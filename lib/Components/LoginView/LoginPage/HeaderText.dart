@@ -8,9 +8,9 @@ class HeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w,
+      // width: 100.w,
       alignment: Alignment.topCenter,
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 22, bottom:20),
       padding: EdgeInsets.all(10),
       child: RichText(
         textAlign: TextAlign.center,

@@ -10,7 +10,6 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top:50),
-        width:100.w,
         height:context.height *0.10,
         color:  Get.isDarkMode? Colors.blueGrey.shade700: Colors.blueGrey.shade900,
         child:Row(

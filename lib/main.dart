@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         // ),
 
         // CONFIGURE THEME SETTING :
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         theme: ThemeData(
           textTheme: LightFontTheme(textTheme),
           primaryColor: Color(0xff1e847f),
