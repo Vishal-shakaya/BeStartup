@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:be_startup/UI/LoginView/Phone/MobileLoginView.dart';
+import 'package:be_startup/UI/LoginView/Phone/PhoneLoginView.dart';
 import 'package:be_startup/UI/LoginView/Web/WebLoginView.dart';
 
 class LoginHandler extends StatelessWidget {

@@ -2,7 +2,6 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
-import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 class SignupForm extends StatelessWidget {
   const SignupForm({Key? key}) : super(key: key);

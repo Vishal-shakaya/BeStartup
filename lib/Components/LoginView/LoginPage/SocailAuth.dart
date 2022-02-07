@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:sign_button/sign_button.dart';
 class SocailAuth extends StatefulWidget {
@@ -11,7 +10,6 @@ class SocailAuth extends StatefulWidget {
 
 class _SocailAuthState extends State<SocailAuth> {
   bool is_theme_light = false;
-  double font_size = 2.2.sp;
   @override
   Widget build(BuildContext context) {
     return Container(

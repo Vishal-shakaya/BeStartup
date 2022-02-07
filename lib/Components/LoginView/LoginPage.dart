@@ -4,7 +4,7 @@ import 'package:be_startup/Components/LoginView/LoginPage/LoginTabs.dart';
 import 'package:be_startup/Components/LoginView/LoginPage/CustomDivider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
 
           // LOGIN FORM ROW  :
           Container(
-              margin: EdgeInsets.only(top: 4.h),
+              margin: EdgeInsets.only(top: context.height*0.04),
               child: Row(
                 children: [
                   // SPACING

@@ -4,7 +4,6 @@ import 'package:be_startup/Handlers/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
     final is_login = false;
     final textTheme = Theme.of(context).textTheme;
 
-    return Sizer(builder: (context, orientation, deviceType) {
       return GetMaterialApp(
         // CONFIGURE RESPONSIVE BREAKPOINTS :
         // builder: (context, widget) => ResponsiveWrapper.builder(
@@ -70,6 +68,5 @@ class MyApp extends StatelessWidget {
               : GetPage(name: '/', page: () => LoginHandler())
         ],
       );
-    });
   }
 }

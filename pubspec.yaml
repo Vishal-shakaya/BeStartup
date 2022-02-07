@@ -36,7 +36,6 @@ dependencies:
   container_tab_indicator: ^0.3.0
   json_annotation: ^4.3.0
   sign_button: ^2.0.2
-  sizer: ^2.0.15
   cupertino_icons: ^1.0.2
   firebase_core: ^1.11.0
   firebase_analytics: ^9.0.5

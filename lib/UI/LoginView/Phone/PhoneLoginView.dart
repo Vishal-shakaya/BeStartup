@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MobileLoginView extends StatefulWidget {
   MobileLoginView({Key? key}) : super(key: key);
@@ -11,7 +12,11 @@ class _MobileLoginViewState extends State<MobileLoginView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:Text('mobile login View')
+      child:Column(
+        children:[
+
+        ]
+      )
     );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:be_startup/Components/LoginView/InfoPage/PhoneResponsiveRow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 
 class ReverseBlock extends StatefulWidget {
@@ -21,7 +21,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
     double heading_font_size = 27; 
 
     return Container(
-      margin:EdgeInsets.only(top:10.h),
+      margin:EdgeInsets.only(top:context.height*0.09),
       child:
       context.width<800
         ?ResponsiveRow(

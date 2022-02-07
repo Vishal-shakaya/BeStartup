@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
-import 'package:responsive_framework/responsive_framework.dart';
+
 class LoginSideImage extends StatelessWidget {
   const LoginSideImage({Key? key}) : super(key: key);
 

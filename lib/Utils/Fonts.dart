@@ -1,6 +1,5 @@
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Light Theme Font

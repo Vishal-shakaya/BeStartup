@@ -7,7 +7,6 @@ import 'package:be_startup/Components/LoginView/LoginPage.dart';
 import 'package:be_startup/Components/Widgets/BottomBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 
 class WebLoginView extends StatefulWidget {
   WebLoginView({Key? key}) : super(key: key);

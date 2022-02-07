@@ -1,13 +1,10 @@
 import 'package:be_startup/Backend/Firebase/LoginUser.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/HelpingFun.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
-import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginForm extends StatefulWidget {
   String? form_type;
