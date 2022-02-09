@@ -7,15 +7,12 @@ import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
-  String? form_type;
-
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  MyFirebaseStore my_store = MyFirebaseStore();
   String login_text = 'Login';
 
   @override

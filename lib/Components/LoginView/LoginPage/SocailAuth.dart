@@ -45,6 +45,7 @@ class _SocailAuthState extends State<SocailAuth> {
               print('click');
               }),
           ],
-        ));
+        )
+        );
   }
 }

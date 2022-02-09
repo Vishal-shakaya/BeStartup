@@ -11,6 +11,7 @@ Color hover_color = Color(0xff1e847f);
 final light_color_type1 = Colors.blueGrey[900];
 final light_color_type2 = Colors.blueGrey[800];
 final light_color_type3 = Colors.blueGrey;
+final primary_light = Color(0xFF54BAB9); 
 
 // DARK COLOR THEME :
 final dartk_color_type1 = Colors.white;
@@ -28,4 +29,10 @@ Gradient g1 = LinearGradient(
 Gradient g2 = LinearGradient(colors: [
   Color(0xfff12711),
   Color(0xfff5af19),
+]);
+
+// Signup button gradient :
+Gradient g3 = LinearGradient(colors: [
+  Color(0xffffffff),
+  Color(0xffffffff),
 ]);

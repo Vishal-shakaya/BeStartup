@@ -29,23 +29,9 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
       return GetMaterialApp(
-        // CONFIGURE RESPONSIVE BREAKPOINTS :
-        // builder: (context, widget) => ResponsiveWrapper.builder(
-        //   BouncingScrollWrapper.builder(context, widget!),
-        //   maxWidth: 1920,
-        //   minWidth: 480,
-        //   defaultScale: true,
-        //   breakpoints: [
-        //     ResponsiveBreakpoint.resize(480, name: MOBILE),
-        //     ResponsiveBreakpoint.autoScale(800, name: TABLET),
-        //     ResponsiveBreakpoint.autoScale(1000, name: TABLET),
-        //     ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-        //     ResponsiveBreakpoint.resize(2460, name: '4K'),
-        //   ],
-        // ),
-
         // CONFIGURE THEME SETTING :
         themeMode: ThemeMode.light,
+        // themeMode: ThemeMode.dark,
         theme: ThemeData(
           textTheme: LightFontTheme(textTheme),
           primaryColor: Color(0xff1e847f),

@@ -12,7 +12,7 @@ class LoginHandler extends StatelessWidget {
 
     return Scaffold(
       body: is_mobile 
-      ? MobileLoginView() 
+      ? PhoneLoginView() 
       : WebLoginView()
     );
   }
