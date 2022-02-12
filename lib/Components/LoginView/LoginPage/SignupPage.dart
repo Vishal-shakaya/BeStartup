@@ -1,7 +1,5 @@
-import 'dart:io';
-import 'dart:io';
+
 import 'dart:typed_data';
-import 'dart:html'as html;
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +33,10 @@ class _SignupPageState extends State<SignupPage> {
   Future UploadImage() async {
     if (image == null) return;
 
+    // UPLOAD FILE LOCAION IN FIREBASE : 
     final destination = 'user_profile/profile_image/$filename';
-
-    upload_process = FileStorage.UploadFile(destination, image!);
-
+    upload_process = FileStorage.UploadFileBytes(destination, image!);
+    // ERROR ACCURE 
     if (upload_process == null) return;
 
     final snapshot = await upload_process!.whenComplete(() {
@@ -46,12 +44,9 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     final urlDownload = await snapshot.ref.getDownloadURL();
-
     setState(() {
       upload_image_url = urlDownload;
     });
-
-    print('Download-Link: $urlDownload');
   }
 
   Future<void> PickImage() async {
@@ -65,7 +60,7 @@ class _SignupPageState extends State<SignupPage> {
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
-      UploadImage();
+      await UploadImage();
     }
   }
 

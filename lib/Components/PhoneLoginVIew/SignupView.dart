@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SignupView extends StatefulWidget {
   SignupView({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class _SignupViewState extends State<SignupView> {
   XFile? profile_image;
   File? circular_profile;
   String profile_image_path = '';
+  UploadTask? upload_process;
 
 ////////////////////////////
 // CROPE IMAGE :
@@ -39,6 +42,14 @@ class _SignupViewState extends State<SignupView> {
     setState(() {
       circular_profile = File(crop_image!.path);
     });
+
+    // STORE FILE IN FIREBASE STORAGE :
+    String filename = DateTime.now().toString();
+    String destination = 'user_profile/profile_image/$filename';
+    upload_process = FileStorage.UploadFile(destination, crop_image!);
+    final snapshot = await upload_process!.whenComplete(() => {});
+    final download_url = await snapshot.ref.getData();
+    print(download_url);
   }
 
 // CLEAR IMAGE :
@@ -104,46 +115,38 @@ class _SignupViewState extends State<SignupView> {
         alignment: Alignment.center,
         child: Stack(
           children: [
-            Card(
-              shadowColor: light_color_type3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(85.0),
-              ),
-              child: CircleAvatar(
-                  radius: 85,
-                  backgroundColor: Colors.blueGrey[100],
-                  child: circular_profile != null
-                      ? ClipOval(
-                          child:
-                              Image.file(circular_profile!, fit: BoxFit.cover),
-                        )
-                      : Icon(Icons.person, size: 70, color: light_color_type3)),
-            ),
+            circular_profile != null
+                ? CircleAvatar(
+                    radius: 85,
+                    backgroundColor: Colors.blueGrey[100],
+                    foregroundImage: FileImage(circular_profile!),
+                  )
+                : CircleAvatar(
+                    radius: 85,
+                    backgroundColor: Colors.blueGrey[100],
+                    child:
+                        Icon(Icons.person, size: 70, color: light_color_type3)),
 
             //////////////////////////////
             // UPLOAD CAMERA ICON:
             ////////////////////////////////
             Positioned(
-              top:129,
-              left:129,  
-              child: Card(
-                shadowColor: primary_light,
-                // elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20) ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade200,
-                  radius: 18,
-                  child: IconButton(
-                    onPressed: BottomSheet, 
-                    icon: Icon(
-                      Icons.camera_alt_rounded,
-                      size:19,
-                      color:primary_light
-                       )
-                      ),
-                ),
-              )),
+                top: 129,
+                left: 129,
+                child: Card(
+                  shadowColor: primary_light,
+                  // elevation: 1,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey.shade200,
+                    radius: 18,
+                    child: IconButton(
+                        onPressed: BottomSheet,
+                        icon: Icon(Icons.camera_alt_rounded,
+                            size: 19, color: primary_light)),
+                  ),
+                )),
           ],
         ));
   }

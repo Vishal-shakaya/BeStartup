@@ -8,10 +8,8 @@ import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 
 class PHLoginForm extends StatefulWidget {
   String button_text = '';
-  bool is_form_login; 
-  PHLoginForm({ 
-    required this.button_text,
-    required this.is_form_login});
+  bool is_form_login;
+  PHLoginForm({required this.button_text, required this.is_form_login});
 
   @override
   State<PHLoginForm> createState() => _PHLoginFormState();
@@ -19,58 +17,57 @@ class PHLoginForm extends StatefulWidget {
 
 class _PHLoginFormState extends State<PHLoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
+
   bool is_password_visible = true;
-    Color input_text_color =
-        Get.isDarkMode ? Colors.grey.shade100 : Colors.black87;
-    Color input_foucs_color =
-        Get.isDarkMode ? Colors.tealAccent : Colors.teal.shade400;
-    Color input_label_color =
-        Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
+  Color input_text_color =
+      Get.isDarkMode ? Colors.grey.shade100 : Colors.black87;
+  Color input_foucs_color =
+      Get.isDarkMode ? Colors.tealAccent : Colors.teal.shade400;
+  Color input_label_color =
+      Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
   @override
   Widget build(BuildContext context) {
-
-
-
 //////////////////////////////////
-/// MANAGE LOGIN AND SIGNUP FOROM: 
+    /// MANAGE LOGIN AND SIGNUP FOROM:
 //////////////////////////////////
 
-  SubmitForm() async{
-    if(widget.is_form_login){
-      // SUBMIT LOGIN FORM :
-      SubmitLoginForm() async {
-        _formKey.currentState!.save();
-        if (_formKey.currentState!.validate()) {
-          String email = _formKey.currentState!.value['email'];
-          String password = _formKey.currentState!.value['password'];
-          _formKey.currentState!.reset();
-          // LOGIN USER :
-          // await my_store.LoginUser(email: email, password: password);
-        } else {
-          print('error found');
-        }
+    // SUBMIT LOGIN FORM :
+    SubmitLoginForm() async {
+      print('Login form');
+      _formKey.currentState!.save();
+      if (_formKey.currentState!.validate()) {
+        String email = _formKey.currentState!.value['email'];
+        String password = _formKey.currentState!.value['password'];
+        _formKey.currentState!.reset();
+        // LOGIN USER :
+        // await my_store.LoginUser(email: email, password: password);
+      } else {
+        print('error found');
       }
     }
 
-  else{
-        // SUBMIT SIGNUP FORM :
-        SubmitSignupForm() async {
-          _formKey.currentState!.save();
-          if (_formKey.currentState!.validate()) {
-            String email = _formKey.currentState!.value['email'];
-            String password = _formKey.currentState!.value['password'];
-            _formKey.currentState!.reset();
-            // LOGIN USER :
-            // await my_store.LoginUser(email: email, password: password);
-          } else {
-            print('error found');
-          }
-        }
+    // SUBMIT SIGNUP FORM :
+    SubmitSignupForm() async {
+      print('Signup form');
+      _formKey.currentState!.save();
+      if (_formKey.currentState!.validate()) {
+        String email = _formKey.currentState!.value['email'];
+        String password = _formKey.currentState!.value['password'];
+        _formKey.currentState!.reset();
+        // LOGIN USER :
+        // await my_store.LoginUser(email: email, password: password);
+      } else {
+        print('error found');
+      }
+    }
 
-  }
-
-  }
-
+    SubmitForm() async {
+      if (widget.is_form_login) {
+        SubmitLoginForm();
+      } else {
+        SubmitSignupForm();
+      }
+    }
 
     return Container(
         width: context.width * 0.80,
@@ -99,43 +96,40 @@ class _PHLoginFormState extends State<PHLoginForm> {
                   ),
 
                   // EMAIL INPUT FILED :
-                  Container(
-                    height: 52,
-                    child: FormBuilderTextField(
-                      name: 'email',
-                      style: TextStyle(
+                  FormBuilderTextField(
+                    name: 'email',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight:
+                            Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
+                        color: input_text_color),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.email(context,
+                          errorText: 'enter valid email')
+                    ]),
+                    decoration: InputDecoration(
+                        hintText: 'enter mail ',
+                        contentPadding: EdgeInsets.all(16),
+                        hintStyle: TextStyle(
                           fontSize: 15,
-                          fontWeight: Get.isDarkMode
-                              ? FontWeight.w400
-                              : FontWeight.w600,
-                          color: input_text_color),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.email(context,
-                            errorText: 'enter valid email')
-                      ]),
-                      decoration: InputDecoration(
-                          hintText: 'enter mail ',
-                          hintStyle: TextStyle(
-                            fontSize: 15,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.email_rounded,
-                            color: Colors.orange.shade300,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
-                                  width: 1.5, color: Colors.teal.shade300)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
-                                  width: 2, color: input_foucs_color)),
-                          // errorText: 'invalid email address',
-                          // constraints: BoxConstraints(),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15))),
-                    ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.email_rounded,
+                          color: Colors.orange.shade300,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                width: 1.5, color: Colors.teal.shade300)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide:
+                                BorderSide(width: 2, color: input_foucs_color)),
+                        // errorText: 'invalid email address',
+                        // constraints: BoxConstraints(),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15))),
                   ),
 
                   ////////////////////////////
@@ -155,56 +149,54 @@ class _PHLoginFormState extends State<PHLoginForm> {
                   ),
 
                   // PASSWORD INPUT FILED :
-                  Container(
-                    height: 52,
-                    child: FormBuilderTextField(
-                      name: 'password',
-                      obscureText: is_password_visible,
-                      style: TextStyle(
+                  FormBuilderTextField(
+                    name: 'password',
+                    obscureText: is_password_visible,
+
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight:
+                            Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
+                        color: input_text_color),
+                    keyboardType: TextInputType.emailAddress,
+
+                    // Validate password
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.minLength(context, 8,
+                          errorText: 'invalid password')
+                    ]),
+
+                    decoration: InputDecoration(
+                        hintText: 'password',
+                        contentPadding: EdgeInsets.all(16),
+                        hintStyle: TextStyle(
                           fontSize: 15,
-                          fontWeight: Get.isDarkMode
-                              ? FontWeight.w400
-                              : FontWeight.w600,
-                          color: input_text_color),
-                      keyboardType: TextInputType.emailAddress,
-
-                      // Validate password
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.minLength(context, 8,
-                            errorText: 'invalid password')
-                      ]),
-
-                      decoration: InputDecoration(
-                          hintText: 'password',
-                          hintStyle: TextStyle(
-                            fontSize: 15,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.lock_rounded,
-                            color: Colors.orange.shade300,
-                          ),
-                          // suffix: InkWell(
-                          //     onTap: () {
-                          //       setState(() {
-                          //         is_password_visible = false;
-                          //       });
-                          //     },
-                          //     child: Icon(
-                          //         Icons.remove_red_eye,
-                          //         color: input_label_color)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
-                                  width: 1.5, color: Colors.teal.shade300)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
-                                  width: 2, color: input_foucs_color)),
-                          // errorText: 'invalid email address',
-                          // constraints: BoxConstraints(),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15))),
-                    ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock_rounded,
+                          color: Colors.orange.shade300,
+                        ),
+                        // suffix: InkWell(
+                        //     onTap: () {
+                        //       setState(() {
+                        //         is_password_visible = false;
+                        //       });
+                        //     },
+                        //     child: Icon(
+                        //         Icons.remove_red_eye,
+                        //         color: input_label_color)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                width: 1.5, color: Colors.teal.shade300)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide:
+                                BorderSide(width: 2, color: input_foucs_color)),
+                        // errorText: 'invalid email address',
+                        // constraints: BoxConstraints(),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15))),
                   ),
                 ])),
 
@@ -218,7 +210,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
               child: a.GradientElevatedButton(
                   gradient: g1,
                   onPressed: () async {
-                    await SubmitForm();
+                    SubmitForm();
                   },
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
