@@ -3,7 +3,7 @@ import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHBottomBar.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHLoginIcon.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHSocialAuth.dart';
-import 'package:be_startup/Components/PhoneLoginVIew/PhLoginForm.dart';
+import 'package:be_startup/Components/PhoneLoginVIew/LoginView.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/SignupView.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

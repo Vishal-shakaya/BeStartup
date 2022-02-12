@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui';
+import 'package:be_startup/Components/LoginView/LoginPage/SignupPage.dart';
 import 'package:be_startup/Handlers/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,8 +52,10 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         getPages: [
           is_login
-              ? GetPage(name: '/', page: () => Text('Home  page'))
-              : GetPage(name: '/', page: () => LoginHandler())
+            ? GetPage(name: '/', page: () => Text('Home  page'))
+            : GetPage(name: '/', page: () => LoginHandler()),
+
+          GetPage(name: signup_page,page:()=> SignupPage() )
         ],
       );
   }

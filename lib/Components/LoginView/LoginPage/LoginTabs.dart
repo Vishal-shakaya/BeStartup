@@ -1,5 +1,5 @@
 import 'package:be_startup/Components/LoginView/LoginPage/LoginForm.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/SignupForm.dart';
+import 'package:be_startup/Components/LoginView/LoginPage/SignupBox.dart';
 import 'package:be_startup/Components/LoginView/LoginPage/SocialAuthRow.dart';
 import 'package:flutter/material.dart';
 import 'package:container_tab_indicator/container_tab_indicator.dart';

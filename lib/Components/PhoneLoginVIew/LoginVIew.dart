@@ -20,15 +20,15 @@ class PHLoginForm extends StatefulWidget {
 class _PHLoginFormState extends State<PHLoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool is_password_visible = true;
-  @override
-  Widget build(BuildContext context) {
-
     Color input_text_color =
         Get.isDarkMode ? Colors.grey.shade100 : Colors.black87;
     Color input_foucs_color =
         Get.isDarkMode ? Colors.tealAccent : Colors.teal.shade400;
     Color input_label_color =
         Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
+  @override
+  Widget build(BuildContext context) {
+
 
 
 //////////////////////////////////
