@@ -16,26 +16,26 @@ class PhoneLoginView extends StatefulWidget {
 }
 
 class _PhoneLoginViewState extends State<PhoneLoginView> {
-  bool is_login_page = true;
+  bool is_login_form = true;
   String main_text = ' Account';
   String desc_text = 'Create New';
   String btn_text = 'Login';
-  bool is_form_login = true; 
   // Switch Login Page to Signup Page:
   SetPageState() {
     // Configure Signup Page:
-    if (is_login_page) {
+    if (is_login_form) {
       setState(() {
-        is_login_page = false;
+        is_login_form = false;
         btn_text = 'Signup';
         desc_text = 'Back To';
         main_text = ' Login';
       });
 
+
       // Configure Login Page
     } else {
       setState(() {
-        is_login_page = true;
+        is_login_form = true;
         btn_text = 'Login';
         desc_text = 'Create New';
         main_text = ' Account';
@@ -52,10 +52,10 @@ class _PhoneLoginViewState extends State<PhoneLoginView> {
           child: Column(children: [
             // Show logo in Login Page :
             // Else show upload picture widget:
-            is_login_page ? PHLoginIcon() : SignupView(),
+            is_login_form ? PHLoginIcon() : SignupView(),
 
             PHLoginForm(
-              is_form_login:is_form_login,
+              is_form_login:is_login_form,
               button_text:btn_text),
             PHSocailAuth(),
             PHBottomBar(

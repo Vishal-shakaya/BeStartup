@@ -1,7 +1,7 @@
-import 'package:be_startup/Components/LoginView/LoginPage/SideImage.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/SocailAuth.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/LoginTabs.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/CustomDivider.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/SideImage.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/SocailAuth.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/LoginTabs.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/CustomDivider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

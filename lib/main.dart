@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui';
-import 'package:be_startup/Components/LoginView/LoginPage/SignupPage.dart';
+import 'package:flutter/material.dart';
 import 'package:be_startup/Handlers/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/SignupView.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:cool_alert/cool_alert.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

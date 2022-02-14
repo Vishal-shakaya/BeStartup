@@ -29,12 +29,12 @@ class PHSocailAuth extends StatelessWidget {
             // AUTH TEXT  
             Container(
               margin:EdgeInsets.only(left:60),
-              child: Text('Social Auth',
+              child: Text('Continue with',
               softWrap: true,
               style: TextStyle(
                 color:light_color_type3, 
                 fontSize: 15,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 decoration: TextDecoration.none  
               ) ,),
             ),

@@ -14,6 +14,7 @@ class FileStorage {
       return null;
     }
   }
+  
   static UploadTask? UploadFile(String destination, File file) {
     try {
       final ref = FirebaseStorage.instance.ref(destination);

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'package:be_startup/Components/LoginView/InfoPage/FeatureBlock.dart';
-import 'package:be_startup/Components/LoginView/InfoPage/InfoHeading.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage/FeatureBlock.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage/InfoHeading.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';

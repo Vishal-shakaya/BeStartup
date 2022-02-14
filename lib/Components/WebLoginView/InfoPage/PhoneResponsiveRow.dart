@@ -1,51 +1,42 @@
-import 'package:be_startup/Components/LoginView/InfoPage/PhoneResponsiveRow.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
+import 'dart:ui';
+import 'package:be_startup/Components/WebLoginView/InfoPage/PhoneResponsiveRow.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
-
-class FeatureBlock extends StatefulWidget {
+import 'package:get/get.dart';
+class ResponsiveRow extends StatefulWidget {
   String? heading_text = '';
   String? body_text = '';
   Gradient? gradient1; 
-  FeatureBlock({this.heading_text, this.body_text, this.gradient1});
+  ResponsiveRow({this.heading_text, this.body_text, this.gradient1});
 
   @override
-  State<FeatureBlock> createState() => _FeatureBlockState();
+  State<ResponsiveRow> createState() => _ResponsiveRowState();
 }
 
-class _FeatureBlockState extends State<FeatureBlock> {
+class _ResponsiveRowState extends State<ResponsiveRow> {
   @override
   Widget build(BuildContext context) {
     double heading_font_size = 27; 
-
-    return Container(
-        margin: EdgeInsets.only(top: context.height*0.09),
-        child: context.width<800
-        ?ResponsiveRow(
-          heading_text: widget.heading_text,
-          body_text: widget.body_text,
-          gradient1: widget.gradient1,)  
-        :Row(
-          mainAxisSize: MainAxisSize.max,
+    return Column(
+      children: [
+        Row(
           children: [
-          ////////////////////////
-          // IMAGE SECTION :
-          ////////////////////////
-           Expanded(
-              flex: 1,
-              child: Container(
-                  // margin:EdgeInsets.all(40),
-                  padding: EdgeInsets.all(10),
-                  // color: Colors.green,
-                  child: Image.asset('assets/images/Info/Feature1.png',
-                      width: 200, height: 250, fit: BoxFit.contain))
-          ),
+            Expanded(
+                flex: 1,
+                child: Container(
+                    // margin:EdgeInsets.all(40),
+                    padding: EdgeInsets.all(10),
+                    // color: Colors.green,
+                    child: Image.asset('assets/images/Info/Feature1.png',
+                        width: 200, height: 250, fit: BoxFit.contain))
+            ),
+          ],
+        ),
 
-          ////////////////////////
-          // TEXT SECTION:
-          ////////////////////////
-          Expanded(
+        Row(
+          children: [
+            Expanded(
               flex: 1,
               child: Container(
                   height: 200,
@@ -90,6 +81,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                             margin: EdgeInsets.only(top: 15),
                             
                             child: RichText(
+                              textAlign: TextAlign.center,
                                 text: TextSpan(
                                   style: Get.theme.textTheme.headline5,
                                   children: [
@@ -103,8 +95,11 @@ class _FeatureBlockState extends State<FeatureBlock> {
                           )
                         ]),
                   )
-                 )
+                  )
                 ),
-        ]));
+          ],
+        )
+      ],
+    );
   }
 }

@@ -18,9 +18,9 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     // Change Theme : 
-    Color input_text_color = Get.isDarkMode ?  Colors.grey.shade100: Colors.black87;
-    Color input_foucs_color = Get.isDarkMode ? Colors.tealAccent : Colors.teal.shade400;
-    Color input_label_color = Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
+  Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
+  Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
+  Color input_label_color = Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
 
     // SUBMIT LOGIN FORM : 
     SubmitLofinForm() async {

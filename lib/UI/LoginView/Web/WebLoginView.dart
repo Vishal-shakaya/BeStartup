@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:be_startup/Components/LoginView/InfoPage.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/HeaderText.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/LogoContainer.dart';
-import 'package:be_startup/Components/LoginView/LoginPage.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/HeaderText.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/LogoContainer.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage.dart';
 import 'package:be_startup/Components/Widgets/BottomBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

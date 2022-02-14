@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:be_startup/Components/LoginView/InfoPage/PhoneResponsiveRow.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage/PhoneResponsiveRow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

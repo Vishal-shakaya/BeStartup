@@ -1,6 +1,6 @@
-import 'package:be_startup/Components/LoginView/LoginPage/LoginForm.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/SignupBox.dart';
-import 'package:be_startup/Components/LoginView/LoginPage/SocialAuthRow.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/LoginForm.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/SignupBox.dart';
+import 'package:be_startup/Components/WebLoginView/LoginPage/SocialAuthRow.dart';
 import 'package:flutter/material.dart';
 import 'package:container_tab_indicator/container_tab_indicator.dart';
 import 'package:get/get.dart';
