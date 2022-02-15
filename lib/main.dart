@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui';
+import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:be_startup/Handlers/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage/SignupView.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -55,7 +56,8 @@ class MyApp extends StatelessWidget {
             ? GetPage(name: '/', page: () => Text('Home  page'))
             : GetPage(name: '/', page: () => LoginHandler()),
 
-          GetPage(name: signup_page,page:()=> SignupPage() )
+          GetPage(name: signup_url,page:()=> SignupView() ), 
+          GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
         ],
       );
   }

@@ -49,7 +49,7 @@ class SignupForm extends StatelessWidget {
                   gradient: g1,
                   onPressed: () {
                     Get.toNamed(
-                      signup_page,
+                      signup_url,
                     );
                   },
                   style: ButtonStyle(

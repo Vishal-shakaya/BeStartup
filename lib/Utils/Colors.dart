@@ -12,9 +12,15 @@ Color hover_color = Color(0xff1e847f);
 final light_color_type1 = Colors.blueGrey[900];
 final light_color_type2 = Colors.blueGrey[800];
 final light_color_type3 = Colors.blueGrey;
+
+// 
 final primary_light = Color(0xFF54BAB9);
+final primary_light2 = Color(0xFF79B4B7);
+final primary_light_hover = Color(0xFFC8F2EF);
+
 final light_black = Colors.black87; // input text color
 final darkTeal = Colors.teal.shade400; // focus input border
+
 
 
 

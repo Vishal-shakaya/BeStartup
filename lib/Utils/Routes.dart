@@ -1,1 +1,3 @@
-String signup_page = '/signup-page';
+String signup_url = '/signup-page';
+String user_type_slide_url = '/select-user-type';
+String user_registration_url = '/select-user-type';

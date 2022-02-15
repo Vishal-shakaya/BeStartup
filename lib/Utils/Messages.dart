@@ -25,3 +25,9 @@ String signup_detail_message =
     'We are our choices. Build yourself a great story';
 
 String copyright_text = 'feelsafe @Copyright';
+
+/////////////////////////////////////
+/// REGISTRATION SLIDES
+/// ////////////////////////////////
+
+String user_type_heading = 'WHO YOU ARE ?';
