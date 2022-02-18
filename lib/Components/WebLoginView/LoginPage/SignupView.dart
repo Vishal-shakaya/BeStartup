@@ -27,6 +27,8 @@ class _SignupViewState extends State<SignupView> {
   String upload_image_url = '';
   late UploadTask? upload_process;
   final controller = CropController();
+
+  
   /////////////////////////////////////////
   // PICKED IMAGE AND STORE IN  FILE :
   /////////////////////////////////////////

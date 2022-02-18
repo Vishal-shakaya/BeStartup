@@ -15,8 +15,9 @@ final light_color_type3 = Colors.blueGrey;
 
 // 
 final primary_light = Color(0xFF54BAB9);
-final primary_light2 = Color(0xFF79B4B7);
 final primary_light_hover = Color(0xFFC8F2EF);
+
+final primary_light2 = Color(0xFF79B4B7);
 
 final light_black = Colors.black87; // input text color
 final darkTeal = Colors.teal.shade400; // focus input border

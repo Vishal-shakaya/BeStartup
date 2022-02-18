@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -33,24 +34,21 @@ class _PHLoginFormState extends State<PHLoginForm> {
     String? confirm_password;
     TextEditingController confirm_pass_field = TextEditingController();
 
-  ////////////////////////////////////////
-  /// CHECK IF BOTH PASS MATCHED :
-  /// IF NOT MATCH THEN SHOW ERROR: 
-  /// ELSE JUST MOVE FORWORD [SIGNUP USER ] :  
-  ////////////////////////////////////////
+    ////////////////////////////////////////
+    /// CHECK IF BOTH PASS MATCHED :
+    /// IF NOT MATCH THEN SHOW ERROR:
+    /// ELSE JUST MOVE FORWORD [SIGNUP USER ] :
+    ////////////////////////////////////////
     ConfirmPassword() {
       confirm_password = confirm_pass_field.text;
       if (password != confirm_password) {
         FocusManager.instance.primaryFocus?.unfocus();
         CoolAlert.show(
-          context: context,
-          type: CoolAlertType.info,
-          title: 'Password does not match',
-          text:'please enter signup password' 
-          );
-          print('password not match');
-
-
+            context: context,
+            type: CoolAlertType.info,
+            title: 'Password does not match',
+            text: 'please enter signup password');
+        print('password not match');
       } else {
         Navigator.of(context).pop();
         print('match passwod');
@@ -66,7 +64,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            contentPadding: EdgeInsets.all(5),
+                contentPadding: EdgeInsets.all(5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 title: Row(
@@ -74,23 +72,19 @@ class _PHLoginFormState extends State<PHLoginForm> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Securiy Check',
-                          style: Get.textTheme.headline2)),
+                          alignment: Alignment.center,
+                          child: Text('Securiy Check',
+                              style: Get.textTheme.headline2)),
                     ),
                     InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
-                        child: Icon(
-                          Icons.cancel_outlined,
-                          color: Colors.blueGrey.shade300, size: 20))
-                  ],  
+                        child: Icon(Icons.cancel_outlined,
+                            color: Colors.blueGrey.shade300, size: 20))
+                  ],
                 ),
-
-
                 content: Container(
                   color: Colors.white,
                   padding: EdgeInsets.all(20),
@@ -107,32 +101,23 @@ class _PHLoginFormState extends State<PHLoginForm> {
                             Icons.lock_open_outlined,
                             color: Colors.orange.shade300,
                           ),
-
                           hintText: 'confirm password',
-                          
                           contentPadding: EdgeInsets.all(16),
-                          
                           hintStyle: TextStyle(
                             fontSize: 15,
                           ),
-                          
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
                                   width: 1.5, color: Colors.teal.shade300)),
-
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-
                               borderSide: BorderSide(
                                   width: 2, color: input_foucs_color)),
-                                  
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15)),
                         ),
                       ),
-
-
 
                       // CONFIRM BUTTON :
                       Container(
@@ -144,7 +129,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
                         margin: EdgeInsets.only(top: 30),
                         child: TextButton.icon(
                             onPressed: () async {
-                               ConfirmPassword();
+                              ConfirmPassword();
                             },
                             icon: Icon(Icons.check,
                                 size: 17, color: Colors.blue.shade300),
@@ -156,8 +141,6 @@ class _PHLoginFormState extends State<PHLoginForm> {
                                   fontWeight: FontWeight.w600),
                             )),
                       )
-
-
                     ],
                   ),
                 ),
@@ -173,16 +156,17 @@ class _PHLoginFormState extends State<PHLoginForm> {
         email = _formKey.currentState!.value['email'];
         password = _formKey.currentState!.value['password'];
         _formKey.currentState!.reset();
-      } 
+      }
+
+     
     }
 
 //////////////////////////////////////
     // SUBMIT SIGNUP FORM :
     // 1 CHECK PASS LENGTH :
-    // 2 PASS1 == PASS2 
+    // 2 PASS1 == PASS2
 //////////////////////////////////////
     SubmitSignupForm() async {
-      
       _formKey.currentState!.save();
       if (_formKey.currentState!.validate()) {
         String email = _formKey.currentState!.value['email'];
@@ -196,7 +180,11 @@ class _PHLoginFormState extends State<PHLoginForm> {
 
         // RESET FORM TO DEFAUL STATE :
         _formKey.currentState!.reset();
-      } 
+      }
+
+       Get.toNamed(
+        user_registration_url,
+      );
     }
 
 //////////////////////////////////////
@@ -208,6 +196,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
       } else {
         SubmitSignupForm();
       }
+      
     }
 
     return Container(

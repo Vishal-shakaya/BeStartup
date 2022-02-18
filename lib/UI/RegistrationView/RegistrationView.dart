@@ -14,10 +14,12 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-            child:Column(
-              children: [
-                UserType(), 
-              ],
+            child:SingleChildScrollView(
+              child: Column(
+                children: [
+                  UserType(), 
+                ],
+              ),
             )
       ),
     );

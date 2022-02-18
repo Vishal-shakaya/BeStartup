@@ -31,3 +31,18 @@ String copyright_text = 'feelsafe @Copyright';
 /// ////////////////////////////////
 
 String user_type_heading = 'WHO YOU ARE ?';
+
+// Business Detail :
+String business_slide_heading = 'Youe Startup Detail';
+
+// Thmbnail Detail :
+String thumbnail_slide_heading = 'Thumbnail';
+String thumbnail_slide_subheading = 'Explationay Image Represents You,r Idea';
+
+String thumbnail_important_text =
+    'its  by using a raised button in flutter.Visibility widget will help us to completely hide or remove the widget and of course we can display ';
+
+// VISION :
+String vision_Heading_text = '';
+String vision_subHeading_text = ''; 
+

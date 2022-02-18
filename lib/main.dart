@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
+import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/Handlers/Login.dart';
@@ -15,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
 
           GetPage(name: signup_url,page:()=> SignupView() ), 
           GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
+          GetPage(name: startup_slides_url ,page:()=> StartupSlides() ), 
         ],
       );
   }
