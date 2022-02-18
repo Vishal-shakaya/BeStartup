@@ -1,6 +1,7 @@
 import 'dart:js';
 import 'package:be_startup/Components/Slides/BusinessSlide/BusinessBody.dart';
 import 'package:be_startup/Components/Slides/BusinessThumbnail/ThumbnailBody.dart';
+import 'package:be_startup/Components/Slides/BusinessVision/VisionBody.dart';
 import 'package:be_startup/Components/Slides/SlideHeading.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -37,16 +38,28 @@ class _StartupSlidesState extends State<StartupSlides> {
 
     ), 
    /////////////////////////////////////////  
-   ///  BUSINESS SLIDE :
-   ///  1. BUSINESS ICON : 
-   ///  2. INPUT FIELD TAKE BUSINESS NAME :  
+   // BUSINESS THUMBNAIL : 
+   // 1 UPLOD IAMGE : 
+   // THUMBNIAL SIZE : null 
    /////////////////////////////////////////  
     PageViewModel(
     /// HEADING SECTION : 
       titleWidget:SlideHeading(heading: thumbnail_slide_heading,),
     // BODY SECTION
        bodyWidget: ThumbnailBody()
+    ),
+   /////////////////////////////////////////  
+   /// VISION : 
+   /// PUPOSE OF STARTUP : 
+   /////////////////////////////////////////  
+    PageViewModel(
+    /// HEADING SECTION : 
+      titleWidget:SlideHeading(heading: vision_Heading_text,),
+    // BODY SECTION
+       bodyWidget: VisionBody()
     )
+
+
     
   ]; 
 

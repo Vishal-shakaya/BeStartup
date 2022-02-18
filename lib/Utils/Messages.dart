@@ -43,6 +43,6 @@ String thumbnail_important_text =
     'its  by using a raised button in flutter.Visibility widget will help us to completely hide or remove the widget and of course we can display ';
 
 // VISION :
-String vision_Heading_text = '';
-String vision_subHeading_text = ''; 
+String vision_Heading_text = 'Vision';
+String vision_subHeading_text = 'Without Vision there is no startups'; 
 
