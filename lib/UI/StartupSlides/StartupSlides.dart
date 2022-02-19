@@ -1,4 +1,5 @@
 import 'dart:js';
+import 'package:be_startup/Components/Slides/BusinessCatigory/CatigoryBody.dart';
 import 'package:be_startup/Components/Slides/BusinessSlide/BusinessBody.dart';
 import 'package:be_startup/Components/Slides/BusinessThumbnail/ThumbnailBody.dart';
 import 'package:be_startup/Components/Slides/BusinessVision/VisionBody.dart';
@@ -48,6 +49,7 @@ class _StartupSlidesState extends State<StartupSlides> {
     // BODY SECTION
        bodyWidget: ThumbnailBody()
     ),
+
    /////////////////////////////////////////  
    /// VISION : 
    /// PUPOSE OF STARTUP : 
@@ -57,7 +59,17 @@ class _StartupSlidesState extends State<StartupSlides> {
       titleWidget:SlideHeading(heading: vision_Heading_text,),
     // BODY SECTION
        bodyWidget: VisionBody()
-    )
+    ),
+   /////////////////////////////////////////  
+   /// VISION : 
+   /// PUPOSE OF STARTUP : 
+   /////////////////////////////////////////  
+    PageViewModel(
+    /// HEADING SECTION : 
+      titleWidget:SlideHeading(heading: catigory_Heading_text,),
+    // BODY SECTION
+       bodyWidget: CatigoryBody()
+    ),
 
 
     

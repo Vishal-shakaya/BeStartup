@@ -105,7 +105,7 @@ class _VisionBodyState extends State<VisionBody> {
           children: [
             // SUB HEADING :
             Container(
-              margin: EdgeInsets.only(top: context.height * 0.1),
+              margin: EdgeInsets.only(top: context.height * 0.05),
               child: AutoSizeText.rich(
                   TextSpan(
                     style: context.textTheme.headline2, 

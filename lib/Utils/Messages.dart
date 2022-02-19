@@ -44,5 +44,8 @@ String thumbnail_important_text =
 
 // VISION :
 String vision_Heading_text = 'Vision';
-String vision_subHeading_text = 'Without Vision there is no startups'; 
+String vision_subHeading_text = 'Without Vision there is no startups';
 
+// CATIGORY :
+String catigory_Heading_text = 'Catigory';
+String catigory_subHeading_text = 'Select you Startup Type';
