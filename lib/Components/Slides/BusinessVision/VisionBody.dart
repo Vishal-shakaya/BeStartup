@@ -17,21 +17,25 @@ class VisionBody extends StatefulWidget {
 
 class _VisionBodyState extends State<VisionBody> {
   final formKey = GlobalKey<FormBuilderState>();
-    // THEME  COLOR :
+  // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
   Color input_label_color =
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-  int vision_cur_len = 1; 
-  int? vision_max_len = 20; 
-  bool vision_is_focus =true; 
+  int vision_cur_len = 1;
+  int? vision_max_len = 20;
+  bool vision_is_focus = true;
 
+  double vision_cont_width = 0.50;
+  double vision_cont_height = 0.90;
+  double vision_subheading_text = 20;
+  int maxlines = 15; 
 
   SubmitVision(context) {
-    // IF VISION NOT DEFINAE THEN : 
-      CoolAlert.show(
+    // IF VISION NOT DEFINAE THEN :
+    CoolAlert.show(
         context: context,
         width: 200,
         title: 'Define Vision',
@@ -44,66 +48,104 @@ class _VisionBodyState extends State<VisionBody> {
         ));
   }
 
-   ResetVisionForm() {
-    
-  }
+  ResetVisionForm() {}
 
   @override
   Widget build(BuildContext context) {
+    
+    if (context.width > 1200) {
+       maxlines = 15; 
+       vision_subheading_text = 20;
+       vision_cont_width = 0.50;
+       vision_cont_height = 0.90;
+    }
+
+    // PC:
+    if (context.width < 1200) {
+       maxlines = 15; 
+       vision_subheading_text = 20;
+       vision_cont_width = 0.70;
+       vision_cont_height = 0.90;
+    }
+
+    if (context.width < 1000) {
+       maxlines = 15; 
+       vision_cont_width = 0.70;
+       vision_cont_height = 0.90;
+
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+       maxlines = 15; 
+       vision_cont_width = 0.80;
+       vision_cont_height = 0.90;
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {
+       maxlines = 11; 
+       vision_cont_width = 0.80;
+       vision_cont_height = 0.90;
+
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+       maxlines = 15; 
+       vision_cont_width = 0.60;
+       vision_cont_height = 0.90;
+
+    }
+
     return Container(
-      width:context.width* 0.50 ,
-      height:context.height * 0.60,  
+      width: context.width * vision_cont_width,
+      height: context.height * vision_cont_height,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // SUB HEADING : 
+            // SUB HEADING :
             Container(
-              margin: EdgeInsets.only(top:context.height*0.1),
+              margin: EdgeInsets.only(top: context.height * 0.1),
               child: AutoSizeText.rich(
-                TextSpan(
-                  style:context.textTheme.headline2, 
-                  children: [
-                    TextSpan(
-                      text:vision_subHeading_text,
-                      style:TextStyle(
-                        color:light_color_type3
-                      )
-                    )
-                  ]
-                )),
+                  TextSpan(
+                    style: context.textTheme.headline2, 
+                    children: [
+                  TextSpan(
+                    text: vision_subHeading_text,
+                    style: TextStyle(
+                      color: light_color_type3,
+                      fontSize: vision_subheading_text ))
+              ])),
             ),
-
+      
             Container(
-              margin: EdgeInsets.only(top:context.height *0.04),
-              height: 15 * 24.0,
+              margin: EdgeInsets.only(top: context.height * 0.04),
+              height: maxlines * 24.0,
               child: TextField(
-              style: GoogleFonts.robotoSlab(
-                fontSize:16,
-              ),
-              maxLength: 2000,
-              scrollPadding: EdgeInsets.all(10),
-              maxLines: 15,
-              decoration: InputDecoration(
-                helperText: 'min allow 200 ',
-                hintText: "you,r vision",
-                hintStyle: TextStyle(
-                          color:Colors.blueGrey.shade200,
-                  ),
-                fillColor: Colors.grey[100],
-                filled: true,
-                contentPadding: EdgeInsets.all(20),
-                enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                    width: 1.5, color: Colors.blueGrey.shade200)),
-      
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide:
-                        BorderSide(width: 2, color: primary_light)),
-      
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15))),
+                style: GoogleFonts.robotoSlab(
+                  fontSize: 16,
+                ),
+                maxLength: 2000,
+                scrollPadding: EdgeInsets.all(10),
+                maxLines: maxlines,
+                decoration: InputDecoration(
+                    helperText: 'min allow 200 ',
+                    hintText: "you,r vision",
+                    hintStyle: TextStyle(
+                      color: Colors.blueGrey.shade200,
+                    ),
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    contentPadding: EdgeInsets.all(20),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(
+                            width: 1.5, color: Colors.blueGrey.shade200)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(width: 2, color: primary_light)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
               ),
             ),
           ],
