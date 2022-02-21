@@ -3,19 +3,21 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CatigoryChip extends StatefulWidget {
+class RemovableChip extends StatefulWidget {
   String? catigory = '';
-  CatigoryChip(
+  Function removeFun;
+
+  RemovableChip(
       {Key? key,
-      this.catigory,})
+      this.catigory, 
+      required this.removeFun})
       : super(key: key);
   @override
-  State<CatigoryChip> createState() => _CatigoryChipState();
+  State<RemovableChip> createState() => _RemovableChipState();
 }
 
-class _CatigoryChipState extends State<CatigoryChip> {
+class _RemovableChipState extends State<RemovableChip> {
   bool is_selected = false;
-
 
 
   @override
@@ -23,12 +25,18 @@ class _CatigoryChipState extends State<CatigoryChip> {
     return Container(
         margin: EdgeInsets.all(5),
         key: UniqueKey(),
-        child: ChoiceChip(
-          // elevation: 1,
-          selectedColor: chip_activate_background,
+        child: InputChip(
+          onDeleted: (){
+              widget.removeFun(widget.catigory);
+          },
+          deleteIcon: Icon(
+            Icons.cancel_rounded, 
+            size: 16, 
+            color: Colors.white70),
+          // elevation: 1
           autofocus: true,
           padding: EdgeInsets.all(5),
-          backgroundColor: Colors.grey.shade200,
+          backgroundColor: chip_activate_background,
           // side: BorderSide(color: Colors.teal.shade50),
 
           label: Text(
@@ -37,17 +45,9 @@ class _CatigoryChipState extends State<CatigoryChip> {
                 letterSpacing: 1.2,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: chip_color),
+                color: chip_activate_text_color),
           ),
           selected: is_selected,
-          onSelected: (chipState) {
-            setState(() {
-              is_selected = !is_selected;
-              is_selected
-                  ? chip_color = chip_activate_text_color
-                  : chip_color = chip_text_color;
-            });
-          },
         ));
   }
 }
