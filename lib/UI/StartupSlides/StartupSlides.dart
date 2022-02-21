@@ -71,6 +71,17 @@ class _StartupSlidesState extends State<StartupSlides> {
        bodyWidget: CatigoryBody()
     ),
 
+   /////////////////////////////////////////  
+  // PRODUCT SLIDE : 
+  // ADD PRODUCT : 
+   /////////////////////////////////////////  
+    PageViewModel(
+    /// HEADING SECTION : 
+      titleWidget:SlideHeading(heading: product_heading_text,),
+    // BODY SECTION
+       bodyWidget: CatigoryBody()
+    ),
+
 
     
   ]; 

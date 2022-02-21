@@ -49,3 +49,7 @@ String vision_subHeading_text = 'Without Vision there is no startups';
 // CATIGORY :
 String catigory_Heading_text = 'Catigory';
 String catigory_subHeading_text = 'Select you Startup Type';
+
+// PRODUCT :
+String product_heading_text = 'Product or Services';
+
