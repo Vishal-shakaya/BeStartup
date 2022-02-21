@@ -1,5 +1,6 @@
 import 'dart:js';
 import 'package:be_startup/Components/Slides/BusinessCatigory/CatigoryBody.dart';
+import 'package:be_startup/Components/Slides/BusinessProduct/ProductBody.dart';
 import 'package:be_startup/Components/Slides/BusinessSlide/BusinessBody.dart';
 import 'package:be_startup/Components/Slides/BusinessThumbnail/ThumbnailBody.dart';
 import 'package:be_startup/Components/Slides/BusinessVision/VisionBody.dart';
@@ -79,7 +80,7 @@ class _StartupSlidesState extends State<StartupSlides> {
     /// HEADING SECTION : 
       titleWidget:SlideHeading(heading: product_heading_text,),
     // BODY SECTION
-       bodyWidget: CatigoryBody()
+       bodyWidget: ProductBody()
     ),
 
 

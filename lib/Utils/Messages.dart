@@ -52,4 +52,5 @@ String catigory_subHeading_text = 'Select you Startup Type';
 
 // PRODUCT :
 String product_heading_text = 'Product or Services';
+String product_image_subhead = 'Product or Services';
 
