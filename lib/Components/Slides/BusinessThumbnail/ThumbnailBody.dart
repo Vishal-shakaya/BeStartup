@@ -1,10 +1,10 @@
+import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -43,6 +43,8 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double upload_btn_height = 50;
 
   double notice_cont_width = 0.20;
+
+
   /////////////////////////////////////////
   // PICKED IMAGE AND STORE IN  FILE :
   /////////////////////////////////////////
@@ -66,6 +68,9 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     });
   }
 
+
+  // CALL FUNCTION TO UPLOAD IMAGE : 
+  // THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
