@@ -1,0 +1,273 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:be_startup/Utils/Colors.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class ProductForm extends StatefulWidget {
+  BuildContext? context; 
+  Function removeProduct ; 
+  ProductForm({Key? key, this.context , required this.removeProduct}) : super(key: key);
+
+  @override
+  State<ProductForm> createState() => _ProductFormState();
+}
+
+class _ProductFormState extends State<ProductForm> {
+  final formKey = GlobalKey<FormBuilderState>();
+  bool selected_tag_prod = false;
+  Color suffix_icon_color = Colors.blueGrey.shade300;
+  int maxlines = 10;
+  Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
+  ///////////////////////////////////////
+  /// SUBMIT PRODUCT FORM :
+  /// ////////////////////////////////////
+  SubmitProductForm() {
+    if (formKey.currentState!.validate()) {
+      final heading = formKey.currentState!.value['heading'];
+      final description = formKey.currentState!.value['description'];
+    }
+  }
+
+  /// RESET FORM :
+  ResetProductForm() {
+    formKey.currentState!.reset();
+  }
+
+  ToogleProduct() {
+    setState(() {
+      selected_tag_prod = !selected_tag_prod;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // FORM BLOCK :
+        FractionallySizedBox(
+          widthFactor: 0.7,
+          child: FormBuilder(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Column(
+                children: [
+                  // PRODUCT HEADING: 
+                  ProductHeading(context),
+
+                  // SPACING :   
+                  const SizedBox(
+                    height: 25,
+                  ),
+
+                  // PROD DESCRIPTION BOX :
+                  Container(
+                    width: context.width * 0.8,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 10,
+                          child: ProductDescription(context),
+                        ),
+                        Column(
+                          children: [
+                            // DELETE PRODUCT : 
+                            DeleteIcon(context),
+
+                            // SELECT TYPE OF TAG :
+                            TagsType(context),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ],
+    );
+  }
+
+  /////////////////////////////////
+  /// SIDE BAR TAG BUTTON :
+  /// SELECT TYPE OF SECTION : 
+  /// 1 PRODCUT  :
+  /// 2 SERVIECE :
+  /////////////////////////////////
+  Container TagsType(BuildContext context) {
+    return Container(
+            margin:
+                EdgeInsets.only(top: context.height * 0.01),
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(20)),
+                  onTap: () {
+                    ToogleProduct();
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(20))),
+                    elevation: 10,
+                    shadowColor: Colors.blueGrey,
+                    child: CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.green,
+                      child: selected_tag_prod
+                          ? Icon(
+                              Icons.check,
+                              size: 15,
+                              color: Colors.white,
+                            )
+                          : Text('P',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  // fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold)),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(20)),
+                  onTap: () {
+                    ToogleProduct();
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(20))),
+                    elevation: 10,
+                    shadowColor: Colors.blueGrey,
+                    child: CircleAvatar(
+                        radius: 12,
+                        backgroundColor:
+                            Colors.blue.shade300,
+                        child: selected_tag_prod
+                            ? Text('S',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.bold))
+                            : Icon(Icons.check,
+                                size: 15,
+                                color: Colors.white)),
+                  ),
+                ),
+              ],
+            ));
+  }
+//////////////////////////////////////////
+/// DELETE ICON : 
+//////////////////////////////////////////
+  Container DeleteIcon(BuildContext context) {
+    return Container(
+            margin: EdgeInsets.only(
+                bottom: context.height * 0.12),
+            child: InkWell(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(20)),
+              onTap: () {
+                widget.removeProduct();
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(20))),
+                elevation: 10,
+                shadowColor: Colors.blueGrey,
+                child: CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Colors.red.shade200,
+                    child: Icon(Icons.close,
+                        // size:15,
+                        color: Colors.white)),
+              ),
+            ),
+          );
+  }
+
+
+/////////////////////////////////
+// DESCRIPTION SECTION : 
+/////////////////////////////////
+  FormBuilderTextField ProductDescription(BuildContext context) {
+    return FormBuilderTextField(
+            name: 'prod_desc',
+            style: GoogleFonts.robotoSlab(
+              fontSize: 16,
+            ),
+            maxLength: 2000,
+            scrollPadding: EdgeInsets.all(10),
+            maxLines: maxlines,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.minLength(context, 40,
+                  errorText: 'At least 40 char allow')
+            ]),
+            decoration: InputDecoration(
+                helperText: 'min allow 200 ',
+                hintText: "Product revision",
+                hintStyle: TextStyle(
+                  color: Colors.blueGrey.shade200,
+                ),
+                fillColor: Colors.grey[100],
+                filled: true,
+                contentPadding: EdgeInsets.all(20),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color: Colors.blueGrey.shade200)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        width: 2, color: primary_light)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15))),
+          );
+  }
+
+
+  /////////////////////////////////
+  /// HEADING TEXT FIELD : 
+  /////////////////////////////////
+  FormBuilderTextField ProductHeading(BuildContext context) {
+    return FormBuilderTextField(
+            textAlign: TextAlign.center,
+            name: 'prod_heading',
+            style: Get.textTheme.headline2,
+            keyboardType: TextInputType.emailAddress,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.minLength(context, 3,
+                  errorText: 'At least 3 char allow')
+            ]),
+            decoration: InputDecoration(
+              hintText: 'Representative Heading',
+              contentPadding: EdgeInsets.all(16),
+              hintStyle:
+                  TextStyle(fontSize: 18, color: Colors.grey.shade300),
+
+              suffix: InkWell(
+                onTap: () {},
+                child: Container(
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    color: suffix_icon_color,
+                  ),
+                ),
+              ),
+
+              // focusColor:Colors.pink,
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(width: 2, color: primary_light)),
+            ),
+          );
+  }
+}
