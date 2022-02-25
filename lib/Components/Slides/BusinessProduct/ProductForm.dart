@@ -24,7 +24,6 @@ class _ProductFormState extends State<ProductForm> {
   final formKey = GlobalKey<FormBuilderState>();
   bool selected_tag_prod = false;
   Color suffix_icon_color = Colors.blueGrey.shade300;
-  int maxlines = 10;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
 
   Color del_btn_active_color = Colors.red.shade400;
@@ -32,7 +31,8 @@ class _ProductFormState extends State<ProductForm> {
   Color del_btn_color = Colors.red.shade200;
 
   double del_btn_bottom_margin = 135;
-  double tag_btn_bottom_margin = 30; 
+  double tag_btn_bottom_margin = 30;
+  int maxlines = 10;
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
   /// ////////////////////////////////////
@@ -56,49 +56,80 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // FORM BLOCK :
-        FractionallySizedBox(
-          widthFactor: 0.7,
-          child: FormBuilder(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Column(
-                children: [
-                  // PRODUCT HEADING:
-                  ProductHeading(context),
+    double form_width_factor = 0.7;
 
-                  // SPACING :
-                  const SizedBox(
-                    height: 25,
-                  ),
+    // DEFAULT BREAK POINTS :
+    if (context.width > 1000) {
+      form_width_factor = 0.7;
+      del_btn_bottom_margin = 135;
+      tag_btn_bottom_margin = 30;
+    }
 
-                  // PROD DESCRIPTION BOX :
-                  Container(
-                    width: context.width * 0.8,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 10,
-                          child: ProductDescription(context),
-                        ),
-                        Column(
+    if (context.width < 1000) {
+      form_width_factor = 0.6;
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      form_width_factor = 0.8;
+      maxlines = 6;
+      del_btn_bottom_margin = 70;
+      print('width 800 ');
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {
+      form_width_factor = 0.8;
+      maxlines = 6;
+      print('width 640 ');
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // FORM BLOCK :
+          FractionallySizedBox(
+            widthFactor: form_width_factor,
+            child: FormBuilder(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // PRODUCT HEADING:
+                      ProductHeading(context),
+                    
+                      // SPACING :
+                      const SizedBox(
+                        height: 25,
+                      ),
+                    
+                      // PROD DESCRIPTION BOX :
+                      Container(
+                        width: context.width * 0.8,
+                        child: Row(
                           children: [
-                            // DELETE PRODUCT :
-                            DeleteIcon(context),
-
-                            // SELECT TYPE OF TAG :
-                            TagsType(context),
+                            Expanded(
+                              flex: 10,
+                              child: ProductDescription(context),
+                            ),
+                            Column(
+                              children: [
+                                // DELETE PRODUCT :
+                                DeleteIcon(context),
+                    
+                                // SELECT TYPE OF TAG :
+                                TagsType(context),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              )),
-        ),
-      ],
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -130,9 +161,10 @@ class _ProductFormState extends State<ProductForm> {
               });
             },
             child: CircleAvatar(
-                radius: 15,
+                radius: 13,
                 backgroundColor: del_btn_color,
                 child: Icon(Icons.close,
+                    size: 14,
                     // size:15,
                     color: Colors.white)),
           ),

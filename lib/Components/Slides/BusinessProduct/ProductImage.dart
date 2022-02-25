@@ -10,9 +10,13 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:file_picker/file_picker.dart';
+
 class ProductImage extends StatefulWidget {
   BuildContext? context;
-  ProductImage({Key? key, this.context,}) : super(key: key);
+  ProductImage({
+    Key? key,
+    this.context,
+  }) : super(key: key);
 
   @override
   State<ProductImage> createState() => _ProductImageState();
@@ -24,12 +28,10 @@ class _ProductImageState extends State<ProductImage> {
   String upload_image_url = '';
   late UploadTask? upload_process;
 
-  
-
   double image_cont_width = 0.5;
   double image_cont_height = 0.38;
 
-  double image_sec_height = 0.32;
+  double image_sec_height = 0.30;
   double image_sec_width = 0.50;
 
   double upload_btn_top = 0.32;
@@ -40,10 +42,15 @@ class _ProductImageState extends State<ProductImage> {
 
   String youtube_link = '';
   String web_link = '';
-  
+
   Color suffix_icon_color = Colors.blueGrey.shade300;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
   TextEditingController social_medialink_controller = TextEditingController();
+
+  //////////////////////////////
+  /// IMAGE BOX HEIGHT WIDTH:
+  /// ///////////////////////////
+  double image_top_margin = 0.05;
 
   /////////////////////////////////////////
   // PICKED IMAGE AND STORE IN  FILE :
@@ -84,7 +91,6 @@ class _ProductImageState extends State<ProductImage> {
     }
   }
 
-  
 ////////////////////////////////////////////////////
   /// SOCAIL MEDIA LINK SUBMIT FORM :
   ///  1. GET YOUTUBE LINK :
@@ -116,7 +122,7 @@ class _ProductImageState extends State<ProductImage> {
       social_medialink_controller.clear();
     }
   }
-  
+
 // DISPOSE ;
 // 1 SOCIAL MEDIA TEXT CONTROLLER :
   @override
@@ -126,8 +132,67 @@ class _ProductImageState extends State<ProductImage> {
     social_medialink_controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
+// DEFAULT CONFIG:
+    if (context.width > 1500) {
+      image_cont_width = 0.5;
+      image_cont_height = 0.38;
+
+      image_sec_height = 0.30;
+      image_sec_width = 0.50;
+
+      upload_btn_top = 0.32;
+      upload_btn_left = 0.16;
+
+      upload_btn_width = 40;
+      upload_btn_height = 40;
+      image_top_margin = 0.05;
+    }
+
+    if (context.width < 1500) {
+      image_top_margin = 0.07;
+      upload_btn_top = 0.33;
+      upload_btn_left = 0.15;
+    }
+
+    // PC:
+    if (context.width < 1200) {
+      image_cont_width = 0.5;
+      image_cont_height = 0.40;
+      upload_btn_top = 0.33;
+
+      image_sec_height = 0.30;
+      image_sec_width = 0.50;
+
+      upload_btn_top = 0.34;
+      upload_btn_left = 0.16;
+
+      upload_btn_width = 40;
+      upload_btn_height = 40;
+      image_top_margin = 0.08;
+    }
+
+    if (context.width < 1000) {
+      upload_btn_top = 0.35;
+      upload_btn_left = 0.40;
+      image_cont_height = 0.41;
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      image_cont_width = 0.7;
+      image_cont_height = 0.41;
+      upload_btn_top = 0.35;
+      upload_btn_left = 0.60;
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {}
+
+    // PHONE:
+    if (context.width < 480) {}
+
     return Column(
       children: [
         Container(
@@ -136,164 +201,155 @@ class _ProductImageState extends State<ProductImage> {
           child: Stack(
             children: [
               upload_image_url == ''
-                  // UPLOAD IMGE BOX: 
+                  // UPLOAD IMGE BOX:
                   ? ImageBox(context)
 
-                  // IF IMAGE UPLOADED THEN SHOW IMAGE IN CONTAINER :   
+                  // IF IMAGE UPLOADED THEN SHOW IMAGE IN CONTAINER :
                   : ImageContainer(context),
 
-                  // UPLOAD BUTTTON :         
-                    UploadButton(context)
-                  ],
-                ),
-              ),
+              // UPLOAD BUTTTON :
+              UploadButton(context)
+            ],
+          ),
+        ),
 
-                  /// YOUTUBE BUTTON TO UPLAOD LINK :
-                  SocialLinks(context)
+        /// YOUTUBE BUTTON TO UPLAOD LINK :
+        SocialLinks(context)
       ],
     );
   }
 
   //////////////////////////////////////////////////////
-  // UPLOAD IMAGE BOX : 
+  // UPLOAD IMAGE BOX :
   //////////////////////////////////////////////////////
   Container ImageBox(BuildContext context) {
     return Container(
-            height: context.height * image_sec_height,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 29),
-            decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(20),
-                    right: Radius.circular(20)),
-                border: Border.all(width: 2, color: Colors.black54)),
-            child: AutoSizeText.rich(
-                TextSpan(style: Get.textTheme.headline3, children: [
-              TextSpan(
-                  text: product_image_subhead,
-                  style: TextStyle(
-                      color: Colors.blueGrey.shade200,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15))
-            ])),
-          );
+      height: context.height * image_sec_height,
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(top: context.height * image_top_margin),
+      decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(20), right: Radius.circular(20)),
+          border: Border.all(width: 2, color: Colors.black54)),
+      child:
+          AutoSizeText.rich(TextSpan(style: Get.textTheme.headline3, children: [
+        TextSpan(
+            text: product_image_subhead,
+            style: TextStyle(
+                color: Colors.blueGrey.shade200,
+                fontWeight: FontWeight.bold,
+                fontSize: 15))
+      ])),
+    );
   }
 
 //////////////////////////////////////////////////////
-// SHOW IMAGE IF SUCCESSFULLY UPLOADED : 
+// SHOW IMAGE IF SUCCESSFULLY UPLOADED :
 // HEIGHT : __
 // WIDHT : __
 //////////////////////////////////////////////////////
-Container ImageContainer(BuildContext context) {
+  Container ImageContainer(BuildContext context) {
     return Container(
-          padding: EdgeInsets.all(2),
-          height: context.height * image_sec_height,
-          margin: EdgeInsets.only(top: 29),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(20),
-                  right: Radius.circular(20)),
-              border: Border.all(
-                  width: 2, color: Colors.grey.shade200)),
-          child: ClipRRect(
+        padding: EdgeInsets.all(2),
+        height: context.height * image_sec_height,
+        margin: EdgeInsets.only(top: 29),
+        decoration: BoxDecoration(
+            color: Colors.grey.shade200,
             borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(19),
-              right: Radius.circular(19),
-            ),
-            child: Image.network(upload_image_url,
-                width: context.width * image_cont_width,
-                height: context.height * image_cont_height,
-                fit: BoxFit.cover),
-          ));
+                left: Radius.circular(20), right: Radius.circular(20)),
+            border: Border.all(width: 2, color: Colors.grey.shade200)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(19),
+            right: Radius.circular(19),
+          ),
+          child: Image.network(upload_image_url,
+              width: context.width * image_cont_width,
+              height: context.height * image_cont_height,
+              fit: BoxFit.cover),
+        ));
   }
-
-
 
   /////////////////////////////////////////
   /// YOUTUBE BUTTON TO UPLAOD LINK :
-  /// 1 ADD  YOUTUBE LINK : 
-  /// 2 ADD WEB LINK : 
-  /// 3 SET ICON COLOR ACTIVE IF LINK 
+  /// 1 ADD  YOUTUBE LINK :
+  /// 2 ADD WEB LINK :
+  /// 3 SET ICON COLOR ACTIVE IF LINK
   /// HAS SOME STRING VALUE ex: link!=''
   //////////////////////////////////////////
   Container SocialLinks(BuildContext context) {
     return Container(
-        // margin: EdgeInsets.only(left: 20, ),
-        padding: EdgeInsets.all(0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {
-                SocialMediaLinkDialog(
-                  link: LinkType.youtube, 
+      // margin: EdgeInsets.only(left: 20, ),
+      padding: EdgeInsets.all(0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () {
+              SocialMediaLinkDialog(
+                  link: LinkType.youtube,
                   context: context,
-                  social_medialink_controller:social_medialink_controller, 
-                  submitLink: SubmitLink
-                );
-              },
-              child: Icon(
-                Icons.play_circle_fill_outlined,
-                color: youtube_link == ''
-                    ? Colors.red.shade200
-                    : Colors.red.shade400,
-                size: 30,
-              ),
+                  social_medialink_controller: social_medialink_controller,
+                  submitLink: SubmitLink);
+            },
+            child: Icon(
+              Icons.play_circle_fill_outlined,
+              color: youtube_link == ''
+                  ? Colors.red.shade200
+                  : Colors.red.shade400,
+              size: 30,
             ),
-            SizedBox(
-              width: 20,
-            ),
-            InkWell(
-              onTap: () {
-                SocialMediaLinkDialog(
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          InkWell(
+            onTap: () {
+              SocialMediaLinkDialog(
                   link: LinkType.web,
                   context: context,
                   social_medialink_controller: social_medialink_controller,
-                  submitLink: SubmitLink   
-                );
-              },
-              child: Icon(
-                Icons.link_outlined,
-                color: web_link == ''
-                    ? Colors.blue.shade200
-                    : Colors.blue.shade400,
-                size: 30,
-              ),
+                  submitLink: SubmitLink);
+            },
+            child: Icon(
+              Icons.link_outlined,
+              color:
+                  web_link == '' ? Colors.blue.shade200 : Colors.blue.shade400,
+              size: 30,
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 
   ////////////////////////////////////////
-  ///  START IMAGE UPLOADING PROCESS :         
-  //////////////////////////////////////// 
+  ///  START IMAGE UPLOADING PROCESS :
+  ////////////////////////////////////////
   Positioned UploadButton(BuildContext context) {
     return Positioned(
-        top: context.height * upload_btn_top,
-        left: context.width * upload_btn_left,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(50),
-          onTap: () {
-            PickImage();
-          },
-          child: Card(
-            color: Colors.orange,
-            shadowColor: Colors.orangeAccent.shade400,
-            elevation: 6,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50)),
-            child: Container(
-              padding: EdgeInsets.all(5),
-              width: upload_btn_width,
-              height: upload_btn_height,
-              child: Icon(Icons.cloud_upload,
-                  color: Colors.white, size: 20),
-            ),
+      top: context.height * upload_btn_top,
+      left: context.width * upload_btn_left,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () {
+          PickImage();
+        },
+        child: Card(
+          color: Colors.orange,
+          shadowColor: Colors.orangeAccent.shade400,
+          elevation: 6,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          child: Container(
+            padding: EdgeInsets.all(5),
+            width: upload_btn_width,
+            height: upload_btn_height,
+            child: Icon(Icons.cloud_upload, color: Colors.white, size: 20),
           ),
-          ),
-        );
+        ),
+      ),
+    );
   }
 }
