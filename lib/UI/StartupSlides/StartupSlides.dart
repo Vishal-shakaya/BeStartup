@@ -1,14 +1,9 @@
-import 'dart:js';
 import 'package:be_startup/Components/Slides/BusinessCatigory/CatigoryBody.dart';
 import 'package:be_startup/Components/Slides/BusinessProduct/ProductBody.dart';
 import 'package:be_startup/Components/Slides/BusinessSlide/BusinessBody.dart';
 import 'package:be_startup/Components/Slides/BusinessThumbnail/ThumbnailBody.dart';
 import 'package:be_startup/Components/Slides/BusinessVision/VisionBody.dart';
 import 'package:be_startup/Components/Slides/SlideHeading.dart';
-import 'package:be_startup/Utils/Messages.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/RegisterationSlides/UserType.dart';
-import 'package:be_startup/Components/Slides/BusinessSlide/BusinessIcon.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
