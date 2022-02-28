@@ -54,3 +54,6 @@ String catigory_subHeading_text = 'Select you Startup Type';
 String product_heading_text = 'Product or Services';
 String product_image_subhead = 'Product or Services';
 
+// MILESTONEES :
+String milestone_heading_test = 'MileStone';
+String milestone_subHeading_text = 'Each MileStone define How, you gonna achive your milestone and start you startup at the end';

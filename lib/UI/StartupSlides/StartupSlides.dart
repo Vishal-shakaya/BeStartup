@@ -1,4 +1,5 @@
 import 'package:be_startup/Components/Slides/BusinessCatigory/CatigoryBody.dart';
+import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneBody.dart';
 import 'package:be_startup/Components/Slides/BusinessProduct/ProductBody.dart';
 import 'package:be_startup/Components/Slides/BusinessSlide/BusinessBody.dart';
 import 'package:be_startup/Components/Slides/BusinessThumbnail/ThumbnailBody.dart';
@@ -76,6 +77,17 @@ class _StartupSlidesState extends State<StartupSlides> {
       titleWidget:SlideHeading(heading: product_heading_text,),
     // BODY SECTION
        bodyWidget: ProductBody()
+    ),
+
+   /////////////////////////////////////////  
+  // TAG HEADING , SUBHEADING 
+  // ADD TAGS : 
+   /////////////////////////////////////////  
+    PageViewModel(
+    /// HEADING SECTION : 
+      titleWidget:SlideHeading(heading: product_heading_text,),
+    // BODY SECTION
+       bodyWidget: MileStoneBody()
     ),
 
 

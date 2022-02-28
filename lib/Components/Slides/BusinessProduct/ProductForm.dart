@@ -8,11 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductForm extends StatefulWidget {
   BuildContext? context;
   Function removeProduct;
+  Function setFormData;
   Key? product_key;
   ProductForm(
       {Key? key,
       this.context,
       required this.removeProduct,
+      required this.setFormData,
       required this.product_key})
       : super(key: key);
 
@@ -33,13 +35,18 @@ class _ProductFormState extends State<ProductForm> {
   double del_btn_bottom_margin = 135;
   double tag_btn_bottom_margin = 30;
   int maxlines = 10;
+
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
   /// ////////////////////////////////////
   SubmitProductForm() {
+       formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      final heading = formKey.currentState!.value['heading'];
-      final description = formKey.currentState!.value['description'];
+      print('form submited');
+      final heading = formKey.currentState!.value['prod_head'];
+      final description = formKey.currentState!.value['prod_desc'];
+
+      widget.setFormData(widget.key, heading, description);
     }
   }
 
@@ -97,12 +104,12 @@ class _ProductFormState extends State<ProductForm> {
                     children: [
                       // PRODUCT HEADING:
                       ProductHeading(context),
-                    
+
                       // SPACING :
                       const SizedBox(
                         height: 25,
                       ),
-                    
+
                       // PROD DESCRIPTION BOX :
                       Container(
                         width: context.width * 0.8,
@@ -116,7 +123,7 @@ class _ProductFormState extends State<ProductForm> {
                               children: [
                                 // DELETE PRODUCT :
                                 DeleteIcon(context),
-                    
+
                                 // SELECT TYPE OF TAG :
                                 TagsType(context),
                               ],
@@ -139,36 +146,71 @@ class _ProductFormState extends State<ProductForm> {
   Container DeleteIcon(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: del_btn_bottom_margin),
-      child: InkWell(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        onTap: () {
-          widget.removeProduct(widget.product_key);
-        },
-        child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          elevation: 10,
-          shadowColor: Colors.blueGrey,
-          child: MouseRegion(
-            onHover: (d) {
-              setState(() {
-                del_btn_color = del_btn_active_color;
-              });
+      child: Column(
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            onTap: () {
+              widget.removeProduct(widget.product_key);
             },
-            onExit: (e) {
-              setState(() {
-                del_btn_color = del_btn_default_color;
-              });
-            },
-            child: CircleAvatar(
-                radius: 13,
-                backgroundColor: del_btn_color,
-                child: Icon(Icons.close,
-                    size: 14,
-                    // size:15,
-                    color: Colors.white)),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              elevation: 10,
+              shadowColor: Colors.blueGrey,
+              child: MouseRegion(
+                onHover: (d) {
+                  setState(() {
+                    del_btn_color = del_btn_active_color;
+                  });
+                },
+                onExit: (e) {
+                  setState(() {
+                    del_btn_color = del_btn_default_color;
+                  });
+                },
+                child: CircleAvatar(
+                    radius: 13,
+                    backgroundColor: del_btn_color,
+                    child: Icon(Icons.close,
+                        size: 14,
+                        // size:15,
+                        color: Colors.white)),
+              ),
+            ),
           ),
-        ),
+          InkWell(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            onTap: () {
+              SubmitProductForm();
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              elevation: 10,
+              shadowColor: Colors.blueGrey,
+              child: MouseRegion(
+                onHover: (d) {
+                  setState(() {
+                    del_btn_color = del_btn_active_color;
+                  });
+                },
+                onExit: (e) {
+                  setState(() {
+                    del_btn_color = del_btn_default_color;
+                  });
+                },
+                child: CircleAvatar(
+                    radius: 13,
+                    backgroundColor: del_btn_color,
+                    child: Icon(Icons.close,
+                        size: 14,
+                        // size:15,
+                        color: Colors.white)),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -244,7 +286,7 @@ class _ProductFormState extends State<ProductForm> {
   FormBuilderTextField ProductHeading(BuildContext context) {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
-      name: 'prod_heading',
+      name: 'prod_head',
       style: Get.textTheme.headline2,
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
@@ -257,7 +299,9 @@ class _ProductFormState extends State<ProductForm> {
         hintStyle: TextStyle(fontSize: 18, color: Colors.grey.shade300),
 
         suffix: InkWell(
-          onTap: () {},
+          onTap: () {
+            ResetProductForm();
+          },
           child: Container(
             child: Icon(
               Icons.cancel_outlined,

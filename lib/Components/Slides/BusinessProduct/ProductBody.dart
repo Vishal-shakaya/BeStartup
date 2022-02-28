@@ -1,6 +1,5 @@
 import 'package:be_startup/Components/Slides/BusinessProduct/AddSectionButton.dart';
 import 'package:be_startup/Components/Slides/BusinessProduct/ProductSection.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +17,7 @@ class _ProductBodyState extends State<ProductBody> {
   List<ProductSection> products = [
     ProductSection(
         key: UniqueKey(),
+        submitForm: (data) {},
         removeProduct: (key) {
           Get.snackbar(
             'INFO',
@@ -32,6 +32,10 @@ class _ProductBodyState extends State<ProductBody> {
         })
   ];
 
+  SubmitForm(data) {
+    print(data);
+  }
+
   /////////////////////////////////////////
   /// PRODUCT HANDLERS :
   /// 1. ADD :
@@ -42,7 +46,10 @@ class _ProductBodyState extends State<ProductBody> {
     // Add Production Section to List :
     setState(() {
       products
-          .add(ProductSection(key: UniqueKey(), removeProduct: RemoveProduct));
+          .add(ProductSection(
+            key: UniqueKey(), 
+            submitForm: SubmitForm,
+            removeProduct: RemoveProduct));
     });
   }
 
@@ -80,24 +87,20 @@ class _ProductBodyState extends State<ProductBody> {
 
     if (context.width < 1000) {
       print('width 1000');
-
     }
 
     // TABLET :
     if (context.width < 800) {
       print('width 800');
-
     }
     // SMALL TABLET:
     if (context.width < 640) {
       print('width 640');
-
     }
 
     // PHONE:
     if (context.width < 480) {
       print('width 480');
-
     }
 
     return Container(

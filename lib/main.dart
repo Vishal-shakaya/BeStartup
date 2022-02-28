@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:ui';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
 import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
 import 'package:flutter/material.dart';

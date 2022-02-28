@@ -8,13 +8,15 @@ import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
-
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ProductImage extends StatefulWidget {
   BuildContext? context;
+  Function setProductImage;
   ProductImage({
     Key? key,
+    required this.setProductImage,
     this.context,
   }) : super(key: key);
 
@@ -72,6 +74,8 @@ class _ProductImageState extends State<ProductImage> {
     setState(() {
       upload_image_url = urlDownload;
     });
+
+    widget.setProductImage(upload_image_url);
   }
 
   // CALL FUNCTION TO UPLOAD IMAGE :
@@ -138,7 +142,7 @@ class _ProductImageState extends State<ProductImage> {
 // DEFAULT CONFIG:
     if (context.width > 1500) {
       image_cont_width = 0.5;
-      image_cont_height = 0.38;
+      image_cont_height = 0.37;
 
       image_sec_height = 0.30;
       image_sec_width = 0.50;
@@ -249,26 +253,30 @@ class _ProductImageState extends State<ProductImage> {
 // HEIGHT : __
 // WIDHT : __
 //////////////////////////////////////////////////////
-  Container ImageContainer(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(2),
-        height: context.height * image_sec_height,
-        margin: EdgeInsets.only(top: 29),
-        decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20), right: Radius.circular(20)),
-            border: Border.all(width: 2, color: Colors.grey.shade200)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(19),
-            right: Radius.circular(19),
-          ),
-          child: Image.network(upload_image_url,
-              width: context.width * image_cont_width,
-              height: context.height * image_cont_height,
-              fit: BoxFit.cover),
-        ));
+  Column ImageContainer(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+            padding: EdgeInsets.all(2),
+            height: context.height * image_sec_height,
+            margin: EdgeInsets.only(top: 29),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20)),
+                border: Border.all(width: 2, color: Colors.grey.shade200)),
+            child: ClipRRect(
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(19),
+                right: Radius.circular(19),
+              ),
+              child: Image.network(upload_image_url,
+                  width: context.width * image_cont_width,
+                  height: context.height * image_cont_height,
+                  fit: BoxFit.cover),
+            )),
+      ],
+    );
   }
 
   /////////////////////////////////////////
