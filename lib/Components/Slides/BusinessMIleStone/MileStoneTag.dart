@@ -51,88 +51,88 @@ class _MileStoneTagState extends State<MileStoneTag> {
   @override
   Widget build(BuildContext context) {
     return Container(
-                key: UniqueKey(),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(20),
-                      right: Radius.circular(20),
-                    )),
-                child: MouseRegion(
-                  onHover: (_) {
-                    setState(() {
-                      mil_default_text_color = mil_activate_text_color;
-                    });
+        key: UniqueKey(),
+        margin: EdgeInsets.symmetric(vertical: 10),
+
+        // Decoration: 
+        decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(20),
+              right: Radius.circular(20),
+            )),
+        child: MouseRegion(
+          onHover: (_) {
+            setState(() {
+              mil_default_text_color = mil_activate_text_color;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              mil_default_text_color = mil_deactivate_text_color;
+            });
+          },
+          child: ListTile(
+            key: UniqueKey(),
+            onTap: () {
+              MileStoneInfo();
+            },
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(20),
+              right: Radius.circular(20),
+            )),
+            selectedColor: Colors.blue.shade50,
+            hoverColor: Colors.blue.shade50,
+            focusColor: Colors.teal.shade50,
+            selectedTileColor: Colors.teal.shade50,
+
+            // Tile Style :
+            style: ListTileStyle.drawer,
+
+            // Heading text:
+            title: Container(
+                padding: EdgeInsets.all(10),
+                child: AutoSizeText('Complete Website beta version',
+                  style: GoogleFonts.robotoSlab(
+                  color:mil_default_text_color, 
+                  ))),
+
+            // Edit and Delte Button :
+            trailing: Wrap(
+              children: [
+                // EDIT ICION :
+                InkWell(
+                  onTap: () {
+                    EditMileStone();
                   },
-                  onExit: (_) {
-                    setState(() {
-                      mil_default_text_color = mil_deactivate_text_color;
-                    });
-                  },
-                  child: ListTile(
-                    key: UniqueKey(),
-                    onTap: () {
-                      MileStoneInfo();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(20),
-                      right: Radius.circular(20),
-                    )),
-                    selectedColor: Colors.blue.shade50,
-                    hoverColor: Colors.blue.shade50,
-                    focusColor: Colors.teal.shade50,
-                    selectedTileColor: Colors.teal.shade50,
-                    // tileColor: Colors.blueGrey.shade50,
-
-                    // Tile Style :
-
-                    style: ListTileStyle.drawer,
-
-                    // Heading text:
-                    title: Container(
-                        padding: EdgeInsets.all(10),
-                        child: AutoSizeText('Complete Website beta version',
-                            style: GoogleFonts.robotoSlab(
-                            color:mil_default_text_color, 
-                            ))),
-
-                    // Edit and Delte Button :
-                    trailing: Wrap(
-                      children: [
-                        // EDIT ICION :
-                        InkWell(
-                          onTap: () {
-                            EditMileStone();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.blue.shade300,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-
-                        InkWell(
-                          onTap: () {
-                            DeleteMileStone();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.delete_forever_rounded,
-                              color: Colors.red.shade300,
-                              size: 20,
-                            ),
-                          ),
-                        )
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.blue.shade300,
+                      size: 20,
                     ),
                   ),
                 ),
-              );
+
+                InkWell(
+                  onTap: () {
+                    DeleteMileStone();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.delete_forever_rounded,
+                      color: Colors.red.shade300,
+                      size: 20,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
   }
 }

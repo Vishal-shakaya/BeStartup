@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Components/Slides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneTag.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -34,9 +35,14 @@ class _MileStoneBodyState extends State<MileStoneBody> {
           SubHeadingSection(context),
 
           // ADD TAG BUTTON :
-          AddMileButton(),
+         AddMileButton(),
 
-          // LIST OF TAGS :
+        //////////////////////////////
+        // LIST OF TAGS :
+        // 1.Show milestone Info: 
+        // 2.Delete milestone :
+        // 3.Edit MileStone :  
+        //////////////////////////////
           Container(
             width: context.width * list_tile_width,
             height: context.height * list_tile_height,
@@ -49,28 +55,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
                 ]));
   }
 
-/////////////////////////////////
-  /// ADD MILE STONE :
-/////////////////////////////////
-  Container AddMileButton() {
-    return Container(
-      margin: EdgeInsets.only(bottom: context.height * addbtn_top_margin),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(flex: 1, child: Container()),
-          Container(
-              child: ElevatedButton.icon(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(primary_light)),
-                  onPressed: () {},
-                  icon: Icon(Icons.add),
-                  label: Text('Add')))
-        ],
-      ),
-    );
-  }
+
 
   ////////////////////////
   /// SUBHEADING SECTION :
