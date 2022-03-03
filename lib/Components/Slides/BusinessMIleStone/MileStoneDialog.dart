@@ -1,131 +1,103 @@
-import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Components/Slides/BusinessMIleStone/DialogComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 
-int maxlines = 7;
 
- /////////////////////////////////////////
-// MILESTONE TAG INPUT SECTION :
-/////////////////////////////////////////
-  FormBuilderTextField MilestoneTagInput(BuildContext context,ResetMileForm) {
-    return FormBuilderTextField(
-      textAlign: TextAlign.center,
-      name: 'mile_tag',
-      maxLength: 50,
-      style: Get.textTheme.headline2,
-      keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 3,
-            errorText: 'At least 3 char allow'),
-        FormBuilderValidators.maxLength(context, 50,
-            errorText: 'Max 50 char allow')
-      ]),
-      decoration: InputDecoration(
-        hintText: 'Title',
-        contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 18, color: Colors.grey.shade300),
+class MileStoneDialog extends StatefulWidget {
+  var context;
+  var formKey;
+  Function? ResetMileForm;
+  Function? SubmitMileForm;
+  Function? CloseMilestoneDialog;
+  MileStoneDialog(
+      {this.context,
+      this.formKey,
+      this.ResetMileForm,
+      this.SubmitMileForm,
+      this.CloseMilestoneDialog,
+      Key? key})
+      : super(key: key);
 
-        suffix: InkWell(
-          onTap: () {
-            ResetMileForm();
-          },
-          child: Container(
-            child: Icon(
-              Icons.cancel_outlined,
-              color: Colors.grey.shade400,
-            ),
-          ),
+  @override
+  State<MileStoneDialog> createState() => _MileStoneDialogState();
+}
+
+class _MileStoneDialogState extends State<MileStoneDialog> {
+  int maxlines = 7;
+  double con_button_width = 90;
+  double con_button_height = 38;
+  double con_btn_top_margin = 10;
+
+
+  @override
+  Widget build(BuildContext context) {
+    ///////////////////////////////////////////////////////
+    /// 1. MILESTONE DIALOG :
+    /// 2. MILESTONE FORM : Take Title and Description:
+    /////////////////////////////////////////////////////
+    return FractionallySizedBox(
+      widthFactor: 0.8,
+      heightFactor: 0.55,
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.white,
         ),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
 
-        // focusColor:Colors.pink,
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(width: 2, color: primary_light)),
-      ),
-    );
-  }
+                  // HEADING :
+                  MileDialogHeading(context, widget.CloseMilestoneDialog),
 
-/////////////////////////////////////////
-// MILE STONE DESCRIPTION SECTION :
-/////////////////////////////////////////
-  FormBuilderTextField MilestoneDescInput(BuildContext context) {
-    return FormBuilderTextField(
-      name: 'mile_desc',
-      style: GoogleFonts.robotoSlab(
-        fontSize: 16,
-      ),
-      maxLength: 1000,
-      scrollPadding: EdgeInsets.all(10),
-      maxLines: maxlines,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 40,
-            errorText: 'At least 50 char allow')
-      ]),
-      decoration: InputDecoration(
-          helperText: 'min allow 50 ',
-          hintText: "Milestone detail",
-          hintStyle: TextStyle(
-            color: Colors.blueGrey.shade200,
-          ),
-          fillColor: Colors.grey[100],
-          filled: true,
-          contentPadding: EdgeInsets.all(20),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide:
-                  BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(width: 2, color: primary_light)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
-    );
-  }
+                  // ADD MILESTONE FORM :
+                  FormBuilder(
+                      key: widget.formKey,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      child: Container(
+                        width: context.width * 0.35,
+                        height: context.height * 0.41,
+                        child: Column(
+                          children: [
+                            // SPACER :
+                            SizedBox(
+                              height: 20,
+                            ),
 
- 
+                            /// MILESTONE TAG INPUT FIELD
+                            MilestoneTagInput(context, widget.ResetMileForm),
 
-  //////////////////////////////////////////////
-  /// SUBMIT BUTTON :
-//////////////////////////////////////////////
-  Container MilestoneDialogSubmitButton({
-    required SubmitMileForm,
-    con_btn_top_margin,
-    con_button_height,
-    con_button_width }) {
-    return Container(
-      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 0),
-      child: InkWell(
-        highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(20), right: Radius.circular(20)),
-        onTap: () {
-          SubmitMileForm();
-        },
-        child: Card(
-          elevation: 10,
-          shadowColor: light_color_type3,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(5),
-            width: con_button_width,
-            height: con_button_height,
-            decoration: BoxDecoration(
-                color: primary_light,
-                borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(20), right: Radius.circular(20))),
-            child: const Text(
-              'submit',
-              style: TextStyle(
-                  letterSpacing: 2.5,
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+                            // SPACER :
+                            SizedBox(
+                              height: 40,
+                            ),
+
+                            // DESCRIPTION INPUT FIELD
+                            MilestoneDescInput(context,maxlines),
+
+                            /// SUBMIT BUTTON
+                            MilestoneDialogSubmitButton(
+                                SubmitMileForm: widget.SubmitMileForm,
+                                con_btn_top_margin: con_btn_top_margin,
+                                con_button_height: con_button_height,
+                                con_button_width: con_button_width)
+                          ],
+                        ),
+                      )),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
+

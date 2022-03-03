@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
 import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -26,11 +26,7 @@ class _AddMileButtonState extends State<AddMileButton> {
   final formKey = GlobalKey<FormBuilderState>();
   Color suffix_icon_color = Colors.blueGrey.shade300;
   int maxlines = 7;
-
   double addbtn_top_margin = 0.05;
-  double con_button_width = 90;
-  double con_button_height = 38;
-  double con_btn_top_margin = 10;
 
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
 
@@ -47,7 +43,16 @@ class _AddMileButtonState extends State<AddMileButton> {
       builder: (context) => AlertDialog(
         alignment: Alignment.center,
         // title:  MileDialogHeading(context),
-        content: SizedBox(width: 900, child: MileStoneDialog(context)),
+        content: SizedBox(
+          width: 900, 
+          child: MileStoneDialog(
+            key:UniqueKey(),
+            context: context,
+            formKey: formKey, 
+            ResetMileForm: ResetMileForm,
+            SubmitMileForm: SubmitMileForm,
+            CloseMilestoneDialog:CloseMilestoneDialog, 
+          )),
       ));
   }
 
@@ -136,99 +141,4 @@ class _AddMileButtonState extends State<AddMileButton> {
     );
   }
 
-/////////////////////////////////
-  /// MILESTONE DIALOG HEADING :
-  /// /////////////////////////////
-  Row MileDialogHeading(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            alignment: Alignment.topCenter,
-            child: AutoSizeText.rich(TextSpan(
-                style: context.textTheme.headline2,
-                children: [TextSpan(text: 'Define Milestone')])),
-          ),
-        ),
-        IconButton(
-            onPressed: () {
-              CloseMilestoneDialog();
-            },
-            icon: Icon(
-              Icons.cancel_outlined,
-              color: Colors.blueGrey.shade800,
-            ))
-      ],
-    );
-  }
-
-///////////////////////////////////////////////////////
-  /// 1. MILESTONE DIALOG :
-  /// 2. MILESTONE FORM : Take Title and Description:
-/////////////////////////////////////////////////////
-  FractionallySizedBox MileStoneDialog(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.8,
-      heightFactor: 0.55,
-      child: Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  // HEADING :
-                  MileDialogHeading(context),
-
-                  // ADD MILESTONE FORM :
-                  FormBuilder(
-                      key: formKey,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      child: Container(
-                        width: context.width * 0.35,
-                        height: context.height * 0.41,
-                        child: Column(
-                          children: [
-                            // SPACER :
-                            SizedBox(
-                              height: 20,
-                            ),
-
-                            /// MILESTONE TAG INPUT FIELD
-                            MilestoneTagInput(context, ResetMileForm),
-
-                            // SPACER :
-                            SizedBox(
-                              height: 40,
-                            ),
-
-                            // DESCRIPTION INPUT FIELD
-                            MilestoneDescInput(context),
-
-                            /// SUBMIT BUTTON
-                            MilestoneDialogSubmitButton(
-                                SubmitMileForm: SubmitMileForm,
-                                con_btn_top_margin: con_btn_top_margin,
-                                con_button_height: con_button_height,
-                                con_button_width: con_button_width)
-                          ],
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

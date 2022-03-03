@@ -24,7 +24,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
   /////////////////////////////////////////////
   MileStoneInfo() {
     try {
-      print('Show Mile Stone');
+      
     } catch (e) {
       print(' *** ERROR WHILE Show MILE STONE ***');
     }
@@ -96,45 +96,54 @@ class _MileStoneTagState extends State<MileStoneTag> {
           title: Container(
               padding: EdgeInsets.all(10),
               child: AutoSizeText('${widget.milestone!['title']}',
-                  style: GoogleFonts.robotoSlab(
-                    color: mil_default_text_color,
-                  ))),
+              style: GoogleFonts.robotoSlab(
+                color: mil_default_text_color,
+              ))),
 
-          // Edit and Delte Button :
-          trailing: Wrap(
-            children: [
-              // EDIT ICION :
-              InkWell(
-                onTap: () {
-                  EditMileStone();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.blue.shade300,
-                    size: 20,
-                  ),
-                ),
+              // Edit and Delte Button :
+              trailing: Wrap(
+                children: [
+                  // EDIT ICION :
+                  EditMileStoneButton(),
+                  DeleteMileStoneButton()
+                ],
               ),
-
-              InkWell(
-                onTap: () {
-                  DeleteMileStone(widget.milestone!['id']);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.delete_forever_rounded,
-                    color: Colors.red.shade300,
-                    size: 20,
-                  ),
-                ),
-              )
-            ],
-          ),
         ),
       ),
     );
+  }
+
+
+
+  InkWell DeleteMileStoneButton() {
+    return InkWell(
+            onTap: () {
+              DeleteMileStone(widget.milestone!['id']);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.delete_forever_rounded,
+                color: Colors.red.shade300,
+                size: 20,
+              ),
+            ),
+          );
+  }
+
+  InkWell EditMileStoneButton() {
+    return InkWell(
+          onTap: () {
+            EditMileStone();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.edit,
+              color: Colors.blue.shade300,
+              size: 20,
+            ),
+          ),
+        );
   }
 }
