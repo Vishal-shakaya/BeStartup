@@ -3,10 +3,19 @@ import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneDialog.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:stylish_dialog/stylish_dialog.dart';
+
+enum AlertType {
+  error,
+  success,
+}
 
 class MileStoneTag extends StatefulWidget {
   Map<String, dynamic>? milestone;
-  MileStoneTag({this.milestone, Key? key}) : super(key: key);
+  int? index;
+  MileStoneTag({this.index, this.milestone, Key? key}) : super(key: key);
 
   @override
   State<MileStoneTag> createState() => _MileStoneTagState();
@@ -16,29 +25,92 @@ class _MileStoneTagState extends State<MileStoneTag> {
   Color mil_default_text_color = Colors.black;
   Color mil_activate_text_color = Colors.teal.shade300;
   Color mil_deactivate_text_color = Colors.black;
+  final formKey = GlobalKey<FormBuilderState>();
 
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
-
   /////////////////////////////////////////////
   // Show Mile Stone info in dialog box :
   /////////////////////////////////////////////
-  MileStoneInfo() {
-    try {
-      
-    } catch (e) {
-      print(' *** ERROR WHILE Show MILE STONE ***');
+
+  EditMileStoneDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              alignment: Alignment.center,
+              // title:  MileDialogHeading(context),
+              content: SizedBox(
+                  width: 900,
+                  child: MileStoneDialog(
+                    key: UniqueKey(),
+                    context: context,
+                    formKey: formKey,
+                    ResetMileForm: ResetMileForm,
+                    SubmitMileForm: SubmitMileForm,
+                    CloseMilestoneDialog: CloseMilestoneDialog,
+                  )),
+      ));
+  }
+
+  ///////////////////////////////////////
+  /// SUBMIT PRODUCT FORM :
+  /// ////////////////////////////////////
+  SubmitMileForm() {
+    formKey.currentState!.save();
+    if (formKey.currentState!.validate()) {
+      print('form submited');
+      final mile_tag = formKey.currentState!.value['mile_tag'];
+      final mile_desc = formKey.currentState!.value['mile_desc'];
+
+      // Add Milestone :
+      var res = mileStore.EditMileStone(
+          index: widget.index, title: mile_tag, description: mile_desc);
+      // Show success dialog :
+      if (res['response']) {
+        formKey.currentState!.reset();
+        Navigator.of(context).pop();
+        ResultAlert(AlertType.success);
+      }
+      // Show error dialog :
+      if (!res['response']) {
+        ResultAlert(AlertType.error);
+      }
     }
   }
 
-  /////////////////////////////////////////////
-  // Edit Mile Stone :
-  /////////////////////////////////////////////
-  EditMileStone() {
-    try {
-      print('Show Edit');
-    } catch (e) {
-      print(' *** ERROR WHILE Edit MILE STONE ***');
+  /// RESET FORM :
+  ResetMileForm() {
+    formKey.currentState!.reset();
+  }
+
+  // Close dialog :
+  CloseMilestoneDialog() {
+    Navigator.of(context).pop();
+  }
+
+  MileStoneInfo() {}
+  // RESULT ALERT AFTER OPERATION COMPLETE ;
+  // 1 ADD OR DELET
+  ResultAlert(alert_type) async {
+    var dialog;
+    if (alert_type == AlertType.success) {
+      dialog = StylishDialog(
+          context: context,
+          alertType: StylishDialogType.SUCCESS,
+          titleText: 'successfull',
+          controller: DialogController());
     }
+    if (alert_type == AlertType.error) {
+      dialog = StylishDialog(
+          context: context,
+          alertType: StylishDialogType.ERROR,
+          titleText: 'Error',
+          controller: DialogController());
+    }
+
+    dialog.show();
+    await Future.delayed(Duration(seconds: 1));
+    dialog.dismiss();
   }
 
   /////////////////////////////////////////////
@@ -46,12 +118,16 @@ class _MileStoneTagState extends State<MileStoneTag> {
   /////////////////////////////////////////////
   DeleteMileStone(id) {
     final res = mileStore.DeleteMileStone(id);
-    if (res['response']) { print('successs');}
-    if (!res['response']) { print('error'); }
+    if (res['response']) {
+      print('successs');
+    }
+    if (!res['response']) {
+      print('error');
+    }
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Container(
       key: UniqueKey(),
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -96,54 +172,53 @@ class _MileStoneTagState extends State<MileStoneTag> {
           title: Container(
               padding: EdgeInsets.all(10),
               child: AutoSizeText('${widget.milestone!['title']}',
-              style: GoogleFonts.robotoSlab(
-                color: mil_default_text_color,
-              ))),
+                  style: GoogleFonts.robotoSlab(
+                    color: mil_default_text_color,
+                  ))),
 
-              // Edit and Delte Button :
-              trailing: Wrap(
-                children: [
-                  // EDIT ICION :
-                  EditMileStoneButton(),
-                  DeleteMileStoneButton()
-                ],
-              ),
+          // Edit and Delte Button :
+          trailing: Wrap(
+            children: [
+              // EDIT ICION :
+              EditMileStoneButton(),
+              DeleteMileStoneButton()
+            ],
+          ),
         ),
       ),
     );
   }
 
-
-
   InkWell DeleteMileStoneButton() {
     return InkWell(
-            onTap: () {
-              DeleteMileStone(widget.milestone!['id']);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.delete_forever_rounded,
-                color: Colors.red.shade300,
-                size: 20,
-              ),
-            ),
-          );
+      onTap: () {
+        DeleteMileStone(widget.milestone!['id']);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.delete_forever_rounded,
+          color: Colors.red.shade300,
+          size: 20,
+        ),
+      ),
+    );
   }
 
   InkWell EditMileStoneButton() {
     return InkWell(
-          onTap: () {
-            EditMileStone();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.edit,
-              color: Colors.blue.shade300,
-              size: 20,
-            ),
-          ),
-        );
+      onTap: () {
+        print('edit mielstone');
+        EditMileStoneDialog();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.edit,
+          color: Colors.blue.shade300,
+          size: 20,
+        ),
+      ),
+    );
   }
 }

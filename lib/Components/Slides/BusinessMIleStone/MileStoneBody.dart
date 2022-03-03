@@ -55,6 +55,8 @@ class _MileStoneBodyState extends State<MileStoneBody> {
                       itemBuilder: (context, intex) {
                         return MileStoneTag(
                           milestone: milestones[intex],
+                          index: intex,
+                          key: UniqueKey(),
                         );
                       }); 
                 },
