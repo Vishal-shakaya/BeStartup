@@ -3,19 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-
 class MileStoneDialog extends StatefulWidget {
   var context;
   var formKey;
   Function? ResetMileForm;
   Function? SubmitMileForm;
   Function? CloseMilestoneDialog;
+  String? milestone_title='';
+  String? milestone_description='';
+  bool? is_editable=false; 
+  bool? info_dialog=false; 
+
   MileStoneDialog(
       {this.context,
       this.formKey,
       this.ResetMileForm,
       this.SubmitMileForm,
       this.CloseMilestoneDialog,
+      this.milestone_title,
+      this.milestone_description,
+      this.is_editable, 
+      this.info_dialog, 
       Key? key})
       : super(key: key);
 
@@ -28,7 +36,6 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
   double con_button_width = 90;
   double con_button_height = 38;
   double con_btn_top_margin = 10;
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,11 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                             ),
 
                             /// MILESTONE TAG INPUT FIELD
-                            MilestoneTagInput(context, widget.ResetMileForm),
+                            MilestoneTagInput(
+                              context:context, 
+                              ResetMileForm:widget.ResetMileForm,
+                              default_title:widget.milestone_title, 
+                             info_dialog:widget.info_dialog),
 
                             // SPACER :
                             SizedBox(
@@ -80,7 +91,11 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                             ),
 
                             // DESCRIPTION INPUT FIELD
-                            MilestoneDescInput(context,maxlines),
+                            MilestoneDescInput(
+                              context:context, 
+                              maxlines:maxlines,
+                              default_description: widget.milestone_description ,
+                              info_dialog:widget.info_dialog ),
 
                             /// SUBMIT BUTTON
                             MilestoneDialogSubmitButton(
@@ -100,4 +115,3 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
     );
   }
 }
-

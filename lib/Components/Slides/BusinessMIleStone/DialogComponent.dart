@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
 /////////////////////////////////
 /// MILESTONE DIALOG HEADING :
 /// /////////////////////////////
@@ -31,15 +32,20 @@ Row MileDialogHeading(context, CloseMilestoneDialog) {
     ],
   );
 }
+
 /////////////////////////////////////////
 // MILESTONE TAG INPUT SECTION :
 /////////////////////////////////////////
-FormBuilderTextField MilestoneTagInput(BuildContext context, ResetMileForm) {
+FormBuilderTextField MilestoneTagInput({
+  context, ResetMileForm, default_title, info_dialog
+  }) {
   return FormBuilderTextField(
+    enabled: !info_dialog,
+    initialValue: default_title,
     textAlign: TextAlign.center,
     name: 'mile_tag',
     maxLength: 50,
-    style:Get.theme.textTheme.headline2,
+    style: Get.theme.textTheme.headline2,
     keyboardType: TextInputType.emailAddress,
     validator: FormBuilderValidators.compose([
       FormBuilderValidators.minLength(context, 3,
@@ -60,6 +66,7 @@ FormBuilderTextField MilestoneTagInput(BuildContext context, ResetMileForm) {
           child: Icon(
             Icons.cancel_outlined,
             color: Colors.grey.shade400,
+            size: 18,
           ),
         ),
       ),
@@ -74,8 +81,11 @@ FormBuilderTextField MilestoneTagInput(BuildContext context, ResetMileForm) {
 /////////////////////////////////////////
 // MILE STONE DESCRIPTION SECTION :
 /////////////////////////////////////////
-FormBuilderTextField MilestoneDescInput(context,maxlines) {
+FormBuilderTextField MilestoneDescInput(
+    {context, maxlines, default_description, info_dialog}) {
   return FormBuilderTextField(
+    enabled: !info_dialog,
+    initialValue: default_description,
     name: 'mile_desc',
     style: GoogleFonts.robotoSlab(
       fontSize: 16,

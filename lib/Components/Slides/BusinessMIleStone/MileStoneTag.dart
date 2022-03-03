@@ -32,25 +32,43 @@ class _MileStoneTagState extends State<MileStoneTag> {
   // Show Mile Stone info in dialog box :
   /////////////////////////////////////////////
 
-  EditMileStoneDialog() {
+  ShowMileStoneDialog({info_dialog}) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-              alignment: Alignment.center,
-              // title:  MileDialogHeading(context),
-              content: SizedBox(
-                  width: 900,
-                  child: MileStoneDialog(
-                    key: UniqueKey(),
-                    context: context,
-                    formKey: formKey,
-                    ResetMileForm: ResetMileForm,
-                    SubmitMileForm: SubmitMileForm,
-                    CloseMilestoneDialog: CloseMilestoneDialog,
-                  )),
-      ));
+          alignment: Alignment.center,
+          // title:  MileDialogHeading(context),
+          content: SizedBox(
+              width: 900,
+              child: MileStoneDialog(
+                key: UniqueKey(),
+                context: context,
+                formKey: formKey,
+                ResetMileForm: ResetMileForm,
+                SubmitMileForm: SubmitMileForm,
+                CloseMilestoneDialog: CloseMilestoneDialog,
+                milestone_title: widget.milestone!['title'],
+                milestone_description: widget.milestone!['description'],
+                is_editable: true,
+                info_dialog:info_dialog
+              )),
+        ));
   }
+
+  ////////////////////////////////////
+  ///   EDIT MILE STONE DIALOG : 
+  /// //////////////////////////////////
+  EditMileStoneDialog() {
+    ShowMileStoneDialog(info_dialog: false);
+  }
+
+  //////////////////////////////////////
+  ///  SHOW INFO DIALOG OF MILE STONE : 
+  /// //////////////////////////////////
+    MileStoneInfo() {
+      ShowMileStoneDialog(info_dialog: true);
+    }
 
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
@@ -58,7 +76,6 @@ class _MileStoneTagState extends State<MileStoneTag> {
   SubmitMileForm() {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      print('form submited');
       final mile_tag = formKey.currentState!.value['mile_tag'];
       final mile_desc = formKey.currentState!.value['mile_desc'];
 
@@ -88,7 +105,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
     Navigator.of(context).pop();
   }
 
-  MileStoneInfo() {}
+
   // RESULT ALERT AFTER OPERATION COMPLETE ;
   // 1 ADD OR DELET
   ResultAlert(alert_type) async {
@@ -197,8 +214,8 @@ class _MileStoneTagState extends State<MileStoneTag> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Icon(
-          Icons.delete_forever_rounded,
-          color: Colors.red.shade300,
+          Icons.cancel,
+          color: Colors.red.shade400,
           size: 20,
         ),
       ),
@@ -208,14 +225,13 @@ class _MileStoneTagState extends State<MileStoneTag> {
   InkWell EditMileStoneButton() {
     return InkWell(
       onTap: () {
-        print('edit mielstone');
         EditMileStoneDialog();
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Icon(
           Icons.edit,
-          color: Colors.blue.shade300,
+          color: Colors.blue.shade400,
           size: 20,
         ),
       ),

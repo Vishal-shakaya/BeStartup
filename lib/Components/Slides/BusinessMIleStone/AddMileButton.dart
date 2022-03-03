@@ -52,6 +52,9 @@ class _AddMileButtonState extends State<AddMileButton> {
             ResetMileForm: ResetMileForm,
             SubmitMileForm: SubmitMileForm,
             CloseMilestoneDialog:CloseMilestoneDialog, 
+            info_dialog: false,
+            is_editable: false,
+
           )),
       ));
   }
