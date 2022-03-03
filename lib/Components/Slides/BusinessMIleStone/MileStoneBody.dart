@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
 import 'package:be_startup/Components/Slides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneTag.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MileStoneBody extends StatefulWidget {
   const MileStoneBody({Key? key}) : super(key: key);
@@ -23,10 +22,12 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   double addbtn_top_margin = 0.05;
 
-
+  final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
 
   @override
   Widget build(BuildContext context) {
+    var milestones = mileStore.GetMileStonesList();
+    print(milestones);
     return Container(
         width: context.width * mile_cont_width,
         height: context.height * mile_cont_height,
@@ -35,27 +36,31 @@ class _MileStoneBodyState extends State<MileStoneBody> {
           SubHeadingSection(context),
 
           // ADD TAG BUTTON :
-         AddMileButton(),
+          AddMileButton(),
 
-        //////////////////////////////
-        // LIST OF TAGS :
-        // 1.Show milestone Info: 
-        // 2.Delete milestone :
-        // 3.Edit MileStone :  
-        //////////////////////////////
+          //////////////////////////////
+          // LIST OF TAGS :
+          // 1.Show milestone Info:
+          // 2.Delete milestone :
+          // 3.Edit MileStone :
+          //////////////////////////////
           Container(
-            width: context.width * list_tile_width,
-            height: context.height * list_tile_height,
-            margin: EdgeInsets.only(top: 10),
-            child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, intex) {
-                  return MileStoneTag();
-                }))
-                ]));
+              width: context.width * list_tile_width,
+              height: context.height * list_tile_height,
+              margin: EdgeInsets.only(top: 10),
+              child: Obx(
+                () {
+                  return ListView.builder(
+                      itemCount: milestones.length,
+                      itemBuilder: (context, intex) {
+                        return MileStoneTag(
+                          milestone: milestones[intex],
+                        );
+                      }); 
+                },
+              ))
+        ]));
   }
-
-
 
   ////////////////////////
   /// SUBHEADING SECTION :

@@ -1,12 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneTag.dart';
+import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
+import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:stylish_dialog/stylish_dialog.dart';
+
+enum AlertType {
+  error,
+  success,
+}
+
 /////////////////////////////////
 /// ADD MILE STONE :
 /////////////////////////////////
@@ -27,6 +32,24 @@ class _AddMileButtonState extends State<AddMileButton> {
   double con_button_height = 38;
   double con_btn_top_margin = 10;
 
+  final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+
+
+  ////////////////////////////////////
+  /// ADD MILE STONE :
+  /// 1.Tag filed  max char 50 allow:
+  /// 2.Description filed :
+  ////////////////////////////////////
+  AddMileStone() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        // title:  MileDialogHeading(context),
+        content: SizedBox(width: 900, child: MileStoneDialog(context)),
+      ));
+  }
 
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
@@ -35,36 +58,62 @@ class _AddMileButtonState extends State<AddMileButton> {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       print('form submited');
-      // final heading = formKey.currentState!.value['prod_head'];
+      final mile_tag = formKey.currentState!.value['mile_tag'];
+      final mile_desc = formKey.currentState!.value['mile_desc'];
+
+      // Add Milestone :
+      var res = mileStore.AddMileStone(title: mile_tag, description: mile_desc);
+      // Show success dialog :
+      if (res['response']) {
+        formKey.currentState!.reset();
+        Navigator.of(context).pop();
+        ResultAlert(AlertType.success);
+      }
+      // Show error dialog :
+      if (!res['response']) {
+        ResultAlert(AlertType.error);
+      }
     }
   }
+
 
   /// RESET FORM :
   ResetMileForm() {
     formKey.currentState!.reset();
   }
 
- ////////////////////////////////////
-  /// ADD MILE STONE :
-  /// 1.Tag filed  max char 50 allow:
-  /// 2.Description filed :
-  ////////////////////////////////////
-  @override
-  AddMileStone() {
-  showDialog(
-      context: context,
-      builder: (context) => 
-      AlertDialog(
-        alignment: Alignment.center,
-        // title:  MileDialogHeading(context),
-        content:SizedBox(
-          width:900,
-          child: MileDialog(context)) ,
-      ));
+  CloseMilestoneDialog() {
+    Navigator.of(context).pop();
   }
 
 
+  // RESULT ALERT AFTER OPERATION COMPLETE ; 
+  // 1 ADD OR DELET 
+  ResultAlert(alert_type) async {
+    var dialog;
+    if (alert_type == AlertType.success) {
+      dialog = StylishDialog(
+          context: context,
+          alertType: StylishDialogType.SUCCESS,
+          titleText: 'successfull',
+          controller: DialogController());
+    }
+    if (alert_type == AlertType.error) {
+      dialog = StylishDialog(
+          context: context,
+          alertType: StylishDialogType.ERROR,
+          titleText: 'Error',
+          controller: DialogController());
+    }
 
+    dialog.show();
+    await Future.delayed(Duration(seconds: 1));
+    dialog.dismiss();
+  }
+
+
+// MAIN METHOD :
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: context.height * addbtn_top_margin),
@@ -73,38 +122,59 @@ class _AddMileButtonState extends State<AddMileButton> {
         children: [
           Expanded(flex: 1, child: Container()),
           Container(
-            child: ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(primary_light)),
-              onPressed: () {
-                AddMileStone();
-              },
-              icon: Icon(Icons.add),
-              label: Text('Add')))
+              child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(primary_light)),
+                  onPressed: () {
+                    AddMileStone();
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('Add')))
         ],
       ),
     );
   }
 
-
-  AutoSizeText MileDialogHeading(BuildContext context) {
-    return AutoSizeText.rich(TextSpan(
-        style: context.textTheme.headline2,
-        children: [
-          TextSpan(text: 'Define Milestone')
-          ])
-        );
+/////////////////////////////////
+  /// MILESTONE DIALOG HEADING :
+  /// /////////////////////////////
+  Row MileDialogHeading(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: AutoSizeText.rich(TextSpan(
+                style: context.textTheme.headline2,
+                children: [TextSpan(text: 'Define Milestone')])),
+          ),
+        ),
+        IconButton(
+            onPressed: () {
+              CloseMilestoneDialog();
+            },
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: Colors.blueGrey.shade800,
+            ))
+      ],
+    );
   }
- FractionallySizedBox MileDialog(BuildContext context) {
-   return FractionallySizedBox(
-      widthFactor: 0.7,
+
+///////////////////////////////////////////////////////
+  /// 1. MILESTONE DIALOG :
+  /// 2. MILESTONE FORM : Take Title and Description:
+/////////////////////////////////////////////////////
+  FractionallySizedBox MileStoneDialog(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: 0.8,
       heightFactor: 0.55,
       child: Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Colors.white, 
-    
+          color: Colors.white,
         ),
         child: Scaffold(
           body: SingleChildScrollView(
@@ -112,145 +182,53 @@ class _AddMileButtonState extends State<AddMileButton> {
               alignment: Alignment.topCenter,
               child: Column(
                 children: [
-                  SizedBox(height: 10,),  
-                  // HEADING : 
-                 MileDialogHeading(context),
+                  SizedBox(
+                    height: 10,
+                  ),
 
+                  // HEADING :
+                  MileDialogHeading(context),
 
-                  //////////////////////////////////
-                  // FORM : 
-                  // 1.TAG INPUT FILED  : 
-                  // 2.DESCRIPTION INPUT FILED:   
-                  //////////////////////////////////
+                  // ADD MILESTONE FORM :
                   FormBuilder(
-                    key:formKey, 
-                    autovalidateMode:AutovalidateMode.disabled, 
-                    child: Container(
-                      width:context.width * 0.3, 
-                      height:context.height * 0.42, 
-                      // padding:EdgeInsets.all(20),
-                      child: Column(
-                      children: [
-                        SizedBox(height: 20,),
-                         FormBuilderTextField(
-                          textAlign: TextAlign.center,
-                          name: 'mile_tag',
-                          maxLength:50,
-                          style: Get.textTheme.headline2,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.minLength(context, 3,
-                                errorText: 'At least 3 char allow'), 
-                      
-                            FormBuilderValidators.maxLength(context, 50,
-                                errorText: 'Max 50 char allow')
-                          ]),
-                          decoration: InputDecoration(
-                            hintText: 'Title',
-                            contentPadding: EdgeInsets.all(16),
-                            hintStyle: TextStyle(fontSize: 18, color: Colors.grey.shade300),
-                      
-                            suffix: InkWell(
-                              onTap: () {
-                                ResetMileForm();
-                              },
-                              child: Container(
-                                child: Icon(
-                                  Icons.cancel_outlined,
-                                  color: suffix_icon_color,
-                                ),
-                              ),
+                      key: formKey,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      child: Container(
+                        width: context.width * 0.35,
+                        height: context.height * 0.41,
+                        child: Column(
+                          children: [
+                            // SPACER :
+                            SizedBox(
+                              height: 20,
                             ),
-                      
-                            // focusColor:Colors.pink,
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(width: 2, color: primary_light)),
-                          ),
-                        ),
-                      
-                        SizedBox(height: 40,), 
-          
-                         FormBuilderTextField(
-                          name: 'mile_desc',
-                          style: GoogleFonts.robotoSlab(
-                            fontSize: 16,
-                          ),
-                          maxLength:200 ,
-                          scrollPadding: EdgeInsets.all(10),
-                          maxLines: maxlines,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.minLength(context, 40,
-                                errorText: 'At least 50 char allow')
-                          ]),
-                          decoration: InputDecoration(
-                              helperText: 'min allow 50 ',
-                              hintText: "Milestone detail",
-                              hintStyle: TextStyle(
-                                color: Colors.blueGrey.shade200,
-                              ),
-                              fillColor: Colors.grey[100],
-                              filled: true,
-                              contentPadding: EdgeInsets.all(20),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide:
-                                      BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(width: 2, color: primary_light)),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
-                        ) ,
-                      
-                //////////////////////
-                /// SUBMIT BUTTON
-                //////////////////////
-              Container(
-              margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 0),
-              child: InkWell(
-                highlightColor: primary_light_hover,
-                borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(20), right: Radius.circular(20)),
-                onTap: () {
-                  
-                },
-                child: Card(
-                  elevation: 10,
-                  shadowColor: light_color_type3,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(5),
-                    width: con_button_width,
-                    height: con_button_height,
-                    decoration: BoxDecoration(
-                        color: primary_light,
-                        borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(20),
-                            right: Radius.circular(20))),
-                    child: const Text(
-                      'submit',
-                      style: TextStyle(
-                          letterSpacing: 2.5,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            )
-                      
-                      ],
-                  ),
-                )), 
 
-              ],
-                    ),
+                            /// MILESTONE TAG INPUT FIELD
+                            MilestoneTagInput(context, ResetMileForm),
+
+                            // SPACER :
+                            SizedBox(
+                              height: 40,
+                            ),
+
+                            // DESCRIPTION INPUT FIELD
+                            MilestoneDescInput(context),
+
+                            /// SUBMIT BUTTON
+                            MilestoneDialogSubmitButton(
+                                SubmitMileForm: SubmitMileForm,
+                                con_btn_top_margin: con_btn_top_margin,
+                                con_button_height: con_button_height,
+                                con_button_width: con_button_width)
+                          ],
+                        ),
+                      )),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
- }
+  }
 }

@@ -810,6 +810,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  status_alert:
+    dependency: "direct main"
+    description:
+      name: status_alert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   stream_channel:
     dependency: transitive
     description:
@@ -831,6 +838,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  stylish_dialog:
+    dependency: "direct main"
+    description:
+      name: stylish_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.12"
   term_glyph:
     dependency: transitive
     description:

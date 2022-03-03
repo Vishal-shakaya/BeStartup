@@ -37,9 +37,17 @@ dependencies:
   toggle_switch: ^1.4.0
   auto_size_text: ^3.0.0
   cool_alert: ^1.1.0
+  status_alert: ^1.0.0
   container_tab_indicator: ^0.3.0
-  json_annotation: ^4.3.0
   sign_button: ^2.0.2
+  json_annotation: ^4.3.0
+  gradient_ui_widgets: ^1.0.2-nullsafety
+  stylish_dialog: ^0.0.12
+
+  crop_your_image: ^0.6.0+1
+  image_picker: ^0.8.4+6
+  image_cropper: ^1.4.1
+  
   cupertino_icons: ^1.0.2
   firebase_core: ^1.11.0
   firebase_analytics: ^9.0.5
@@ -47,12 +55,8 @@ dependencies:
   google_fonts: ^2.2.0
   flutter_form_builder: ^7.0.0
   form_builder_validators: ^7.3.0
-  gradient_ui_widgets: ^1.0.2-nullsafety
   cloud_firestore: ^3.1.7
   firebase_auth: ^3.3.6
-  image_picker: ^0.8.4+6
-  image_cropper: ^1.4.1
-  crop_your_image: ^0.6.0+1
   file_picker: ^4.3.3
   firebase_storage: ^10.2.7
   introduction_screen: ^3.0.0
