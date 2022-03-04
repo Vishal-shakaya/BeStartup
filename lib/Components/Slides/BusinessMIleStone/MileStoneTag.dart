@@ -40,7 +40,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
     // DEFAULT :
     if (context.width > 1500) {
       print('greator then 1500');
-       milestone_width = 900;
+      milestone_width = 900;
     }
 
     // PC:
@@ -48,26 +48,30 @@ class _MileStoneTagState extends State<MileStoneTag> {
       print('1500');
     }
 
-    if (context.width < 1200) {print('1200');}
+    if (context.width < 1200) {
+      print('1200');
+    }
 
     if (context.width < 1000) {
       milestone_width = 1100;
-      print('1000');}
+      print('1000');
+    }
 
     // TABLET :
     if (context.width < 800) {
       print('800');
       milestone_width = 1200;
-      }
+    }
     // SMALL TABLET:
     if (context.width < 640) {
       milestone_width = 1400;
       print('640');
-
-      }
+    }
 
     // PHONE:
-    if (context.width < 480) {print('480');}
+    if (context.width < 480) {
+      print('480');
+    }
 
     return Container(
       key: UniqueKey(),

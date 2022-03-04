@@ -36,9 +36,8 @@ Row MileDialogHeading(context, CloseMilestoneDialog) {
 /////////////////////////////////////////
 // MILESTONE TAG INPUT SECTION :
 /////////////////////////////////////////
-FormBuilderTextField MilestoneTagInput({
-  context, ResetMileForm, default_title, info_dialog
-  }) {
+FormBuilderTextField MilestoneTagInput(
+    {context, ResetMileForm, default_title, info_dialog}) {
   return FormBuilderTextField(
     enabled: !info_dialog,
     initialValue: default_title,
