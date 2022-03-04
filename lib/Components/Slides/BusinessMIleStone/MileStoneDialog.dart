@@ -9,10 +9,10 @@ class MileStoneDialog extends StatefulWidget {
   Function? ResetMileForm;
   Function? SubmitMileForm;
   Function? CloseMilestoneDialog;
-  String? milestone_title='';
-  String? milestone_description='';
-  bool? is_editable=false; 
-  bool? info_dialog=false; 
+  String? milestone_title = '';
+  String? milestone_description = '';
+  bool? is_editable = false;
+  bool? info_dialog = false;
 
   MileStoneDialog(
       {this.context,
@@ -22,8 +22,8 @@ class MileStoneDialog extends StatefulWidget {
       this.CloseMilestoneDialog,
       this.milestone_title,
       this.milestone_description,
-      this.is_editable, 
-      this.info_dialog, 
+      this.is_editable,
+      this.info_dialog,
       Key? key})
       : super(key: key);
 
@@ -36,9 +36,63 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
   double con_button_width = 90;
   double con_button_height = 38;
   double con_btn_top_margin = 10;
-
+  double formsection_width = 0.35;
+  double formsection_height = 0.41; 
   @override
   Widget build(BuildContext context) {
+       ////////////////////////////////
+    /// RESPONSIVE BREAK  POINTS :
+    /// DEFAULT 1500 :
+    /// ///////////////////////////
+
+    // DEFAULT :
+    if (context.width > 1500) {
+        con_button_width = 90;
+        con_button_height = 38;
+        con_btn_top_margin = 10;
+        formsection_width = 0.35;
+        formsection_height = 0.41;
+        maxlines = 7; 
+      print('greator then 1500');
+  
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      maxlines = 6; 
+      con_btn_top_margin = 7;
+      formsection_height = 0.55; 
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      formsection_width = 0.35;
+      formsection_height = 0.50; 
+      maxlines = 5; 
+      con_button_width = 90;
+      con_button_height = 34;
+      con_btn_top_margin = 5;
+      print('1200');}
+
+    if (context.width < 1000) {
+        formsection_height = 0.70; 
+      print('1000');}
+
+    // TABLET :
+    if (context.width < 800) {
+      maxlines = 4; 
+      print('800');
+
+      }
+    // SMALL TABLET:
+    if (context.width < 640) {
+      maxlines = 3; 
+
+
+      }
+
+    // PHONE:
+    if (context.width < 480) {print('480');}
     ///////////////////////////////////////////////////////
     /// 1. MILESTONE DIALOG :
     /// 2. MILESTONE FORM : Take Title and Description:
@@ -69,41 +123,44 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                       key: widget.formKey,
                       autovalidateMode: AutovalidateMode.disabled,
                       child: Container(
-                        width: context.width * 0.35,
-                        height: context.height * 0.41,
-                        child: Column(
-                          children: [
-                            // SPACER :
-                            SizedBox(
-                              height: 20,
-                            ),
+                        width: context.width * formsection_width,
+                        height: context.height * formsection_height,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              // SPACER :
+                              SizedBox(
+                                height: 20,
+                              ),
 
-                            /// MILESTONE TAG INPUT FIELD
-                            MilestoneTagInput(
-                              context:context, 
-                              ResetMileForm:widget.ResetMileForm,
-                              default_title:widget.milestone_title, 
-                             info_dialog:widget.info_dialog),
+                              /// MILESTONE TAG INPUT FIELD
+                              MilestoneTagInput(
+                                  context: context,
+                                  ResetMileForm: widget.ResetMileForm,
+                                  default_title: widget.milestone_title,
+                                  info_dialog: widget.info_dialog),
 
-                            // SPACER :
-                            SizedBox(
-                              height: 40,
-                            ),
+                              // SPACER :
+                              SizedBox(
+                                height: 40,
+                              ),
 
-                            // DESCRIPTION INPUT FIELD
-                            MilestoneDescInput(
-                              context:context, 
-                              maxlines:maxlines,
-                              default_description: widget.milestone_description ,
-                              info_dialog:widget.info_dialog ),
+                              // DESCRIPTION INPUT FIELD
+                              MilestoneDescInput(
+                                  context: context,
+                                  maxlines: maxlines,
+                                  default_description:
+                                      widget.milestone_description,
+                                  info_dialog: widget.info_dialog),
 
-                            /// SUBMIT BUTTON
-                            MilestoneDialogSubmitButton(
-                                SubmitMileForm: widget.SubmitMileForm,
-                                con_btn_top_margin: con_btn_top_margin,
-                                con_button_height: con_button_height,
-                                con_button_width: con_button_width)
-                          ],
+                              /// SUBMIT BUTTON
+                              MilestoneDialogSubmitButton(
+                                  SubmitMileForm: widget.SubmitMileForm,
+                                  con_btn_top_margin: con_btn_top_margin,
+                                  con_button_height: con_button_height,
+                                  con_button_width: con_button_width)
+                            ],
+                          ),
                         ),
                       )),
                 ],
