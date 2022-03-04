@@ -78,6 +78,7 @@ class _UserTypeState extends State<UserType> {
     // REDIERCT TO STARTUPS VIEW:
     if (selected_user_type == 'investor') {
       print('User Type investor');
+      Get.toNamed(registor_founder ,preventDuplicates: false);
     }
   }
 

@@ -33,7 +33,7 @@ String copyright_text = 'feelsafe @Copyright';
 String user_type_heading = 'WHO YOU ARE ?';
 
 // Business Detail :
-String business_slide_heading = 'Youe Startup Detail';
+String business_slide_heading = 'Your Startup Detail';
 
 // Thmbnail Detail :
 String thumbnail_slide_heading = 'Thumbnail';
@@ -56,4 +56,7 @@ String product_image_subhead = 'Product or Services';
 
 // MILESTONEES :
 String milestone_heading_test = 'MileStone';
-String milestone_subHeading_text = 'Each MileStone define How, you gonna achive your milestone and start you startup at the end';
+String milestone_subHeading_text =
+    'Each MileStone define How, you gonna achive your milestone and start you startup at the end';
+
+String registor_founder_head_text = 'Founder';

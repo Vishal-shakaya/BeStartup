@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:be_startup/UI/RegistorTeam/RegistorTeam.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
 import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:be_startup/Handlers/Login.dart';
+import 'package:be_startup/Handlers/UserRegistration/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: signup_url,page:()=> SignupView() ), 
           GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
           GetPage(name: startup_slides_url ,page:()=> StartupSlides() ), 
+          GetPage(name: registor_founder ,page:()=> RegistorTeam() ), 
         ],
       );
   }
