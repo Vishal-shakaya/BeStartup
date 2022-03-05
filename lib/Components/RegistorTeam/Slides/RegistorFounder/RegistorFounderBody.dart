@@ -20,7 +20,6 @@ class RegistorFounderBody extends StatelessWidget {
       /////////////////////////////////////////  
         child: Column(
           children: [
-
             // UPLOAD FOUNDER IMAGE : 
             FounderImage(),
 

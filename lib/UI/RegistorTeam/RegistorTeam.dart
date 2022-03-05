@@ -25,7 +25,7 @@ class _RegistorTeamState extends State<RegistorTeam> {
    /////////////////////////////////////////  
     PageViewModel(
       /// HEADING SECTION : 
-      titleWidget:SlideHeading(heading: registor_founder_head_text,),
+       titleWidget:SlideHeading(heading: registor_founder_head_text,),
       // BODY SECTION
        bodyWidget: RegistorFounderBody()
 

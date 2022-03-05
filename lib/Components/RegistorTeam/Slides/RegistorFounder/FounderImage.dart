@@ -61,7 +61,7 @@ class _FounderImageState extends State<FounderImage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: context.height * 0.05),
+        margin: EdgeInsets.only(),
         alignment: Alignment.center,
         child: Stack(
           children: [

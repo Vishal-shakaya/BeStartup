@@ -13,6 +13,9 @@ final light_color_type2 = Colors.blueGrey[800];
 final light_color_type3 = Colors.blueGrey;
 final input_label_color  = Colors.grey;
 
+// reset text field icon color :  
+final input_reset_color  = Colors.grey;
+
 //
 final primary_light = Color(0xFF54BAB9);
 final primary_light_hover = Color(0xFFC8F2EF);
