@@ -7,14 +7,14 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 
-class FounderImage extends StatefulWidget {
-  FounderImage({Key? key}) : super(key: key);
+class TeamMemberProfileImage extends StatefulWidget {
+  TeamMemberProfileImage({Key? key}) : super(key: key);
 
   @override
-  State<FounderImage> createState() => _FounderImageState();
+  State<TeamMemberProfileImage> createState() => _TeamMemberProfileImageState();
 }
 
-class _FounderImageState extends State<FounderImage> {
+class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
@@ -61,7 +61,9 @@ class _FounderImageState extends State<FounderImage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.center,
+      width:150, 
+      height:160,
+        // alignment: Alignment.center,
         child: Stack(
           children: [
             Card(
@@ -71,12 +73,12 @@ class _FounderImageState extends State<FounderImage> {
               ),
               child: upload_image_url != ''
                 ? CircleAvatar(
-                    radius: 85,
+                    radius: 70,
                     backgroundColor: Colors.blueGrey[100],
                     foregroundImage: NetworkImage(upload_image_url),
                   )
                 : CircleAvatar(
-                    radius: 85,
+                    radius: 70,
                     backgroundColor: Colors.blueGrey[100],
                     child: AutoSizeText(
                       'Startup Logo', 
@@ -92,8 +94,8 @@ class _FounderImageState extends State<FounderImage> {
             // UPLOAD CAMERA ICON:
             ////////////////////////////////
             Positioned(
-                top: 129,
-                left: 129,
+                top: 100,
+                left: 100,
                 child: Card(
                   shadowColor: primary_light,
                   // elevation: 1,

@@ -59,4 +59,9 @@ String milestone_heading_test = 'MileStone';
 String milestone_subHeading_text =
     'Each MileStone define How, you gonna achive your milestone and start you startup at the end';
 
+// CREATE TEAM SLIDES :
+//1. REGISTORFOUNDER SLIDE :
 String registor_founder_head_text = 'Founder';
+//2. REGISTOR TEAM SLIDE
+String registor_team_head_text = 'Team Members';
+

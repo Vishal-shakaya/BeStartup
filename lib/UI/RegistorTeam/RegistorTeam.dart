@@ -1,4 +1,5 @@
 import 'package:be_startup/Components/RegistorTeam/Slides/RegistorFounder/RegistorFounderBody.dart';
+import 'package:be_startup/Components/RegistorTeam/Slides/RegistorTeam/RegistorTeamBody.dart';
 import 'package:be_startup/Components/Slides/SlideHeading.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -19,15 +20,27 @@ class _RegistorTeamState extends State<RegistorTeam> {
    List<PageViewModel> slides =[
 
    /////////////////////////////////////////  
-   ///  BUSINESS SLIDE :
-   ///  1. BUSINESS ICON : 
-   ///  2. INPUT FIELD TAKE BUSINESS NAME :  
+   ///  FOUNDER REGISTRATION SLIDE :
+   ///  1. PROFILE ICON UPLOAD : 
+   ///  2. TAKE FOUNDER DETAIL AN DCONTACT INFO  :  
    /////////////////////////////////////////  
     PageViewModel(
       /// HEADING SECTION : 
        titleWidget:SlideHeading(heading: registor_founder_head_text,),
       // BODY SECTION
        bodyWidget: RegistorFounderBody()
+
+    ), 
+
+   /////////////////////////////////////////  
+   ///  CREATE TEAM SLIDE  :
+   ///  1. OPTIONAL FOR NOW  : 
+   /////////////////////////////////////////  
+    PageViewModel(
+      /// HEADING SECTION : 
+       titleWidget:SlideHeading(heading: registor_team_head_text,),
+      // BODY SECTION
+       bodyWidget: RegistorTeamBody()
 
     ), 
 

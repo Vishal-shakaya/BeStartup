@@ -29,7 +29,17 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   SubmitFounderDetail() async {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      // String email = formKey.currentState!.value['email'];
+      String founder_name = formKey.currentState!.value['founder_name'];
+      String founder_position = formKey.currentState!.value['founder_position'];
+      String phone_no = formKey.currentState!.value['phone_no'];
+      String email = formKey.currentState!.value['email'];
+      String other_info = formKey.currentState!.value['other_info'];
+     
+     // Testing
+      print(founder_name);
+      print(founder_position); 
+      print(phone_no); 
+      print(email); 
       formKey.currentState!.reset();
     } else {
       print('error found');
@@ -40,9 +50,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     formKey.currentState!.reset();
   }
 
-  double formfield_width=500; 
-  double contact_formfield_width=350; 
-  double contact_text_margin_top=0.05; 
+  double formfield_width = 500;
+  double contact_formfield_width = 350;
+  double contact_text_margin_top = 0.05;
 
   @override
   Widget build(BuildContext context) {
@@ -55,125 +65,118 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // FOUNDER FIELD : 
+                // FOUNDER FIELD :
                 Container(
-                  width:contact_formfield_width,
+                  width: contact_formfield_width,
                   child: Column(
                     children: [
                       InputField(
-                        context:context, 
-                        name: 'founder_name',
-                        error_text: 'Founder name required',
-                        lable_text: 'founder',  
-                        hind_text: 'founder or CEO'
-                         ),
+                          context: context,
+                          name: 'founder_name',
+                          error_text: 'Founder name required',
+                          lable_text: 'founder',
+                          hind_text: 'founder or CEO'),
 
-                       // POSITION:   
+                      // POSITION:
                       InputField(
-                        context:context, 
+                        context: context,
                         name: 'founder_position',
-                        lable_text: 'Position',  
-                        hind_text: 'position in company', 
+                        lable_text: 'Position',
+                        hind_text: 'position in company',
                         error_text: 'position in company required',
-                         ),
+                      ),
                     ],
                   ),
                 ),
 
-                // CONTACT HEADING SECTION:  
+                // CONTACT HEADING SECTION:
                 Container(
-                  margin: EdgeInsets.only(top:context.height*contact_text_margin_top),
-                  child: AutoSizeText.rich(
-                    TextSpan(
-                      style:Get.textTheme.headline2, 
-                      children: [
-                        TextSpan(
-                          text:'Primary Contact', 
-                        )
-                      ]
-                    )
-                  )
-                ),
+                    margin: EdgeInsets.only(
+                        top: context.height * contact_text_margin_top),
+                    child: AutoSizeText.rich(
+                        TextSpan(style: Get.textTheme.headline2, children: [
+                      TextSpan(
+                        text: 'Primary Contact',
+                      )
+                    ]))),
 
-                // TAKE FOUNDER INOF: 
-                SizedBox(height: 30,),
+                // TAKE FOUNDER INOF:
+                SizedBox(
+                  height: 20,
+                ),
                 Card(
-                  elevation: 5,
+                  elevation: 4,
                   shadowColor: Colors.grey,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: Container(
-                    width:formfield_width, 
-                    padding:EdgeInsets.all(20), 
-
-                    decoration: BoxDecoration(
-                      border: Border.all(color:Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    
-                    child:Column(
-                         children: [
+                      width: formfield_width,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Column(
+                        children: [
                           Container(
-                            margin: EdgeInsets.only(bottom:10),
-                           width:contact_formfield_width, 
+                            margin: EdgeInsets.only(bottom: 10),
+                            width: contact_formfield_width,
                             child: Column(
                               children: [
                                 SecondaryInputField(
-                                  context:context, 
+                                  context: context,
                                   name: 'phone_no',
-                                  lable_text: 'Phone no',  
-                                  hind_text: 'primary phone no ', 
-                                  error_text: 'phone no required for investor purpose!',
-                                  ),
+                                  lable_text: 'Phone no',
+                                  hind_text: 'primary phone no ',
+                                  error_text:
+                                      'phone no required for investor purpose!',
+                                ),
                                 SecondaryInputField(
-                                  context:context, 
+                                  context: context,
                                   name: 'email',
-                                  lable_text: 'Email',  
-                                  hind_text: 'personal email', 
+                                  lable_text: 'Email',
+                                  hind_text: 'personal email',
                                   error_text: 'primay eamil required ',
-                                  ),
+                                ),
                                 SecondaryInputField(
-                                  context:context, 
+                                  context: context,
                                   name: 'other_info',
-                                  lable_text: 'Other',  
-                                  hind_text: 'optional contact', 
+                                  lable_text: 'Other',
+                                  hind_text: 'optional contact',
                                   error_text: '',
-                                  require: false, 
-                                  ),
+                                  require: false,
+                                ),
                               ],
                             ),
                           ),
-                         ], 
-                    )
-                  ),
-                )   
+                        ],
+                      )),
+                )
               ],
             ),
           )),
     );
   }
 
-  FormBuilderTextField InputField({
-    context, name, error_text , lable_text, hind_text,require=true}) {
+  FormBuilderTextField InputField(
+      {context, name, error_text, lable_text, hind_text, require = true}) {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
       name: name,
       style: Get.textTheme.headline2,
-      
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.min(context, require? 1:0,
+        FormBuilderValidators.min(context, require ? 1 : 0,
             errorText: error_text)
       ]),
       decoration: InputDecoration(
         labelText: lable_text,
 
         labelStyle: GoogleFonts.robotoSlab(
-        textStyle: TextStyle(),
-        color: input_label_color,
-        fontSize: 14,
-        fontWeight: FontWeight.w500),
+            textStyle: TextStyle(),
+            color: input_label_color,
+            fontSize: 14,
+            fontWeight: FontWeight.w500),
 
         hintText: hind_text,
         contentPadding: EdgeInsets.all(16),
@@ -187,7 +190,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
             child: Icon(
               Icons.cancel_outlined,
               color: input_reset_color,
-              size:20,
+              size: 20,
             ),
           ),
         ),
@@ -199,27 +202,26 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     );
   }
 
-  // Secondary Input field : 
-  FormBuilderTextField SecondaryInputField({
-    context, name, error_text , lable_text, hind_text,require=true}) {
+  // Secondary Input field :
+  FormBuilderTextField SecondaryInputField(
+      {context, name, error_text, lable_text, hind_text, require = true}) {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
       name: name,
       style: Get.textTheme.headline2,
-      
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.min(context, require? 1:0,
+        FormBuilderValidators.min(context, require ? 1 : 0,
             errorText: error_text)
       ]),
       decoration: InputDecoration(
-        labelText: lable_text ,
+        labelText: lable_text,
         labelStyle: GoogleFonts.robotoSlab(
-        textStyle: TextStyle(),
-        color: input_label_color,
-        fontSize: 14,
-        fontWeight: FontWeight.w400),
-      
+            textStyle: TextStyle(),
+            color: input_label_color,
+            fontSize: 14,
+            fontWeight: FontWeight.w400),
+
         hintText: hind_text,
         contentPadding: EdgeInsets.all(16),
         hintStyle: TextStyle(fontSize: 15, color: Colors.grey.shade300),
@@ -232,7 +234,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
             child: Icon(
               Icons.cancel_outlined,
               color: input_reset_color,
-              size:20,
+              size: 20,
             ),
           ),
         ),

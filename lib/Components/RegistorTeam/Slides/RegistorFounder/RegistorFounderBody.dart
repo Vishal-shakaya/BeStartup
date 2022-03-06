@@ -1,9 +1,7 @@
 import 'package:be_startup/Components/RegistorTeam/Slides/RegistorFounder/FounderImage.dart';
 import 'package:be_startup/Components/RegistorTeam/Slides/RegistorFounder/RegistorFounderForm.dart';
-import 'package:be_startup/Components/Slides/BusinessSlide/BusinessForm.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:be_startup/Components/Slides/BusinessSlide/BusinessIcon.dart';
 
 
 class RegistorFounderBody extends StatelessWidget {
