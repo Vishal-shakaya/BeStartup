@@ -1,5 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +7,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MemberInfoForm extends StatefulWidget {
-
-  MemberInfoForm({required, Key? key})
+GlobalKey<FormBuilderState> formkey; 
+  MemberInfoForm({required this.formkey, Key? key})
       : super(key: key);
 
   @override
@@ -18,8 +16,6 @@ class MemberInfoForm extends StatefulWidget {
 }
 
 class _MemberInfoFormState extends State<MemberInfoForm> {
-  final  formkey = GlobalKey<FormBuilderState>();
-  double maxlines = 4 ; 
   bool is_password_visible = true;
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -28,18 +24,78 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
+  double maxlines = 4 ; 
   double formfield_width = 600;
   double contact_formfield_width = 600;
   double contact_text_margin_top = 0.05;
 
   @override
   Widget build(BuildContext context) {
+
+    // DEFAULT :
+    if (context.width > 1500) {
+       maxlines = 4 ; 
+       formfield_width = 600;
+       contact_formfield_width = 600;
+       contact_text_margin_top = 0.05;
+      print('greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+        maxlines = 3 ; 
+       formfield_width = 550;
+       contact_formfield_width = 550;
+       contact_text_margin_top = 0.05;
+      print('1200');
+      
+      }
+
+    if (context.width < 1000) {
+        maxlines = 3 ; 
+       formfield_width = 450;
+       contact_formfield_width = 450;
+       contact_text_margin_top = 0.05;
+      print('1000');}
+
+    // TABLET :
+    if (context.width < 800) {
+        maxlines = 3 ; 
+       formfield_width = 400;
+       contact_formfield_width = 400;
+       contact_text_margin_top = 0.05;
+      
+      print('800');}
+    // SMALL TABLET:
+    if (context.width < 640) {
+       maxlines = 3 ; 
+       formfield_width = 300;
+       contact_formfield_width = 300;
+       contact_text_margin_top = 0.05;
+      
+      print('640');}
+
+    // PHONE:
+    if (context.width < 480) {
+       maxlines = 3 ; 
+       formfield_width = 300;
+       contact_formfield_width = 300;
+       contact_text_margin_top = 0.05;
+      
+      print('480');}
+
+
+
     return Container(
       width: formfield_width,
       margin: EdgeInsets.only(left:context.width* 0.02),
       alignment: Alignment.center,
       child: FormBuilder(
-          key: formkey,
+          key: widget.formkey,
           autovalidateMode: AutovalidateMode.disabled,
           child: SingleChildScrollView(
             child: Column(
@@ -55,7 +111,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
                         width: contact_formfield_width,
                         child: InputField(
                           context: context,
-                          name: 'mem_description',
+                          name: 'meminfo',
                           hind_text: 'Member Detail',
                           error_text: 'member detail min len 20',
                           maxlines: maxlines,

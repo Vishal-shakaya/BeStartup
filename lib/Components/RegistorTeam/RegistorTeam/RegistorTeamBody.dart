@@ -1,6 +1,6 @@
-import 'package:be_startup/Components/RegistorTeam/Slides/RegistorFounder/FounderImage.dart';
-import 'package:be_startup/Components/RegistorTeam/Slides/RegistorFounder/RegistorFounderForm.dart';
-import 'package:be_startup/Components/RegistorTeam/Slides/RegistorTeam/TeamMemberDialog.dart';
+import 'package:be_startup/Components/RegistorTeam/RegistorFounder/FounderImage.dart';
+import 'package:be_startup/Components/RegistorTeam/RegistorFounder/RegistorFounderForm.dart';
+import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

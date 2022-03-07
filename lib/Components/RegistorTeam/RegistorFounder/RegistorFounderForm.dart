@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +55,28 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
 
   @override
   Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {print('1200');}
+
+    if (context.width < 1000) {print('1000');}
+
+    // TABLET :
+    if (context.width < 800) {print('800');}
+    // SMALL TABLET:
+    if (context.width < 640) {print('640');}
+
+    // PHONE:
+    if (context.width < 480) {print('480');}
+    
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
