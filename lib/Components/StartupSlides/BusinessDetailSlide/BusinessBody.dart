@@ -20,8 +20,7 @@ class BusinessBody extends StatefulWidget {
 class _BusinessBodyState extends State<BusinessBody> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  var snakbar_head = 'Uploading Details';
-  var snakbar_msg = 'processs... ';
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +65,8 @@ class _BusinessBodyState extends State<BusinessBody> {
       margin: EdgeInsets.only(top: 10),
       duration: Duration(minutes: 1),
       backgroundColor: Colors.green.shade50,
-      titleText: MySnackbarTitle(title: snakbar_head),
-      messageText: MySnackbarContent(message: snakbar_msg),
+      titleText: MySnackbarTitle(title: 'Details'),
+      messageText: MySnackbarContent(message: 'processs...'),
       maxWidth: context.width * 0.50,
       padding: EdgeInsets.all(15),
     );
@@ -77,6 +76,10 @@ class _BusinessBodyState extends State<BusinessBody> {
       var business_name = formKey.currentState!.value['startup_name'];
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessName(business_name);
+
+      // RESPONSE HANDLING : 
+      // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE : 
+      // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR : 
       if (res['response']) {
         Get.closeAllSnackbars();
         Get.toNamed(create_business_thumbnail_url);
