@@ -1,5 +1,6 @@
-import 'package:be_startup/Components/Slides/BusinessProduct/AddSectionButton.dart';
-import 'package:be_startup/Components/Slides/BusinessProduct/ProductSection.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductSection.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,7 @@ class ProductBody extends StatefulWidget {
 
 class _ProductBodyState extends State<ProductBody> {
   double prod_cont_width = 0.80;
-  double prod_cont_height = 0.90;
+  double prod_cont_height = 0.70;
 
   List<ProductSection> products = [
     ProductSection(
@@ -71,7 +72,7 @@ class _ProductBodyState extends State<ProductBody> {
     // DEFAULT CONFIG:
     if (context.width > 1500) {
       prod_cont_width = 0.80;
-      prod_cont_height = 0.90;
+      prod_cont_height = 0.70;
     }
 
     if (context.width < 1500) {
@@ -81,7 +82,7 @@ class _ProductBodyState extends State<ProductBody> {
     // PC:
     if (context.width < 1200) {
       prod_cont_width = 0.95;
-      prod_cont_height = 0.90;
+      prod_cont_height = 0.70;
       print('width 1200');
     }
 
@@ -103,33 +104,38 @@ class _ProductBodyState extends State<ProductBody> {
       print('width 480');
     }
 
-    return Container(
-      width: context.width * prod_cont_width,
-      height: context.height * prod_cont_height,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // ADD SECTION BUTTON :
-            AddSectionButton(
-              key: UniqueKey(),
-              addProduct: AddProduct,
-            ),
+    return Column(
+      children: [
+        Container(
+          width: context.width * prod_cont_width,
+          height: context.height * prod_cont_height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // ADD SECTION BUTTON :
+                AddSectionButton(
+                  key: UniqueKey(),
+                  addProduct: AddProduct,
+                ),
 
-            ////////////////////////////////////
-            // PRODUCT SECTION;
-            // DARK THEME COLOR ___ :
-            // RESPONSIVE NESS _____:
-            // 1. IMAGE SECTION :
-            // 2. FORM SECTIN:
-            ////////////////////////////////////
-            SingleChildScrollView(
-              child: Column(
-                children: products,
-              ),
-            )
-          ],
+                ////////////////////////////////////
+                // PRODUCT SECTION;
+                // DARK THEME COLOR ___ :
+                // RESPONSIVE NESS _____:
+                // 1. IMAGE SECTION :
+                // 2. FORM SECTIN:
+                ////////////////////////////////////
+                SingleChildScrollView(
+                  child: Column(
+                    children: products,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+        BusinessSlideNav(slide:SlideType.product)
+      ],
     );
   }
 }

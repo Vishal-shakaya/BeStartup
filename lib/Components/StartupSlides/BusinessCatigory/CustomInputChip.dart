@@ -1,5 +1,5 @@
-import 'package:be_startup/Components/Slides/BusinessCatigory/CatigoryChip.dart';
-import 'package:be_startup/Components/Slides/BusinessCatigory/RemovableChip.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CatigoryChip.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessCatigory/RemovableChip.dart';
 import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:cool_alert/cool_alert.dart';

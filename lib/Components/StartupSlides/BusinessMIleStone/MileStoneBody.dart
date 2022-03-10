@@ -1,7 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
-import 'package:be_startup/Components/Slides/BusinessMIleStone/AddMileButton.dart';
-import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneTag.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileButton.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,7 @@ class MileStoneBody extends StatefulWidget {
 
 class _MileStoneBodyState extends State<MileStoneBody> {
   double mile_cont_width = 0.70;
-  double mile_cont_height = 0.90;
+  double mile_cont_height = 0.70;
 
   double list_tile_width = 0.4;
   double list_tile_height = 0.30;
@@ -38,7 +39,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     if (context.width > 1500) {
       print('greator then 1500');
        mile_cont_width = 0.70;
-       mile_cont_height = 0.90;
+       mile_cont_height = 0.70;
 
        list_tile_width = 0.4;
        list_tile_height = 0.30;
@@ -71,40 +72,46 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
     var milestones = mileStore.GetMileStonesList();
     print(milestones);
-    return Container(
-        width: context.width * mile_cont_width,
-        height: context.height * mile_cont_height,
-        child: Column(children: [
-          // SUBHEADING SECTION :
-          SubHeadingSection(context),
+    return Column(
+      children: [
+        Container(
+            width: context.width * mile_cont_width,
+            height: context.height * mile_cont_height,
+            child: Column(children: [
+              // SUBHEADING SECTION :
+              SubHeadingSection(context),
 
-          // ADD TAG BUTTON :
-          AddMileButton(),
+              // ADD TAG BUTTON :
+              AddMileButton(),
 
-          //////////////////////////////
-          // LIST OF TAGS :
-          // 1.Show milestone Info:
-          // 2.Delete milestone :
-          // 3.Edit MileStone :
-          //////////////////////////////
-          Container(
-              width: context.width * list_tile_width,
-              height: context.height * list_tile_height,
-              margin: EdgeInsets.only(top: 10),
-              child: Obx(
-                () {
-                  return ListView.builder(
-                      itemCount: milestones.length,
-                      itemBuilder: (context, intex) {
-                        return MileStoneTag(
-                          milestone: milestones[intex],
-                          index: intex,
-                          key: UniqueKey(),
-                        );
-                      });
-                },
-              ))
-        ]));
+              //////////////////////////////
+              // LIST OF TAGS :
+              // 1.Show milestone Info:
+              // 2.Delete milestone :
+              // 3.Edit MileStone :
+              //////////////////////////////
+              Container(
+                  width: context.width * list_tile_width,
+                  height: context.height * list_tile_height,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Obx(
+                    () {
+                      return ListView.builder(
+                          itemCount: milestones.length,
+                          itemBuilder: (context, intex) {
+                            return MileStoneTag(
+                              milestone: milestones[intex],
+                              index: intex,
+                              key: UniqueKey(),
+                            );
+                          });
+                    },
+                  ))
+            ])),
+
+            BusinessSlideNav(slide:SlideType.milestone)
+      ],
+    );
   }
 
   ////////////////////////

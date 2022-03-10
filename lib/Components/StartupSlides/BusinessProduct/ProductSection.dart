@@ -1,5 +1,5 @@
-import 'package:be_startup/Components/Slides/BusinessProduct/ProductForm.dart';
-import 'package:be_startup/Components/Slides/BusinessProduct/ProductImage.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductForm.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductImage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -43,6 +43,7 @@ dependencies:
   json_annotation: ^4.3.0
   gradient_ui_widgets: ^1.0.2-nullsafety
   stylish_dialog: ^0.0.12
+  flutter_smart_dialog: ^3.4.0+1
 
   crop_your_image: ^0.6.0+1
   image_picker: ^0.8.4+6
@@ -60,6 +61,7 @@ dependencies:
   file_picker: ^4.3.3
   firebase_storage: ^10.2.7
   introduction_screen: ^3.0.0
+  advance_notification: ^1.0.6
 
 dev_dependencies:
   flutter_test:

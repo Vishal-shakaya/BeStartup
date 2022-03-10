@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberInfoForm.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDetailForm.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberProfileImage.dart';
-import 'package:be_startup/Components/Slides/BusinessMIleStone/DialogComponent.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/DialogComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

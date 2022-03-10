@@ -3,3 +3,11 @@ String user_type_slide_url = '/select-user-type';
 String user_registration_url = '/select-user-type';
 String startup_slides_url = '/starup-registration-processs';
 String registor_founder = '/founder-registration-processs';
+
+// CREATE BUSINESS :
+String create_business_detail_url = '/create-business-details';
+String create_business_catigory_url = '/create-business-catigory';
+String create_business_milestone_url = '/create-business-milestone';
+String create_business_product_url = '/create-business-product';
+String create_business_thumbnail_url = '/create-business-thumbnail';
+String create_business_vision_url = '/create-business-vision';

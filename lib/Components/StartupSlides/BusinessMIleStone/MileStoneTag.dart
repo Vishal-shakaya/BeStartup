@@ -3,7 +3,7 @@ import 'package:be_startup/Backend/Startup/MileStoneStore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:be_startup/Components/Slides/BusinessMIleStone/MileStoneDialog.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneDialog.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stylish_dialog/stylish_dialog.dart';
 

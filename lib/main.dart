@@ -1,6 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:be_startup/UI/RegistorTeam/RegistorTeam.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessCatigoryView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessDetailView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessMileStoneView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessProductView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessThumbnailView.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessVision.dart';
 import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +23,7 @@ import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -34,6 +41,10 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
       return GetMaterialApp(
+      // INITILIZE TOAST DIALOG  : 
+      navigatorObservers: [FlutterSmartDialog.observer],
+      builder: FlutterSmartDialog.init(),
+
         // CONFIGURE THEME SETTING :
         themeMode: ThemeMode.light,
         // themeMode: ThemeMode.dark,
@@ -62,6 +73,15 @@ class MyApp extends StatelessWidget {
           GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
           GetPage(name: startup_slides_url ,page:()=> StartupSlides() ), 
           GetPage(name: registor_founder ,page:()=> RegistorTeam() ), 
+          
+          // BUSINESS DETAIL : 
+          GetPage(name: create_business_detail_url ,page:()=> BusinessDetailView() ), 
+          GetPage(name: create_business_thumbnail_url ,page:()=> BusinessThumbnailView() ), 
+          GetPage(name: create_business_vision_url ,page:()=> BusinessVisionView() ), 
+          GetPage(name: create_business_milestone_url ,page:()=> BusinessMileStone() ), 
+          GetPage(name: create_business_catigory_url ,page:()=> BusinessCatigoryView() ), 
+          GetPage(name: create_business_product_url ,page:()=> BusinessProductView() ), 
+           
         ],
       );
   }

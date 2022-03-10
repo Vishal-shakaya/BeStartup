@@ -1,6 +1,6 @@
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
-import 'package:be_startup/Components/Slides/BusinessProduct/ProductSection.dart';
-import 'package:be_startup/Components/Slides/BusinessProduct/SocialLinkDialog.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductSection.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/SocialLinkDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
