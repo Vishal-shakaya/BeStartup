@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/StartupDetailStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetailStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -41,7 +41,7 @@ class _BusinessBodyState extends State<BusinessBody> {
               ),
               BusinessSlideNav(
                 key: UniqueKey(),
-                businessDetailForm: SubmitBusinessDetail,
+                submitform: SubmitBusinessDetail,
                 slide: SlideType.detail,
               )
             ],
@@ -49,7 +49,11 @@ class _BusinessBodyState extends State<BusinessBody> {
         ));
   }
 
-
+///////////////////////////////////////////////////
+  /// HANDLE SUBMIT FORM :
+  /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
+  /// 2. ELSE SHOW ERRO RALERT :
+///////////////////////////////////////////////////
   SubmitBusinessDetail() async {
     // SHOW LOADING SPINNER :
     Get.snackbar(
@@ -70,8 +74,7 @@ class _BusinessBodyState extends State<BusinessBody> {
 
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      String business_name = formKey.currentState!.value['startup_name'];
-
+      var business_name = formKey.currentState!.value['startup_name'];
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessName(business_name);
       if (res['response']) {
@@ -89,14 +92,15 @@ class _BusinessBodyState extends State<BusinessBody> {
           padding: EdgeInsets.all(10),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error  accure'),
-          messageText: MySnackbarContent(message: 'Something went wrong'),
+          titleText: MySnackbarTitle(title: 'Error accured'),
+          messageText: MySnackbarContent(message: res['message']),
           maxWidth: context.width * 0.50,
         );
       }
 
       formKey.currentState!.reset();
     } else {
+      Get.closeAllSnackbars();
       Get.snackbar(
         '',
         '',

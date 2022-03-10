@@ -29,13 +29,17 @@ class BusinessDetailStore extends GetxController {
   GetBusinessLogo() {
     return image_url;
   }
+
 ////////////////////////////////////////////////////
   // 1. SET BUSINESS NAME :
-  // 2. ERROR CHECK : 
-  // 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :  
+  // 2. ERROR CHECK :
+  // 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :
 //////////////////////////////////////////////////////
-  SetBusinessName(String businessName) async {
+  SetBusinessName(businessName) async {
     try {
+      if (businessName==null) {
+        return ResponseBack(response_type: false , message: 'Startup name required');
+      }
       business_name = businessName;
       return ResponseBack(response_type: true);
     } catch (e) {

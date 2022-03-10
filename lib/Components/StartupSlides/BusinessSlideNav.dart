@@ -12,9 +12,9 @@ enum SlideType {
 }
 
 class BusinessSlideNav extends StatefulWidget {
-  Function? businessDetailForm;
+  Function? submitform;
   SlideType? slide;
-  BusinessSlideNav({this.businessDetailForm, this.slide, Key? key})
+  BusinessSlideNav({this.submitform, this.slide, Key? key})
       : super(key: key);
 
   @override
@@ -26,7 +26,6 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     // 1. Detail view:
     if (slide == SlideType.detail) {
       Get.toNamed(user_registration_url);
-      
     }
     // 2.Thumbnail view <- Null  view :
     if (slide == SlideType.thumbnail) {
@@ -54,7 +53,8 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
   ForwordButton(slide) {
     // 1. Detail view -> Thumbnail  view : :
     if (slide == SlideType.detail) {
-      Get.toNamed(create_business_thumbnail_url);
+      // Get.toNamed(create_business_thumbnail_url);
+      widget.submitform!();
     }
     // 2.Thumbnail view -> Vision  view :
     if (slide == SlideType.thumbnail) {
