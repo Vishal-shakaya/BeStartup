@@ -1,6 +1,8 @@
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductImageSection.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 class AddSectionButton extends StatefulWidget {
@@ -38,12 +40,14 @@ class _AddSectionButtonState extends State<AddSectionButton> {
                       /////////////////////////////////
                       // Image Section :
                       /////////////////////////////////
-                        ProductImageSection()
-                    ],
-                       
+                        ProductImageSection(),
+                      ////////////////////////////// 
                       // Content Section :
                       // 1. Title : 
                       // 2. Description : 
+                      ////////////////////////////// 
+                       ProductForm()
+                    ],
                       )),
             )));
   }

@@ -4,12 +4,20 @@ import 'package:get/get.dart';
 
 class BusinessProductStore extends GetxController {
   var product_list = [];
-  static String? image_url; 
+  static String? image_url;
+  static var product = {
+    'title': '',
+    'description': '',
+    'image': '',
+    'timestamp': '',
+    'belong_to': '',
+    'catigory': '',
+  };
+
   // ADD PRODUCT :
-  SetProduct(product) {
+  SetProduct({title, description}) {
     try {
-      print(product);
-      
+      product_list.add(product);
       return ResponseBack(response_type: true);
     } catch (e) {}
     return ResponseBack(response_type: false);
