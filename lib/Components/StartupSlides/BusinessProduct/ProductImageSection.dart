@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -29,9 +31,10 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   String filename = '';
   String upload_image_url = '';
   late UploadTask? upload_process;
+  bool is_uploading = false;
 
-  // Upload Button Position Ration 
-  // 1 Top and righ : 
+  // Upload Button Position Ration
+  // 1 Top and righ :
   double upload_btn_top_pod = 0.31;
   double upload_btn_right_pod = 0.15;
 
@@ -59,6 +62,12 @@ class _ProductImageSectionState extends State<ProductImageSection> {
       filename = result.files.first.name;
 
       // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
+      // 1. Start Loading spinner :
+      // 2. If success then stop and show cloud icon :
+      // 3. If error then show cloud icon and alert :
+      setState(() {
+        is_uploading = true;
+      });
       var resp =
           await prodStore.UploadProductImage(logo: image, filename: filename);
 
@@ -68,6 +77,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
         // Upldate UI :
         setState(() {
           upload_image_url = logo_url;
+          is_uploading = false;
         });
       }
 
@@ -83,6 +93,11 @@ class _ProductImageSectionState extends State<ProductImageSection> {
           messageText: MySnackbarContent(message: 'Something went wrong'),
           maxWidth: context.width * 0.50,
         );
+
+        // Set spinner off : 
+        setState(() {
+          is_uploading = false;
+        });
       }
     }
   }
@@ -98,44 +113,50 @@ class _ProductImageSectionState extends State<ProductImageSection> {
           upload_image_url == ''
               ? ImagePreviewContainer(context)
               :
-                // IMAGE BLOCK :
-                ImageContainer(context),
+              // IMAGE BLOCK :
+              ImageContainer(context),
 
-                // Upload Button :
-                UploadButton(context)
-              ],
-            ),
-          );
-        }
-
-
-
+          // Upload Button :
+          UploadButton(context)
+        ],
+      ),
+    );
+  }
 
   Positioned UploadButton(BuildContext context) {
     return Positioned(
-          top: context.height * upload_btn_top_pod,
-          left: context.width * upload_btn_right_pod,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(50),
-            onTap: () {
-              PickImage();
-            },
-            child: Card(
-              color: Colors.orange,
-              shadowColor: Colors.orangeAccent.shade400,
-              elevation: 6,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              child: Container(
-                padding: EdgeInsets.all(5),
-                width: upload_btn_width,
-                height: upload_btn_height,
-                child:
-                    Icon(Icons.cloud_upload, color: Colors.white, size: 30),
-              ),
-            ),
+      top: context.height * upload_btn_top_pod,
+      left: context.width * upload_btn_right_pod,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () {
+          PickImage();
+        },
+        child: Card(
+          color: Colors.orange,
+          shadowColor: Colors.orangeAccent.shade400,
+          elevation: 6,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          child: Container(
+            padding: EdgeInsets.all(5),
+            width: upload_btn_width,
+            height: upload_btn_height,
+            child: 
+            is_uploading 
+            ? Container(
+              padding: EdgeInsets.all(5),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 4,
+                ),
+            )
+
+            : Icon(Icons.cloud_upload, color: Colors.white, size: 30),
           ),
-        );
+        ),
+      ),
+    );
   }
 
   Container ImageContainer(BuildContext context) {
@@ -144,8 +165,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
         decoration: BoxDecoration(
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20),
-                right: Radius.circular(20)),
+                left: Radius.circular(20), right: Radius.circular(20)),
             border: Border.all(width: 2, color: Colors.grey)),
         child: ClipRRect(
           borderRadius: BorderRadius.horizontal(
@@ -161,28 +181,26 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   Container ImagePreviewContainer(BuildContext context) {
     return Container(
-          width: context.width * image_cont_width,
-          height: context.height * image_cont_height,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20),
-                right: Radius.circular(20),
-              ),
-              border: Border.all(width: 2, color: Colors.grey)),
-          child: Container(
-            alignment: Alignment.center,
-            child: AutoSizeText.rich(
-              TextSpan(
-                  style: Get.textTheme.headline3,
-                  children: [
-                    TextSpan(
-                        text: product_image_subhead,
-                        style: TextStyle(
-                            color: Colors.blueGrey.shade200,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20))
-                  ]),
+        width: context.width * image_cont_width,
+        height: context.height * image_cont_height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(20),
+              right: Radius.circular(20),
             ),
-          ));
+            border: Border.all(width: 2, color: Colors.grey)),
+        child: Container(
+          alignment: Alignment.center,
+          child: AutoSizeText.rich(
+            TextSpan(style: Get.textTheme.headline3, children: [
+              TextSpan(
+                  text: product_image_subhead,
+                  style: TextStyle(
+                      color: Colors.blueGrey.shade200,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20))
+            ]),
+          ),
+        ));
   }
 }
