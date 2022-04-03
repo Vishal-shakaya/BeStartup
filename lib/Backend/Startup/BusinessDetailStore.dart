@@ -1,6 +1,5 @@
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class BusinessDetailStore extends GetxController {
@@ -38,6 +37,11 @@ class BusinessDetailStore extends GetxController {
   SetBusinessName(businessName) async {
     try {
       if (businessName==null) {
+        return ResponseBack(response_type: false , message: 'Startup name required');
+      }
+
+      businessName = businessName.toString();
+      if (businessName=='' || businessName.length<1 ) {
         return ResponseBack(response_type: false , message: 'Startup name required');
       }
       business_name = businessName;

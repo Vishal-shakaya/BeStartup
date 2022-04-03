@@ -1,22 +1,48 @@
+import 'package:be_startup/Backend/Startup/BusinessCatigoryStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:cool_alert/cool_alert.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CatigoryChip extends StatefulWidget {
   String? catigory = '';
-  CatigoryChip(
-      {Key? key,
-      this.catigory,})
-      : super(key: key);
+  CatigoryChip({
+    Key? key,
+    this.catigory,
+  }) : super(key: key);
   @override
   State<CatigoryChip> createState() => _CatigoryChipState();
 }
 
 class _CatigoryChipState extends State<CatigoryChip> {
   bool is_selected = false;
+  var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigories');
 
-
+  // Add or Remove catigory form backend :
+  UpdateStorage(is_selected) async {
+    var res;
+    if (is_selected) {
+      res = await catigoryStore.SetCatigory(cat: widget.catigory);
+    } else {
+      res = await catigoryStore.RemoveCatigory(cat: widget.catigory);
+    }
+    if (!res['response']) {
+      // CLOSE SNAKBAR :
+      Get.closeAllSnackbars();
+      // Error Alert :
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.all(10),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error accure'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +66,17 @@ class _CatigoryChipState extends State<CatigoryChip> {
                 color: chip_color),
           ),
           selected: is_selected,
-          onSelected: (chipState) {
+          onSelected: (chipState) async {
+            is_selected = !is_selected;
             setState(() {
-              is_selected = !is_selected;
               is_selected
                   ? chip_color = chip_activate_text_color
                   : chip_color = chip_text_color;
             });
+
+            // UPLDATE BACKEND :
+            // 1 REMOVE OR ADD CATIGORY :
+            await UpdateStorage(is_selected);
           },
         ));
   }

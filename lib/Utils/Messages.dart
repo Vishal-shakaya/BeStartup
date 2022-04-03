@@ -54,6 +54,7 @@ String catigory_subHeading_text = 'Select you Startup Type';
 String product_heading_text = 'Product or Services';
 String product_image_subhead = 'Product or Services';
 
+
 // MILESTONEES :
 String milestone_heading_test = 'MileStone';
 String milestone_subHeading_text =
@@ -64,4 +65,3 @@ String milestone_subHeading_text =
 String registor_founder_head_text = 'Founder';
 //2. REGISTOR TEAM SLIDE
 String registor_team_head_text = 'Team Members';
-

@@ -5,7 +5,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
-import 'package:cool_alert/cool_alert.dart';
+// import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -84,13 +84,13 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 Container(
                   margin: EdgeInsets.only(top: context.height * 0.05),
                   child: AutoSizeText.rich(
-                      TextSpan(style: context.textTheme.headline2, children: [
+                    TextSpan(style: context.textTheme.headline2, children: [
                     TextSpan(
-                        text: catigory_subHeading_text,
-                        style: TextStyle(
-                            color: light_color_type3,
-                            fontSize: vision_subheading_text))
-                  ])),
+                      text: catigory_subHeading_text,
+                      style: TextStyle(
+                          color: light_color_type3,
+                          fontSize: vision_subheading_text))
+                ])),
                 ),
         
                 //////////////////////////////////////////

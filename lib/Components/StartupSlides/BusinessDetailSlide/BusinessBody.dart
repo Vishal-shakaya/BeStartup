@@ -63,7 +63,7 @@ class _BusinessBodyState extends State<BusinessBody> {
       borderRadius: 4,
       showProgressIndicator: true,
       margin: EdgeInsets.only(top: 10),
-      duration: Duration(minutes: 1),
+      duration: Duration(minutes: 5),
       backgroundColor: Colors.green.shade50,
       titleText: MySnackbarTitle(title: 'Details'),
       messageText: MySnackbarContent(message: 'processs...'),

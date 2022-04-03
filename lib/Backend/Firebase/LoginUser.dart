@@ -1,4 +1,3 @@
-
 // Import the firebase_core and cloud_firestore plugin
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

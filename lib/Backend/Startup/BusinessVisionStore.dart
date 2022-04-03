@@ -12,7 +12,6 @@ class BusinessVisionStore extends GetxController {
             response_type: false, message: 'vision is required');
       }
 
-     print(visionText);
       vision = visionText;
       return ResponseBack(response_type: true);
 
@@ -21,4 +20,18 @@ class BusinessVisionStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
+
+ 
+ // Return Vision: 
+  GetVision() async {
+    try {
+      return vision;
+    } catch (e) {
+      return ResponseBack(
+        response_type: false,
+      );
+    }
+  }
+
+
 }

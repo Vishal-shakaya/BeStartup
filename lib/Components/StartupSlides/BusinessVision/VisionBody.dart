@@ -4,7 +4,6 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -188,10 +187,18 @@ class _VisionBodyState extends State<VisionBody> {
         autovalidateMode: AutovalidateMode.disabled,
         child: FormBuilderTextField(
           name: 'vision',
+          maxLength: 2000,
           style: GoogleFonts.robotoSlab(
             fontSize: 16,
           ),
-          maxLength: 2000,
+          validator: FormBuilderValidators.compose([
+            // Remove Comment in  Production mode: 
+            // FormBuilderValidators.minLength(context, 200,
+            //     errorText: 'At least 200 required'),
+            FormBuilderValidators.maxLength(context, 2000,
+                errorText: 'Maximum 2000 char allow ')
+                
+          ]),
           scrollPadding: EdgeInsets.all(10),
           maxLines: maxlines,
           decoration: InputDecoration(
