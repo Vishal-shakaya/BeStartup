@@ -1,5 +1,6 @@
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductImageSection.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/SelectProductType.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -31,7 +32,7 @@ class _AddSectionButtonState extends State<AddSectionButton> {
             content: SizedBox(
               width: context.width * 0.60,
               height: context.height * 0.50,
-              
+
               // PRODUCT CONTAINER :
               child: Container(
                   padding: EdgeInsets.all(20),
@@ -40,15 +41,17 @@ class _AddSectionButtonState extends State<AddSectionButton> {
                       /////////////////////////////////
                       // Image Section :
                       /////////////////////////////////
-                        ProductImageSection(),
-                      ////////////////////////////// 
+                      ProductImageSection(),
+                      //////////////////////////////
                       // Content Section :
-                      // 1. Title : 
-                      // 2. Description : 
-                      ////////////////////////////// 
-                       ProductForm()
+                      // 1. Title :
+                      // 2. Description :
+                      //////////////////////////////
+                      ProductForm(),
+
+                      SelectProductType()
                     ],
-                      )),
+                  )),
             )));
   }
 

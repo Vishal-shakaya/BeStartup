@@ -37,9 +37,17 @@ class _ProductBodyState extends State<ProductBody> {
                 // PRODUCT SECTION;
                 // DARK THEME COLOR ___ :
                 // RESPONSIVE NESS _____:
-                // 1. IMAGE SECTION :
-                // 2. FORM SECTIN:
                 ////////////////////////////////////
+                
+                // PRODUCT LIST VIEW : 
+                Container(
+                  child:Wrap(
+                    children: [
+                      // IMAGE SECTION: 
+                      
+                    ],
+                  )
+                )
 
               ],
             ),

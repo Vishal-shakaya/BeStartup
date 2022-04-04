@@ -22,7 +22,7 @@ class _ProductFormState extends State<ProductForm> {
   double con_button_width = 90;
   double con_button_height = 38;
   double con_btn_top_margin = 10;
-  double form_width = 0.35;
+  double form_width = 0.32;
   double form_height = 0.60;
 
   final productStore = Get.put(BusinessProductStore(), tag: 'product_form');
@@ -33,7 +33,7 @@ class _ProductFormState extends State<ProductForm> {
   /// 2. IF SUBMIT SUCCESS THEN EXIT MODEL :
   /// 3. IF ERROR THEN SHOW WARNING ALERT :
   /// /////////////////////////////////////////////
-  SubmitProductForm() async {
+  SubmitProductForm({type=ProductType.product}) async {
     formKey.currentState!.save();
     SmartDialog.showLoading(
         background: Colors.white,
@@ -49,7 +49,9 @@ class _ProductFormState extends State<ProductForm> {
 
       // STORE PRODUCT TO BACKEND:
       var res = await productStore.SetProduct(
-          title: product_title, description: product_desc);
+          title: product_title, 
+          description: product_desc,
+          );
       if (!res['response']) {
         
         // CLOSE SNAKBAR :
