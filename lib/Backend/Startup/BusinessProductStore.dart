@@ -32,9 +32,10 @@ class BusinessProductStore extends GetxController {
   late ProductType prod_type;
 
   // Setting youtube link :
-  SetYoutubeLink(link) {
+  SetYoutubeLink(link) async {
     try {
       youtube_link = link;
+      print('youtube link set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -42,9 +43,10 @@ class BusinessProductStore extends GetxController {
   }
 
   // Setting product content Link :
-  SetContentLink(link) {
+  SetContentLink(link) async {
     try {
       content_link = link;
+      print('content link set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -52,7 +54,7 @@ class BusinessProductStore extends GetxController {
   }
 
   // Set Product Type :
-  SetProductType(type) {
+  SetProductType(type) async {
     try {
       if (ProductType.product == type) {
         product_type = 'product';
@@ -61,6 +63,17 @@ class BusinessProductStore extends GetxController {
         product_type = 'service';
       }
       print('PRODUCT TYPE ${product_type}');
+      print('product set');
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  SetImageUrl(image) async {
+    try {
+      image_url = image;
+      print('image set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -68,7 +81,7 @@ class BusinessProductStore extends GetxController {
   }
 
   // ADD PRODUCT :
-  SetProduct({title, description}) {
+  CreateProduct({title, description}) {
     Map<String, dynamic?> product = {
       'id': UniqueKey(),
       'title': title,
@@ -83,6 +96,34 @@ class BusinessProductStore extends GetxController {
     };
     try {
       product_list.add(product);
+      image_url = null;
+      product_type = null;
+      youtube_link = null;
+      content_link = null;
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  // ADD PRODUCT :
+  UpdateProduct({title, description, id, index}) {
+    print('update index');
+    Map<String, dynamic?> product = {
+      'id': id,
+      'title': title,
+      'description': description,
+      'type': product_type,
+      'image_url': image_url,
+      'timestamp': DateTime.now().toString(),
+      'youtube_link': youtube_link,
+      'content_link': content_link,
+      'belong_to': '',
+      'catigory': '',
+    };
+    try {
+      product_list[index] = product;
       image_url = null;
       product_type = null;
       youtube_link = null;

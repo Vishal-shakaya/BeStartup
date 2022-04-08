@@ -1,7 +1,6 @@
 import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -10,7 +9,18 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductForm extends StatefulWidget {
-  ProductForm({Key? key}) : super(key: key);
+  String? title = '';
+  String? description = '';
+  String? form_type = '';
+  UniqueKey? id;
+  int? product_index; 
+  ProductForm({
+    this.id,
+    this.product_index, 
+    this.form_type, 
+    this.title, 
+    this.description, Key? key})
+      : super(key: key);
 
   @override
   State<ProductForm> createState() => _ProductFormState();
@@ -33,7 +43,7 @@ class _ProductFormState extends State<ProductForm> {
   /// 2. IF SUBMIT SUCCESS THEN EXIT MODEL :
   /// 3. IF ERROR THEN SHOW WARNING ALERT :
   /// /////////////////////////////////////////////
-  SubmitProductForm({type=ProductType.product}) async {
+  SubmitProductForm({type = ProductType.product}) async {
     formKey.currentState!.save();
     SmartDialog.showLoading(
         background: Colors.white,
@@ -48,12 +58,22 @@ class _ProductFormState extends State<ProductForm> {
       var product_desc = formKey.currentState!.value['product_desc'];
 
       // STORE PRODUCT TO BACKEND:
-      var res = await productStore.SetProduct(
-          title: product_title, 
+      var res;
+      if (widget.form_type == 'update') {
+        print('UPDATE PRODUCT START');
+        res = await productStore.UpdateProduct(
+          title: product_title,
           description: product_desc,
-          );
+          id: widget.id,
+          index: widget.product_index
+        );
+      } else {
+        res = await productStore.CreateProduct(
+          title: product_title,
+          description: product_desc,
+        );
+      }
       if (!res['response']) {
-        
         // CLOSE SNAKBAR :
         SmartDialog.dismiss();
         Get.closeAllSnackbars();
@@ -69,7 +89,7 @@ class _ProductFormState extends State<ProductForm> {
           messageText: MySnackbarContent(message: 'Something went wrong'),
           maxWidth: context.width * 0.50,
         );
-        return; 
+        return;
       }
       SmartDialog.dismiss();
       Navigator.of(context).pop();
@@ -102,7 +122,6 @@ class _ProductFormState extends State<ProductForm> {
                 // SUBMIT PRODUCT BUTTON:
                 ProductSubmitButton()
               ],
-
             ),
           )),
     );
@@ -148,6 +167,7 @@ class _ProductFormState extends State<ProductForm> {
 
   FormBuilderTextField ProductDescInput(BuildContext context) {
     return FormBuilderTextField(
+      initialValue: widget.description,
       name: 'product_desc',
       style: GoogleFonts.robotoSlab(
         fontSize: 16,
@@ -181,6 +201,7 @@ class _ProductFormState extends State<ProductForm> {
 
   FormBuilderTextField ProductTitleInput(BuildContext context) {
     return FormBuilderTextField(
+      initialValue: widget.title,
       textAlign: TextAlign.center,
       name: 'product_title',
       maxLength: 100,

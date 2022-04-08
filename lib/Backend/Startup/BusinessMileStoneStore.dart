@@ -54,7 +54,6 @@ class MileStoneStore extends GetxController {
         'title': title,
         'description': description,
       };
-      print(milestone[index]);
       milestones[index] = milestone;
       // milestones
       response = {

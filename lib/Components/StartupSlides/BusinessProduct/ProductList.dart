@@ -1,14 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductForm.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductImageSection.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessProduct/SelectProductType.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductListView extends StatefulWidget {
   Map<String, dynamic?>? product;
-  ProductListView({this.product, Key? key}) : super(key: key);
+  int? index; 
+  ProductListView({
+    this.index,
+    this.product, Key? key}) : super(key: key);
 
   @override
   State<ProductListView> createState() => _ProductListViewState();
@@ -22,10 +27,93 @@ class _ProductListViewState extends State<ProductListView> {
   double desc_cont_height = 0.22;
 
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
+
+  Row ProductDialogHeading() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // HEADING SECTION:
+        Expanded(
+            flex: 1,
+            child: Container(
+                alignment: Alignment.topCenter,
+                child: Text('Add Title', style: Get.textTheme.headline2))),
+
+        // CLOSE DIALOG ICON :
+        // POP THE DIALOG BOX:
+        TextButton(
+          onPressed: () {
+            CloseDialog();
+          },
+          child: Icon(
+            Icons.close,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    );
+  }
+
+  EditProduct() async {
+    // Set Links
+    await productStore.SetYoutubeLink(widget.product!['youtube_link']);
+    await productStore.SetContentLink(widget.product!['content_link']);
+    // Set Image
+    await productStore.SetImageUrl(widget.product!['image_url']);
+    // Set product type:
+    if (widget.product!['type'] == 'product') {
+      await productStore.SetProductType(ProductType.product);
+    }
+    if (widget.product!['type'] == 'service') {
+      await productStore.SetProductType(ProductType.service);
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: ProductDialogHeading(),
+            content: SizedBox(
+              width: context.width * 0.60,
+              height: context.height * 0.50,
+
+              // PRODUCT CONTAINER :
+              child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Wrap(
+                    children: [
+                      /////////////////////////////////
+                      // Image Section :
+                      /////////////////////////////////
+                      ProductImageSection(
+                        product_image_url: widget.product!['image_url'],
+                      ),
+
+                      //////////////////////////////
+                      // Content Section :
+                      // 1. Title :
+                      // 2. Description :
+                      //////////////////////////////
+                      ProductForm(
+                          title: widget.product!['title'],
+                          product_index: widget.index,
+                          description: widget.product!['description'],
+                          id: widget.product!['id'],
+                          form_type: 'update'),
+
+                      SelectProductType(product_type: widget.product!['type']),
+                    ],
+                  )),
+            )));
+  }
+
   // REMOVE PRODUCT AND UPDATE UI :
   DeleteProduct(id) async {
     print('DELETING PRODUCT');
     var res = await productStore.RemoveProduct(widget.product!['id']);
+  }
+
+  CloseDialog() {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -35,7 +123,7 @@ class _ProductListViewState extends State<ProductListView> {
         child: Row(
       children: [
         // Image Section :
-        ProductImageSection(context),
+        ProductImage(context),
 
         // Product Dectription:
         ProductDescription(context),
@@ -96,7 +184,7 @@ class _ProductListViewState extends State<ProductListView> {
             child: InkWell(
               onTap: () {
                 // SetService();
-                // EditProduct();
+                EditProduct();
               },
               radius: 15,
               child: CircleAvatar(
@@ -172,7 +260,7 @@ class _ProductListViewState extends State<ProductListView> {
         ));
   }
 
-  Card ProductImageSection(BuildContext context) {
+  Card ProductImage(BuildContext context) {
     return Card(
       elevation: 3,
       shadowColor: Colors.blueGrey,

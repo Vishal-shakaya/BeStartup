@@ -62,7 +62,9 @@ class _ProductBodyState extends State<ProductBody> {
                                 itemBuilder: (context, index) {
                                   return ProductListView(
                                       key: UniqueKey(),
-                                      product: product[index]);
+                                      product: product[index],
+                                      index: index,
+                                      );
                                 });
                           })),
                     ],

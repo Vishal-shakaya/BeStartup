@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SelectProductType extends StatefulWidget {
-  const SelectProductType({
+  String? product_type = '';
+  SelectProductType({
+    this.product_type, 
     Key? key,
   }) : super(key: key);
 
@@ -33,8 +35,18 @@ class _SelectProductTypeState extends State<SelectProductType> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+
+  //Edit View Setting default selected product
+    if (widget.product_type == 'product')  {
+       SetProduct();
+    }
+    if (widget.product_type == 'service')  {
+       SetService();
+    }
+    
     return Container(
       margin: EdgeInsets.only(left: 15, top: 120),
       child: Column(
