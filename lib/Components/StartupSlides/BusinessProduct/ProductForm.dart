@@ -25,7 +25,7 @@ class _ProductFormState extends State<ProductForm> {
   double form_width = 0.32;
   double form_height = 0.60;
 
-  final productStore = Get.put(BusinessProductStore(), tag: 'product_form');
+  final productStore = Get.put(BusinessProductStore(), tag: 'productList');
 
   ////////////////////////////////////////////////
   /// SUBMIT PRODUCT :
@@ -103,7 +103,6 @@ class _ProductFormState extends State<ProductForm> {
                 ProductSubmitButton()
               ],
 
-              // PRODUCT SUBMIT BUTTON :
             ),
           )),
     );

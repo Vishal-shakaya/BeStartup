@@ -71,7 +71,6 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     if (context.width < 480) {print('480');}
 
     var milestones = mileStore.GetMileStonesList();
-    print(milestones);
     return Column(
       children: [
         Container(

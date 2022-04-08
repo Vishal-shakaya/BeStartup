@@ -1,21 +1,12 @@
-import 'dart:html';
-
 import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Firebase/FileStorage.dart';
-import 'package:be_startup/Backend/Startup/BusinessDetailStore.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 
 enum ProductUrlType { youtube, content }
 
@@ -34,7 +25,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   String upload_image_url = '';
   late UploadTask? upload_process;
   bool is_uploading = false;
-  final prodStore = Get.put(BusinessProductStore(), tag: 'product_store');
+  final productStore = Get.put(BusinessProductStore(), tag: 'product_store');
 
   // Upload Button Position Ration
   // 1 Top and righ :
@@ -62,7 +53,6 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   SetProductYoutubeUrl() {
     setState(() {
-      print('hello');
       prod_url_sec_visible = true;
       url_type = ProductUrlType.youtube;
     });
@@ -72,7 +62,6 @@ class _ProductImageSectionState extends State<ProductImageSection> {
     setState(() {
       prod_url_sec_visible = true;
       url_type = ProductUrlType.content;
-      // content_icon_color = active_content_icon_color;
     });
   }
 
@@ -80,10 +69,10 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   /// 1. Check if url is null then not update url :
   /// 2. If Success then Update url :
   /// 3. Hide url Input Filed :
-  /// ///////////////////////////////////
-  SubmitProductUrl() {
+  /// ///////////////////////////////////////////////////
+  SubmitProductUrl() async {
     var url_val = product_url_controller.text;
-
+    // Null Check :
     if (url_val == '' || url_val == null) {
       return;
     }
@@ -92,23 +81,28 @@ class _ProductImageSectionState extends State<ProductImageSection> {
       setState(() {
         youtube_icon_color = active_youtube_icon_color;
       });
+      final  res = await productStore.SetYoutubeLink(url_val);
     }
 
     if (url_type == ProductUrlType.content) {
       setState(() {
         content_icon_color = active_content_icon_color;
       });
+       final   res = await productStore.SetContentLink(url_val);
     }
 
-    // hide input field :
+    // Hide input field :
     setState(() {
       prod_url_sec_visible = false;
     });
-    // Clear input field : 
+
+    // Clear input field :
     product_url_controller.clear();
   }
 
-// UPLOADING IMAGE :
+//////////////////////////////////////////
+  // UPLOADING IMAGE :
+//////////////////////////////////////////
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -128,8 +122,8 @@ class _ProductImageSectionState extends State<ProductImageSection> {
       setState(() {
         is_uploading = true;
       });
-      var resp =
-          await prodStore.UploadProductImage(logo: image, filename: filename);
+      var resp = await productStore.UploadProductImage(
+          logo: image, filename: filename);
 
       if (resp['response']) {
         String logo_url = resp['data'];
@@ -177,85 +171,93 @@ class _ProductImageSectionState extends State<ProductImageSection> {
           // Upload Button :
           UploadButton(context),
 
-          Container(
-              child: Positioned(
-            top: context.height * 0.35,
-            left: context.width * 0.07,
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    SetProductYoutubeUrl();
-                  },
-                  child: Tooltip(
-                    message: 'Add youtube video link',
-                    child: Icon(
-                      Icons.video_library_rounded,
-                      color: youtube_icon_color,
-                      size: 25,
-                    ),
-                  ),
-                ),
-                // Spacing
-                SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  onTap: () {
-                    SetProductContentUrl();
-                  },
-                  child: Tooltip(
-                    message: 'Add content supportive Link',
-                    child: Icon(
-                      Icons.link_outlined,
-                      color: content_icon_color,
-                      size: 25,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )),
+          ProductLinks(context),
 
           // Take Content Link :
-          Visibility(
-            visible: prod_url_sec_visible,
-            child: Positioned(
-              top: context.height * 0.39,
-              left: context.width * 0.01,
-              child: Container(
-                width: context.width * 0.30,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: product_url_controller,
-                        decoration: InputDecoration(hintText: 'paste url'),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                          margin: EdgeInsets.only(top: 25, left: 15),
-                          alignment: Alignment.bottomLeft,
-                          child: IconButton(
-                              onPressed: () {
-                                SubmitProductUrl();
-                              },
-                              icon: Icon(
-                                Icons.check,
-                                color: Colors.blue.shade300,
-                              ))),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          )
+          UrlSection(context)
         ],
       ),
     );
+  }
+
+  Visibility UrlSection(BuildContext context) {
+    return Visibility(
+          visible: prod_url_sec_visible,
+          child: Positioned(
+            top: context.height * 0.39,
+            left: context.width * 0.01,
+            child: Container(
+              width: context.width * 0.30,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      controller: product_url_controller,
+                      decoration: InputDecoration(hintText: 'paste url'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(top: 25, left: 15),
+                        alignment: Alignment.bottomLeft,
+                        child: IconButton(
+                            onPressed: () {
+                              SubmitProductUrl();
+                            },
+                            icon: Icon(
+                              Icons.check,
+                              color: Colors.blue.shade300,
+                            ))),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+  }
+
+  Container ProductLinks(BuildContext context) {
+    return Container(
+        child: Positioned(
+          top: context.height * 0.35,
+          left: context.width * 0.07,
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  SetProductYoutubeUrl();
+                },
+                child: Tooltip(
+                  message: 'Add youtube video link',
+                  child: Icon(
+                    Icons.video_library_rounded,
+                    color: youtube_icon_color,
+                    size: 25,
+                  ),
+                ),
+              ),
+              // Spacing
+              SizedBox(
+                width: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  SetProductContentUrl();
+                },
+                child: Tooltip(
+                  message: 'Add content supportive Link',
+                  child: Icon(
+                    Icons.link_outlined,
+                    color: content_icon_color,
+                    size: 25,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 
   Positioned UploadButton(BuildContext context) {
