@@ -12,8 +12,10 @@ enum ProductUrlType { youtube, content }
 
 class ProductImageSection extends StatefulWidget {
   String? product_image_url = '';
+  String? form_type;
   ProductImageSection({
     this.product_image_url,
+    this.form_type,
     Key? key,
   }) : super(key: key);
 
@@ -24,10 +26,18 @@ class ProductImageSection extends StatefulWidget {
 class _ProductImageSectionState extends State<ProductImageSection> {
   Uint8List? image;
   String filename = '';
-  String upload_image_url = '';
+  String? upload_image_url = '';
   late UploadTask? upload_process;
   bool is_uploading = false;
   final productStore = Get.put(BusinessProductStore(), tag: 'product_store');
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.form_type == 'update') {
+      upload_image_url = widget.product_image_url;
+    }
+  }
 
   // Upload Button Position Ration
   // 1 Top and righ :
@@ -160,24 +170,17 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   @override
   Widget build(BuildContext context) {
-    String? final_image;
-    if (widget.product_image_url != '') {
-      final_image = widget.product_image_url;
-    }
-    if (upload_image_url != '') {
-      final_image = upload_image_url;
-    }
-
     // IMAGE BLOCK:
     return Container(
       width: context.width * 0.20,
       height: context.height * 0.45,
       child: Stack(
         children: [
-          upload_image_url == '' && widget.product_image_url == ''
+          upload_image_url == ''
               ? ImagePreviewContainer(context)
               : // IMAGE BLOCK :
-              ImageContainer(context, final_image),
+              ImageContainer(context, upload_image_url),
+
           // Upload Button :
           UploadButton(context),
 

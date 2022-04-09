@@ -86,6 +86,7 @@ class _ProductListViewState extends State<ProductListView> {
                       /////////////////////////////////
                       ProductImageSection(
                         product_image_url: widget.product!['image_url'],
+                        form_type : 'update'
                       ),
 
                       //////////////////////////////
