@@ -73,7 +73,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 // MEMBER PROFILE LIST VIEW :
                 // Image , name , position , email , then desc :
                 Container(
-                    height: context.height * 0.50,
+                    height: context.height * 0.60,
                     width: context.width * 0.50,
                     child: Obx(
                       () {

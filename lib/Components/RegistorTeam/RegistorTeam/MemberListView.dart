@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,11 +75,18 @@ class _MemberListViewState extends State<MemberListView> {
                 ),
 
                 // POSITION:
-                MemPosition(),
-                // MEMBER NAME :
-                MemName(),
-                // CONTACT EMAIL ADDRESS :
-                MemContact(),
+                SizedBox(
+                  width:200, 
+                  child: Column(
+                    children: [
+                      MemPosition(),
+                      // MEMBER NAME :
+                      MemName(),
+                      // CONTACT EMAIL ADDRESS :
+                      MemContact(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -204,6 +210,7 @@ class _MemberListViewState extends State<MemberListView> {
   Container MemContact() {
     return Container(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -213,10 +220,15 @@ class _MemberListViewState extends State<MemberListView> {
             size: 16,
           ),
         ),
-        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+        AutoSizeText.rich(
+          TextSpan(
+            style: Get.textTheme.headline5, 
+            children: [
           TextSpan(
               text: widget.member!['email'],
-              style: TextStyle(color: Colors.blue, fontSize: 11))
+              style: TextStyle(
+                overflow: TextOverflow.ellipsis,
+                color: Colors.blue, fontSize: 11))
         ])),
       ],
     ));

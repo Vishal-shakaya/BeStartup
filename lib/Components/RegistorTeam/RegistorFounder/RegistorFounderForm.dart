@@ -9,10 +9,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegistorFounderForm extends StatefulWidget {
-  var formKey; 
-  RegistorFounderForm({
-    this.formKey, 
-      Key? key}) : super(key: key);
+  var formKey;
+  RegistorFounderForm({this.formKey, Key? key}) : super(key: key);
 
   @override
   State<RegistorFounderForm> createState() => _RegistorFounderFormState();
@@ -30,10 +28,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   double formfield_width = 500;
   double contact_formfield_width = 350;
   double contact_text_margin_top = 0.05;
-  
 
-  ResetForm() {
-    widget.formKey.currentState!.reset();
+  ResetForm(field) {
+    widget.formKey.currentState.fields[field].didChange('');
   }
 
   @override
@@ -91,7 +88,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                             error_text: 'Founder name required',
                             lable_text: 'founder',
                             hind_text: 'founder or CEO'),
-                  
+
                         // POSITION:
                         InputField(
                           context: context,
@@ -180,16 +177,14 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(
-      textStyle: TextStyle(),
-      color: light_color_type1,
-      fontSize: 17,
-      fontWeight: FontWeight.w600,
-    ),
+        textStyle: TextStyle(),
+        color: light_color_type1,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+      ),
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 1 ,
-            errorText: error_text)
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
 
@@ -205,7 +200,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
 
         suffix: InkWell(
           onTap: () {
-            ResetForm();
+            ResetForm(name);
           },
           child: Container(
             child: Icon(
@@ -230,15 +225,15 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(
-      textStyle: TextStyle(),
-      color: light_color_type1,
-      fontSize: 17,
-      fontWeight: FontWeight.w600,
-    ),
+        textStyle: TextStyle(),
+        color: light_color_type1,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+      ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 1, 
-            allowEmpty: name =='other_info' ? true:false,
+        FormBuilderValidators.minLength(context, 1,
+            allowEmpty: name == 'other_info' ? true : false,
             errorText: error_text)
       ]),
       decoration: InputDecoration(
@@ -255,7 +250,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
 
         suffix: InkWell(
           onTap: () {
-            ResetForm();
+            ResetForm(name);
           },
           child: Container(
             child: Icon(

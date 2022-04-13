@@ -77,11 +77,13 @@ class RegistorFounderBody extends StatelessWidget {
             );
         }
         formKey.currentState!.reset();
-        // SmartDialog.dismiss();
+        SmartDialog.dismiss();
+
+        // Redirect to team page: 
+        Get.toNamed(create_business_team);
 
         
       } else {
-        Get.toNamed(create_business_team);
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
         // Error Alert :

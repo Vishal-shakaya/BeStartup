@@ -1,6 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
-import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -135,7 +133,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
 
         suffix: InkWell(
           onTap: () {
-            widget.ResetForm();
+            widget.ResetForm(name);
           },
           child: Container(
             child: Icon(

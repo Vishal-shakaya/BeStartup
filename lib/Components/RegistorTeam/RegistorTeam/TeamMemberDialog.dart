@@ -130,8 +130,10 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
   }
 
   // RESET FORM :
-  ResetForm() {
-    formKey.currentState!.reset();
+  ResetForm(field) {
+    print(field);
+    // formKey.currentState!.reset();
+    formKey.currentState!.fields[field]!.didChange('');
   }
 
   // CLOSE DIALOG :
@@ -242,27 +244,25 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
                 children: [
                   Expanded(
                       flex: 5,
-                      child: widget.form_type== MemberFormType.create?
-                       TeamMemberProfileImage()
-                    
-                      : TeamMemberProfileImage(
-                        member_image:widget.member['image'],
-                        form_type: MemberFormType.edit,
-                      )),
-
+                      child: widget.form_type == MemberFormType.create
+                          ? TeamMemberProfileImage()
+                          : TeamMemberProfileImage(
+                              member_image: widget.member['image'],
+                              form_type: MemberFormType.edit,
+                            )),
                   Expanded(
                       flex: 5,
-                      child: widget.form_type== MemberFormType.create?  
-                      TeamMemberDetailForm(
-                        formkey: formKey,
-                        ResetForm: ResetForm,
-                      )
-                      :TeamMemberDetailForm(
-                        formkey: formKey,
-                        ResetForm: ResetForm,
-                        form_type: MemberFormType.edit,
-                        member: widget.member,
-                      ))
+                      child: widget.form_type == MemberFormType.create
+                          ? TeamMemberDetailForm(
+                              formkey: formKey,
+                              ResetForm: ResetForm,
+                            )
+                          : TeamMemberDetailForm(
+                              formkey: formKey,
+                              ResetForm: ResetForm,
+                              form_type: MemberFormType.edit,
+                              member: widget.member,
+                            ))
                 ],
               )),
 
@@ -272,16 +272,15 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
                 children: [
                   Row(
                     children: [
-                      widget.form_type== MemberFormType.create?
-                      MemberInfoForm(
-                        formkey: formKey2,
-                      )
-                      
-                      : MemberInfoForm(
-                        formkey: formKey2,
-                        form_type: MemberFormType.edit,
-                        member: widget.member,
-                      ),
+                      widget.form_type == MemberFormType.create
+                          ? MemberInfoForm(
+                              formkey: formKey2,
+                            )
+                          : MemberInfoForm(
+                              formkey: formKey2,
+                              form_type: MemberFormType.edit,
+                              member: widget.member,
+                            ),
                     ],
                   ),
                   Container(
