@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _ProductFormState extends State<ProductForm> {
       // STORE PRODUCT TO BACKEND:
       var res;
       if (widget.form_type == 'update') {
-        print('UPDATE PRODUCT START');
+        // print('UPDATE PRODUCT START');
         res = await productStore.UpdateProduct(
           title: product_title,
           description: product_desc,

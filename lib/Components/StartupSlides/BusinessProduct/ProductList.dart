@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductImageSection.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/SelectProductType.dart';
@@ -109,7 +109,7 @@ class _ProductListViewState extends State<ProductListView> {
 
   // REMOVE PRODUCT AND UPDATE UI :
   DeleteProduct(id) async {
-    print('DELETING PRODUCT');
+    // print('DELETING PRODUCT');
     var res = await productStore.RemoveProduct(widget.product!['id']);
   }
 

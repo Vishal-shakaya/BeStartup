@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';

@@ -84,6 +84,7 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
   Widget build(BuildContext context) {
     return Container(
       width: context.width * 0.50,
+      height: context.height*0.15,
       child: Row(
         children: [
           // Back Button:

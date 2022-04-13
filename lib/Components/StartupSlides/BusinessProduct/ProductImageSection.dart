@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

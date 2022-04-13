@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/BusinessVisionStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';

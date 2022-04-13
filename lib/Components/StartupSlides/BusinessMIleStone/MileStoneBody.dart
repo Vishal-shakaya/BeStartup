@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Startup/BusinessMileStoneStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';

@@ -1,7 +1,7 @@
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
-import 'package:be_startup/Backend/Startup/BusinessProductStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:be_startup/UI/RegistorTeam/RegistorTeam.dart';
+import 'package:be_startup/UI/RegistorTeam/RegistorFounderView.dart';
+import 'package:be_startup/UI/RegistorTeam/RegistorTeamView.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessCatigoryView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessDetailView.dart';
@@ -72,7 +73,6 @@ class MyApp extends StatelessWidget {
           GetPage(name: signup_url,page:()=> SignupView() ), 
           GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
           GetPage(name: startup_slides_url ,page:()=> StartupSlides() ), 
-          GetPage(name: registor_founder ,page:()=> RegistorTeam() ), 
           
           // BUSINESS DETAIL : 
           GetPage(name: create_business_detail_url ,page:()=> BusinessDetailView() ), 
@@ -81,6 +81,11 @@ class MyApp extends StatelessWidget {
           GetPage(name: create_business_milestone_url ,page:()=> BusinessMileStone() ), 
           GetPage(name: create_business_catigory_url ,page:()=> BusinessCatigoryView() ), 
           GetPage(name: create_business_product_url ,page:()=> BusinessProductView() ), 
+
+          // FOUNDER REGISTRATION AND TEAM 
+          GetPage(name: create_founder ,page:()=> RegistorFounderView() ), 
+          GetPage(name: create_business_team ,page:()=> RegistorTeamView() ), 
+
            
         ],
       );

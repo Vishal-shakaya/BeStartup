@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,14 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TeamMemberDetailForm extends StatefulWidget {
-  GlobalKey<FormBuilderState>?  formkey;
+  GlobalKey<FormBuilderState>? formkey;
   Function ResetForm;
-  TeamMemberDetailForm({required this.ResetForm, this.formkey, Key? key})
+  MemberFormType? form_type;
+  var member; 
+  TeamMemberDetailForm({
+    this.form_type, 
+    this.member,
+    required this.ResetForm, this.formkey, Key? key})
       : super(key: key);
 
   @override
@@ -57,11 +63,14 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
                         child: Column(
                           children: [
                             SecondaryInputField(
+                              // initial_value:widget.member['name'],
                               context: context,
                               name: 'name',
                               lable_text: 'Full name',
                               hind_text: 'enter name',
                               error_text: 'name field required',
+                              initial_val: 
+                              widget.form_type == MemberFormType.edit? widget.member['name'] :''
                             ),
                             SecondaryInputField(
                               context: context,
@@ -69,6 +78,8 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
                               lable_text: 'Position',
                               hind_text: 'type',
                               error_text: 'member position required',
+                              initial_val: 
+                              widget.form_type == MemberFormType.edit? widget.member['position']:''
                             ),
                             SecondaryInputField(
                               context: context,
@@ -77,6 +88,8 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
                               hind_text: 'contact email',
                               error_text: '',
                               require: false,
+                              initial_val:
+                               widget.form_type == MemberFormType.edit?widget.member['email']:''
                             ),
                           ],
                         ),
@@ -92,21 +105,22 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
 
   // Secondary Input field :
   FormBuilderTextField SecondaryInputField(
-      {context, name, error_text, lable_text, hind_text, require = true}) {
+      {context, name,   error_text, lable_text, hind_text, require = true,
+        initial_val
+      }) {
     return FormBuilderTextField(
+      initialValue: initial_val!=''?initial_val:'',
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
         color: light_color_type1,
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.min(context, require ? 1 : 0,
-            errorText: error_text)
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
         labelStyle: GoogleFonts.robotoSlab(

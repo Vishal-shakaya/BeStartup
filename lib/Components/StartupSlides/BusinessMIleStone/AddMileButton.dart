@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Startup/BusinessMileStoneStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';

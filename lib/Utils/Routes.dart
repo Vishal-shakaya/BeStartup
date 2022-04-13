@@ -11,3 +11,8 @@ String create_business_milestone_url = '/create-business-milestone';
 String create_business_product_url = '/create-business-product';
 String create_business_thumbnail_url = '/create-business-thumbnail';
 String create_business_vision_url = '/create-business-vision';
+
+// FOUNDER AND TEAM 
+String create_founder = '/create-business-founder';
+String create_business_team = '/create-business-team';
+

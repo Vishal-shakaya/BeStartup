@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Utils/Colors.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,14 +9,16 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegistorFounderForm extends StatefulWidget {
-  RegistorFounderForm({Key? key}) : super(key: key);
+  var formKey; 
+  RegistorFounderForm({
+    this.formKey, 
+      Key? key}) : super(key: key);
 
   @override
   State<RegistorFounderForm> createState() => _RegistorFounderFormState();
 }
 
 class _RegistorFounderFormState extends State<RegistorFounderForm> {
-  final formKey = GlobalKey<FormBuilderState>();
   bool is_password_visible = true;
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -24,34 +27,14 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-// SUBMIT  FORM :
-  SubmitFounderDetail() async {
-    formKey.currentState!.save();
-    if (formKey.currentState!.validate()) {
-      String founder_name = formKey.currentState!.value['founder_name'];
-      String founder_position = formKey.currentState!.value['founder_position'];
-      String phone_no = formKey.currentState!.value['phone_no'];
-      String email = formKey.currentState!.value['email'];
-      String other_info = formKey.currentState!.value['other_info'];
-     
-     // Testing
-      print(founder_name);
-      print(founder_position); 
-      print(phone_no); 
-      print(email); 
-      formKey.currentState!.reset();
-    } else {
-      print('error found');
-    }
-  }
-
-  ResetForm() {
-    formKey.currentState!.reset();
-  }
-
   double formfield_width = 500;
   double contact_formfield_width = 350;
   double contact_text_margin_top = 0.05;
+  
+
+  ResetForm() {
+    widget.formKey.currentState!.reset();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,23 +48,33 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       print('1500');
     }
 
-    if (context.width < 1200) {print('1200');}
+    if (context.width < 1200) {
+      print('1200');
+    }
 
-    if (context.width < 1000) {print('1000');}
+    if (context.width < 1000) {
+      print('1000');
+    }
 
     // TABLET :
-    if (context.width < 800) {print('800');}
+    if (context.width < 800) {
+      print('800');
+    }
     // SMALL TABLET:
-    if (context.width < 640) {print('640');}
+    if (context.width < 640) {
+      print('640');
+    }
 
     // PHONE:
-    if (context.width < 480) {print('480');}
-    
+    if (context.width < 480) {
+      print('480');
+    }
+
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
       child: FormBuilder(
-          key: formKey,
+          key: widget.formKey,
           autovalidateMode: AutovalidateMode.disabled,
           child: SingleChildScrollView(
             child: Column(
@@ -89,24 +82,26 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                 // FOUNDER FIELD :
                 Container(
                   width: contact_formfield_width,
-                  child: Column(
-                    children: [
-                      InputField(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        InputField(
+                            context: context,
+                            name: 'founder_name',
+                            error_text: 'Founder name required',
+                            lable_text: 'founder',
+                            hind_text: 'founder or CEO'),
+                  
+                        // POSITION:
+                        InputField(
                           context: context,
-                          name: 'founder_name',
-                          error_text: 'Founder name required',
-                          lable_text: 'founder',
-                          hind_text: 'founder or CEO'),
-
-                      // POSITION:
-                      InputField(
-                        context: context,
-                        name: 'founder_position',
-                        lable_text: 'Position',
-                        hind_text: 'position in company',
-                        error_text: 'position in company required',
-                      ),
-                    ],
+                          name: 'founder_position',
+                          lable_text: 'Position',
+                          hind_text: 'position in company',
+                          error_text: 'position in company required',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -184,10 +179,15 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
       name: name,
-      style: Get.textTheme.headline2,
+      style: GoogleFonts.robotoSlab(
+      textStyle: TextStyle(),
+      color: light_color_type1,
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+    ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.min(context, require ? 1 : 0,
+        FormBuilderValidators.minLength(context, 1 ,
             errorText: error_text)
       ]),
       decoration: InputDecoration(
@@ -229,10 +229,16 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
       name: name,
-      style: Get.textTheme.headline2,
+      style: GoogleFonts.robotoSlab(
+      textStyle: TextStyle(),
+      color: light_color_type1,
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+    ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.min(context, require ? 1 : 0,
+        FormBuilderValidators.minLength(context, 1, 
+            allowEmpty: name =='other_info' ? true:false,
             errorText: error_text)
       ]),
       decoration: InputDecoration(
