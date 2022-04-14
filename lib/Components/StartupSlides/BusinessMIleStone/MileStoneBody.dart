@@ -4,7 +4,12 @@ import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileBut
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
+import 'dart:math';
 import 'package:get/get.dart';
 
 class MileStoneBody extends StatefulWidget {
@@ -28,8 +33,62 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
 
+  late ConfettiController _controllerCenter;
+  @override
+  void initState() {
+    super.initState();
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    _controllerCenter.dispose();
+    super.dispose();
+  }
+
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
   @override
   Widget build(BuildContext context) {
+    SubmitMileStone() {
+      _controllerCenter.play();
+      CoolAlert.show(
+          barrierDismissible: false,
+          title: 'First Step Completed!!',
+          text: 'Now you have to complete final step.',
+          width: alert_width,
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+            _controllerCenter.stop();
+            Get.toNamed(create_founder, preventDuplicates: false);
+          },
+          context: context,
+          type: CoolAlertType.success);
+    }
+
     ////////////////////////////////
     /// RESPONSIVE BREAK  POINTS :
     /// DEFAULT 1500 :
@@ -38,16 +97,16 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     // DEFAULT :
     if (context.width > 1500) {
       print('greator then 1500');
-       mile_cont_width = 0.70;
-       mile_cont_height = 0.70;
+      mile_cont_width = 0.70;
+      mile_cont_height = 0.70;
 
-       list_tile_width = 0.4;
-       list_tile_height = 0.30;
+      list_tile_width = 0.4;
+      list_tile_height = 0.30;
 
-       addbtn_top_margin = 0.05;
+      addbtn_top_margin = 0.05;
 
-       subhead_sec_width = 400;
-       subhead_sec_height = 80;
+      subhead_sec_width = 400;
+      subhead_sec_height = 80;
     }
 
     // PC:
@@ -55,20 +114,28 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       print('1500');
     }
 
-    if (context.width < 1200) {print('1200');}
+    if (context.width < 1200) {
+      print('1200');
+    }
 
-    if (context.width < 1000) {print('1000');}
+    if (context.width < 1000) {
+      print('1000');
+    }
 
     // TABLET :
-    if (context.width < 800) {print('800');}
+    if (context.width < 800) {
+      print('800');
+    }
     // SMALL TABLET:
     if (context.width < 640) {
       print('640');
       list_tile_width = 0.6;
-      }
+    }
 
     // PHONE:
-    if (context.width < 480) {print('480');}
+    if (context.width < 480) {
+      print('480');
+    }
 
     var milestones = mileStore.GetMileStonesList();
     return Column(
@@ -77,11 +144,15 @@ class _MileStoneBodyState extends State<MileStoneBody> {
             width: context.width * mile_cont_width,
             height: context.height * mile_cont_height,
             child: Column(children: [
+
               // SUBHEADING SECTION :
               SubHeadingSection(context),
 
               // ADD TAG BUTTON :
               AddMileButton(),
+
+              // CONGRESS MESSAGE WITH SPARKEL: 
+              CongressMessage(),
 
               //////////////////////////////
               // LIST OF TAGS :
@@ -107,10 +178,41 @@ class _MileStoneBodyState extends State<MileStoneBody> {
                     },
                   ))
             ])),
-
-            BusinessSlideNav(slide:SlideType.milestone)
+        BusinessSlideNav(
+          slide: SlideType.milestone,
+          submitform: SubmitMileStone,
+        )
       ],
     );
+  }
+
+  Stack CongressMessage() {
+    return Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: ConfettiWidget(
+                      maxBlastForce: 50, // set a lower max blast force
+                      minBlastForce: 40,
+                      numberOfParticles: 25, // set a lower min blast force
+                    confettiController: _controllerCenter,
+                    blastDirectionality: BlastDirectionality
+                        .explosive, // don't specify a direction, blast randomly
+                    shouldLoop:
+                        true, // start again as soon as the animation is finished
+                    colors: const [
+                      Colors.green,
+                      Colors.blue,
+                      Colors.pink,
+                      Colors.orange,
+                      Colors.purple
+                    ], // manually specify the colors to be used
+                    createParticlePath:
+                        drawStar, // define a custom shape/path.
+                  ),
+                ),
+              ],
+            );
   }
 
   ////////////////////////
@@ -126,7 +228,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
         SafeArea(
           child: Container(
               alignment: Alignment.topCenter,
-              width:  subhead_sec_width,
+              width: subhead_sec_width,
               height: subhead_sec_height,
               margin: EdgeInsets.only(top: 20),
               padding: EdgeInsets.all(20),

@@ -3,7 +3,6 @@ import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -263,6 +262,7 @@ class _UserTypeState extends State<UserType> {
                 // INVESTOR SECTION :
                 //////////////////////////////
                 Container(
+                    
                   padding: EdgeInsets.all(card_padding),
                   child: InkWell(
                     borderRadius: BorderRadius.all(Radius.circular(22)),
@@ -277,6 +277,7 @@ class _UserTypeState extends State<UserType> {
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Container(
                           decoration: BoxDecoration(
+                              // color:Colors.white,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                               border: Border.all(

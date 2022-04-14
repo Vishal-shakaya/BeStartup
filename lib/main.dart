@@ -9,6 +9,7 @@ import 'package:be_startup/UI/StartupSlides/BusinessProductView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessThumbnailView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessVision.dart';
 import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
+import 'package:be_startup/UI/StartupView/StartupView.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/Handlers/UserRegistration/Login.dart';
@@ -51,8 +52,8 @@ class MyApp extends StatelessWidget {
         // themeMode: ThemeMode.dark,
         theme: ThemeData(
           textTheme: LightFontTheme(textTheme),
-          primaryColor: Color(0xff1e847f),
-          primarySwatch: Colors.teal,
+          primaryColor: Color(0xFF54BAB9),
+          primarySwatch: Colors.blueGrey
         ),
 
         // Dark Theme
@@ -85,6 +86,9 @@ class MyApp extends StatelessWidget {
           // FOUNDER REGISTRATION AND TEAM 
           GetPage(name: create_founder ,page:()=> RegistorFounderView() ), 
           GetPage(name: create_business_team ,page:()=> RegistorTeamView() ), 
+
+          // STARTUP PAGE: 
+          GetPage(name:  startup_view_url,page:()=> StartupView() ), 
 
            
         ],

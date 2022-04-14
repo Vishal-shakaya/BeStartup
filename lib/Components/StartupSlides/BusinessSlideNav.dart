@@ -76,7 +76,8 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
 
     // 2.Thumbnail view -> Null view :
     if (widget.slide == SlideType.milestone) {
-      return null;
+         widget.submitform!();
+      // return null;
     }
   }
 

@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+double alert_width = 320;
+
 List<String> business_catigories = [
   'Software Dev',
   'IT Industry',
