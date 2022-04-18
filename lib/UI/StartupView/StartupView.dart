@@ -1,4 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorSection.dart';
+import 'package:be_startup/Components/StartupView/ProductServices/ProductSection.dart';
+import 'package:be_startup/Components/StartupView/ProductServices/ServiceSection.dart';
+import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupInfoSection.dart';
+import 'package:be_startup/Components/StartupView/StartupVisionSection/StartupVisionSection.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class StartupView extends StatelessWidget {
@@ -20,10 +27,36 @@ class StartupView extends StatelessWidget {
             StartupInfoSection(),
 
             // VISION SECTION : 
+            // 1 HEADING : 
+            // 2 STARTUP VISION DESCRIPTION: 
+            StartupVisionSection(), 
+
+            // PRODUCT HEADING :             
+            StartupHeaderText(title:'Product',font_size: 32,),
             
-          ],
+            // PRODUCT AND SERVIVES : 
+            ProductSection(),
+
+            // SERVICE HEADING : 
+            StartupHeaderText(title:'Services',font_size: 32,),
+            
+            // SERVICE SECTION : 
+            ServiceSection(), 
+
+            // INVESTOR HEADING:             
+            StartupHeaderText(title:'Investors',font_size: 32,),
+
+  
+             InvestorSection(),  
+           ],
+          
+
+
+      
         ),
       ),
     );
   }
+
+
 }

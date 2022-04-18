@@ -102,7 +102,7 @@ class InvestmentChart extends StatelessWidget {
                 text: title,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(),
-                  color: light_color_type3,
+                  color: light_color_type2,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 )),
@@ -113,7 +113,7 @@ class InvestmentChart extends StatelessWidget {
                 text: value,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(),
-                  color: light_color_type3,
+                  color: light_color_type2,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 )),

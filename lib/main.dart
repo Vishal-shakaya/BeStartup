@@ -1,4 +1,8 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
+import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
+import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
+import 'package:be_startup/Helper/HorizontalScroll.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorFounderView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorTeamView.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
       return GetMaterialApp(
+      scrollBehavior: MyCustomScrollBehavior(),
       // INITILIZE TOAST DIALOG  : 
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
@@ -89,6 +94,13 @@ class MyApp extends StatelessWidget {
 
           // STARTUP PAGE: 
           GetPage(name:  startup_view_url,page:()=> StartupView() ), 
+          // SUB-ROUTES : 
+          
+          // 1 Team Page
+          GetPage(name:  team_page_url,page:()=> TeamPage() ), 
+          GetPage(name:  vision_page_url,page:()=> VisionPage() ), 
+          GetPage(name:  invest_page_url,page:()=> InvestPage() ), 
+
 
            
         ],

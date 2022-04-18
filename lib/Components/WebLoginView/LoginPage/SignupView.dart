@@ -89,7 +89,7 @@ class _SignupViewState extends State<SignupView> {
     }
 
     // IF SUCCESS THTN GO FORWORD :
-    Get.toNamed(startup_view_url);
+    // Get.toNamed(startup_view_url);
   }
 
   @override

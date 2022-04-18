@@ -55,7 +55,6 @@ class _MemberListViewState extends State<MemberListView> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.member);
     return Container(
       child: Row(
         children: [
@@ -105,7 +104,7 @@ class _MemberListViewState extends State<MemberListView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 /////////////////////////////
-                // DELETE PRODUCT BUTTON :
+                // DELETE MEMBER BUTTON :
                 /////////////////////////////
                 Card(
                   shadowColor: Colors.grey,

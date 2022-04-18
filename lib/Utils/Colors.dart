@@ -11,7 +11,11 @@ Color hover_color = Color(0xff1e847f);
 final light_color_type1 = Colors.blueGrey[900];
 final light_color_type2 = Colors.blueGrey[800];
 final light_color_type3 = Colors.blueGrey;
+final light_color_type4 = Colors.blueGrey.shade700;
 final input_label_color  = Colors.grey;
+
+final border_color= Colors.grey.shade300;
+final shadow_color1= Colors.grey.shade300;
 
 // reset text field icon color :  
 final input_reset_color  = Colors.grey;

@@ -7,7 +7,7 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  double profile_top_pos = 0.18;
+  double profile_top_pos = 0.19;
   double profile_left_pos = 0.01;
     return Positioned(
       top: context.height * profile_top_pos,

@@ -1,13 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/ProfileImage.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
-import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+enum StartupPageRoute {
+  team, 
+  vision, 
+  invest, 
+}
 class StartupInfoSection extends StatefulWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
@@ -40,9 +41,9 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
                     children: [
-                      StartupNavigation(title: 'Team', route: () {}),
-                      StartupNavigation(title: 'Vision', route: () {}),
-                      StartupNavigation(title: 'Invest', route: () {}),
+                      StartupNavigation(title: 'Team', route: StartupPageRoute.team),
+                      StartupNavigation(title: 'Vision', route: StartupPageRoute.vision),
+                      StartupNavigation(title: 'Invest', route: StartupPageRoute.invest),
 
                       // STATIC SECTION WITH INVEST BUTTON : 
                      InvestmentChart()

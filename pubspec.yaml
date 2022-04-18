@@ -33,6 +33,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  tab_container: ^1.2.2
   confetti: ^0.6.0
   chips_input: ^0.0.6
   toggle_switch: ^1.4.0
@@ -63,6 +64,7 @@ dependencies:
   firebase_storage: ^10.2.7
   introduction_screen: ^3.0.0
   advance_notification: ^1.0.6
+  horizontal_card_pager: ^1.1.1
 
 dev_dependencies:
   flutter_test:

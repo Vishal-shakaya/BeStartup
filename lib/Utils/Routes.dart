@@ -18,3 +18,6 @@ String create_business_team = '/create-business-team';
 
 // STARTUP PAGE ROUTES :
 String startup_view_url = '/startup-view';
+String team_page_url = '/business_team_url';
+String vision_page_url = '/vision_page_url';
+String invest_page_url = '/invest_page_url';

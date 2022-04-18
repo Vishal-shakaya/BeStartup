@@ -1,3 +1,4 @@
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_button/sign_button.dart';
@@ -36,12 +37,14 @@ class _SocailAuthState extends State<SocailAuth> {
               buttonType: ButtonType.linkedin,
               elevation: 3,
               onPressed: () {
+              Get.toNamed(startup_view_url);
               print('click');
               }),
             SignInButton(
               buttonType:  ButtonType.apple,
               elevation: 3,
               onPressed: () {
+                Get.toNamed(create_business_vision_url ,preventDuplicates: false);
               print('click');
               }),
           ],
