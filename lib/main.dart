@@ -3,6 +3,7 @@ import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
 import 'package:be_startup/Helper/HorizontalScroll.dart';
+import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorFounderView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorTeamView.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
@@ -100,6 +101,9 @@ class MyApp extends StatelessWidget {
           GetPage(name:  team_page_url,page:()=> TeamPage() ), 
           GetPage(name:  vision_page_url,page:()=> VisionPage() ), 
           GetPage(name:  invest_page_url,page:()=> InvestPage() ), 
+
+          // HOME PAGE 
+          GetPage(name:  home_page_url,page:()=> HomeView() ), 
 
 
            

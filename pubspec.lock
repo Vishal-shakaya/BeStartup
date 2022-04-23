@@ -424,6 +424,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_multi_select_items:
+    dependency: "direct main"
+    description:
+      name: flutter_multi_select_items
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -873,6 +880,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.12"
+  syncfusion_flutter_core:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.1.50"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.1.50"
   tab_container:
     dependency: "direct main"
     description:

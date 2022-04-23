@@ -65,6 +65,9 @@ dependencies:
   introduction_screen: ^3.0.0
   advance_notification: ^1.0.6
   horizontal_card_pager: ^1.1.1
+  flutter_multi_select_items: ^0.4.0
+  syncfusion_flutter_sliders: ^20.1.50
+  syncfusion_flutter_core: ^20.1.50
 
 dev_dependencies:
   flutter_test:
