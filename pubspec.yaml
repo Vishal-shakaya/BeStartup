@@ -68,6 +68,7 @@ dependencies:
   flutter_multi_select_items: ^0.4.0
   syncfusion_flutter_sliders: ^20.1.50
   syncfusion_flutter_core: ^20.1.50
+  paginated_search_bar: ^1.1.2
 
 dev_dependencies:
   flutter_test:

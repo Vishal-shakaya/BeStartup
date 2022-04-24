@@ -19,7 +19,8 @@ class HomeView extends StatelessWidget {
 
               // HEADER SECTION : 
               // 1 EXPLORE AND SEARCH BAR : 
-              HomeHeaderSection(), 
+               SizedBox(height: context.height*0.05,)
+,              HomeHeaderSection(), 
           ],
     ));
   }
