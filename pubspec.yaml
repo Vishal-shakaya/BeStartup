@@ -50,6 +50,7 @@ dependencies:
   crop_your_image: ^0.6.0+1
   image_picker: ^0.8.4+6
   image_cropper: ^1.4.1
+  card_swiper: ^2.0.3
   
   cupertino_icons: ^1.0.2
   firebase_core: ^1.11.0

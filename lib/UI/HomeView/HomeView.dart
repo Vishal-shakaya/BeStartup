@@ -1,4 +1,5 @@
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
+import 'package:be_startup/Components/HomeView/StoryView/StoryListView.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +20,11 @@ class HomeView extends StatelessWidget {
 
               // HEADER SECTION : 
               // 1 EXPLORE AND SEARCH BAR : 
-               SizedBox(height: context.height*0.05,)
-,              HomeHeaderSection(), 
+              SizedBox(height: context.height*0.04,),
+              HomeHeaderSection(), 
+              
+              StoryListView()
+
           ],
     ));
   }

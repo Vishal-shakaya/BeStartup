@@ -24,7 +24,7 @@ class _SignupViewState extends State<SignupView> {
 // CROPE IMAGE :
 ////////////////////////////
   Future<void> CorpImage(profile_image) async {
-    File? crop_image = await ImageCropper.cropImage(
+    File? cropImage = await ImageCropper().cropImage(
         sourcePath: profile_image!.path,
         androidUiSettings: AndroidUiSettings(
             toolbarColor: primary_light,
@@ -40,13 +40,13 @@ class _SignupViewState extends State<SignupView> {
 
     // UPDATE PROFILE IMAGE IN UI :
     setState(() {
-      circular_profile = File(crop_image!.path);
+      circular_profile = File(cropImage!.path);
     });
 
     // STORE FILE IN FIREBASE STORAGE :
     String filename = DateTime.now().toString();
     String destination = 'user_profile/profile_image/$filename';
-    upload_process = FileStorage.UploadFile(destination, crop_image!);
+    upload_process = FileStorage.UploadFile(destination, cropImage!);
     final snapshot = await upload_process!.whenComplete(() => {});
     final download_url = await snapshot.ref.getData();
     print(download_url);

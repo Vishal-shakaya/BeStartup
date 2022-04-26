@@ -24,7 +24,7 @@ class HomeHeaderSection extends StatefulWidget {
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double header_sec_width = 0.60;
-  double header_sec_height = 0.20;
+  double header_sec_height = 0.16;
 
   double con_button_width = 80;
   double con_button_height = 40;
