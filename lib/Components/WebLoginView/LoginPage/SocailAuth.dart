@@ -27,6 +27,7 @@ class _SocailAuthState extends State<SocailAuth> {
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,
             onPressed: () {
+            Get.toNamed(select_investor_choise);
               print('click');
             }),
         SignInButton(

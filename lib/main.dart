@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
 import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
 import 'package:be_startup/Helper/HorizontalScroll.dart';
 import 'package:be_startup/UI/HomeView/HomeView.dart';
+import 'package:be_startup/UI/RegistorInvestor/ChooseCatigoryView.dart';
+import 'package:be_startup/UI/RegistorInvestor/InvestorRegistorFormView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorFounderView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorTeamView.dart';
 import 'package:be_startup/UI/RegistrationView/RegistrationView.dart';
@@ -105,6 +108,9 @@ class MyApp extends StatelessWidget {
           // HOME PAGE 
           GetPage(name:  home_page_url,page:()=> HomeView() ), 
 
+          // REGISTOR INVESTOR : 
+          GetPage(name:  select_investor_choise ,page:()=> ChooseCatigoryView() ), 
+          GetPage(name:  investor_registration_form ,page:()=> InvestorRegistorForm() ), 
 
            
         ],

@@ -18,9 +18,13 @@ String create_business_team = '/create-business-team';
 
 // STARTUP PAGE ROUTES :
 String startup_view_url = '/startup-view';
-String team_page_url = '/business_team_view';
-String vision_page_url = '/vision_view';
-String invest_page_url = '/invest_view';
+String team_page_url = '/business-team-view';
+String vision_page_url = '/vision-view';
+String invest_page_url = '/invest-view';
 
 // HOME PAGE :
-String home_page_url = '/home_page_view';
+String home_page_url = '/home-page-view';
+
+// REGISTOR INVESTOR :
+String select_investor_choise = '/investor-choise';
+String investor_registration_form = '/investor-registration-form';

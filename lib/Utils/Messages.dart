@@ -70,3 +70,7 @@ String milestone_subHeading_text =
 String registor_founder_head_text = 'Founder';
 //2. REGISTOR TEAM SLIDE
 String registor_team_head_text = 'Team Members';
+
+// REGISTOR INVESTORS :
+String investor_choise_text = 'What you Like';
+String investor_choise_sub_text = 'Pesnolize Topics you are Interested In ';
