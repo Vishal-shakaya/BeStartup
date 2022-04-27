@@ -109,7 +109,6 @@ class BusinessProductStore extends GetxController {
 
   // ADD PRODUCT :
   UpdateProduct({title, description, id, index}) {
-    print('update index');
     Map<String, dynamic?> product = {
       'id': id,
       'title': title,

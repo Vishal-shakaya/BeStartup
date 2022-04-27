@@ -1,5 +1,5 @@
 import 'package:be_startup/Components/WebLoginView/LoginPage/SideImage.dart';
-import 'package:be_startup/Components/WebLoginView/LoginPage/SocailAuth.dart';
+import 'package:be_startup/Components/WebLoginView/SocialAuth/SocailAuth.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage/LoginTabs.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage/CustomDivider.dart';
 import 'package:flutter/material.dart';
