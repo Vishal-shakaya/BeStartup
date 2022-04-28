@@ -47,6 +47,14 @@ class MyAuthentication extends GetxController {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
+      // Verify if eamil is verified or not :
+      final user = auth.currentUser;
+      final verify_email = user?.emailVerified;
+
+      if (verify_email == false) {
+        return ResponseBack(response_type: false,data:'email_not_verify');
+      }
       return ResponseBack(
         response_type: true,
       );

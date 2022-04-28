@@ -18,7 +18,7 @@ class SignupDetailForm extends StatefulWidget {
 }
 
 class _SignupDetailFormState extends State<SignupDetailForm> {
-  var myAuth = Get.put(MyAuthentication(), tag: 'signup_user');
+  var myAuth = Get.put(MyAuthentication(), tag: 'current_user');
 
   // Change Theme :
   final _formKey = GlobalKey<FormBuilderState>();
@@ -65,15 +65,14 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
   // SUBMIT SIGNUP FORM :
   SubmitSignupForm(context, width) async {
     _formKey.currentState!.save();
+    // START LOADING : 
     StartLoading();
     if (_formKey.currentState!.validate()) {
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
-      // String confirm_password =
-      //     _formKey.currentState!.value['confirmPassword'];
-        
-
+      // String confirm_password =   _formKey.currentState!.value['confirmPassword'];
       // print(confirm_password);
+      
       _formKey.currentState!.reset();
 
       // SIGNUP PROCESS :
