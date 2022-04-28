@@ -45,100 +45,13 @@ class _LoginFormState extends State<LoginForm> {
                 autovalidateMode: AutovalidateMode.disabled,
                 child: Column(children: [
                   // 1. EMAIL FIELD
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    alignment: Alignment.centerLeft,
-                    child: Text('Email addresss',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: input_label_color)),
-                  ),
+                  Label(input_label_color,'Email addresss'),
+                  EmailInputField(input_text_color, context, input_foucs_color),
 
-                  FormBuilderTextField(
-                    name: 'email',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: Get.isDarkMode? FontWeight.w400:FontWeight.w600 ,
-                      color:input_text_color 
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.email(context,
-                          errorText: 'enter valid email')
-                    ]),
-                    decoration: InputDecoration(
-                        hintText: 'enter mail ',
-                        hintStyle: TextStyle(
-                          fontSize: 15,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.email_rounded,
-                          color: Colors.orange.shade300,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                width: 1.5, color: Colors.teal.shade300)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(width: 2, color:input_foucs_color)),
-                        // errorText: 'invalid email address',
-                        // constraints: BoxConstraints(),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  ),
 
                   // 2. PASSWORD
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(top: 15),
-                    alignment: Alignment.centerLeft,
-                    child: Text('Password',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: input_label_color)),
-                  ),
-
-                  // PASSWORD BUTTON :
-                  FormBuilderTextField(
-                    name: 'password',
-                    obscureText: true,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.minLength(context, 8,
-                          errorText: 'invalid password')
-                    ]),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: Get.isDarkMode? FontWeight.w400:FontWeight.w600 ,
-                      color: input_text_color,
-                    ),
-                    decoration: InputDecoration(
-                        hintText: 'enter password',
-                        hintStyle: const TextStyle(
-                          fontSize: 15,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock_rounded,
-                          color: Colors.orange.shade300,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                width: 1.5, color: Colors.teal.shade300)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(width: 2, color: input_foucs_color)),
-                        // errorText: 'invalid email address',
-                        // constraints: BoxConstraints(),
-
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  ),
+                  Label(input_label_color, 'Password'), 
+                  PasswodInputField(context, input_text_color, input_foucs_color),
 
                   // LOOGIN BUTTON:
                   Container(
@@ -161,10 +74,101 @@ class _LoginFormState extends State<LoginForm> {
                               letterSpacing: 2,
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
-                            ))),
+                      ))),
                   ),
                 ]))
           ]),
         ));
+  }
+//////////////////////////////
+/// METHODS SECTION: 
+/// /////////////////////////
+
+  FormBuilderTextField PasswodInputField(BuildContext context, Color input_text_color, Color input_foucs_color) {
+    return FormBuilderTextField(
+                  name: 'password',
+                  obscureText: true,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.minLength(context, 8,
+                        errorText: 'invalid password')
+                  ]),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: Get.isDarkMode? FontWeight.w400:FontWeight.w600 ,
+                    color: input_text_color,
+                  ),
+                  decoration: InputDecoration(
+                      hintText: 'enter password',
+                      hintStyle: const TextStyle(
+                        fontSize: 15,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.lock_rounded,
+                        color: Colors.orange.shade300,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              width: 1.5, color: Colors.teal.shade300)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(width: 2, color: input_foucs_color)),
+                      // errorText: 'invalid email address',
+                      // constraints: BoxConstraints(),
+
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                );
+  }
+
+  FormBuilderTextField EmailInputField(Color input_text_color, BuildContext context, Color input_foucs_color) {
+    return FormBuilderTextField(
+                  name: 'email',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: Get.isDarkMode? FontWeight.w400:FontWeight.w600 ,
+                    color:input_text_color 
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.email(context,
+                        errorText: 'enter valid email')
+                  ]),
+                  decoration: InputDecoration(
+                      hintText: 'enter mail ',
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.email_rounded,
+                        color: Colors.orange.shade300,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              width: 1.5, color: Colors.teal.shade300)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(width: 2, color:input_foucs_color)),
+                      // errorText: 'invalid email address',
+                      // constraints: BoxConstraints(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                );
+  }
+
+  Container Label(Color input_label_color,title) {
+    return Container(
+                  padding: EdgeInsets.all(8),
+                  alignment: Alignment.centerLeft,
+                  child: Text(title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: input_label_color)),
+                );
   }
 }

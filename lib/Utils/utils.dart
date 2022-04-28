@@ -74,7 +74,7 @@ ResponseBack({required response_type, code=null, data=null, message=null}) async
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Setup Your ${title}',
+              '${title}',
               style: GoogleFonts.robotoSlab(
                 textStyle: TextStyle(),
                 color: Colors.black,
