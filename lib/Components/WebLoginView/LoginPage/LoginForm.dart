@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Firebase/LoginUser.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -8,16 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 import 'package:get/get.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
-import 'package:stylish_dialog/stylish_dialog.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -41,7 +35,7 @@ class _LoginFormState extends State<LoginForm> {
                   style: GoogleFonts.robotoSlab(
                     textStyle: TextStyle(),
                     color: light_color_type3,
-                    fontSize: 18,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                   )))
             ],
@@ -86,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
       if (_formKey.currentState!.validate()) {
         String email = _formKey.currentState!.value['email'];
         String password = _formKey.currentState!.value['password'];
-        _formKey.currentState!.reset();
+        // _formKey.currentState!.reset();
         // LOGIN USER :
         var resp = await myAuth.LoginUser(email: email, password: password);
         print('Signup Response ${resp}');
@@ -94,13 +88,14 @@ class _LoginFormState extends State<LoginForm> {
         if (resp['response']) {
           EndLoading();
           // Rediret to User Type Page :
+          Get.toNamed(user_registration_url);
         }
 
         // EMAIL NOT VERIFY THEN FIRT ASK FOR VERIFY EMAIL :
         if (resp['data'] == 'email_not_verify') {
           EndLoading();
           InfoDialog(context);
-          return ; 
+          return;
         }
 
         // ERROR RESPONSE :

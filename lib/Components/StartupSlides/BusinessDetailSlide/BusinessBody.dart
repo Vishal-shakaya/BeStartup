@@ -21,7 +21,6 @@ class _BusinessBodyState extends State<BusinessBody> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,12 +47,9 @@ class _BusinessBodyState extends State<BusinessBody> {
         ));
   }
 
-///////////////////////////////////////////////////
-  /// HANDLE SUBMIT FORM :
-  /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
-  /// 2. ELSE SHOW ERRO RALERT :
-///////////////////////////////////////////////////
-  SubmitBusinessDetail() async {
+
+  
+  StartLoading() {
     // SHOW LOADING SPINNER :
     Get.snackbar(
       '',
@@ -70,16 +66,24 @@ class _BusinessBodyState extends State<BusinessBody> {
       maxWidth: context.width * 0.50,
       padding: EdgeInsets.all(15),
     );
-
+  }
+///////////////////////////////////////////////////
+  /// HANDLE SUBMIT FORM :
+  /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
+  /// 2. ELSE SHOW ERRO RALERT :
+///////////////////////////////////////////////////
+  SubmitBusinessDetail() async {
     formKey.currentState!.save();
+    StartLoading();
     if (formKey.currentState!.validate()) {
       var business_name = formKey.currentState!.value['startup_name'];
+      print(business_name);
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessName(business_name);
 
-      // RESPONSE HANDLING : 
-      // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE : 
-      // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR : 
+      // RESPONSE HANDLING :
+      // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
+      // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
       if (res['response']) {
         Get.closeAllSnackbars();
         Get.toNamed(create_business_thumbnail_url);
@@ -101,7 +105,7 @@ class _BusinessBodyState extends State<BusinessBody> {
         );
       }
 
-      formKey.currentState!.reset();
+      // formKey.currentState!.reset();
     } else {
       Get.closeAllSnackbars();
       Get.snackbar(

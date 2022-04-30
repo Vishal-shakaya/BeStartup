@@ -1,17 +1,18 @@
 // Import the firebase_core and cloud_firestore plugin
+import 'package:be_startup/Backend/Auth/ManageUserStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MyAuthentication extends GetxController {
   static String image_url = '';
 
-  FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  var manage_user = AuthUserManagerStore();
+  var userStore = UserStore();
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -53,8 +54,17 @@ class MyAuthentication extends GetxController {
       final verify_email = user?.emailVerified;
 
       if (verify_email == false) {
-        return ResponseBack(response_type: false,data:'email_not_verify');
+        return ResponseBack(response_type: false, data: 'email_not_verify');
+      } else {
+        // Create User :
+        try {
+          userStore.CreateUser(email: email);
+          return ResponseBack(response_type: true);
+        } catch (e) {
+          return ResponseBack(response_type: false);
+        }
       }
+
       return ResponseBack(
         response_type: true,
       );
@@ -71,23 +81,35 @@ class MyAuthentication extends GetxController {
 
   // LOGOUT USER :
   LogoutUser() async {
-    await FirebaseAuth.instance.signOut();
+    try {
+      print(auth.currentUser);
+      await auth.signOut();
+      print(auth.currentUser);
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
   }
 
-  //////////////////////////////
-  // FIRESBASE EMAIL LOGIN:
-  //////////////////////////////
-  // LoginUser({email, password}) async {
-  //   final users = store.collection('users');
-  //   try {
-  //     users.add({
-  //       'email': email,
-  //       'password': password,
-  //     });
-  //   } catch (err) {
-  //     print('UNABLE TO LOGIN ${err}');
-  //   }
-  // }
+  // RESET USER PASSWORD BY SENDING EMAIL LINK:
+  ResetPasswordWithEmail() async {
+    var resp = await manage_user.ResetPasswordWithEmail();
+    if (resp) {
+      return ResponseBack(response_type: true);
+    } else {
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  // PERMANENT DELETE USER :
+  Deleteuser() async {
+    var resp = await manage_user.DeleteUser();
+    if (resp) {
+      return ResponseBack(response_type: true);
+    } else {
+      ResponseBack(response_type: false);
+    }
+  }
 
   // UPLOAD IMAGE :
   UploadProfileImage({image, filename}) async {

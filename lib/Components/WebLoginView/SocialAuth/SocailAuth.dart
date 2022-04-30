@@ -1,3 +1,4 @@
+import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ class SocailAuth extends StatefulWidget {
 
 class _SocailAuthState extends State<SocailAuth> {
   bool is_theme_light = false;
+  var auth = Get.put(MyAuthentication(), tag: 'current_user');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,16 +28,21 @@ class _SocailAuthState extends State<SocailAuth> {
             buttonType:
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,
-            onPressed: () {
-            Get.toNamed(select_investor_choise);
-              print('click');
+            onPressed: () async {
+              await auth.ResetPasswordWithEmail();
+              // Get.toNamed(select_investor_choise);
+              print('reset password');
             }),
         SignInButton(
             buttonType: ButtonType.twitter,
             elevation: 3,
-            onPressed: () {
-            Get.toNamed(home_page_url);
-            print('click');
+            onPressed: () async {
+              // Get.toNamed(home_page_url);
+              final resp = await auth.LogoutUser();
+              if (resp['response']) {
+                Get.toNamed(home_route);
+              }
+              print('logout');
             }),
         SignInButton(
             buttonType: ButtonType.linkedin,

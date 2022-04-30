@@ -22,6 +22,21 @@ class _BusinessIconState extends State<BusinessIcon> {
   String filename = '';
   String upload_image_url = '';
   late UploadTask? upload_process;
+  bool is_uploading = false;
+
+
+  ErrorSnakbar() {
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error'),
+      messageText: MySnackbarContent(message: 'Something went wrong'),
+      maxWidth: context.width * 0.50,
+    );
+  }
 
   // STORAGE :
   final detailStore = Get.put(BusinessDetailStore(), tag: 'startup_deatil');
@@ -29,60 +44,46 @@ class _BusinessIconState extends State<BusinessIcon> {
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
+    setState(() {
+      is_uploading = true;
+    });
     // if rsult null then return :
     if (result == null) return;
-
     // if file single then gets ist path :
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+      // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
+      var resp =
+          await detailStore.SetBusinessLogo(logo: image, filename: filename);
 
-    // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
-    var resp = await detailStore.SetBusinessLogo(logo: image, filename: filename);
-
-    if (resp['response']) {
-      String logo_url = resp['data'];
+      if (resp['response']) {
+        String logo_url = resp['data'];
 
         // Upldate UI :
         setState(() {
           upload_image_url = logo_url;
+          is_uploading = false;
         });
+      }
 
-      // successful snakbar :
-      Get.snackbar(
-        '',
-        '',
-            margin: EdgeInsets.only(top:10),
-            duration: Duration(seconds: 3),
-            backgroundColor: Colors.green.shade50,
-            titleText: MySnackbarTitle(title:'Successfuly Operation'),
-            messageText:  MySnackbarContent(message:'Business Logo Uploaded  Successfully'),
-            maxWidth: context.width*0.50, 
-          );
-    }
-
-    if (!resp['response']) {
-      // show error snakbar :
-        Get.snackbar(
-          '',
-          '',
-              margin: EdgeInsets.only(top:10),
-              duration: Duration(seconds: 3),
-              backgroundColor: Colors.red.shade50,
-              titleText: MySnackbarTitle(title:'Error'),
-              messageText:  MySnackbarContent(message:'Something went wrong'),
-              maxWidth: context.width*0.50, 
-            );
-
-    }
+      if (!resp['response']) {
+        // show error snakbar :
+        ErrorSnakbar();
+      }
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    var spinner = Container(
+      padding: EdgeInsets.all(8),
+      child: CircularProgressIndicator(
+        color: dartk_color_type3,
+        strokeWidth: 4,
+      ),
+    );
+
     return Container(
         margin: EdgeInsets.only(top: context.height * 0.05),
         alignment: Alignment.center,
@@ -123,13 +124,14 @@ class _BusinessIconState extends State<BusinessIcon> {
                   child: CircleAvatar(
                     backgroundColor: Colors.grey.shade200,
                     radius: 18,
-                    child: IconButton(
-                        onPressed: () {
-                          PickImage(
-                          );
-                        },
-                        icon: Icon(Icons.camera_alt_rounded,
-                            size: 19, color: primary_light)),
+                    child: is_uploading
+                        ? spinner
+                        : IconButton(
+                            onPressed: () {
+                              PickImage();
+                            },
+                            icon: Icon(Icons.camera_alt_rounded,
+                                size: 19, color: primary_light)),
                   ),
                 )),
           ],

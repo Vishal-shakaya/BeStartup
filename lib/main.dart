@@ -77,9 +77,9 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         getPages: [
           is_login
-            ? GetPage(name: '/', page: () => Text('Home  page'))
-            : GetPage(name: '/', page: () => LoginHandler()),
-
+            ? GetPage(name:home_route , page: () => Text('Home  page'))
+            : GetPage(name: home_route , page: () => LoginHandler()),
+  
           GetPage(name: signup_url,page:()=> SignupView() ), 
           GetPage(name: user_registration_url ,page:()=> RegistrationView() ), 
           GetPage(name: startup_slides_url ,page:()=> StartupSlides() ), 

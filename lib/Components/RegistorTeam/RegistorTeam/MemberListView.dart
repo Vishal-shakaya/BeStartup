@@ -1,6 +1,3 @@
-import 'dart:html';
-import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
@@ -14,6 +11,7 @@ enum MemberFormType { edit, create }
 class MemberListView extends StatefulWidget {
   Map<String, dynamic>? member;
   int? index;
+  
   MemberListView({this.index, this.member, Key? key}) : super(key: key);
 
   @override

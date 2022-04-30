@@ -58,7 +58,7 @@ class InvestorRegistorFormBody extends StatelessWidget {
         // print(email);
         // print(other_contact);
 
-        var res = await founderStore.CreateFounder(founder);
+        var res = await founderStore.CreateInvestor(founder);
 
         if (!res['response']) {
           // CLOSE SNAKBAR :
