@@ -14,12 +14,21 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessCatigory
-      String? temp_data = localStore.getString('BusinessCatigory');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('BusinessCatigory');
+
+      if (is_data) {
+        String? temp_data = localStore.getString('BusinessCatigory');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      } 
+      
+      else {
+        return ResponseBack(response_type: false);
+      }
+
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -32,17 +41,26 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessDetail
-      String? temp_data = localStore.getString('BusinessDetail');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('BusinessDetail');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessDetail');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+
+      }
+      else{
+        return ResponseBack(response_type: false);  
+      }
+
+      
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateBusinessMileStone() async {
     final localStore = await SharedPreferences.getInstance();
@@ -51,12 +69,20 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessMilestones
-      String? temp_data = localStore.getString('BusinessMilestones');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('BusinessMilestones');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessMilestones');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      }
+
+      else{
+        return ResponseBack(response_type: false);  
+      }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -69,12 +95,21 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessProducts
-      String? temp_data = localStore.getString('BusinessProducts');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      
+      bool is_data = localStore.containsKey('BusinessProducts');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessProducts');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+
+      }
+      else{
+        return ResponseBack(response_type: false);  
+      }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -87,17 +122,25 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessVision
-      String? temp_data = localStore.getString('BusinessVision');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('BusinessVision');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessVision');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+
+      }
+      else{
+        return ResponseBack(response_type: false);  
+      }
+
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateBusinessThumbnail() async {
     final localStore = await SharedPreferences.getInstance();
@@ -106,17 +149,26 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessThumbnail
-      String? temp_data = localStore.getString('BusinessThumbnail');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      
+      bool is_data = localStore.containsKey('BusinessThumbnail');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessThumbnail');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+
+      }
+      else{
+        return ResponseBack(response_type: false);  
+      }
+
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateUserDetail() async {
     final localStore = await SharedPreferences.getInstance();
@@ -125,17 +177,25 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : UserDetail
-      String? temp_data = localStore.getString('UserDetail');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('UserDetail');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('UserDetail');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      }
+
+      else{
+        return ResponseBack(response_type: false);  
+      }
+      
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateUserContact() async {
     final localStore = await SharedPreferences.getInstance();
@@ -144,12 +204,20 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : UserContact
-      String? temp_data = localStore.getString('UserContact');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      
+      bool is_data = localStore.containsKey('UserContact');
+      if (is_data) {
+        String? temp_data = localStore.getString('UserContact');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(
+          response_type: false,
+        );
+      }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -162,18 +230,22 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessTeamMember
-      String? temp_data = localStore.getString('BusinessTeamMember');
-      var data = json.decode(temp_data!);
-   
-      // Store Data in Firebase :   
-      await myStore.add(data);
-      return ResponseBack(response_type: true);
+      bool is_data = localStore.containsKey('BusinessTeamMember');
+      // Validate key : 
+      if(is_data){
+        String? temp_data = localStore.getString('BusinessTeamMember');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+
+      }
+      else{
+        return ResponseBack(response_type: false);  
+      }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
-
 }
