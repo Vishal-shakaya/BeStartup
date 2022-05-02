@@ -1,6 +1,7 @@
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -26,7 +27,7 @@ class _AddMileButtonState extends State<AddMileButton> {
   Color suffix_icon_color = Colors.blueGrey.shade300;
   int maxlines = 7;
   double addbtn_bottom_margin = 0.05;
-  double milestone_width = 900; 
+  double milestone_width = 900;
 
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
 
@@ -60,6 +61,20 @@ class _AddMileButtonState extends State<AddMileButton> {
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
   /// ////////////////////////////////////
+  ErrorSnakbar() {
+    Get.closeAllSnackbars();
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error'),
+      messageText: MySnackbarContent(message: 'Something went wrong'),
+      maxWidth: context.width * 0.50,
+    );
+  }
+
   SubmitMileForm() {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
@@ -73,11 +88,10 @@ class _AddMileButtonState extends State<AddMileButton> {
       if (res['response']) {
         formKey.currentState!.reset();
         Navigator.of(context).pop();
-        ResultAlert(AlertType.success);
       }
       // Show error dialog :
       if (!res['response']) {
-        ResultAlert(AlertType.error);
+        ErrorSnakbar();
       }
     }
   }

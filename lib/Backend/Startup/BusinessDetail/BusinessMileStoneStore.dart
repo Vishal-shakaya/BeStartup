@@ -1,9 +1,16 @@
-import 'package:flutter/widgets.dart';
+import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Models/StartupModels.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 class MileStoneStore extends GetxController {
   static Map<String, dynamic> default_tag = {
-    'id': UniqueKey(),
+    'id': uuid.v4(),
     'title': 'same age',
     'description': 'kala',
   };
@@ -19,7 +26,7 @@ class MileStoneStore extends GetxController {
   AddMileStone({title, description}) {
     try {
       final Map<String, dynamic> milestone = {
-        'id': UniqueKey(),
+        'id': uuid.v4(),
         'title': title,
         'description': description,
       };
@@ -109,4 +116,19 @@ class MileStoneStore extends GetxController {
 // DETAIL INFORMATION:
 ////////////////////////////////////////
   GetMileStone(id) {}
+
+  PersistMileStone() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      var resp = await MileStoneModel(
+          user_id: getUserId,
+          email: getuserEmail,
+          startup_name: getStartupName,
+          milestone: milestones);
+      localStore.setString('BusinessMilestones', json.encode(resp));
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Models/Models.dart';
+import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

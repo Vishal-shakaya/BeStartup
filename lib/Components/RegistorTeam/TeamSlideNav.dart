@@ -9,8 +9,8 @@ enum TeamSlideType {
 
 class TeamSlideNav extends StatefulWidget {
   TeamSlideType slide;
-  Function? submitFounderDetail;
-  TeamSlideNav({required this.submitFounderDetail, required this.slide, Key? key})
+  Function? submitform;
+  TeamSlideNav({required this.submitform, required this.slide, Key? key})
       : super(key: key);
 
   @override
@@ -31,7 +31,10 @@ class _TeamSlideNavState extends State<TeamSlideNav> {
 
   ForwordButton(slide) async {
     if (TeamSlideType.founder == slide) {
-       await  widget.submitFounderDetail!();
+       await  widget.submitform!();
+    }
+    if (TeamSlideType.team == slide) {
+       await  widget.submitform!();
     }
   }
 

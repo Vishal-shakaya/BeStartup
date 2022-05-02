@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessCatigoryStore.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CatigoryChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
@@ -7,6 +8,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
 // import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class CatigoryBody extends StatefulWidget {
@@ -19,6 +21,7 @@ class CatigoryBody extends StatefulWidget {
 double vision_cont_width = 0.60;
 double vision_cont_height = 0.70;
 double vision_subheading_text = 20;
+var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
 
 class _CatigoryBodyState extends State<CatigoryBody> {
   @override
@@ -63,11 +66,53 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       vision_subheading_text = 16;
     }
 
+    ErrorSnakbar() {
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+
+    // SHOW LOADING SPINNER :
+    StartLoading() {
+      var dialog = SmartDialog.showLoading(
+          background: Colors.white,
+          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+          widget: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.orangeAccent,
+          ));
+      return dialog;
+    }
+
+    // End Loading
+    EndLoading() async {
+      SmartDialog.dismiss();
+    }
+
+    // SUBMIT CATIGORY :
+    SubmitCatigory() async {
+      print('submiting data');
+      StartLoading();
+      var resp = await catigoryStore.PersistCatigory();
+      print(resp);
+      if (resp == false) {
+        EndLoading();
+        ErrorSnakbar();
+      }
+      EndLoading();
+    }
+
     // CAREAT CATIGORY CHIPS:
     List<CatigoryChip> catigory_list = [];
     business_catigories.forEach((cat) {
-      catigory_list.add(
-        CatigoryChip(
+      catigory_list.add(CatigoryChip(
         key: UniqueKey(),
         catigory: cat,
       ));
@@ -84,15 +129,15 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 Container(
                   margin: EdgeInsets.only(top: context.height * 0.05),
                   child: AutoSizeText.rich(
-                    TextSpan(style: context.textTheme.headline2, children: [
+                      TextSpan(style: context.textTheme.headline2, children: [
                     TextSpan(
-                      text: catigory_subHeading_text,
-                      style: TextStyle(
-                          color: light_color_type3,
-                          fontSize: vision_subheading_text))
-                ])),
+                        text: catigory_subHeading_text,
+                        style: TextStyle(
+                            color: light_color_type3,
+                            fontSize: vision_subheading_text))
+                  ])),
                 ),
-        
+
                 //////////////////////////////////////////
                 // CATIGORY SELECT SECTION :
                 // DISPLAY DEFAULT CATIGORIES CHIPS :
@@ -106,7 +151,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                     children: catigory_list,
                   ),
                 ),
-        
+
                 ///////////////////////////////////////////////////
                 // INPUT CHIP TO GET CUSTOME BUSINESS CATIGORY :
                 // ADD CUSTOM BUSINESS CATIGORIES :
@@ -117,8 +162,10 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 )
               ],
             )),
-
-            BusinessSlideNav(slide: SlideType.catigory,)
+        BusinessSlideNav(
+          slide: SlideType.catigory,
+          submitform: SubmitCatigory,
+        )
       ],
     );
   }

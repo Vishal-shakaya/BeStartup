@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -210,6 +211,20 @@ class _MileStoneTagState extends State<MileStoneTag> {
   ///////////////////////////////////////
   /// SUBMIT PRODUCT FORM :
   /// ////////////////////////////////////
+  ErrorSnakbar() {
+    Get.closeAllSnackbars();
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error'),
+      messageText: MySnackbarContent(message: 'Something went wrong'),
+      maxWidth: context.width * 0.50,
+    );
+  }
+
   SubmitMileForm() {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
@@ -223,11 +238,10 @@ class _MileStoneTagState extends State<MileStoneTag> {
       if (res['response']) {
         formKey.currentState!.reset();
         Navigator.of(context).pop();
-        ResultAlert(AlertType.success);
       }
       // Show error dialog :
       if (!res['response']) {
-        ResultAlert(AlertType.error);
+        ErrorSnakbar();
       }
     }
   }

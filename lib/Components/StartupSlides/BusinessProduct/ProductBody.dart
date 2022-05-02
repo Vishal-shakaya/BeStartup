@@ -2,8 +2,10 @@ import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionBu
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
+import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ProductBody extends StatefulWidget {
@@ -23,6 +25,47 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
+    // SHOW LOADING SPINNER :
+    StartLoading() {
+      var dialog = SmartDialog.showLoading(
+          background: Colors.white,
+          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+          widget: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.orangeAccent,
+          ));
+      return dialog;
+    }
+
+    // End Loading
+    EndLoading() async {
+      SmartDialog.dismiss();
+    }
+
+    ErrorSnakbar() {
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+
+    SubmitProduct() async {
+      StartLoading();
+      var resp = await productStore.PersistProduct();
+      print(resp);
+      if (!resp['response']) {
+        EndLoading();
+        ErrorSnakbar();
+      }
+      EndLoading();
+    }
+
     var product = productStore.GetProductList();
     Obx(() {
       print('update length ${product.length}');
@@ -61,10 +104,10 @@ class _ProductBodyState extends State<ProductBody> {
                                 key: UniqueKey(),
                                 itemBuilder: (context, index) {
                                   return ProductListView(
-                                      key: UniqueKey(),
-                                      product: product[index],
-                                      index: index,
-                                      );
+                                    key: UniqueKey(),
+                                    product: product[index],
+                                    index: index,
+                                  );
                                 });
                           })),
                     ],
@@ -74,7 +117,10 @@ class _ProductBodyState extends State<ProductBody> {
             ),
           ),
         ),
-        BusinessSlideNav(slide: SlideType.product)
+        BusinessSlideNav(
+          slide: SlideType.product,
+          submitform: SubmitProduct,
+        )
       ],
     );
   }

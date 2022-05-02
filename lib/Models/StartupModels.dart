@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -19,7 +20,6 @@ BusinessInfoModel({user_id, logo, name, email}) async {
 }
 
 ThumbnailModel({
-  logo,
   thumbnail,
   user_id,
   email,
@@ -39,7 +39,7 @@ ThumbnailModel({
   }
 }
 
-Vision({user_id, email, vision, startup_name}) async {
+VisionModel({user_id, email, vision, startup_name}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
@@ -54,7 +54,7 @@ Vision({user_id, email, vision, startup_name}) async {
   }
 }
 
-CatigoryModel({user_id, email, startup_name, List<String>? catigory}) async {
+CatigoryModel({user_id, email, startup_name, catigory}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
@@ -69,59 +69,32 @@ CatigoryModel({user_id, email, startup_name, List<String>? catigory}) async {
   }
 }
 
-ProductModel(
-    {user_id,
-    email,
-    startup_name,
-    image,
-    youtube_link,
-    content_link,
-    heading,
-    detail,
-    timestamp}) async {
+
+BusinessProductsList({user_id, email, startup_name, products, timestamp}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
-      'youtube_link': youtube_link,
-      'content_link': content_link,
-      'heading': heading,
-      'detail': detail,
       'timestamp': timestamp,
+      'products': products
     };
-    return temp_obj;
+    return temp_obj;    
   } catch (e) {
-    return false;
+    return false; 
   }
 }
 
-ServiceModel(
-    {user_id,
-    email,
-    startup_name,
-    image,
-    youtube_link,
-    content_link,
-    heading,
-    detail,
-    timestamp}) async {
+BusinessServiceList({user_id, email, startup_name, services, timestamp}) {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
-      'youtube_link': youtube_link,
-      'content_link': content_link,
-      'heading': heading,
-      'detail': detail,
       'timestamp': timestamp,
+      'services': services
     };
-    return temp_obj;
+    return temp_obj;    
   } catch (e) {
-    return false;
+    return false; 
   }
 }
 
@@ -129,16 +102,39 @@ MileStoneModel(
     {user_id,
     email,
     startup_name,
-    List<String>? tags,
-    List<String>? content}) async {
+    milestone}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
       'email': email,
       'startup_name': startup_name,
-      'tags': tags,
-      'content': content,
+      'milestone':milestone
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
+
+
+BusinessTeamMembersModel({
+  user_id,
+  email,
+  startup_name,
+  members,
+  timestamp,  
+
+})async{
+ try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'startup_name':startup_name,
+      'email': email,
+      'members':members, 
+      'timestamp':timestamp, 
+
     };
     return temp_obj;
   } catch (e) {

@@ -9,6 +9,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'dart:math';
 import 'package:get/get.dart';
 
@@ -73,20 +74,58 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   @override
   Widget build(BuildContext context) {
-    SubmitMileStone() {
-      _controllerCenter.play();
-      CoolAlert.show(
-          barrierDismissible: false,
-          title: 'First Step Completed!!',
-          text: 'Now you have to complete final step.',
-          width: alert_width,
-          onConfirmBtnTap: () {
-            Navigator.of(context).pop();
-            _controllerCenter.stop();
-            Get.toNamed(create_founder, preventDuplicates: false);
-          },
-          context: context,
-          type: CoolAlertType.success);
+// SHOW LOADING SPINNER :
+    StartLoading() {
+      var dialog = SmartDialog.showLoading(
+          background: Colors.white,
+          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+          widget: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.orangeAccent,
+          ));
+      return dialog;
+    }
+
+// End Loading
+    EndLoading() async {
+      SmartDialog.dismiss();
+    }
+
+    ErrorSnakbar() {
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+
+    SubmitMileStone() async {
+      StartLoading();
+      var resp = await mileStore.PersistMileStone();
+      if (!resp['response']) {
+        EndLoading();
+        ErrorSnakbar();
+      } else {
+        await EndLoading();
+        _controllerCenter.play();
+        CoolAlert.show(
+            barrierDismissible: false,
+            title: 'First Step Completed!!',
+            text: 'Now you have to complete final step.',
+            width: alert_width,
+            onConfirmBtnTap: () {
+              Navigator.of(context).pop();
+              _controllerCenter.stop();
+              Get.toNamed(create_founder, preventDuplicates: false);
+            },
+            context: context,
+            type: CoolAlertType.success);
+      }
     }
 
     ////////////////////////////////
@@ -144,14 +183,13 @@ class _MileStoneBodyState extends State<MileStoneBody> {
             width: context.width * mile_cont_width,
             height: context.height * mile_cont_height,
             child: Column(children: [
-
               // SUBHEADING SECTION :
               SubHeadingSection(context),
 
               // ADD TAG BUTTON :
               AddMileButton(),
 
-              // CONGRESS MESSAGE WITH SPARKEL: 
+              // CONGRESS MESSAGE WITH SPARKEL:
               CongressMessage(),
 
               //////////////////////////////
@@ -188,31 +226,30 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   Stack CongressMessage() {
     return Stack(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: ConfettiWidget(
-                      maxBlastForce: 50, // set a lower max blast force
-                      minBlastForce: 40,
-                      numberOfParticles: 25, // set a lower min blast force
-                    confettiController: _controllerCenter,
-                    blastDirectionality: BlastDirectionality
-                        .explosive, // don't specify a direction, blast randomly
-                    shouldLoop:
-                        true, // start again as soon as the animation is finished
-                    colors: const [
-                      Colors.green,
-                      Colors.blue,
-                      Colors.pink,
-                      Colors.orange,
-                      Colors.purple
-                    ], // manually specify the colors to be used
-                    createParticlePath:
-                        drawStar, // define a custom shape/path.
-                  ),
-                ),
-              ],
-            );
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: ConfettiWidget(
+            maxBlastForce: 50, // set a lower max blast force
+            minBlastForce: 40,
+            numberOfParticles: 25, // set a lower min blast force
+            confettiController: _controllerCenter,
+            blastDirectionality: BlastDirectionality
+                .explosive, // don't specify a direction, blast randomly
+            shouldLoop:
+                true, // start again as soon as the animation is finished
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple
+            ], // manually specify the colors to be used
+            createParticlePath: drawStar, // define a custom shape/path.
+          ),
+        ),
+      ],
+    );
   }
 
   ////////////////////////

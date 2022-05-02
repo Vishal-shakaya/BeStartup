@@ -1,16 +1,23 @@
+import 'dart:convert';
+
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+var uuid = Uuid();
 class BusinessTeamMemberStore extends GetxController {
   static Map<String, dynamic> temp_member = {
-    'id': UniqueKey(),
-    'user': '',
+    'id': uuid.v4(),
+    'email':getuserEmail,
+    'startup_name':getStartupName,
     'name': 'Vishal',
     'position': 'Ceo',
-    'email': 'shakayavishal007@gmail.com',
+    'member_mail': 'shakayavishal007@gmail.com',
     'meminfo': feature1_body,
     'image': temp_image,
     'timestamp': DateTime.now().toString(),
@@ -42,18 +49,19 @@ class BusinessTeamMemberStore extends GetxController {
   CreateTeamMember(member) async {
     try {
       Map<String, dynamic> temp_member = {
-        'id': UniqueKey(),
-        'user': '',
+        'id': uuid.v4(),
+        'email': getuserEmail,
+        'startup_name':getStartupName,
         'name': member['name'],
         'position': member['position'],
-        'email': member['email'],
+        'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
         'timestamp': DateTime.now().toString(),
       };
       member = temp_member;
-      profile_image = null;
       member_list.add(member);
+      profile_image = null;
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -63,11 +71,9 @@ class BusinessTeamMemberStore extends GetxController {
   UpdateTeamMember(member, index) async {
     try {
       Map<String, dynamic> temp_member = {
-        'id': member['id'],
-        'user': '',
         'name': member['name'],
         'position': member['position'],
-        'email': member['email'],
+        'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
         'timestamp': DateTime.now().toString(),
@@ -91,6 +97,25 @@ class BusinessTeamMemberStore extends GetxController {
       return member_list;
     } catch (e) {
       return [];
+    }
+  }
+
+  // STORE MEMBER TO LOCAL STORAGE : 
+  PersistMembers()async{
+    final localStore = await SharedPreferences.getInstance();
+       try {
+      var resp =  await BusinessTeamMembersModel(
+        user_id: getUserId,
+        email: getuserEmail,
+        startup_name: getStartupName,
+        members: member_list,
+      );
+
+      localStore.setString('BusinessTeamMember', json.encode(resp));
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }

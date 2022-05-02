@@ -43,8 +43,6 @@ class RegistorFounderBody extends StatelessWidget {
         String other_contact = formKey.currentState!.value['other_info'];
 
         Map<String, dynamic> founder = {
-          'id': UniqueKey(),
-          'user': '',
           'name': founder_name,
           'position': founder_position,
           'phone_no': phone_no,
@@ -84,6 +82,7 @@ class RegistorFounderBody extends StatelessWidget {
 
         
       } else {
+        SmartDialog.dismiss();
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
         // Error Alert :
@@ -127,7 +126,7 @@ class RegistorFounderBody extends StatelessWidget {
               ),
             )),
         TeamSlideNav(
-          submitFounderDetail: SubmitFounderDetail,
+          submitform: SubmitFounderDetail,
           slide: TeamSlideType.founder,
         )
       ],

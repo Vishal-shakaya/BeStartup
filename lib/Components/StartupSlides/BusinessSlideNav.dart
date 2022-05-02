@@ -67,10 +67,12 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     }
     // 2.Thumbnail view -> Product view :
     if (slide == SlideType.catigory) {
+      widget.submitform!();
       Get.toNamed(create_business_product_url);
     }
     // 2.Thumbnail view -> Milestone view :
     if (slide == SlideType.product) {
+      widget.submitform!();
       Get.toNamed(create_business_milestone_url);
     }
 

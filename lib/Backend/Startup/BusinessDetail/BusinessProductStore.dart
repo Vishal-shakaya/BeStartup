@@ -1,8 +1,12 @@
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:uuid/uuid.dart';
 
 enum ProductType {
   service,
@@ -10,9 +14,11 @@ enum ProductType {
 }
 
 class BusinessProductStore extends GetxController {
+
+ var uuid = Uuid();
   // Test Product :
   static Map<String, dynamic?> temp_product = {
-    'id': UniqueKey(),
+    'id': 'some_randodnjflks',
     'title': 'word famous watter battle and cleane',
     'description': long_string,
     'type': 'product',
@@ -83,7 +89,7 @@ class BusinessProductStore extends GetxController {
   // ADD PRODUCT :
   CreateProduct({title, description}) {
     Map<String, dynamic?> product = {
-      'id': UniqueKey(),
+      'id': uuid.v4(),
       'title': title,
       'description': description,
       'type': product_type,
@@ -173,6 +179,23 @@ class BusinessProductStore extends GetxController {
       return product_list;
     } catch (e) {
       return [];
+    }
+  }
+
+  PersistProduct() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      var resp =  await BusinessProductsList(
+        user_id: getUserId,
+        email: getuserEmail,
+        startup_name: getStartupName,
+        products: product_list,
+      );
+
+      localStore.setString('BusinessProducts', json.encode(resp));
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }
