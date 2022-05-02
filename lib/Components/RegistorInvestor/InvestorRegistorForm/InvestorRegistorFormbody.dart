@@ -15,7 +15,7 @@ class InvestorRegistorFormBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var founderStore = Get.put(InvestorDetailStore(), tag: 'investor');
+    var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
 
     final formKey = GlobalKey<FormBuilderState>();
     double done_btn_width = 150;
@@ -58,7 +58,7 @@ class InvestorRegistorFormBody extends StatelessWidget {
         // print(email);
         // print(other_contact);
 
-        var res = await founderStore.CreateInvestor(founder);
+        var res = await investorStore.CreateInvestor(founder);
 
         if (!res['response']) {
           // CLOSE SNAKBAR :

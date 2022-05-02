@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class InvestorCatigoryStore extends GetxController {
@@ -39,6 +44,24 @@ class InvestorCatigoryStore extends GetxController {
       // print(catigories);
       return catigories;
     } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
+
+    // STORE CATIGORY LOCALY :
+  PersistCatigory() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      var resp = await CatigoryModel(
+          user_id: getUserId,
+          email: getuserEmail,
+          startup_name: getStartupName,
+          catigory: catigories);
+
+      localStore.setString('InvestorChooseCatigory', json.encode(resp));
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      print(e);
       return ResponseBack(response_type: false);
     }
   }

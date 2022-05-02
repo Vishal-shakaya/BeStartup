@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Investor/InvestorCatigoryStorage.dart';
+import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
@@ -8,6 +10,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
 // import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ChooseCatigoryBody extends StatefulWidget {
@@ -17,15 +20,68 @@ class ChooseCatigoryBody extends StatefulWidget {
   State<ChooseCatigoryBody> createState() => _ChooseCatigoryBodyState();
 }
 
-double vision_cont_width = 0.60;
-double vision_cont_height = 0.50;
-double vision_subheading_text = 20;
-double continue_btn_width = 150;
-double continue_btn_height = 50;
-
 class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
+  double vision_cont_width = 0.60;
+  double vision_cont_height = 0.50;
+  double vision_subheading_text = 20;
+  double continue_btn_width = 150;
+  double continue_btn_height = 50;
+  var catigoryStore = Get.put(InvestorCatigoryStore(), tag: 'catigories');
+  var investorConct = Get.put(InvestorConnector(), tag: 'investor_connector');
   @override
   Widget build(BuildContext context) {
+    ErrorSnakbar() {
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+
+    // SHOW LOADING SPINNER :
+    StartLoading() {
+      var dialog = SmartDialog.showLoading(
+          background: Colors.white,
+          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+          widget: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.orangeAccent,
+          ));
+      return dialog;
+    }
+
+    // End Loading
+    EndLoading() async {
+      SmartDialog.dismiss();
+    }
+
+    // SUBMIT CATIGORY :
+    SubmitCatigory() async {
+      StartLoading();
+      var resp = await catigoryStore.PersistCatigory();
+      if (resp == false) {
+        EndLoading();
+        ErrorSnakbar();
+        return;
+      } else {
+        var resp = await investorConct.CreateInvestorCatigory();
+        print(resp);
+        
+        var resp1 = await investorConct.CreateInvestorContact();
+        print(resp);
+        
+        var resp2 = await investorConct.CreateInvestorDetail();
+        print(resp);
+
+        EndLoading();
+      }
+    }
+
     // DEFAULT :
     if (context.width > 1500) {
       vision_cont_height = 0.50;
@@ -111,12 +167,12 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
                 ),
               ],
             )),
-        ContinueButton()
+        ContinueButton(SubmitCatigory)
       ],
     );
   }
 
-  Container ContinueButton() {
+  Container ContinueButton(Function submitCatigory) {
     return Container(
       // margin:
       //     EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
@@ -125,6 +181,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
+          await submitCatigory();
           Get.toNamed(investor_registration_form);
         },
         child: Card(

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
+import 'package:be_startup/Backend/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:typed_data';
@@ -19,49 +21,67 @@ class _InvestorImageState extends State<InvestorImage> {
   String filename = '';
   String upload_image_url = '';
   late UploadTask? upload_process;
+  bool is_uploading = false; 
+  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
+
   double image_radius = 85;
   double upload_icon_position_top = 129;
   double upload_icon_position_left = 129;
-  /////////////////////////////////////////
-  // PICKED IMAGE AND STORE IN  FILE :
-  /////////////////////////////////////////
-
-  Future UploadImage() async {
-    if (image == null) return;
-
-    // UPLOAD FILE LOCAION IN FIREBASE :
-    final destination = 'user_profile/profile_image/$filename';
-    upload_process = FileStorage.UploadFileBytes(destination, image!);
-    // ERROR ACCURE
-    if (upload_process == null) return;
-
-    final snapshot = await upload_process!.whenComplete(() {
-      print('PROFILE UPLOADED');
-    });
-
-    final urlDownload = await snapshot.ref.getDownloadURL();
-    setState(() {
-      upload_image_url = urlDownload;
-    });
-  }
-
-  Future<void> PickImage() async {
-    // Pick only one file :
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    // if rsult null then return :
-    if (result == null) return;
-
-    // if file single then gets ist path :
-    if (result != null && result.files.isNotEmpty) {
-      image = result.files.first.bytes;
-      filename = result.files.first.name;
-      await UploadImage();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    /////////////////////////////////////////
+    // PICKED IMAGE AND STORE IN  FILE :
+    /////////////////////////////////////////
+    var spinner = Container(
+      padding: EdgeInsets.all(8),
+      child: CircularProgressIndicator(
+        color: dartk_color_type3,
+        strokeWidth: 4,
+      ),
+    );
+
+    ErrorSnakbar() {
+      Get.closeAllSnackbars();
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: 'Error'),
+        messageText: MySnackbarContent(message: 'Something went wrong'),
+        maxWidth: context.width * 0.50,
+      );
+    }
+
+    Future<void> PickImage() async {
+      // Pick only one file :
+      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+     setState(() {
+        is_uploading = true; 
+      });
+      // if rsult null then return :
+      if (result == null) return;
+
+      // if file single then gets ist path :
+      if (result != null && result.files.isNotEmpty) {
+        image = result.files.first.bytes;
+        filename = result.files.first.name;
+        var resp = await investorStore.UploadFounderImage(
+            image: image, filename: filename);
+
+        if (!resp['response']) {
+          ErrorSnakbar();
+          return;
+        }
+        setState(() {
+          upload_image_url = resp['data'];
+          is_uploading = false;
+        });
+      }
+    }
+
     // DEFAULT :
     if (context.width > 1500) {
       image_radius = 85;
@@ -86,7 +106,7 @@ class _InvestorImageState extends State<InvestorImage> {
     }
 
     if (context.width < 1000) {
-       upload_icon_position_top = 105;
+      upload_icon_position_top = 105;
       upload_icon_position_left = 118;
       image_radius = 75;
       print('1000');
@@ -101,7 +121,7 @@ class _InvestorImageState extends State<InvestorImage> {
     }
     // SMALL TABLET:
     if (context.width < 640) {
-       upload_icon_position_top = 90;
+      upload_icon_position_top = 90;
       upload_icon_position_left = 90;
       image_radius = 65;
       print('640');
@@ -154,7 +174,9 @@ class _InvestorImageState extends State<InvestorImage> {
                   child: CircleAvatar(
                     backgroundColor: Colors.grey.shade200,
                     radius: 18,
-                    child: IconButton(
+                    child: is_uploading
+                        ? spinner
+                        : IconButton(
                         onPressed: () {
                           PickImage();
                         },
