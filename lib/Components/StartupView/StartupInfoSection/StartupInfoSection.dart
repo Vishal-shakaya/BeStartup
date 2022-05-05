@@ -1,14 +1,21 @@
+import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/ProfileImage.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
+import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 enum StartupPageRoute {
-  team, 
-  vision, 
-  invest, 
+  team,
+  vision,
+  invest,
 }
+
 class StartupInfoSection extends StatefulWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
@@ -19,14 +26,50 @@ class StartupInfoSection extends StatefulWidget {
 class _StartupInfoSectionState extends State<StartupInfoSection> {
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
+  var startupConnect =
+      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+
   @override
   Widget build(BuildContext context) {
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final data = await startupConnect.FetchThumbnail();
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
+
+   
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+                    baseColor: shimmer_base_color,
+                    highlightColor: shimmer_highlight_color,
+                    child: MainMethod(
+                        context, snapshot.data == null ? shimmer_image : snapshot.data)));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context, snapshot.data);
+          }
+          return MainMethod(context, snapshot.data);
+        });
+  }
+
+  Container MainMethod(BuildContext context, data) {
     return Container(
         height: context.height * 0.45,
         child: Stack(
           children: [
             // THUMBNAIL SECTION:
-            Thumbnail(context),
+            Thumbnail(context, data),
 
             // PROFILE PICTURE :
             ProfileImage(),
@@ -41,12 +84,15 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
                     children: [
-                      StartupNavigation(title: 'Team', route: StartupPageRoute.team),
-                      StartupNavigation(title: 'Vision', route: StartupPageRoute.vision),
-                      StartupNavigation(title: 'Invest', route: StartupPageRoute.invest),
+                      StartupNavigation(
+                          title: 'Team', route: StartupPageRoute.team),
+                      StartupNavigation(
+                          title: 'Vision', route: StartupPageRoute.vision),
+                      StartupNavigation(
+                          title: 'Invest', route: StartupPageRoute.invest),
 
-                      // STATIC SECTION WITH INVEST BUTTON : 
-                     InvestmentChart()
+                      // STATIC SECTION WITH INVEST BUTTON :
+                      InvestmentChart()
                     ],
                   )),
             )
@@ -54,9 +100,7 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
         ));
   }
 
-
-
-  Card Thumbnail(BuildContext context) {
+  Card Thumbnail(BuildContext context, thumbnail_image) {
     return Card(
       elevation: 5,
       shadowColor: Colors.grey,
@@ -78,11 +122,12 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
               left: Radius.circular(19),
               right: Radius.circular(19),
             ),
-            child: Image.network(
-                'https://www.postplanner.com/hubfs/how_to_get_more_likes_on_facebook.png',
-                width: context.width * image_cont_width,
-                height: context.height * image_cont_height,
-                fit: BoxFit.cover),
+            child: CachedNetworkImage(
+              imageUrl: thumbnail_image,
+              width: context.width * image_cont_width,
+              height: context.height * image_cont_height,
+              fit: BoxFit.cover,
+            ),
           )),
     );
   }

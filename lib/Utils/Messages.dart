@@ -4,6 +4,9 @@ String temp_image =
     'https://www.ubuy.co.in/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFEdHhXMGZnV0wuX0FDX1NMMTUwMF8uanBn.jpg';
 String profile_image =
     'https://p.kindpng.com/picc/s/32-324477_hair-face-hairstyle-long-hair-beauty-skin-hair.png';
+
+String shimmer_image ='https://www.pngmagic.com/product_images/white-and-grey-gradient-background.jpg';
+
 /////////////////
 // LOGIN PAGE :
 //////////////////
