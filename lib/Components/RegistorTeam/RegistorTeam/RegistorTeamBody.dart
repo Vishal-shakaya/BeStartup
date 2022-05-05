@@ -6,6 +6,7 @@ import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog
 import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -71,6 +72,30 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     );
   }
 
+  /////////////////////////////////////////////////////
+  // START STORING ALL FOUNDER DETIAL TO FIREBASE :
+  /////////////////////////////////////////////////////
+  SendDataToFireStore() async {
+    var resp = await startupConnector.CreateBusinessCatigory();
+
+    var resp2 = await startupConnector.CreateBusinessDetail();
+
+    var resp3 = await startupConnector.CreateBusinessMileStone();
+
+    var resp4 = await startupConnector.CreateBusinessProduct();
+
+    var resp5 = await startupConnector.CreateBusinessThumbnail();
+
+    var resp6 = await startupConnector.CreateBusinessVision();
+
+    var resp7 = await startupConnector.CreateUserContact();
+
+    var resp8 = await startupConnector.CreateUserDetail();
+
+    var resp9 = await startupConnector.CreateBusinessTeamMember();
+    return true;
+  }
+
   // TEAM FORM :
   SubmitTeamMemberDetails() async {
     StartLoading();
@@ -80,37 +105,13 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
       ErrorSnakbar();
       return;
     } else {
-      // CATIGORY :
-      var resp = await startupConnector.CreateBusinessCatigory();
-      print(resp);
-
-      var resp2 = await startupConnector.CreateBusinessDetail();
-      print(resp);
-
-      var resp3 = await startupConnector.CreateBusinessMileStone();
-      print(resp);
-
-      var resp4 = await startupConnector.CreateBusinessProduct();
-      print(resp);
-
-      var resp5 = await startupConnector.CreateBusinessThumbnail();
-      print(resp);
-
-      var resp6 = await startupConnector.CreateBusinessVision();
-      print(resp);
-
-      var resp7 = await startupConnector.CreateUserContact();
-      print(resp);
-
-      var resp8 = await startupConnector.CreateUserDetail();
-      print(resp);
-
-      var resp9 = await startupConnector.CreateBusinessTeamMember();
-      print(resp);
+      // Send data for firebase:
+      var resp = await SendDataToFireStore();
+      print('Create Startup ${resp}');
 
       EndLoading();
-      print('member created');
-      // START STORING ALL FOUNDER DETIAL TO FIREBASE :
+      print('Upload Detail Successfull');
+      Get.toNamed(startup_view_url);
     }
   }
 

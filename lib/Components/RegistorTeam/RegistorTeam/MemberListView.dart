@@ -221,7 +221,7 @@ class _MemberListViewState extends State<MemberListView> {
             style: Get.textTheme.headline5, 
             children: [
           TextSpan(
-              text: widget.member!['email'],
+              text: widget.member!['member_mail'],
               style: TextStyle(
                 overflow: TextOverflow.ellipsis,
                 color: Colors.blue, fontSize: 11))

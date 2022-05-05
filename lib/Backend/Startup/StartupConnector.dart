@@ -6,7 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StartupConnector extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
-
+  
+  ///////////////////////////////////////////////////////
+  // 1. Get Data form local storage : 
+  // 2. if has data then Store in Firebase Databse : 
+  //////////////////////////////////////////////////////
   CreateBusinessCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {

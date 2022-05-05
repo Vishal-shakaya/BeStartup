@@ -145,7 +145,9 @@ class _FounderImageState extends State<FounderImage> {
       try {
         // await Future.delayed(Duration(seconds: 5));
         final data = await founderStore.GetFounderDetail();
-        upload_image_url = data['picture'];
+        if(data['picture']!=''){
+          upload_image_url = data['picture'];
+        }
         return data;
       } catch (e) {
         return '';
