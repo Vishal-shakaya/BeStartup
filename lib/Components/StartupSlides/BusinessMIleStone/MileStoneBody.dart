@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -12,6 +13,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MileStoneBody extends StatefulWidget {
   const MileStoneBody({Key? key}) : super(key: key);
@@ -176,7 +178,46 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       print('480');
     }
 
-    var milestones = mileStore.GetMileStonesList();
+    var milestones;
+
+    // return MainMethod(context, milestones, SubmitMileStone);
+    // INITILIZE DEFAULT STATE :
+// GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final data = await mileStore.GetMileStonesList();
+        milestones = data;
+        return milestones;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading Input Section',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context, snapshot.data,SubmitMileStone);
+          }
+          return MainMethod(context, snapshot.data,SubmitMileStone);
+        });
+  }
+
+  Column MainMethod(
+      BuildContext context, milestones, Future<Null> SubmitMileStone()) {
     return Column(
       children: [
         Container(
@@ -204,7 +245,10 @@ class _MileStoneBodyState extends State<MileStoneBody> {
                   margin: EdgeInsets.only(top: 10),
                   child: Obx(
                     () {
-                      return ListView.builder(
+                      return 
+                      milestones == false
+                      ?Container()
+                      :ListView.builder(
                           itemCount: milestones.length,
                           itemBuilder: (context, intex) {
                             return MileStoneTag(

@@ -121,6 +121,7 @@ class _ProductListViewState extends State<ProductListView> {
   Widget build(BuildContext context) {
     // print(widget.product);
     return Container(
+      margin: EdgeInsets.all(20),
         child: Row(
       children: [
         // Image Section :
@@ -244,7 +245,7 @@ class _ProductListViewState extends State<ProductListView> {
                     style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
                         color: light_color_type3,
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         wordSpacing: 2,
                         height: 1.6),
@@ -252,7 +253,8 @@ class _ProductListViewState extends State<ProductListView> {
 
                   textAlign: TextAlign.left,
                   softWrap: true,
-                  overflow: TextOverflow.visible,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 6,
                   // maxLines:5,
                 ),
               ),

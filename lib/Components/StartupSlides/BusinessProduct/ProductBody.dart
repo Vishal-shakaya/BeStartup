@@ -2,11 +2,13 @@ import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionBu
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductBody extends StatefulWidget {
   const ProductBody({Key? key}) : super(key: key);
@@ -18,11 +20,9 @@ class ProductBody extends StatefulWidget {
 class _ProductBodyState extends State<ProductBody> {
   double prod_cont_width = 0.80;
   double prod_cont_height = 0.70;
-
   double prod_sec_width = 0.65;
 
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
-
   @override
   Widget build(BuildContext context) {
     // SHOW LOADING SPINNER :
@@ -66,11 +66,40 @@ class _ProductBodyState extends State<ProductBody> {
       EndLoading();
     }
 
-    var product = productStore.GetProductList();
-    Obx(() {
-      print('update length ${product.length}');
-      return Text('');
-    });
+
+  // INITILIZE DEFAULT STATE :
+  // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final data = await productStore.GetProductList();
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CustomShimmer(text: 'Loading Products',);
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context, snapshot.data,SubmitProduct);
+          }
+            return MainMethod(context, snapshot.data,SubmitProduct);
+        });
+    // return MainMethod(context, product, SubmitProduct);
+  }
+
+
+//////////////////////////////
+// MAIN METHOD SECTION: 
+//////////////////////////////
+  Column MainMethod(
+      BuildContext context, product, Future<Null> SubmitProduct()) {
     return Column(
       children: [
         Container(
@@ -91,7 +120,6 @@ class _ProductBodyState extends State<ProductBody> {
                 ////////////////////////////////////
 
                 // PRODUCT LIST VIEW :
-
                 SingleChildScrollView(
                   child: Column(
                     children: [

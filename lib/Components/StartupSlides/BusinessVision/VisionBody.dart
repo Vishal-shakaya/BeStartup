@@ -10,6 +10,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class VisionBody extends StatefulWidget {
   VisionBody({Key? key}) : super(key: key);
@@ -36,6 +37,7 @@ class _VisionBodyState extends State<VisionBody> {
   double vision_subheading_text = 20;
   int maxlines = 15;
 
+  String? inital_val = '';
   var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
 
   SubmitVisionForm() async {
@@ -62,7 +64,6 @@ class _VisionBodyState extends State<VisionBody> {
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
       var res = await visionStore.SetVision(visionText: vision);
-      print(res);
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
@@ -153,6 +154,45 @@ class _VisionBodyState extends State<VisionBody> {
       vision_cont_height = 0.70;
     }
 
+// INITILIZE DEFAULT STATE :
+// GET IMAGE IF HAS IS LOCAL STORAGE :
+    Future<String?> GetLocalStorageData() async {
+      try {
+        final data = await visionStore.GetVision();
+        inital_val = data;
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CustomShimmer(
+              text: 'Loading Vision',
+            );
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            print(snapshot.data);
+            return MainMethod(
+                context,
+                snapshot
+                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+          }
+          inital_val = snapshot.data.toString();
+          return MainMethod(context, snapshot.data);
+        });
+  }
+
+  // MAIN METHOD SECTION :
+  Column MainMethod(
+    BuildContext context,
+    data,
+  ) {
     return Column(
       children: [
         Container(
@@ -164,7 +204,7 @@ class _VisionBodyState extends State<VisionBody> {
               SubHeadingSection(context),
 
               // Vision input field
-              VisionInputField(context),
+              VisionInputField(context)
             ],
           ),
         ),
@@ -180,48 +220,49 @@ class _VisionBodyState extends State<VisionBody> {
 
   Container VisionInputField(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: context.height * 0.04),
-      height: maxlines * 24.0,
-      child: FormBuilder(
-        key: formKey,
-        autovalidateMode: AutovalidateMode.disabled,
-        child: FormBuilderTextField(
-          name: 'vision',
-          maxLength: 2000,
-          style: GoogleFonts.robotoSlab(
-            fontSize: 16,
-          ),
-          validator: FormBuilderValidators.compose([
-            // Remove Comment in  Production mode: 
-            // FormBuilderValidators.minLength(context, 200,
-            //     errorText: 'At least 200 required'),
-            FormBuilderValidators.maxLength(context, 2000,
-                errorText: 'Maximum 2000 char allow ')
-                
-          ]),
-          scrollPadding: EdgeInsets.all(10),
-          maxLines: maxlines,
-          decoration: InputDecoration(
-              helperText: 'min allow 200 ',
-              hintText: "your vision",
-              hintStyle: TextStyle(
-                color: Colors.blueGrey.shade200,
+              margin: EdgeInsets.only(top: context.height * 0.04),
+              height: maxlines * 24.0,
+              child: FormBuilder(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: FormBuilderTextField(
+                  initialValue: inital_val!="null" ? inital_val: '',
+                  name: 'vision',
+                  maxLength: 2000,
+                  style: GoogleFonts.robotoSlab(
+                    fontSize: 16,
+                  ),
+                  validator: FormBuilderValidators.compose([
+                    // Remove Comment in  Production mode:
+                    // FormBuilderValidators.minLength(context, 200,
+                    //     errorText: 'At least 200 required'),
+                    FormBuilderValidators.maxLength(context, 2000,
+                        errorText: 'Maximum 2000 char allow ')
+                  ]),
+                  scrollPadding: EdgeInsets.all(10),
+                  maxLines: maxlines,
+                  decoration: InputDecoration(
+                      helperText: 'min allow 200 ',
+                      hintText: "your vision",
+                      hintStyle: TextStyle(
+                        color: Colors.blueGrey.shade200,
+                      ),
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.all(20),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                              width: 1.5, color: Colors.blueGrey.shade200)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide:
+                              BorderSide(width: 2, color: primary_light)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15))),
+                ),
               ),
-              fillColor: Colors.grey[100],
-              filled: true,
-              contentPadding: EdgeInsets.all(20),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide:
-                      BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(width: 2, color: primary_light)),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
-        ),
-      ),
-    );
+            );
   }
 
   Container SubHeadingSection(BuildContext context) {

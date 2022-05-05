@@ -12,7 +12,7 @@ class ProductForm extends StatefulWidget {
   String? title = '';
   String? description = '';
   String? form_type = '';
-  UniqueKey? id;
+  String? id;
   int? product_index; 
   ProductForm({
     this.id,

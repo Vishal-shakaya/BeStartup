@@ -10,6 +10,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RegistorTeamBody extends StatefulWidget {
   const RegistorTeamBody({Key? key}) : super(key: key);
@@ -79,11 +80,10 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
       ErrorSnakbar();
       return;
     } else {
-
-      // CATIGORY : 
+      // CATIGORY :
       var resp = await startupConnector.CreateBusinessCatigory();
       print(resp);
-      
+
       var resp2 = await startupConnector.CreateBusinessDetail();
       print(resp);
 
@@ -98,13 +98,13 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
       var resp6 = await startupConnector.CreateBusinessVision();
       print(resp);
-      
+
       var resp7 = await startupConnector.CreateUserContact();
       print(resp);
-      
+
       var resp8 = await startupConnector.CreateUserDetail();
       print(resp);
-      
+
       var resp9 = await startupConnector.CreateBusinessTeamMember();
       print(resp);
 
@@ -116,8 +116,34 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>?> member_list = memeberStore.GetMembers();
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        // await Future.delayed(Duration(seconds: 5));
+        final data = await memeberStore.GetMembers();
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
 
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CustomShimmer(text: 'Loading Member List ');
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context, snapshot.data);
+          }
+          return MainMethod(context, snapshot.data);
+        });
+  }
+
+  Column MainMethod(BuildContext context, member_list) {
     return Column(
       children: [
         Container(

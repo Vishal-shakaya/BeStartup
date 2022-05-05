@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
+import 'package:get/get.dart';
 
 var uuid = Uuid();
 
@@ -70,7 +71,7 @@ CatigoryModel({user_id, email, startup_name, catigory}) async {
 }
 
 
-BusinessProductsList({user_id, email, startup_name, products, timestamp}) async {
+BusinessProductsList({user_id, email, startup_name,  products, timestamp}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),

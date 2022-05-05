@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BusinessDetailStore extends GetxController {
   static String? image_url;
   static String? business_name;
- 
+
 /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
@@ -31,8 +31,19 @@ class BusinessDetailStore extends GetxController {
   }
 
   // GET BUSINESS LOGO:
-  GetBusinessLogo() {
-    return image_url;
+  GetBusinessLogo() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('BusinessDetail');
+      if (is_detail) {
+        var data = localStore.getString('BusinessDetail');
+        var json_obj = jsonDecode(data!);
+        image_url = json_obj["logo"];
+        return json_obj["logo"];
+      }
+    } catch (e) {
+      return '';
+    }
   }
 
 ////////////////////////////////////////////////////
@@ -76,7 +87,17 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-  GetBusinessName() {
-    return business_name;
+  GetBusinessName() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('BusinessDetail');
+      if (is_detail) {
+        var data = localStore.getString('BusinessDetail');
+        var json_obj = jsonDecode(data!);
+        return json_obj["name"];
+      }
+    } catch (e) {
+      return '';
+    }
   }
 }

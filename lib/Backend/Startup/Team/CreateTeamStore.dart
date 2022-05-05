@@ -10,11 +10,12 @@ import 'package:uuid/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
+
 class BusinessTeamMemberStore extends GetxController {
   static Map<String, dynamic> temp_member = {
     'id': uuid.v4(),
-    'email':getuserEmail,
-    'startup_name':getStartupName,
+    'email': getuserEmail,
+    'startup_name': getStartupName,
     'name': 'Vishal',
     'position': 'Ceo',
     'member_mail': 'shakayavishal007@gmail.com',
@@ -22,9 +23,11 @@ class BusinessTeamMemberStore extends GetxController {
     'image': temp_image,
     'timestamp': DateTime.now().toString(),
   };
+
   static Map<String, dynamic>? member;
   static String? profile_image;
-  List<Map<String, dynamic>?> member_list = [temp_member].obs;
+
+  RxList member_list = [].obs;
 
   // SET PROFILE IMAGE :
   SetProfileImage(image) async {
@@ -51,7 +54,7 @@ class BusinessTeamMemberStore extends GetxController {
       Map<String, dynamic> temp_member = {
         'id': uuid.v4(),
         'email': getuserEmail,
-        'startup_name':getStartupName,
+        'startup_name': getStartupName,
         'name': member['name'],
         'position': member['position'],
         'member_mail': member['email'],
@@ -78,7 +81,7 @@ class BusinessTeamMemberStore extends GetxController {
         'image': profile_image,
         'timestamp': DateTime.now().toString(),
       };
-      member_list[index] = temp_member; 
+      member_list[index] = temp_member;
       profile_image = null;
       return ResponseBack(response_type: true);
     } catch (e) {
@@ -92,19 +95,43 @@ class BusinessTeamMemberStore extends GetxController {
   }
 
   // GET MEMBERS
-  GetMembers() {
+  GetMembers() async {
+    final localStore = await SharedPreferences.getInstance();
     try {
-      return member_list;
+      // Check local store for product :
+      bool is_detail = localStore.containsKey('BusinessTeamMember');
+      if (is_detail) {
+        // Retrive Product  then convert in list then update
+        // Product list :
+        var data = localStore.getString('BusinessTeamMember');
+        var json_obj = jsonDecode(data!);
+
+        var temp_list = json_obj['members'].toList();
+        for (int i = 0; i < temp_list.length; i++) {
+          member_list.add(temp_list[i]);
+        }
+        return member_list;
+
+        // If there is no product then just add temp prodcut to list :
+        // and send for example purpose :
+      } else {
+        member_list.add(temp_member);
+        return member_list;
+      }
+
+      // To Save widget from crash if error occure then send temp product:
+      // print error :
     } catch (e) {
-      return [];
+      print('Error While Get Milestones ${e}');
+      return false;
     }
   }
 
-  // STORE MEMBER TO LOCAL STORAGE : 
-  PersistMembers()async{
+  // STORE MEMBER TO LOCAL STORAGE :
+  PersistMembers() async {
     final localStore = await SharedPreferences.getInstance();
-       try {
-      var resp =  await BusinessTeamMembersModel(
+    try {
+      var resp = await BusinessTeamMembersModel(
         user_id: getUserId,
         email: getuserEmail,
         startup_name: getStartupName,
@@ -113,6 +140,8 @@ class BusinessTeamMemberStore extends GetxController {
 
       localStore.setString('BusinessTeamMember', json.encode(resp));
 
+      // Remove Dublication for local storage and cache storage: 
+      member_list.clear();
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

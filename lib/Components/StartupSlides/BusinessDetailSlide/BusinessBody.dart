@@ -21,6 +21,12 @@ class _BusinessBodyState extends State<BusinessBody> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
+  // SET DEFAULT STATE :
+  Future<String?> SetVal() async {
+    await Future.delayed(Duration(seconds: 5));
+    var data = await detailStore.GetBusinessName();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,8 +53,6 @@ class _BusinessBodyState extends State<BusinessBody> {
         ));
   }
 
-
-  
   StartLoading() {
     // SHOW LOADING SPINNER :
     Get.snackbar(
@@ -67,6 +71,7 @@ class _BusinessBodyState extends State<BusinessBody> {
       padding: EdgeInsets.all(15),
     );
   }
+
 ///////////////////////////////////////////////////
   /// HANDLE SUBMIT FORM :
   /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :

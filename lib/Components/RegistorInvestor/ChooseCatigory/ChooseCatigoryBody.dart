@@ -26,8 +26,11 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
   double vision_subheading_text = 20;
   double continue_btn_width = 150;
   double continue_btn_height = 50;
+  
   var catigoryStore = Get.put(InvestorCatigoryStore(), tag: 'catigories');
   var investorConct = Get.put(InvestorConnector(), tag: 'investor_connector');
+  
+
   @override
   Widget build(BuildContext context) {
     ErrorSnakbar() {
@@ -182,7 +185,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           await submitCatigory();
-          Get.toNamed(investor_registration_form);
+          
         },
         child: Card(
           elevation: 10,
@@ -199,7 +202,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: const Text(
-              'Continue',
+              'Finish',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,

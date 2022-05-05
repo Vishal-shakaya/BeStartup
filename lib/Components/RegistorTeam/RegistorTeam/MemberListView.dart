@@ -184,7 +184,6 @@ class _MemberListViewState extends State<MemberListView> {
         child: Container(
           padding: EdgeInsets.only(bottom: 15),
           child: RichText(
-              textAlign: TextAlign.center,
               maxLines: 6,
               text: TextSpan(children: [
                 // Heading Texct :

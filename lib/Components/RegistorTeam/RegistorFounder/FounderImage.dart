@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 class FounderImage extends StatefulWidget {
   FounderImage({Key? key}) : super(key: key);
@@ -60,7 +61,7 @@ class _FounderImageState extends State<FounderImage> {
       // Pick only one file :
       final result = await FilePicker.platform.pickFiles(allowMultiple: false);
       setState(() {
-        is_uploading = true; 
+        is_uploading = true;
       });
 
       // if rsult null then return :
@@ -80,7 +81,7 @@ class _FounderImageState extends State<FounderImage> {
         }
         setState(() {
           upload_image_url = resp['data'];
-           is_uploading = false; 
+          is_uploading = false;
         });
       }
     }
@@ -138,6 +139,41 @@ class _FounderImageState extends State<FounderImage> {
       print('480');
     }
 
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        // await Future.delayed(Duration(seconds: 5));
+        final data = await founderStore.GetFounderDetail();
+        upload_image_url = data['picture'];
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: MainMethod(spinner, PickImage),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(spinner, PickImage);
+          }
+          return MainMethod(spinner, PickImage);
+        });
+    // return MainMethod(context);
+  }
+
+  Container MainMethod(Container spinner, Future<void> PickImage()) {
     return Container(
         alignment: Alignment.center,
         child: Stack(

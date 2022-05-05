@@ -9,7 +9,14 @@ import 'dart:convert';
 class BusinessFounderStore extends GetxController {
   static Map<String, dynamic>? founder;
   static String? image_url;
-
+  Map<String, dynamic> clean_resp = {
+    'picture': '',
+    'name': '',
+    'position': '',
+    'phone_no': '',
+    'primary_mail': '',
+    'other_contact': '',
+  };
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
@@ -51,10 +58,10 @@ class BusinessFounderStore extends GetxController {
             position: founder['position'],
             picture: image_url);
 
-        var resp2 =  await UserContact(
+        var resp2 = await UserContact(
             user_id: getUserId,
             email: getuserEmail,
-            primary_main: founder['email'],
+            primary_mail: founder['email'],
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);
 
@@ -67,6 +74,36 @@ class BusinessFounderStore extends GetxController {
       }
     } catch (e) {
       return ResponseBack(response_type: false);
+    }
+  }
+
+  GetFounderDetail() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('UserDetail');
+      bool is_contanct = localStore.containsKey('UserContact');
+      if (is_detail && is_contanct) {
+        var detail = localStore.getString('UserDetail');
+        var contact = localStore.getString('UserContact');
+
+        var detail_obj = jsonDecode(detail!);
+        var contact_obj = jsonDecode(contact!);
+
+        Map<String, dynamic> temp_founder = {
+          'picture': detail_obj['picture'],
+          'name': detail_obj['name'],
+          'position': detail_obj['position'],
+          'phone_no': contact_obj['phone_no'],
+          'primary_mail': contact_obj['primary_mail'],
+          'other_contact': contact_obj['other_contact'],
+        };
+        return temp_founder;
+      
+      } else {
+        return clean_resp;
+      }
+    } catch (e) {
+      return clean_resp;
     }
   }
 }

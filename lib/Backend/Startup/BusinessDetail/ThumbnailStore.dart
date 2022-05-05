@@ -25,17 +25,30 @@ class ThumbnailStore extends GetxController {
             user_id: getUserId,
             email: getuserEmail,
             startup_name: getStartupName);
-            
+
         localStore.setString('BusinessThumbnail', json.encode(resp));
         return ResponseBack(response_type: true, data: image_url);
-
       } catch (e) {
         return ResponseBack(response_type: false);
       }
-
-
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
+
+  GetThumbnail() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('BusinessThumbnail');
+      if (is_detail) {
+        var data = localStore.getString('BusinessThumbnail');
+        var json_obj = jsonDecode(data!);
+        return json_obj["thumbnail"];
+      }
+    } catch (e) {
+      return '';
+    }
+  }
+
+  
 }

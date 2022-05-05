@@ -80,7 +80,7 @@ class InvestorRegistorFormBody extends StatelessWidget {
         SmartDialog.dismiss();
 
         // Redirect to team page:
-        Get.toNamed(create_business_team);
+        Get.toNamed(select_investor_choise,preventDuplicates: false);
       } else {
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();

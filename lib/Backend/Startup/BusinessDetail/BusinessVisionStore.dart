@@ -40,13 +40,17 @@ class BusinessVisionStore extends GetxController {
   }
 
   // Return Vision:
-  GetVision() async {
+   GetVision() async {
+    final localStore = await SharedPreferences.getInstance();
     try {
-      return vision;
+      bool is_detail = localStore.containsKey('BusinessVision');
+      if (is_detail) {
+        var data = localStore.getString('BusinessVision');
+        var json_obj = jsonDecode(data!);
+        return json_obj["vision"];
+      }
     } catch (e) {
-      return ResponseBack(
-        response_type: false,
-      );
+      return '';
     }
   }
 }

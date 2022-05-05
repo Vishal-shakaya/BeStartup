@@ -1,4 +1,4 @@
-import 'package:be_startup/Components/RegisterationSlides/UserType.dart';
+import 'package:be_startup/Components/SelectUserType/UserType.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 

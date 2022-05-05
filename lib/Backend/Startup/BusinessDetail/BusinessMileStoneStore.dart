@@ -16,7 +16,7 @@ class MileStoneStore extends GetxController {
   };
   var response;
 
-  List<Map<String, dynamic>> milestones = [default_tag].obs;
+  RxList milestones = [].obs;
 
 ////////////////////////////////////////
   /// ADD MILE STONE :
@@ -107,8 +107,26 @@ class MileStoneStore extends GetxController {
 ////////////////////////////////////////
 // RETERIVE LIST OF MILESTONES :
 ////////////////////////////////////////
-  List<Map<String, dynamic>> GetMileStonesList() {
-    return milestones;
+  GetMileStonesList() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('BusinessMilestones');
+      if (is_detail) {
+        var data = localStore.getString('BusinessMilestones');
+        var json_obj = jsonDecode(data!);
+
+        var temp_list = json_obj['milestone'].toList();
+        for (int i = 0; i < temp_list.length; i++) {
+          milestones.add(temp_list[i]);
+        }
+        return milestones;
+      } else {
+        milestones.add(default_tag);
+        return milestones;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 
 ////////////////////////////////////////
@@ -126,6 +144,9 @@ class MileStoneStore extends GetxController {
           startup_name: getStartupName,
           milestone: milestones);
       localStore.setString('BusinessMilestones', json.encode(resp));
+
+      // Clear memory allocation : to remove content Dublication: 
+      milestones.clear();
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

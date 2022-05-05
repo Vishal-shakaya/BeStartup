@@ -113,7 +113,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
         color: light_color_type1,
-        fontSize: 17,
+        fontSize: 14,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -139,7 +139,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
             child: Icon(
               Icons.cancel_outlined,
               color: input_reset_color,
-              size: 18,
+              size: 15,
             ),
           ),
         ),

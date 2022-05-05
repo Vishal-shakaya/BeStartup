@@ -45,12 +45,12 @@ UserDetailModel(
   }
 }
 
-UserContact({user_id, email,  primary_main, other_contact, phone_no}) async {
+UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'primary_main': primary_main,
+      'primary_mail': primary_mail,
       'other_contact': other_contact,
       'phone_no': phone_no
     };

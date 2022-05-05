@@ -98,7 +98,6 @@ class _CatigoryBodyState extends State<CatigoryBody> {
 
     // SUBMIT CATIGORY :
     SubmitCatigory() async {
-      print('submiting data');
       StartLoading();
       var resp = await catigoryStore.PersistCatigory();
       print(resp);
@@ -108,13 +107,16 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       }
       EndLoading();
     }
+  
 
     // CAREAT CATIGORY CHIPS:
     List<CatigoryChip> catigory_list = [];
-    business_catigories.forEach((cat) {
+    business_catigories.forEach((cat) async {
+      var is_selected = false;
       catigory_list.add(CatigoryChip(
         key: UniqueKey(),
         catigory: cat,
+        is_selected: is_selected,
       ));
     });
 

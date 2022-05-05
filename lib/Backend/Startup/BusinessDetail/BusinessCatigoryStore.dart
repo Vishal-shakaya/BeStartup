@@ -33,12 +33,19 @@ class BusinessCatigoryStore extends GetxController {
   }
 
   // GET LIST TO CATIGORY:
-  GetCatigories() {
+  // Return Vision:
+  GetCatigory() async {
+    final localStore = await SharedPreferences.getInstance();
     try {
-      // print(catigories);
-      return catigories;
+      bool is_detail = localStore.containsKey('BusinessCatigory');
+      if (is_detail) {
+        var data = localStore.getString('BusinessCatigory');
+        var json_obj = jsonDecode(data!);
+        print('data $json_obj');
+        return json_obj["catigory"];
+      }
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return [''];
     }
   }
 

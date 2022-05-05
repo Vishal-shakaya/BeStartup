@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BusinessIcon extends StatefulWidget {
   BusinessIcon({Key? key}) : super(key: key);
@@ -23,7 +24,6 @@ class _BusinessIconState extends State<BusinessIcon> {
   String upload_image_url = '';
   late UploadTask? upload_process;
   bool is_uploading = false;
-
 
   ErrorSnakbar() {
     Get.snackbar(
@@ -74,6 +74,18 @@ class _BusinessIconState extends State<BusinessIcon> {
     }
   }
 
+  // INITILIZE DEFAULT STATE :
+  // GET IMAGE IF HAS IS LOCAL STORAGE :
+  SetLogo() async {
+    try {
+      final logo = await detailStore.GetBusinessLogo();
+      upload_image_url = logo;
+      return upload_image_url;
+    } catch (e) {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var spinner = Container(
@@ -84,6 +96,31 @@ class _BusinessIconState extends State<BusinessIcon> {
       ),
     );
 
+    return FutureBuilder(
+        future: SetLogo(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+                baseColor: shimmer_base_color,
+                highlightColor: shimmer_highlight_color,
+                child: MainMethod(context, spinner, snapshot.data),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(
+                context,
+                spinner,
+                snapshot
+                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+          }
+          return MainMethod(context, spinner, snapshot.data);
+        });
+  }
+
+  Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
         margin: EdgeInsets.only(top: context.height * 0.05),
         alignment: Alignment.center,

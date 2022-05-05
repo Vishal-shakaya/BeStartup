@@ -6,18 +6,19 @@ import 'package:get/get.dart';
 
 class CatigoryChip extends StatefulWidget {
   String? catigory = '';
+  bool? is_selected=false; 
   CatigoryChip({
     Key? key,
     this.catigory,
+    this.is_selected
   }) : super(key: key);
   @override
   State<CatigoryChip> createState() => _CatigoryChipState();
 }
 
 class _CatigoryChipState extends State<CatigoryChip> {
-  bool is_selected = false;
   var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigories');
-
+  bool is_selected = false;
   // Add or Remove catigory form backend :
   UpdateStorage(is_selected) async {
     var res;

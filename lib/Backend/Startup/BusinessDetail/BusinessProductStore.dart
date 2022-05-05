@@ -14,8 +14,7 @@ enum ProductType {
 }
 
 class BusinessProductStore extends GetxController {
-
- var uuid = Uuid();
+  var uuid = Uuid();
   // Test Product :
   static Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
@@ -30,7 +29,7 @@ class BusinessProductStore extends GetxController {
     'catigory': '',
   };
 
-  List<Map<String, dynamic?>> product_list = [temp_product].obs;
+  RxList product_list = [].obs;
   static String? image_url;
   static String? product_type = 'product';
   static String? youtube_link = '';
@@ -41,7 +40,6 @@ class BusinessProductStore extends GetxController {
   SetYoutubeLink(link) async {
     try {
       youtube_link = link;
-      print('youtube link set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -52,7 +50,6 @@ class BusinessProductStore extends GetxController {
   SetContentLink(link) async {
     try {
       content_link = link;
-      print('content link set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -68,8 +65,6 @@ class BusinessProductStore extends GetxController {
       if (ProductType.service == type) {
         product_type = 'service';
       }
-      print('PRODUCT TYPE ${product_type}');
-      print('product set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -79,7 +74,6 @@ class BusinessProductStore extends GetxController {
   SetImageUrl(image) async {
     try {
       image_url = image;
-      print('image set');
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -160,32 +154,63 @@ class BusinessProductStore extends GetxController {
 
 // REMOVE PRODUCT FROM LIST USING ID param:
   RemoveProduct(id) async {
-    print('Before ${product_list}');
     try {
       product_list.removeWhere((element) => element['id'] == id);
-      print('After ${product_list}');
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
 
-  //////////////////////
-  /// GETTERS :
-  /// ///////////////////
+  /// GETTERS
 
-  // Get All Products :
-  GetProductList() {
+///////////////////////////////////////////////////
+  /// GETTING PRODUCT LIST :
+  /// 1. CHECK IF PRODUCT IS STORE IN LOCAL STORAGE :
+  /// 2. IF STORE THEN UPDATE product_list ;
+  /// 3. INSTED OF CREATEING NEW LIST , WE USE UPDATE
+  /// METHOD BZ OF product_list has Observer attach :
+///////////////////////////////////////////////////
+  GetProductList() async {
+    final localStore = await SharedPreferences.getInstance();
     try {
-      return product_list;
+      // Check local store for product :
+      bool is_detail = localStore.containsKey('BusinessProducts');
+      if (is_detail) {
+        // Retrive Product  then convert in list then update
+        // Product list :
+        var data = localStore.getString('BusinessProducts');
+        var json_obj = jsonDecode(data!);
+
+        var temp_list = json_obj['products'].toList();
+        for (int i = 0; i < temp_list.length; i++) {
+          product_list.add(temp_list[i]);
+        }
+        return product_list;
+
+        // If there is no product then just add temp prodcut to list :
+        // and send for example purpose :
+      } else {
+        product_list.add(temp_product);
+        return product_list;
+      }
+
+      // To Save widget from crash if error occure then send temp product:
+      // print error :
     } catch (e) {
-      return [];
+      print('Error While Get Milestones ${e}');
+      return false;
     }
   }
 
+  ///////////////////////////////////////////////////////////////
+  // STORE PRODUCT LIST LOCALY : PERSIST DATA FOR FURTHUR USAGE:
+  // USE LOCAL STORAGE :
+  // CREATE PRODUCT MODEL WITH LIST OF PRODUCT IN JSON FORMAT :
+  ///////////////////////////////////////////////////////////////
   PersistProduct() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      var resp =  await BusinessProductsList(
+      var resp = await BusinessProductsList(
         user_id: getUserId,
         email: getuserEmail,
         startup_name: getStartupName,
@@ -193,6 +218,7 @@ class BusinessProductStore extends GetxController {
       );
 
       localStore.setString('BusinessProducts', json.encode(resp));
+      product_list.clear();
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

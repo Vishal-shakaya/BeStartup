@@ -2,12 +2,14 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ThumbnailSection extends StatefulWidget {
   ThumbnailSection({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   String upload_image_url = '';
   late UploadTask? upload_process;
   double image_hint_text_size = 22;
-  bool is_loading = false; 
+  bool is_loading = false;
 
   var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
 ///////////////////////////////////
@@ -60,7 +62,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
     setState(() {
-      is_loading= true; 
+      is_loading = true;
     });
 
     // if rsult null then return :
@@ -75,12 +77,12 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
           await thumbStore.SetThumbnail(thumbnail: image, filename: filename);
       if (!resp['response']) {
         ErrorSnakbar();
-        return; 
+        return;
       }
 
       setState(() {
         upload_image_url = resp['data'];
-        is_loading = false; 
+        is_loading = false;
       });
     }
   }
@@ -127,6 +129,48 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
     // PHONE:
     if (context.width < 480) {}
+
+
+
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final data = await thumbStore.GetThumbnail();
+        upload_image_url = data;
+        return upload_image_url;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+            child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child:  MainMethod(context, spinner, snapshot.data),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(
+                context,
+                spinner,
+                snapshot
+                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+          }
+          return MainMethod(context, spinner, snapshot.data);
+        });
+  }
+
+
+  // MAIN WIDGET SECTION : 
+  Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 10),
@@ -143,13 +187,13 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
               ? ThumbnailContainer(context)
               : ThumbnailImageContainer(context),
           // UPLOAD THUMBNAIL BUTTON :
-          ThumbnailUploadBUtton(context,spinner,is_loading)
+          ThumbnailUploadBUtton(context, spinner, is_loading)
         ],
       ),
     );
   }
 
-  Positioned ThumbnailUploadBUtton(BuildContext context,spinner, is_loading) {
+  Positioned ThumbnailUploadBUtton(BuildContext context, spinner, is_loading) {
     return Positioned(
       top: context.height * upload_btn_top,
       left: context.width * upload_btn_left,
@@ -168,8 +212,9 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
             padding: EdgeInsets.all(5),
             width: upload_btn_width,
             height: upload_btn_height,
-            child: is_loading? spinner: 
-            Icon(Icons.cloud_upload, color: Colors.white, size: 40),
+            child: is_loading
+                ? spinner
+                : Icon(Icons.cloud_upload, color: Colors.white, size: 40),
           ),
         ),
       ),

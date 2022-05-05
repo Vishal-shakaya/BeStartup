@@ -47,7 +47,7 @@ class InvestorDetailStore extends GetxController {
         var resp2 =  await UserContact(
             user_id: getUserId,
             email: getuserEmail,
-            primary_main: investor['email'],
+            primary_mail: investor['email'],
             phone_no: investor['phone_no'],
             other_contact: investor['other_contact']);
 
