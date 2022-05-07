@@ -1,4 +1,3 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/StartupView/MemberDetailDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -8,7 +7,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MemberBlock extends StatefulWidget {
-  MemberBlock({Key? key}) : super(key: key);
+  var member; 
+  MemberBlock({
+    this.member, 
+    Key? key}) : super(key: key);
 
   @override
   State<MemberBlock> createState() => _MemberBlockState();
@@ -41,13 +43,12 @@ class _MemberBlockState extends State<MemberBlock> {
                 SizedBox(
                   width: 200,
                   child: InkWell(
-                    
                     child: Column(
                       children: [
                         // MEMBER NAME :
                         MemName(),
-                        
-                        // POSITION:  
+
+                        // POSITION:
                         MemPosition(),
                         // CONTACT EMAIL ADDRESS :
                         MemContact(),
@@ -73,8 +74,6 @@ class _MemberBlockState extends State<MemberBlock> {
     );
   }
 
-
-
   Card MemDescription(BuildContext context) {
     return Card(
       shadowColor: Colors.teal,
@@ -97,7 +96,7 @@ class _MemberBlockState extends State<MemberBlock> {
               text: TextSpan(children: [
                 // Heading Texct :
                 TextSpan(
-                  text: long_string,
+                  text: widget.member['meminfo'],
                   style: GoogleFonts.robotoSlab(
                     textStyle: TextStyle(),
                     color: light_color_type3,
@@ -115,7 +114,7 @@ class _MemberBlockState extends State<MemberBlock> {
   Container MemContact() {
     return Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -125,15 +124,13 @@ class _MemberBlockState extends State<MemberBlock> {
             size: 16,
           ),
         ),
-        AutoSizeText.rich(
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
-            style: Get.textTheme.headline5, 
-            children: [
-          TextSpan(
-              text: 'shakayavishal008@gmail.com',
+              text: widget.member['member_mail'],
               style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: Colors.blue, fontSize: 11))
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.blue,
+                  fontSize: 11))
         ])),
       ],
     ));
@@ -144,97 +141,96 @@ class _MemberBlockState extends State<MemberBlock> {
         margin: EdgeInsets.only(bottom: 12),
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline2, children: [
-      TextSpan(
-          text: 'vishal',
-          style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
-    ])));
+          TextSpan(
+              text:widget.member['name'] ,
+              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
+        ])));
   }
 
   Container MemPosition() {
     return Container(
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
-          TextSpan(
-              text: '@Managing Director',
-              style: TextStyle(color: light_color_type2, fontSize: 12))
-        ])));
+      TextSpan(
+          text: widget.member['position'],
+          style: TextStyle(color: light_color_type2, fontSize: 12))
+    ])));
   }
 
   Container ProfileImage() {
     return Container(
         child: CircleAvatar(
-      radius:60,
+      radius: 60,
       backgroundColor: Colors.blueGrey[100],
-      foregroundImage: NetworkImage(profile_image),
+      foregroundImage: NetworkImage(widget.member['image']),
     ));
   }
 
-    Container EidtDeleteLButtons(BuildContext context) {
+  Container EidtDeleteLButtons(BuildContext context) {
     return Container(
-          height: context.height * 0.20,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              /////////////////////////////
-              // DELETE MEMBER BUTTON :
-              /////////////////////////////
-              Card(
-                shadowColor: Colors.grey,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    // await RemoveMember(widget.member!['id']);
-                  },
-                  radius: 15,
-                  child: CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.red.shade300,
-                      child: Container(
-                          padding: EdgeInsets.all(2),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                            size: 15,
-                          ))),
-                ),
-              ),
-
-              // SPACING :
-              SizedBox(
-                height: 5,
-              ),
-
-              /////////////////////////////
-              // EDIT PRODUCT BUTTON:
-              /////////////////////////////
-              Card(
-                shadowColor: Colors.grey,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    // EditMember();
-                  },
-                  radius: 15,
-                  child: CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.blue.shade300,
-                      child: Container(
-                          padding: EdgeInsets.all(2),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 15,
-                          ))),
-                ),
-              ),
-            ],
+      height: context.height * 0.20,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          /////////////////////////////
+          // DELETE MEMBER BUTTON :
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () async {
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.red.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 15,
+                      ))),
+            ),
           ),
-        );
+
+          // SPACING :
+          SizedBox(
+            height: 5,
+          ),
+
+          /////////////////////////////
+          // EDIT PRODUCT BUTTON:
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () {
+                // EditMember();
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.blue.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 15,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

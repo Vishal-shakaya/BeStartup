@@ -5,14 +5,22 @@ import 'package:get/get.dart';
 
 var uuid = Uuid();
 
-BusinessInfoModel({user_id, logo, name, email}) async {
+BusinessInfoModel({
+  user_id, 
+  logo, 
+  name, 
+  email,
+  disire_amount,
+  investor_no}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
+      'user_id': user_id, 
+      'email': email,
       'logo': logo,
       'name': name,
-      'email': email,
-      'user_id': user_id
+      'desire_amount':disire_amount,
+      'investor_no':investor_no
     };
     return temp_obj;
   } catch (e) {

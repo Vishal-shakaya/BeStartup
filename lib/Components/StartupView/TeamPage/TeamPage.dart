@@ -1,11 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/AllMembers.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TeamPage extends StatelessWidget {
   const TeamPage({Key? key}) : super(key: key);
@@ -18,10 +21,54 @@ class TeamPage extends StatelessWidget {
     }
 
     double page_width = 0.80;
-    return Container(
-        width: context.width * page_width,
+    var startupConnect =
+        Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
-        // TEAM MEMBER   SECTION :
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final data = await startupConnect.FetchBusinessTeamMember();
+        return data;
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text('Loading'),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(
+                context: context,
+                page_width: page_width,
+                EditMember: EditMember,
+                data: snapshot.data);
+          }
+          return MainMethod(
+              context: context,
+              page_width: page_width,
+              EditMember: EditMember,
+              data: snapshot.data);
+        });
+
+    // TEAM MEMBER   SECTION :
+  }
+
+  Container MainMethod(
+      {context, page_width, required Null EditMember(), data}) {
+    return Container(
+        width: MediaQuery.of(context).size.width * page_width,
         child: Container(
             child: SingleChildScrollView(
           child: Column(
@@ -46,8 +93,8 @@ class TeamPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Container(
-                      width: context.width * 0.50,
-                      height: context.height * 0.70,
+                      width: MediaQuery.of(context).size.width * 0.50,
+                      height: MediaQuery.of(context).size.height * 0.70,
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       decoration: BoxDecoration(
@@ -56,23 +103,18 @@ class TeamPage extends StatelessWidget {
                       ),
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            // Member Block :
-                            // Higher Order Member:
-                            MemberBlock(),
-                            MemberBlock(),
-                            MemberBlock(),
-                            MemberBlock(),
-                          ],
-                        ),
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return MemberBlock(member:data[index]);
+                        },
                       ),
                     ),
                   ),
 
                   // Spacing :
-                  SizedBox(height: context.height * 0.04),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   // Headign :
                   StartupHeaderText(
                     title: 'Members',
@@ -91,7 +133,7 @@ class TeamPage extends StatelessWidget {
     return Container(
         width: context.width * 0.48,
         alignment: Alignment.topRight,
-        margin: EdgeInsets.only(top: context.height * 0.04),
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
         child: Container(
           width: 90,
           height: 30,

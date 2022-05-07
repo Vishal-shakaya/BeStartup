@@ -1,6 +1,6 @@
 import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
-import 'package:be_startup/Components/StartupView/StartupInfoSection/ProfileImage.dart';
+import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -35,14 +35,15 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
+        final data1 = await startupConnect.FetchBusinessDetail();
         final data = await startupConnect.FetchThumbnail();
-        return data;
+        var temp_data = {'thumbnail': data, 'logo': data1};
+        return temp_data;
       } catch (e) {
         return '';
       }
     }
 
-   
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -51,8 +52,10 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
                 child: Shimmer.fromColors(
                     baseColor: shimmer_base_color,
                     highlightColor: shimmer_highlight_color,
-                    child: MainMethod(
-                        context, snapshot.data == null ? shimmer_image : snapshot.data)));
+                    child: MainMethod(context,
+                        snapshot.data == null
+                         ? {'thumbnail':shimmer_image,'logo':shimmer_image} 
+                         : snapshot.data)));
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -69,10 +72,10 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
         child: Stack(
           children: [
             // THUMBNAIL SECTION:
-            Thumbnail(context, data),
+            Thumbnail(context, data['thumbnail']),
 
             // PROFILE PICTURE :
-            ProfileImage(),
+            Picture(logo: data['logo'],),
 
             // TABS
             Positioned(

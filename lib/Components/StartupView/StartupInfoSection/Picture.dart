@@ -1,9 +1,14 @@
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileImage extends StatelessWidget {
-  const ProfileImage({Key? key}) : super(key: key);
+class Picture extends StatelessWidget {
+  String? logo = temp_logo;
+
+  Picture({
+    this.logo, 
+    Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +25,9 @@ class ProfileImage extends StatelessWidget {
             child: CircleAvatar(
           radius: 60,
           backgroundColor: Colors.blueGrey[100],
-          foregroundImage: NetworkImage(
-              'https://i.pinimg.com/originals/1e/c3/17/1ec317142711af99cce906ef35a2f44f.jpg'),
-        )),
+          foregroundImage: NetworkImage(logo!)
+        ),
       ),
-    );
+    ));
   }
 }
