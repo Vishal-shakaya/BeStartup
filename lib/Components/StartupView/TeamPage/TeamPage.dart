@@ -43,7 +43,13 @@ class TeamPage extends StatelessWidget {
                 child: Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child: Text('Loading'),
+              child: snapshot.data==null 
+              ? Text('Loading Members',style: Get.textTheme.headline2)
+              : MainMethod(
+                context: context,
+                page_width: page_width,
+                EditMember: EditMember,
+                data: snapshot.data),
             ));
           }
           if (snapshot.hasError) return ErrorPage();

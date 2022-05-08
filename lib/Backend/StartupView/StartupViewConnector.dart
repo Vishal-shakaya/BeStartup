@@ -5,6 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+var uuid = Uuid();
 
 class StartupViewConnector extends GetxController {
   ////////////////////////////////////////
@@ -124,7 +128,17 @@ class StartupViewConnector extends GetxController {
 
   FetchBusinessTeamMember() async {
     var data;
-
+    Map<String, dynamic> temp_member = {
+      'id': uuid.v4(),
+      'email': getuserEmail,
+      'startup_name': getStartupName,
+      'name': 'Vishal',
+      'position': 'Ceo',
+      'member_mail': 'shakayavishal007@gmail.com',
+      'meminfo': feature1_body,
+      'image': temp_image,
+      'timestamp': DateTime.now().toString(),
+    };
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessTeamMember');
@@ -152,7 +166,75 @@ class StartupViewConnector extends GetxController {
       return data['members'];
     } catch (e) {
       print(e);
-      return shimmer_image;
+      return [];
+    }
+  }
+
+  FetchBusinessVision() async {
+    var data;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessVision');
+      if (cacheData != false) {
+        return cacheData['vision'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessVision');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: getuserEmail,
+          )
+          .where('user_id', isEqualTo: getUserId)
+          .where('startup_name', isEqualTo: getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      // CACHE BUSINESS DETAIL :
+      StoreCacheData(fromModel: 'BusinessVision', data: data);
+      return data['vision'];
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  FetchBusinessMilestone() async {
+    var data;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessMilestones');
+      if (cacheData != false) {
+        // return cacheData['milestone'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessMilestones');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: getuserEmail,
+          )
+          .where('user_id', isEqualTo: getUserId)
+          .where('startup_name', isEqualTo: getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      // CACHE BUSINESS DETAIL :
+      StoreCacheData(fromModel: 'BusinessMilestones', data: data);
+      return data['milestone'];
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }
