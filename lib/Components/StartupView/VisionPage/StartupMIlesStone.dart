@@ -55,7 +55,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
               child: Text(
-                'Loading Input Section',
+                'Loading MileStone Section',
                 style: Get.textTheme.headline2,
               ),
             ));

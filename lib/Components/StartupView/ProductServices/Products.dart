@@ -7,7 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import './ProductDetailDialog.dart';
 
 class Products extends StatefulWidget {
-  const Products({
+  var product;
+  Products({
+    this.product,
     Key? key,
   }) : super(key: key);
 
@@ -25,6 +27,7 @@ class _ProductsState extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
+    print('maind data ${widget.product}');
     // PRODUT DEATIL DIALOG :
     ProductDetailView() {
       showDialog(
@@ -38,6 +41,7 @@ class _ProductsState extends State<Products> {
 
     return Container(
       child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
             Wrap(
@@ -81,25 +85,28 @@ class _ProductsState extends State<Products> {
               Container(
                 padding: EdgeInsets.only(bottom: 15),
                 child: RichText(
-                    text: TextSpan(children: [
-                  // Heading Texct :
-                  TextSpan(
-                    text: 'sample product with heading',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: TextStyle(),
-                      color: light_color_type2,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                  text: TextSpan(children: [
+                    // Heading Texct :
+                    TextSpan(
+                      text: widget.product['title'],
+                      style: GoogleFonts.robotoSlab(
+                        textStyle: TextStyle(),
+                        color: light_color_type2,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ])),
+                  ]),
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
 
               // Description:
               Container(
                 child: AutoSizeText.rich(
                   TextSpan(
-                    text: long_string,
+                    text: widget.product['description'],
                     style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
                         color: light_color_type3,
@@ -136,7 +143,7 @@ class _ProductsState extends State<Products> {
             left: Radius.circular(19),
             right: Radius.circular(19),
           ),
-          child: Image.network(temp_image,
+          child: Image.network(widget.product['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
               fit: BoxFit.contain),

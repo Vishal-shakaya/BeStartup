@@ -19,7 +19,7 @@ class VisionPage extends StatefulWidget {
 }
 
 class _VisionPageState extends State<VisionPage> {
-  var final_data; 
+  var final_data;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,9 @@ class _VisionPageState extends State<VisionPage> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
+        // await Future.delayed(Duration(seconds: 3));
         final vision = await startupConnect.FetchBusinessVision();
-        // final miles = await startupConnect.FetchBusinessMilestone();
-        // final data = {'vision': vision, 'miles': miles};
-        final_data = vision ; 
+        final_data = vision;
         return vision;
       } catch (e) {
         return '';
@@ -59,7 +58,7 @@ class _VisionPageState extends State<VisionPage> {
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
               child: Text(
-                'Loading Input Section',
+                'Loading Vision Section',
                 style: Get.textTheme.headline2,
               ),
             ));
@@ -69,7 +68,7 @@ class _VisionPageState extends State<VisionPage> {
           if (snapshot.hasData) {
             return MainMethod(context, page_width, EditVision, EditMilestone);
           }
-          return MainMethod(context, page_width, EditVision, EditMilestone);
+            return MainMethod(context, page_width, EditVision, EditMilestone);
         });
   }
 
@@ -102,7 +101,6 @@ class _VisionPageState extends State<VisionPage> {
                 height: context.height * 0.01,
               ),
 
-
               // VISION TEXT:
               ClipPath(
                 child: Card(
@@ -123,7 +121,7 @@ class _VisionPageState extends State<VisionPage> {
                               right: Radius.circular(15))),
                       child: AutoSizeText.rich(
                         TextSpan(
-                            text:final_data,
+                            text: final_data,
                             style: GoogleFonts.openSans(
                                 textStyle: TextStyle(),
                                 color: light_color_type3,

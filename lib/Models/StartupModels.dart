@@ -84,6 +84,8 @@ BusinessProductsList({user_id, email, startup_name,  products, timestamp}) async
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
+      'email':email, 
+      'startup_name':startup_name, 
       'timestamp': timestamp,
       'products': products
     };

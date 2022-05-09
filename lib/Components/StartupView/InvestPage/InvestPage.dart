@@ -2,9 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class InvestPage extends StatelessWidget {
   const InvestPage({Key? key}) : super(key: key);
@@ -16,45 +18,96 @@ class InvestPage extends StatelessWidget {
   
   double invest_btn_width = 300;
   double invest_btn_height = 50;
+  double page_width = 0.80;
+// INITILIZE DEFAULT STATE :
+// GET IMAGE IF HAS IS LOCAL STORAGE :
+  GetLocalStorageData() async {
+    try {
+      // await Future.delayed(Duration(seconds: 5));
+      // final data= await detailStore.GetBusinessLogo();
+      // upload_image_url = data;
+      // return upload_image_url;
+    } catch (e) {
+      return '';
+    }
+  }
 
-    double page_width = 0.80;
+
+return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading Input Section',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+                return MainMethod(
+                  context, 
+                  page_width, 
+                  notice_block_padding,
+                  notice_cont_width,
+                  invest_btn_width,
+                  invest_btn_height);
+          }
+          return  MainMethod(
+              context, 
+              page_width, 
+              notice_block_padding,
+              notice_cont_width,
+              invest_btn_width,
+              invest_btn_height);
+                });
+
+
+  }
+
+  Container MainMethod(BuildContext context, double page_width, double notice_block_padding, double notice_cont_width, double invest_btn_width, double invest_btn_height) {
     return Container(
-      width: context.width * page_width,
-      child:  Container(
-        width: context.width*0.50,
-        height: context.height*0.38,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // HEADING : 
-              SizedBox(height: context.height*0.01,),
-              StartupHeaderText(title:'Invest',font_size:35,),
-              SizedBox(height: context.height*0.03,),
+    width: context.width * page_width,
+    child:  Container(
+      width: context.width*0.50,
+      height: context.height*0.38,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // HEADING : 
+            SizedBox(height: context.height*0.01,),
+            StartupHeaderText(title:'Invest',font_size:35,),
+            SizedBox(height: context.height*0.03,),
 
-              StartupHeaderText(title:'Why you invest in us !',font_size: 20,),
-              SizedBox(height: context.height*0.02,),
+            StartupHeaderText(title:'Why you invest in us !',font_size: 20,),
+            SizedBox(height: context.height*0.02,),
 
-              // VISION TEXT:  
-              Description(context), 
+            // VISION TEXT:  
+            Description(context), 
 
-            SizedBox(height: context.height*0.05,),
-              StartupHeaderText(title:'Terms & Conditions',font_size: 19,),
-            // Notice Section : 
-             NoticeContainer(
-              context,
-              notice_block_padding, 
-              notice_cont_width),
+          SizedBox(height: context.height*0.05,),
+            StartupHeaderText(title:'Terms & Conditions',font_size: 19,),
+          // Notice Section : 
+           NoticeContainer(
+            context,
+            notice_block_padding, 
+            notice_cont_width),
 
-            // Invet Button : 
-            SizedBox(height: context.height*0.05,),
-            InvestButton(invest_btn_width, invest_btn_height) 
+          // Invet Button : 
+          SizedBox(height: context.height*0.05,),
+          InvestButton(invest_btn_width, invest_btn_height) 
 
 
-            ],
-          ),
-        ),       
-    ),
-    );
+          ],
+        ),
+      ),       
+  ),
+  );
   }
 
   ClipPath Description(BuildContext context) {
