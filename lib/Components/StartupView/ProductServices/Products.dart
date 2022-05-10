@@ -23,11 +23,12 @@ class _ProductsState extends State<Products> {
 
   double desc_cont_width = 0.40;
   double desc_cont_height = 0.20;
+  double desc_sec_width = 0.40;
+  double desc_sec_height = 0.20;
   double mem_dialog_width = 0.60;
 
   @override
   Widget build(BuildContext context) {
-    print('maind data ${widget.product}');
     // PRODUT DEATIL DIALOG :
     ProductDetailView() {
       showDialog(
@@ -79,50 +80,48 @@ class _ProductsState extends State<Products> {
               right: Radius.circular(20),
             ),
             border: Border.all(width: 1, color: Colors.grey.shade300)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 15),
-                child: RichText(
-                  text: TextSpan(children: [
-                    // Heading Texct :
-                    TextSpan(
-                      text: widget.product['title'],
-                      style: GoogleFonts.robotoSlab(
-                        textStyle: TextStyle(),
-                        color: light_color_type2,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ]),
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-
-              // Description:
-              Container(
-                child: AutoSizeText.rich(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 15),
+              child: RichText(
+                text: TextSpan(children: [
+                  // Heading Texct :
                   TextSpan(
-                    text: widget.product['description'],
-                    style: GoogleFonts.openSans(
-                        textStyle: TextStyle(),
-                        color: light_color_type3,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        wordSpacing: 2,
-                        height: 1.6),
+                    text: widget.product['title'],
+                    style: GoogleFonts.robotoSlab(
+                      textStyle: TextStyle(),
+                      color: light_color_type2,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  textAlign: TextAlign.left,
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
-                  maxLines: 5,
-                ),
+                ]),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+
+            // Description:
+            Container(
+              child: AutoSizeText.rich(
+                TextSpan(
+                  text: widget.product['description'],
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(),
+                      color: light_color_type3,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      wordSpacing: 2,
+                      height: 1.6),
+                ),
+                textAlign: TextAlign.left,
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                maxLines: 5,
+              ),
+            ),
+          ],
         ));
   }
 

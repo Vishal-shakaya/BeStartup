@@ -240,13 +240,14 @@ class StartupViewConnector extends GetxController {
 
   FetchProducts() async {
     var data;
-
+    var product_list = [];
+    var only_product = [];
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      // final cacheData = await GetCachedData('BusinessProducts');
-      // if (cacheData != false) {
-      //   return cacheData['products'];
-      // }
+      final cacheData = await GetCachedData('BusinessProducts');
+      if (cacheData != false && cacheData!=null) {
+        return cacheData['products'];
+      }
 
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection('BusinessProducts');
@@ -265,10 +266,64 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessProducts', data: data);
-      return data['products'];
+
+      // FILETER PRODUCT
+      product_list = data['products'];
+      product_list.forEach((element) {
+        if (element['type'] == 'product') {
+          only_product.add(element);
+        }
+      });
+
+      return only_product;
     } catch (e) {
       print(e);
       return false;
     }
   }
+  FetchServices() async {
+    var data;
+    var product_list = [];
+    var only_product = [];
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessProducts');
+      if (cacheData != false && cacheData!=null) {
+        return cacheData['service'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessProducts');
+      var query = store
+          // .where(
+          //   'email',
+          //   isEqualTo: getuserEmail,
+          // )
+          .where('user_id', isEqualTo: getUserId)
+          // .where('startup_name', isEqualTo: getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+
+      // FILETER PRODUCT
+      product_list = data['products'];
+      product_list.forEach((element) {
+        if (element['type'] == 'service') {
+          only_product.add(element);
+        }
+      });
+
+      return only_product;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+
 }

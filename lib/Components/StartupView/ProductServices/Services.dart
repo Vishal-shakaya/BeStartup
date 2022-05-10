@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Services extends StatelessWidget {
-  const Services({
+  var service; 
+  Services({
+    this.service, 
     Key? key,
   }) : super(key: key);
 
@@ -70,47 +72,49 @@ class Services extends StatelessWidget {
               right: Radius.circular(20),
             ),
             border: Border.all(width: 1, color: Colors.grey.shade300)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 15),
-                child: RichText(
-                    text: TextSpan(children: [
-                  // Heading Texct :
-                  TextSpan(
-                    text: 'sample product with heading',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: TextStyle(),
-                      color: light_color_type2,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 15),
+              child: RichText(
+                  text: TextSpan(children: [
+                // Heading Texct :
+                TextSpan(
+                  text: service['title'],
+                  style: GoogleFonts.robotoSlab(
+                    textStyle: TextStyle(),
+                    color: light_color_type2,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
                   ),
-                ])),
-              ),
-
-              // Description:
-              Container(
-                child: AutoSizeText.rich(
-                  TextSpan(
-                    text: long_string,
-                    style: GoogleFonts.openSans(
-                        textStyle: TextStyle(),
-                        color: light_color_type3,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        wordSpacing: 2,
-                        height: 1.6),
-                  ),
-                  textAlign: TextAlign.left,
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
-                  maxLines: 5,
                 ),
+                
+              ]),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+
+            // Description:
+            Container(
+              child: AutoSizeText.rich(
+                TextSpan(
+                  text: service['description'],
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(),
+                      color: light_color_type3,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      wordSpacing: 2,
+                      height: 1.6),
+                ),
+                textAlign: TextAlign.left,
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                maxLines: 5,
+              ),
+            ),
+          ],
         ));
   }
 
@@ -131,7 +135,7 @@ class Services extends StatelessWidget {
             left: Radius.circular(19),
             right: Radius.circular(19),
           ),
-          child: Image.network(temp_image,
+          child: Image.network(service['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
               fit: BoxFit.contain),

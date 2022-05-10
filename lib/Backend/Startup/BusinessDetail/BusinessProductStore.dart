@@ -18,7 +18,7 @@ class BusinessProductStore extends GetxController {
   // Test Product :
   static Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
-    'title': 'word famous watter battle and cleane',
+    'title': 'word famous watter battle  cleane',
     'description': long_string,
     'type': 'product',
     'image_url': temp_image,

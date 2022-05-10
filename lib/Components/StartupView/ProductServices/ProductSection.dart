@@ -1,8 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Products.dart';
-import 'package:be_startup/Components/StartupView/ProductServices/Services.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,18 @@ class _ProductSectionState extends State<ProductSection> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic?> temp_product = {
+      'id': 'some_randodnjflks',
+      'title': 'word famous watter battle  cleane',
+      'description': long_string,
+      'type': 'product',
+      'image_url': temp_image,
+      'timestamp': DateTime.now().toString(),
+      'youtube_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
+      'content_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
+      'belong_to': '',
+      'catigory': '',
+    };
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
@@ -32,7 +43,7 @@ class _ProductSectionState extends State<ProductSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration(seconds: 5));
         final data = await startupConnect.FetchProducts();
         products = data;
         return data;
@@ -49,7 +60,7 @@ class _ProductSectionState extends State<ProductSection> {
                 child: Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child: Text('fd'),
+              child: Products(product: temp_product,),
             ));
           }
           if (snapshot.hasError) return ErrorPage();
@@ -57,7 +68,7 @@ class _ProductSectionState extends State<ProductSection> {
           if (snapshot.hasData) {
             return MainMethodSection(context);
           }
-          return MainMethodSection(context);
+            return MainMethodSection(context);
         });
   }
 

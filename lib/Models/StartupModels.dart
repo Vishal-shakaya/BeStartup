@@ -87,7 +87,7 @@ BusinessProductsList({user_id, email, startup_name,  products, timestamp}) async
       'email':email, 
       'startup_name':startup_name, 
       'timestamp': timestamp,
-      'products': products
+      'products': products,
     };
     return temp_obj;    
   } catch (e) {
