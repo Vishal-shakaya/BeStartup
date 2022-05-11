@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberInfoForm.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
@@ -36,7 +35,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
   int maxlines = 7;
   double con_button_width = 55;
   double con_button_height = 30;
-  double con_btn_top_margin = 10;
+  double con_btn_top_margin = 5;
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
 
@@ -201,8 +200,8 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
     /// 2. MILESTONE FORM : Take Title and Description:
     /////////////////////////////////////////////////////
     return FractionallySizedBox(
-      widthFactor: 0.8,
-      heightFactor: 0.60,
+      widthFactor: 0.85,
+      heightFactor: 0.64,
       child: Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -221,10 +220,10 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
                   Expanded(
                     flex: 1,
                     child: Container(
-                      alignment: Alignment.topCenter,
-                      child: AutoSizeText.rich(TextSpan(
-                          style: Get.theme.textTheme.headline2,
-                          children: [TextSpan(text: 'Define Milestone')])),
+                      // alignment: Alignment.topCenter,
+                      // child: AutoSizeText.rich(TextSpan(
+                      //     style: Get.theme.textTheme.headline2,
+                      //     children: [TextSpan(text: 'Define Milestone')])),
                     ),
                   ),
                   IconButton(
@@ -285,7 +284,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
                   ),
                   Container(
                     margin:
-                        EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+                        EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
                     child: InkWell(
                       highlightColor: primary_light_hover,
                       borderRadius: BorderRadius.horizontal(

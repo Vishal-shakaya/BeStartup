@@ -15,12 +15,10 @@ Row MileDialogHeading(context, CloseMilestoneDialog) {
       Expanded(
         flex: 1,
         child: Container(
-          alignment: Alignment.topCenter,
-          child: AutoSizeText.rich(TextSpan(
-              style: Get.theme.textTheme.headline2,
-              children: [TextSpan(text: 'Define Milestone')])),
+          alignment: Alignment.topRight,
+           ),
         ),
-      ),
+      
       IconButton(
           onPressed: () {
             CloseMilestoneDialog();

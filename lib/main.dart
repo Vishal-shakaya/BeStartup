@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
+import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
@@ -112,6 +113,9 @@ class MyApp extends StatelessWidget {
           // REGISTOR INVESTOR : 
           GetPage(name:  select_investor_choise ,page:()=> ChooseCatigoryView() ), 
           GetPage(name:  investor_registration_form ,page:()=> InvestorRegistorForm() ), 
+
+          // SELECT PLAN 
+          GetPage(name:  select_plan_url ,page:()=> SelectPlan() ), 
 
            
         ],

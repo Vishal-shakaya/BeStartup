@@ -29,7 +29,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-  double maxlines = 4;
+  double maxlines = 5;
   double formfield_width = 600;
   double contact_formfield_width = 600;
   double contact_text_margin_top = 0.05;
@@ -38,7 +38,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
   Widget build(BuildContext context) {
     // DEFAULT :
     if (context.width > 1500) {
-      maxlines = 4;
+      maxlines = 5;
       formfield_width = 600;
       contact_formfield_width = 600;
       contact_text_margin_top = 0.05;
@@ -97,7 +97,9 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
 
     return Container(
       width: formfield_width,
-      margin: EdgeInsets.only(left: context.width * 0.02),
+      margin: EdgeInsets.only(
+        left: context.width * 0.04,
+        top: context.width * 0.01 ),
       alignment: Alignment.center,
       child: FormBuilder(
           key: widget.formkey,

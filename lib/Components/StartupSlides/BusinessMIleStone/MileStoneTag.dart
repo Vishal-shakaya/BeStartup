@@ -99,7 +99,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
         child: ListTile(
           key: UniqueKey(),
           onTap: () {
-            MileStoneInfo();
+            // MileStoneInfo();
           },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.horizontal(

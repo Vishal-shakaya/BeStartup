@@ -1,6 +1,5 @@
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/RegistorTeamBody.dart';
-import 'package:be_startup/Components/StartupSlides/SlideHeading.dart';
-import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:flutter/material.dart';
 
 class RegistorTeamView extends StatelessWidget {
@@ -12,8 +11,7 @@ class RegistorTeamView extends StatelessWidget {
       body: Container(
         child:Column(
           children: [
-              SlideHeading(heading: registor_team_head_text,),
-              RegistorTeamBody()
+              SelectPlan()
           ]
         )
       ),

@@ -29,3 +29,6 @@ String home_page_url = '/home-page-view';
 // REGISTOR INVESTOR :
 String select_investor_choise = '/investor-choise';
 String investor_registration_form = '/investor-registration-form';
+
+// REGISTOR PLAN : 
+String select_plan_url = '/select-0plan-url';

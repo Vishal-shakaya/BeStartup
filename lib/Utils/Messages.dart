@@ -81,3 +81,6 @@ String registor_team_head_text = 'Team Members';
 // REGISTOR INVESTORS :
 String investor_choise_text = 'What you Like';
 String investor_choise_sub_text = 'Pesnolize Topics you are Interested In ';
+
+// SELECT PLAN :
+String select_plan_heading = 'Our Best Plans';
