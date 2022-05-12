@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -16,15 +17,12 @@ UserModel({email,is_profile_complete}) async {
   }
 }
 
-UserDetailModel(
+InvestorModel(
     {email, 
     user_id,
     name,
     picture,
     phone_no,
-    founder,
-    investor,
-    plan,
     position,
     }) async {
   try {
@@ -35,8 +33,34 @@ UserDetailModel(
       'email':email, 
       'name': name,
       'picture': picture,
-      'founder': founder, // T/F
-      'investor': investor, // T/F
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
+
+FounderModel(
+    {email, 
+    user_id,
+    name,
+    picture,
+    phone_no,
+    founder,
+    investor,
+    plan,
+    position,
+    startup_name
+    }) async {
+  try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'startup_name':startup_name,  
+      'name': name,
+      'position':position, 
+      'email':email, 
+      'picture': picture,
       'plan': plan // plan id :
     };
     return temp_obj;
@@ -44,6 +68,8 @@ UserDetailModel(
     return false;
   }
 }
+
+
 
 UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
   try {

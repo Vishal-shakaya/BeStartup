@@ -35,11 +35,9 @@ class InvestorDetailStore extends GetxController {
     var localStore = await SharedPreferences.getInstance();
     try {
       try {
-        var resp = await UserDetailModel(
+        var resp = await InvestorModel(
             user_id: getUserId,
             email: getuserEmail,
-            investor: true,
-            founder: false,
             name: investor['name'],
             position: investor['position'],
             picture: image_url);

@@ -50,10 +50,10 @@ class BusinessFounderStore extends GetxController {
       // };
 
       try {
-        var resp = await UserDetailModel(
+        var resp = await FounderModel(
             user_id: getUserId,
             email: getuserEmail,
-            founder: true,
+            startup_name: getStartupName,
             name: founder['name'],
             position: founder['position'],
             picture: image_url);
@@ -65,8 +65,8 @@ class BusinessFounderStore extends GetxController {
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);
 
-        localStore.setString('UserDetail', json.encode(resp));
-        localStore.setString('UserContact', json.encode(resp2));
+        localStore.setString('FounderUserDetail', json.encode(resp));
+        localStore.setString('FounderUserContact', json.encode(resp2));
 
         return ResponseBack(response_type: true);
       } catch (e) {

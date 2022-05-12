@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
+import 'package:be_startup/Backend/Startup/connector/GetStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Products.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';

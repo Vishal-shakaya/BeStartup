@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
+import 'package:be_startup/Backend/Startup/connector/GetStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
