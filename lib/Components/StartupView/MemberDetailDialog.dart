@@ -22,7 +22,7 @@ class _MemberDetailDialogState extends State<MemberDetailDialog> {
   double contact_formfield_width = 400;
   double contact_text_margin_top = 0.05;
 
-
+  String upload_image_url = '';
   // CLOSE DIALOG :
   CloseDialog(context) {
     Navigator.of(context).pop();
@@ -47,13 +47,18 @@ class _MemberDetailDialogState extends State<MemberDetailDialog> {
 
              // PROFILE IMAG AND INFO : 
 
-                  Container(
-                  child: Row(
+              Container(
+               child: Row(
                 children: [
+                  ////////////////////////////
+                   // INVESTOR PROFILE IMAGE :  
+                  ////////////////////////////
                   Expanded(  
                     flex: 5,
-                    child:TeamMemberProfileImage()
-                    ),
+                    child:ProfileImage()),
+                  ////////////////////////////
+                   // INVESTOR DETAIL SECTION :  
+                  ////////////////////////////
                   Expanded(
                       flex: 5,
                       child: Container(
@@ -83,6 +88,38 @@ class _MemberDetailDialogState extends State<MemberDetailDialog> {
         ), 
       ),
     );
+  }
+
+  Container ProfileImage() {
+    return Container(
+      width: 150,
+      height: 160,
+      // alignment: Alignment.center,
+      child: Stack(
+        children: [
+          Card(
+              shadowColor: light_color_type3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(85.0),
+              ),
+              child: upload_image_url != ''
+                  ? CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.blueGrey[100],
+                      foregroundImage: NetworkImage(upload_image_url),
+                    )
+                  : CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.blueGrey[100],
+                      child: AutoSizeText(
+                        'profile picture',
+                        style: TextStyle(
+                            color: light_color_type3,
+                            fontWeight: FontWeight.bold),
+                ))),
+
+        ],
+      ));
   }
 
   Container MemDescription() {

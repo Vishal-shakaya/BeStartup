@@ -4,15 +4,22 @@ import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/AllMembers.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-class TeamPage extends StatelessWidget {
+class TeamPage extends StatefulWidget {
   const TeamPage({Key? key}) : super(key: key);
 
+  @override
+  State<TeamPage> createState() => _TeamPageState();
+}
+
+class _TeamPageState extends State<TeamPage> {
+  
   @override
   Widget build(BuildContext context) {
     // REDIRECT TO CREATE MEMEBER PAGE :
@@ -81,7 +88,7 @@ class TeamPage extends StatelessWidget {
             children: [
               // Heading :
               StartupHeaderText(
-                title: 'Team Members',
+                title: 'Founder',
                 font_size: 32,
               ),
 
@@ -92,6 +99,76 @@ class TeamPage extends StatelessWidget {
                   // REDIRECT TO CREATE TEAME PAGE :
                   EditButton(context, EditMember),
 
+
+                  // FOUNDER SECTION : 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        elevation: 1,
+                        shadowColor: Colors.blueGrey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.20,
+                          height: MediaQuery.of(context).size.height * 0.34,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: border_color),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.topCenter,
+                          margin: EdgeInsets.only(top: 10),
+                         
+                          child:   Container(
+                              padding: EdgeInsets.all(12),
+
+                              // MEMBER DETAIL SECTION :
+                              child: Column(
+                                children: [
+                                  // Profile Image
+                                  ProfileImage(),
+
+                                  // SPACING:
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+
+                                  // POSITION:
+                                  SizedBox(
+                                    width:200, 
+                                    child: Column(
+                                      children: [
+                                        MemPosition(),
+                                        // MEMBER NAME :
+                                        MemName(),
+                                        // CONTACT EMAIL ADDRESS :
+                                        MemContact(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ),
+                        
+                      )
+                    ],
+                  ), 
+
+                  // SPACING : 
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.15) , 
+
+              StartupHeaderText(
+                title: 'Members',
+                font_size: 32,
+              ),
+              
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05) , 
                   Card(
                     elevation: 1,
                     shadowColor: Colors.blueGrey,
@@ -119,15 +196,15 @@ class TeamPage extends StatelessWidget {
                     ),
                   ),
 
-                  // Spacing :
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  // Headign :
-                  StartupHeaderText(
-                    title: 'Members',
-                    font_size: 32,
-                  ),
-                  // ALL MEMBER LIST
-                  AllMembers()
+                  // // Spacing :
+                  // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  // // Headign :
+                  // StartupHeaderText(
+                  //   title: 'Members',
+                  //   font_size: 32,
+                  // ),
+                  // // ALL MEMBER LIST
+                  // AllMembers()
                 ],
               )
             ],
@@ -156,5 +233,66 @@ class TeamPage extends StatelessWidget {
               ),
               label: Text('Edit')),
         ));
+  }
+
+  Container MemContact() {
+    return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Icon(
+            Icons.mail_outline_outlined,
+            color: Colors.orange.shade300,
+            size: 16,
+          ),
+        ),
+        AutoSizeText.rich(
+          TextSpan(
+            style: Get.textTheme.headline5, 
+            children: [
+          TextSpan(
+              // text: widget.member!['member_mail'],
+              text:'vishalsakaya@gmail.com', 
+              style: TextStyle(
+                overflow: TextOverflow.ellipsis,
+                color: Colors.blue, fontSize: 11))
+        ])),
+      ],
+    ));
+  }
+
+  Container MemName() {
+    return Container(
+        child: AutoSizeText.rich(
+            TextSpan(style: Get.textTheme.headline5, children: [
+      TextSpan(
+          // text: widget.member!['name'],
+          text:'vishal shakaya',
+          style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 13))
+    ])));
+  }
+
+  Container MemPosition() {
+    return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: AutoSizeText.rich(
+            TextSpan(style: Get.textTheme.headline2, children: [
+          TextSpan(
+              // text: widget.member!['position'],
+              text:'CEO', 
+              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
+        ])));
+  }
+
+  Container ProfileImage() {
+    return Container(
+        child: CircleAvatar(
+      radius: 70,
+      backgroundColor: Colors.blueGrey[100],
+      // foregroundImage: NetworkImage(widget.member!['image']),
+      foregroundImage:NetworkImage(temp_image),
+    ));
   }
 }
