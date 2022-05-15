@@ -36,6 +36,10 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shimmer/shimmer.dart';
+
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

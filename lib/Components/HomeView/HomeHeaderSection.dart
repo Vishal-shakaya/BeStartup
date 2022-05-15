@@ -6,6 +6,8 @@ import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart'
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
@@ -15,16 +17,17 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
 
+
+
 class HomeHeaderSection extends StatefulWidget {
   const HomeHeaderSection({Key? key}) : super(key: key);
-
   @override
   State<HomeHeaderSection> createState() => _HomeHeaderSectionState();
 }
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
-  double header_sec_width = 0.60;
-  double header_sec_height = 0.16;
+  double header_sec_width = 1;
+  double header_sec_height = 0.10;
 
   double con_button_width = 80;
   double con_button_height = 40;
@@ -48,50 +51,91 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              content: ExploreCatigoryAlert()
-            );
+            return AlertDialog(content: ExploreCatigoryAlert());
           });
     }
 
     return Container(
       width: context.width * header_sec_width,
       height: context.height * header_sec_height,
-      child: Container(
-        // 1 ADD EXPLORE BUTTON FOR SELECT CATIGORIES :  
-        // 2 ADD SEARCH BAR FOR SEARCH SEPCIFIC STARTUP [ BY CEO NAME , STARTUP NAME ] :
-        child: Wrap(
-          spacing: 10,
-          alignment:WrapAlignment.center ,
-          children: [
-            // Explore Menu :
-            Container(
-                margin: EdgeInsets.only(
-                  top: context.height * 0.04,
-                  right: context.width * 0.03 ),
-                child: Container(
-                  width: 90,
-                  height: 30,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: border_color)),
-                  child: TextButton.icon(
-                      onPressed: () {
-                        ExploreFunction();
-                      },
-                      icon: Icon(
-                        Icons.wb_incandescent_sharp,
-                        size: 15,
-                      ),
-                      label: Text('Explore')),
-                )),
 
-             // SEARCH BAR :
-              BusinessSearchBar()
-          ],
+
+      child: Card(
+        elevation: 3,
+        shadowColor: Colors.grey,
+        child: Container(
+        // decoration: BoxDecoration(
+        //   border: Border.all(color: Colors.grey.shade300)
+        // ),
+        alignment: Alignment.topCenter,
+          // 1 ADD EXPLORE BUTTON FOR SELECT CATIGORIES :
+          // 2 ADD SEARCH BAR FOR SEARCH SEPCIFIC STARTUP [ BY CEO NAME , STARTUP NAME ] :
+          child: Wrap(
+            spacing: 10,
+            alignment: WrapAlignment.center,
+            children: [
+              // Explore Menu :
+              ExploreButton(context, ExploreFunction),
+              // SEARCH BAR :
+              BusinessSearchBar(),
+              // Menu Icon :
+              SizedBox(width:context.width*0.08,),
+              Container(
+                padding: EdgeInsets.all(5),
+                alignment: Alignment.center,
+                height:context.width*0.04,
+                width:context.width*0.10, 
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () {}, 
+                    icon: Icon(
+                      Icons.home,
+                      size: 30,)), 
+      
+                  IconButton(
+                    onPressed: () {}, 
+                    icon: Icon(
+                      Icons.settings,
+                      size: 30, )),
+                  
+                  Container(
+                    margin: EdgeInsets.only(top:context.height*0.01),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(temp_avtar_image),
+                    ),
+                  )
+                    
+                    ],
+              ))
+            ],
+          ),
         ),
       ),
     );
   }
 
+  Container ExploreButton(BuildContext context, Null ExploreFunction()) {
+    return Container(
+        margin: EdgeInsets.only(
+            top: context.height * 0.03, right: context.width * 0.03),
+        child: Container(
+          width: 90,
+          height: 30,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: border_color)),
+          child: TextButton.icon(
+              onPressed: () {
+                ExploreFunction();
+              },
+              icon: Icon(
+                Icons.wb_incandescent_sharp,
+                size: 15,
+              ),
+              label: Text('Explore')),
+        ));
+  }
 }

@@ -1,5 +1,7 @@
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:endless/endless.dart';
 
@@ -45,44 +47,62 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top:context.height*0.02),
+        margin: EdgeInsets.only(top: context.height * 0.02),
         child: SizedBox(
-            width: context.width * 0.30,
-            child: PaginatedSearchBar<ExampleItem>(
-                maxHeight: 300,
-                hintText: 'Search',
-                // placeholderBuilder: (context) {
-                //   return const Text("I'm a placeholder state!");
-                // },
-                paginationDelegate: EndlessPaginationDelegate(
-                  pageSize: 20,
-                  maxPages: 3,
+          width: context.width * 0.20,
+          child: PaginatedSearchBar<ExampleItem>(
+             maxHeight: 300,
+
+              containerDecoration: BoxDecoration(
+                borderRadius:BorderRadius.circular(20),
+                color: Colors.grey.shade100,
+                border: Border.all(color:Colors.grey.shade300)
+              ),
+
+              inputDecoration: InputDecoration(
+                icon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.search , color: Colors.grey,),
                 ),
+                border:InputBorder.none,
+                contentPadding: EdgeInsets.all(5),
+              ),
 
-                itemBuilder: (
-                  context, {
-                  required item,
-                  required index,
-                }) {
-                  return Text(item.title);
-                },
+              inputStyle:GoogleFonts.openSans(
+                textStyle: TextStyle(),
+                color: Colors.black,
+                fontSize: 16,
+              ),
 
-                onSearch: ({
-                  required pageIndex,
-                  required pageSize,
-                  required searchQuery,
-                }) async {
-                  return Future.delayed(const Duration(milliseconds: 1000), () {
-                    if (searchQuery == "empty") {
-                      return [];
-                    }
+              hintText: 'look startups',
+              paginationDelegate: EndlessPaginationDelegate(
+                pageSize: 20,
+                maxPages: 3,
+              ),
+              itemBuilder: (
+                context, {
+                required item,
+                required index,
+              }) {
+                return Text(item.title);
+              },
+              onSearch: ({
+                required pageIndex,
+                required pageSize,
+                required searchQuery,
+              }) async {
+                return Future.delayed(const Duration(milliseconds: 1000), () {
+                  if (searchQuery == "empty") {
+                    return [];
+                  }
 
-                    if (pageIndex == 0) {
-                      pager = ExampleItemPager();
-                    }
+                  if (pageIndex == 0) {
+                    pager = ExampleItemPager();
+                  }
 
-                    return pager.nextBatch();
-                  });
-                })));
+                  return pager.nextBatch();
+                });
+              }),
+        ));
   }
 }

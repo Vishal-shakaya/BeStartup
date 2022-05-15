@@ -75,6 +75,7 @@ dependencies:
   syncfusion_flutter_core: ^20.1.50
   paginated_search_bar: ^1.1.2
   google_sign_in: ^5.3.0
+  searchable_listview: ^1.5.2
 
 dev_dependencies:
   flutter_test:

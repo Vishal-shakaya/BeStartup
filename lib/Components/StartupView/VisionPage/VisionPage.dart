@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Startup/connector/GetStartupData.dart';
+import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/StartupMIlesStone.dart';
 import 'package:be_startup/Utils/Colors.dart';
