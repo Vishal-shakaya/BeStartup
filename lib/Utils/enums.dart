@@ -6,3 +6,10 @@ enum ProductType {
 }
 
 enum ProductUrlType { youtube, content }
+
+enum HomePageViews {
+  storyView,
+  safeStory,
+  settingView,
+  profileView,
+}

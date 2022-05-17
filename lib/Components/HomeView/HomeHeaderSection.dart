@@ -5,6 +5,7 @@ import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
+import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -14,13 +15,14 @@ import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:paginated_search_bar/widgets/line_spacer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
-
-
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HomeHeaderSection extends StatefulWidget {
-  const HomeHeaderSection({Key? key}) : super(key: key);
+  Function changeView;
+  HomeHeaderSection({required this.changeView, Key? key}) : super(key: key);
   @override
   State<HomeHeaderSection> createState() => _HomeHeaderSectionState();
 }
@@ -46,6 +48,15 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> items = [
+      'View Profile',
+      'Investor',
+      'Startup',
+      'Settings',
+      'Logout',
+    ];
+    String? selectedValue;
+
     // Explore Topics
     ExploreFunction() {
       showDialog(
@@ -58,16 +69,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     return Container(
       width: context.width * header_sec_width,
       height: context.height * header_sec_height,
-
-
       child: Card(
-        elevation: 3,
+        elevation: 1,
         shadowColor: Colors.grey,
         child: Container(
-        // decoration: BoxDecoration(
-        //   border: Border.all(color: Colors.grey.shade300)
-        // ),
-        alignment: Alignment.topCenter,
+          // decoration: BoxDecoration(
+          //   border: Border.all(color: Colors.grey.shade300)
+          // ),
+          alignment: Alignment.topCenter,
           // 1 ADD EXPLORE BUTTON FOR SELECT CATIGORIES :
           // 2 ADD SEARCH BAR FOR SEARCH SEPCIFIC STARTUP [ BY CEO NAME , STARTUP NAME ] :
           child: Wrap(
@@ -78,38 +87,86 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               ExploreButton(context, ExploreFunction),
               // SEARCH BAR :
               BusinessSearchBar(),
+
               // Menu Icon :
-              SizedBox(width:context.width*0.08,),
               Container(
-                padding: EdgeInsets.all(5),
-                alignment: Alignment.center,
-                height:context.width*0.04,
-                width:context.width*0.10, 
+                  margin: EdgeInsets.only(
+                    left: context.width * 0.07,
+                  ),
+                  color: Colors.white,
+                  padding: EdgeInsets.all(5),
+                  alignment: Alignment.center,
+                  height: context.width * 0.04,
+                  width: context.width * 0.14,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: () {}, 
-                    icon: Icon(
-                      Icons.home,
-                      size: 30,)), 
-      
-                  IconButton(
-                    onPressed: () {}, 
-                    icon: Icon(
-                      Icons.settings,
-                      size: 30, )),
-                  
-                  Container(
-                    margin: EdgeInsets.only(top:context.height*0.01),
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(temp_avtar_image),
-                    ),
-                  )
-                    
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.home,
+                            size: 28,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.bookmark,
+                            size: 28,
+                          )),
+                      Container(
+                        width: context.width * 0.08,
+                        child: DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                          items: [
+                            ...MenuItems.firstItems.map(
+                              (item) => DropdownMenuItem<MenuItem>(
+                                value: item,
+                                child: MenuItems.buildItem(item),
+                              ),
+                            ),
+                            // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
+                            ...MenuItems.secondItems.map(
+                              (item) => DropdownMenuItem<MenuItem>(
+                                value: item,
+                                child: MenuItems.buildItem(item),
+                              ),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            // MenuItems.onChanged(context, value as MenuItem);
+                            switch (value) {
+                              case MenuItems.profile:
+                                widget.changeView(HomePageViews.profileView);
+                                //Do something
+                                break;
+                              case MenuItems.investor:
+                                //Do something
+                                break;
+                              case MenuItems.startup:
+                                //Do something
+                                break;
+                              case MenuItems.settings:
+                                //Do something
+                                break;
+                              case MenuItems.logout:
+                                //Do something
+                                break;
+                            }
+                          },
+                          openWithLongPress: true,
+                          customItemsHeight: 8,
+                          customButton: Container(
+                            margin: EdgeInsets.only(top: context.height * 0.01),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(temp_avtar_image, scale: 1),
+                            ),
+                          ),
+                        )),
+                      )
                     ],
-              ))
+                  ))
             ],
           ),
         ),
@@ -120,7 +177,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   Container ExploreButton(BuildContext context, Null ExploreFunction()) {
     return Container(
         margin: EdgeInsets.only(
-            top: context.height * 0.03, right: context.width * 0.03),
+            top: context.height * 0.03, right: context.width * 0.02),
         child: Container(
           width: 90,
           height: 30,
@@ -137,5 +194,74 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               ),
               label: Text('Explore')),
         ));
+  }
+}
+
+class MenuItem {
+  final String text;
+  final IconData icon;
+
+  const MenuItem({
+    required this.text,
+    required this.icon,
+  });
+}
+
+class MenuItems {
+  static const List<MenuItem> firstItems = [
+    profile,
+    investor,
+    startup,
+    settings
+  ];
+  static const List<MenuItem> secondItems = [logout];
+
+  static const profile = MenuItem(text: 'profile', icon: Icons.person);
+  static const investor =
+      MenuItem(text: 'investor', icon: Icons.add_box_outlined);
+  static const startup =
+      MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+  static const settings = MenuItem(text: 'settings', icon: Icons.settings);
+  static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+
+  static Widget buildItem(MenuItem item) {
+    return Row(
+      children: [
+        Icon(
+          item.icon,
+          color: light_color_type2,
+          size: 22,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          item.text,
+          style: TextStyle(
+            color: light_color_type2,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static onChanged(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.profile:
+        //Do something
+        break;
+      case MenuItems.investor:
+        //Do something
+        break;
+      case MenuItems.startup:
+        //Do something
+        break;
+      case MenuItems.settings:
+        //Do something
+        break;
+      case MenuItems.logout:
+        //Do something
+        break;
+    }
   }
 }

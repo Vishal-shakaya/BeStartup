@@ -45,9 +45,9 @@ class _StoryInfoChartState extends State<StoryInfoChart> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                  StaticRow(title: 'Team', value: "50"),
-                  StaticRow(title: 'Vision', value: "50"),
-                  StaticRow(title: 'Investor', value: "50"),
+                  StaticRow(title: 'Desire', value: "₹ 50"),
+                  StaticRow(title: 'Achived', value: "₹ 30"),
+                  StaticRow(title: 'Team', value: "5"),
 
                   // SUBMIT BUTTON: 
                   Container(

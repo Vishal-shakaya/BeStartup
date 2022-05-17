@@ -64,9 +64,9 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.search , color: Colors.grey,),
                 ),
+                hintText: 'Search',
                 border:InputBorder.none,
-                contentPadding: EdgeInsets.all(5),
-              ),
+                contentPadding: EdgeInsets.all(5),),
 
               inputStyle:GoogleFonts.openSans(
                 textStyle: TextStyle(),
