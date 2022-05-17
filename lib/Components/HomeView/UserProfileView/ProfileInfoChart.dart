@@ -92,7 +92,7 @@ class _ProfileInfoChartState extends State<ProfileInfoChart> {
                 text: value,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(),
-                  color: light_color_type2,
+                  color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 )),
