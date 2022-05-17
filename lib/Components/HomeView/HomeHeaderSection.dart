@@ -37,6 +37,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
 
+  bool is_home_view = true;
+  bool is_save_view = false;
+
   var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
 
   // SUBMIT DATE AND CATIGORY :
@@ -56,6 +59,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       'Logout',
     ];
     String? selectedValue;
+
 
     // Explore Topics
     ExploreFunction() {
@@ -102,17 +106,42 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: Icon(
+                          onPressed: () {
+                            setState(() {
+                              is_home_view? is_home_view = false : is_home_view=true; 
+                              is_save_view? is_save_view = false : is_save_view=true; 
+                            });
+                            widget.changeView(HomePageViews.storyView);
+                          },
+                          icon: is_home_view ?Icon(
                             Icons.home,
                             size: 28,
-                          )),
+                          )
+                          : Icon(
+                            Icons.home_outlined,
+                            size: 28,
+                          )
+                          ),
+
+
                       IconButton(
-                          onPressed: () {},
-                          icon: Icon(
+                          onPressed: () {
+                            setState(() {
+                              is_home_view? is_home_view = false : is_home_view=true; 
+                              is_save_view? is_save_view = false : is_save_view=true; 
+                            });
+                            widget.changeView(HomePageViews.safeStory);
+                          },
+                          icon: is_save_view? 
+                          Icon(
                             Icons.bookmark,
                             size: 28,
-                          )),
+                          )
+                        :  Icon(
+                            Icons.bookmark_border_outlined,
+                            size: 28,
+                          )
+                          ),
                       Container(
                         width: context.width * 0.08,
                         child: DropdownButtonHideUnderline(

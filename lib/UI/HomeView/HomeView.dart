@@ -1,4 +1,5 @@
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
+import 'package:be_startup/Components/HomeView/SaveStories/StoryListView.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryListView.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileView.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,12 @@ class _HomeViewState extends State<HomeView> {
         view = HomePageViews.profileView;
       });
     }
+    if (changeView == HomePageViews.safeStory) {
+      setState(() {
+        view = HomePageViews.safeStory;
+      });
+    }
+
   }
 
   @override
@@ -34,8 +41,22 @@ class _HomeViewState extends State<HomeView> {
     double page_width = 0.80;
     double page_height = 0.90;
     dynamic mainViewWidget = StoryListView();
+
+
+    ///////////////////////////////////////////
+    /// ASSIGNING VIEW  : 
+    /// DEFAULT VIEW IS STORYVIEW : 
+    ///////////////////////////////////////////
     if (view == HomePageViews.profileView) {
       mainViewWidget = UserProfileView();
+    }
+
+    if (view == HomePageViews.safeStory) {
+      mainViewWidget = SaveStoryListView();
+    }
+
+    if (view == HomePageViews.storyView) {
+      mainViewWidget = StoryListView();
     }
 
     return Container(
