@@ -118,15 +118,21 @@ class _UserProfileViewState extends State<UserProfileView> {
     );
   }
 
-  Container MemName() {
-    return Container(
-        child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline5, children: [
-      TextSpan(
-          text: 'vishal shakaya',
-          style: TextStyle(
-              fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
-    ])));
+  Row MemName() {
+    return Row(
+      children: [
+        Container(
+            child: AutoSizeText.rich(
+                TextSpan(style: Get.textTheme.headline5, children: [
+          TextSpan(
+              text: 'vishal shakaya',
+              style: TextStyle(
+                  fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
+        ]))),
+
+        
+      ],
+    );
   }
 
   Container MemPosition() {

@@ -89,7 +89,23 @@ class _StoryViewState extends State<StoryView> {
       
       
             // MILESTONES: 
-             StoryMileStone() 
+             StoryMileStone(), 
+
+            // SAVE BUTTON : 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                  Container(
+                    padding: EdgeInsets.all(1),
+                    margin: EdgeInsets.only(
+                      right: context.width*0.02,
+                      top:5 ),
+                    child: Icon(
+                      Icons.bookmark_border_rounded,
+                      size:26,
+                      color: Colors.grey, ))
+              ],  
+            )
           ],
         ),
       ),
