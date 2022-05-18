@@ -1,5 +1,6 @@
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
 import 'package:be_startup/Components/HomeView/SaveStories/StoryListView.dart';
+import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryListView.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileView.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   var view = HomePageViews.storyView;
-  
+
   SetHomeView(changeView) {
 
     if (changeView == HomePageViews.profileView) {
@@ -28,9 +29,22 @@ class _HomeViewState extends State<HomeView> {
         view = HomePageViews.profileView;
       });
     }
+
     if (changeView == HomePageViews.safeStory) {
       setState(() {
         view = HomePageViews.safeStory;
+      });
+    }
+
+    if (changeView == HomePageViews.storyView) {
+      setState(() {
+        view = HomePageViews.safeStory;
+      });
+    }
+    
+    if (changeView == HomePageViews.settingView) {
+      setState(() {
+        view = HomePageViews.settingView;
       });
     }
 
@@ -42,10 +56,9 @@ class _HomeViewState extends State<HomeView> {
     double page_height = 0.90;
     dynamic mainViewWidget = StoryListView();
 
-
     ///////////////////////////////////////////
-    /// ASSIGNING VIEW  : 
-    /// DEFAULT VIEW IS STORYVIEW : 
+    /// ASSIGNING VIEW  :
+    /// DEFAULT VIEW IS STORYVIEW :
     ///////////////////////////////////////////
     if (view == HomePageViews.profileView) {
       mainViewWidget = UserProfileView();
@@ -59,6 +72,10 @@ class _HomeViewState extends State<HomeView> {
       mainViewWidget = StoryListView();
     }
 
+    if (view == HomePageViews.settingView) {
+      mainViewWidget = UserSettings();
+    }
+
     return Container(
         width: page_width,
         height: page_height,
@@ -70,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(
               height: context.height * 0.04,
             ),
-            HomeHeaderSection(changeView:SetHomeView ), 
+            HomeHeaderSection(changeView: SetHomeView),
             SizedBox(
               height: context.height * 0.06,
             ),

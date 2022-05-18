@@ -60,7 +60,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     ];
     String? selectedValue;
 
-
     // Explore Topics
     ExploreFunction() {
       showDialog(
@@ -108,40 +107,37 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                       IconButton(
                           onPressed: () {
                             setState(() {
-                              is_home_view? is_home_view = false : is_home_view=true; 
-                              is_save_view? is_save_view = false : is_save_view=true; 
+                              is_home_view = true;
+                              is_save_view= false;
                             });
                             widget.changeView(HomePageViews.storyView);
                           },
-                          icon: is_home_view ?Icon(
-                            Icons.home,
-                            size: 28,
-                          )
-                          : Icon(
-                            Icons.home_outlined,
-                            size: 28,
-                          )
-                          ),
-
-
+                          icon: is_home_view
+                              ? Icon(
+                                  Icons.home,
+                                  size: 28,
+                                )
+                              : Icon(
+                                  Icons.home_outlined,
+                                  size: 28,
+                                )),
                       IconButton(
                           onPressed: () {
                             setState(() {
-                              is_home_view? is_home_view = false : is_home_view=true; 
-                              is_save_view? is_save_view = false : is_save_view=true; 
+                              is_home_view=false;
+                              is_save_view=true;
                             });
                             widget.changeView(HomePageViews.safeStory);
                           },
-                          icon: is_save_view? 
-                          Icon(
-                            Icons.bookmark,
-                            size: 28,
-                          )
-                        :  Icon(
-                            Icons.bookmark_border_outlined,
-                            size: 28,
-                          )
-                          ),
+                          icon: is_save_view
+                              ? Icon(
+                                  Icons.bookmark,
+                                  size: 28,
+                                )
+                              : Icon(
+                                  Icons.bookmark_border_outlined,
+                                  size: 28,
+                                )),
                       Container(
                         width: context.width * 0.08,
                         child: DropdownButtonHideUnderline(
@@ -166,6 +162,10 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                             switch (value) {
                               case MenuItems.profile:
                                 widget.changeView(HomePageViews.profileView);
+                                setState(() {
+                                  is_home_view = false;
+                                  is_save_view = false;
+                                });
                                 //Do something
                                 break;
                               case MenuItems.investor:
@@ -175,6 +175,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                                 //Do something
                                 break;
                               case MenuItems.settings:
+                                widget.changeView(HomePageViews.settingView);
+                                setState(() {
+                                  is_home_view = false;
+                                  is_save_view = false;
+                                });
                                 //Do something
                                 break;
                               case MenuItems.logout:
