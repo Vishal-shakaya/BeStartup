@@ -21,6 +21,12 @@ class _StoryViewState extends State<StoryView> {
   bool is_saved = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    is_saved = false;
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 10,

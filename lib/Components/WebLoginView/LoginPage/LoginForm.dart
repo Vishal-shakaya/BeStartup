@@ -11,7 +11,6 @@ import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -83,7 +82,6 @@ class _LoginFormState extends State<LoginForm> {
         // _formKey.currentState!.reset();
         // LOGIN USER :
         var resp = await myAuth.LoginUser(email: email, password: password);
-        print('Signup Response ${resp}');
         // SUCCESS RESPONSE :
         if (resp['response']) {
           EndLoading();

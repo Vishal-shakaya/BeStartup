@@ -1,5 +1,5 @@
 // Import the firebase_core and cloud_firestore plugin
-import 'package:be_startup/Backend/Auth/ManageUserStore.dart';
+import 'package:be_startup/Backend/Auth/ManageUser.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -11,7 +11,7 @@ class MyAuthentication extends GetxController {
   static String image_url = '';
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  var manage_user = AuthUserManagerStore();
+  var manage_user = AuthUserManager();
   var userStore = UserStore();
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
@@ -64,11 +64,6 @@ class MyAuthentication extends GetxController {
           return ResponseBack(response_type: false);
         }
       }
-
-      return ResponseBack(
-        response_type: true,
-      );
-
       // Error Exception:
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -79,35 +74,28 @@ class MyAuthentication extends GetxController {
     }
   }
 
-  // LOGOUT USER :
-  LogoutUser() async {
+  // RESET USER PASSWORD BY SENDING EMAIL LINK:
+  ResetPasswordWithEmail() async {
     try {
-      print(auth.currentUser);
-      await auth.signOut();
-      print(auth.currentUser);
+      final user = auth.currentUser;
+      String? email = user?.email;
+      print(email!);
+      await user?.reload();
+      auth.sendPasswordResetEmail(email: email);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
 
-  // RESET USER PASSWORD BY SENDING EMAIL LINK:
-  ResetPasswordWithEmail() async {
-    var resp = await manage_user.ResetPasswordWithEmail();
-    if (resp) {
-      return ResponseBack(response_type: true);
-    } else {
-      return ResponseBack(response_type: false);
-    }
-  }
-
   // PERMANENT DELETE USER :
   Deleteuser() async {
-    var resp = await manage_user.DeleteUser();
-    if (resp) {
+    final user = auth.currentUser;
+    try {
+      var resp = await user?.delete();
       return ResponseBack(response_type: true);
-    } else {
-      ResponseBack(response_type: false);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 

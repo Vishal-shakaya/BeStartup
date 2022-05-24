@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
@@ -41,6 +42,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   bool is_save_view = false;
 
   var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
+  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
 
   // SUBMIT DATE AND CATIGORY :
   var catigories = [];
@@ -51,13 +53,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> items = [
-      'View Profile',
-      'Investor',
-      'Startup',
-      'Settings',
-      'Logout',
-    ];
     String? selectedValue;
 
     // Explore Topics
@@ -108,7 +103,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                           onPressed: () {
                             setState(() {
                               is_home_view = true;
-                              is_save_view= false;
+                              is_save_view = false;
                             });
                             widget.changeView(HomePageViews.storyView);
                           },
@@ -124,8 +119,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                       IconButton(
                           onPressed: () {
                             setState(() {
-                              is_home_view=false;
-                              is_save_view=true;
+                              is_home_view = false;
+                              is_save_view = true;
                             });
                             widget.changeView(HomePageViews.safeStory);
                           },
@@ -157,7 +152,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                               ),
                             ),
                           ],
-                          onChanged: (value) {
+                          onChanged: (value) async {
                             // MenuItems.onChanged(context, value as MenuItem);
                             switch (value) {
                               case MenuItems.profile:
@@ -184,6 +179,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                                 break;
                               case MenuItems.logout:
                                 //Do something
+                                await socialAuth.Logout();
                                 break;
                             }
                           },
@@ -277,25 +273,5 @@ class MenuItems {
         ),
       ],
     );
-  }
-
-  static onChanged(BuildContext context, MenuItem item) {
-    switch (item) {
-      case MenuItems.profile:
-        //Do something
-        break;
-      case MenuItems.investor:
-        //Do something
-        break;
-      case MenuItems.startup:
-        //Do something
-        break;
-      case MenuItems.settings:
-        //Do something
-        break;
-      case MenuItems.logout:
-        //Do something
-        break;
-    }
   }
 }

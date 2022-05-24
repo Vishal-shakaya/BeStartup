@@ -1,4 +1,5 @@
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
+import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class SocailAuth extends StatefulWidget {
 
 class _SocailAuthState extends State<SocailAuth> {
   bool is_theme_light = false;
-  var auth = Get.put(MyAuthentication(), tag: 'current_user');
+  var auth = Get.put(MySocialAuth(), tag: 'socail_auth');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,39 +25,49 @@ class _SocailAuthState extends State<SocailAuth> {
       verticalDirection: VerticalDirection.down,
       spacing: 15,
       children: [
+        // GOOGLE :
         SignInButton(
             buttonType:
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,
             onPressed: () async {
-              await auth.ResetPasswordWithEmail();
-              // Get.toNamed(select_investor_choise);
-              print('reset password');
+              GetPlatform.isWeb
+                  ? await auth.SignInWithGoogleInWeb()
+                  : await auth.SigninWithGoogleInAndroid();
             }),
+
+        // TWITTER :
         SignInButton(
             buttonType: ButtonType.twitter,
             elevation: 3,
             onPressed: () async {
-              // Get.toNamed(home_page_url);
-              final resp = await auth.LogoutUser();
-              if (resp['response']) {
-                Get.toNamed(home_route);
-              }
-              print('logout');
+              GetPlatform.isWeb
+                ? await auth.signInWithTwitterInWeb()
+                : await auth.signInWithTwitterAndroid();
             }),
+
+        // FACEBOOK :
         SignInButton(
-            buttonType: ButtonType.linkedin,
+            buttonType:
+                Get.isDarkMode ? ButtonType.facebookDark : ButtonType.facebook,
             elevation: 3,
-            onPressed: () {
-              Get.toNamed(startup_view_url);
-              print('click');
+            onPressed: () async {
+              GetPlatform.isWeb
+                  ? await auth.signInWithFacebookInWeb()
+                  : await auth.signInWithFacebookInAndroid();
             }),
+
+        // APPLE :.
         SignInButton(
             buttonType: ButtonType.apple,
+             elevation: 3, 
+             onPressed: () {}),
+
+        SignInButton(
+            buttonType: ButtonType.mail,
             elevation: 3,
-            onPressed: () {
-              Get.toNamed(create_business_vision_url, preventDuplicates: false);
-              print('click');
+            onPressed: () async {
+              await auth.Logout();
             }),
       ],
     ));
