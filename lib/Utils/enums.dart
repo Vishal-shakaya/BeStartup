@@ -13,3 +13,8 @@ enum HomePageViews {
   settingView,
   profileView,
 }
+
+  enum ReautheticateTask{
+    updateEmail, 
+    deleteProfile 
+  }

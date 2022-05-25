@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,13 @@ class MySocialAuth extends GetxController {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      final resp = await FirebaseAuth.instance.signInWithCredential(credintail);
+
+      try {
+        final resp =
+            await FirebaseAuth.instance.signInWithCredential(credintail);
+      } on FirebaseAuthException catch (e) {
+        AuthErrorHandling(e);
+      }
     } catch (e) {
       print('google android error $e');
     }
@@ -46,8 +53,6 @@ class MySocialAuth extends GetxController {
       googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
       // Once signed in, return the UserCredential
       final resp = await FirebaseAuth.instance.signInWithPopup(googleProvider);
-      print(resp.user?.email);
-      print(resp.user);
     } catch (e) {
       print('GOOGLE WEB LOGIN ERROR $e');
     }
@@ -148,6 +153,28 @@ class MySocialAuth extends GetxController {
       googleSignIn.disconnect();
     } catch (e) {
       print('google logout error');
+    }
+  }
+
+  AuthErrorHandling(e) async {
+    if (e.code == 'account-exists-with-different-credential') {
+      // The account already exists with a different credential
+      String? email = e.email;
+      AuthCredential? pendingCredential = e.credential;
+      List<String> userSignInMethods =
+          await auth.fetchSignInMethodsForEmail(email!);
+
+      print('Sign in Method ${userSignInMethods}');
+
+      // Link with Email :
+      if (userSignInMethods.first == 'password') {
+        return ResponseBack(response_type: false, message: 'password_method');
+      }
+
+      // Link with Facebook :
+      if (userSignInMethods.first == 'facebook.com') {
+        return ResponseBack(response_type: false, message: 'facebook_method');
+      }
     }
   }
 }

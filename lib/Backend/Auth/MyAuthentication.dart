@@ -1,10 +1,10 @@
 // Import the firebase_core and cloud_firestore plugin
 import 'package:be_startup/Backend/Auth/ManageUser.dart';
+import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MyAuthentication extends GetxController {
@@ -13,6 +13,8 @@ class MyAuthentication extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   var manage_user = AuthUserManager();
   var userStore = UserStore();
+  var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
+
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -92,7 +94,17 @@ class MyAuthentication extends GetxController {
   Deleteuser() async {
     final user = auth.currentUser;
     try {
-      var resp = await user?.delete();
+      await user?.delete();
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+  UpdateUserMail(email) async {
+    final user = auth.currentUser;
+    try {
+      await user?.updateEmail(email);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

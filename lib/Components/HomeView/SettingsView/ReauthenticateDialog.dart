@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
+import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +13,13 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 import 'package:sign_button/sign_button.dart';
+
 class ReauthenticateWidget extends StatefulWidget {
-  ReauthenticateWidget({Key? key}) : super(key: key);
+  var task;
+  var updateMail;
+
+  ReauthenticateWidget({this.task, this.updateMail, Key? key})
+      : super(key: key);
 
   @override
   State<ReauthenticateWidget> createState() => _ReauthenticateWidgetState();
@@ -19,6 +27,51 @@ class ReauthenticateWidget extends StatefulWidget {
 
 class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
+
+  var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
+  var auth = Get.put(MyAuthentication(), tag: 'my_auth');
+
+  ErrorSnakbar() {
+    Get.closeAllSnackbars();
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error'),
+      messageText: MySnackbarContent(message: 'Something went wrong'),
+      maxWidth: context.width * 0.50,
+    );
+  }
+
+  //////////////////////////////////////////////
+  // COMPLETE TASK :
+  // UPDATE MAIL :
+  // DELETE USER :
+  //////////////////////////////////////////////
+  CompleteTask() async {
+    // Delete User Permanently :
+    if (widget.task == ReautheticateTask.deleteProfile) {
+      var resp = await auth.Deleteuser();
+      if (!resp['response']) {
+        ErrorSnakbar();
+      }
+    }
+
+    // Update Mail Address :
+    if (widget.task == ReautheticateTask.updateEmail) {
+      if (widget.updateMail != '' || widget.updateMail != null) {
+        var resp = await auth.UpdateUserMail(widget.updateMail);
+        if (!resp['response']) {
+        ErrorSnakbar();
+        }
+      }
+    }
+
+    // Close Dialog Model :
+    Navigator.of(context).pop();
+  }
 
   // LOADING SPINNER :
   StartLoading() {
@@ -114,9 +167,10 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
     }
 
     // Change Theme :
-    Color input_text_color  = Get.isDarkMode ? dartk_color_type2 : light_black;
+    Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
     Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
-    Color input_label_color = Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
+    Color input_label_color =
+        Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
 
     return Container(
       child: FormBuilder(
@@ -124,42 +178,39 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-        
-              // HEADER TEXT : 
+              // HEADER TEXT :
               AutoSizeText.rich(
-                TextSpan(
-                    text: 'User Confirmation', style: TextStyle(fontSize: 18)),
+                TextSpan(text: 'Confirmation', style: TextStyle(fontSize: 22)),
                 style: Get.textTheme.headline3,
               ),
-              
+
               ///////////////////////////
-              // FORM INPUT FIELDS : 
+              // FORM INPUT FIELDS :
               ///////////////////////////
-             
+
               // 1. EMAIL FIELD
               Container(
-                width: context.width*0.18,
-                margin: EdgeInsets.only(top:context.height*0.04),
+                width: context.width * 0.18,
+                margin: EdgeInsets.only(top: context.height * 0.04),
                 child: Column(
                   children: [
                     Label(input_label_color, 'Email addresss'),
-                    EmailInputField(input_text_color, context, input_foucs_color),
-        
-                    // 2. PASSWORD FIELD : 
+                    EmailInputField(
+                        input_text_color, context, input_foucs_color),
+
+                    // 2. PASSWORD FIELD :
                     Label(input_label_color, 'Password'),
                     PasswodInputField(
                         context, input_text_color, input_foucs_color),
                   ],
                 ),
               ),
-        
-        
-              // SUBMIT FORM BUTTON : 
+
+              // SUBMIT FORM BUTTON :
               SubmitFormButton(SubmitLofinForm),
-        
-             // SOCIAL AUTH BUTTON ROW : 
-              SocialReAuthRow(context) 
-        
+
+              // SOCIAL AUTH BUTTON ROW :
+              SocialReAuthRow(context)
             ],
           ),
         ),
@@ -169,80 +220,83 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
 
   Container SocialReAuthRow(BuildContext context) {
     return Container(
-        width: context.width*0.15,
-        margin: EdgeInsets.only(top:context.height*0.07),
-        child:Row(
-          mainAxisSize:MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:[
-            Expanded(
-              flex:1,
-              child: SignInButton.mini(
-              buttonType: Get.isDarkMode? ButtonType.googleDark: ButtonType.google,
-              elevation: 3,
-              buttonSize: ButtonSize.medium,
-              onPressed: () {
-              print('click');
-              }),
-            ),
-            Expanded(
-              flex:1,
-              child: SignInButton.mini(
-              buttonType: ButtonType.twitter,
-              elevation: 3,
-              buttonSize: ButtonSize.medium,
-              onPressed: () {
-              print('click');
-              }),
-            ),
-            Expanded(
-              flex:1,
-              child: SignInButton.mini(
-              buttonType: ButtonType.linkedin,
-              elevation: 3,
-              buttonSize: ButtonSize.medium,
-              onPressed: () {
-              print('click');
-              }),
-            ),
-            Expanded(
-              flex:1,
-              child: SignInButton.mini(
-              buttonType:ButtonType.apple,
-              elevation: 3,
-              buttonSize: ButtonSize.medium,
-              onPressed: () {
-              print('click');
-              }),
-            ),
-          ]
-        )
-          );
+        width: context.width * 0.15,
+        margin: EdgeInsets.only(top: context.height * 0.07),
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: SignInButton.mini(
+                    buttonType: Get.isDarkMode
+                        ? ButtonType.googleDark
+                        : ButtonType.google,
+                    elevation: 3,
+                    buttonSize: ButtonSize.medium,
+                    onPressed: () async {
+                      GetPlatform.isWeb
+                          ? await reAuth.ReSignInWithGoogleInWeb()
+                          : await reAuth.ReSigninWithGoogleInAndroid();
+                      await CompleteTask();
+                    }),
+              ),
+              Expanded(
+                flex: 1,
+                child: SignInButton.mini(
+                    buttonType: ButtonType.twitter,
+                    elevation: 3,
+                    buttonSize: ButtonSize.medium,
+                    onPressed: () {
+                      print('click');
+                    }),
+              ),
+              Expanded(
+                flex: 1,
+                child: SignInButton.mini(
+                    buttonType: ButtonType.linkedin,
+                    elevation: 3,
+                    buttonSize: ButtonSize.medium,
+                    onPressed: () {
+                      print('click');
+                    }),
+              ),
+              Expanded(
+                flex: 1,
+                child: SignInButton.mini(
+                    buttonType: ButtonType.apple,
+                    elevation: 3,
+                    buttonSize: ButtonSize.medium,
+                    onPressed: () {
+                      print('click');
+                    }),
+              ),
+            ]));
   }
 
   Container SubmitFormButton(Future<Null> SubmitLofinForm()) {
     return Container(
-            width: 220,
-            height: 42,
-            margin: EdgeInsets.only(top: 20),
-            child: a.GradientElevatedButton(
-                gradient: g1,
-                onPressed: () async {
-                  await  SubmitLofinForm();
-                },
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<
-                        RoundedRectangleBorder>(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  // side: BorderSide(color: Colors.orange)
-                ))),
-                child: Text('Login',
-                    style: TextStyle(
-                      letterSpacing: 2,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                    ))),
-            );
+      width: 220,
+      height: 42,
+      margin: EdgeInsets.only(top: 20),
+      child: a.GradientElevatedButton(
+          gradient: g1,
+          onPressed: () async {
+            await SubmitLofinForm();
+          },
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            // side: BorderSide(color: Colors.orange)
+          ))),
+          child: Text('Login',
+              style: TextStyle(
+                letterSpacing: 2,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ))),
+    );
   }
   //////////////////////////////
   /// METHODS SECTION:
