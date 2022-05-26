@@ -12,12 +12,11 @@ class MySocialAuth extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
-
   ///////////////////////////////////////////////////////////////
-  /// CHECK IF ACCOUNT ALREADY EXIST : 
-  /// 1. THEN CEHCK ALREADY SINGED IN METHOD : 
+  /// CHECK IF ACCOUNT ALREADY EXIST :
+  /// 1. THEN CEHCK ALREADY SINGED IN METHOD :
   /// 2. USE THAT METHOD RE-SIGNIN :
-  /// 3. LINK MULTIPLE ACCOUNT TO ALREADY REGISTERD EAMIL : 
+  /// 3. LINK MULTIPLE ACCOUNT TO ALREADY REGISTERD EAMIL :
   ////////////////////////////////////////////////////////////////
   AuthErrorHandling(e) async {
     if (e.code == 'account-exists-with-different-credential') {
@@ -32,39 +31,29 @@ class MySocialAuth extends GetxController {
       // Link with Email :
       if (userSignInMethods.first == 'password') {
         return ResponseBack(
-            response_type: false,
-            message: 'password_method',
-            data: e);
+            response_type: false, message: 'password_method', data: e);
       }
 
       // Link with Facebook :
       if (userSignInMethods.first == 'facebook.com') {
         return ResponseBack(
-            response_type: false,
-            message: 'facebook_method',
-            data: e);
+            response_type: false, message: 'facebook_method', data: e);
       }
       // Link with Google Account :
       if (userSignInMethods.first == 'google.com') {
         return ResponseBack(
-            response_type: false,
-            message: 'google_method',
-            data: e);
+            response_type: false, message: 'google_method', data: e);
       }
       // Link with Google Twitter :
       if (userSignInMethods.first == 'twitter.com') {
         return ResponseBack(
-            response_type: false,
-            message: 'twitter_method',
-            data: e);
+            response_type: false, message: 'twitter_method', data: e);
       }
 
       // Link with Google Apple :
       if (userSignInMethods.first == 'apple.com') {
         return ResponseBack(
-            response_type: false,
-            message: 'apple_method',
-            data: e);
+            response_type: false, message: 'apple_method', data: e);
       }
     }
   }
@@ -89,17 +78,14 @@ class MySocialAuth extends GetxController {
         idToken: googleAuth?.idToken,
       );
 
-       // Once signed in, return the UserCredential
+      // Once signed in, return the UserCredential
       try {
         final resp =
-            await FirebaseAuth.instance.signInWithCredential(credintail); 
-     
+            await FirebaseAuth.instance.signInWithCredential(credintail);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
-    
-    
     } catch (e) {
       print('google android error $e');
     }
@@ -115,20 +101,15 @@ class MySocialAuth extends GetxController {
           .addScope('https://www.googleapis.com/auth/contacts.readonly');
       googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-
-
       // Once signed in, return the UserCredential
       try {
         final resp =
             await FirebaseAuth.instance.signInWithPopup(googleProvider);
-        print('Successful Login with google ');
+        return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
-
-    
-    
     } catch (e) {
       print('GOOGLE WEB LOGIN ERROR $e');
     }
@@ -146,19 +127,16 @@ class MySocialAuth extends GetxController {
       final OAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-
       // Once signed in, return the UserCredential
       try {
         final resp =
             FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-        
+            return ResponseBack(response_type: true);
+
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
-
-
-
     } catch (e) {
       print(' FACEBOOK ANDROID LOGIN ERROR $e');
     }
@@ -175,18 +153,15 @@ class MySocialAuth extends GetxController {
         'display': 'popup',
       });
 
-
       // Once signed in, return the UserCredential
       try {
         await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+        return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
-        return error; 
+        return error;
       }
-    } 
-    
-    
-    catch (e) {
+    } catch (e) {
       print(' FACEBOOK ANDROID LOGIN ERROR $e');
     }
   }
@@ -212,19 +187,17 @@ class MySocialAuth extends GetxController {
         secret: authResult.authTokenSecret!,
       );
 
-
       // Once signed in, return the UserCredential
       try {
         final resp = await FirebaseAuth.instance
             .signInWithCredential(twitterAuthCredential);
-        
+            return ResponseBack(response_type: true);
+
+
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
-
-
-
     } catch (e) {
       print('ERROR WHILE LOGIN WITH TWITTER $e ');
     }
@@ -235,26 +208,23 @@ class MySocialAuth extends GetxController {
       // Create a new provider
       TwitterAuthProvider twitterProvider = TwitterAuthProvider();
 
-
       // Once signed in, return the UserCredential
       try {
-        final resp = await FirebaseAuth.instance.signInWithPopup(twitterProvider);
-        
+        final resp =
+            await FirebaseAuth.instance.signInWithPopup(twitterProvider);
+            return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
-
-
-
     } catch (e) {
       print('Login with Twitter web Error $e');
     }
   }
 
 /////////////////////////////////////
-/// LOGOUT : 
-/// ////////////////////////////////
+  /// LOGOUT :
+  /// ////////////////////////////////
   Logout() async {
     // Logout from firebase :
     FirebaseAuth.instance.signOut();

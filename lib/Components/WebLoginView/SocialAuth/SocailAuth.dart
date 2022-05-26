@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:be_startup/Backend/Auth/ManageUser.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Components/Widgets/GetPasswordDialog.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_button/sign_button.dart';
@@ -18,17 +21,40 @@ class _SocailAuthState extends State<SocailAuth> {
   bool is_theme_light = false;
   var auth = Get.put(MySocialAuth(), tag: 'socail_auth');
   var authManager = Get.put(AuthUserManager(), tag: 'user_manager');
+  var registor_mail;
+  var pendingCred;
 
   @override
   Widget build(BuildContext context) {
-    var confirm_pass;
-
-    // Getting password throung dialog : 
-    GetPassword(password) {
-      confirm_pass = password;
+    ErrorSnakbar() {
+      Get.closeAllSnackbars();
+      Get.snackbar(
+        '',
+        '',
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.green.shade50,
+        titleText: MySnackbarTitle(title: 'info'),
+        messageText:
+            MySnackbarContent(message: 'Verify email address before login'),
+        maxWidth: context.width * 0.50,
+      );
     }
 
-    //  Get user password for link account to already registor account : 
+    // Getting password throung dialog :
+    GetPassword(password) async {
+      final email_resp = await authManager.LinkAccountUsingEmailPassword(
+          email: registor_mail,
+          pendingCredential: pendingCred,
+          password: password);
+
+      if (email_resp['message'] == 'email_not_verify') {
+        ErrorSnakbar();
+      }
+      Navigator.of(context).pop();
+    }
+
+    //  Get user password for link account to already registor account :
     GetPasswordDialog({task, updateMail}) async {
       showDialog(
           context: context,
@@ -41,51 +67,43 @@ class _SocailAuthState extends State<SocailAuth> {
                     height: context.height * 0.20,
                     child: GetAuthUserPassword(
                       passwordGetter: GetPassword,
-              )));
+                    )));
           });
     }
 
-
-
-  //////////////////////////////////////////////////
-  /// ALREADY REGISTOR ACCOUNT LINKING PROCESS : 
-  ///  [ HANDLE BOTH PHONE AND WEB ]
-  ///  1 WITH PASSWORD : 
-  ///  2 GOOGLE : 
-  ///  3 FACEBOOK : 
-  //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    /// ALREADY REGISTOR ACCOUNT LINKING PROCESS :
+    ///  [ HANDLE BOTH PHONE AND WEB ]
+    ///  1 WITH PASSWORD :
+    ///  2 GOOGLE :
+    ///  3 FACEBOOK :
+    //////////////////////////////////////////////////
     LinkAccountWithWeb(message, data) async {
       final pendingCredentail = data.credential;
       final email = data.email;
-      print('user Email $email');
-      print('user pending credintail $pendingCredentail');
+      registor_mail = email;
+      pendingCred = pendingCredentail;
 
       if (message == "password_method") {
+        print('Linking Start to password');
         // Getting password here:
         await GetPasswordDialog();
-        authManager.LinkAccountUsingEmailPassword(
-            email: email,
-            pendingCredential: pendingCredentail,
-            password: confirm_pass);
       }
+
       if (message == "facebook_method") {
-        authManager.LinkWithFacebookInWeb(pendingCredentail);
+        await authManager.LinkWithFacebookInWeb(pendingCredentail);
       }
       if (message == "google_method") {
-        authManager.LinkWithGoogleInWeb(pendingCredentail);
+        await authManager.LinkWithGoogleInWeb(pendingCredentail);
       }
       if (message == "twitter_method") {
-        authManager.LinkInWithTwitterInWeb(pendingCredentail);
+        await authManager.LinkInWithTwitterInWeb(pendingCredentail);
       }
 
       // if (resp['message'] == "apple_method") {
       //   authManager.LinkWithFacebookInWeb(resp['data']);
       // }
-      confirm_pass = '';
     }
-
-
-
 
     LinkAccountWithPhone(message, data) async {
       final pendingCredentail = data.credential;
@@ -96,30 +114,22 @@ class _SocailAuthState extends State<SocailAuth> {
       if (message == "password_method") {
         // Getting password here:
         await GetPasswordDialog();
-        authManager.LinkAccountUsingEmailPassword(
-            email: email,
-            pendingCredential: pendingCredentail,
-            password: confirm_pass);
       }
 
       if (message == "facebook_method") {
-        authManager.LinkInWithGoogleInAndroid(pendingCredentail);
+        await authManager.LinkInWithGoogleInAndroid(pendingCredentail);
       }
       if (message == "google_method") {
-        authManager.LinkWithFacebookInAndroid(pendingCredentail);
+        await authManager.LinkWithFacebookInAndroid(pendingCredentail);
       }
       if (message == "twitter_method") {
-        authManager.LinkInWithTwitterAndroid(pendingCredentail);
+        await authManager.LinkInWithTwitterAndroid(pendingCredentail);
       }
 
       // if (resp['message'] == "apple_method") {
       //   authManager.LinkWithFacebookInWeb(resp['data']);
       // }
     }
-
-
-
-
 
     // Google SignIn :
     GoogleSingIn() async {
@@ -145,8 +155,6 @@ class _SocailAuthState extends State<SocailAuth> {
       }
     }
 
-
-
     // Facebook SingIn :
     FacebookSingIn() async {
       var resp;
@@ -170,8 +178,6 @@ class _SocailAuthState extends State<SocailAuth> {
         }
       }
     }
-
-
 
     // Twitter Singin :
     TwitterSingIn() async {
@@ -197,8 +203,6 @@ class _SocailAuthState extends State<SocailAuth> {
       }
     }
 
-
-
     AppleSingIn() async {}
 
     return Container(
@@ -215,8 +219,8 @@ class _SocailAuthState extends State<SocailAuth> {
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,
             onPressed: () async {
-              GetPasswordDialog();
-              // await GoogleSingIn();
+              // GetPasswordDialog();
+              await GoogleSingIn();
             }),
 
         // TWITTER :

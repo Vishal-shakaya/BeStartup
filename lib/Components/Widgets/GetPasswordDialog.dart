@@ -28,7 +28,9 @@ class _GetAuthUserPasswordState extends State<GetAuthUserPassword> {
 
           TextField(
               controller: passwordController,
+              obscureText: true,
               decoration: InputDecoration(
+                icon: Icon(Icons.key),
                   hintText: 'Confirm password',
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

@@ -19,17 +19,23 @@ class AuthUserManager extends GetxController {
   // EMAIL AND PASSWORD METHOD TO LOGIN ACCOUNT :
   ///////////////////////////////////////////////////
   LinkAccountUsingEmailPassword({email, password, pendingCredential}) async {
+    
     try {
       // Sign the user in to their account with the password
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
-      // Signin and Link Account : 
       await userCredential.user?.linkWithCredential(pendingCredential!);
       print('Account Linked ');
-    
+
+      // Signin and Link Account :
+      final user = auth.currentUser;
+      final verify_email = user?.emailVerified;
+      if (verify_email == false) {
+        await user?.sendEmailVerification();
+        return ResponseBack(response_type: false, message: 'email_not_verify');
+      }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -47,13 +53,11 @@ class AuthUserManager extends GetxController {
       final OAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-
-      // Signin and Link Account : 
-      final resp = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      // Signin and Link Account :
+      final resp = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
       resp.user?.linkWithCredential(pendingCredential);
       print('Account Linked Facebook account ');
-
-
     } catch (e) {
       print(' FACEBOOK ANDROID LOGIN ERROR $e');
     }
@@ -70,13 +74,10 @@ class AuthUserManager extends GetxController {
         'display': 'popup',
       });
 
-
-      // Signin and Link Account : 
+      // Signin and Link Account :
       var resp = await FirebaseAuth.instance.signInWithPopup(facebookProvider);
       resp.user?.linkWithCredential(pendingCredential);
       print('Account Linked Facebook account ');
-
-
     } catch (e) {
       print(' FACEBOOK ANDROID LOGIN ERROR $e');
     }
@@ -101,18 +102,14 @@ class AuthUserManager extends GetxController {
         idToken: googleAuth?.idToken,
       );
 
-
-      // Signin and Link Account : 
+      // Signin and Link Account :
       final resp = await FirebaseAuth.instance.signInWithCredential(credintail);
       resp.user?.linkWithCredential(pendingCredential);
       print('Successful link account with google');
-
-
     } catch (e) {
       print('google android error $e');
     }
   }
-
 
   LinkWithGoogleInWeb(pendingCredential) async {
     try {
@@ -123,20 +120,14 @@ class AuthUserManager extends GetxController {
           .addScope('https://www.googleapis.com/auth/contacts.readonly');
       googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-
-      // Signin and Link Account : 
+      // Signin and Link Account :
       final resp = await FirebaseAuth.instance.signInWithPopup(googleProvider);
       resp.user?.linkWithCredential(pendingCredential);
       print('Successful link account with google');
-
-
     } catch (e) {
       print('GOOGLE WEB LOGIN ERROR $e');
     }
   }
-
-
-
 
   ////////////////////////////////////////////////////
   /// TWITTER LINK ACCOUNT :
@@ -159,34 +150,28 @@ class AuthUserManager extends GetxController {
         secret: authResult.authTokenSecret!,
       );
 
-
-      // Signin and Link Account : 
-      final resp = await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
-      resp.user?.linkWithCredential(pendingCredential);  
+      // Signin and Link Account :
+      final resp = await FirebaseAuth.instance
+          .signInWithCredential(twitterAuthCredential);
+      resp.user?.linkWithCredential(pendingCredential);
       print('Successful link account with Twitter');
-
-
     } catch (e) {
       print('ERROR WHILE LOGIN WITH TWITTER $e ');
     }
   }
 
-  // Twitter Web : 
+  // Twitter Web :
   LinkInWithTwitterInWeb(pendingCredential) async {
     try {
       // Create a new provider
       TwitterAuthProvider twitterProvider = TwitterAuthProvider();
-      
 
-      // Signin and Link Account : 
+      // Signin and Link Account :
       final resp = await FirebaseAuth.instance.signInWithPopup(twitterProvider);
-      resp.user?.linkWithCredential(pendingCredential);  
+      resp.user?.linkWithCredential(pendingCredential);
       print('Successful link account with Twitter');
-
-
     } catch (e) {
       print('Login with Twitter web Error $e');
     }
   }
-
 }
