@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Auth/ManageUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,95 @@ class MyAuthentication extends GetxController {
   var manage_user = AuthUserManager();
   var userStore = UserStore();
   var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
+
+  ////////////////////////////////////////
+  /// Verify Phone No :
+  ////////////////////////////////////////
+  VerifyPhoneNo({number,is_update}) async {
+    try {
+      final currentUser = auth.currentUser;
+      // If Updating user then use singin operation 
+      // else use link Operation to just verify user : 
+      final confirmationResult =
+          is_update== NumberOperation.update?
+          await auth.signInWithPhoneNumber(number)
+        : await auth.currentUser?.linkWithPhoneNumber(number);
+
+      return ResponseBack(response_type: true, data: {
+        'confirmationResult': confirmationResult,
+        'currentUser': currentUser,
+        'verificanId': confirmationResult?.verificationId,
+      });
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+  // Verify Otp :
+  VerifyOtp({currentUser, confirmationResult, otp}) async {
+    try {
+      UserCredential userCredential = await confirmationResult.confirm(otp);
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      print('not link cred $e');
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+  // Update phone no of currently login user :
+  UpdatePhoneNo({verificationId, otp}) {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: otp);
+    try {
+      final update_no = auth.currentUser?.updatePhoneNumber(credential);
+      return ResponseBack(
+        response_type: true,
+      );
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+// Phone number verification and link no in Android or ios device :
+  AndroidPhoneVerificaiton(number) async {
+    await auth.verifyPhoneNumber(
+      phoneNumber: number,
+      // Check Invalid Phone no :
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+        print(e);
+        return ResponseBack(response_type: false);
+      },
+
+      // ANDROID ONLY!
+      // Sign the user in (or link) with the auto-generated credential
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        print('Android code Verification');
+        // var res = await auth.signInWithCredential(credential);
+        if (GetPlatform.isAndroid) {
+          auth.currentUser?.linkWithCredential(credential);
+        }
+      },
+
+      timeout: const Duration(seconds: 60),
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Auto-resolution timed out...
+      },
+
+      codeSent: (String verificationId, int? resendToken) async {
+        // Update the UI - wait for the user to enter the SMS code
+        print('confirm otp');
+        String smsCode = '';
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: smsCode);
+
+        await auth.currentUser?.linkWithCredential(credential);
+      },
+    );
+  }
 
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :

@@ -14,7 +14,12 @@ enum HomePageViews {
   profileView,
 }
 
-  enum ReautheticateTask{
-    updateEmail, 
-    deleteProfile 
-  }
+enum ReautheticateTask{
+  updateEmail, 
+  deleteProfile 
+}
+
+enum NumberOperation{
+  update, 
+  verify , 
+}

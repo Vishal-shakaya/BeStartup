@@ -77,7 +77,7 @@ class MySocialAuth extends GetxController {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
+      
       // Once signed in, return the UserCredential
       try {
         final resp =

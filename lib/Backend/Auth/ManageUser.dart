@@ -3,10 +3,6 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:be_startup/Utils/utils.dart';
-import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -15,9 +11,10 @@ class AuthUserManager extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  ///////////////////////////////////////////////////
-  // EMAIL AND PASSWORD METHOD TO LOGIN ACCOUNT :
-  ///////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
+  // Link Account to Email/Password Method 
+  // 1. External Social method like ->Facebook Google etc.. : 
+  ////////////////////////////////////////////////////////////
   LinkAccountUsingEmailPassword({email, password, pendingCredential}) async {
     
     try {

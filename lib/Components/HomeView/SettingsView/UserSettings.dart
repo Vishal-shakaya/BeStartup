@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
+import 'package:be_startup/Components/Widgets/PhoneNoVerification.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -21,6 +22,7 @@ class UserSettings extends StatefulWidget {
 class _UserSettingsState extends State<UserSettings> {
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
   FirebaseAuth fireInstance = FirebaseAuth.instance;
+
   var updateEmailFeild = TextEditingController();
   var is_update_mail = false;
   // success alert :
@@ -58,12 +60,31 @@ class _UserSettingsState extends State<UserSettings> {
           });
     }
 
+    PhoneNoVerificationDialog({task, updateMail}) async {
+      showDialog(
+          barrierDismissible: false,
+          context: context, 
+          builder: (context) {
+            return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                content: SizedBox(
+                  width: context.width * 0.20,
+                  height: context.height * 0.30,
+                  child:PhoneNoVerifyDialogAlert(
+                    noOperation: NumberOperation.update,
+                    key:UniqueKey())
+                ));
+          });
+    }
+
     ResetPassword() async {
       await auth.ResetPasswordWithEmail();
       await ResultDialog(context);
     }
 
     SecondFactAuth() async {
+      
       print('SecondFactAuth ');
     }
 
@@ -83,6 +104,10 @@ class _UserSettingsState extends State<UserSettings> {
         task: ReautheticateTask.deleteProfile,
       );
       print('DeleteUser ');
+    }
+
+    VerifyPhoneno() async {
+     PhoneNoVerificationDialog();
     }
 
     return Container(
@@ -122,6 +147,10 @@ class _UserSettingsState extends State<UserSettings> {
                       icon: Icons.person,
                       fun: EditProfile,
                     ),
+                    EditPhoneNo(
+                        title: fireInstance.currentUser?.phoneNumber,
+                        icon: Icons.phone,
+                        fun: VerifyPhoneno),
                     WarningItem(
                         title: 'Delete Account',
                         icon: Icons.delete_rounded,
@@ -210,6 +239,80 @@ class _UserSettingsState extends State<UserSettings> {
                     ),
                     label: Text('update')),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container EditPhoneNo({title, icon, fun}) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      child: ListTile(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        style: ListTileStyle.drawer,
+        hoverColor: Colors.grey.shade200,
+        selected: true,
+        mouseCursor: MouseCursor.defer,
+        onTap: () {},
+        autofocus: true,
+        leading: Icon(icon, size: 20, color: light_color_type2),
+        title: Container(
+          width: context.width * 0.06,
+          child: Row(
+            children: [
+              AutoSizeText.rich(
+                TextSpan(text: title),
+                style: TextStyle(fontSize: 15, color: light_color_type1),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: fireInstance.currentUser?.phoneNumber!=null
+                ? Icon(Icons.verified_outlined,
+                  size: 18,
+                  color: primary_light,
+                )
+                :Container(), 
+              )
+            ],
+          ),
+        ),
+        trailing: Container(
+            width: 200,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 90,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.blueGrey.shade300)),
+                child: TextButton.icon(
+                  icon: Icon(Icons.edit,size:15,),
+                    onPressed: () async {
+                      await fun();
+                    },
+                    label:Text('update')),
+              ),
+
+              fireInstance.currentUser?.phoneNumber==null?
+              Container(
+                width: 90,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.blueGrey.shade300)),
+                child:  TextButton.icon(
+                icon:   Icon(Icons.check,size: 15,),
+                    onPressed: () async {
+                      await fun();
+                    },
+                    label:Text('verify')),
+              )
+              :Container()
             ],
           ),
         ),

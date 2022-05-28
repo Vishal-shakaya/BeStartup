@@ -26,7 +26,7 @@ class _SocailAuthState extends State<SocailAuth> {
 
   @override
   Widget build(BuildContext context) {
-    ErrorSnakbar() {
+    ErrorSnakbar() async {
       Get.closeAllSnackbars();
       Get.snackbar(
         '',
@@ -42,6 +42,7 @@ class _SocailAuthState extends State<SocailAuth> {
     }
 
     // Getting password throung dialog :
+    // After getting passwod link account :
     GetPassword(password) async {
       final email_resp = await authManager.LinkAccountUsingEmailPassword(
           email: registor_mail,
@@ -49,12 +50,13 @@ class _SocailAuthState extends State<SocailAuth> {
           password: password);
 
       if (email_resp['message'] == 'email_not_verify') {
-        ErrorSnakbar();
+        await ErrorSnakbar();
       }
       Navigator.of(context).pop();
     }
 
-    //  Get user password for link account to already registor account :
+    //  Get u
+    //ser password for link account to already registor account :
     GetPasswordDialog({task, updateMail}) async {
       showDialog(
           context: context,
