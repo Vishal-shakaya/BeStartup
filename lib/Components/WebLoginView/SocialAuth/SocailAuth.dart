@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:be_startup/Backend/Auth/ManageUser.dart';
+import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Components/Widgets/GetPasswordDialog.dart';

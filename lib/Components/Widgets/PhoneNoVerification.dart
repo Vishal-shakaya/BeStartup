@@ -75,7 +75,10 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
         ));
   }
 
-  // SUBMIT PHONE NO TO SEND OTP:
+  ///////////////////////////////////////////////////////
+  // Verify Phone and send otp to phone numbser : 
+  // Handle Update and Link Phone no to current user : 
+  ////////////////////////////////////////////////////////
   SubmitPhoneNo() async {
     final is_valid = formKey.currentState!.validate();
     if (is_valid) {
@@ -86,9 +89,9 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
         is_update:NumberOperation.update );
         
       if (resp['response']) {
-        confirmResult = resp['data']['confirmationResult'];
         currentUser = resp['data']['currentUser'];
         verificanId = resp['data']['verificanId'];
+        confirmResult=resp['data']['confirmationResult'];
         setState(() {
           is_otp_field = true;
         });
@@ -99,10 +102,11 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
-
+  ///////////////////////////////////////////////////////
   // GET OTP AND SEND FOR VERIFICATION:
   // If Success then link phone no to login user :
   // else show error :
+  ///////////////////////////////////////////////////////
   VerifyNumber() async {
     final resp = await auth.VerifyOtp(
         currentUser: currentUser,
@@ -118,7 +122,10 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
-  // Updating Phone number
+  //////////////////////////////////////////////////////
+  // Updating Phone number:
+  // Send required params : verificationId and otp: 
+  //////////////////////////////////////////////////////
   UpdatePhoneNo() async {
         final resp = await auth.UpdatePhoneNo(
         verificationId: verificanId,
@@ -133,6 +140,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
+
   // Check if update phone no or just vrify : process accordingly :
   VerifingOtp() async {
     if (widget.noOperation == NumberOperation.update) {
@@ -141,6 +149,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
       await VerifyNumber();
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 // Import the firebase_core and cloud_firestore plugin
-import 'package:be_startup/Backend/Auth/ManageUser.dart';
+import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
@@ -19,15 +19,14 @@ class MyAuthentication extends GetxController {
   ////////////////////////////////////////
   /// Verify Phone No :
   ////////////////////////////////////////
-  VerifyPhoneNo({number,is_update}) async {
+  VerifyPhoneNo({number, is_update}) async {
     try {
       final currentUser = auth.currentUser;
-      // If Updating user then use singin operation 
-      // else use link Operation to just verify user : 
-      final confirmationResult =
-          is_update== NumberOperation.update?
-          await auth.signInWithPhoneNumber(number)
-        : await auth.currentUser?.linkWithPhoneNumber(number);
+      // If Updating user then use singin operation
+      // else use link Operation to just verify user :
+      final confirmationResult = is_update == NumberOperation.update
+          ? await auth.signInWithPhoneNumber(number)
+          : await auth.currentUser?.linkWithPhoneNumber(number);
 
       return ResponseBack(response_type: true, data: {
         'confirmationResult': confirmationResult,
@@ -177,6 +176,23 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
+    }
+  }
+
+  ForgotPassword(email) async {
+    try {
+      final method =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+
+      if(method.contains('password')){
+        auth.sendPasswordResetEmail(email: email);
+        return ResponseBack(response_type: true);
+      }
+
+       return ResponseBack(response_type: false ,message: 'mail address not registered');
+
+    } on FirebaseAuthException catch (e) {
+      return ResponseBack(response_type: false , message:'mail address not registered');
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Components/Widgets/ForgotPasswordDialogAlert.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
@@ -114,12 +115,29 @@ class _LoginFormState extends State<LoginForm> {
             maxWidth: context.width * 0.50,
           );
         }
-      }
-
-      // ERROR HANDLING :
-      else {
+      } else {
         print('error found');
       }
+    }
+
+
+  // Start Forgoting Password : 
+  
+    ForgotPasswordMethod() async {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                content: SizedBox(
+                    width: context.width * 0.20,
+                    height: context.height * 0.30,
+                    child: ForgotPasswordAlert(
+                      key: UniqueKey(),
+                    )));
+          });
     }
 
     return Container(
@@ -139,37 +157,66 @@ class _LoginFormState extends State<LoginForm> {
                   PasswodInputField(
                       context, input_text_color, input_foucs_color),
 
-                  // LOOGIN BUTTON:
-                  Container(
-                    width: 270,
-                    height: 42,
-                    margin: EdgeInsets.only(top: 20),
-                    child: a.GradientElevatedButton(
-                        gradient: g1,
-                        onPressed: () async {
-                          await SubmitLofinForm();
-                        },
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          // side: BorderSide(color: Colors.orange)
-                        ))),
-                        child: Text('$login_text',
-                            style: TextStyle(
-                              letterSpacing: 2,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                            ))),
-                  ),
+                  // 3.LOOGIN BUTTON:
+                  LoginButton(SubmitLofinForm),
+
+                  // 5. Forgot password :
+                  ResetPasswordButton(ForgotPasswordMethod)
                 ]))
           ]),
         ));
   }
-//////////////////////////////
-  /// METHODS SECTION:
-  /// /////////////////////////
 
+
+
+/////////////////////////////////////////
+/// EXTERNAL METHODS : 
+/////////////////////////////////////////
+
+// Password Reset Button : 
+  Container ResetPasswordButton(ForgotPasswordMethod) {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: InkWell(
+        onTap: () {
+          ForgotPasswordMethod();
+        },
+        child: AutoSizeText.rich(
+          TextSpan(text: 'click here to forgot password !'),
+          style: TextStyle(color: light_color_type3, fontSize: 14),
+        ),
+      ),
+    );
+  }
+
+  // Login Button : 
+  Container LoginButton(SubmitLofinForm) {
+    return Container(
+      width: 270,
+      height: 42,
+      margin: EdgeInsets.only(top: 20),
+      child: a.GradientElevatedButton(
+          gradient: g1,
+          onPressed: () async {
+            await SubmitLofinForm();
+          },
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            // side: BorderSide(color: Colors.orange)
+          ))),
+          child: Text('$login_text',
+              style: TextStyle(
+                letterSpacing: 2,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ))),
+    );
+  }
+
+
+  // Take Password Input : 
   FormBuilderTextField PasswodInputField(
       BuildContext context, Color input_text_color, Color input_foucs_color) {
     return FormBuilderTextField(
@@ -207,6 +254,8 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+
+  // Take Email Input : 
   FormBuilderTextField EmailInputField(
       Color input_text_color, BuildContext context, Color input_foucs_color) {
     return FormBuilderTextField(
@@ -240,6 +289,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  // Labels of input field : 
   Container Label(Color input_label_color, title) {
     return Container(
       padding: EdgeInsets.all(8),
