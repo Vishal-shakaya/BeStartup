@@ -171,7 +171,7 @@ var spinner = Container(
         GetPage(name: startup_view_url, page: () => StartupView()),
         // SUB-ROUTES :
 
-        // 1 Team Page
+        // 1 Team Page :
         GetPage(name: team_page_url, page: () => TeamPage()),
         GetPage(name: vision_page_url, page: () => VisionPage()),
         GetPage(name: invest_page_url, page: () => InvestPage()),

@@ -24,6 +24,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   double mem_dialog_width = 900;
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
+  
   ShowDialog(context) {
     showDialog(
         barrierDismissible: false,

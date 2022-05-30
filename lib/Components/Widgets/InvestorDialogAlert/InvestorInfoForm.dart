@@ -1,0 +1,181 @@
+import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
+import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class InvestorInfoForm extends StatefulWidget {
+  GlobalKey<FormBuilderState> formkey;
+  InvestorFormType? form_type;
+  var member; 
+  InvestorInfoForm({
+    this.form_type,
+    this.member,
+    required this.formkey, Key? key}) : super(key: key);
+
+  @override
+  State<InvestorInfoForm> createState() => _InvestorInfoFormState();
+}
+
+class _InvestorInfoFormState extends State<InvestorInfoForm> {
+  bool is_password_visible = true;
+  // THEME  COLOR :
+  Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
+  Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
+  Color input_label_color =
+      Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
+  Color suffix_icon_color = Colors.blueGrey.shade300;
+
+  double maxlines = 5;
+  double formfield_width = 600;
+  double contact_formfield_width = 600;
+  double contact_text_margin_top = 0.05;
+
+  @override
+  Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1500) {
+      maxlines = 5;
+      formfield_width = 600;
+      contact_formfield_width = 600;
+      contact_text_margin_top = 0.05;
+      print('greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      maxlines = 3;
+      formfield_width = 550;
+      contact_formfield_width = 550;
+      contact_text_margin_top = 0.05;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      maxlines = 3;
+      formfield_width = 450;
+      contact_formfield_width = 450;
+      contact_text_margin_top = 0.05;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      maxlines = 3;
+      formfield_width = 400;
+      contact_formfield_width = 400;
+      contact_text_margin_top = 0.05;
+
+      print('800');
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {
+      maxlines = 3;
+      formfield_width = 300;
+      contact_formfield_width = 300;
+      contact_text_margin_top = 0.05;
+
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      maxlines = 3;
+      formfield_width = 300;
+      contact_formfield_width = 300;
+      contact_text_margin_top = 0.05;
+
+      print('480');
+    }
+
+    return Container(
+      width: formfield_width,
+      margin: EdgeInsets.only(
+        left: context.width * 0.04,
+        top: context.width * 0.01 ),
+      alignment: Alignment.center,
+      child: FormBuilder(
+          key: widget.formkey,
+          autovalidateMode: AutovalidateMode.disabled,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // TAKE FOUNDER INOF:
+                SizedBox(
+                  height: 25,
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: contact_formfield_width,
+                        child: InputField(
+                          context: context,
+                          name: 'meminfo',
+                          hind_text: 'Member Detail',
+                          error_text: 'member detail min len 20',
+                          maxlines: maxlines,
+                          inital_val: widget.form_type== InvestorFormType.edit? widget.member['meminfo']:''
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
+    );
+  }
+
+  // Secondary Input field :
+  FormBuilderTextField InputField(
+      {context,
+      maxlines,
+      name,
+      error_text,
+      lable_text,
+      hind_text,
+      require = true,
+      inital_val }) {
+    return FormBuilderTextField(
+      // enabled: !info_dialog,
+      initialValue: inital_val!=''?inital_val:'',
+      name: name,
+      style: GoogleFonts.robotoSlab(
+        fontSize: 16,
+      ),
+      maxLength: 500,
+      scrollPadding: EdgeInsets.all(10),
+      maxLines: maxlines,
+      validator: FormBuilderValidators.compose([
+        FormBuilderValidators.minLength(context, 50,
+            errorText: 'At least 50 char allow')
+      ]),
+      decoration: InputDecoration(
+          helperText: 'min allow 50 ',
+          hintText: hind_text,
+          hintStyle: TextStyle(
+            color: Colors.blueGrey.shade200,
+          ),
+          fillColor: Colors.grey[100],
+          filled: true,
+          contentPadding: EdgeInsets.all(20),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide:
+                  BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(width: 2, color: primary_light)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+    );
+  }
+}

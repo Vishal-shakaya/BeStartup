@@ -122,7 +122,6 @@ class _LoginFormState extends State<LoginForm> {
 
 
   // Start Forgoting Password : 
-  
     ForgotPasswordMethod() async {
       showDialog(
           barrierDismissible: false,

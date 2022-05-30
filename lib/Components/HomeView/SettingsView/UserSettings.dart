@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
+import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
 import 'package:be_startup/Components/Widgets/PhoneNoVerification.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -22,9 +23,10 @@ class UserSettings extends StatefulWidget {
 class _UserSettingsState extends State<UserSettings> {
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
   FirebaseAuth fireInstance = FirebaseAuth.instance;
-
+  double mem_dialog_width = 900;
   var updateEmailFeild = TextEditingController();
   var is_update_mail = false;
+
   // success alert :
   ResultDialog(context) async {
     CoolAlert.show(
@@ -78,13 +80,24 @@ class _UserSettingsState extends State<UserSettings> {
           });
     }
 
+
+
+
     ResetPassword() async {
       await auth.ResetPasswordWithEmail();
       await ResultDialog(context);
     }
 
+    UpdateEmail() async {
+      var email = updateEmailFeild.text;
+      ReauthenticateDialog(
+          task: ReautheticateTask.updateEmail, updateMail: email);
+    }
+
+
+
+
     SecondFactAuth() async {
-      
       print('SecondFactAuth ');
     }
 
@@ -92,19 +105,15 @@ class _UserSettingsState extends State<UserSettings> {
       print('EditProfile ');
     }
 
-    UpdateEmail() async {
-      var email = updateEmailFeild.text;
-      // print(email);
-      ReauthenticateDialog(
-          task: ReautheticateTask.updateEmail, updateMail: email);
-    }
 
-    DeleteUser() async {
-      await ReauthenticateDialog(
-        task: ReautheticateTask.deleteProfile,
-      );
-      print('DeleteUser ');
-    }
+
+
+  DeleteUser() async {
+    await ReauthenticateDialog(
+      task: ReautheticateTask.deleteProfile,
+    );
+    print('DeleteUser ');
+  }
 
     VerifyPhoneno() async {
      PhoneNoVerificationDialog();

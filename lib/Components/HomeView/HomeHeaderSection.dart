@@ -6,10 +6,12 @@ import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
+import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
 import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
@@ -35,6 +37,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double con_button_width = 80;
   double con_button_height = 40;
   double con_btn_top_margin = 40;
+
+  double mem_dialog_width = 900;
+
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
 
@@ -54,6 +59,26 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   @override
   Widget build(BuildContext context) {
     String? selectedValue;
+
+    ShowDialog(context) {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => AlertDialog(
+                alignment: Alignment.center,
+                // title:  MileDialogHeading(context),
+                content: SizedBox(
+                  width: mem_dialog_width,
+                  child: AddInvestorDialogAlert(
+                    form_type: InvestorFormType.create,
+                  ),
+                ),
+              ));
+    }
+
+    AddInvestor(context) {
+      ShowDialog(context);
+    }
 
     // Explore Topics
     ExploreFunction() {
@@ -164,6 +189,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                                 //Do something
                                 break;
                               case MenuItems.investor:
+                                await AddInvestor(context);
                                 //Do something
                                 break;
                               case MenuItems.startup:

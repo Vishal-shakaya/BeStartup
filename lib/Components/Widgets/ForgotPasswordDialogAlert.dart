@@ -35,6 +35,7 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
   }
 
 
+  
   ErrorSnakbar(message) async {
     Get.closeAllSnackbars();
     Get.snackbar(
@@ -43,7 +44,7 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
       margin: EdgeInsets.only(top: 10),
       duration: Duration(seconds: 3),
       backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Something went wrong'),
+      titleText: MySnackbarTitle(title: 'May Email is not registored'),
       messageText: MySnackbarContent(message: message),
       maxWidth: context.width * 0.50,
     );
