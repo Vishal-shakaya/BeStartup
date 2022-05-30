@@ -11,6 +11,7 @@ import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -87,6 +88,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           builder: (context) {
             return AlertDialog(content: ExploreCatigoryAlert());
           });
+    }
+
+    // CreateStartup :
+    CreateStatup() async {
+      Get.toNamed(startup_slides_url);
     }
 
     return Container(
@@ -193,6 +199,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                                 //Do something
                                 break;
                               case MenuItems.startup:
+                                CreateStatup();
                                 //Do something
                                 break;
                               case MenuItems.settings:

@@ -32,4 +32,4 @@ String select_investor_choise = '/investor-choise';
 String investor_registration_form = '/investor-registration-form';
 
 // REGISTOR PLAN : 
-String select_plan_url = '/select-0plan-url';
+String select_plan_url = '/select-plan-url';
