@@ -4,8 +4,11 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:horizontal_card_pager/card_item.dart';
+import 'package:razorpay_web/razorpay_web.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 enum PlanOption { basicPlan, bestPlan, businessPlan }
 
@@ -17,26 +20,36 @@ class SelectPlan extends StatefulWidget {
 }
 
 class _SelectPlanState extends State<SelectPlan> {
+  static const platform = MethodChannel("razorpay_flutter");
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   Color? unselect_color =
       Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
   Color? select_color = Get.isDarkMode ? tealAccent : primary_light;
 
-  Color? basicPlan = Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
+  Color? basicPlan =
+      Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
-  Color? bestPlan = Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
+  Color? bestPlan =
+      Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
-  Color? businessPlan = Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
+  Color? businessPlan =
+      Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
   Color? card_hover_color =
       Get.isDarkMode ? tealAccent.withOpacity(0.3) : Colors.blueGrey.shade50;
 
   String? select_plan_type = null;
+  var _razorpay = Razorpay();
+
+  int? planAmount;
 
   ///////////////////////////////////////
   // CARD AND BUTTON  :
   // 1. WIDTH AND HEIGHT :
   ///////////////////////////////////////
+
   double card_width = 300;
   double card_height = 430;
   double card_padding = 20;
@@ -59,6 +72,13 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 2. REDIRECT TO SLIDE PAGE :
 ///////////////////////////////////////////
   OnpressContinue(context) {
+    var selectedPlan = {
+      'plan': select_plan_type?.toUpperCase(),
+      'phone_no': auth.currentUser?.phoneNumber,
+      'mail': auth.currentUser?.email,
+      'amount': planAmount
+    };
+
     // REQUIRED TO SELECT USER TYPE:
     if (select_plan_type == null) {
       CoolAlert.show(
@@ -72,12 +92,62 @@ class _SelectPlanState extends State<SelectPlan> {
                 color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
                 fontWeight: FontWeight.bold),
           ));
+    } else {
+      openCheckout(
+          plan_type: selectedPlan['plan'],
+          phone: selectedPlan['phone_no'],
+          amount: selectedPlan['amount'],
+          email: selectedPlan['mail']);
     }
+  }
 
-    // // REDIRECT TO CREATE STARTUP PAGE :
-    // if (select_plan_type == 'founder') {
-    //   Get.toNamed(create_business_detail_url ,preventDuplicates: false);
-    // }
+  PaymentSuccess(response) async {
+    final resp = await response; 
+    print('SUCCESS RESPONSE $resp');
+  }
+
+  PaymentError(response) async {
+    print('SUCCESS ERROR $response');
+  }
+
+  PayemtnFromExternalWallet(response) async {
+    print('SUCCESS EXTERNAL WALLET $response');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, PaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, PaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, PayemtnFromExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout({amount, phone, email, plan_type}) async {
+    var options = {
+      'key': 'rzp_test_XBqgVUXDkrs93M',
+      'amount': amount,
+      'name': 'BeStartup',
+      'description': 'plan_type',
+      'retry': {'enabled': true, 'max_count': 1},
+      'send_sms_hash': true,
+      'prefill': {'contact': phone, 'email': email},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
   }
 
   SelectedPlan(option) {
@@ -89,7 +159,7 @@ class _SelectPlanState extends State<SelectPlan> {
         bestPlan = unselect_color;
         businessPlan = unselect_color;
         select_plan_type = 'basic';
-
+        planAmount = 100000;
         // 1. SELECT INVESTOR LOGIC:
         // 2. UNSELECT FOUNDER
       } else if (PlanOption.bestPlan == option) {
@@ -97,16 +167,17 @@ class _SelectPlanState extends State<SelectPlan> {
         basicPlan = unselect_color;
         businessPlan = unselect_color;
         select_plan_type = 'best';
+        planAmount = 175000;
       }
 
       // 1. SELECT INVESTOR LOGIC:
       // 2. UNSELECT FOUNDER
       else if (PlanOption.businessPlan == option) {
-
         businessPlan = select_color;
         bestPlan = unselect_color;
         basicPlan = unselect_color;
         select_plan_type = 'business';
+        planAmount = 600000;
       }
     });
   }
@@ -182,12 +253,10 @@ class _SelectPlanState extends State<SelectPlan> {
 
     return Container(
         child: SingleChildScrollView(
-         child: Column(
-           mainAxisSize: MainAxisSize.min,
-            children: [
-          ///////////////////////////////
-          // Heading Section :
-          ///////////////////////////////
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        ///////////////////////////////
+        // Heading Section :
+        ///////////////////////////////
         Container(
           height: context.height * heading_col_height,
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -214,21 +283,21 @@ class _SelectPlanState extends State<SelectPlan> {
                 period: '3 Month',
                 type: 'Basic Plan',
                 selected_plan: PlanOption.basicPlan,
-                active_color:basicPlan, 
+                active_color: basicPlan,
                 color_pallet: Colors.blue),
             PlanType(
                 amount: '₹ 1750/-',
                 period: '1 Year',
                 type: 'Best Plan',
                 selected_plan: PlanOption.bestPlan,
-                active_color:bestPlan, 
+                active_color: bestPlan,
                 color_pallet: Colors.orange),
             PlanType(
                 amount: '₹ 6000/-',
                 period: 'Lifetime',
                 type: 'Business Plan',
                 selected_plan: PlanOption.businessPlan,
-                active_color:businessPlan, 
+                active_color: businessPlan,
                 color_pallet: primary_light2),
           ],
         ),
@@ -280,13 +349,8 @@ class _SelectPlanState extends State<SelectPlan> {
     );
   }
 
-  Container PlanType({
-    type, 
-    amount, 
-    period, 
-    color_pallet,
-    active_color, 
-    selected_plan}) {
+  Container PlanType(
+      {type, amount, period, color_pallet, active_color, selected_plan}) {
     return Container(
         height: body_cont_height,
         child: Row(

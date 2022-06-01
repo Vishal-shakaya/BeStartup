@@ -12,6 +12,7 @@ class MyAuthentication extends GetxController {
   static String image_url = '';
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  
   var manage_user = AuthUserManager();
   var userStore = UserStore();
   var reAuth = Get.put(ReAuthentication(), tag: 're_auth');

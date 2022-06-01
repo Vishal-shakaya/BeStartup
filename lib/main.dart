@@ -23,6 +23,7 @@ import 'package:be_startup/UI/StartupView/StartupView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/Handlers/UserRegistration/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
@@ -69,30 +70,33 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const platform = MethodChannel("razorpay_flutter");
   @override
   void initState() {
+     
     // TODO: implement initState
     super.initState();
   }
 
-  // LOADING SPINNER : 
-var spinner = Container(
-      width: 60,
-      height: 60,
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(8),
-      child: CircularProgressIndicator(
-        backgroundColor: Colors.transparent,
-        color: dartk_color_type3,
-        strokeWidth: 5,
-      ),
-    );
+  // LOADING SPINNER :
+  var spinner = Container(
+    width: 60,
+    height: 60,
+    alignment: Alignment.center,
+    padding: EdgeInsets.all(8),
+    child: CircularProgressIndicator(
+      backgroundColor: Colors.transparent,
+      color: dartk_color_type3,
+      strokeWidth: 5,
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     print('Login State $is_user_login_state');
 
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
       // INITILIZE TOAST DIALOG  :
       navigatorObservers: [FlutterSmartDialog.observer],
@@ -131,13 +135,12 @@ var spinner = Container(
                       return spinner;
                     }
                     if (snapshot.hasData) {
-                      // Check Login user complete profile setup or not : 
-                      // if Complete then redirect to 
+                      // Check Login user complete profile setup or not :
+                      // if Complete then redirect to
                       return HomeView();
                     }
                     return LoginHandler();
                   });
-
             }),
 
         GetPage(name: user_registration_url, page: () => RegistrationView()),
