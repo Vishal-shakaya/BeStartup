@@ -69,9 +69,7 @@ class StartupViewConnector extends GetxController {
           FirebaseFirestore.instance.collection('BusinessThumbnail');
       var query = thumbnail
           .where(
-            'email',
-            isEqualTo: getuserEmail,
-          )
+            'email',isEqualTo: getuserEmail,)
           .where('user_id', isEqualTo: getUserId)
           .where('startup_name', isEqualTo: getStartupName)
           .get();
@@ -237,6 +235,8 @@ class StartupViewConnector extends GetxController {
       return false;
     }
   }
+
+
 
   FetchProducts() async {
     var data;

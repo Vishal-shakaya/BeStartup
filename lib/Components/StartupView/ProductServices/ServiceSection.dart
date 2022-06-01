@@ -72,15 +72,15 @@ class _ServiceSectionState extends State<ServiceSection> {
 
   Container MainMethod(BuildContext context) {
     return Container(
-      width: context.width * 0.70,
-      height: context.height * 0.50,
+      width: context.width * 0.75,
+      height: context.height * 0.60,
       margin: EdgeInsets.only(
           bottom: context.height * 0.06, top: context.height * 0.06),
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: services.length,
         itemBuilder: (context, index) {
-        return Services(service: services[index],);
+        return Services(service: services[index],key:UniqueKey());
       }),
     );
   }

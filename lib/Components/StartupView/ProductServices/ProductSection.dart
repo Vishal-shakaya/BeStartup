@@ -43,7 +43,7 @@ class _ProductSectionState extends State<ProductSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        await Future.delayed(Duration(seconds: 5));
+        // await Future.delayed(Duration(seconds: 5));
         final data = await startupConnect.FetchProducts();
         products = data;
         return data;
@@ -77,8 +77,8 @@ class _ProductSectionState extends State<ProductSection> {
       children: [
         EditButton(context, EditProductAndService),
         Container(
-            width: context.width * 0.70,
-            height: context.height * 0.50,
+            width: context.width * 0.75,
+            height: context.height * 0.60,
             margin: EdgeInsets.only(
                 bottom: context.height * 0.06, top: context.height * 0.02),
             child: ListView.builder(

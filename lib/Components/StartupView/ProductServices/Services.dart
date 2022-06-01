@@ -15,11 +15,12 @@ class Services extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double image_cont_width = 0.18;
-    double image_cont_height = 0.20;
+    double image_cont_width = 0.20;
+    double image_cont_height = 0.27;
 
-    double desc_cont_width = 0.40;
-    double desc_cont_height = 0.20;
+    double desc_cont_width = 0.41;
+    double desc_cont_height = 0.21;
+
     double mem_dialog_width = 0.60;
 
     // PRODUT DEATIL DIALOG :
@@ -71,7 +72,7 @@ class Services extends StatelessWidget {
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+            border: Border.all(width: 1, color: Colors.grey.shade200)),
         child: Column(
           children: [
             Container(
@@ -90,7 +91,6 @@ class Services extends StatelessWidget {
                 ),
                 
               ]),
-                maxLines: 5,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -103,14 +103,14 @@ class Services extends StatelessWidget {
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
                       color: light_color_type3,
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       wordSpacing: 2,
-                      height: 1.6),
+                      height: 1.8),
                 ),
                 textAlign: TextAlign.left,
                 softWrap: true,
-                overflow: TextOverflow.visible,
+                overflow: TextOverflow.ellipsis,
                 maxLines: 5,
               ),
             ),
@@ -125,15 +125,15 @@ class Services extends StatelessWidget {
       shadowColor: Colors.blueGrey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(
-          left: Radius.circular(19),
-          right: Radius.circular(19),
+          left: Radius.circular(15),
+          right: Radius.circular(15),
         ),
       ),
       child: Container(
         child: ClipRRect(
           borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(19),
-            right: Radius.circular(19),
+            left: Radius.circular(15),
+            right: Radius.circular(15),
           ),
           child: Image.network(service['image_url'],
               width: context.width * image_cont_width,
@@ -142,8 +142,8 @@ class Services extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(20),
-              right: Radius.circular(20),
+              left: Radius.circular(15),
+              right: Radius.circular(15),
             ),
             border: Border.all(width: 2, color: Colors.grey.shade200)),
       ),

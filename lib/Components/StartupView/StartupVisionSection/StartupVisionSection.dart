@@ -62,7 +62,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
   Container MainMethod(BuildContext context) {
     return Container(
       width: context.width*0.50,
-      height: context.height*0.38,
+      height: context.height*0.42,
       child: Column(
         children: [
           // HEADING : 
@@ -95,9 +95,10 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
                     style:GoogleFonts.openSans(
                           textStyle: TextStyle(),
                           color: light_color_type3,
-                          fontSize: 16,
-                          height:1.6
-                        )
+                          fontSize: 15,
+                          height:1.8, 
+                          fontWeight:FontWeight.w600
+                                                  )
                     ), 
                     maxLines: 8,
                     overflow: TextOverflow.ellipsis,

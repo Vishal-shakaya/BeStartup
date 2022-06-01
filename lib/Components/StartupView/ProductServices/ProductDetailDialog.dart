@@ -72,12 +72,15 @@ class _ProductDetailDialogState extends State<ProductDetailDialog> {
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              border: Border.all(color: border_color) 
+                              border: Border.all(color: Colors.grey.shade200) 
                             ),
                             child: AutoSizeText.rich(
                               TextSpan(
                                 text:long_string, 
-                                style: TextStyle(fontSize: 15)
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  wordSpacing: 2,
+                                  height:1.8 )
                               ),
                                  style: Get.theme.textTheme.headline5, 
                               ) ,
@@ -127,7 +130,8 @@ class _ProductDetailDialogState extends State<ProductDetailDialog> {
                           TextSpan(
                             text:title,
                             style: TextStyle(
-                              fontSize: 32
+                              fontSize: 20, 
+                              color:light_color_type3
                             ) )
                         
                           ])),
