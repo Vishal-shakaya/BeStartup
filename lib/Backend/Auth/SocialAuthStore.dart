@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,11 +8,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:twitter_login/twitter_login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MySocialAuth extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  var userStore = UserStore();
   ///////////////////////////////////////////////////////////////
   /// CHECK IF ACCOUNT ALREADY EXIST :
   /// 1. THEN CEHCK ALREADY SINGED IN METHOD :
@@ -77,11 +79,12 @@ class MySocialAuth extends GetxController {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      
+
       // Once signed in, return the UserCredential
       try {
-        final resp =
-            await FirebaseAuth.instance.signInWithCredential(credintail);
+        await FirebaseAuth.instance.signInWithCredential(credintail);
+        await userStore.CreateUser();
+        await auth.setPersistence(Persistence.SESSION);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
@@ -101,10 +104,14 @@ class MySocialAuth extends GetxController {
           .addScope('https://www.googleapis.com/auth/contacts.readonly');
       googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-      // Once signed in, return the UserCredential
       try {
-        final resp =
-            await FirebaseAuth.instance.signInWithPopup(googleProvider);
+        // Once signed in, return the UserCredential
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+        // Create user in DB:
+        await userStore.CreateUser();
+        // Set Persistance:
+        await auth.setPersistence(Persistence.SESSION);
+
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
@@ -131,8 +138,8 @@ class MySocialAuth extends GetxController {
       try {
         final resp =
             FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-            return ResponseBack(response_type: true);
-
+        await userStore.CreateUser();
+        return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
@@ -156,6 +163,7 @@ class MySocialAuth extends GetxController {
       // Once signed in, return the UserCredential
       try {
         await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+        await userStore.CreateUser();
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
@@ -191,9 +199,9 @@ class MySocialAuth extends GetxController {
       try {
         final resp = await FirebaseAuth.instance
             .signInWithCredential(twitterAuthCredential);
-            return ResponseBack(response_type: true);
+        await userStore.CreateUser();
 
-
+        return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
@@ -212,7 +220,9 @@ class MySocialAuth extends GetxController {
       try {
         final resp =
             await FirebaseAuth.instance.signInWithPopup(twitterProvider);
-            return ResponseBack(response_type: true);
+        await userStore.CreateUser();
+
+        return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
@@ -226,6 +236,15 @@ class MySocialAuth extends GetxController {
   /// LOGOUT :
   /// ////////////////////////////////
   Logout() async {
+    final localStore = await SharedPreferences.getInstance();
+   
+    localStorageKeyes.forEach((objKey) {
+      final key_found = localStore.containsKey(objKey);
+      if (key_found) {
+        localStore.remove(objKey);
+      }
+    });
+
     // Logout from firebase :
     FirebaseAuth.instance.signOut();
     // Facebook signout :

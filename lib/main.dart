@@ -71,9 +71,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   static const platform = MethodChannel("razorpay_flutter");
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
-     
     // TODO: implement initState
     super.initState();
   }
@@ -93,7 +94,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    print('Login State $is_user_login_state');
+
+    SetAppLocalState() async {
+      final user = auth.currentUser;
+      await SetLoginUserMail(user?.email);
+      await SetLoginUserId(user?.uid);
+    }
+
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -126,7 +133,7 @@ class _MyAppState extends State<MyApp> {
             page: () {
               return StreamBuilder(
                   stream: FirebaseAuth.instance.authStateChanges(),
-                  builder: (context, snapshot) {
+                  builder: (context, snapshot)  {
                     if (snapshot.hasError) {
                       // SHOW ERROR :
                       ErrorPage();
@@ -137,6 +144,9 @@ class _MyAppState extends State<MyApp> {
                     if (snapshot.hasData) {
                       // Check Login user complete profile setup or not :
                       // if Complete then redirect to
+
+                      // Configure App local state :
+                      SetAppLocalState();
                       return HomeView();
                     }
                     return LoginHandler();

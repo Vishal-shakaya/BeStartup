@@ -43,8 +43,17 @@ List<String> business_catigories = [
   'Textile',
 ];
 
-// CREATE RESPONSE ERROR OR SUCCESSFUL :
 
+ final localStorageKeyes = [
+      'loginUserName',
+      'loginUserEmail',
+      'loginUserId',
+      'StartupName'
+    ];
+
+
+
+// CREATE RESPONSE ERROR OR SUCCESSFUL :
 ResponseBack(
     {required response_type, code = null, data = null, message = null}) async {
   var response;

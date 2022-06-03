@@ -106,11 +106,12 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   AutoSizeText MiltTitleTab({title}) {
     return AutoSizeText.rich(
       TextSpan(
-          text: title,
+          text: title.toString().capitalizeFirst,
           style: GoogleFonts.robotoSlab(
             textStyle: TextStyle(),
             color: light_color_type4,
             fontSize: 16,
+            fontWeight:FontWeight.w600
           )),
       style: Get.textTheme.headline2,
     );
@@ -128,7 +129,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
             margin: EdgeInsets.only(bottom: dy_height),
             child: AutoSizeText.rich(
               TextSpan(
-                  text: title,
+                  text: title.toString().capitalizeFirst,
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
                       color: light_color_type1,
@@ -144,8 +145,8 @@ class _StartupMileStoneState extends State<StartupMileStone> {
                 style: GoogleFonts.openSans(
                     textStyle: TextStyle(),
                     color: light_color_type1,
-                    fontSize: 15,
-                    height: 1.6,
+                    fontSize: 14,
+                    height: 1.8,
                     wordSpacing: 2)),
             style: Get.textTheme.headline2,
             // textAlign: TextAlign.center,

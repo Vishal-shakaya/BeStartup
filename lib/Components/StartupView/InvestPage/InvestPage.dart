@@ -84,7 +84,7 @@ return FutureBuilder(
             StartupHeaderText(title:'Invest',font_size:35,),
             SizedBox(height: context.height*0.03,),
 
-            StartupHeaderText(title:'Why you invest in us !',font_size: 20,),
+            StartupHeaderText(title:'Why you invest in us !',font_size: 15,),
             SizedBox(height: context.height*0.02,),
 
             // VISION TEXT:  
@@ -137,11 +137,15 @@ return FutureBuilder(
                       style:GoogleFonts.openSans(
                             textStyle: TextStyle(),
                             color: light_color_type3,
-                            fontSize: 16,
-                            height:1.6
+                              fontSize: 15,
+                              height:1.8, 
+                              fontWeight:FontWeight.w600
                           )
-                      ), 
+                      ),
+                      maxLines: 6,
+                      overflow: TextOverflow.ellipsis, 
                       style: Get.textTheme.headline2,
+                      textAlign: TextAlign.left,
                   )
                 ),
               ),
@@ -178,7 +182,7 @@ return FutureBuilder(
                     style: TextStyle(
                         letterSpacing: 2.5,
                         color: Colors.white,
-                        fontSize: 25,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

@@ -125,9 +125,12 @@ class _VisionPageState extends State<VisionPage> {
                             style: GoogleFonts.openSans(
                                 textStyle: TextStyle(),
                                 color: light_color_type3,
-                                fontSize: 16,
-                                height: 1.6)),
+                                fontSize: 15,
+                                height: 1.8,
+                                fontWeight:FontWeight.w600
+                                 )),
                         style: Get.textTheme.headline2,
+                        maxLines: 18,
                       )),
                 ),
               ),

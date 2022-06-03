@@ -1,4 +1,5 @@
 // Import the firebase_core and cloud_firestore plugin
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
@@ -12,7 +13,7 @@ class MyAuthentication extends GetxController {
   static String image_url = '';
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  
+
   var manage_user = AuthUserManager();
   var userStore = UserStore();
   var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
@@ -39,6 +40,7 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
   // Verify Otp :
   VerifyOtp({currentUser, confirmationResult, otp}) async {
     try {
@@ -50,6 +52,7 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
 
   // Update phone no of currently login user :
   UpdatePhoneNo({verificationId, otp}) {
@@ -64,6 +67,7 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
 
 // Phone number verification and link no in Android or ios device :
   AndroidPhoneVerificaiton(number) async {
@@ -148,9 +152,12 @@ class MyAuthentication extends GetxController {
       if (verify_email == false) {
         return ResponseBack(response_type: false, data: 'email_not_verify');
       } else {
-        // Create User :
+
         try {
-          userStore.CreateUser(email: email);
+          if (GetPlatform.isWeb) {
+            await auth.setPersistence(Persistence.SESSION);
+          }
+
           return ResponseBack(response_type: true);
         } catch (e) {
           return ResponseBack(response_type: false);
@@ -185,15 +192,16 @@ class MyAuthentication extends GetxController {
       final method =
           await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
 
-      if(method.contains('password')){
+      if (method.contains('password')) {
         auth.sendPasswordResetEmail(email: email);
         return ResponseBack(response_type: true);
       }
 
-       return ResponseBack(response_type: false ,message: 'mail address not registered');
-
+      return ResponseBack(
+          response_type: false, message: 'mail address not registered');
     } on FirebaseAuthException catch (e) {
-      return ResponseBack(response_type: false , message:'mail address not registered');
+      return ResponseBack(
+          response_type: false, message: 'mail address not registered');
     }
   }
 

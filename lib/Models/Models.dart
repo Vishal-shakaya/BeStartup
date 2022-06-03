@@ -4,10 +4,10 @@ import 'package:uuid/uuid_util.dart';
 
 var uuid = Uuid();
 
-UserModel({email,is_profile_complete}) async {
+UserModel({email,is_profile_complete, id}) async {
   try {
     Map<String, dynamic> temp_obj = {
-      'id': uuid.v4(),
+      'id': id,
       'email': email,
       'is_profile_complete':is_profile_complete
     };
