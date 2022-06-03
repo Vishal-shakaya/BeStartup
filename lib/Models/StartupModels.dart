@@ -63,6 +63,21 @@ VisionModel({user_id, email, vision, startup_name}) async {
   }
 }
 
+WhyInvestModel({user_id, email, why_text, startup_name}) async {
+  try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'email': email,
+      'startup_name': startup_name,
+      'why_text': why_text,
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
+
 CatigoryModel({user_id, email, startup_name, catigory}) async {
   try {
     Map<String, dynamic> temp_obj = {

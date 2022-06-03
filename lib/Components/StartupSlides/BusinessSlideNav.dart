@@ -9,6 +9,7 @@ enum SlideType {
   milestone,
   catigory,
   product,
+  whyInvest
 }
 
 class BusinessSlideNav extends StatefulWidget {
@@ -27,26 +28,31 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     if (slide == SlideType.detail) {
       Get.toNamed(user_registration_url);
     }
-    // 2.Thumbnail view <- Null  view :
+    // 2.BusinessDetail view <- Null  view :
     if (slide == SlideType.thumbnail) {
       Get.toNamed(create_business_detail_url);
     }
-    // 2.Thumbnail view <- Detail view :
+    // 3.Business Thumbnail view <- Detail view :
     if (slide == SlideType.vision) {
       Get.toNamed(create_business_thumbnail_url);
     }
-    // 2.Thumbnail view <- Vision view :
+    // 4.BusinessVision view <- Vision view :
     if (slide == SlideType.catigory) {
       Get.toNamed(create_business_vision_url);
     }
-    // 2.Thumbnail view <- Catigory view :
+    // 5.BusinessCatigory view <- Catigory view :
     if (slide == SlideType.product) {
       Get.toNamed(create_business_catigory_url);
     }
-
-    // 2.Thumbnail view <- Product view :
-    if (slide == SlideType.milestone) {
+    
+    // BusinessProduct <= Why Invest  : 
+    if (slide == SlideType.whyInvest) {
       Get.toNamed(create_business_product_url);
+    }
+
+    // 6. Business Product view <- Product view :
+    if (slide == SlideType.milestone) {
+      Get.toNamed(create_business_whyInvest_url);
     }
   }
 
@@ -73,7 +79,11 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     // 2.Thumbnail view -> Milestone view :
     if (slide == SlideType.product) {
       widget.submitform!();
-      Get.toNamed(create_business_milestone_url);
+      Get.toNamed(create_business_whyInvest_url);
+    }
+
+    if (slide == SlideType.whyInvest) {
+      widget.submitform!();
     }
 
     // 2.Thumbnail view -> Null view :

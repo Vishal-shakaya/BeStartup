@@ -18,6 +18,7 @@ import 'package:be_startup/UI/StartupSlides/BusinessMileStoneView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessProductView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessThumbnailView.dart';
 import 'package:be_startup/UI/StartupSlides/BusinessVision.dart';
+import 'package:be_startup/UI/StartupSlides/BusinessWhyView.dart';
 import 'package:be_startup/UI/StartupSlides/StartupSlides.dart';
 import 'package:be_startup/UI/StartupView/StartupView.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -175,6 +176,9 @@ class _MyAppState extends State<MyApp> {
         GetPage(
             name: create_business_product_url,
             page: () => BusinessProductView()),
+        GetPage(
+            name: create_business_whyInvest_url,
+            page: () => BusinessWhyInvestView()),
 
         // FOUNDER REGISTRATION AND TEAM
         GetPage(name: create_founder, page: () => RegistorFounderView()),

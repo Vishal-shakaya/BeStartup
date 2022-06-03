@@ -82,5 +82,10 @@ String registor_team_head_text = 'Team Members';
 String investor_choise_text = 'What you Like';
 String investor_choise_sub_text = 'Pesnolize Topics you are Interested In ';
 
+// Business Why Invest Section : 
+String business_why_head_text = 'Why You Invest in Us ';
+String business_why_sub_text = 'Describe why investor invest in you idea in detail';
+
+
 // SELECT PLAN :
 String select_plan_heading = 'Our Best Plans';
