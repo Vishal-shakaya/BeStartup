@@ -4,12 +4,13 @@ import 'package:uuid/uuid_util.dart';
 
 var uuid = Uuid();
 
-UserModel({email,is_profile_complete, id}) async {
+UserModel({email,is_profile_complete, id,plan}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': id,
       'email': email,
-      'is_profile_complete':is_profile_complete
+      'is_profile_complete':is_profile_complete,
+      'plan':plan,  
     };
     return temp_obj;
   } catch (e) {
@@ -86,16 +87,17 @@ UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
   }
 }
 
-PlanModel({name, buyer_mail, purchase_date, expire_date}) async {
+PlanModel({name,phone_no, buyer_mail, purchase_date, expire_date}) async {
   try {
-    Map<String, dynamic> user = {
+    Map<String, dynamic> plan = {
       'id': uuid.v4(),
       'name': name,
       'buyer': buyer_mail,
+      'phone_no':phone_no, 
       'purchase_date': '', // T/F
       'expire_date': '', // T/F
     };
-    return user;
+    return plan;
   } catch (e) {
     return false;
   }

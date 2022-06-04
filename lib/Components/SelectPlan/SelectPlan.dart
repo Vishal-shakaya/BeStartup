@@ -1,3 +1,4 @@
+import 'package:be_startup/Helper/MailServer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -66,13 +67,14 @@ class _SelectPlanState extends State<SelectPlan> {
   double heading_text_top_mar = 0;
 
   double plan_text_font_size = 17;
+  var selectedPlan;
   ///////////////////////////////////////////
   /// HANDLER :
   /// 1.CHECK SELECT USER TYPE :
   /// 2. REDIRECT TO SLIDE PAGE :
 ///////////////////////////////////////////
   OnpressContinue(context) {
-    var selectedPlan = {
+    selectedPlan = {
       'plan': select_plan_type?.toUpperCase(),
       'phone_no': auth.currentUser?.phoneNumber,
       'mail': auth.currentUser?.email,
@@ -88,9 +90,10 @@ class _SelectPlanState extends State<SelectPlan> {
           type: CoolAlertType.info,
           widget: Text(
             'You have to select a Plan to continue',
+            textAlign: TextAlign.center,
             style: TextStyle(
-                color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
-                fontWeight: FontWeight.bold),
+              color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+            ),
           ));
     } else {
       openCheckout(
@@ -101,22 +104,57 @@ class _SelectPlanState extends State<SelectPlan> {
     }
   }
 
-  PaymentSuccess(response) async {
-    final resp = await response; 
-    print('SUCCESS RESPONSE $resp');
+  GetExpiredDate(plan_type) async {
+    var expired;
+
+    if (plan_type == 'basic') {
+      expired = DateTime.now().add(Duration(days: 60)).toUtc().toString();
+      print('Basic plan Selected');
+    }
+    if (plan_type == 'best') {
+      expired = DateTime.now().add(Duration(days: 180)).toUtc().toString();
+      print('Best plan Selected');
+    }
+    if (plan_type == 'business') {
+      print('Business plan Selected');
+      expired = DateTime.now().add(Duration(days: 360)).toUtc().toString();
+    }
+    return expired;
   }
 
-  PaymentError(response) async {
+  PaymentSuccess(PaymentSuccessResponse response) async {
+    final orderd = DateTime.now().toUtc().toString();
+    final plan_type = selectedPlan['plan'].toString().toLowerCase();
+    final expired = GetExpiredDate(plan_type);
+    await SendMailToUser(
+      transaction_id: response.paymentId,
+      plan_type: selectedPlan['plan'],
+      phone_no: selectedPlan['phone_no'],
+      amount: selectedPlan['amount'],
+      receiver_mail_address: selectedPlan['mail'],
+      subject: ' Bestartup Payment Statement ',
+      order_date: orderd,
+      expire_date: expired,
+      payer_name: selectedPlan['mail'],
+    );
+
+    print('SUCCESS RESPONSE ${response.paymentId}');
+  }
+
+  PaymentError(PaymentFailureResponse response) async {
     print('SUCCESS ERROR $response');
   }
 
-  PayemtnFromExternalWallet(response) async {
+  PayemtnFromExternalWallet(ExternalWalletResponse response) async {
     print('SUCCESS EXTERNAL WALLET $response');
   }
 
   @override
   void initState() {
     super.initState();
+    // Default Selected Plan :
+    SelectedPlan(PlanOption.bestPlan);
+
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, PaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, PaymentError);
@@ -134,7 +172,7 @@ class _SelectPlanState extends State<SelectPlan> {
       'key': 'rzp_test_XBqgVUXDkrs93M',
       'amount': amount,
       'name': 'BeStartup',
-      'description': 'plan_type',
+      'description': plan_type,
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
       'prefill': {'contact': phone, 'email': email},
@@ -167,7 +205,7 @@ class _SelectPlanState extends State<SelectPlan> {
         basicPlan = unselect_color;
         businessPlan = unselect_color;
         select_plan_type = 'best';
-        planAmount = 175000;
+        planAmount = 195000;
       }
 
       // 1. SELECT INVESTOR LOGIC:
@@ -286,7 +324,7 @@ class _SelectPlanState extends State<SelectPlan> {
                 active_color: basicPlan,
                 color_pallet: Colors.blue),
             PlanType(
-                amount: '₹ 1750/-',
+                amount: '₹ 1950/-',
                 period: '1 Year',
                 type: 'Best Plan',
                 selected_plan: PlanOption.bestPlan,
