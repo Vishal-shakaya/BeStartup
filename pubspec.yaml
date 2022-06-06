@@ -131,6 +131,12 @@ flutter:
     - assets/images/Slides/founder.png
     - assets/images/Slides/investor.png
 
+    - assets/images/payicon/amazon-pay.jpg
+    - assets/images/payicon/card.png
+    - assets/images/payicon/googlepe.png
+    - assets/images/payicon/paytm.jpeg
+    - assets/images/payicon/phonepe.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

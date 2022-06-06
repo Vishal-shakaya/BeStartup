@@ -79,6 +79,10 @@ class _SelectPlanState extends State<SelectPlan> {
 
   double plan_text_font_size = 17;
   var selectedPlan;
+  var userName;
+  var phoneNo;
+  var tax = 10;
+  var total_amount;
 
   // SHOW LOADING SPINNER :
   StartLoading() {
@@ -97,6 +101,22 @@ class _SelectPlanState extends State<SelectPlan> {
     SmartDialog.dismiss();
   }
 
+  // SNAKBAR :
+  ErrorSnakbar({title, message}) {
+    Get.closeAllSnackbars();
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error ${title}'),
+      messageText: MySnackbarContent(message: 'Something went wrong : $message'),
+      maxWidth: context.width * 0.50,
+    );
+  }
+
+  // Helpong function for gettin expiration date :
   GetExpiredDate(plan_type) async {
     var expired;
 
@@ -115,7 +135,15 @@ class _SelectPlanState extends State<SelectPlan> {
     return expired;
   }
 
-  CheckoutAlertDialog({val}) async {
+  ///////////////////////////////////////////////////////////
+  // CHECKOUT DIALOG ALERT : [Billing Form ]
+  // Handle Pyament flow with Getting required details
+  // for billing purpose  :
+  // 1. Execute checkout function :
+  // 2. pass all payment required param:
+  // 3. Get username , mail , phoneno
+  //////////////////////////////////////////////////////
+  CheckoutAlertDialog({planVal, checkoutVal}) async {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -126,7 +154,8 @@ class _SelectPlanState extends State<SelectPlan> {
               content: SizedBox(
                 width: context.width * 0.37,
                 height: context.height * 0.65,
-                child: CheckoutPaymentDialogWidget(),
+                child: CheckoutPaymentDialogWidget(
+                    plan: planVal, checkout: checkoutVal, key: UniqueKey()),
               ));
         });
   }
@@ -137,13 +166,23 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 2 Requirements :
   /// 2.1 openCheckout
 ///////////////////////////////////////////
-  OnpressContinue(context) {
+  OnpressContinue(context) async {
+    var exact_amount = planAmount! / 100;
+
+    var tax_amount = ((exact_amount * tax) / 100);
+    total_amount = tax_amount + exact_amount;
+    final paid_amount = total_amount * 100;
+
     selectedPlan = {
       'plan': select_plan_type?.toUpperCase(),
       'phone_no': auth.currentUser?.phoneNumber,
       'mail': auth.currentUser?.email,
-      'amount': planAmount
+      'amount': paid_amount,
+      'tax': '${tax}%',
+      'total_amount': total_amount,
+      'tax_amount': tax_amount,
     };
+    final temp_val = selectedPlan;
 
     // REQUIRED TO SELECT USER TYPE:
     if (select_plan_type == null) {
@@ -160,13 +199,29 @@ class _SelectPlanState extends State<SelectPlan> {
             ),
           ));
     } else {
-      CheckoutAlertDialog();
-      // openCheckout(
-      //     plan_type: selectedPlan['plan'],
-      //     phone: selectedPlan['phone_no'],
-      //     amount: selectedPlan['amount'],
-      //     email: selectedPlan['mail']);
+      await CheckoutAlertDialog(planVal: temp_val, checkoutVal: openCheckout);
     }
+  }
+
+// Alert for Success Payment :
+  SuccessMailSendAlert() async {
+    CoolAlert.show(
+        onConfirmBtnTap: () {
+          Get.toNamed(
+            create_business_detail_url,
+          );
+        },
+        context: context,
+        width: 200,
+        title: 'Successful',
+        type: CoolAlertType.success,
+        widget: Text(
+          'Billing Detail send to mail address',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+          ),
+        ));
   }
 
   ///////////////////////////////////////////////////
@@ -175,24 +230,26 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 3. Payment Id for handle issue :
   /// 4. Use email js library to send mail :
   ////////////////////////////////////////////////
-  SendInvoiceMail({
-    required paymentId,
-    required exact_amount,
-    required orderd,
-    required expired,
-  }) async {
+  SendInvoiceMail(
+      {required paymentId,
+      required exact_amount,
+      required orderd,
+      required expired,
+      required payer_name,
+      phone_no}) async {
     try {
       await SendMailToUser(
         transaction_id: paymentId,
         plan_type: selectedPlan['plan'],
-        phone_no: selectedPlan['phone_no'],
+        phone_no: phone_no == null ? '' : phone_no,
         amount: exact_amount.toString(),
         receiver_mail_address: selectedPlan['mail'],
         subject: ' Bestartup Payment Statement ',
         order_date: orderd,
         expire_date: expired,
-        payer_name: selectedPlan['mail'],
+        payer_name: payer_name == null ? selectedPlan['mail'] : payer_name,
       );
+
       EndLoading();
     } catch (e) {
       EndLoading();
@@ -249,12 +306,16 @@ class _SelectPlanState extends State<SelectPlan> {
         paymentId: response.paymentId,
         exact_amount: exact_amount,
         orderd: orderd,
-        expired: expired);
+        expired: expired,
+        payer_name: userName,
+        phone_no: phoneNo);
 
     // 3.  Set UserPlan to its Profile DB :
     await SetUserPlan(
         exact_amount: exact_amount, orderd: orderd, expired: expired);
-
+    await SuccessMailSendAlert();
+    // await Future.delayed(Duration(seconds: 3));
+    // Get.toNamed(create_business_detail_url);
     print('SUCCESS RESPONSE ${response.paymentId}');
   }
 
@@ -264,14 +325,39 @@ class _SelectPlanState extends State<SelectPlan> {
   /////////////////////////////////////////
 
   PaymentError(PaymentFailureResponse response) async {
-    print('SUCCESS ERROR $response');
+    print('SUCCESS ERROR ${response.message}');
+    ErrorSnakbar(title: response.code, message: response.message);
   }
 
   ////////////////////////////////////////
   /// HANDEL EXTERNAL WALLET :
   ////////////////////////////////////////
   PayemtnFromExternalWallet(ExternalWalletResponse response) async {
-    print('SUCCESS EXTERNAL WALLET $response');
+    StartLoading();
+    final orderd = DateTime.now().toUtc().toString();
+    final plan_type = selectedPlan['plan'].toString().toLowerCase();
+    final expired = await GetExpiredDate(plan_type);
+    var exact_amount = selectedPlan['amount'] / 100;
+
+    // 1. Check if user already purcahase any plan
+    // then show alert about the plan :
+
+    // 2.  Send Bill to Founder Mail address :
+    await SendInvoiceMail(
+        paymentId: response.walletName,
+        exact_amount: exact_amount,
+        orderd: orderd,
+        expired: expired,
+        payer_name: userName,
+        phone_no: phoneNo);
+
+    // 3.  Set UserPlan to its Profile DB :
+    await SetUserPlan(
+        exact_amount: exact_amount, orderd: orderd, expired: expired);
+    await SuccessMailSendAlert();
+    // await Future.delayed(Duration(seconds: 3));
+    // Get.toNamed(create_business_detail_url);
+    print('SUCCESS RESPONSE ${response.walletName}');
   }
 
   @override
@@ -298,7 +384,9 @@ class _SelectPlanState extends State<SelectPlan> {
   /// razorpay :
   /// 2. Required: amount , plan , phone , email ,
   //////////////////////////////////////////////////////
-  void openCheckout({amount, phone, email, plan_type}) async {
+  void openCheckout({amount, phone, email, plan_type, user_name}) async {
+    userName = user_name;
+    phoneNo = phone;
     var options = {
       'key': 'rzp_test_XBqgVUXDkrs93M',
       'amount': amount,

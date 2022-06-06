@@ -33,7 +33,7 @@ Future SendMailToUser({
           'template_params': {
             'transaction_id': transaction_id,
             'plan_type': plan_type,
-            'amount': amount,
+            'amount': '₹${amount}',
             'order_date': order_date,
             'expire_date': expire_date,
             'phone_no': phone_no,

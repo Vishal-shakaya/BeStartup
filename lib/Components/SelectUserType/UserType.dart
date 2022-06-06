@@ -72,7 +72,7 @@ class _UserTypeState extends State<UserType> {
     // REDIRECT TO CREATE STARTUP PAGE :
     if (selected_user_type == 'founder') {
       // Get.toNamed(startup_slides_url ,preventDuplicates: false);
-      Get.toNamed(create_business_detail_url ,preventDuplicates: false);
+      Get.toNamed(select_plan_url ,preventDuplicates: false);
     }
 
     // REDIERCT TO STARTUPS VIEW:
