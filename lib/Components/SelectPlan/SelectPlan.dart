@@ -1,14 +1,22 @@
+import 'dart:convert';
+
+import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/Helper/MailServer.dart';
+import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:horizontal_card_pager/card_item.dart';
 import 'package:razorpay_web/razorpay_web.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 enum PlanOption { basicPlan, bestPlan, businessPlan }
@@ -23,7 +31,7 @@ class SelectPlan extends StatefulWidget {
 class _SelectPlanState extends State<SelectPlan> {
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  var userStore = Get.put(UserStore(), tag: 'user_store');
   Color? unselect_color =
       Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
@@ -46,6 +54,9 @@ class _SelectPlanState extends State<SelectPlan> {
 
   int? planAmount;
 
+  var basic_plan_amount = 1000;
+  var best_plan_amount = 1950;
+  var business_plan_amount = 6000;
   ///////////////////////////////////////
   // CARD AND BUTTON  :
   // 1. WIDTH AND HEIGHT :
@@ -68,10 +79,63 @@ class _SelectPlanState extends State<SelectPlan> {
 
   double plan_text_font_size = 17;
   var selectedPlan;
+
+  // SHOW LOADING SPINNER :
+  StartLoading() {
+    var dialog = SmartDialog.showLoading(
+        background: Colors.white,
+        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+        widget: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent,
+        ));
+    return dialog;
+  }
+
+// End Loading
+  EndLoading() async {
+    SmartDialog.dismiss();
+  }
+
+  GetExpiredDate(plan_type) async {
+    var expired;
+
+    if (plan_type == 'basic') {
+      expired = DateTime.now().add(Duration(days: 60)).toUtc().toString();
+      print('Basic plan Selected');
+    }
+    if (plan_type == 'best') {
+      expired = DateTime.now().add(Duration(days: 180)).toUtc().toString();
+      print('Best plan Selected');
+    }
+    if (plan_type == 'business') {
+      print('Business plan Selected');
+      expired = DateTime.now().add(Duration(days: 360)).toUtc().toString();
+    }
+    return expired;
+  }
+
+  CheckoutAlertDialog({val}) async {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                width: context.width * 0.37,
+                height: context.height * 0.65,
+                child: CheckoutPaymentDialogWidget(),
+              ));
+        });
+  }
+
   ///////////////////////////////////////////
-  /// HANDLER :
-  /// 1.CHECK SELECT USER TYPE :
-  /// 2. REDIRECT TO SLIDE PAGE :
+  /// CHECKOUT  HANDLER :
+  /// 1. Create Payment obj :
+  /// 2 Requirements :
+  /// 2.1 openCheckout
 ///////////////////////////////////////////
   OnpressContinue(context) {
     selectedPlan = {
@@ -96,55 +160,116 @@ class _SelectPlanState extends State<SelectPlan> {
             ),
           ));
     } else {
-      openCheckout(
-          plan_type: selectedPlan['plan'],
-          phone: selectedPlan['phone_no'],
-          amount: selectedPlan['amount'],
-          email: selectedPlan['mail']);
+      CheckoutAlertDialog();
+      // openCheckout(
+      //     plan_type: selectedPlan['plan'],
+      //     phone: selectedPlan['phone_no'],
+      //     amount: selectedPlan['amount'],
+      //     email: selectedPlan['mail']);
     }
   }
 
-  GetExpiredDate(plan_type) async {
-    var expired;
-
-    if (plan_type == 'basic') {
-      expired = DateTime.now().add(Duration(days: 60)).toUtc().toString();
-      print('Basic plan Selected');
+  ///////////////////////////////////////////////////
+  /// 1. Send Bill To Buyer [ Founder ]:
+  /// 2. Bill has expiration date  Important:
+  /// 3. Payment Id for handle issue :
+  /// 4. Use email js library to send mail :
+  ////////////////////////////////////////////////
+  SendInvoiceMail({
+    required paymentId,
+    required exact_amount,
+    required orderd,
+    required expired,
+  }) async {
+    try {
+      await SendMailToUser(
+        transaction_id: paymentId,
+        plan_type: selectedPlan['plan'],
+        phone_no: selectedPlan['phone_no'],
+        amount: exact_amount.toString(),
+        receiver_mail_address: selectedPlan['mail'],
+        subject: ' Bestartup Payment Statement ',
+        order_date: orderd,
+        expire_date: expired,
+        payer_name: selectedPlan['mail'],
+      );
+      EndLoading();
+    } catch (e) {
+      EndLoading();
     }
-    if (plan_type == 'best') {
-      expired = DateTime.now().add(Duration(days: 180)).toUtc().toString();
-      print('Best plan Selected');
-    }
-    if (plan_type == 'business') {
-      print('Business plan Selected');
-      expired = DateTime.now().add(Duration(days: 360)).toUtc().toString();
-    }
-    return expired;
   }
 
+  ///////////////////////////////////////////
+  /// 1. Update user Profile with plan :
+  /// 2. if user plan activate thne show Alert :
+  /// for plan is already activated :
+  /// 3. else activate plan :
+  ///////////////////////////////////////////
+  SetUserPlan({
+    required exact_amount,
+    required orderd,
+    required expired,
+  }) async {
+    // Activate User Plan :
+    try {
+      final plan = await PlanModel(
+        plan_name: selectedPlan['plan'],
+        phone_no: selectedPlan['phone_no'],
+        amount: exact_amount,
+        order_date: orderd,
+        expire_date: expired,
+        buyer_mail: selectedPlan['mail'],
+      );
+
+      await userStore.UpdateUser(field: 'plan', val: plan);
+    } catch (e) {
+      EndLoading();
+    }
+  }
+
+  ///////////////////////////////////
+  /// PAYMENT SUCCESS HANDLER :
+  /// Rqquirements :
+  /// 1. SendInvoiceMail,
+  /// 2. SetUserPlan,
+  /// 3. GetExpiredDate
+  ///////////////////////////////////
   PaymentSuccess(PaymentSuccessResponse response) async {
+    StartLoading();
     final orderd = DateTime.now().toUtc().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
-    final expired = GetExpiredDate(plan_type);
-    await SendMailToUser(
-      transaction_id: response.paymentId,
-      plan_type: selectedPlan['plan'],
-      phone_no: selectedPlan['phone_no'],
-      amount: selectedPlan['amount'],
-      receiver_mail_address: selectedPlan['mail'],
-      subject: ' Bestartup Payment Statement ',
-      order_date: orderd,
-      expire_date: expired,
-      payer_name: selectedPlan['mail'],
-    );
+    final expired = await GetExpiredDate(plan_type);
+    var exact_amount = selectedPlan['amount'] / 100;
+
+    // 1. Check if user already purcahase any plan
+    // then show alert about the plan :
+
+    // 2.  Send Bill to Founder Mail address :
+    await SendInvoiceMail(
+        paymentId: response.paymentId,
+        exact_amount: exact_amount,
+        orderd: orderd,
+        expired: expired);
+
+    // 3.  Set UserPlan to its Profile DB :
+    await SetUserPlan(
+        exact_amount: exact_amount, orderd: orderd, expired: expired);
 
     print('SUCCESS RESPONSE ${response.paymentId}');
   }
+
+  /////////////////////////////////////////
+  /// ERROR HANDLER :
+  /// 1. Show Error Snakbar with message:
+  /////////////////////////////////////////
 
   PaymentError(PaymentFailureResponse response) async {
     print('SUCCESS ERROR $response');
   }
 
+  ////////////////////////////////////////
+  /// HANDEL EXTERNAL WALLET :
+  ////////////////////////////////////////
   PayemtnFromExternalWallet(ExternalWalletResponse response) async {
     print('SUCCESS EXTERNAL WALLET $response');
   }
@@ -167,6 +292,12 @@ class _SelectPlanState extends State<SelectPlan> {
     _razorpay.clear();
   }
 
+  ///////////////////////////////////////////////////////
+  /// MAIN FUNCTION :
+  /// 1. Maintain Payment flow with
+  /// razorpay :
+  /// 2. Required: amount , plan , phone , email ,
+  //////////////////////////////////////////////////////
   void openCheckout({amount, phone, email, plan_type}) async {
     var options = {
       'key': 'rzp_test_XBqgVUXDkrs93M',
@@ -180,7 +311,6 @@ class _SelectPlanState extends State<SelectPlan> {
         'wallets': ['paytm']
       }
     };
-
     try {
       _razorpay.open(options);
     } catch (e) {
@@ -188,6 +318,12 @@ class _SelectPlanState extends State<SelectPlan> {
     }
   }
 
+  /////////////////////////////////////////////////////////
+  /// UI PLAN HADLER :
+  /// 1. Set plan state activate :
+  /// 2. set plan type to var :
+  /// 3. set amont *100 to normalize for razorpay standards
+  ///////////////////////////////////////////////////////////
   SelectedPlan(option) {
     setState(() {
       // 1. SELECT FOUNDER LOGIC:
@@ -197,7 +333,7 @@ class _SelectPlanState extends State<SelectPlan> {
         bestPlan = unselect_color;
         businessPlan = unselect_color;
         select_plan_type = 'basic';
-        planAmount = 100000;
+        planAmount = basic_plan_amount * 100;
         // 1. SELECT INVESTOR LOGIC:
         // 2. UNSELECT FOUNDER
       } else if (PlanOption.bestPlan == option) {
@@ -205,7 +341,7 @@ class _SelectPlanState extends State<SelectPlan> {
         basicPlan = unselect_color;
         businessPlan = unselect_color;
         select_plan_type = 'best';
-        planAmount = 195000;
+        planAmount = best_plan_amount * 100;
       }
 
       // 1. SELECT INVESTOR LOGIC:
@@ -215,7 +351,7 @@ class _SelectPlanState extends State<SelectPlan> {
         bestPlan = unselect_color;
         basicPlan = unselect_color;
         select_plan_type = 'business';
-        planAmount = 600000;
+        planAmount = business_plan_amount * 100;
       }
     });
   }

@@ -45,6 +45,6 @@ Future SendMailToUser({
 
     print('[FEED BACK RESPONSE] ${response.body}');
   } catch (error) {
-    print('[SEND FEEDBACK MAIL ERROR]');
+    print('[SEND FEEDBACK MAIL ERROR]$error');
   }
 }

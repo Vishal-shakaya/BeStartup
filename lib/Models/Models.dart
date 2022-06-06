@@ -87,15 +87,17 @@ UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
   }
 }
 
-PlanModel({name,phone_no, buyer_mail, purchase_date, expire_date}) async {
+PlanModel({plan_name,phone_no, buyer_mail, order_date, expire_date ,amount ,tax}) async {
   try {
     Map<String, dynamic> plan = {
       'id': uuid.v4(),
-      'name': name,
-      'buyer': buyer_mail,
+      'plan_name': plan_name,
+      'buyer_mail': buyer_mail,
       'phone_no':phone_no, 
-      'purchase_date': '', // T/F
-      'expire_date': '', // T/F
+      'amount':amount, 
+      'tax':tax, 
+      'order_date':order_date,
+      'expire_date':expire_date , 
     };
     return plan;
   } catch (e) {
