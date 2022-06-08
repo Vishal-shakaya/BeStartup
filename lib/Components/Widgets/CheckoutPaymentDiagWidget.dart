@@ -287,6 +287,7 @@ class _CheckoutPaymentDialogWidgetState
         ));
   }
 
+
   Container PayIconRow2() {
     return Container(
         padding: EdgeInsets.all(20),

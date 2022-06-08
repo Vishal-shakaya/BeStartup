@@ -1,4 +1,5 @@
 import 'package:be_startup/Models/Models.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,7 @@ class UserStore extends GetxController {
   IsUserActivate() async {}
 
   UpdateUser({field, val}) async {
+    var temp_plan = [];
     // Get User from firebase update ints field :
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
@@ -45,24 +47,57 @@ class UserStore extends GetxController {
     var old_user;
     var obj_id;
     try {
-      // Update Perticular Object using query : 
-      // get user object using mail address and update: 
+      // Update Perticular Object using query :
+      // get user object using mail address and update:
       await user.where('email', isEqualTo: email).get().then((value) {
         old_user = value.docs.first.data();
         obj_id = value.docs.first.id;
       });
 
-      // Set Update Params : 
-      old_user['plan'] = val;
+      print(old_user['plan']);
+      // Set Update Params :
+      if (old_user['plan'] == null ||old_user['plan'] ==[] ) {
+        temp_plan.add(val);
+        old_user['plan'] = temp_plan;
+      } else {
+        old_user['plan'] = old_user['plan'].add(val);
+      }
 
-      // Update object to DB : 
+      // Update object to DB :
       user.doc(obj_id).update(old_user);
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
 
-  CreatePlan({data}) async {
-    var plan = PlanModel();
+  IsAlreadyPlanBuyed() async {
+    // Get User from firebase update ints field :
+    final id = auth.currentUser?.uid;
+    final email = auth.currentUser?.email;
+    final user = store.collection('users');
+    var old_user;
+    var plan = [];
+    try {
+      // Update Perticular Object using query :
+      // get user object using mail address and update:
+      await user.where('email', isEqualTo: email).get().then((value) {
+        old_user = value.docs.first.data();
+        plan = old_user['plan'];
+      });
+
+      print('plan $plan');
+      // User Plan Check Before continue :
+      // 1. Check if user purchase plan without startup : Add startup withdout pay :
+      if (plan.isEmpty) {
+        // print('newplan create'); // test
+        return IsUserPlanBuyedType.newplan;
+      } else {
+        // 2. Check if user has plan with startup , pay first Then Add new startup
+        // print('preplan  found'); //test
+        return IsUserPlanBuyedType.preplan;
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
   }
 }

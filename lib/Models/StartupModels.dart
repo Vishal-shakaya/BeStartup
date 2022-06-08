@@ -5,6 +5,28 @@ import 'package:get/get.dart';
 
 var uuid = Uuid();
 
+StartupModel({
+  user_id,
+  email,
+  startup_name,
+  timestamp,  
+
+})async{
+ try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'email': email,
+      'startup_name':startup_name,
+      'registor_date':timestamp, 
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
+
+
 BusinessInfoModel({
   user_id, 
   logo, 
@@ -114,6 +136,7 @@ BusinessServiceList({user_id, email, startup_name, services, timestamp}) {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
+      'email': email,
       'user_id': user_id,
       'timestamp': timestamp,
       'services': services
@@ -167,3 +190,4 @@ BusinessTeamMembersModel({
     return false;
   }
 }
+

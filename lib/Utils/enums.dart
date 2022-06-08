@@ -27,3 +27,8 @@ enum InvestorFormType {
   create , 
   edit , 
 }
+
+enum IsUserPlanBuyedType {
+  preplan , 
+  newplan, 
+}

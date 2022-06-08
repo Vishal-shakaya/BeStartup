@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/Helper/MailServer.dart';
@@ -8,6 +9,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,11 @@ import 'package:horizontal_card_pager/card_item.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:uuid/uuid_util.dart';
+import 'package:uuid/uuid.dart';
 
+var uuid = Uuid();
 enum PlanOption { basicPlan, bestPlan, businessPlan }
 
 class SelectPlan extends StatefulWidget {
@@ -30,8 +36,9 @@ class SelectPlan extends StatefulWidget {
 
 class _SelectPlanState extends State<SelectPlan> {
   static const platform = MethodChannel("razorpay_flutter");
-  FirebaseAuth auth = FirebaseAuth.instance;
   var userStore = Get.put(UserStore(), tag: 'user_store');
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   Color? unselect_color =
       Get.isDarkMode ? dartk_color_type4 : shimmer_highlight_color;
 
@@ -53,7 +60,7 @@ class _SelectPlanState extends State<SelectPlan> {
   var _razorpay = Razorpay();
 
   int? planAmount;
-
+  var mainData = '';
   var basic_plan_amount = 1000;
   var best_plan_amount = 1950;
   var business_plan_amount = 6000;
@@ -111,7 +118,8 @@ class _SelectPlanState extends State<SelectPlan> {
       duration: Duration(seconds: 3),
       backgroundColor: Colors.red.shade50,
       titleText: MySnackbarTitle(title: 'Error ${title}'),
-      messageText: MySnackbarContent(message: 'Something went wrong : $message'),
+      messageText:
+          MySnackbarContent(message: 'Something went wrong : $message'),
       maxWidth: context.width * 0.50,
     );
   }
@@ -224,6 +232,24 @@ class _SelectPlanState extends State<SelectPlan> {
         ));
   }
 
+  CreateNewBusinessAlert(context) async {
+    CoolAlert.show(
+        onCancelBtnTap: () {
+          Get.toNamed(home_page_url);
+        },
+        context: context,
+        width: 200,
+        title: 'Create New Startup',
+        type: CoolAlertType.info,
+        widget: Text(
+          'Create another startup as you created before',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+          ),
+        ));
+  }
+
   ///////////////////////////////////////////////////
   /// 1. Send Bill To Buyer [ Founder ]:
   /// 2. Bill has expiration date  Important:
@@ -314,8 +340,10 @@ class _SelectPlanState extends State<SelectPlan> {
     await SetUserPlan(
         exact_amount: exact_amount, orderd: orderd, expired: expired);
     await SuccessMailSendAlert();
-    // await Future.delayed(Duration(seconds: 3));
-    // Get.toNamed(create_business_detail_url);
+
+    await Future.delayed(Duration(seconds: 8));
+    Get.toNamed(create_business_detail_url);
+
     print('SUCCESS RESPONSE ${response.paymentId}');
   }
 
@@ -344,7 +372,7 @@ class _SelectPlanState extends State<SelectPlan> {
 
     // 2.  Send Bill to Founder Mail address :
     await SendInvoiceMail(
-        paymentId: response.walletName,
+        paymentId: uuid.v4(),
         exact_amount: exact_amount,
         orderd: orderd,
         expired: expired,
@@ -355,10 +383,14 @@ class _SelectPlanState extends State<SelectPlan> {
     await SetUserPlan(
         exact_amount: exact_amount, orderd: orderd, expired: expired);
     await SuccessMailSendAlert();
-    // await Future.delayed(Duration(seconds: 3));
-    // Get.toNamed(create_business_detail_url);
+
+    await Future.delayed(Duration(seconds: 8));
+    Get.toNamed(create_business_detail_url);
     print('SUCCESS RESPONSE ${response.walletName}');
   }
+
+  bool? is_new_startup;
+  var planType;
 
   @override
   void initState() {
@@ -446,6 +478,23 @@ class _SelectPlanState extends State<SelectPlan> {
 
   @override
   Widget build(BuildContext context) {
+
+CreateStartupDialogAlert({task, updateMail})  {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            content: SizedBox(
+          width: context.width * 0.20,
+          height: context.height * 0.20,
+          child:Container(),
+        ));
+      });
+   }
+
+
     ///////////////////////////////////////
     // BREAKPOINTS :
     // 1. TAB SIZE :
@@ -513,6 +562,48 @@ class _SelectPlanState extends State<SelectPlan> {
       heading_text_top_mar = 30;
     }
 
+// INITILIZE DEFAULT STATE :
+// GET IMAGE IF HAS IS LOCAL STORAGE :
+
+    ChecUserPlanStatus() async {
+      try {
+        // User Plan Check Before continue :
+        // 1. Check if user purchase plan without startup : Add startup withdout pay :
+        // 2. Check if user has plan with startup , pay first Then Add new startup :
+        // var resp = await userStore.IsAlreadyPlanBuyed();
+        return '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+
+    return FutureBuilder(
+        future: ChecUserPlanStatus(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading Plans ',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  Container MainMethod(
+    BuildContext context,
+  ) {
     return Container(
         child: SingleChildScrollView(
       child: Column(mainAxisSize: MainAxisSize.min, children: [

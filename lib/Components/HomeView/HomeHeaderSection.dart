@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
@@ -49,7 +50,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
   var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
-
+  var userStore = Get.put(UserStore(), tag: 'user_store');
   // SUBMIT DATE AND CATIGORY :
   var catigories = [];
   SubmitExploreCatigory(context) async {
@@ -92,7 +93,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
     // CreateStartup :
     CreateStatup() async {
-      Get.toNamed(startup_slides_url);
+      var resp = await userStore.IsAlreadyPlanBuyed();
+      print(resp);
+      if (resp == IsUserPlanBuyedType.newplan) {
+        Get.toNamed(user_type_slide_url);
+      }
+      if (resp == IsUserPlanBuyedType.preplan) {
+        Get.toNamed(create_business_detail_url);
+      }
     }
 
     return Container(
