@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
 import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
+import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -24,14 +27,25 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   double mem_dialog_width = 900;
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
-  
+  var userStore = Get.put(UserStore(), tag: 'user_store');
+
   ShowDialog(context) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
               alignment: Alignment.center,
-              // title:  MileDialogHeading(context),
+              title: Container(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.cancel_outlined,
+                      color: Colors.blueGrey.shade800,
+                    )),
+              ),
               content: SizedBox(
                 width: mem_dialog_width,
                 child: TeamMemberDialog(
@@ -73,27 +87,78 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     );
   }
 
+  CreateStartup() async {
+    var startup = await StartupModel(
+        user_id: await getUserId,
+        email: await getuserEmail,
+        startup_name: await getStartupName,
+        desire_amount: await getDesireAmount);
+
+    final resp = await userStore.UpdateUserPlanAndStartup(
+        field: 'startups', val: startup);
+    if (!resp['response']) {
+      print('Error Creating Startup model ${resp["message"]}');
+    } else {
+      print("**** Startup Model Created ****");
+    }
+  }
+
   /////////////////////////////////////////////////////
   // START STORING ALL FOUNDER DETIAL TO FIREBASE :
   /////////////////////////////////////////////////////
   SendDataToFireStore() async {
     var resp = await startupConnector.CreateBusinessCatigory();
+    if (resp['response']) {
+      print(
+          '********* CreateBusinessCatigory Stored Succefully ${resp} *******');
+    }
 
     var resp2 = await startupConnector.CreateBusinessDetail();
+    if (resp2['response']) {
+      print(
+          '********* CreateBusinessDetail Stored Succefully ${resp2} *******');
+    }
 
     var resp3 = await startupConnector.CreateBusinessMileStone();
+    if (resp3['response']) {
+      print(
+          '********* CreateBusinessMileStone Stored Succefully ${resp3} *******');
+    }
 
     var resp4 = await startupConnector.CreateBusinessProduct();
+    if (resp4['response']) {
+      print(
+          '********* CreateBusinessProduct Stored Succefully ${resp4} *******');
+    }
 
     var resp5 = await startupConnector.CreateBusinessThumbnail();
+    if (resp5['response']) {
+      print(
+          '********* CreateBusinessThumbnail Stored Succefully ${resp5} *******');
+    }
 
     var resp6 = await startupConnector.CreateBusinessVision();
+    if (resp6['response']) {
+      print(
+          '********* CreateBusinessVision Stored Succefully ${resp6} *******');
+    }
 
     var resp7 = await startupConnector.CreateUserContact();
+    if (resp7['response']) {
+      print('********* CreateUserContact Stored Succefully ${resp7} *******');
+    }
 
     var resp8 = await startupConnector.CreateUserDetail();
+    if (resp8['response']) {
+      print('********* CreateUserDetail Stored Succefully ${resp8} *******');
+    }
 
     var resp9 = await startupConnector.CreateBusinessTeamMember();
+    if (resp9['response']) {
+      print(
+          '********* CreateBusinessTeamMember Stored Succefully ${resp9} *******');
+    }
+    await CreateStartup();
     return true;
   }
 

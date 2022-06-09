@@ -185,7 +185,6 @@ class _ProductListViewState extends State<ProductListView> {
             ),
             child: InkWell(
               onTap: () {
-                // SetService();
                 EditProduct();
               },
               radius: 15,

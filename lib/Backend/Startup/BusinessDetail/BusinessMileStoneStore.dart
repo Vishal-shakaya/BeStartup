@@ -121,7 +121,6 @@ class MileStoneStore extends GetxController {
         }
         return milestones;
       } else {
-        milestones.add(default_tag);
         return milestones;
       }
     } catch (e) {
@@ -139,9 +138,9 @@ class MileStoneStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await MileStoneModel(
-          user_id: getUserId,
-          email: getuserEmail,
-          startup_name: getStartupName,
+          user_id: await getUserId,
+          email: await getuserEmail,
+          startup_name: await getStartupName,
           milestone: milestones);
       localStore.setString('BusinessMilestones', json.encode(resp));
 

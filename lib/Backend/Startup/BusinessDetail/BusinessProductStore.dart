@@ -190,7 +190,7 @@ class BusinessProductStore extends GetxController {
         // If there is no product then just add temp prodcut to list :
         // and send for example purpose :
       } else {
-        product_list.add(temp_product);
+        // product_list.add(temp_product);
         return product_list;
       }
 
@@ -211,9 +211,9 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessProductsList(
-        user_id: getUserId,
-        email: getuserEmail,
-        startup_name: getStartupName,
+        user_id:await getUserId,
+        email: await getuserEmail,
+        startup_name: await getStartupName,
         products: product_list,
       );
 

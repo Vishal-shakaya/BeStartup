@@ -53,9 +53,9 @@ class InvestorCatigoryStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await CatigoryModel(
-          user_id: getUserId,
-          email: getuserEmail,
-          startup_name: getStartupName,
+          user_id: await getUserId,
+          email: await getuserEmail,
+          startup_name: await getStartupName,
           catigory: catigories);
 
       localStore.setString('InvestorChooseCatigory', json.encode(resp));

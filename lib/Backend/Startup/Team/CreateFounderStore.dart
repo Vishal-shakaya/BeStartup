@@ -51,16 +51,16 @@ class BusinessFounderStore extends GetxController {
 
       try {
         var resp = await FounderModel(
-            user_id: getUserId,
-            email: getuserEmail,
-            startup_name: getStartupName,
+            user_id: await getUserId,
+            email: await getuserEmail,
+            startup_name: await  getStartupName,
             name: founder['name'],
             position: founder['position'],
             picture: image_url);
 
         var resp2 = await UserContact(
-            user_id: getUserId,
-            email: getuserEmail,
+            user_id: await getUserId,
+            email: await getuserEmail,
             primary_mail: founder['email'],
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);

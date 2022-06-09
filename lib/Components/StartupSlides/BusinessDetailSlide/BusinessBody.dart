@@ -82,10 +82,9 @@ class _BusinessBodyState extends State<BusinessBody> {
     StartLoading();
     if (formKey.currentState!.validate()) {
       var business_name = formKey.currentState!.value['startup_name'];
-      print(business_name);
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessName(business_name);
-
+      
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :

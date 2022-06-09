@@ -35,10 +35,9 @@ class UserStore extends GetxController {
     }
   }
 
-  // Check if user complete Creating profile :
-  IsUserActivate() async {}
 
-  UpdateUser({field, val}) async {
+
+  UpdateUserPlanAndStartup({field, val}) async {
     var temp_plan = [];
     // Get User from firebase update ints field :
     final id = auth.currentUser?.uid;
@@ -54,21 +53,30 @@ class UserStore extends GetxController {
         obj_id = value.docs.first.id;
       });
 
-      print(old_user['plan']);
+      print('Updating : ${old_user[field]}');
+
       // Set Update Params :
-      if (old_user['plan'] == null ||old_user['plan'] ==[] ) {
+      if (old_user[field] == null || old_user[field] == []) {
         temp_plan.add(val);
-        old_user['plan'] = temp_plan;
+        old_user[field] = temp_plan;
+
+        print('******** NEW $field ADDED ********');
       } else {
-        old_user['plan'] = old_user['plan'].add(val);
+        old_user[field] = old_user[field].add(val);
+        print('******** PREDEFINE NEW $field ADDED ********');
       }
 
       // Update object to DB :
       user.doc(obj_id).update(old_user);
+      print('*** UpDate object DB *****');
+      return ResponseBack(response_type: true);
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false  ,message: e);
     }
   }
+
+
+
 
   IsAlreadyPlanBuyed() async {
     // Get User from firebase update ints field :
@@ -85,15 +93,14 @@ class UserStore extends GetxController {
         plan = old_user['plan'];
       });
 
-      print('plan $plan');
       // User Plan Check Before continue :
       // 1. Check if user purchase plan without startup : Add startup withdout pay :
       if (plan.isEmpty) {
-        // print('newplan create'); // test
+        print('newplan found'); // test
         return IsUserPlanBuyedType.newplan;
       } else {
         // 2. Check if user has plan with startup , pay first Then Add new startup
-        // print('preplan  found'); //test
+        print('preplan  found'); //test
         return IsUserPlanBuyedType.preplan;
       }
     } catch (e) {

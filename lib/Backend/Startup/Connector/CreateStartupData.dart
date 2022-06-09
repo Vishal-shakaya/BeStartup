@@ -6,34 +6,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StartupConnector extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
-  
+
   ///////////////////////////////////////////////////////
-  // 1. Get Data form local storage : 
-  // 2. if has data then Store in Firebase Databse : 
+  // 1. Get Data form local storage :
+  // 2. if has data then Store in Firebase Databse :
   //////////////////////////////////////////////////////
   CreateBusinessCatigory() async {
     final localStore = await SharedPreferences.getInstance();
+    final myStore = store.collection('BusinessCatigory');
     try {
-      final myStore = store.collection('BusinessCatigory');
 
-      // fetch catigories for local storage :
       // kye : BusinessCatigory
       bool is_data = localStore.containsKey('BusinessCatigory');
 
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessCatigory');
-        var data = json.decode(temp_data!);
+        String? temp_data =  localStore.getString('BusinessCatigory');
+        Map<String,dynamic> data = json.decode(temp_data!);
 
-        // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-      } 
-      
-      else {
+      } else {
         return ResponseBack(response_type: false);
       }
-
     } catch (e) {
+      print('Error Creating Catigory $e');
       return ResponseBack(response_type: false, message: e);
     }
   }
@@ -46,21 +42,17 @@ class StartupConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : BusinessDetail
       bool is_data = localStore.containsKey('BusinessDetail');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessDetail');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
+      } else {
+        return ResponseBack(response_type: false);
       }
-      else{
-        return ResponseBack(response_type: false);  
-      }
-
-      
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -74,18 +66,16 @@ class StartupConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : BusinessMilestones
       bool is_data = localStore.containsKey('BusinessMilestones');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessMilestones');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-      }
-
-      else{
-        return ResponseBack(response_type: false);  
+      } else {
+        return ResponseBack(response_type: false);
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -99,20 +89,18 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessProducts
-      
+
       bool is_data = localStore.containsKey('BusinessProducts');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessProducts');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
-      }
-      else{
-        return ResponseBack(response_type: false);  
+      } else {
+        return ResponseBack(response_type: false);
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -127,20 +115,17 @@ class StartupConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : BusinessVision
       bool is_data = localStore.containsKey('BusinessVision');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessVision');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
+      } else {
+        return ResponseBack(response_type: false);
       }
-      else{
-        return ResponseBack(response_type: false);  
-      }
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -153,22 +138,19 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : BusinessThumbnail
-      
+
       bool is_data = localStore.containsKey('BusinessThumbnail');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessThumbnail');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
+      } else {
+        return ResponseBack(response_type: false);
       }
-      else{
-        return ResponseBack(response_type: false);  
-      }
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -182,20 +164,17 @@ class StartupConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : UserDetail
       bool is_data = localStore.containsKey('UserDetail');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('UserDetail');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(response_type: false);
       }
-
-      else{
-        return ResponseBack(response_type: false);  
-      }
-      
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -208,7 +187,7 @@ class StartupConnector extends GetxController {
 
       // fetch catigories for local storage :
       // kye : UserContact
-      
+
       bool is_data = localStore.containsKey('UserContact');
       if (is_data) {
         String? temp_data = localStore.getString('UserContact');
@@ -235,18 +214,16 @@ class StartupConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : BusinessTeamMember
       bool is_data = localStore.containsKey('BusinessTeamMember');
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString('BusinessTeamMember');
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
-      }
-      else{
-        return ResponseBack(response_type: false);  
+      } else {
+        return ResponseBack(response_type: false);
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

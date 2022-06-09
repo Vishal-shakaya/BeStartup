@@ -35,18 +35,21 @@ class _SelectProductTypeState extends State<SelectProductType> {
     });
   }
 
-
   @override
-  Widget build(BuildContext context) {
-
-  //Edit View Setting default selected product
-    if (widget.product_type == 'product')  {
+  void initState() {
+    // TODO: implement initState
+        if (widget.product_type == 'product')  {
        SetProduct();
     }
     if (widget.product_type == 'service')  {
        SetService();
     }
-    
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Container(
       margin: EdgeInsets.only(left: 15, top: 120),
       child: Column(

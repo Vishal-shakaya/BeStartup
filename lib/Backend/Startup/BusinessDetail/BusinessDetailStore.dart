@@ -70,20 +70,23 @@ class BusinessDetailStore extends GetxController {
       business_name = businessName;
 
       // STORE DATA LOCALY FOR PERSISTANCE :
+      final user_mail = await getuserEmail;
+      final userId = await getUserId;
       var resp = await BusinessInfoModel(
           logo: image_url,
-          email: getuserEmail,
+          email: user_mail,
           name: businessName,
-          user_id: getUserId);
+          user_id: userId.toString());
 
       try {
+        await SetStartupName(businessName);
         localStore.setString('BusinessDetail', json.encode(resp));
         return ResponseBack(response_type: true);
       } catch (e) {
-        return ResponseBack(response_type: false);
+        return ResponseBack(response_type: false, message: e);
       }
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: e);
     }
   }
 

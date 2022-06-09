@@ -14,8 +14,8 @@ var uuid = Uuid();
 class BusinessTeamMemberStore extends GetxController {
   static Map<String, dynamic> temp_member = {
     'id': uuid.v4(),
-    'email': getuserEmail,
-    'startup_name': getStartupName,
+    'email':  '124@gmail.ocm',
+    'startup_name': 'xyz ltd',
     'name': 'Vishal',
     'position': 'Ceo',
     'member_mail': 'shakayavishal007@gmail.com',
@@ -53,8 +53,8 @@ class BusinessTeamMemberStore extends GetxController {
     try {
       Map<String, dynamic> temp_member = {
         'id': uuid.v4(),
-        'email': getuserEmail,
-        'startup_name': getStartupName,
+        'email': await getuserEmail,
+        'startup_name': await getStartupName,
         'name': member['name'],
         'position': member['position'],
         'member_mail': member['email'],
@@ -115,7 +115,6 @@ class BusinessTeamMemberStore extends GetxController {
         // If there is no product then just add temp prodcut to list :
         // and send for example purpose :
       } else {
-        member_list.add(temp_member);
         return member_list;
       }
 
@@ -132,9 +131,9 @@ class BusinessTeamMemberStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessTeamMembersModel(
-        user_id: getUserId,
-        email: getuserEmail,
-        startup_name: getStartupName,
+        user_id: await  getUserId,
+        email: await getuserEmail,
+        startup_name: await getStartupName,
         members: member_list,
       );
 

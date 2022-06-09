@@ -53,7 +53,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
                 Card(
                   shadowColor: Colors.grey,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Column(
                     children: [
                       Container(

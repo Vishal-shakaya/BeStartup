@@ -66,9 +66,8 @@ class _ProductBodyState extends State<ProductBody> {
       EndLoading();
     }
 
-
-  // INITILIZE DEFAULT STATE :
-  // GET IMAGE IF HAS IS LOCAL STORAGE :
+    // INITILIZE DEFAULT STATE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
         final data = await productStore.GetProductList();
@@ -82,21 +81,22 @@ class _ProductBodyState extends State<ProductBody> {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CustomShimmer(text: 'Loading Products',);
+            return CustomShimmer(
+              text: 'Loading Products',
+            );
           }
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, snapshot.data,SubmitProduct);
+            return MainMethod(context, snapshot.data, SubmitProduct);
           }
-            return MainMethod(context, snapshot.data,SubmitProduct);
+          return MainMethod(context, snapshot.data, SubmitProduct);
         });
     // return MainMethod(context, product, SubmitProduct);
   }
 
-
 //////////////////////////////
-// MAIN METHOD SECTION: 
+// MAIN METHOD SECTION:
 //////////////////////////////
   Column MainMethod(
       BuildContext context, product, Future<Null> SubmitProduct()) {
@@ -127,17 +127,17 @@ class _ProductBodyState extends State<ProductBody> {
                           width: context.width * prod_sec_width,
                           height: context.height * 0.60,
                           child: Obx(() {
-                            return ListView.builder(
-                                itemCount: product.length,
-                                key: UniqueKey(),
-                                itemBuilder: (context, index) {
-                                  return ProductListView(
+                                return ListView.builder(
+                                    itemCount: product.length,
                                     key: UniqueKey(),
-                                    product: product[index],
-                                    index: index,
-                                  );
-                                });
-                          })),
+                                    itemBuilder: (context, index) {
+                                      return ProductListView(
+                                        key: UniqueKey(),
+                                        product: product[index],
+                                        index: index,
+                                      );
+                                    });
+                              })),
                     ],
                   ),
                 )

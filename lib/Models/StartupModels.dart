@@ -10,7 +10,9 @@ StartupModel({
   email,
   startup_name,
   timestamp,  
-
+  desire_amount, 
+  achived_amount,
+  invested 
 })async{
  try {
     Map<String, dynamic> temp_obj = {
@@ -18,7 +20,10 @@ StartupModel({
       'user_id': user_id,
       'email': email,
       'startup_name':startup_name,
-      'registor_date':timestamp, 
+      'desire_amount':desire_amount, 
+      'achived_amount':achived_amount, 
+      'invested':invested, // bool : true if achived desired amount : 
+      'registor_date':DateTime.now().toString(), 
     };
     return temp_obj;
   } catch (e) {

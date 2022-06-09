@@ -22,20 +22,20 @@ class BusinessVisionStore extends GetxController {
       vision = visionText;
       try {
         var resp = await VisionModel(
-            user_id: getUserId,
-            email: getuserEmail,
+            user_id: await getUserId,
+            email:  await  getuserEmail,
             vision: vision,
-            startup_name: getStartupName);
+            startup_name: await  getStartupName);
         localStore.setString('BusinessVision', json.encode(resp));
         return ResponseBack(response_type: true);
       } 
       catch (e) {
-        return ResponseBack(response_type: false);
+        return ResponseBack(response_type: false ,message: e);
       }
 
       // STORE VALUE IN LOCAL VAR FOR FURTHURE USE :
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false ,message: e);
     }
   }
 

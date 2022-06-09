@@ -36,15 +36,15 @@ class InvestorDetailStore extends GetxController {
     try {
       try {
         var resp = await InvestorModel(
-            user_id: getUserId,
-            email: getuserEmail,
+            user_id: await getUserId,
+            email: await getuserEmail,
             name: investor['name'],
             position: investor['position'],
             picture: image_url);
 
         var resp2 =  await UserContact(
-            user_id: getUserId,
-            email: getuserEmail,
+            user_id: await  getUserId,
+            email: await getuserEmail,
             primary_mail: investor['email'],
             phone_no: investor['phone_no'],
             other_contact: investor['other_contact']);
@@ -58,7 +58,7 @@ class InvestorDetailStore extends GetxController {
       }
 
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: e);
     }
   }
 

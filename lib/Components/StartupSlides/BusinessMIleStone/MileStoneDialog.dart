@@ -106,6 +106,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
           color: Colors.white,
         ),
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Container(
               alignment: Alignment.topCenter,
@@ -115,8 +116,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                     height: 10,
                   ),
 
-                  // HEADING :
-                  MileDialogHeading(context, widget.CloseMilestoneDialog),
+
 
                   // ADD MILESTONE FORM :
                   FormBuilder(

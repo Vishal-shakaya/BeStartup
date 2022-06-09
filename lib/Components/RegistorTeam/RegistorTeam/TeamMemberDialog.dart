@@ -208,33 +208,11 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
           color: Colors.white,
         ),
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(children: [
               SizedBox(
                 height: 10,
-              ),
-
-              // HEADING :
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      // alignment: Alignment.topCenter,
-                      // child: AutoSizeText.rich(TextSpan(
-                      //     style: Get.theme.textTheme.headline2,
-                      //     children: [TextSpan(text: 'Define Milestone')])),
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        CloseDialog(context);
-                      },
-                      icon: Icon(
-                        Icons.cancel_outlined,
-                        color: Colors.blueGrey.shade800,
-                      ))
-                ],
               ),
 
               // TEAM MEMEBER PROFILE IAMGE SECTION

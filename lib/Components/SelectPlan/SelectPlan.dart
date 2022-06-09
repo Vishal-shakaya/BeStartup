@@ -304,11 +304,12 @@ class _SelectPlanState extends State<SelectPlan> {
         buyer_mail: selectedPlan['mail'],
       );
 
-      await userStore.UpdateUser(field: 'plan', val: plan);
+      await userStore.UpdateUserPlanAndStartup(field: 'plan', val: plan);
     } catch (e) {
       EndLoading();
     }
   }
+
 
   ///////////////////////////////////
   /// PAYMENT SUCCESS HANDLER :
@@ -479,21 +480,6 @@ class _SelectPlanState extends State<SelectPlan> {
   @override
   Widget build(BuildContext context) {
 
-CreateStartupDialogAlert({task, updateMail})  {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            content: SizedBox(
-          width: context.width * 0.20,
-          height: context.height * 0.20,
-          child:Container(),
-        ));
-      });
-   }
-
 
     ///////////////////////////////////////
     // BREAKPOINTS :
@@ -562,48 +548,8 @@ CreateStartupDialogAlert({task, updateMail})  {
       heading_text_top_mar = 30;
     }
 
-// INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
+ 
 
-    ChecUserPlanStatus() async {
-      try {
-        // User Plan Check Before continue :
-        // 1. Check if user purchase plan without startup : Add startup withdout pay :
-        // 2. Check if user has plan with startup , pay first Then Add new startup :
-        // var resp = await userStore.IsAlreadyPlanBuyed();
-        return '';
-      } catch (e) {
-        return '';
-      }
-    }
-
-
-    return FutureBuilder(
-        future: ChecUserPlanStatus(),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: Text(
-                'Loading Plans ',
-                style: Get.textTheme.headline2,
-              ),
-            ));
-          }
-          if (snapshot.hasError) return ErrorPage();
-
-          if (snapshot.hasData) {
-            return MainMethod(context);
-          }
-          return MainMethod(context);
-        });
-  }
-
-  Container MainMethod(
-    BuildContext context,
-  ) {
     return Container(
         child: SingleChildScrollView(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -823,3 +769,4 @@ CreateStartupDialogAlert({task, updateMail})  {
     );
   }
 }
+

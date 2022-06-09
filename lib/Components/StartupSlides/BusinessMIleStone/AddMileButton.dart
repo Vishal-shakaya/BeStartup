@@ -42,7 +42,16 @@ class _AddMileButtonState extends State<AddMileButton> {
         context: context,
         builder: (context) => AlertDialog(
               alignment: Alignment.center,
+              title: Container(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.close))),
               // title:  MileDialogHeading(context),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
               content: SizedBox(
                   width: milestone_width,
                   child: MileStoneDialog(

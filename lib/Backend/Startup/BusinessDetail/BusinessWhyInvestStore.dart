@@ -22,10 +22,11 @@ class BusinessWhyInvestStore extends GetxController {
       why_text = visionText;
       try {
         var resp = await WhyInvestModel(
-            user_id: getUserId,
-            email: getuserEmail,
+            user_id: await getUserId,
+            email: await getuserEmail,
+            startup_name: await getStartupName,
             why_text: why_text,
-            startup_name: getStartupName);
+            );
         localStore.setString('BusinessWhyInvest', json.encode(resp));
         return ResponseBack(response_type: true);
       } 
