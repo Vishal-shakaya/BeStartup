@@ -31,7 +31,7 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
   EditThumbnail() {
-    Get.toNamed(create_business_thumbnail_url);
+    Get.toNamed(create_business_thumbnail_url, parameters: {'type':'update'});
   }
 
   @override
