@@ -4,6 +4,7 @@ import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dar
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,10 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
+  EditThumbnail() {
+    Get.toNamed(create_business_thumbnail_url);
+  }
+
   @override
   Widget build(BuildContext context) {
     // INITILIZE DEFAULT STATE :
@@ -52,10 +57,14 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
                 child: Shimmer.fromColors(
                     baseColor: shimmer_base_color,
                     highlightColor: shimmer_highlight_color,
-                    child: MainMethod(context,
+                    child: MainMethod(
+                        context,
                         snapshot.data == null
-                         ? {'thumbnail':shimmer_image,'logo':shimmer_image} 
-                         : snapshot.data)));
+                            ? {
+                                'thumbnail': shimmer_image,
+                                'logo': shimmer_image
+                              }
+                            : snapshot.data)));
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -75,7 +84,9 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
             Thumbnail(context, data['thumbnail']),
 
             // PROFILE PICTURE :
-            Picture(logo: data['logo'],),
+            Picture(
+              logo: data['logo'],
+            ),
 
             // TABS
             Positioned(
@@ -103,35 +114,61 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
         ));
   }
 
-  Card Thumbnail(BuildContext context, thumbnail_image) {
-    return Card(
-      elevation: 5,
-      shadowColor: Colors.grey,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.horizontal(
-        left: Radius.circular(19),
-        right: Radius.circular(19),
-      )),
-      child: Container(
-          height: context.height * 0.23,
-          padding: EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20), right: Radius.circular(20)),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(19),
-              right: Radius.circular(19),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: thumbnail_image,
-              width: context.width * image_cont_width,
-              height: context.height * image_cont_height,
-              fit: BoxFit.cover,
-            ),
+  Stack Thumbnail(BuildContext context, thumbnail_image) {
+    return Stack(
+      children: [
+        Card(
+          elevation: 5,
+          shadowColor: Colors.grey,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(19),
+            right: Radius.circular(19),
           )),
+          child: InkWell(
+            onHover: (flag) {},
+            child: Container(
+                height: context.height * 0.23,
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(20), right: Radius.circular(20)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(19),
+                    right: Radius.circular(19),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: thumbnail_image,
+                    width: context.width * image_cont_width,
+                    height: context.height * image_cont_height,
+                    fit: BoxFit.cover,
+                  ),
+                )),
+          ),
+        ),
+        Positioned(
+            left: context.width * 0.53,
+            top: context.height * 0.02,
+            child: Container(
+              width: 80,
+              height: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: border_color)),
+              child: TextButton.icon(
+                  onPressed: () {
+                    EditThumbnail();
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    size: 15,
+                  ),
+                  label: Text('Edit')),
+            )),
+      ],
     );
   }
 }

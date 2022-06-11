@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
 
@@ -26,8 +24,8 @@ class StartupViewConnector extends GetxController {
       if (data != null || data != '') {
         var final_data = json.decode(data!);
         Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['email'] == getuserEmail &&
-            cacheData['user_id'] == getUserId) {
+        if (cacheData['email'] == await getuserEmail &&
+            cacheData['user_id'] == await getUserId) {
           return final_data;
         }
       }
@@ -69,9 +67,9 @@ class StartupViewConnector extends GetxController {
           FirebaseFirestore.instance.collection('BusinessThumbnail');
       var query = thumbnail
           .where(
-            'email',isEqualTo: getuserEmail,)
-          .where('user_id', isEqualTo: getUserId)
-          .where('startup_name', isEqualTo: getStartupName)
+            'email',isEqualTo: await getuserEmail,)
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -106,9 +104,9 @@ class StartupViewConnector extends GetxController {
       var query = store
           .where(
             'email',
-            isEqualTo: getuserEmail,
+            isEqualTo: await getuserEmail,
           )
-          .where('user_id', isEqualTo: getUserId)
+          .where('user_id', isEqualTo: await getUserId)
           .get();
 
       await query.then((value) {
@@ -128,8 +126,8 @@ class StartupViewConnector extends GetxController {
     var data;
     Map<String, dynamic> temp_member = {
       'id': uuid.v4(),
-      'email': getuserEmail,
-      'startup_name': getStartupName,
+      'email': await getuserEmail,
+      'startup_name': await getStartupName,
       'name': 'Vishal',
       'position': 'Ceo',
       'member_mail': 'shakayavishal007@gmail.com',
@@ -149,10 +147,10 @@ class StartupViewConnector extends GetxController {
       var query = store
           .where(
             'email',
-            isEqualTo: getuserEmail,
+            isEqualTo: await getuserEmail,
           )
-          .where('user_id', isEqualTo: getUserId)
-          .where('startup_name', isEqualTo: getStartupName)
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -183,10 +181,10 @@ class StartupViewConnector extends GetxController {
       var query = store
           .where(
             'email',
-            isEqualTo: getuserEmail,
+            isEqualTo: await getuserEmail,
           )
-          .where('user_id', isEqualTo: getUserId)
-          .where('startup_name', isEqualTo: getStartupName)
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -217,10 +215,10 @@ class StartupViewConnector extends GetxController {
       var query = store
           .where(
             'email',
-            isEqualTo: getuserEmail,
+            isEqualTo: await getuserEmail,
           )
-          .where('user_id', isEqualTo: getUserId)
-          .where('startup_name', isEqualTo: getStartupName)
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -254,10 +252,10 @@ class StartupViewConnector extends GetxController {
       var query = store
           // .where(
           //   'email',
-          //   isEqualTo: getuserEmail,
+          //   isEqualTo: await getuserEmail,
           // )
-          .where('user_id', isEqualTo: getUserId)
-          // .where('startup_name', isEqualTo: getStartupName)
+          .where('user_id', isEqualTo: await getUserId)
+          // .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -297,10 +295,10 @@ class StartupViewConnector extends GetxController {
       var query = store
           // .where(
           //   'email',
-          //   isEqualTo: getuserEmail,
+          //   isEqualTo: await getuserEmail,
           // )
-          .where('user_id', isEqualTo: getUserId)
-          // .where('startup_name', isEqualTo: getStartupName)
+          .where('user_id', isEqualTo: await getUserId)
+          // .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
