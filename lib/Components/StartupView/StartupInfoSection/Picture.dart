@@ -10,7 +10,7 @@ class Picture extends StatelessWidget {
   Picture({this.logo, Key? key}) : super(key: key);
 
   EditBusinessLogo() {
-    Get.toNamed(create_business_detail_url);
+    Get.toNamed(create_business_detail_url, parameters: {'type':'update'});
   }
 
   @override
@@ -45,7 +45,7 @@ class Picture extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.edit,
-                  size: 18,
+                  size: 19,
                   color:light_color_type3)),
               ))
           ],

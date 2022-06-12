@@ -18,10 +18,21 @@ class BusinessDetailStore extends GetxController {
   /// SET BUSINESS LOGO:
 ////////////////////////////////////////
   SetBusinessLogo({logo, filename}) async {
+    final localStore = await SharedPreferences.getInstance();
     try {
       // STORE IMAGE IN FIREBASE :
       // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
       image_url = await UploadImage(image: logo, filename: filename);
+
+      // Update Image in Local Storage : 
+      bool is_detail = localStore.containsKey('BusinessDetail');
+      if (is_detail) {
+        var data = localStore.getString('BusinessDetail');
+        var json_obj = jsonDecode(data!);
+        json_obj["logo"] = image_url;
+        
+        localStore.setString('BusinessDetail', json.encode(json_obj));
+      }
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
       return ResponseBack(response_type: true, data: image_url);

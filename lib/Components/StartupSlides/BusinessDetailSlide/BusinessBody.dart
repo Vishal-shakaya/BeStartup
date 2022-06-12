@@ -21,10 +21,28 @@ class _BusinessBodyState extends State<BusinessBody> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
+  var pageParam;
+  bool? updateMode;
+
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+
+
   // SET DEFAULT STATE :
   Future<String?> SetVal() async {
     await Future.delayed(Duration(seconds: 5));
     var data = await detailStore.GetBusinessName();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
   }
 
   @override
@@ -43,7 +61,10 @@ class _BusinessBodyState extends State<BusinessBody> {
               BusinessForm(
                 formKey: formKey,
               ),
-              BusinessSlideNav(
+
+              updateMode == true
+              ? UpdateButton(context)
+              : BusinessSlideNav(
                 key: UniqueKey(),
                 submitform: SubmitBusinessDetail,
                 slide: SlideType.detail,
@@ -84,13 +105,15 @@ class _BusinessBodyState extends State<BusinessBody> {
       var business_name = formKey.currentState!.value['startup_name'];
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessName(business_name);
-      
+
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
       if (res['response']) {
         Get.closeAllSnackbars();
-        Get.toNamed(create_business_thumbnail_url);
+        updateMode ==true
+        ? Get.toNamed(startup_view_url)
+        : Get.toNamed(create_business_thumbnail_url);
       }
 
       if (!res['response']) {
@@ -124,5 +147,43 @@ class _BusinessBodyState extends State<BusinessBody> {
         maxWidth: context.width * 0.50,
       );
     }
+  }
+
+  Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await SubmitBusinessDetail();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

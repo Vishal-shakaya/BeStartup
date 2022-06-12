@@ -7,6 +7,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/NoticeSect
 import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/ThumbnailSection.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -42,9 +43,10 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
 
   UpdateThumbnail() async {
-    final resp = await  updateStore.UpdateThumbnail();
+    final resp = await updateStore.UpdateThumbnail();
     if (resp['response']) {
       print('******* Updated Thumnail ********');
+      Get.toNamed(startup_view_url);
     }
     if (!resp['response']) {
       print('******* Not Updated Thumnail ********');

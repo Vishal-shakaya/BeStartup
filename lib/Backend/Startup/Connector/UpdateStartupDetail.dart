@@ -98,7 +98,49 @@ class StartupUpdater extends GetxController {
       // Cached Image for loacal use :
       await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
       return ResponseBack(response_type: true);
-      
+    } catch (e) {
+      print(e);
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  UpdateBusinessDetail() async {
+    var data;
+    var name;
+    var logo; 
+    var doc_id;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessDetail');
+      if (cacheData != false) {
+        logo = cacheData['logo'];
+        name = cacheData['name'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessDetail');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Logo:
+      data['logo'] = logo;
+      data['name'] = name;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessDetail', data: data);
+
+      return ResponseBack(response_type: true);
     } catch (e) {
       print(e);
       return ResponseBack(response_type: false);
