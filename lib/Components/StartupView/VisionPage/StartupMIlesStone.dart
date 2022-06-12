@@ -133,10 +133,11 @@ class _StartupMileStoneState extends State<StartupMileStone> {
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
                       color: light_color_type1,
-                      fontSize: 20,
-                      height: 1.6)),
+                      fontSize: 15,
+                      height: 1.5)),
               style: Get.textTheme.headline2,
               textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           AutoSizeText.rich(
@@ -145,7 +146,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
                 style: GoogleFonts.openSans(
                     textStyle: TextStyle(),
                     color: light_color_type1,
-                    fontSize: 14,
+                    fontSize: 13,
                     height: 1.8,
                     wordSpacing: 2)),
             style: Get.textTheme.headline2,

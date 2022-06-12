@@ -30,7 +30,7 @@ class _VisionPageState extends State<VisionPage> {
     }
 
     EditMilestone() {
-      Get.toNamed(create_business_milestone_url);
+      Get.toNamed(create_business_milestone_url , parameters: {'type':'update'});
     }
 
     var startupConnect =

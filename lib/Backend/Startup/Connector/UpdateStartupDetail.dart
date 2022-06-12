@@ -196,4 +196,47 @@ class StartupUpdater extends GetxController {
       return false;
     }
   }
+
+  ///////////////////////////////////////
+  /// Milestone Update :
+  ///////////////////////////////////////
+  FetchBusinessMilestone() async {
+    var data;
+    var temp_miles;
+    var doc_id;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessMilestones');
+      if (cacheData != false) {
+        temp_miles = cacheData['milestone'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessMilestones');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Data in FireStore :
+      data['milestone'] = temp_miles;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      StoreCacheData(fromModel: 'BusinessMilestones', data: data);
+      return ResponseBack(response_type: true);
+    } catch (e) {
+
+      return ResponseBack(response_type: false);
+    }
+  }
 }

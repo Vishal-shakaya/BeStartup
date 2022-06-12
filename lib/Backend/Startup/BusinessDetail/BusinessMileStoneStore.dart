@@ -132,7 +132,6 @@ class MileStoneStore extends GetxController {
 // GET PERTICULAR MILESTONE FOR
 // DETAIL INFORMATION:
 ////////////////////////////////////////
-  GetMileStone(id) {}
 
   PersistMileStone() async {
     final localStore = await SharedPreferences.getInstance();

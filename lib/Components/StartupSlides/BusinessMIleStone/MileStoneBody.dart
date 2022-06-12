@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
@@ -34,26 +35,23 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   double subhead_sec_width = 400;
   double subhead_sec_height = 80;
 
-  final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+
+  var pageParam;
+  bool? updateMode = false;
 
   late ConfettiController _controllerCenter;
-  @override
-  void initState() {
-    super.initState();
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 10));
-  }
-
-  @override
-  void dispose() {
-    _controllerCenter.dispose();
-    super.dispose();
-  }
-
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+  
+  //////////////////////////////////////////
+  /// Congress message animation : 
+  //////////////////////////////////////////
   Path drawStar(Size size) {
     // Method to convert degree to radians
     double degToRad(double deg) => deg * (pi / 180.0);
-
     const numberOfPoints = 5;
     final halfWidth = size.width / 2;
     final externalRadius = halfWidth;
@@ -74,44 +72,80 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     return path;
   }
 
+
+//////////////////////////
+/// Initial State : 
+//////////////////////////
   @override
-  Widget build(BuildContext context) {
-// SHOW LOADING SPINNER :
-    StartLoading() {
-      var dialog = SmartDialog.showLoading(
-          background: Colors.white,
-          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.orangeAccent,
-          ));
-      return dialog;
+  void initState() {
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
     }
+    super.initState();
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    _controllerCenter.dispose();
+    super.dispose();
+  }
+
+// SHOW LOADING SPINNER :
+  StartLoading() {
+    var dialog = SmartDialog.showLoading(
+      background: Colors.white,
+      maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+      widget: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.orangeAccent,
+      ));
+    return dialog;
+  }
+
+  ErrorSnakbar(context) {
+    Get.snackbar(
+      '',
+      '',
+      margin: EdgeInsets.only(top: 10),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.red.shade50,
+      titleText: MySnackbarTitle(title: 'Error'),
+      messageText: MySnackbarContent(message: 'Something went wrong'),
+      maxWidth: context.width * 0.50,
+    );
+  }
 
 // End Loading
-    EndLoading() async {
-      SmartDialog.dismiss();
-    }
+  EndLoading() async {
+    SmartDialog.dismiss();
+  }
 
-    ErrorSnakbar() {
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
-    }
 
+  ///////////////////////////////
+  /// Update Milestone : 
+  ///////////////////////////////
+  UpdateMileStone() async {
+    StartLoading();
+    var resp = await mileStore.PersistMileStone();
+    if (!resp['response']) {
+      EndLoading();
+    } else {
+      EndLoading();
+      Get.toNamed(vision_page_url);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     SubmitMileStone() async {
       StartLoading();
       var resp = await mileStore.PersistMileStone();
       if (!resp['response']) {
         EndLoading();
-        ErrorSnakbar();
+        ErrorSnakbar(context);
       } else {
         await EndLoading();
         _controllerCenter.play();
@@ -210,61 +244,106 @@ class _MileStoneBodyState extends State<MileStoneBody> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, snapshot.data,SubmitMileStone);
+            return MainMethod(context, snapshot.data, SubmitMileStone);
           }
-          return MainMethod(context, snapshot.data,SubmitMileStone);
+          return MainMethod(context, snapshot.data, SubmitMileStone);
         });
   }
 
   Column MainMethod(
-      BuildContext context, milestones, Future<Null> SubmitMileStone()) {
+    BuildContext context, 
+    milestones, 
+    Future<Null> SubmitMileStone()) {
+
     return Column(
-      children: [
-        Container(
-            width: context.width * mile_cont_width,
-            height: context.height * mile_cont_height,
-            child: Column(children: [
-              // SUBHEADING SECTION :
-              SubHeadingSection(context),
+     children: [
+      Container(
+          width: context.width * mile_cont_width,
+          height: context.height * mile_cont_height,
+          child: Column(children: [
+            // SUBHEADING SECTION :
+            SubHeadingSection(context),
 
-              // ADD TAG BUTTON :
-              AddMileButton(),
+            // ADD TAG BUTTON :
+            AddMileButton(),
 
-              // CONGRESS MESSAGE WITH SPARKEL:
-              CongressMessage(),
+            // CONGRESS MESSAGE WITH SPARKEL:
+            CongressMessage(),
 
-              //////////////////////////////
-              // LIST OF TAGS :
-              // 1.Show milestone Info:
-              // 2.Delete milestone :
-              // 3.Edit MileStone :
-              //////////////////////////////
-              Container(
-                  width: context.width * list_tile_width,
-                  height: context.height * list_tile_height,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Obx(
-                    () {
-                      return 
-                      milestones == false
-                      ?Container()
-                      :ListView.builder(
-                          itemCount: milestones.length,
-                          itemBuilder: (context, intex) {
-                            return MileStoneTag(
-                              milestone: milestones[intex],
-                              index: intex,
-                              key: UniqueKey(),
-                            );
-                          });
-                    },
-                  ))
-            ])),
-        BusinessSlideNav(
-          slide: SlideType.milestone,
-          submitform: SubmitMileStone,
-        )
+            //////////////////////////////
+            // LIST OF TAGS :
+            // 1.Show milestone Info:
+            // 2.Delete milestone :
+            // 3.Edit MileStone :
+            //////////////////////////////
+            Container(
+                width: context.width * list_tile_width,
+                height: context.height * list_tile_height,
+                margin: EdgeInsets.only(top: 10),
+                child: Obx(
+                  () {
+                  return milestones == false
+                    ? Container()
+                    : ListView.builder(
+                        itemCount: milestones.length,
+                        itemBuilder: (context, intex) {
+                        return MileStoneTag(
+                          milestone: milestones[intex],
+                          index: intex,
+                          key: UniqueKey(),
+                        );
+                      });
+                },
+                ))
+          ])),
+      updateMode == true
+          ? UpdateButton(context)
+          : BusinessSlideNav(
+              slide: SlideType.milestone,
+              submitform: SubmitMileStone,
+            )
       ],
+    );
+  }
+
+///////////////////////////////////////////
+/// COMPONENT : 
+///////////////////////////////////////////
+  Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await UpdateMileStone();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
