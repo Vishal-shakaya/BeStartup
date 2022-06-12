@@ -26,7 +26,7 @@ class _VisionPageState extends State<VisionPage> {
     double page_width = 0.80;
 
     EditVision() {
-      Get.toNamed(create_business_vision_url);
+      Get.toNamed(create_business_vision_url, parameters: {'type':'update'});
     }
 
     EditMilestone() {
@@ -68,7 +68,7 @@ class _VisionPageState extends State<VisionPage> {
           if (snapshot.hasData) {
             return MainMethod(context, page_width, EditVision, EditMilestone);
           }
-            return MainMethod(context, page_width, EditVision, EditMilestone);
+          return MainMethod(context, page_width, EditVision, EditMilestone);
         });
   }
 
@@ -127,8 +127,7 @@ class _VisionPageState extends State<VisionPage> {
                                 color: light_color_type3,
                                 fontSize: 15,
                                 height: 1.8,
-                                fontWeight:FontWeight.w600
-                                 )),
+                                fontWeight: FontWeight.w600)),
                         style: Get.textTheme.headline2,
                         maxLines: 18,
                       )),

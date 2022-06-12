@@ -104,10 +104,16 @@ class StartupUpdater extends GetxController {
     }
   }
 
+//////////////////////////////////////////////
+  /// Update Business  :
+  /// 1 logo and Name :
+  /// Update Firestore :
+  /// Then Cached Data :
+//////////////////////////////////////////////
   UpdateBusinessDetail() async {
     var data;
     var name;
-    var logo; 
+    var logo;
     var doc_id;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
@@ -144,6 +150,50 @@ class StartupUpdater extends GetxController {
     } catch (e) {
       print(e);
       return ResponseBack(response_type: false);
+    }
+  }
+
+/////////////////////////////////////////
+  /// Update Vision :
+  ///
+/////////////////////////////////////////
+  UpdatehBusinessVision() async {
+    var data;
+    var vision;
+    var doc_id;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessVision');
+      if (cacheData != false) {
+        vision = cacheData['vision'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessVision');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      data['vision'] = vision;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessVision', data: data);
+      return data['vision'];
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

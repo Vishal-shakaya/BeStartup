@@ -37,8 +37,22 @@ class _VisionBodyState extends State<VisionBody> {
   double vision_subheading_text = 20;
   int maxlines = 15;
 
+
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+
+  var pageParam;
+  bool? updateMode = false;
+
+
+
   String? inital_val = '';
   var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
+
+
+
+
 
   SubmitVisionForm() async {
     // START LOADING :
@@ -69,8 +83,9 @@ class _VisionBodyState extends State<VisionBody> {
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
       if (res['response']) {
         Get.closeAllSnackbars();
-        // formKey.currentState!.reset();
-        Get.toNamed(create_business_catigory_url);
+        updateMode==true 
+        ? Get.toNamed(vision_page_url)
+        : Get.toNamed(create_business_catigory_url);
       }
 
       // FORM STORAGE ERROR :
@@ -109,7 +124,17 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
-  ResetVisionForm() {}
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +235,9 @@ class _VisionBodyState extends State<VisionBody> {
         ),
 
         // BOTTOM NAVIGATION:
-        BusinessSlideNav(
+        updateMode==true
+        ? UpdateButton(context)
+        : BusinessSlideNav(
           slide: SlideType.vision,
           submitform: SubmitVisionForm,
         )
@@ -275,6 +302,44 @@ class _VisionBodyState extends State<VisionBody> {
             style: TextStyle(
                 color: light_color_type3, fontSize: vision_subheading_text))
       ])),
+    );
+  }
+
+    Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await SubmitVisionForm();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

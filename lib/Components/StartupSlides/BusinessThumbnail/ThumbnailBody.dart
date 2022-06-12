@@ -33,12 +33,15 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
   var pageParam;
   bool? updateMode = false;
+
+  
   ///////////////////////////////////
   /// RESPONSIVE DEFAULT SETTINGS;
   /// ///////////////////////////
   double body_cont_width = 0.5;
   double body_height = 0.70;
   double image_hint_text_size = 22;
+
 
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
 
