@@ -39,7 +39,6 @@ class _ServiceSectionState extends State<ServiceSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        await Future.delayed(Duration(seconds: 5));
         final data = await startupConnect.FetchServices();
         services = data;
         return data;
@@ -77,11 +76,11 @@ class _ServiceSectionState extends State<ServiceSection> {
       margin: EdgeInsets.only(
           bottom: context.height * 0.06, top: context.height * 0.06),
       child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: services.length,
-        itemBuilder: (context, index) {
-        return Services(service: services[index],key:UniqueKey());
-      }),
+          scrollDirection: Axis.vertical,
+          itemCount: services.length,
+          itemBuilder: (context, index) {
+            return Services(service: services[index], key: UniqueKey());
+          }),
     );
   }
 }

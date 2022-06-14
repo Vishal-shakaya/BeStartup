@@ -1,8 +1,10 @@
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -21,8 +23,26 @@ class _ProductBodyState extends State<ProductBody> {
   double prod_cont_width = 0.80;
   double prod_cont_height = 0.70;
   double prod_sec_width = 0.65;
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
 
+  var pageParam;
+  bool? updateMode = false;
+
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // SHOW LOADING SPINNER :
@@ -58,12 +78,13 @@ class _ProductBodyState extends State<ProductBody> {
     SubmitProduct() async {
       StartLoading();
       var resp = await productStore.PersistProduct();
-      print(resp);
+      await updateStore.UpdateProducts();
       if (!resp['response']) {
         EndLoading();
         ErrorSnakbar();
       }
       EndLoading();
+      updateMode == true ? Get.toNamed(startup_view_url) : EndLoading();
     }
 
     // INITILIZE DEFAULT STATE :
@@ -127,17 +148,17 @@ class _ProductBodyState extends State<ProductBody> {
                           width: context.width * prod_sec_width,
                           height: context.height * 0.60,
                           child: Obx(() {
-                                return ListView.builder(
-                                    itemCount: product.length,
+                            return ListView.builder(
+                                itemCount: product.length,
+                                key: UniqueKey(),
+                                itemBuilder: (context, index) {
+                                  return ProductListView(
                                     key: UniqueKey(),
-                                    itemBuilder: (context, index) {
-                                      return ProductListView(
-                                        key: UniqueKey(),
-                                        product: product[index],
-                                        index: index,
-                                      );
-                                    });
-                              })),
+                                    product: product[index],
+                                    index: index,
+                                  );
+                                });
+                          })),
                     ],
                   ),
                 )
@@ -145,11 +166,51 @@ class _ProductBodyState extends State<ProductBody> {
             ),
           ),
         ),
-        BusinessSlideNav(
-          slide: SlideType.product,
-          submitform: SubmitProduct,
-        )
+        updateMode == true
+            ? UpdateButton(context, SubmitProduct)
+            : BusinessSlideNav(
+                slide: SlideType.product,
+                submitform: SubmitProduct,
+              )
       ],
+    );
+  }
+
+  Container UpdateButton(BuildContext context, SubmitProduct) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await SubmitProduct();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

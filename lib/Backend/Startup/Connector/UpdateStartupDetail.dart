@@ -235,7 +235,97 @@ class StartupUpdater extends GetxController {
       StoreCacheData(fromModel: 'BusinessMilestones', data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
 
+  ///////////////////////////////////////////
+  /// UPDATE PRODUCTS :
+  ///////////////////////////////////////////
+  UpdateProducts() async {
+    var data;
+    var product_list = [];
+    var only_product = [];
+    var temp_products = [];
+
+    var doc_id;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessProducts');
+      if (cacheData != false && cacheData != null) {
+        temp_products = cacheData['products'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessProducts');
+      var query = store
+          .where('user_id', isEqualTo: await getUserId)
+          // .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Product :
+      data['products'] = temp_products;
+
+      // Uppdate product in firestore :
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  FetchServices() async {
+    var data;
+    var product_list = [];
+    var only_product = [];
+    var temp_service = [];
+
+    var doc_id;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessProducts');
+      if (cacheData != false && cacheData != null) {
+        temp_service = cacheData['service'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessProducts');
+      var query = store
+          // .where(
+          //   'email',
+          //   isEqualTo: await getuserEmail,
+          // )
+          .where('user_id', isEqualTo: await getUserId)
+          // .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Product :
+      data['products'] = temp_service;
+
+      // Uppdate product in firestore :
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      print(e);
       return ResponseBack(response_type: false);
     }
   }

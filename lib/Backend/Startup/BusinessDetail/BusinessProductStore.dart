@@ -60,9 +60,11 @@ class BusinessProductStore extends GetxController {
   SetProductType(type) async {
     try {
       if (ProductType.product == type) {
+        print('Set Type Product');
         product_type = 'product';
       }
       if (ProductType.service == type) {
+        print('Set Type Servivce');
         product_type = 'service';
       }
       return ResponseBack(response_type: true);
@@ -108,7 +110,8 @@ class BusinessProductStore extends GetxController {
   }
 
   // ADD PRODUCT :
-  UpdateProduct({title, description, id, index}) {
+  UpdateProduct({title, description, id, index}) async {
+    final localStore = await SharedPreferences.getInstance();
     Map<String, dynamic?> product = {
       'id': id,
       'title': title,
@@ -211,7 +214,7 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessProductsList(
-        user_id:await getUserId,
+        user_id: await getUserId,
         email: await getuserEmail,
         startup_name: await getStartupName,
         products: product_list,

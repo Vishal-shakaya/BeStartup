@@ -67,7 +67,9 @@ class StartupViewConnector extends GetxController {
           FirebaseFirestore.instance.collection('BusinessThumbnail');
       var query = thumbnail
           .where(
-            'email',isEqualTo: await getuserEmail,)
+            'email',
+            isEqualTo: await getuserEmail,
+          )
           .where('user_id', isEqualTo: await getUserId)
           .where('startup_name', isEqualTo: await getStartupName)
           .get();
@@ -243,8 +245,16 @@ class StartupViewConnector extends GetxController {
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessProducts');
-      if (cacheData != false && cacheData!=null) {
-        return cacheData['products'];
+      if (cacheData != false && cacheData != null) {
+        print('***************** Product Local Storage ******************');
+
+        product_list = cacheData['products'];
+        product_list.forEach((element) {
+          if (element['type'] == 'product') {
+            only_product.add(element);
+          }
+        });
+        return only_product;
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -279,15 +289,24 @@ class StartupViewConnector extends GetxController {
       return false;
     }
   }
+
   FetchServices() async {
     var data;
-    var product_list = [];
-    var only_product = [];
+    var service_list = [];
+    var only_services = [];
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessProducts');
-      if (cacheData != false && cacheData!=null) {
-        return cacheData['service'];
+      if (cacheData != false && cacheData != null) {
+        print('********** Fetch Services **************');
+
+        service_list = cacheData['products'];
+        service_list.forEach((element) {
+          if (element['type'] == 'service') {
+            only_services.add(element);
+          }
+        });
+        return only_services;
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -309,19 +328,18 @@ class StartupViewConnector extends GetxController {
       await StoreCacheData(fromModel: 'BusinessProducts', data: data);
 
       // FILETER PRODUCT
-      product_list = data['products'];
-      product_list.forEach((element) {
+      service_list = data['products'];
+      service_list.forEach((element) {
         if (element['type'] == 'service') {
-          only_product.add(element);
+          print(element);
+          only_services.add(element);
         }
       });
 
-      return only_product;
+      return only_services;
     } catch (e) {
       print(e);
       return false;
     }
   }
-
-
 }

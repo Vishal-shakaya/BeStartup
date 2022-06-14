@@ -76,7 +76,7 @@ class Services extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 15),
+              padding: EdgeInsets.only(bottom: 20),
               child: RichText(
                   text: TextSpan(children: [
                 // Heading Texct :
@@ -138,7 +138,7 @@ class Services extends StatelessWidget {
           child: Image.network(service['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
-              fit: BoxFit.contain),
+              fit: BoxFit.fill),
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(

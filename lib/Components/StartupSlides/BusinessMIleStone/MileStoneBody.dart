@@ -42,9 +42,9 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   var pageParam;
   bool? updateMode = false;
 
-  late ConfettiController _controllerCenter;
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+  late ConfettiController _controllerCenter;
   
   //////////////////////////////////////////
   /// Congress message animation : 
@@ -306,9 +306,9 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     );
   }
 
-///////////////////////////////////////////
-/// COMPONENT : 
-///////////////////////////////////////////
+  ///////////////////////////////////////////
+  /// COMPONENT : 
+  ///////////////////////////////////////////
   Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),

@@ -19,7 +19,7 @@ class _ProductSectionState extends State<ProductSection> {
   var products = [];
 
   EditProductAndService() {
-    Get.toNamed(create_business_product_url);
+    Get.toNamed(create_business_product_url, parameters:{'type':'update'});
   }
 
   @override
@@ -43,7 +43,6 @@ class _ProductSectionState extends State<ProductSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        // await Future.delayed(Duration(seconds: 5));
         final data = await startupConnect.FetchProducts();
         products = data;
         return data;
