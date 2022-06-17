@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
@@ -28,6 +29,14 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var userStore = Get.put(UserStore(), tag: 'user_store');
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+
+  var pageParam;
+  bool? updateMode = false;
 
   ShowDialog(context) {
     showDialog(
@@ -57,6 +66,17 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   AddMember(context) {
     ShowDialog(context);
+  }
+
+  SmallLoadin() {
+    var dialog = SmartDialog.showLoading(
+        background: Colors.white,
+        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+        widget: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent,
+        ));
+    return dialog;
   }
 
   // SHOW LOADING SPINNER :
@@ -181,6 +201,32 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     }
   }
 
+  // TEAM FORM Update:
+  UpdateTeamMemberDetails() async {
+    SmallLoadin();
+    var resp = await memeberStore.PersistMembers();
+    final resp1 = await updateStore.UpdateBusinessTeamMember();
+    if (!resp['response'] || !resp1['response']) {
+      EndLoading();
+      ErrorSnakbar();
+      return;
+    } else {
+      EndLoading();
+      print('Upload Detail Successfull');
+      Get.toNamed(startup_view_url);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // INITILIZE DEFAULT STATE :
@@ -258,9 +304,49 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                     }))
               ],
             )),
-        TeamSlideNav(
-            submitform: SubmitTeamMemberDetails, slide: TeamSlideType.team)
+        updateMode == true
+            ? UpdateButton(context)
+            : TeamSlideNav(
+                submitform: SubmitTeamMemberDetails, slide: TeamSlideType.team)
       ],
+    );
+  }
+
+  Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await UpdateTeamMemberDetails();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

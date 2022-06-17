@@ -37,6 +37,17 @@ class _MemberListViewState extends State<MemberListView> {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
+            title: Container(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.cancel_outlined,
+                      color: Colors.blueGrey.shade800,
+                    )),
+              ),
               alignment: Alignment.center,
               // title:  MileDialogHeading(context),
               content: SizedBox(

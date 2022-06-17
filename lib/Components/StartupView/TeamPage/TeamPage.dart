@@ -19,12 +19,11 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
-  
   @override
   Widget build(BuildContext context) {
     // REDIRECT TO CREATE MEMEBER PAGE :
     EditMember() {
-      Get.toNamed(create_business_team, preventDuplicates: false);
+      Get.toNamed(create_business_team,parameters: {'type':'update'});
     }
 
     double page_width = 0.80;
@@ -50,13 +49,14 @@ class _TeamPageState extends State<TeamPage> {
                 child: Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child: snapshot.data==null 
-              ? Text('Loading Members',style: Get.textTheme.headline2)
-              : MainMethod(
-                context: context,
-                page_width: page_width,
-                EditMember: EditMember,
-                data: snapshot.data),
+              child: snapshot.data == null
+                  ? Text('Loading Members', style: Get.textTheme.headline2)
+                  : MainMethod(
+                      context: context,
+                      page_width: page_width,
+                      EditMember: EditMember,
+                       
+                      data: snapshot.data),
             ));
           }
           if (snapshot.hasError) return ErrorPage();
@@ -66,12 +66,14 @@ class _TeamPageState extends State<TeamPage> {
                 context: context,
                 page_width: page_width,
                 EditMember: EditMember,
+                 
                 data: snapshot.data);
           }
           return MainMethod(
               context: context,
               page_width: page_width,
               EditMember: EditMember,
+               
               data: snapshot.data);
         });
 
@@ -79,28 +81,27 @@ class _TeamPageState extends State<TeamPage> {
   }
 
   Container MainMethod(
-      {context, page_width, required Null EditMember(), data}) {
+      {context, page_width, required Null EditMember(),data}) {
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(
             child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               // Heading :
               StartupHeaderText(
                 title: 'Founder',
                 font_size: 32,
               ),
 
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            
+
               // Member List Section :
               Column(
                 children: [
-                  // EDIT TEAM MEMBER :
-                  // REDIRECT TO CREATE TEAME PAGE :
-                  EditButton(context, EditMember),
-
-
-                  // FOUNDER SECTION : 
+                  // FOUNDER SECTION :
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -113,62 +114,62 @@ class _TeamPageState extends State<TeamPage> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.20,
                           height: MediaQuery.of(context).size.height * 0.34,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
                           decoration: BoxDecoration(
                             // border: Border.all(color: border_color),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.topCenter,
                           margin: EdgeInsets.only(top: 10),
-                         
-                          child:   Container(
-                              padding: EdgeInsets.all(12),
+                          child: Container(
+                            padding: EdgeInsets.all(12),
 
-                              // MEMBER DETAIL SECTION :
-                              child: Column(
-                                children: [
-                                  // Profile Image
-                                  ProfileImage(),
+                            // MEMBER DETAIL SECTION :
+                            child: Column(
+                              children: [
+                                // Profile Image
+                                ProfileImage(),
 
-                                  // SPACING:
-                                  SizedBox(
-                                    height: 15,
+                                // SPACING:
+                                SizedBox(
+                                  height: 15,
+                                ),
+
+                                // POSITION:
+                                SizedBox(
+                                  width: 200,
+                                  child: Column(
+                                    children: [
+                                      MemPosition(),
+                                      // MEMBER NAME :
+                                      MemName(),
+                                      // CONTACT EMAIL ADDRESS :
+                                      MemContact(),
+                                    ],
                                   ),
-
-                                  // POSITION:
-                                  SizedBox(
-                                    width:200, 
-                                    child: Column(
-                                      children: [
-                                        MemPosition(),
-                                        // MEMBER NAME :
-                                        MemName(),
-                                        // CONTACT EMAIL ADDRESS :
-                                        MemContact(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
+                          ),
                         ),
-                        
                       )
                     ],
-                  ), 
+                  ),
 
-                  // SPACING : 
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15) , 
+                  // SPACING :
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.10),
 
-              StartupHeaderText(
-                title: 'Members',
-                font_size: 32,
-              ),
-              
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05) , 
+                  StartupHeaderText(
+                    title: 'Members',
+                    font_size: 32,
+                  ),
+
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
+                  // EDIT TEAM MEMBER :
+                  // REDIRECT TO CREATE TEAME PAGE :
+                  EditButton(context, EditMember),
                   Card(
                     elevation: 1,
                     shadowColor: Colors.blueGrey,
@@ -190,7 +191,7 @@ class _TeamPageState extends State<TeamPage> {
                         scrollDirection: Axis.vertical,
                         itemCount: data.length,
                         itemBuilder: (context, index) {
-                          return MemberBlock(member:data[index]);
+                          return MemberBlock(member: data[index]);
                         },
                       ),
                     ),
@@ -212,20 +213,20 @@ class _TeamPageState extends State<TeamPage> {
         )));
   }
 
-  Container EditButton(BuildContext context, Function EditMumber) {
+  Container EditButton(BuildContext context, Function fun) {
     return Container(
         width: context.width * 0.48,
         alignment: Alignment.topRight,
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
         child: Container(
-          width: 90,
+          width: 80,
           height: 30,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: border_color)),
           child: TextButton.icon(
               onPressed: () {
-                EditMumber();
+                fun();
               },
               icon: Icon(
                 Icons.edit,
@@ -238,7 +239,7 @@ class _TeamPageState extends State<TeamPage> {
   Container MemContact() {
     return Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -248,16 +249,14 @@ class _TeamPageState extends State<TeamPage> {
             size: 16,
           ),
         ),
-        AutoSizeText.rich(
-          TextSpan(
-            style: Get.textTheme.headline5, 
-            children: [
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
               // text: widget.member!['member_mail'],
-              text:'vishalsakaya@gmail.com', 
+              text: 'vishalsakaya@gmail.com',
               style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: Colors.blue, fontSize: 11))
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.blue,
+                  fontSize: 11))
         ])),
       ],
     ));
@@ -265,13 +264,14 @@ class _TeamPageState extends State<TeamPage> {
 
   Container MemName() {
     return Container(
-        child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline5, children: [
-      TextSpan(
-          // text: widget.member!['name'],
-          text:'vishal shakaya',
-          style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 13))
-    ])));
+      alignment: Alignment.center,
+        child: AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+          TextSpan(
+            text: 'vishal shakaya',
+            style: TextStyle(
+              color: Colors.blueGrey.shade700,
+              fontSize: 13))
+        ])));
   }
 
   Container MemPosition() {
@@ -281,7 +281,7 @@ class _TeamPageState extends State<TeamPage> {
             TextSpan(style: Get.textTheme.headline2, children: [
           TextSpan(
               // text: widget.member!['position'],
-              text:'CEO', 
+              text: 'CEO',
               style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
         ])));
   }
@@ -292,7 +292,7 @@ class _TeamPageState extends State<TeamPage> {
       radius: 70,
       backgroundColor: Colors.blueGrey[100],
       // foregroundImage: NetworkImage(widget.member!['image']),
-      foregroundImage:NetworkImage(temp_image),
+      foregroundImage: NetworkImage(temp_image),
     ));
   }
 }

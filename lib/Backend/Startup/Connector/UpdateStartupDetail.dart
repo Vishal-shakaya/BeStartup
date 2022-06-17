@@ -200,7 +200,7 @@ class StartupUpdater extends GetxController {
   ///////////////////////////////////////
   /// Milestone Update :
   ///////////////////////////////////////
-  FetchBusinessMilestone() async {
+  UpdateBusinessMilestone() async {
     var data;
     var temp_miles;
     var doc_id;
@@ -326,6 +326,45 @@ class StartupUpdater extends GetxController {
       return ResponseBack(response_type: true);
     } catch (e) {
       print(e);
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  UpdateBusinessTeamMember() async {
+    var data;
+    var doc_id;
+    var temp_mem;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessTeamMember');
+      if (cacheData != false) {
+        temp_mem = cacheData['members'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessTeamMember');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data();
+        doc_id = value.docs.first.id;
+      });
+
+      data['members'] = temp_mem;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
+      return ResponseBack(response_type: true);
+
+    } catch (e) {
       return ResponseBack(response_type: false);
     }
   }

@@ -124,19 +124,9 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
   FetchBusinessTeamMember() async {
     var data;
-    Map<String, dynamic> temp_member = {
-      'id': uuid.v4(),
-      'email': await getuserEmail,
-      'startup_name': await getStartupName,
-      'name': 'Vishal',
-      'position': 'Ceo',
-      'member_mail': 'shakayavishal007@gmail.com',
-      'meminfo': feature1_body,
-      'image': temp_image,
-      'timestamp': DateTime.now().toString(),
-    };
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessTeamMember');
@@ -167,6 +157,8 @@ class StartupViewConnector extends GetxController {
       return [];
     }
   }
+
+
 
   FetchBusinessVision() async {
     var data;

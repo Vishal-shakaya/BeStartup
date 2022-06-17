@@ -22,54 +22,56 @@ class _MemberBlockState extends State<MemberBlock> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
-        children: [
-          // Profile Image and Member Detail :
-          Container(
-            padding: EdgeInsets.all(12),
-
-            // MEMBER DETAIL SECTION :
-            child: Column(
-              children: [
-                // Profile Image
-                ProfileImage(),
-
-                // SPACING:
-                SizedBox(
-                  height: 15,
-                ),
-
-                // POSITION:
-                SizedBox(
-                  width: 200,
-                  child: InkWell(
-                    child: Column(
-                      children: [
-                        // MEMBER NAME :
-                        MemName(),
-
-                        // POSITION:
-                        MemPosition(),
-                        // CONTACT EMAIL ADDRESS :
-                        MemContact(),
-                      ],
+      child: SingleChildScrollView(
+        child: Row(
+          children: [
+            // Profile Image and Member Detail :
+            Container(
+              padding: EdgeInsets.all(12),
+      
+              // MEMBER DETAIL SECTION :
+              child: Column(
+                children: [
+                  // Profile Image
+                  ProfileImage(),
+      
+                  // SPACING:
+                  SizedBox(
+                    height: 15,
+                  ),
+      
+                  // POSITION:
+                  SizedBox(
+                    width: 200,
+                    child: InkWell(
+                      child: Column(
+                        children: [
+                          // MEMBER NAME :
+                          MemName(),
+      
+                          // POSITION:
+                          MemPosition(),
+                          // CONTACT EMAIL ADDRESS :
+                          MemContact(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-
-          // SPACING:
-          SizedBox(
-            width: context.width * 0.04,
-          ),
-
-          // MEMBER DESCRIPTION SECTION :
-          MemDescription(context),
-
-          // EidtDeleteLButtons(context)
-        ],
+      
+            // SPACING:
+            SizedBox(
+              width: context.width * 0.04,
+            ),
+      
+            // MEMBER DESCRIPTION SECTION :
+            MemDescription(context),
+      
+            // EidtDeleteLButtons(context)
+          ],
+        ),
       ),
     );
   }
@@ -91,21 +93,21 @@ class _MemberBlockState extends State<MemberBlock> {
         child: Container(
           padding: EdgeInsets.only(bottom: 15),
           child: RichText(
-              textAlign: TextAlign.center,
-              maxLines: 6,
-              text: TextSpan(children: [
-                // Heading Texct :
-                TextSpan(
-                  text: widget.member['meminfo'],
-                  style: GoogleFonts.robotoSlab(
-                    textStyle: TextStyle(),
-                    color: light_color_type3,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    height: 1.70,
-                  ),
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                text: widget.member['meminfo'],
+                style: GoogleFonts.robotoSlab(
+                  textStyle: TextStyle(),
+                  color: light_color_type3,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  height: 1.70,
                 ),
-              ])),
+              ), 
+              
+              maxLines: 6,
+              overflow: TextOverflow.ellipsis,
+              ),
         ),
       ),
     );

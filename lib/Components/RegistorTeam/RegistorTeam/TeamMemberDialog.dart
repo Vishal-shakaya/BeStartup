@@ -287,8 +287,8 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
                               borderRadius: const BorderRadius.horizontal(
                                   left: Radius.circular(20),
                                   right: Radius.circular(20))),
-                          child: const Text(
-                            'Done',
+                          child:  Text(
+                            widget.form_type == MemberFormType.create? 'Done':'Update',
                             style: TextStyle(
                                 letterSpacing: 2.5,
                                 color: Colors.white,
