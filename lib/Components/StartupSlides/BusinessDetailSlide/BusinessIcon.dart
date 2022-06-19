@@ -89,9 +89,7 @@ class _BusinessIconState extends State<BusinessIcon> {
       final resp = await startupConnector.FetchBusinessDetail();
 
       // Test : 
-      print(resp['message']);
-        Get.showSnackbar(mySnack);
-     
+      print(resp['message']);     
       // Success Handler
       if (resp['response']) {
         final logo = await detailStore.GetBusinessLogo();

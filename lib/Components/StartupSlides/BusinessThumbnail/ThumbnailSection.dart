@@ -2,8 +2,10 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +29,8 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   bool is_loading = false;
 
   var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
 ///////////////////////////////////
   /// RESPONSIVE DEFAULT SETTINGS;
   /// ///////////////////////////
@@ -41,26 +45,12 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   double upload_btn_width = 50;
   double upload_btn_height = 50;
 
-  ErrorSnakbar() {
-    Get.closeAllSnackbars();
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(seconds: 3),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Error'),
-      messageText: MySnackbarContent(message: 'Something went wrong'),
-      maxWidth: context.width * 0.50,
-    );
-  }
-
   // CALL FUNCTION TO UPLOAD IMAGE :
   // THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
     setState(() {
       is_loading = true;
     });
@@ -76,7 +66,8 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
       var resp =
           await thumbStore.SetThumbnail(thumbnail: image, filename: filename);
       if (!resp['response']) {
-        ErrorSnakbar();
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(width: snack_width));
         return;
       }
 
@@ -89,13 +80,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
   @override
   Widget build(BuildContext context) {
-    var spinner = Container(
-      padding: EdgeInsets.all(8),
-      child: CircularProgressIndicator(
-        color: Colors.white,
-        strokeWidth: 4,
-      ),
-    );
+    var spinner = MyCustomButtonSpinner(color: Colors.white);
     ////////////////////////////////////
     /// RESPONSIVE BREAK POINTS :
     /// //////////////////////////////
@@ -130,16 +115,33 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     // PHONE:
     if (context.width < 480) {}
 
-
-
     // INITILIZE DEFAULT STATE :
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
+      var snack_width = MediaQuery.of(context).size.width * 0.50;
       try {
-        final data = await thumbStore.GetThumbnail();
-        upload_image_url = data;
-        return upload_image_url;
+        final resp = await startupConnector.FetchThumbnail();
+        print(resp['message']);
+        if (resp['response']) {
+          final data = await thumbStore.GetThumbnail();
+          upload_image_url = data;
+          return upload_image_url;
+        }
+        if (!resp['response']) {
+          Get.closeCurrentSnackbar();
+          Get.showSnackbar(MyCustSnackbar(
+              width: snack_width,
+              type: MySnackbarType.error,
+              message: resp['message']));
+        }
       } catch (e) {
+        Get.closeCurrentSnackbar();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error,
+          message: e,
+        ));
+
         return '';
       }
     }
@@ -149,10 +151,10 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-            child: Shimmer.fromColors(
+                child: Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child:  MainMethod(context, spinner, snapshot.data),
+              child: MainMethod(context, spinner, snapshot.data),
             ));
           }
           if (snapshot.hasError) return ErrorPage();
@@ -168,8 +170,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
         });
   }
 
-
-  // MAIN WIDGET SECTION : 
+  // MAIN WIDGET SECTION :
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
       padding: EdgeInsets.all(10),

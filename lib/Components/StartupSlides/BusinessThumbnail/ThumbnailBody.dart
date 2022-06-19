@@ -8,6 +8,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/ThumbnailS
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,7 +35,6 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   var pageParam;
   bool? updateMode = false;
 
-  
   ///////////////////////////////////
   /// RESPONSIVE DEFAULT SETTINGS;
   /// ///////////////////////////
@@ -42,17 +42,19 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double body_height = 0.70;
   double image_hint_text_size = 22;
 
-
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
 
   UpdateThumbnail() async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
     final resp = await updateStore.UpdateThumbnail();
     if (resp['response']) {
-      print('******* Updated Thumnail ********');
       Get.toNamed(startup_view_url);
     }
     if (!resp['response']) {
-      print('******* Not Updated Thumnail ********');
+      Get.showSnackbar(
+        MyCustSnackbar(
+        width: snack_width,
+        message: resp['message']));
     }
   }
 

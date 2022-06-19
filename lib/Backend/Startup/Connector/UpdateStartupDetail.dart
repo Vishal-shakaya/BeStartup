@@ -97,10 +97,10 @@ class StartupUpdater extends GetxController {
 
       // Cached Image for loacal use :
       await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
-      return ResponseBack(response_type: true);
+      
+      return ResponseBack(response_type: true, );
     } catch (e) {
-      print(e);
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: e);
     }
   }
 

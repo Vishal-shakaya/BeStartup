@@ -40,7 +40,7 @@ class StartupViewConnector extends GetxController {
       final localStore = await SharedPreferences.getInstance();
       if (data != null || data != '') {
         localStore.setString(fromModel, json.encode(data));
-        print('Cached Data Successfully');
+        print('Cached $fromModel Successfully');
         return true;
       }
     } catch (e) {
@@ -59,7 +59,10 @@ class StartupViewConnector extends GetxController {
       ////////////////////////////////////////////////////
       final cacheData = await GetCachedData('BusinessThumbnail');
       if (cacheData != false) {
-        return cacheData['thumbnail'];
+        return ResponseBack(
+            response_type: true,
+            data: cacheData,
+            message: 'Fetch Thumbnail from Cached Store');
       }
 
       // FETCHING DATA FROM FIREBASE:
@@ -82,10 +85,13 @@ class StartupViewConnector extends GetxController {
       // STORE DATA TO DB :
       await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
 
-      return data['thumbnail'];
+      return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'Thumbnail Fetch from Firebase');
     } catch (e) {
-      print(e);
-      return shimmer_image;
+      return ResponseBack(
+          response_type: false, data: shimmer_image, message: e);
     }
   }
 
@@ -123,13 +129,14 @@ class StartupViewConnector extends GetxController {
       print('Business Detail Store to Cached Storage');
 
       return ResponseBack(
-        response_type:true,
-        data:data,
-        message: 'Business Detail Fetch from Database' );
+          response_type: true,
+          data: data,
+          message: 'Business Detail Fetch from Database');
     } catch (e) {
       return ResponseBack(
-        response_type: false, 
-        data: shimmer_image,);
+        response_type: false,
+        data: shimmer_image,
+      );
     }
   }
 
@@ -173,7 +180,10 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessVision');
       if (cacheData != false) {
-        return cacheData['vision'];
+        return ResponseBack(
+          response_type: true,
+          data: cacheData,
+          message: 'Vision Fetch from Cached Store'  );
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -193,10 +203,14 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       StoreCacheData(fromModel: 'BusinessVision', data: data);
-      return data['vision'];
+        return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'Vision Fetch from Firestore DB'  );
     } catch (e) {
-      print(e);
-      return false;
+        return ResponseBack(
+          response_type: false,
+          message: e  );
     }
   }
 
