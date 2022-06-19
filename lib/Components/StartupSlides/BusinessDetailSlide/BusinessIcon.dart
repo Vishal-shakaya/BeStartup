@@ -1,7 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
@@ -25,22 +28,12 @@ class _BusinessIconState extends State<BusinessIcon> {
   late UploadTask? upload_process;
   bool is_uploading = false;
 
-  ErrorSnakbar() {
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(seconds: 3),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Error'),
-      messageText: MySnackbarContent(message: 'Something went wrong'),
-      maxWidth: context.width * 0.50,
-    );
-  }
-
   // STORAGE :
   final detailStore = Get.put(BusinessDetailStore(), tag: 'startup_deatil');
+  final startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
 
+  // IMAGE PICKER :
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -69,42 +62,72 @@ class _BusinessIconState extends State<BusinessIcon> {
 
       if (!resp['response']) {
         // show error snakbar :
-        ErrorSnakbar();
+        MyCustSnackbar(
+            type: MySnackbarType.error,
+            context: context,
+            title: fetch_data_error_title,
+            message: fetch_data_error_msg,
+            width: context.width * 0.50);
       }
     }
   }
 
-  // INITILIZE DEFAULT STATE :
-  // GET IMAGE IF HAS IS LOCAL STORAGE :
-  SetLogo() async {
+  //////////////////////////////////////////////////////
+  /// 1. FETCH DATA ETHIER LOCALY CACHED OR DATABASE
+  //  2. INITILIZE DEFAULT STATE :
+  //  3. GET IMAGE IF HAS IS LOCAL STORAGE :
+  ///////////////////////////////////////////////////////
+  FetchData(context) async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    var mySnack = MyCustSnackbar(
+        type: MySnackbarType.error,
+        title: fetch_data_error_title,
+        message: fetch_data_error_msg,
+        width: snack_width);
+
     try {
-      final logo = await detailStore.GetBusinessLogo();
-      upload_image_url = logo;
-      return upload_image_url;
+      final resp = await startupConnector.FetchBusinessDetail();
+
+      // Test : 
+      print(resp['message']);
+        Get.showSnackbar(mySnack);
+     
+      // Success Handler
+      if (resp['response']) {
+        final logo = await detailStore.GetBusinessLogo();
+        upload_image_url = logo;
+        return upload_image_url;
+      }
+
+      // Error Handler : 
+      if (!resp['response']) {
+        Get.showSnackbar(mySnack);
+      }
+
     } catch (e) {
+      Get.showSnackbar(
+        MyCustSnackbar(
+          type: MySnackbarType.error,
+          title: fetch_data_error_title,
+          message: e,
+          width: snack_width));
       return '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var spinner = Container(
-      padding: EdgeInsets.all(8),
-      child: CircularProgressIndicator(
-        color: dartk_color_type3,
-        strokeWidth: 4,
-      ),
-    );
+    var spinner = MyCustomButtonSpinner();
 
     return FutureBuilder(
-        future: SetLogo(),
+        future: FetchData(context),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: Shimmer.fromColors(
-                baseColor: shimmer_base_color,
-                highlightColor: shimmer_highlight_color,
-                child: MainMethod(context, spinner, snapshot.data),
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: MainMethod(context, spinner, snapshot.data),
             ));
           }
           if (snapshot.hasError) return ErrorPage();

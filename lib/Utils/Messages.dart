@@ -11,6 +11,14 @@ String shimmer_image =
 String temp_logo =
     'https://i.pinimg.com/originals/1e/c3/17/1ec317142711af99cce906ef35a2f44f.jpg';
 
+/////////////////////////////
+/// ERROR MESSAGES
+/////////////////////////////
+String fetch_data_error_msg =
+    'Error while fetching data! please check internet connection.';
+String fetch_data_error_title =
+    'Somethig went wrong  or please Try Again ';
+
 /////////////////
 // LOGIN PAGE :
 //////////////////
@@ -82,10 +90,10 @@ String registor_team_head_text = 'Team Members';
 String investor_choise_text = 'What you Like';
 String investor_choise_sub_text = 'Pesnolize Topics you are Interested In ';
 
-// Business Why Invest Section : 
+// Business Why Invest Section :
 String business_why_head_text = 'Why You Invest in Us ';
-String business_why_sub_text = 'Describe why investor invest in you idea in detail';
-
+String business_why_sub_text =
+    'Describe why investor invest in you idea in detail';
 
 // SELECT PLAN :
 String select_plan_heading = 'Our Best Plans';

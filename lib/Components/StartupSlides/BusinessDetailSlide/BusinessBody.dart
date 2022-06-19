@@ -3,6 +3,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/Business
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -27,13 +28,6 @@ class _BusinessBodyState extends State<BusinessBody> {
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
-
-
-  // SET DEFAULT STATE :
-  Future<String?> SetVal() async {
-    await Future.delayed(Duration(seconds: 5));
-    var data = await detailStore.GetBusinessName();
-  }
 
   @override
   void initState() {
@@ -61,14 +55,13 @@ class _BusinessBodyState extends State<BusinessBody> {
               BusinessForm(
                 formKey: formKey,
               ),
-
               updateMode == true
-              ? UpdateButton(context)
-              : BusinessSlideNav(
-                key: UniqueKey(),
-                submitform: SubmitBusinessDetail,
-                slide: SlideType.detail,
-              )
+                  ? UpdateButton(context)
+                  : BusinessSlideNav(
+                      key: UniqueKey(),
+                      submitform: SubmitBusinessDetail,
+                      slide: SlideType.detail,
+                    )
             ],
           ),
         ));
@@ -84,7 +77,7 @@ class _BusinessBodyState extends State<BusinessBody> {
       borderRadius: 4,
       showProgressIndicator: true,
       margin: EdgeInsets.only(top: 10),
-      duration: Duration(minutes: 5),
+      duration: Duration(seconds: 5),
       backgroundColor: Colors.green.shade50,
       titleText: MySnackbarTitle(title: 'Details'),
       messageText: MySnackbarContent(message: 'processs...'),
@@ -99,6 +92,7 @@ class _BusinessBodyState extends State<BusinessBody> {
   /// 2. ELSE SHOW ERRO RALERT :
 ///////////////////////////////////////////////////
   SubmitBusinessDetail() async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
     formKey.currentState!.save();
     StartLoading();
     if (formKey.currentState!.validate()) {
@@ -111,41 +105,28 @@ class _BusinessBodyState extends State<BusinessBody> {
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
       if (res['response']) {
         Get.closeAllSnackbars();
-        updateMode ==true
-        ? Get.toNamed(startup_view_url)
-        : Get.toNamed(create_business_thumbnail_url);
-      }
+        updateMode == true
+          ? Get.toNamed(startup_view_url)
+          : Get.toNamed(create_business_thumbnail_url);
+       }
 
       if (!res['response']) {
+        // Error Snack :
         Get.closeAllSnackbars();
-        // Error Alert :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(10),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error accured'),
-          messageText: MySnackbarContent(message: res['message']),
-          maxWidth: context.width * 0.50,
-        );
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error , 
+          message: res['message'],
+        ));
       }
 
-      // formKey.currentState!.reset();
     } else {
-      Get.closeAllSnackbars();
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error  accure'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
+        // Error Snack :
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error , 
+        ));
     }
   }
 

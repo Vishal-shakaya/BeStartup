@@ -43,8 +43,9 @@ class _BusinessFormState extends State<BusinessForm> {
   Future<String?> SetVal() async {
     try {
       var data = await detailStore.GetBusinessName();
+      await Future.delayed(Duration(seconds: 1));
       initial_val = data;
-      return initial_val;
+      return data;
     } catch (e) {
       return '';
     }
@@ -92,7 +93,7 @@ class _BusinessFormState extends State<BusinessForm> {
               child: Column(
                 children: [
                   FormBuilderTextField(
-                    initialValue: initial_val,
+                    initialValue: data,
                     textAlign: TextAlign.center,
                     name: 'startup_name',
                     style: Get.textTheme.headline3,

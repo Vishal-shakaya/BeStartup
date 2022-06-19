@@ -41,22 +41,6 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-  // GET BUSINESS LOGO:
-  GetBusinessLogo() async {
-    final localStore = await SharedPreferences.getInstance();
-    try {
-      bool is_detail = localStore.containsKey('BusinessDetail');
-      if (is_detail) {
-        var data = localStore.getString('BusinessDetail');
-        var json_obj = jsonDecode(data!);
-        image_url = json_obj["logo"];
-        return json_obj["logo"];
-      }
-    } catch (e) {
-      return '';
-    }
-  }
-
 ////////////////////////////////////////////////////
   // 1. SET BUSINESS NAME :
   // 2. ERROR CHECK :
@@ -93,6 +77,7 @@ class BusinessDetailStore extends GetxController {
         await SetStartupName(businessName);
         localStore.setString('BusinessDetail', json.encode(resp));
         return ResponseBack(response_type: true);
+        
       } catch (e) {
         return ResponseBack(response_type: false, message: e);
       }
@@ -114,4 +99,21 @@ class BusinessDetailStore extends GetxController {
       return '';
     }
   }
+  
+    // GET BUSINESS LOGO:
+  GetBusinessLogo() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('BusinessDetail');
+      if (is_detail) {
+        var data = localStore.getString('BusinessDetail');
+        var json_obj = jsonDecode(data!);
+        image_url = json_obj["logo"];
+        return json_obj["logo"];
+      }
+    } catch (e) {
+      return '';
+    }
+  }
+
 }

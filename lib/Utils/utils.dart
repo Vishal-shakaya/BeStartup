@@ -1,4 +1,5 @@
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
 
 double alert_width = 320;
+final snackbar_show_time = 4;
 
 List<String> business_catigories = [
   'Software Dev',
@@ -43,17 +45,16 @@ List<String> business_catigories = [
   'Textile',
 ];
 
+final localStorageKeyes = [
+  'loginUserName',
+  'loginUserEmail',
+  'loginUserId',
+  'StartupName'
+];
 
- final localStorageKeyes = [
-      'loginUserName',
-      'loginUserEmail',
-      'loginUserId',
-      'StartupName'
-    ];
-
-
-
+////////////////////////////////////////////
 // CREATE RESPONSE ERROR OR SUCCESSFUL :
+////////////////////////////////////////////
 ResponseBack(
     {required response_type, code = null, data = null, message = null}) async {
   var response;
@@ -79,8 +80,9 @@ ResponseBack(
   return response;
 }
 
-/// Shhow SnakBar
-
+///////////////////////////////////
+/// Snackbar Component :
+//////////////////////////////////
 Row MySnackbarTitle({title}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -107,21 +109,61 @@ Row MySnackbarContent({message = 'processing... '}) {
         style: GoogleFonts.openSans(
           textStyle: TextStyle(),
           color: Colors.black,
-          fontSize: 15,
-          fontWeight: FontWeight.w600,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
         ),
       )
     ],
   );
 }
 
-// SHOW LOADING SPINNER :
-StartPageLoadingSpinner() {
+////////////////////////////////////////////////
+/// Custom SnackBar of handle :
+/// 1. Error  , Success
+/// 2. Custom message and title :
+/// //////////////////////////////////////////
+
+MyCustSnackbar({context, title, message, type, required width}) {
+  var snack; 
+  // var snack_width = MediaQuery.of(context).size.width * 0.50;
+  try {
+    if (type == MySnackbarType.error) {
+    // Error Snackbar:
+       snack = GetSnackBar(
+        snackPosition:SnackPosition.TOP ,
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.shade50,
+        titleText: MySnackbarTitle(title: title != null ? title : 'Error accured'),
+        messageText: MySnackbarContent(
+            message: message != null ? message : 'Something went wrong'),
+        maxWidth: width,
+      );
+      return snack;
+    }
+
+    if (type == MySnackbarType.success) {
+    // Success Snackbar : 
+
+    }
+
+  } catch (e) {
+    print('Snackbar Creating Error $e');
+  }
+}
+
+
+
+
+////////////////////////////////////////////
+/// MY CUSTOM LOADING SPINNER :
+////////////////////////////////////////////
+MyCustomButtonSpinner({color, width}) {
   var spinner = Container(
     padding: EdgeInsets.all(8),
     child: CircularProgressIndicator(
-      color: dartk_color_type3,
-      strokeWidth: 4,
+      color: color != null ? color : dartk_color_type3,
+      strokeWidth: width != null ? width : 4,
     ),
   );
   return spinner;
@@ -148,7 +190,6 @@ class CustomShimmer extends StatefulWidget {
   Widget? shape = null;
   String? text;
   CustomShimmer({this.text, this.shape, Key? key}) : super(key: key);
-
   @override
   State<CustomShimmer> createState() => _CustomShimmerState();
 }
@@ -178,23 +219,3 @@ class _CustomShimmerState extends State<CustomShimmer> {
     ));
   }
 }
-
-// FutureBuilder<dynamic> MyFutureBuilder({
-//   futureFun,
-//   loadingWidget,
-//   mainWidget,
-// }) {
-//   return FutureBuilder(
-//       future: futureFun(),
-//       builder: (_, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return loadingWidget;
-//         }
-//         if (snapshot.hasError) return ErrorPage();
-
-//         if (snapshot.hasData) {
-//           return mainWidget; // snapshot.data  :- get your object which is pass from your downloadData() function
-//         }
-//         return mainWidget;
-//       });
-// }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -93,12 +94,14 @@ class StartupViewConnector extends GetxController {
   // 3. Store data in local storage:
   FetchBusinessDetail() async {
     var data;
-
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessDetail');
       if (cacheData != false) {
-        return cacheData['logo'];
+        return ResponseBack(
+            response_type: true,
+            data: cacheData,
+            message: 'Business Detail Fetch from Cached Storage');
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -117,13 +120,18 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       StoreCacheData(fromModel: 'BusinessDetail', data: data);
-      return data['logo'];
+      print('Business Detail Store to Cached Storage');
+
+      return ResponseBack(
+        response_type:true,
+        data:data,
+        message: 'Business Detail Fetch from Database' );
     } catch (e) {
-      print(e);
-      return shimmer_image;
+      return ResponseBack(
+        response_type: false, 
+        data: shimmer_image,);
     }
   }
-
 
   FetchBusinessTeamMember() async {
     var data;
@@ -157,8 +165,6 @@ class StartupViewConnector extends GetxController {
       return [];
     }
   }
-
-
 
   FetchBusinessVision() async {
     var data;
@@ -227,8 +233,6 @@ class StartupViewConnector extends GetxController {
       return false;
     }
   }
-
-
 
   FetchProducts() async {
     var data;
