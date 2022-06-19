@@ -86,8 +86,6 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
     if (_formKey.currentState!.validate()) {
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
-      // String confirm_password =   _formKey.currentState!.value['confirmPassword'];
-      // print(confirm_password);
 
       _formKey.currentState!.reset();
 
@@ -257,7 +255,6 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
   FormBuilderTextField PasswordField(BuildContext context) {
     return FormBuilderTextField(
       name: 'password',
-
       onChanged: (val) {
         pass_controller = val;
       },

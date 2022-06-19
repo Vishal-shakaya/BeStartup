@@ -363,7 +363,77 @@ class StartupUpdater extends GetxController {
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
       return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
 
+////////////////////////////////////////////////////
+/// UPDATIN USER DETAIL AND CONTACT BOTH:
+////////////////////////////////////////////////////
+  UpdateUserDetailandContact() async {
+    var data_userContact;
+    var data_userDetail;
+    var doc_id_userDetail;
+    var doc_id_userContact;
+    var temp_userDetail;
+    var temp_userContact;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final userDetailCach = await GetCachedData('UserDetail');
+      final userContactCach = await GetCachedData('UserContact');
+      if (userDetailCach != false || userContactCach != false) {
+        temp_userContact = userContactCach;
+        temp_userDetail = userContactCach;
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('UserDetail');
+
+      var store1 = FirebaseFirestore.instance.collection('UserContact');
+
+      // Get User Detial Document :
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data_userDetail = value.docs.first.data();
+        doc_id_userDetail = value.docs.first.id;
+      });
+
+      // Get User  Conctact Document:
+      var query1 = store1
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data_userContact = value.docs.first.data();
+        doc_id_userContact = value.docs.first.id;
+      });
+
+      data_userDetail = temp_userDetail;
+      data_userContact = temp_userContact;
+
+      // Update Data in DB : 
+      store.doc(doc_id_userDetail).update(data_userDetail);
+      store.doc(doc_id_userContact).update(data_userContact);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'UserDetail', data: data_userDetail);
+      await StoreCacheData(fromModel: 'UserContact', data: data_userContact);
+
+      return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
     }

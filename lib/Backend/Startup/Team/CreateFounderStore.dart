@@ -40,14 +40,6 @@ class BusinessFounderStore extends GetxController {
     var localStore = await SharedPreferences.getInstance();
     print(founder);
     try {
-      // Map<String, dynamic> temp_founder = {
-      //   'user': founder['user'],
-      //   'name': founder['name'],
-      //   'position': founder['position'],
-      //   'phone_no': founder['phone_no'],
-      //   'email': founder['email'],
-      //   'other_contact': founder['other_contact'],
-      // };
 
       try {
         var resp = await FounderModel(

@@ -195,7 +195,7 @@ class _FounderImageState extends State<FounderImage> {
                         radius: image_radius,
                         backgroundColor: Colors.blueGrey[100],
                         child: AutoSizeText(
-                          'Startup Logo',
+                          'upload picture',
                           style: TextStyle(
                               color: light_color_type3,
                               fontWeight: FontWeight.bold),

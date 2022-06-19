@@ -96,7 +96,7 @@ class _UserSettingsState extends State<UserSettings> {
     }
 
     EditProfile() async {
-      Get.toNamed(select_plan_url);
+      Get.toNamed(create_founder, parameters: {'type':'update'});
     }
 
     DeleteUser() async {
