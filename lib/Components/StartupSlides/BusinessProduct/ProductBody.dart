@@ -1,9 +1,12 @@
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
+
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 
@@ -32,7 +35,9 @@ class _ProductBodyState extends State<ProductBody> {
 
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
-
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
+      
   @override
   void initState() {
     // TODO: implement initState
@@ -45,6 +50,8 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+
     // SHOW LOADING SPINNER :
     StartLoading() {
       var dialog = SmartDialog.showLoading(
@@ -62,18 +69,6 @@ class _ProductBodyState extends State<ProductBody> {
       SmartDialog.dismiss();
     }
 
-    ErrorSnakbar() {
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
-    }
 
     SubmitProduct() async {
       StartLoading();
@@ -81,19 +76,47 @@ class _ProductBodyState extends State<ProductBody> {
       await updateStore.UpdateProducts();
       if (!resp['response']) {
         EndLoading();
-        ErrorSnakbar();
-      }
+
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          message: fetch_data_error_msg,
+          title: fetch_data_error_title  ));
+    }
       EndLoading();
       updateMode == true ? Get.toNamed(startup_view_url) : EndLoading();
     }
+
+
 
     // INITILIZE DEFAULT STATE :
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        final data = await productStore.GetProductList();
-        return data;
+        final resp = await startupConnector.FetchProducts();
+        print(resp['message']);
+
+        // Success Handler :
+        if (resp['response']) {
+          final data = await productStore.GetProductList();
+          return data;
+        }
+
+        // Error Handler :
+        if (!resp['response']) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            message: fetch_data_error_msg,
+            title: fetch_data_error_title  ));
+        }
+
       } catch (e) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            message: e,
+            title: fetch_data_error_title  ));
         return '';
       }
     }

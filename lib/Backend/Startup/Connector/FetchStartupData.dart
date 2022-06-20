@@ -146,7 +146,10 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessTeamMember');
       if (cacheData != false) {
-        return cacheData['members'];
+        return ResponseBack(
+        response_type: true,
+        data: cacheData,
+        message: 'BusinessTeamMember  Fetch from Cache DB');
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -166,10 +169,15 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
-      return data['members'];
+        return ResponseBack(
+        response_type: true,
+        data: data,
+        message: 'BusinessTeamMember Fetch from Firestore DB');
     } catch (e) {
-      print(e);
-      return [];
+        return ResponseBack(
+        response_type: false,
+        data: data,
+        message: e);
     }
   }
 
@@ -269,7 +277,11 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessMilestones');
       if (cacheData != false) {
-        return cacheData['milestone'];
+        return ResponseBack(
+        response_type: true,
+        data: cacheData,
+        message: 'BusinessMilestones Fetch from Cached DB'  );
+
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -289,14 +301,23 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       StoreCacheData(fromModel: 'BusinessMilestones', data: data);
-      return data['milestone'];
+      return ResponseBack(
+        response_type: true,
+        data: data,
+        message: 'BusinessMilestones Fetch from Firestore DB'  );
+
     } catch (e) {
-      print(e);
-      return false;
+      return ResponseBack(
+        response_type: false,
+        data: [],
+        message: e );
+
     }
   }
 
-
+  //////////////////////////////////
+  /// Fetch Product : 
+  //////////////////////////////////
   FetchProducts() async {
     var data;
     var product_list = [];
@@ -305,18 +326,20 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessProducts');
       if (cacheData != false && cacheData != null) {
-        print('***************** Product Local Storage ******************');
-
+        // filter product : 
         product_list = cacheData['products'];
         product_list.forEach((element) {
           if (element['type'] == 'product') {
             only_product.add(element);
           }
         });
-        return only_product;
+        return ResponseBack(
+          response_type: true,
+          data:only_product,
+          message: 'BusinessProducts Fetch from Cached DB'  );
       }
 
-      // FETCHING DATA FROM FIREBASE
+      // FETCHING PRODUCT AND SERVICE FROM FIREBASE DB:
       var store = FirebaseFirestore.instance.collection('BusinessProducts');
       var query = store
           // .where(
@@ -342,10 +365,16 @@ class StartupViewConnector extends GetxController {
         }
       });
 
-      return only_product;
+      return ResponseBack(
+        response_type: true, 
+        data:only_product, 
+        message: 'BusinessProducts Fetch from Firebase  DB');
+
     } catch (e) {
-      print(e);
-      return false;
+      return ResponseBack(
+        response_type: false, 
+        data:[], 
+        message: e);
     }
   }
 
@@ -357,15 +386,17 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessProducts');
       if (cacheData != false && cacheData != null) {
-        print('********** Fetch Services **************');
-
         service_list = cacheData['products'];
         service_list.forEach((element) {
           if (element['type'] == 'service') {
             only_services.add(element);
           }
         });
-        return only_services;
+        return ResponseBack(
+        response_type: true, 
+        data:only_services, 
+        message: 'BusinessProducts Fetch Services from Cached  DB');
+
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -395,10 +426,15 @@ class StartupViewConnector extends GetxController {
         }
       });
 
-      return only_services;
+        return ResponseBack(
+        response_type: true, 
+        data:only_services, 
+        message: 'BusinessProducts Fetch Services from Firstore  DB');
     } catch (e) {
-      print(e);
-      return false;
+        return ResponseBack(
+        response_type: false, 
+        data:[], 
+        message: e);
     }
   }
 }

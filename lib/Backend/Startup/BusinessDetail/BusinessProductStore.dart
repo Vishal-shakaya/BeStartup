@@ -200,8 +200,8 @@ class BusinessProductStore extends GetxController {
       // To Save widget from crash if error occure then send temp product:
       // print error :
     } catch (e) {
-      print('Error While Get Milestones ${e}');
-      return false;
+      print('Error While Get Product ${e}');
+      return [];
     }
   }
 
