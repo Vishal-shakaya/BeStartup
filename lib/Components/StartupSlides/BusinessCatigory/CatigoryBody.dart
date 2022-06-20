@@ -125,7 +125,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     }
 
     // INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
+    // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
         final resp = await startupConnector.FetchBusinessCatigory();
@@ -134,15 +134,18 @@ class _CatigoryBodyState extends State<CatigoryBody> {
           print(resp['message']);
           default_catigory = await catigoryStore.GetCatigory();
           await SetDefaultCatigory(default_catigory);
+
+          // Update local catigory var :
+          default_catigory.forEach((el) async {
+            await catigoryStore.SetCatigory(cat: el);
+          });
         }
 
         // Error Handler :
         if (!resp['response']) {
           Get.closeAllSnackbars();
           Get.showSnackbar(
-              MyCustSnackbar(
-                width: snack_width,
-                message: resp['message']));
+              MyCustSnackbar(width: snack_width, message: resp['message']));
         }
       } catch (e) {
         return '';

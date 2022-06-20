@@ -65,6 +65,8 @@ class _CustomInputChipState extends State<CustomInputChip> {
     }
   }
 
+
+
   ///////////////////////////////////////
   // 1. CREATE INPUT CHIP
   // 2. STORE IN CHIP LIST :
@@ -101,42 +103,46 @@ class _CustomInputChipState extends State<CustomInputChip> {
         return;
       }
 
-      // CREATIN CUSTOM CHIP WIDGET :
-      final custom_cat = RemovableChip(
-        key: UniqueKey(),
-        catigory: val,
-        removeFun: RemoveChip,
-      );
+        // CREATIN CUSTOM CHIP WIDGET :
+        final custom_cat = RemovableChip(
+          key: UniqueKey(),
+          catigory: val,
+          removeFun: RemoveChip,
+        );
 
-      // Update UI :
-      setState(() {
-        custom_business_catigory_list.add(custom_cat);
-      });
-      ///////////////////////////////////////////
-      // STORE CHIP IN BACKGROUND:
-      // GET RESPONSE SUCCESS OR ERROR:
-      // IF GET ERROR THEN SHOW ERROR ALERT :
-      ///////////////////////////////////////////
-      var res = await catigoryStore.SetCatigory(cat: val);
-      if (!res['response']) {
+        // Update UI :
+        setState(() {
+          custom_business_catigory_list.add(custom_cat);
+        });
+        ///////////////////////////////////////////
+        // STORE CHIP IN BACKGROUND:
+        // GET RESPONSE SUCCESS OR ERROR:
+        // IF GET ERROR THEN SHOW ERROR ALERT :
+        ///////////////////////////////////////////
+        var res = await catigoryStore.SetCatigory(cat: val);
+        if (!res['response']) {
+          // CLOSE SNAKBAR :
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(width: snack_width));
+        }
+
+        // Reset form :
+        formKey.currentState!.reset();
+      } else {
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(width: snack_width));
       }
-
-      // Reset form :
-      formKey.currentState!.reset();
-    } else {
-      // CLOSE SNAKBAR :
-      Get.closeAllSnackbars();
-      Get.showSnackbar(MyCustSnackbar(width: snack_width));
-    }
   }
+
+
 
   // Reset Form :
   ResetCatigory() {
     formKey.currentState!.reset();
   }
+
+
 
   @override
   void initState() {
@@ -155,30 +161,32 @@ class _CustomInputChipState extends State<CustomInputChip> {
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
     return Container(
-        margin: EdgeInsets.only(top: context.height * chip_input_top_margin),
-        child: Column(
-          children: [
-            // CUSTION CHIPS :
-            PredefineChipSection(context),
+      margin: EdgeInsets.only(top: context.height * chip_input_top_margin),
+      child: Column(
+        children: [
+          // CUSTION CHIPS :
+          PredefineChipSection(context),
 
-            // CUSTOM CATIGORY FORM :
-            FormBuilder(
-                key: formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: Column(
-                  children: [
-                    ChipInputField(context),
-                  ],
-                )),
+          // CUSTOM CATIGORY FORM :
+          FormBuilder(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Column(
+                children: [
+                  ChipInputField(context),
+                ],
+              )),
 
-            // SUBMIT BUTTON :
-            ChipAddButton(context, snack_width)
-          ],
-        ));
+          // SUBMIT BUTTON :
+          ChipAddButton(context, snack_width)
+        ],
+      ));
   }
 
   ////////////////////////////////////
