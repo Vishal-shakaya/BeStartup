@@ -41,8 +41,7 @@ class BusinessCatigoryStore extends GetxController {
       if (is_detail) {
         var data = localStore.getString('BusinessCatigory');
         var json_obj = jsonDecode(data!);
-        print('data $json_obj');
-        return json_obj["catigory"];
+        return json_obj["catigories"].toList();
       }
     } catch (e) {
       return [''];
@@ -62,7 +61,6 @@ class BusinessCatigoryStore extends GetxController {
       localStore.setString('BusinessCatigory', json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
-      print(e);
       return ResponseBack(response_type: false);
     }
   }

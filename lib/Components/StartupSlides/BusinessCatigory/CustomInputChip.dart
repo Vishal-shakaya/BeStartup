@@ -12,7 +12,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class CustomInputChip extends StatefulWidget {
-  CustomInputChip({Key? key}) : super(key: key);
+  List defualt_custom_chip = [];
+  CustomInputChip({required this.defualt_custom_chip, Key? key})
+      : super(key: key);
 
   @override
   State<CustomInputChip> createState() => _CustomInputChipState();
@@ -37,6 +39,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
   List<RemovableChip> custom_business_catigory_list = [];
   var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
 
+  // REMOVE CHIP HANDLER :
   RemoveChip(val) async {
     setState(() {
       custom_business_catigory_list.removeWhere((element) {
@@ -47,9 +50,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
     // UPLDATE BACKEND :
     var res = await catigoryStore.RemoveCatigory(cat: val);
     if (!res['response']) {
-      // CLOSE SNAKBAR :
       Get.closeAllSnackbars();
-      // Error Alert :
       Get.snackbar(
         '',
         '',
@@ -69,7 +70,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
   // 2. STORE IN CHIP LIST :
   // 3. THEN SET STATE :
   //////////////////////////////////////////
-  SubmitCatigory(context) async {
+  SubmitCatigory(context, snack_width) async {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       final val = formKey.currentState!.value['custom_catigory'];
@@ -84,9 +85,6 @@ class _CustomInputChipState extends State<CustomInputChip> {
         }
       });
 
-      // VALIDATE CHIP :
-      // WARNING ALERT TO ADD ANOTHER CATIGORY :
-      // RETURN FUNCTION :
       if (is_dub_catigory) {
         CoolAlert.show(
             context: context,
@@ -120,22 +118,10 @@ class _CustomInputChipState extends State<CustomInputChip> {
       // IF GET ERROR THEN SHOW ERROR ALERT :
       ///////////////////////////////////////////
       var res = await catigoryStore.SetCatigory(cat: val);
-      print(res);
       if (!res['response']) {
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
-        // Error Alert :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(10),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error accure'),
-          messageText: MySnackbarContent(message: 'Something went wrong'),
-          maxWidth: context.width * 0.50,
-        );
+        Get.showSnackbar(MyCustSnackbar(width: snack_width));
       }
 
       // Reset form :
@@ -143,27 +129,35 @@ class _CustomInputChipState extends State<CustomInputChip> {
     } else {
       // CLOSE SNAKBAR :
       Get.closeAllSnackbars();
-      // Error Alert :
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error accure'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
+      Get.showSnackbar(MyCustSnackbar(width: snack_width));
     }
   }
 
+  // Reset Form :
   ResetCatigory() {
     formKey.currentState!.reset();
   }
 
   @override
+  void initState() {
+    // Set Default Custom Chips :   
+    widget.defualt_custom_chip.forEach((el) {
+      final custom_cat = RemovableChip(
+        key: UniqueKey(),
+        catigory: el,
+        removeFun: RemoveChip,
+      );
+
+      if (!business_catigories.contains(el)) {
+        custom_business_catigory_list.add(custom_cat);
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
     return Container(
         margin: EdgeInsets.only(top: context.height * chip_input_top_margin),
         child: Column(
@@ -182,12 +176,15 @@ class _CustomInputChipState extends State<CustomInputChip> {
                 )),
 
             // SUBMIT BUTTON :
-            ChipAddButton(context)
+            ChipAddButton(context, snack_width)
           ],
         ));
   }
 
-  Container ChipAddButton(BuildContext context) {
+  ////////////////////////////////////
+  /// EXTERNAL COMPONENTS :
+  ////////////////////////////////////
+  Container ChipAddButton(BuildContext context, snack_width) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
@@ -195,7 +192,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () {
-          SubmitCatigory(context);
+          SubmitCatigory(context, snack_width);
         },
         child: Card(
           elevation: 10,

@@ -6,21 +6,19 @@ import 'package:get/get.dart';
 
 class CatigoryChip extends StatefulWidget {
   String? catigory = '';
-  bool? is_selected=false; 
-  CatigoryChip({
-    Key? key,
-    this.catigory,
-    this.is_selected
-  }) : super(key: key);
+  bool? is_selected;
+  CatigoryChip({Key? key, this.catigory, this.is_selected}) : super(key: key);
   @override
   State<CatigoryChip> createState() => _CatigoryChipState();
 }
 
 class _CatigoryChipState extends State<CatigoryChip> {
   var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigories');
-  bool is_selected = false;
+  late bool is_selected;
+
+
   // Add or Remove catigory form backend :
-  UpdateStorage(is_selected) async {
+  UpdateStorage(is_selected, snack_width) async {
     var res;
     if (is_selected) {
       res = await catigoryStore.SetCatigory(cat: widget.catigory);
@@ -28,25 +26,25 @@ class _CatigoryChipState extends State<CatigoryChip> {
       res = await catigoryStore.RemoveCatigory(cat: widget.catigory);
     }
     if (!res['response']) {
-      // CLOSE SNAKBAR :
-      Get.closeAllSnackbars();
-      // Error Alert :
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error accure'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
+      Get.showSnackbar(MyCustSnackbar(width: snack_width));
     }
   }
 
+  
+  @override
+  void initState() {
+    super.initState();
+    is_selected = widget.is_selected!;
+  }
   @override
   Widget build(BuildContext context) {
+    // catigory Default State : 
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    // select chip color if chip already selected or not : 
+    is_selected
+          ? chip_color = chip_activate_text_color
+          : chip_color = chip_text_color;
+
     return Container(
         margin: EdgeInsets.all(5),
         key: UniqueKey(),
@@ -77,7 +75,7 @@ class _CatigoryChipState extends State<CatigoryChip> {
 
             // UPLDATE BACKEND :
             // 1 REMOVE OR ADD CATIGORY :
-            await UpdateStorage(is_selected);
+            await UpdateStorage(is_selected, snack_width);
           },
         ));
   }

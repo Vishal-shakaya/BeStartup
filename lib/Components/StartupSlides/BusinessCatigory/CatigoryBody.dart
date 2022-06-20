@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessCatigoryStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CatigoryChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
+import 'package:be_startup/Components/StartupSlides/BusinessCatigory/RemovableChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -10,6 +12,7 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CatigoryBody extends StatefulWidget {
   CatigoryBody({Key? key}) : super(key: key);
@@ -22,10 +25,17 @@ double vision_cont_width = 0.60;
 double vision_cont_height = 0.70;
 double vision_subheading_text = 20;
 var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
+var startupConnector =
+    Get.put(StartupViewConnector(), tag: 'startup_connector');
 
 class _CatigoryBodyState extends State<CatigoryBody> {
   @override
   Widget build(BuildContext context) {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    var is_selected = false;
+    List<CatigoryChip> catigory_list = [];
+    List<RemovableChip> default_catigory_chip = [];
+    var default_catigory;
     // DEFAULT :
     if (context.width > 1500) {
       vision_cont_height = 0.70;
@@ -66,19 +76,6 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       vision_subheading_text = 16;
     }
 
-    ErrorSnakbar() {
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
-    }
-
     // SHOW LOADING SPINNER :
     StartLoading() {
       var dialog = SmartDialog.showLoading(
@@ -103,23 +100,82 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       print(resp);
       if (resp == false) {
         EndLoading();
-        ErrorSnakbar();
+
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(width: snack_width));
       }
       EndLoading();
     }
-  
 
-    // CAREAT CATIGORY CHIPS:
-    List<CatigoryChip> catigory_list = [];
-    business_catigories.forEach((cat) async {
-      var is_selected = false;
-      catigory_list.add(CatigoryChip(
-        key: UniqueKey(),
-        catigory: cat,
-        is_selected: is_selected,
-      ));
-    });
+    SetDefaultCatigory(List default_catigory) async {
+      // Set Default Catigory Chip:
+      business_catigories.forEach((cat) async {
+        if (default_catigory.contains(cat)) {
+          is_selected = true;
+        } else {
+          is_selected = false;
+        }
 
+        catigory_list.add(CatigoryChip(
+          key: UniqueKey(),
+          catigory: cat,
+          is_selected: is_selected,
+        ));
+      });
+    }
+
+    // INITILIZE DEFAULT STATE :
+// GET IMAGE IF HAS IS LOCAL STORAGE :
+    GetLocalStorageData() async {
+      try {
+        final resp = await startupConnector.FetchBusinessCatigory();
+        // Success Handler :
+        if (resp['response']) {
+          print(resp['message']);
+          default_catigory = await catigoryStore.GetCatigory();
+          await SetDefaultCatigory(default_catigory);
+        }
+
+        // Error Handler :
+        if (!resp['response']) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(
+              MyCustSnackbar(
+                width: snack_width,
+                message: resp['message']));
+        }
+      } catch (e) {
+        return '';
+      }
+    }
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading Catigory Section',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(
+                context, catigory_list, default_catigory, SubmitCatigory);
+          }
+          return MainMethod(
+              context, catigory_list, default_catigory, SubmitCatigory);
+        });
+  }
+
+  Column MainMethod(BuildContext context, List<CatigoryChip> catigory_list,
+      List default_catigory, Future<Null> SubmitCatigory()) {
     return Column(
       children: [
         Container(
@@ -161,6 +217,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 ///////////////////////////////////////////////////
                 CustomInputChip(
                   key: UniqueKey(),
+                  defualt_custom_chip: default_catigory,
                 )
               ],
             )),

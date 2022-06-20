@@ -173,6 +173,9 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+  ///////////////////////////////////
+  /// FETCH STARTUP VISION : 
+  ///////////////////////////////////
   FetchBusinessVision() async {
     var data;
 
@@ -213,6 +216,51 @@ class StartupViewConnector extends GetxController {
           message: e  );
     }
   }
+  ///////////////////////////////////
+  /// FETCH STARTUP VISION : 
+  ///////////////////////////////////
+  FetchBusinessCatigory() async {
+    var data;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessCatigory');
+      if (cacheData != false) {
+        return ResponseBack(
+          response_type: true,
+          data: cacheData,
+          message: 'BusinessCatigory Fetch from Cached Store'  );
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessCatigory');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      // CACHE BUSINESS DETAIL :
+      StoreCacheData(fromModel: 'BusinessCatigory', data: data);
+        return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'BusinessCatigory Fetch from Firestore DB'  );
+    } catch (e) {
+        return ResponseBack(
+          response_type: false,
+          message: e  );
+    }
+  }
+
+
 
   FetchBusinessMilestone() async {
     var data;
@@ -247,6 +295,7 @@ class StartupViewConnector extends GetxController {
       return false;
     }
   }
+
 
   FetchProducts() async {
     var data;

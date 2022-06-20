@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -37,24 +40,20 @@ class _VisionBodyState extends State<VisionBody> {
   double vision_subheading_text = 20;
   int maxlines = 15;
 
-
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
 
   var pageParam;
   bool? updateMode = false;
-
-
-
   String? inital_val = '';
+
   var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
-
-
-
-
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
 
   SubmitVisionForm() async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
     // START LOADING :
     // SHOW LOADING SPINNER :
     Get.snackbar(
@@ -78,52 +77,31 @@ class _VisionBodyState extends State<VisionBody> {
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
       var res = await visionStore.SetVision(visionText: vision);
-      // RESPONSE HANDLING :
-      // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
-      // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
+
+      // Success Handler :
       if (res['response']) {
         Get.closeAllSnackbars();
-        updateMode==true 
-        ? Get.toNamed(vision_page_url)
-        : Get.toNamed(create_business_catigory_url);
+        updateMode == true
+            ? Get.toNamed(vision_page_url)
+            : Get.toNamed(create_business_catigory_url);
       }
 
-      // FORM STORAGE ERROR :
+      // Error Handler
       if (!res['response']) {
         Get.closeAllSnackbars();
-        // Error Alert :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(10),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error accured'),
-          messageText: MySnackbarContent(message: res['message']),
-          maxWidth: context.width * 0.50,
-        );
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, message: res['message']));
       }
     }
 
-    // INVALID FORM :
+    // Invalid Form :
     else {
       Get.closeAllSnackbars();
-      // Error Alert :
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error accured'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
+      Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+      ));
     }
   }
-
 
   @override
   void initState() {
@@ -134,7 +112,6 @@ class _VisionBodyState extends State<VisionBody> {
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +159,29 @@ class _VisionBodyState extends State<VisionBody> {
 // INITILIZE DEFAULT STATE :
 // GET IMAGE IF HAS IS LOCAL STORAGE :
     Future<String?> GetLocalStorageData() async {
+      var snack_width = MediaQuery.of(context).size.width * 0.50;
       try {
-        final data = await visionStore.GetVision();
-        inital_val = data;
-        return data;
+        final resp = await startupConnector.FetchBusinessVision();
+        print(resp['message']);
+        // Success Handler :
+        if (resp['response']) {
+          final data = await visionStore.GetVision();
+          inital_val = data;
+          return data;
+        }
+
+        // Error Handler :
+        if (!resp['response']) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+              width: snack_width,
+              message: fetch_data_error_msg,
+              title: fetch_data_error_title));
+        }
       } catch (e) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width, message: e, title: fetch_data_error_title));
         return '';
       }
     }
@@ -235,61 +230,61 @@ class _VisionBodyState extends State<VisionBody> {
         ),
 
         // BOTTOM NAVIGATION:
-        updateMode==true
-        ? UpdateButton(context)
-        : BusinessSlideNav(
-          slide: SlideType.vision,
-          submitform: SubmitVisionForm,
-        )
+        updateMode == true
+            ? UpdateButton(context)
+            : BusinessSlideNav(
+                slide: SlideType.vision,
+                submitform: SubmitVisionForm,
+              )
       ],
     );
   }
 
   Container VisionInputField(BuildContext context) {
     return Container(
-              margin: EdgeInsets.only(top: context.height * 0.04),
-              height: maxlines * 24.0,
-              child: FormBuilder(
-                key: formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: FormBuilderTextField(
-                  initialValue: inital_val!="null" ? inital_val: '',
-                  name: 'vision',
-                  maxLength: 2000,
-                  style: GoogleFonts.robotoSlab(
-                    fontSize: 16,
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    // Remove Comment in  Production mode:
-                    // FormBuilderValidators.minLength(context, 200,
-                    //     errorText: 'At least 200 required'),
-                    FormBuilderValidators.maxLength(context, 2000,
-                        errorText: 'Maximum 2000 char allow ')
-                  ]),
-                  scrollPadding: EdgeInsets.all(10),
-                  maxLines: maxlines,
-                  decoration: InputDecoration(
-                      helperText: 'min allow 200 ',
-                      hintText: "your vision",
-                      hintStyle: TextStyle(
-                        color: Colors.blueGrey.shade200,
-                      ),
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.all(20),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                              width: 1.5, color: Colors.blueGrey.shade200)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide:
-                              BorderSide(width: 2, color: primary_light)),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                ),
+      margin: EdgeInsets.only(top: context.height * 0.04),
+      height: maxlines * 24.0,
+      child: FormBuilder(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        child: FormBuilderTextField(
+          initialValue: inital_val != "null" ? inital_val : '',
+          name: 'vision',
+          maxLength: 2000,
+          style: GoogleFonts.robotoSlab(
+            fontSize: 15,
+          ),
+          validator: FormBuilderValidators.compose([
+            // Remove Comment in  Production mode:
+            FormBuilderValidators.minLength(context, 500,
+                errorText: 'At least 500 required'),
+                
+            FormBuilderValidators.maxLength(context, 2000,
+                errorText: 'Maximum 2000 char allow ')
+          ]),
+          scrollPadding: EdgeInsets.all(10),
+          maxLines: maxlines,
+          decoration: InputDecoration(
+              helperText: 'min allow 200 ',
+              hintText: "your vision",
+              hintStyle: TextStyle(
+                color: Colors.blueGrey.shade200,
               ),
-            );
+              fillColor: Colors.grey[100],
+              filled: true,
+              contentPadding: EdgeInsets.all(20),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 2, color: primary_light)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+        ),
+      ),
+    );
   }
 
   Container SubHeadingSection(BuildContext context) {
@@ -305,7 +300,7 @@ class _VisionBodyState extends State<VisionBody> {
     );
   }
 
-    Container UpdateButton(BuildContext context) {
+  Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
