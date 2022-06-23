@@ -324,7 +324,7 @@ class StartupViewConnector extends GetxController {
         return ResponseBack(
         response_type: true,
         data: cacheData,
-        message: 'BusinessMilestones Fetch from Cached DB'  );
+        message: 'BusinessMilestones Fetch from Cached DB');
 
       }
 

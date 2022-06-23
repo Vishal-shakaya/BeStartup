@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/AddMileButton.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessMIleStone/MileStoneTag.dart';
@@ -7,6 +8,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,15 @@ class MileStoneBody extends StatefulWidget {
 }
 
 class _MileStoneBodyState extends State<MileStoneBody> {
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
+
+  late ConfettiController _controllerCenter;
+  var my_context = Get.context;
+  var milestones;
+
   double mile_cont_width = 0.70;
   double mile_cont_height = 0.70;
 
@@ -42,12 +53,8 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   var pageParam;
   bool? updateMode = false;
 
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
-  final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
-  late ConfettiController _controllerCenter;
-  
   //////////////////////////////////////////
-  /// Congress message animation : 
+  /// Congress message animation :
   //////////////////////////////////////////
   Path drawStar(Size size) {
     // Method to convert degree to radians
@@ -72,10 +79,84 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     return path;
   }
 
+// SHOW LOADING SPINNER :
+  StartLoading() {
+    var dialog = SmartDialog.showLoading(
+        background: Colors.white,
+        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+        widget: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent,
+        ));
+    return dialog;
+  }
 
-//////////////////////////
-/// Initial State : 
-//////////////////////////
+  EndLoading() async {
+    SmartDialog.dismiss();
+  }
+
+  ///////////////////////////////
+  /// Update Milestone :
+  ///////////////////////////////
+  UpdateMileStone() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    StartLoading();
+    var res = await mileStore.PersistMileStone();
+    var resp = await updateStore.UpdateBusinessMilestone();
+
+    // Success Handler Cached Data :
+    if (res['response']) {
+      // Update Success Handler :
+      if (resp['response']) {
+        EndLoading();
+        Get.toNamed(vision_page_url);
+      }
+
+      // Update Error Handler :
+      if (!resp['response']) {
+        EndLoading();
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+      }
+    }
+
+    // Error Hander Cached Data ;
+    if (!res['response']) {
+      EndLoading();
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+    }
+  }
+
+//////////////////////////////////
+  /// SUBMIT MILESTONE FORM :
+//////////////////////////////////
+  SubmitMileStone() async {
+    StartLoading();
+    var resp = await mileStore.PersistMileStone();
+    if (!resp['response']) {
+      EndLoading();
+    } else {
+      await EndLoading();
+      _controllerCenter.play();
+      CoolAlert.show(
+          barrierDismissible: false,
+          title: 'First Step Completed!!',
+          text: 'Now you have to complete final step.',
+          width: alert_width,
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+            _controllerCenter.stop();
+            Get.toNamed(create_founder, preventDuplicates: false);
+          },
+          context: my_context!,
+          type: CoolAlertType.success);
+    }
+  }
+
+///////////////////////////////////////////
+// SET PAGE DEFAULT STATE :
+///////////////////////////////////////////
   @override
   void initState() {
     pageParam = Get.parameters;
@@ -87,91 +168,17 @@ class _MileStoneBodyState extends State<MileStoneBody> {
         ConfettiController(duration: const Duration(seconds: 10));
   }
 
+  // REMOVE DESPOSE PARAM :
   @override
   void dispose() {
     _controllerCenter.dispose();
     super.dispose();
   }
 
-// SHOW LOADING SPINNER :
-  StartLoading() {
-    var dialog = SmartDialog.showLoading(
-      background: Colors.white,
-      maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-      widget: CircularProgressIndicator(
-        backgroundColor: Colors.white,
-        color: Colors.orangeAccent,
-      ));
-    return dialog;
-  }
-
-  ErrorSnakbar(context) {
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(seconds: 3),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Error'),
-      messageText: MySnackbarContent(message: 'Something went wrong'),
-      maxWidth: context.width * 0.50,
-    );
-  }
-
-// End Loading
-  EndLoading() async {
-    SmartDialog.dismiss();
-  }
-
-
-  ///////////////////////////////
-  /// Update Milestone : 
-  ///////////////////////////////
-  UpdateMileStone() async {
-    StartLoading();
-    var resp = await mileStore.PersistMileStone();
-    if (!resp['response']) {
-      EndLoading();
-    } else {
-      EndLoading();
-      Get.toNamed(vision_page_url);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    SubmitMileStone() async {
-      StartLoading();
-      var resp = await mileStore.PersistMileStone();
-      if (!resp['response']) {
-        EndLoading();
-        ErrorSnakbar(context);
-      } else {
-        await EndLoading();
-        _controllerCenter.play();
-        CoolAlert.show(
-            barrierDismissible: false,
-            title: 'First Step Completed!!',
-            text: 'Now you have to complete final step.',
-            width: alert_width,
-            onConfirmBtnTap: () {
-              Navigator.of(context).pop();
-              _controllerCenter.stop();
-              Get.toNamed(create_founder, preventDuplicates: false);
-            },
-            context: context,
-            type: CoolAlertType.success);
-      }
-    }
-
-    ////////////////////////////////
-    /// RESPONSIVE BREAK  POINTS :
-    /// DEFAULT 1500 :
-    /// ///////////////////////////
-
     // DEFAULT :
     if (context.width > 1500) {
-      print('greator then 1500');
       mile_cont_width = 0.70;
       mile_cont_height = 0.70;
 
@@ -212,13 +219,12 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       print('480');
     }
 
-    var milestones;
-
-    // return MainMethod(context, milestones, SubmitMileStone);
-    // INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
+    //////////////////////////////////////
+    //  GET REQUIREMENTS :
+    //////////////////////////////////////
     GetLocalStorageData() async {
       try {
+        final resp = startupConnector.FetchBusinessMilestone();
         final data = await mileStore.GetMileStonesList();
         milestones = data;
         return milestones;
@@ -227,6 +233,9 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       }
     }
 
+    //////////////////////////////////////
+    //  SET  REQUIREMENTS :
+    //////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -244,71 +253,77 @@ class _MileStoneBodyState extends State<MileStoneBody> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, snapshot.data, SubmitMileStone);
+            return MainMethod(context, snapshot.data);
           }
-          return MainMethod(context, snapshot.data, SubmitMileStone);
+          return MainMethod(context, snapshot.data);
         });
   }
 
+  /////////////////////////////////////
+  /// MAIN METHOD :
+  /////////////////////////////////////
   Column MainMethod(
-    BuildContext context, 
-    milestones, 
-    Future<Null> SubmitMileStone()) {
-
+    BuildContext context,
+    milestones,
+  ) {
     return Column(
-     children: [
-      Container(
-          width: context.width * mile_cont_width,
-          height: context.height * mile_cont_height,
-          child: Column(children: [
-            // SUBHEADING SECTION :
-            SubHeadingSection(context),
+      children: [
+        Container(
+            width: context.width * mile_cont_width,
+            height: context.height * mile_cont_height,
+            child: Column(children: [
+              // SUBHEADING SECTION :
+              SubHeadingSection(context),
 
-            // ADD TAG BUTTON :
-            AddMileButton(),
+              // ADD TAG BUTTON :
+              AddMileButton(),
 
-            // CONGRESS MESSAGE WITH SPARKEL:
-            CongressMessage(),
+              // CONGRESS MESSAGE WITH SPARKEL:
+              CongressMessage(),
 
-            //////////////////////////////
-            // LIST OF TAGS :
-            // 1.Show milestone Info:
-            // 2.Delete milestone :
-            // 3.Edit MileStone :
-            //////////////////////////////
-            Container(
-                width: context.width * list_tile_width,
-                height: context.height * list_tile_height,
-                margin: EdgeInsets.only(top: 10),
-                child: Obx(
-                  () {
-                  return milestones == false
-                    ? Container()
-                    : ListView.builder(
-                        itemCount: milestones.length,
-                        itemBuilder: (context, intex) {
-                        return MileStoneTag(
-                          milestone: milestones[intex],
-                          index: intex,
-                          key: UniqueKey(),
-                        );
-                      });
-                },
-                ))
-          ])),
-      updateMode == true
-          ? UpdateButton(context)
-          : BusinessSlideNav(
-              slide: SlideType.milestone,
-              submitform: SubmitMileStone,
-            )
+              //////////////////////////////
+              // LIST OF TAGS :
+              // 1.Show milestone Info:
+              // 2.Delete milestone :
+              // 3.Edit MileStone :
+              //////////////////////////////
+              Container(
+                  width: context.width * list_tile_width,
+                  height: context.height * list_tile_height,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Obx(
+                    () {
+                      return milestones == false
+                          ? Container()
+                          : ListView.builder(
+                              itemCount: milestones.length,
+                              itemBuilder: (context, intex) {
+                                return MileStoneTag(
+                                  milestone: milestones[intex],
+                                  index: intex,
+                                  key: UniqueKey(),
+                                );
+                              });
+                    },
+                  ))
+            ])),
+        updateMode == true
+            ? UpdateButton(context)
+            : BusinessSlideNav(
+                slide: SlideType.milestone,
+                submitform: SubmitMileStone,
+              )
       ],
     );
   }
 
   ///////////////////////////////////////////
-  /// COMPONENT : 
+  /// EXTERNAL METHODS  :
+  /// 1. Updatebutton :
+  /// 2. Contegress Message :
+  /// 3. Subheading Section :
   ///////////////////////////////////////////
+
   Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
@@ -347,6 +362,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     );
   }
 
+  // CONGRESS MESSAGE:
   Stack CongressMessage() {
     return Stack(
       children: [
@@ -375,9 +391,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     );
   }
 
-  ////////////////////////
   /// SUBHEADING SECTION :
-  /// /////////////////////
   Column SubHeadingSection(BuildContext context) {
     return Column(
       children: [
