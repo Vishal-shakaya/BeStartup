@@ -224,6 +224,50 @@ class StartupViewConnector extends GetxController {
           message: e  );
     }
   }
+
+  ///////////////////////////////////
+  /// FETCH STARTUP VISION : 
+  ///////////////////////////////////
+  FetchBusinessWhy() async {
+    var data;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessWhyInvest');
+      if (cacheData != false) {
+        return ResponseBack(
+          response_type: true,
+          data: cacheData,
+          message: 'BusinessWhyInvest Fetch from Cached Store'  );
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessWhyInvest');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      // CACHE BUSINESS DETAIL :
+      StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
+        return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'BusinessWhyInvest Fetch from Firestore DB'  );
+    } catch (e) {
+        return ResponseBack(
+          response_type: false,
+          message: e  );
+    }
+  }
   ///////////////////////////////////
   /// FETCH STARTUP VISION : 
   ///////////////////////////////////

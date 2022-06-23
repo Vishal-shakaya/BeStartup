@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -23,7 +24,14 @@ class VisionBody extends StatefulWidget {
 }
 
 class _VisionBodyState extends State<VisionBody> {
+  var startupUpdater = Get.put(StartupUpdater(), tag: 'update_startup');
+  var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
+  var my_context = Get.context;
+
   final formKey = GlobalKey<FormBuilderState>();
+
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
@@ -48,31 +56,13 @@ class _VisionBodyState extends State<VisionBody> {
   bool? updateMode = false;
   String? inital_val = '';
 
-  var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
-  var startupConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_connector');
 
+
+  /////////////////////////////
+  /// SUBMIT FORM :
+  /////////////////////////////
   SubmitVisionForm() async {
-    var snack_width = MediaQuery.of(context).size.width * 0.50;
-    // START LOADING :
-    // SHOW LOADING SPINNER :
-    Get.snackbar(
-      '',
-      '',
-      shouldIconPulse: true,
-      isDismissible: true,
-      borderRadius: 4,
-      showProgressIndicator: true,
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(minutes: 1),
-      backgroundColor: Colors.green.shade50,
-      titleText: MySnackbarTitle(title: 'Vision'),
-      messageText: MySnackbarContent(),
-      maxWidth: context.width * 0.50,
-      padding: EdgeInsets.all(15),
-    );
-
-    // IF VISION NOT DEFINAE THEN :
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
@@ -81,9 +71,7 @@ class _VisionBodyState extends State<VisionBody> {
       // Success Handler :
       if (res['response']) {
         Get.closeAllSnackbars();
-        updateMode == true
-            ? Get.toNamed(vision_page_url)
-            : Get.toNamed(create_business_catigory_url);
+        Get.toNamed(create_business_catigory_url);
       }
 
       // Error Handler
@@ -103,6 +91,56 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
+
+
+  /////////////////////////////
+  /// UPDATE VISION  FORM :
+  /////////////////////////////
+  UpdatetVisionFrom() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    formKey.currentState!.save();
+    if (formKey.currentState!.validate()) {
+      var vision = formKey.currentState!.value['vision'];
+      var res = await visionStore.SetVision(visionText: vision);
+      var resp = await startupUpdater.UpdatehBusinessVision();
+      // Success Handler Cached Data:
+      if (res['response']) {
+
+         // Update Success Handler :  
+        if(resp['response']){
+          Get.closeAllSnackbars();
+          Get.toNamed(create_business_catigory_url);
+        }
+
+        //  Update Error Handler : 
+        if(!resp['response']){
+          Get.closeAllSnackbars();
+          Get.showSnackbar(
+              MyCustSnackbar(width: snack_width, message: res['message']));
+        }
+      }
+
+      // Error Handler Data : 
+      if (!res['response']) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, message: res['message']));
+      }
+    }
+
+    // Invalid Form :
+    else {
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+      ));
+    }
+  }
+
+  
+  /////////////////////////////////////
+  // SET PAGE DEFAULT STATE : 
+  /////////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
@@ -112,6 +150,8 @@ class _VisionBodyState extends State<VisionBody> {
     }
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +196,11 @@ class _VisionBodyState extends State<VisionBody> {
       vision_cont_height = 0.70;
     }
 
-// INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
+
+
+    ////////////////////////////
+    // GET REQUIREMENTS : 
+    ////////////////////////////
     Future<String?> GetLocalStorageData() async {
       var snack_width = MediaQuery.of(context).size.width * 0.50;
       try {
@@ -186,6 +229,11 @@ class _VisionBodyState extends State<VisionBody> {
       }
     }
 
+
+
+  /////////////////////////////
+  /// SET REQUIREMENTS : 
+  /////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -208,7 +256,10 @@ class _VisionBodyState extends State<VisionBody> {
         });
   }
 
+
+  //////////////////////////////////////////
   // MAIN METHOD SECTION :
+  //////////////////////////////////////////
   Column MainMethod(
     BuildContext context,
     data,
@@ -224,7 +275,7 @@ class _VisionBodyState extends State<VisionBody> {
               SubHeadingSection(context),
 
               // Vision input field
-              VisionInputField(context)
+              WhyInputField(context)
             ],
           ),
         ),
@@ -240,7 +291,12 @@ class _VisionBodyState extends State<VisionBody> {
     );
   }
 
-  Container VisionInputField(BuildContext context) {
+
+  //////////////////////////////
+  /// EXTERNAL METHODS : 
+  /// 1. 
+  //////////////////////////////
+  Container WhyInputField(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: context.height * 0.04),
       height: maxlines * 24.0,
@@ -258,7 +314,7 @@ class _VisionBodyState extends State<VisionBody> {
             // Remove Comment in  Production mode:
             FormBuilderValidators.minLength(context, 500,
                 errorText: 'At least 500 required'),
-                
+
             FormBuilderValidators.maxLength(context, 2000,
                 errorText: 'Maximum 2000 char allow ')
           ]),
@@ -308,7 +364,7 @@ class _VisionBodyState extends State<VisionBody> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
-          await SubmitVisionForm();
+          await UpdatetVisionFrom();
         },
         child: Card(
           elevation: 10,

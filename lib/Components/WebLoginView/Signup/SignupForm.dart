@@ -87,10 +87,10 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
 
-      _formKey.currentState!.reset();
 
       // SIGNUP PROCESS :
       var resp = await myAuth.SignupUser(email: email, password: password);
+      _formKey.currentState!.reset();
       print('Signup Response ${resp}');
 
       // SUCCESS RESPONSE :

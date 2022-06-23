@@ -40,6 +40,7 @@ class BusinessWhyInvestStore extends GetxController {
     }
   }
 
+
   // Return Vision:
    GetWhyInvest() async {
     final localStore = await SharedPreferences.getInstance();

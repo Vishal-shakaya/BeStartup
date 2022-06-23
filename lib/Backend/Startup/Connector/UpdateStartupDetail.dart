@@ -159,14 +159,14 @@ class StartupUpdater extends GetxController {
 /////////////////////////////////////////
   UpdatehBusinessVision() async {
     var data;
-    var vision;
+    var why_text;
     var doc_id;
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessVision');
       if (cacheData != false) {
-        vision = cacheData['vision'];
+        why_text = cacheData['why_text'];
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -185,11 +185,53 @@ class StartupUpdater extends GetxController {
         doc_id = value.docs.first.id;
       });
 
-      data['vision'] = vision;
+      data['why_text'] = why_text;
       store.doc(doc_id).update(data);
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessVision', data: data);
+
+    } catch (e) {
+      return ResponseBack(response_type: false,message: e);
+    }
+  }
+
+/////////////////////////////////////////
+  /// Update Why :
+/////////////////////////////////////////
+  UpdatehBusinessWhy() async {
+    var data;
+    var vision;
+    var doc_id;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessWhyInvest');
+      if (cacheData != false) {
+        vision = cacheData['vision'];
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessWhyInvest');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      data['vision'] = vision;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
       return data['vision'];
     } catch (e) {
       print(e);

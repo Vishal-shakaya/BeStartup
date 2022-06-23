@@ -1,9 +1,12 @@
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessWhyInvestStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +24,15 @@ class BusinessWhyInvestBody extends StatefulWidget {
 }
 
 class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
+  var whyInvestStore =
+      Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: "startup_connector");
+  var startupUpdater = Get.put(StartupUpdater(), tag: 'update_startup');
+
   final formKey = GlobalKey<FormBuilderState>();
+  var my_context = Get.context;
+
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
@@ -37,84 +48,119 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   double vision_cont_height = 0.70;
   double vision_subheading_text = 20;
   int maxlines = 15;
-
   String? inital_val = '';
-  var whyInvestStore = Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
 
+  // update params:
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+  var pageParam;
+  bool? updateMode = false;
+
+
+
+
+  /////////////////////////////////
+  // SUBMIT FORM : 
+  /////////////////////////////////
   SubmitWhyInvestForm() async {
-    // START LOADING :
-    // SHOW LOADING SPINNER :
-    Get.snackbar(
-      '',
-      '',
-      shouldIconPulse: true,
-      isDismissible: true,
-      borderRadius: 4,
-      showProgressIndicator: true,
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(minutes: 1),
-      backgroundColor: Colors.green.shade50,
-      titleText: MySnackbarTitle(title: 'Why Invest'),
-      messageText: MySnackbarContent(),
-      maxWidth: context.width * 0.50,
-      padding: EdgeInsets.all(15),
-    );
-
-    // IF VISION NOT DEFINAE THEN :
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var whyInvest = formKey.currentState!.value['whyinvest'];
-
       var res = await whyInvestStore.SetWhyInvest(visionText: whyInvest);
-      // RESPONSE HANDLING :
-      // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
-      // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
+
+      // Success Handler :
       if (res['response']) {
         Get.closeAllSnackbars();
-        // formKey.currentState!.reset();
         Get.toNamed(create_business_milestone_url);
       }
 
-      // FORM STORAGE ERROR :
+      // Error Handler :
       if (!res['response']) {
         Get.closeAllSnackbars();
-        // Error Alert :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(10),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error accured'),
-          messageText: MySnackbarContent(message: res['message']),
-          maxWidth: context.width * 0.50,
-        );
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
       }
     }
 
-    // INVALID FORM :
+    // Invalid Form :
     else {
       Get.closeAllSnackbars();
-      // Error Alert :
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error accured'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
   }
 
-  ResetVisionForm() {}
+
+
+
+  //////////////////////////////
+  /// UPDATE FORM : 
+  //////////////////////////////
+  UpdateWhyInvest() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    formKey.currentState!.save();
+    if (formKey.currentState!.validate()) {
+      var whyInvest = formKey.currentState!.value['whyinvest'];
+      var res = await whyInvestStore.SetWhyInvest(visionText: whyInvest);
+      var resp = await startupUpdater.UpdatehBusinessWhy();
+      // Success Handler Cached data :
+      if (res['response']) {
+          //HANDLING UPDATE RESPONSE : 
+
+          // Update Success Handler :  
+          if (resp['response']) {
+              Get.closeAllSnackbars();
+              Get.toNamed(create_business_milestone_url);
+            }
+           // Update Error Handler :    
+          if (!resp['response']) {
+            Get.closeAllSnackbars();
+            Get.showSnackbar(
+                MyCustSnackbar(
+                  width: snack_width, 
+                  type: MySnackbarType.error));
+              }
+      }
+
+      // Error Handler Cached data :
+      if (!res['response']) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+      }
+    }
+
+    // Invalid Form :
+    else {
+      Get.closeAllSnackbars();
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+    }
+  }
+
+
+
+  //////////////////////////////////
+  // SET PAGE DEFAULT STATE : 
+  //////////////////////////////////
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+
     if (context.width > 1200) {
       maxlines = 15;
       vision_subheading_text = 20;
@@ -156,19 +202,47 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       vision_cont_height = 0.70;
     }
 
-// INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
+    ///////////////////////////////  
+    // GET REQUIREMENTS 
+    ///////////////////////////////  
     Future<String?> GetLocalStorageData() async {
       try {
-        final data = await whyInvestStore.GetWhyInvest();
-        inital_val = data;
-        return data;
+        final resp = await startupConnector.FetchBusinessWhy();
+
+        // Success Handler :
+        if (resp['response']) {
+          final data = await whyInvestStore.GetWhyInvest();
+          inital_val = data;
+          return data;
+        }
+
+        // Error Handler :
+        if (!resp['response']) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+              width: snack_width,
+              type: MySnackbarType.error,
+              message: fetch_data_error_msg,
+              title: fetch_data_error_title));
+        }
+
       } catch (e) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error,
+          message: e,
+          title: fetch_data_error_title,
+        ));
+
         return '';
       }
     }
 
 
+    /////////////////////////////
+    /// SET REQUIREMTNS : 
+    /////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -180,18 +254,19 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            print(snapshot.data);
             return MainMethod(
-                context,
-                snapshot
-                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+              context,
+              snapshot.data,
+            ); // snapshot.data  :- get your object which is pass from your downloadData() function
           }
           inital_val = snapshot.data.toString();
           return MainMethod(context, snapshot.data);
         });
   }
 
+///////////////////////////////
   // MAIN METHOD SECTION :
+///////////////////////////////
   Column MainMethod(
     BuildContext context,
     data,
@@ -213,59 +288,67 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
         ),
 
         // BOTTOM NAVIGATION:
-        BusinessSlideNav(
-          slide: SlideType.whyInvest,
-          submitform: SubmitWhyInvestForm,
-        )
+        updateMode == true
+            ? UpdateButton(context)
+            : BusinessSlideNav(
+                slide: SlideType.whyInvest,
+                submitform: SubmitWhyInvestForm,
+              )
       ],
     );
   }
 
+
+  //////////////////////////////////////////////
+  /// EXTERNAL METHODS : 
+  /// 1. VisonText 
+  /// 2. SubHeadingText
+  /// 3. UploadButton 
+  //////////////////////////////////////////////
   Container VisionInputField(BuildContext context) {
     return Container(
-              margin: EdgeInsets.only(top: context.height * 0.04),
-              height: maxlines * 24.0,
-              child: FormBuilder(
-                key: formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: FormBuilderTextField(
-                  initialValue: inital_val!="null" ? inital_val: '',
-                  name: 'whyinvest',
-                  maxLength: 2000,
-                  style: GoogleFonts.robotoSlab(
-                    fontSize: 16,
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    // Remove Comment in  Production mode:
-                    // FormBuilderValidators.minLength(context, 200,
-                    //     errorText: 'At least 200 required'),
-                    FormBuilderValidators.maxLength(context, 2000,
-                        errorText: 'Maximum 2000 char allow ')
-                  ]),
-                  scrollPadding: EdgeInsets.all(10),
-                  maxLines: maxlines,
-                  decoration: InputDecoration(
-                      helperText: 'min allow 200 ',
-                      hintText: "why invest  in you",
-                      hintStyle: TextStyle(
-                        color: Colors.blueGrey.shade200,
-                      ),
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.all(20),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                              width: 1.5, color: Colors.blueGrey.shade200)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide:
-                              BorderSide(width: 2, color: primary_light)),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                ),
+      margin: EdgeInsets.only(top: context.height * 0.04),
+      height: maxlines * 24.0,
+      child: FormBuilder(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        child: FormBuilderTextField(
+          initialValue: inital_val != "null" ? inital_val : '',
+          name: 'whyinvest',
+          maxLength: 2000,
+          style: GoogleFonts.robotoSlab(
+            fontSize: 16,
+          ),
+          validator: FormBuilderValidators.compose([
+            // Remove Comment in  Production mode:
+            // FormBuilderValidators.minLength(context, 200,
+            //     errorText: 'At least 200 required'),
+            FormBuilderValidators.maxLength(context, 2000,
+                errorText: 'Maximum 2000 char allow ')
+          ]),
+          scrollPadding: EdgeInsets.all(10),
+          maxLines: maxlines,
+          decoration: InputDecoration(
+              helperText: 'min allow 200 ',
+              hintText: "why invest  in you",
+              hintStyle: TextStyle(
+                color: Colors.blueGrey.shade200,
               ),
-            );
+              fillColor: Colors.grey[100],
+              filled: true,
+              contentPadding: EdgeInsets.all(20),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 2, color: primary_light)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+        ),
+      ),
+    );
   }
 
   Container SubHeadingSection(BuildContext context) {
@@ -278,6 +361,44 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
             style: TextStyle(
                 color: light_color_type3, fontSize: vision_subheading_text))
       ])),
+    );
+  }
+
+  Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await UpdateWhyInvest();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
