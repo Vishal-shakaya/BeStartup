@@ -1,4 +1,5 @@
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -134,9 +135,9 @@ MyCustSnackbar({context, title, message, type, required width}) {
         margin: EdgeInsets.only(top: 10),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: title != null ? title : 'Error accured'),
+        titleText: MySnackbarTitle(title: title != null ? title : common_error_title),
         messageText: MySnackbarContent(
-            message: message != null ? message : 'Something went wrong'),
+            message: message != null ? message : common_error_msg),
         maxWidth: width,
       );
       return snack;

@@ -155,9 +155,13 @@ class StartupUpdater extends GetxController {
     }
   }
 
+
 /////////////////////////////////////////
-  /// Update Vision :
-  ///
+/// Update Vision :
+/// It fetches data from cache storage, fetches data from firebase, updates the data in firebase and
+/// then updates the cache storage
+/// Returns:
+///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
   UpdatehBusinessVision() async {
     var data;

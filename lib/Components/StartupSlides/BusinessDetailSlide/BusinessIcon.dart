@@ -87,29 +87,15 @@ class _BusinessIconState extends State<BusinessIcon> {
 
     try {
       final resp = await startupConnector.FetchBusinessDetail();
+      print(resp['message']);  
 
-      // Test : 
-      print(resp['message']);     
-      // Success Handler
-      if (resp['response']) {
-        final logo = await detailStore.GetBusinessLogo();
-        upload_image_url = logo;
-        return upload_image_url;
-      }
+      final logo = await detailStore.GetBusinessLogo();
+      upload_image_url = logo;
+      return upload_image_url;
 
-      // Error Handler : 
-      if (!resp['response']) {
-        Get.showSnackbar(mySnack);
-      }
 
     } catch (e) {
-      Get.showSnackbar(
-        MyCustSnackbar(
-          type: MySnackbarType.error,
-          title: fetch_data_error_title,
-          message: e,
-          width: snack_width));
-      return '';
+      return upload_image_url;
     }
   }
 
@@ -141,58 +127,72 @@ class _BusinessIconState extends State<BusinessIcon> {
         });
   }
 
+/////////////////////////////////////
+/// MAIN METHOD : 
+/////////////////////////////////////
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
         margin: EdgeInsets.only(top: context.height * 0.05),
         alignment: Alignment.center,
         child: Stack(
           children: [
-            Card(
-                shadowColor: light_color_type3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(85.0),
-                ),
-                child: upload_image_url != ''
-                    ? CircleAvatar(
-                        radius: 85,
-                        backgroundColor: Colors.blueGrey[100],
-                        foregroundImage: NetworkImage(upload_image_url),
-                      )
-                    : CircleAvatar(
-                        radius: 85,
-                        backgroundColor: Colors.blueGrey[100],
-                        child: AutoSizeText(
-                          'Startup Logo',
-                          style: TextStyle(
-                              color: light_color_type3,
-                              fontWeight: FontWeight.bold),
-                        ))),
+            BusinessLogo(),
 
-            //////////////////////////////
-            // UPLOAD CAMERA ICON:
-            ////////////////////////////////
-            Positioned(
-                top: 129,
-                left: 129,
-                child: Card(
-                  shadowColor: primary_light,
-                  // elevation: 1,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey.shade200,
-                    radius: 18,
-                    child: is_uploading
-                        ? spinner
-                        : IconButton(
-                            onPressed: () {
-                              PickImage();
-                            },
-                            icon: Icon(Icons.camera_alt_rounded,
-                                size: 19, color: primary_light)),
-                  ),
-                )),
+            UploadButton(spinner),
           ],
         ));
   }
+
+
+/////////////////////////////////
+/// EXTERNAL METHODS : 
+/// 1. Logo card : 
+/// 2. Upload button : 
+/////////////////////////////////
+Card BusinessLogo() {
+return Card(
+    shadowColor: light_color_type3,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(85.0),
+    ),
+    child: upload_image_url != ''
+        ? CircleAvatar(
+            radius: 85,
+            backgroundColor: Colors.blueGrey[100],
+            foregroundImage: NetworkImage(upload_image_url),
+          )
+        : CircleAvatar(
+            radius: 85,
+            backgroundColor: Colors.blueGrey[100],
+            child: AutoSizeText(
+              'Startup Logo',
+              style: TextStyle(
+                  color: light_color_type3,
+                  fontWeight: FontWeight.bold),
+      )));
+}
+
+Positioned UploadButton(Container spinner) {
+  return Positioned(
+    top: 129,
+    left: 129,
+    child: Card(
+      shadowColor: primary_light,
+      // elevation: 1,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)),
+      child: CircleAvatar(
+        backgroundColor: Colors.grey.shade200,
+        radius: 18,
+        child: is_uploading
+            ? spinner
+            : IconButton(
+                onPressed: () {
+                  PickImage();
+                },
+                icon: Icon(Icons.camera_alt_rounded,
+                    size: 19, color: primary_light)),
+      ),
+));
+}
 }

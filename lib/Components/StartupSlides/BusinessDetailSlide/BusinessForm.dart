@@ -39,20 +39,27 @@ class _BusinessFormState extends State<BusinessForm> {
     widget.formKey.currentState!.reset();
   }
 
-  // SET DEFAULT STATE :
+
+/////////////////////////////////
+/// GET REQUIREMENTS : 
+/////////////////////////////////
   Future<String?> SetVal() async {
     try {
       var data = await detailStore.GetBusinessName();
-      await Future.delayed(Duration(seconds: 1));
       initial_val = data;
       return data;
     } catch (e) {
-      return '';
+      return initial_val;
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+  /////////////////////////////////
+  /// SET REQUIREMENTS : 
+  /////////////////////////////////
     return FutureBuilder(
         future: SetVal(),
         builder: (_, snapshot) {
@@ -79,6 +86,10 @@ class _BusinessFormState extends State<BusinessForm> {
         });
   }
 
+
+ //////////////////////////////////
+ /// MAIN METHOD :  
+ ////////////////////////////////// 
   Column MainMethod(BuildContext context, data) {
     return Column(
       children: [
