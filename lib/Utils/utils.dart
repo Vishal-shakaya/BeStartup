@@ -169,6 +169,25 @@ MyCustomButtonSpinner({color, width}) {
   return spinner;
 }
 
+
+MyCustPageLoadingSpinner(){
+    var dialog = SmartDialog.showLoading(
+      background: Colors.white,
+      maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+      widget: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.orangeAccent,
+      ));
+  return dialog;
+}
+
+CloseCustomPageLoadingSpinner(){
+  SmartDialog.dismiss();
+}
+
+////////////////////////////////////////////////////////
+/// ERROR PAGE : 
+////////////////////////////////////////////////////////
 class ErrorPage extends StatefulWidget {
   ErrorPage({Key? key}) : super(key: key);
   @override
@@ -186,6 +205,11 @@ class _ErrorPageState extends State<ErrorPage> {
   }
 }
 
+////////////////////////////////////////////////////
+/// Custom Chimmer for loading : 
+/// 1. Take widget for shape shimmer: 
+/// 2. Take text or show text shimmer : 
+/////////////////////////////////////////////////////
 class CustomShimmer extends StatefulWidget {
   Widget? shape = null;
   String? text;
@@ -193,8 +217,6 @@ class CustomShimmer extends StatefulWidget {
   @override
   State<CustomShimmer> createState() => _CustomShimmerState();
 }
-
-//  CUSTOM SHIMMER :
 class _CustomShimmerState extends State<CustomShimmer> {
   @override
   Widget build(BuildContext context) {

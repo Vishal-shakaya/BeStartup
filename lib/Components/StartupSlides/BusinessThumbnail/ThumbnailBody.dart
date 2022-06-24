@@ -28,6 +28,7 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   String upload_image_url = '';
   late UploadTask? upload_process;
 
+  // Update params : 
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
@@ -58,6 +59,7 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     }
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -67,6 +69,9 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     }
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

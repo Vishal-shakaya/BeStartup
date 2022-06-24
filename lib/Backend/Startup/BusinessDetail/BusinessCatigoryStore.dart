@@ -10,11 +10,22 @@ class BusinessCatigoryStore extends GetxController {
   // LOCAL STORAGE:
 
   static List<String> catigories = [];
+  static List<String> temp_catigories = [];
 
   // SET CATIGORY :
   SetCatigory({cat}) async {
     try {
       catigories.add(cat);
+      return await ResponseBack(response_type: true);
+    } catch (e) {
+      return await ResponseBack(response_type: false);
+    }
+  }
+
+  // Store catigory for temprory for update catigory purpose: 
+  SetTempCatigory({cat}) async {
+    try {
+      temp_catigories.add(cat);
       return await ResponseBack(response_type: true);
     } catch (e) {
       return await ResponseBack(response_type: false);
@@ -44,13 +55,14 @@ class BusinessCatigoryStore extends GetxController {
         return json_obj["catigories"].toList();
       }
     } catch (e) {
-      return [''];
+      return catigories;
     }
   }
 
   // STORE CATIGORY LOCALY :
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
+    var main_cat = catigories + temp_catigories;
     try {
       var resp = await CatigoryModel(
           user_id: await getUserId,

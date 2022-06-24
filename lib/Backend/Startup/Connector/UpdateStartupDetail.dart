@@ -97,8 +97,10 @@ class StartupUpdater extends GetxController {
 
       // Cached Image for loacal use :
       await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
-      
-      return ResponseBack(response_type: true, );
+
+      return ResponseBack(
+        response_type: true,
+      );
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -190,9 +192,8 @@ class StartupUpdater extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessVision', data: data);
-
     } catch (e) {
-      return ResponseBack(response_type: false,message: e);
+      return ResponseBack(response_type: false, message: e);
     }
   }
 
@@ -372,6 +373,10 @@ class StartupUpdater extends GetxController {
     }
   }
 
+
+  //////////////////////////////////
+  /// UPDATE TEAM MEMEBER : 
+  //////////////////////////////////
   UpdateBusinessTeamMember() async {
     var data;
     var doc_id;
@@ -383,7 +388,7 @@ class StartupUpdater extends GetxController {
         temp_mem = cacheData['members'];
       }
 
-      // FETCHING DATA FROM FIREBASE
+      // UPDATE DATA TO FIREBASE
       var store = FirebaseFirestore.instance.collection('BusinessTeamMember');
       var query = store
           .where(
@@ -412,6 +417,12 @@ class StartupUpdater extends GetxController {
 
 ////////////////////////////////////////////////////
 /// UPDATIN USER DETAIL AND CONTACT BOTH:
+/// I'm fetching data from firebase and storing it in a variable, then I'm fetching data from cache
+/// storage and storing it in a variable, then I'm updating the data in firebase with the data from
+/// cache storage
+/// 
+/// Returns:
+///   A Future of type ResponseBack.
 ////////////////////////////////////////////////////
   UpdateUserDetailandContact() async {
     var data_userContact;
@@ -467,7 +478,7 @@ class StartupUpdater extends GetxController {
       data_userDetail = temp_userDetail;
       data_userContact = temp_userContact;
 
-      // Update Data in DB : 
+      // Update Data in DB :
       store.doc(doc_id_userDetail).update(data_userDetail);
       store.doc(doc_id_userContact).update(data_userContact);
 
@@ -478,6 +489,50 @@ class StartupUpdater extends GetxController {
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
+    }
+  }
+
+
+/// It fetches data from cache storage,
+/// updates it and then stores it back to cache storage
+/// Returns:
+///  A ResponseBack object.
+
+  UpdateBusinessCatigory() async {
+    var data;
+    var doc_id;
+    var temp_catigory;
+
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessCatigory');
+      if (cacheData != false) {
+        temp_catigory = cacheData['catigories'];
+      }
+
+      // UPDATE DATA TO FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessCatigory');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      data['catigories'] = temp_catigory;
+      store.doc(doc_id).update(data);
+      // CACHE BUSINESS CATIGORIES :
+      await StoreCacheData(fromModel: 'BusinessCatigory', data: data);
+      return ResponseBack(response_type: true, );
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }

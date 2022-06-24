@@ -1,11 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessCatigoryStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CatigoryChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/RemovableChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
 // import 'package:cool_alert/cool_alert.dart';
@@ -21,21 +23,119 @@ class CatigoryBody extends StatefulWidget {
   State<CatigoryBody> createState() => _CatigoryBodyState();
 }
 
-double vision_cont_width = 0.60;
-double vision_cont_height = 0.70;
-double vision_subheading_text = 20;
-var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
-var startupConnector =
-    Get.put(StartupViewConnector(), tag: 'startup_connector');
-
 class _CatigoryBodyState extends State<CatigoryBody> {
+
+  var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+
+  List<CatigoryChip> catigory_list = [];
+  List<RemovableChip> default_catigory_chip = [];
+
+  var default_catigory;
+  var is_selected = false;
+  var my_context = Get.context;
+
+  double vision_cont_width = 0.60;
+  double vision_cont_height = 0.70;
+  double vision_subheading_text = 20;
+
+// Update   params :
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+
+  var pageParam;
+  bool? updateMode = false;
+
+//////////////////////////////////
+// SUBMIT CATIGORY FORM :
+//////////////////////////////////
+  SubmitCatigory() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    MyCustPageLoadingSpinner();
+
+    var resp = await catigoryStore.PersistCatigory();
+    print(resp); // Test
+
+    if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(width: snack_width));
+    }
+
+    CloseCustomPageLoadingSpinner();
+  }
+
+
+  ///////////////////////////////////////////////////
+  /// UPDATE CATIGORIES :   
+  /// It's a function that updates a catigory , 
+  /// in a database.
+  ///////////////////////////////////////////////////  
+  UpdateCatigory() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    MyCustPageLoadingSpinner();
+
+    var resp = await catigoryStore.PersistCatigory();
+    var resp1 = updateStore.UpdateBusinessCatigory(); // Test
+
+    // Success Handler :
+    if (resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(home_page_url);
+    }
+
+    // Error Handler :
+    if (!resp1['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(width: snack_width));
+    }
+
+    CloseCustomPageLoadingSpinner();
+  }
+
+////////////////////////////////////////
+/// SET DEFAULT CATIGORIES
+////////////////////////////////////////
+
+  SetDefaultCatigory(List default_catigory) async {
+    // Set Default Catigory Chip:
+    business_catigories.forEach((cat) async {
+      if (default_catigory.contains(cat)) {
+        is_selected = true;
+      } else {
+        is_selected = false;
+      }
+
+      catigory_list.add(CatigoryChip(
+        key: UniqueKey(),
+        catigory: cat,
+        is_selected: is_selected,
+      ));
+    });
+  }
+
+  ///////////////////////////////////
+  // SET APP DEFAULT STATE :
+  ///////////////////////////////////
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
-    var snack_width = MediaQuery.of(context).size.width * 0.50;
-    var is_selected = false;
-    List<CatigoryChip> catigory_list = [];
-    List<RemovableChip> default_catigory_chip = [];
-    var default_catigory;
     // DEFAULT :
     if (context.width > 1500) {
       vision_cont_height = 0.70;
@@ -76,82 +176,32 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       vision_subheading_text = 16;
     }
 
-    // SHOW LOADING SPINNER :
-    StartLoading() {
-      var dialog = SmartDialog.showLoading(
-          background: Colors.white,
-          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.orangeAccent,
-          ));
-      return dialog;
-    }
-
-    // End Loading
-    EndLoading() async {
-      SmartDialog.dismiss();
-    }
-
-    // SUBMIT CATIGORY :
-    SubmitCatigory() async {
-      StartLoading();
-      var resp = await catigoryStore.PersistCatigory();
-      print(resp);
-      if (resp == false) {
-        EndLoading();
-
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(width: snack_width));
-      }
-      EndLoading();
-    }
-
-    SetDefaultCatigory(List default_catigory) async {
-      // Set Default Catigory Chip:
-      business_catigories.forEach((cat) async {
-        if (default_catigory.contains(cat)) {
-          is_selected = true;
-        } else {
-          is_selected = false;
-        }
-
-        catigory_list.add(CatigoryChip(
-          key: UniqueKey(),
-          catigory: cat,
-          is_selected: is_selected,
-        ));
-      });
-    }
-
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    /////////////////////////////////////
+    // GET REQUIREMETNS :
+    /////////////////////////////////////
     GetLocalStorageData() async {
+      var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      var erro_resp;
       try {
         final resp = await startupConnector.FetchBusinessCatigory();
-        // Success Handler :
-        if (resp['response']) {
-          print(resp['message']);
-          default_catigory = await catigoryStore.GetCatigory();
-          await SetDefaultCatigory(default_catigory);
+        print(resp['message']);
 
-          // Update local catigory var :
-          default_catigory.forEach((el) async {
-            await catigoryStore.SetCatigory(cat: el);
-          });
-        }
+        default_catigory = await catigoryStore.GetCatigory();
+        erro_resp = default_catigory;
+        await SetDefaultCatigory(default_catigory);
 
-        // Error Handler :
-        if (!resp['response']) {
-          Get.closeAllSnackbars();
-          Get.showSnackbar(
-              MyCustSnackbar(width: snack_width, message: resp['message']));
-        }
+        // Update local catigory storage :
+        default_catigory.forEach((el) async {
+          await catigoryStore.SetTempCatigory(cat: el);
+        });
       } catch (e) {
-        return '';
+        return erro_resp;
       }
     }
 
+    ///////////////////////////////////////////
+    /// SET REQUIREMENTS :
+    ///////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -169,16 +219,18 @@ class _CatigoryBodyState extends State<CatigoryBody> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(
-                context, catigory_list, default_catigory, SubmitCatigory);
+            return MainMethod(context);
           }
-          return MainMethod(
-              context, catigory_list, default_catigory, SubmitCatigory);
+          return MainMethod(context);
         });
   }
 
-  Column MainMethod(BuildContext context, List<CatigoryChip> catigory_list,
-      List default_catigory, Future<Null> SubmitCatigory()) {
+//////////////////////////////////
+  /// MAIN METHOD :
+//////////////////////////////////
+  Column MainMethod(
+    BuildContext context,
+  ) {
     return Column(
       children: [
         Container(
@@ -224,11 +276,54 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 )
               ],
             )),
-        BusinessSlideNav(
+       updateMode==true
+       ?UpdateButton(context)     
+       : BusinessSlideNav(
           slide: SlideType.catigory,
           submitform: SubmitCatigory,
         )
       ],
+    );
+  }
+    
+  //////////////////////////////////////////
+  /// External Methods:  
+  ///////////////////////////////////////////
+    Container UpdateButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () async {
+          await UpdateCatigory();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: con_button_width,
+            height: con_button_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: const Text(
+              'Update',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
