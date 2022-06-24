@@ -23,12 +23,16 @@ class ThumbnailBody extends StatefulWidget {
 }
 
 class _ThumbnailBodyState extends State<ThumbnailBody> {
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
   late UploadTask? upload_process;
 
-  // Update params : 
+  var my_context = Get.context;
+
+  // Update params :
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
@@ -43,23 +47,33 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double body_height = 0.70;
   double image_hint_text_size = 22;
 
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
 
+/////////////////////////////////////////////
+/// UPDATE THUMBNAIL : 
+/// The function is called when the user clicks on the "Update" button. The function then calls the
+/// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
+/// response object. The response object is then used to determine whether the update was successful or
+/// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
+/// update was not successful, a snackbar is displayed to the user
+/////////////////////////////////////////////
   UpdateThumbnail() async {
-    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final resp = await updateStore.UpdateThumbnail();
+    // Update Success Handler :
     if (resp['response']) {
       Get.toNamed(startup_view_url);
     }
+
+    // Update Error Handler :
     if (!resp['response']) {
       Get.showSnackbar(
-        MyCustSnackbar(
-        width: snack_width,
-        message: resp['message']));
+          MyCustSnackbar(width: snack_width, message: resp['message']));
     }
   }
 
-
+  ////////////////////////////////////////////
+  /// SET PAGE DEFAULT STATE 
+  ////////////////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
@@ -70,15 +84,10 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     super.initState();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    ////////////////////////////////////
-    /// RESPONSIVE BREAK POINTS :
-    /// //////////////////////////////
 
+    
     // PC:
     if (context.width > 1500) {
       body_cont_width = 0.5;
@@ -101,6 +110,9 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
     // PHONE:
     if (context.width < 480) {}
+
+
+
 
     return SingleChildScrollView(
       child: Column(
@@ -128,6 +140,11 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
       ),
     );
   }
+
+
+///////////////////////////////////////////
+/// EXTERNAL METHODS : 
+///////////////////////////////////////////
 
   Container UpdateButton(BuildContext context) {
     return Container(

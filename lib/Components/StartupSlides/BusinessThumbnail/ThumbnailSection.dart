@@ -21,19 +21,19 @@ class ThumbnailSection extends StatefulWidget {
 }
 
 class _ThumbnailSectionState extends State<ThumbnailSection> {
+  var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
+
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
+
   late UploadTask? upload_process;
   double image_hint_text_size = 22;
   bool is_loading = false;
 
-  var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
-  var startupConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_connector');
-///////////////////////////////////
   /// RESPONSIVE DEFAULT SETTINGS;
-  /// ///////////////////////////
   double imgage_sec_height = 0.3;
 
   double upload_btn_top = 0.27;
@@ -115,37 +115,28 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     // PHONE:
     if (context.width < 480) {}
 
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
+
+
+    ////////////////////////////////////////////////
+    /// GET REQUIREMENTS :
+    ////////////////////////////////////////////////
     GetLocalStorageData() async {
       var snack_width = MediaQuery.of(context).size.width * 0.50;
       try {
         final resp = await startupConnector.FetchThumbnail();
         print(resp['message']);
-        if (resp['response']) {
-          final data = await thumbStore.GetThumbnail();
-          upload_image_url = data;
-          return upload_image_url;
-        }
-        if (!resp['response']) {
-          Get.closeCurrentSnackbar();
-          Get.showSnackbar(MyCustSnackbar(
-              width: snack_width,
-              type: MySnackbarType.error,
-              message: resp['message']));
-        }
-      } catch (e) {
-        Get.closeCurrentSnackbar();
-        Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.error,
-          message: e,
-        ));
 
+        final data = await thumbStore.GetThumbnail();
+        upload_image_url = data;
+        return upload_image_url;
+      } catch (e) {
         return '';
       }
     }
 
+    ////////////////////////////////////////////////
+    /// SET REQUIREMENTS :
+    ////////////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -160,17 +151,18 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(
-                context,
-                spinner,
-                snapshot
-                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+            return MainMethod(context,spinner,snapshot.data); 
           }
           return MainMethod(context, spinner, snapshot.data);
         });
   }
 
+//////////////////////////////////////
   // MAIN WIDGET SECTION :
+  // 1. Thumbnal Image section: 
+  // 2. Thumbnail upload button : 
+  // 3. Thumbnail Container : 
+//////////////////////////////////////
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
       padding: EdgeInsets.all(10),
