@@ -167,11 +167,11 @@ class BusinessProductStore extends GetxController {
   /// GETTERS
 
 ///////////////////////////////////////////////////
-  /// GETTING PRODUCT LIST :
-  /// 1. CHECK IF PRODUCT IS STORE IN LOCAL STORAGE :
-  /// 2. IF STORE THEN UPDATE product_list ;
-  /// 3. INSTED OF CREATEING NEW LIST , WE USE UPDATE
-  /// METHOD BZ OF product_list has Observer attach :
+/// GETTING PRODUCT LIST :
+/// 1. CHECK IF PRODUCT IS STORE IN LOCAL STORAGE :
+/// 2. IF STORE THEN UPDATE product_list ;
+/// 3. INSTED OF CREATEING NEW LIST , WE USE UPDATE
+/// METHOD BZ OF product_list has Observer attach :
 ///////////////////////////////////////////////////
   GetProductList() async {
     final localStore = await SharedPreferences.getInstance();
@@ -193,15 +193,13 @@ class BusinessProductStore extends GetxController {
         // If there is no product then just add temp prodcut to list :
         // and send for example purpose :
       } else {
-        // product_list.add(temp_product);
         return product_list;
       }
 
       // To Save widget from crash if error occure then send temp product:
-      // print error :
     } catch (e) {
       print('Error While Get Product ${e}');
-      return [];
+      return product_list;
     }
   }
 

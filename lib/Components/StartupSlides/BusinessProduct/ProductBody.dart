@@ -23,21 +23,84 @@ class ProductBody extends StatefulWidget {
 }
 
 class _ProductBodyState extends State<ProductBody> {
-  double prod_cont_width = 0.80;
-  double prod_cont_height = 0.70;
-  double prod_sec_width = 0.65;
-  double con_button_width = 150;
-  double con_button_height = 40;
-  double con_btn_top_margin = 30;
-
-  var pageParam;
-  bool? updateMode = false;
-
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
   var startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
-      
+
+  double prod_cont_width = 0.80;
+  double prod_cont_height = 0.70;
+  double prod_sec_width = 0.65;
+
+  // Update params;
+  double con_button_width = 150;
+  double con_button_height = 40;
+  double con_btn_top_margin = 30;
+  var pageParam;
+  bool? updateMode = false;
+  var my_context = Get.context;
+
+  /////////////////////////////////////////
+  /// SUBMIT PRODUCT :
+  /////////////////////////////////////////
+  SubmitProduct() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    MyCustPageLoadingSpinner();
+    var resp = await productStore.PersistProduct();
+    // Error Handerl :
+    if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          message: fetch_data_error_msg,
+          title: fetch_data_error_title));
+    }
+    CloseCustomPageLoadingSpinner();
+  }
+
+  /////////////////////////////////////////
+  /// UPDATE PRODUCT :
+  /////////////////////////////////////////
+  UpdateProduct() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    MyCustPageLoadingSpinner();
+    var resp = await productStore.PersistProduct();
+    // Cached Data Success Handler:
+    if (resp['response']) {
+      var update_resp = await updateStore.UpdateProducts();
+
+      // Update Success Handler :
+      if (update_resp['response']) {
+        MyCustPageLoadingSpinner();
+        Get.toNamed(startup_view_url);
+      }
+
+      if (!update_resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            message: fetch_data_error_msg,
+            title: fetch_data_error_title));
+      }
+    }
+
+    // Error Handerl :
+    if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          message: fetch_data_error_msg,
+          title: fetch_data_error_title));
+    }
+    CloseCustomPageLoadingSpinner();
+  }
+
+///////////////////////////////
+// Set page Default State :
+///////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
@@ -50,77 +113,31 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
-    var snack_width = MediaQuery.of(context).size.width * 0.50;
-
-    // SHOW LOADING SPINNER :
-    StartLoading() {
-      var dialog = SmartDialog.showLoading(
-          background: Colors.white,
-          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.orangeAccent,
-          ));
-      return dialog;
-    }
-
-    // End Loading
-    EndLoading() async {
-      SmartDialog.dismiss();
-    }
-
-
-    SubmitProduct() async {
-      StartLoading();
-      var resp = await productStore.PersistProduct();
-      await updateStore.UpdateProducts();
-      if (!resp['response']) {
-        EndLoading();
-
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          message: fetch_data_error_msg,
-          title: fetch_data_error_title  ));
-    }
-      EndLoading();
-      updateMode == true ? Get.toNamed(startup_view_url) : EndLoading();
-    }
-
-
-
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
+  ///////////////////////////////////////////////////
+  /// GET REQUIREMENTS DATA :
+  /// It fetches data from the server and stores. it in the local storage.
+  ///  If the server is down, it
+  /// returns the data from the local storage
+  /// Returns:
+  ///   The return value is a Future&lt;dynamic&gt;.
+  ///////////////////////////////////////////////////
     GetLocalStorageData() async {
+      var error_resp;
       try {
         final resp = await startupConnector.FetchProducts();
         print(resp['message']);
 
-        // Success Handler :
-        if (resp['response']) {
-          final data = await productStore.GetProductList();
-          return data;
-        }
-
-        // Error Handler :
-        if (!resp['response']) {
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            message: fetch_data_error_msg,
-            title: fetch_data_error_title  ));
-        }
-
+        final data = await productStore.GetProductList();
+        error_resp = data;
+        return data;
       } catch (e) {
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            message: e,
-            title: fetch_data_error_title  ));
-        return '';
+        return error_resp;
       }
     }
 
+    ///////////////////////////////////
+    /// SET REQUIREMNTS :
+    ///////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -132,18 +149,21 @@ class _ProductBodyState extends State<ProductBody> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, snapshot.data, SubmitProduct);
+            return MainMethod(context, snapshot.data);
           }
-          return MainMethod(context, snapshot.data, SubmitProduct);
+          return MainMethod(context, snapshot.data);
         });
-    // return MainMethod(context, product, SubmitProduct);
   }
+
+
 
 //////////////////////////////
 // MAIN METHOD SECTION:
 //////////////////////////////
   Column MainMethod(
-      BuildContext context, product, Future<Null> SubmitProduct()) {
+    BuildContext context,
+    product,
+  ) {
     return Column(
       children: [
         Container(
@@ -190,7 +210,7 @@ class _ProductBodyState extends State<ProductBody> {
           ),
         ),
         updateMode == true
-            ? UpdateButton(context, SubmitProduct)
+            ? UpdateButton(context)
             : BusinessSlideNav(
                 slide: SlideType.product,
                 submitform: SubmitProduct,
@@ -199,7 +219,7 @@ class _ProductBodyState extends State<ProductBody> {
     );
   }
 
-  Container UpdateButton(BuildContext context, SubmitProduct) {
+  Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
