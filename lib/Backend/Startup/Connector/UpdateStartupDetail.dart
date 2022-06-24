@@ -102,7 +102,7 @@ class StartupUpdater extends GetxController {
         response_type: true,
       );
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
@@ -150,29 +150,27 @@ class StartupUpdater extends GetxController {
 
       return ResponseBack(response_type: true);
     } catch (e) {
-      print(e);
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
-
 /////////////////////////////////////////
-/// Update Vision :
-/// It fetches data from cache storage, fetches data from firebase, updates the data in firebase and
-/// then updates the cache storage
-/// Returns:
-///   ResponseBack(response_type: false, message: e);
+  /// Update Vision :
+  /// It fetches data from cache storage, fetches data from firebase, updates the data in firebase and
+  /// then updates the cache storage
+  /// Returns:
+  ///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
   UpdatehBusinessVision() async {
     var data;
-    var why_text;
+    var vision;
     var doc_id;
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessVision');
       if (cacheData != false) {
-        why_text = cacheData['why_text'];
+        vision = cacheData['vision'];
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -191,13 +189,15 @@ class StartupUpdater extends GetxController {
         doc_id = value.docs.first.id;
       });
 
-      data['why_text'] = why_text;
+      data['vision'] = vision;
       store.doc(doc_id).update(data);
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessVision', data: data);
+      return ResponseBack(response_type: true);
+      
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
@@ -206,14 +206,14 @@ class StartupUpdater extends GetxController {
 /////////////////////////////////////////
   UpdatehBusinessWhy() async {
     var data;
-    var vision;
+    var why_text;
     var doc_id;
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData('BusinessWhyInvest');
       if (cacheData != false) {
-        vision = cacheData['vision'];
+        why_text = cacheData['why_text'];
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -232,15 +232,15 @@ class StartupUpdater extends GetxController {
         doc_id = value.docs.first.id;
       });
 
-      data['vision'] = vision;
+      data['why_text'] = why_text;
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
+      // Cached data 
       await StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
-      return data['vision'];
+
+      return ResponseBack(response_type: true);
     } catch (e) {
-      print(e);
-      return false;
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
@@ -282,7 +282,7 @@ class StartupUpdater extends GetxController {
       StoreCacheData(fromModel: 'BusinessMilestones', data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
@@ -325,8 +325,7 @@ class StartupUpdater extends GetxController {
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessProducts', data: data);
     } catch (e) {
-      print(e);
-      return false;
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
@@ -372,14 +371,12 @@ class StartupUpdater extends GetxController {
 
       return ResponseBack(response_type: true);
     } catch (e) {
-      print(e);
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
-
   //////////////////////////////////
-  /// UPDATE TEAM MEMEBER : 
+  /// UPDATE TEAM MEMEBER :
   //////////////////////////////////
   UpdateBusinessTeamMember() async {
     var data;
@@ -415,18 +412,18 @@ class StartupUpdater extends GetxController {
       await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
 ////////////////////////////////////////////////////
-/// UPDATIN USER DETAIL AND CONTACT BOTH:
-/// I'm fetching data from firebase and storing it in a variable, then I'm fetching data from cache
-/// storage and storing it in a variable, then I'm updating the data in firebase with the data from
-/// cache storage
-/// 
-/// Returns:
-///   A Future of type ResponseBack.
+  /// UPDATIN USER DETAIL AND CONTACT BOTH:
+  /// I'm fetching data from firebase and storing it in a variable, then I'm fetching data from cache
+  /// storage and storing it in a variable, then I'm updating the data in firebase with the data from
+  /// cache storage
+  ///
+  /// Returns:
+  ///   A Future of type ResponseBack.
 ////////////////////////////////////////////////////
   UpdateUserDetailandContact() async {
     var data_userContact;
@@ -492,15 +489,14 @@ class StartupUpdater extends GetxController {
 
       return ResponseBack(response_type: true);
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
-
-/// It fetches data from cache storage,
-/// updates it and then stores it back to cache storage
-/// Returns:
-///  A ResponseBack object.
+  /// It fetches data from cache storage,
+  /// updates it and then stores it back to cache storage
+  /// Returns:
+  ///  A ResponseBack object.
 
   UpdateBusinessCatigory() async {
     var data;
@@ -534,9 +530,11 @@ class StartupUpdater extends GetxController {
       store.doc(doc_id).update(data);
       // CACHE BUSINESS CATIGORIES :
       await StoreCacheData(fromModel: 'BusinessCatigory', data: data);
-      return ResponseBack(response_type: true, );
+      return ResponseBack(
+        response_type: true,
+      );
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 }

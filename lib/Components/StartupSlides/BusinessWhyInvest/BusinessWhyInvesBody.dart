@@ -107,8 +107,6 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       var resp = await startupUpdater.UpdatehBusinessWhy();
       // Success Handler Cached data :
       if (res['response']) {
-          //HANDLING UPDATE RESPONSE : 
-
           // Update Success Handler :  
           if (resp['response']) {
               Get.closeAllSnackbars();
@@ -118,17 +116,19 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
           if (!resp['response']) {
             Get.closeAllSnackbars();
             Get.showSnackbar(
-                MyCustSnackbar(
-                  width: snack_width, 
-                  type: MySnackbarType.error));
-              }
+              MyCustSnackbar(
+                width: snack_width, 
+                type: MySnackbarType.error,
+                title: update_error_title,
+                message: update_error_msg  ));
+            }
       }
 
       // Error Handler Cached data :
       if (!res['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
       }
     }
 
@@ -136,7 +136,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     else {
       Get.closeAllSnackbars();
       Get.showSnackbar(
-          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+        MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
   }
 
