@@ -124,7 +124,7 @@ class MileStoneStore extends GetxController {
         return milestones;
       }
     } catch (e) {
-      return false;
+      return milestones;
     }
   }
 

@@ -224,12 +224,13 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     //////////////////////////////////////
     GetLocalStorageData() async {
       try {
-        final resp = startupConnector.FetchBusinessMilestone();
+        final resp = await startupConnector.FetchBusinessMilestone();
+        print(resp['message']);
         final data = await mileStore.GetMileStonesList();
         milestones = data;
         return milestones;
       } catch (e) {
-        return false;
+        return milestones;
       }
     }
 

@@ -35,7 +35,7 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-  StoreCacheData({fromModel, data}) async {
+   StoreCacheData({fromModel, data}) async {
     try {
       final localStore = await SharedPreferences.getInstance();
       if (data != null || data != '') {
@@ -83,7 +83,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // STORE DATA TO DB :
-      await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
+      await  StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
 
       return ResponseBack(
           response_type: true,
@@ -125,7 +125,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: 'BusinessDetail', data: data);
+      await StoreCacheData(fromModel: 'BusinessDetail', data: data);
       print('Business Detail Store to Cached Storage');
 
       return ResponseBack(
@@ -213,7 +213,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: 'BusinessVision', data: data);
+      await StoreCacheData(fromModel: 'BusinessVision', data: data);
         return ResponseBack(
           response_type: true,
           data: data,
@@ -257,7 +257,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
+      await  StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
         return ResponseBack(
           response_type: true,
           data: data,
@@ -300,7 +300,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: 'BusinessCatigory', data: data);
+      await  StoreCacheData(fromModel: 'BusinessCatigory', data: data);
         return ResponseBack(
           response_type: true,
           data: data,
@@ -344,7 +344,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: 'BusinessMilestones', data: data);
+      await StoreCacheData(fromModel: 'BusinessMilestones', data: data);
       return ResponseBack(
         response_type: true,
         data: data,

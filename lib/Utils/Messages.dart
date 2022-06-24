@@ -1,3 +1,5 @@
+
+// Test Cred : 
 String long_string =
     'Lorem Ipsum  is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum  ';
 String temp_image =
@@ -11,13 +13,28 @@ String shimmer_image =
 String temp_logo =
     'https://i.pinimg.com/originals/1e/c3/17/1ec317142711af99cce906ef35a2f44f.jpg';
 
+
+
 /////////////////////////////
 /// ERROR MESSAGES
 /////////////////////////////
-String fetch_data_error_msg =
-    'Error while fetching data! please check internet connection.';
-String fetch_data_error_title =
-    'Somethig went wrong  or please Try Again ';
+
+String common_error_title = 'Something Went Wrong';
+String common_error_msg = 'check internet ! trye again later';
+
+String create_error_title = 'Unable to Create';
+String create_error_msg = 'Somethig went wrong  or please Try Again ';
+
+String update_error_title = 'Unable to Complete Operation';
+String update_error_msg = 'Somethig went wrong  or please Try Again ';
+
+String fetch_data_error_msg = 'Unable to Fetch Data !';
+String fetch_data_error_title = 'Somethig went wrong  or please Try Again ';
+
+String delete_error_title = 'Unable to Remove object';
+String delete_error_msg = 'Somethig went wrong  or please Try Again ';
+
+
 
 /////////////////
 // LOGIN PAGE :
@@ -47,10 +64,12 @@ String signup_detail_message =
 
 String copyright_text = 'feelsafe @Copyright';
 
+
+
+
 /////////////////////////////////////
 /// REGISTRATION SLIDES
 /// ////////////////////////////////
-
 String user_type_heading = 'WHO YOU ARE ?';
 
 // Business Detail :
