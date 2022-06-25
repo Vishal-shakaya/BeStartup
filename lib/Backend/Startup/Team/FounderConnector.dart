@@ -11,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
 
-class UserConnector extends GetxController {
+class FounderConnector extends GetxController {
+  FirebaseFirestore store = FirebaseFirestore.instance;
   ////////////////////////////////////////
   // CUSTOM CACHING  SYSTEM :
   // GET DATA FROM LOCAL STORGE
@@ -61,8 +62,8 @@ class UserConnector extends GetxController {
     var temp_userContact;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData('UserDetail');
-      final userContactCach = await GetCachedData('UserContact');
+      final userDetailCach = await GetCachedData('FounderUserDetail');
+      final userContactCach = await GetCachedData('FounderUserContact');
       if (userDetailCach != false || userContactCach != false) {
         Map<String, dynamic> temp_founder = {
           'picture': userDetailCach['picture'],
@@ -77,8 +78,8 @@ class UserConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('UserDetail');
-      var store1 = FirebaseFirestore.instance.collection('UserContact');
+      var store = FirebaseFirestore.instance.collection('FounderUserDetail');
+      var store1 = FirebaseFirestore.instance.collection('FounderUserContact');
 
       // Get User Detial Document :
       var query = store
@@ -122,12 +123,106 @@ class UserConnector extends GetxController {
       
       print('***** Fetch Firebase User Detail $temp_founder');
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'UserDetail', data: data_userDetail);
-      await StoreCacheData(fromModel: 'UserContact', data: data_userContact);
+      await StoreCacheData(fromModel: 'FounderUserDetail', data: data_userDetail);
+      await StoreCacheData(fromModel: 'FounderUserContact', data: data_userContact);
 
       return temp_founder;
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
+    CreateFounderDetail() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      final myStore = store.collection('FounderUserDetail');
+
+      // fetch catigories for local storage :
+      // kye : FounderUserDetail
+      bool is_data = localStore.containsKey('FounderUserDetail');
+      // Validate key :
+      if (is_data) {
+        String? temp_data = localStore.getString('FounderUserDetail');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(response_type: false);
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+  CreateFounderContact() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      final myStore = store.collection('FounderUserContact');
+
+      // fetch catigories for local storage :
+      // kye : FounderUserContact
+
+      bool is_data = localStore.containsKey('FounderUserContact');
+      if (is_data) {
+        String? temp_data = localStore.getString('FounderUserContact');
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(
+          response_type: false,
+        );
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+
+  FetchBusinessTeamMember() async {
+    var data;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData('BusinessTeamMember');
+      if (cacheData != false) {
+        return ResponseBack(
+        response_type: true,
+        data: cacheData,
+        message: 'BusinessTeamMember  Fetch from Cache DB');
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('BusinessTeamMember');
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data = value.docs.first.data();
+      });
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
+        return ResponseBack(
+        response_type: true,
+        data: data,
+        message: 'BusinessTeamMember Fetch from Firestore DB');
+    } catch (e) {
+        return ResponseBack(
+        response_type: false,
+        data: data,
+        message: e);
+    }
+  }
+
 }

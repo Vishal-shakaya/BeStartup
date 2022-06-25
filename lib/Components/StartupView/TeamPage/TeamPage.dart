@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/AllMembers.dart';
@@ -29,13 +30,14 @@ class _TeamPageState extends State<TeamPage> {
     double page_width = 0.80;
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+    var founderConnector =
+        Get.put(FounderConnector(), tag: 'startup_view_first_connector');
 
     // INITILIZE DEFAULT STATE :
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        final data = await startupConnect.FetchBusinessTeamMember();
-        return data;
+        final data = await founderConnector.FetchBusinessTeamMember();
       } catch (e) {
         return '';
       }

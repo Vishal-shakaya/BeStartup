@@ -17,6 +17,7 @@ class BusinessFounderStore extends GetxController {
     'primary_mail': '',
     'other_contact': '',
   };
+
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
@@ -72,11 +73,11 @@ class BusinessFounderStore extends GetxController {
   GetFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('UserDetail');
-      bool is_contanct = localStore.containsKey('UserContact');
+      bool is_detail = localStore.containsKey('FounderUserDetail');
+      bool is_contanct = localStore.containsKey('FounderUserContact');
       if (is_detail && is_contanct) {
-        var detail = localStore.getString('UserDetail');
-        var contact = localStore.getString('UserContact');
+        var detail = localStore.getString('FounderUserDetail');
+        var contact = localStore.getString('FounderUserContact');
 
         var detail_obj = jsonDecode(detail!);
         var contact_obj = jsonDecode(contact!);

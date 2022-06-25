@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Startup/Connector/FetchFounderDetail.dart';
-import 'package:be_startup/Backend/Startup/Team/CreateFounderStore.dart';
+import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
+import 'package:be_startup/Backend/Startup/Team/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 
@@ -38,7 +38,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   }
 
   var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
-  var userConnector = Get.put(UserConnector(), tag: 'user_onnector');
+  var userConnector = Get.put(FounderConnector(), tag: 'user_onnector');
 
   @override
   Widget build(BuildContext context) {

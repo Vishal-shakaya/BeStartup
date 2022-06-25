@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -15,21 +16,22 @@ class StartupConnector extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     final myStore = store.collection('BusinessCatigory');
     try {
-
       // kye : BusinessCatigory
       bool is_data = localStore.containsKey('BusinessCatigory');
 
       if (is_data) {
-        String? temp_data =  localStore.getString('BusinessCatigory');
-        Map<String,dynamic> data = json.decode(temp_data!);
+        String? temp_data = localStore.getString('BusinessCatigory');
+        Map<String, dynamic> data = json.decode(temp_data!);
 
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create BusinessCatigory Successfully');
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+            response_type: false, message: 'BusinessCatigory ${cached_error} ');
       }
     } catch (e) {
-      print('Error Creating Catigory $e');
       return ResponseBack(response_type: false, message: e);
     }
   }
@@ -49,9 +51,13 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true, message: 'Create BusinessDetail Successfully');
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+          response_type: false,
+          message: 'BusinessDetail ${cached_error} ',
+        );
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -73,9 +79,14 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+          response_type: true,
+          message: 'Create BusinessMilestones Successfully',
+        );
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+            response_type: false,
+            message: 'BusinessMilestones ${cached_error} ');
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -98,9 +109,12 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create BusinessProduct Successfully');
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+            response_type: false, message: 'BusinessProduct ${cached_error} ');
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -122,9 +136,11 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true, message: 'Create BusinessVision Successfully');
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+            response_type: false, message: 'BusinessVision ${cached_error} ');
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -147,59 +163,13 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
-      } else {
-        return ResponseBack(response_type: false);
-      }
-    } catch (e) {
-      return ResponseBack(response_type: false, message: e);
-    }
-  }
-
-  CreateUserDetail() async {
-    final localStore = await SharedPreferences.getInstance();
-    try {
-      final myStore = store.collection('UserDetail');
-
-      // fetch catigories for local storage :
-      // kye : UserDetail
-      bool is_data = localStore.containsKey('UserDetail');
-      // Validate key :
-      if (is_data) {
-        String? temp_data = localStore.getString('UserDetail');
-        var data = json.decode(temp_data!);
-
-        // Store Data in Firebase :
-        await myStore.add(data);
-        return ResponseBack(response_type: true);
-      } else {
-        return ResponseBack(response_type: false);
-      }
-    } catch (e) {
-      return ResponseBack(response_type: false, message: e);
-    }
-  }
-
-  CreateUserContact() async {
-    final localStore = await SharedPreferences.getInstance();
-    try {
-      final myStore = store.collection('UserContact');
-
-      // fetch catigories for local storage :
-      // kye : UserContact
-
-      bool is_data = localStore.containsKey('UserContact');
-      if (is_data) {
-        String? temp_data = localStore.getString('UserContact');
-        var data = json.decode(temp_data!);
-
-        // Store Data in Firebase :
-        await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create BusinessThumbnail Successfully');
       } else {
         return ResponseBack(
-          response_type: false,
-        );
+            response_type: false,
+            message: 'BusinessThumbnail ${cached_error} ');
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
@@ -221,9 +191,13 @@ class StartupConnector extends GetxController {
 
         // Store Data in Firebase :
         await myStore.add(data);
-        return ResponseBack(response_type: true);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create BusinessTeamMember Successfully');
       } else {
-        return ResponseBack(response_type: false);
+        return ResponseBack(
+            response_type: false,
+            message: 'BusinessTeamMember ${cached_error} ');
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);

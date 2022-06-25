@@ -94,7 +94,10 @@ class BusinessTeamMemberStore extends GetxController {
     member_list.removeWhere((element) => element!['id'] == id);
   }
 
+
+  ////////////////////////////////////////////////////
   // GET MEMBERS
+  ///////////////////////////////////////////////////
   GetMembers() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -122,11 +125,18 @@ class BusinessTeamMemberStore extends GetxController {
       // print error :
     } catch (e) {
       print('Error While Get Milestones ${e}');
-      return false;
+      return member_list;
     }
   }
 
-  // STORE MEMBER TO LOCAL STORAGE :
+
+
+
+  /////////////////////////////////////////
+  /// STORE MEMBER TO LOCAL STORAGE :
+  /// The function is used to save the data to 
+  /// the local storage and cache storage
+  /////////////////////////////////////////
   PersistMembers() async {
     final localStore = await SharedPreferences.getInstance();
     try {

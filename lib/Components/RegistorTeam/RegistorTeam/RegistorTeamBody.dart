@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
+import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
@@ -10,7 +12,9 @@ import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -25,19 +29,27 @@ class RegistorTeamBody extends StatefulWidget {
 }
 
 class _RegistorTeamBodyState extends State<RegistorTeamBody> {
-  double mem_dialog_width = 900;
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
+  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
+  var investorConnector =
+      Get.put(InvestorConnector(), tag: 'investor_connector');
+
   var userStore = Get.put(UserStore(), tag: 'user_store');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var my_context = Get.context;
 
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
+  double mem_dialog_width = 900;
 
   var pageParam;
   bool? updateMode = false;
 
+/////////////////////////////////////////////
+  /// ADD TEAM MEMBER DIALOG WIDGET :
+/////////////////////////////////////////////
   ShowDialog(context) {
     showDialog(
         barrierDismissible: false,
@@ -68,18 +80,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     ShowDialog(context);
   }
 
-  SmallLoadin() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ));
-    return dialog;
-  }
-
-  // SHOW LOADING SPINNER :
+  // SHOW  BIG LOADING SPINNER :
   StartLoading() {
     var dialog = SmartDialog.showLoading(
         background: Colors.white,
@@ -88,25 +89,11 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     return dialog;
   }
 
-// End Loading
-  EndLoading() async {
-    SmartDialog.dismiss();
-  }
-
-  ErrorSnakbar() {
-    Get.closeAllSnackbars();
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(seconds: 3),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Error'),
-      messageText: MySnackbarContent(message: 'Something went wrong'),
-      maxWidth: context.width * 0.50,
-    );
-  }
-
+///////////////////////////////////////////////////////////////
+// CREATE STARTUP :
+  /// It creates a startup model and .
+  /// pdates the user's plan and startup field in the database
+///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var startup = await StartupModel(
         user_id: await getUserId,
@@ -128,95 +115,105 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   /////////////////////////////////////////////////////
   SendDataToFireStore() async {
     var resp = await startupConnector.CreateBusinessCatigory();
-    if (resp['response']) {
-      print(
-          '********* CreateBusinessCatigory Stored Succefully ${resp} *******');
-    }
+    print(resp);
 
     var resp2 = await startupConnector.CreateBusinessDetail();
-    if (resp2['response']) {
-      print(
-          '********* CreateBusinessDetail Stored Succefully ${resp2} *******');
-    }
-
-    var resp3 = await startupConnector.CreateBusinessMileStone();
-    if (resp3['response']) {
-      print(
-          '********* CreateBusinessMileStone Stored Succefully ${resp3} *******');
-    }
+    print(resp2);
 
     var resp4 = await startupConnector.CreateBusinessProduct();
-    if (resp4['response']) {
-      print(
-          '********* CreateBusinessProduct Stored Succefully ${resp4} *******');
-    }
+    print(resp4);
 
     var resp5 = await startupConnector.CreateBusinessThumbnail();
-    if (resp5['response']) {
-      print(
-          '********* CreateBusinessThumbnail Stored Succefully ${resp5} *******');
-    }
+    print(resp5);
 
     var resp6 = await startupConnector.CreateBusinessVision();
-    if (resp6['response']) {
-      print(
-          '********* CreateBusinessVision Stored Succefully ${resp6} *******');
-    }
+    print(resp6);
 
-    var resp7 = await startupConnector.CreateUserContact();
-    if (resp7['response']) {
-      print('********* CreateUserContact Stored Succefully ${resp7} *******');
-    }
+    var resp7 = await founderConnector.CreateFounderContact();
+    print(resp7);
 
-    var resp8 = await startupConnector.CreateUserDetail();
-    if (resp8['response']) {
-      print('********* CreateUserDetail Stored Succefully ${resp8} *******');
-    }
+    var resp8 = await founderConnector.CreateFounderDetail();
+    print(resp8);
 
     var resp9 = await startupConnector.CreateBusinessTeamMember();
-    if (resp9['response']) {
-      print(
-          '********* CreateBusinessTeamMember Stored Succefully ${resp9} *******');
-    }
+    print(resp9);
+
+    var resp10 = await investorConnector.CreateInvestorContact();
+    print(resp10);
+
+    var resp11 = await investorConnector.CreateInvestorDetail();
+    print(resp11);
+
     await CreateStartup();
     return true;
   }
 
-  // TEAM FORM :
+  ////////////////////////////////////////////////////////
+  // SUBMIT TEAM FORM :
+  // 1. Create Team member :
+  // 2. Create Startup upload detail to firestore :
+  //////////////////////////////////////////////////////////
   SubmitTeamMemberDetails() async {
     StartLoading();
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     var resp = await memeberStore.PersistMembers();
     if (!resp['response']) {
-      EndLoading();
-      ErrorSnakbar();
+      CloseCustomPageLoadingSpinner();
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
       return;
     } else {
-      // Send data for firebase:
+      // Send data to firebase:
       var resp = await SendDataToFireStore();
-      print('Create Startup ${resp}');
-
-      EndLoading();
+      CloseCustomPageLoadingSpinner();
       print('Upload Detail Successfull');
       Get.toNamed(startup_view_url);
     }
   }
 
-  // TEAM FORM Update:
+/////////////////////////////////////////
+// Update Team form :
+/////////////////////////////////////////
   UpdateTeamMemberDetails() async {
-    SmallLoadin();
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
+    MyCustPageLoadingSpinner();
     var resp = await memeberStore.PersistMembers();
-    final resp1 = await updateStore.UpdateBusinessTeamMember();
-    if (!resp['response'] || !resp1['response']) {
-      EndLoading();
-      ErrorSnakbar();
-      return;
-    } else {
-      EndLoading();
-      print('Upload Detail Successfull');
-      Get.toNamed(startup_view_url);
+    final upload_resp = await updateStore.UpdateBusinessTeamMember();
+
+    if (resp['response']) {
+      // Upload Succes response :
+      if (upload_resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(startup_view_url);
+      }
+
+      // Upload Error Response
+      if (!upload_resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.error,
+            title: update_error_title,
+            message: update_error_msg));
+      }
+    }
+
+    // Update error Handler :
+    if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error,
+          title: update_error_title,
+          message: update_error_msg));
     }
   }
 
+//////////////////////////////////////
+// SET PAGE DEFAULT STATE :
+//////////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
@@ -227,20 +224,26 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     super.initState();
   }
 
+//////////////////////////////////////////
+  /// GET REQUIREMENTS DATA :
+//////////////////////////////////////////
+  GetLocalStorageData() async {
+    var error_resp;
+    try {
+      final fetch_resp = founderConnector.FetchBusinessTeamMember();
+      final data = await memeberStore.GetMembers();
+      error_resp = data;
+      return data;
+    } catch (e) {
+      return error_resp;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        // await Future.delayed(Duration(seconds: 5));
-        final data = await memeberStore.GetMembers();
-        return data;
-      } catch (e) {
-        return '';
-      }
-    }
-
+    //////////////////////////////////////////
+    /// SET REQUIREMENTS DATA :
+    //////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -256,6 +259,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
         });
   }
 
+/////////////////////////////////////////
+  /// MAIN METHOD :
+/////////////////////////////////////////
   Column MainMethod(BuildContext context, member_list) {
     return Column(
       children: [
@@ -312,6 +318,10 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     );
   }
 
+///////////////////////////////////
+  /// EXTERNAL METHODS :
+  /// 1. Update buttopn :
+///////////////////////////////////
   Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),

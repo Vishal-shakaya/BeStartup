@@ -9,8 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 class InvestorDetailStore extends GetxController {
   static Map<String, dynamic>? investor;
- static String? image_url;
-
+  static String? image_url;
+    Map<String, dynamic> clean_resp = {
+    'picture': '',
+    'name': '',
+    'position': '',
+    'phone_no': '',
+    'primary_mail': '',
+    'other_contact': '',
+  };
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
@@ -62,7 +69,35 @@ class InvestorDetailStore extends GetxController {
     }
   }
 
+  GetInvestorDetail() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey('InvestorUserDetail');
+      bool is_contanct = localStore.containsKey('InvestorUserContact');
+      if (is_detail && is_contanct) {
+        var detail = localStore.getString('InvestorUserDetail');
+        var contact = localStore.getString('InvestorUserContact');
 
+        var detail_obj = jsonDecode(detail!);
+        var contact_obj = jsonDecode(contact!);
+
+        Map<String, dynamic> temp_founder = {
+          'picture': detail_obj['picture'],
+          'name': detail_obj['name'],
+          'position': detail_obj['position'],
+          'phone_no': contact_obj['phone_no'],
+          'primary_mail': contact_obj['primary_mail'],
+          'other_contact': contact_obj['other_contact'],
+        };
+        return temp_founder;
+      
+      } else {
+        return clean_resp;
+      }
+    } catch (e) {
+      return clean_resp;
+    }
+  }
 
   
 }
