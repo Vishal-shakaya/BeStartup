@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Backend/Startup/Team/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,9 @@ class FounderImage extends StatefulWidget {
 }
 
 class _FounderImageState extends State<FounderImage> {
+  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  var my_context = Get.context;
+
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
@@ -28,63 +32,59 @@ class _FounderImageState extends State<FounderImage> {
   double upload_icon_position_top = 129;
   double upload_icon_position_left = 129;
 
-  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  /////////////////////////////////////////
+  // PICKED IMAGE AND STORE IN  FILE :
+  /////////////////////////////////////////
+  Future<void> PickImage() async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    // Pick only one file :
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    setState(() {
+      is_uploading = true;
+    });
+
+    // if rsult null then return :
+    if (result == null) return;
+
+    // if file single then gets ist path :
+    if (result != null && result.files.isNotEmpty) {
+      image = result.files.first.bytes;
+      filename = result.files.first.name;
+
+      var resp = await founderStore.UploadFounderImage(
+          image: image, filename: filename);
+
+      if (!resp['response']) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+        return;
+      }
+      setState(() {
+        upload_image_url = resp['data'];
+        is_uploading = false;
+      });
+    }
+  }
+
+  //////////////////////////////////////////////////
+  /// GET REQUIREMNTS :
+  //////////////////////////////////////////////////
+  GetLocalStorageData() async {
+    try {
+      final data = await founderStore.GetFounderDetail();
+      if (data['picture'] != '') {
+        upload_image_url = data['picture'];
+      }
+      return data;
+    } catch (e) {
+      return '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    var spinner = Container(
-      padding: EdgeInsets.all(8),
-      child: CircularProgressIndicator(
-        color: dartk_color_type3,
-        strokeWidth: 4,
-      ),
-    );
-
-    ErrorSnakbar() {
-      Get.closeAllSnackbars();
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Error'),
-        messageText: MySnackbarContent(message: 'Something went wrong'),
-        maxWidth: context.width * 0.50,
-      );
-    }
-
-    /////////////////////////////////////////
-    // PICKED IMAGE AND STORE IN  FILE :
-    /////////////////////////////////////////
-    Future<void> PickImage() async {
-      // Pick only one file :
-      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-      setState(() {
-        is_uploading = true;
-      });
-
-      // if rsult null then return :
-      if (result == null) return;
-
-      // if file single then gets ist path :
-      if (result != null && result.files.isNotEmpty) {
-        image = result.files.first.bytes;
-        filename = result.files.first.name;
-
-        var resp = await founderStore.UploadFounderImage(
-            image: image, filename: filename);
-
-        if (!resp['response']) {
-          ErrorSnakbar();
-          return;
-        }
-        setState(() {
-          upload_image_url = resp['data'];
-          is_uploading = false;
-        });
-      }
-    }
+    var spinner = MyCustomButtonSpinner();
 
     // DEFAULT :
     if (context.width > 1500) {
@@ -139,21 +139,9 @@ class _FounderImageState extends State<FounderImage> {
       print('480');
     }
 
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        // await Future.delayed(Duration(seconds: 5));
-        final data = await founderStore.GetFounderDetail();
-        if(data['picture']!=''){
-          upload_image_url = data['picture'];
-        }
-        return data;
-      } catch (e) {
-        return '';
-      }
-    }
-
+//////////////////////////////////////////////////
+    /// SET REQUIREMNTS :
+//////////////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -172,9 +160,12 @@ class _FounderImageState extends State<FounderImage> {
           }
           return MainMethod(spinner, PickImage);
         });
-    // return MainMethod(context);
   }
 
+
+///////////////////////////////////
+/// MAIN METHOD : 
+///////////////////////////////////
   Container MainMethod(Container spinner, Future<void> PickImage()) {
     return Container(
         alignment: Alignment.center,

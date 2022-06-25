@@ -21,7 +21,11 @@ class RegistorFounderForm extends StatefulWidget {
 }
 
 class _RegistorFounderFormState extends State<RegistorFounderForm> {
+  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  var founde_connector = Get.put(FounderConnector(), tag: 'user_onnector');
+
   bool is_password_visible = true;
+
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
@@ -37,8 +41,20 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     widget.formKey.currentState.fields[field].didChange('');
   }
 
-  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
-  var userConnector = Get.put(FounderConnector(), tag: 'user_onnector');
+//////////////////////////////////////
+// GET REQUIREMENTS :
+//////////////////////////////////////
+  GetLocalStorageData() async {
+    var error_resp;
+    try {
+      final resp = await founde_connector.FetchFounderDetailandContact();
+      final data = await founderStore.GetFounderDetail();
+      error_resp = data;
+      return data;
+    } catch (e) {
+      return error_resp;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,17 +90,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       print('480');
     }
 
-// INITILIZE DEFAULT STATE :
-// GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        final data = await founderStore.GetFounderDetail();
-        return data;
-      } catch (e) {
-        return '';
-      }
-    }
-
+    //////////////////////////////////////
+    /// SET REQUIREMENTS :
+    //////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -100,9 +108,11 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
           }
           return MainMethod(context, snapshot.data);
         });
-    // return MainMethod(context);
   }
 
+  ///////////////////////////////////
+  /// MAIN METHOD :
+  ///////////////////////////////////
   Container MainMethod(BuildContext context, data) {
     return Container(
       width: formfield_width,
@@ -214,6 +224,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     );
   }
 
+//////////////////////////////////
+  /// EXTERNAL METHODS ;
+//////////////////////////////////
   FormBuilderTextField InputField(
       {context,
       name,

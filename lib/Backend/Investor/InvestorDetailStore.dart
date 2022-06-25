@@ -1,3 +1,4 @@
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/AppState/UserState.dart';
@@ -47,7 +48,8 @@ class InvestorDetailStore extends GetxController {
             email: await getuserEmail,
             name: investor['name'],
             position: investor['position'],
-            picture: image_url);
+            picture: image_url
+            );
 
         var resp2 =  await UserContact(
             user_id: await  getUserId,
@@ -59,15 +61,16 @@ class InvestorDetailStore extends GetxController {
         localStore.setString('InvestorUserDetail', json.encode(resp));
         localStore.setString('InvestorUserContact', json.encode(resp2));
 
-        return ResponseBack(response_type: true);
+        return ResponseBack(response_type: true );
       } catch (e) {
-        ResponseBack(response_type: false, message: e);
+        return ResponseBack(response_type: false, message:create_error_title );
       }
-
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      return ResponseBack(response_type: false, message: create_error_title);
     }
   }
+
+
 
   GetInvestorDetail() async {
     final localStore = await SharedPreferences.getInstance();

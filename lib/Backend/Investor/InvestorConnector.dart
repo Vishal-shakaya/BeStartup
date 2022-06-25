@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -46,9 +47,9 @@ class InvestorConnector extends GetxController {
     }
   }
 
-  FetchUserDetailandContact() async {
-    print('********* START FETCHING USER DATA DETAIL AND CONTACT *********');
-    
+
+
+  FetchInvestorDetailandContact() async {
     var data_userContact;
     var data_userDetail;
     var doc_id_userDetail;
@@ -60,16 +61,12 @@ class InvestorConnector extends GetxController {
       final userDetailCach = await GetCachedData('InvestorUserDetail');
       final userContactCach = await GetCachedData('InvestorUserContact');
       if (userDetailCach != false || userContactCach != false) {
-        Map<String, dynamic> temp_founder = {
-          'picture': userDetailCach['picture'],
-          'name': userDetailCach['name'],
-          'position': userDetailCach['position'],
-          'phone_no': userContactCach['phone_no'],
-          'primary_mail': userContactCach['primary_mail'],
-          'other_contact': userContactCach['other_contact'],
-        };
-        print('***** Fetch Local User Detail $temp_founder');
-        return temp_founder;
+        return ResponseBack(
+        response_type: true, 
+        message: 'Fetch Investor Detail from cached storage',
+        data: {
+        'userDetail':userDetailCach,
+        'userContect':userContactCach});
       }
 
       // FETCHING DATA FROM FIREBASE
@@ -91,6 +88,7 @@ class InvestorConnector extends GetxController {
         doc_id_userDetail = value.docs.first.id;
       });
 
+
       // Get User  Conctact Document:
       var query1 = store1
           .where(
@@ -106,26 +104,101 @@ class InvestorConnector extends GetxController {
         doc_id_userContact = value.docs.first.id;
       });
 
-      Map<String, dynamic> temp_founder = {
-        'picture': data_userDetail['picture'],
-        'name': data_userDetail['name'],
-        'position': data_userDetail['position'],
-        'phone_no': data_userContact['phone_no'],
-        'primary_mail': data_userContact['primary_mail'],
-        'other_contact': data_userContact['other_contact'],
-      };
 
-      
-      print('***** Fetch Firebase User Detail $temp_founder');
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'InvestorUserDetail', data: data_userDetail);
       await StoreCacheData(fromModel: 'InvestorUserContact', data: data_userContact);
 
-      return temp_founder;
+      return ResponseBack(
+        response_type: true, 
+        message: 'Fetch Investor Detail from Firebase storage',
+        data: {
+        'userDetail':data_userDetail,
+        'userContect':data_userContact});
+
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      return ResponseBack(response_type: false, message: fetch_data_error_title);
     }
   }
+
+
+
+
+  UpdateInvestorDetail() async {
+    var data_userContact;
+    var data_userDetail;
+    var doc_id_userDetail;
+    var doc_id_userContact;
+    var temp_userDetail;
+    var temp_userContact;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final userDetailCach = await GetCachedData('InvestorUserDetail');
+      final userContactCach = await GetCachedData('InvestorUserContact');
+      if (userDetailCach != false || userContactCach != false) {
+        temp_userDetail = userDetailCach;
+        temp_userContact = userContactCach;        
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance.collection('InvestorUserDetail');
+
+      var store1 = FirebaseFirestore.instance.collection('InvestorUserContact');
+
+      // Get User Detial Document :
+      var query = store
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data_userDetail = value.docs.first.data();
+        doc_id_userDetail = value.docs.first.id;
+      });
+
+      // Get User  Conctact Document:
+      var query1 = store1
+          .where(
+            'email',
+            isEqualTo: await getuserEmail,
+          )
+          .where('user_id', isEqualTo: await getUserId)
+          .where('startup_name', isEqualTo: await getStartupName)
+          .get();
+
+      await query.then((value) {
+        data_userContact = value.docs.first.data();
+        doc_id_userContact = value.docs.first.id;
+      });
+
+      data_userDetail['name'] = temp_userDetail['name'];
+      data_userDetail['position'] = temp_userDetail['position'];
+      data_userDetail['name'] = temp_userDetail['picture'];
+
+      data_userContact['email'] = temp_userContact['email'];
+      data_userContact['phone_no'] = temp_userContact['phone_no'];
+      data_userContact['other_contact'] = temp_userContact['other_contact'];
+
+      // Update Data in DB :
+      store.doc(doc_id_userDetail).update(data_userDetail);
+      store.doc(doc_id_userContact).update(data_userContact);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(
+          fromModel: 'InvestorUserDetail', data: data_userDetail);
+      await StoreCacheData(
+          fromModel: 'InvestorUserContact', data: data_userContact);
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: update_error_title);
+    }
+  }
+
 
 
 

@@ -1,10 +1,13 @@
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
+import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/Team/FounderStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorFounder/FounderImage.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorFounder/RegistorFounderForm.dart';
 import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -20,8 +23,10 @@ class RegistorFounderBody extends StatefulWidget {
 
 class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  var founderConnector = Get.put(FounderConnector(),tag:'founder_connector');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_store');
   final formKey = GlobalKey<FormBuilderState>();
+  var my_context = Get.context; 
 
   double con_button_width = 150;
   double con_button_height = 40;
@@ -30,49 +35,15 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var pageParam;
   bool? updateMode = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    pageParam = Get.parameters;
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
-    }
-    super.initState();
-  }
-
-  ErrorSnakbar(context) {
-    SmartDialog.dismiss();
-    // CLOSE SNAKBAR :
-    Get.closeAllSnackbars();
-    // Error Alert :
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.all(10),
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Form Validation Error'),
-      messageText: MySnackbarContent(message: 'Check required field'),
-      maxWidth: context.width * 0.50,
-    );
-  }
-
-  StartLoading() {
-    // START SPINNER :
-    SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ));
-  }
-
-  // SUBMIT  FORM :
+  /////////////////////////////////////////
+  // CREATE FOUNDER  FORM :
+  /////////////////////////////////////////
   SubmitFounderDetail(context) async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     formKey.currentState!.save();
-    StartLoading();
+    MyCustPageLoadingSpinner();
+
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
       final String founder_position =
@@ -91,7 +62,13 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       final res = await founderStore.CreateFounder(founder);
 
       if (!res['response']) {
-        ErrorSnakbar(context);
+        SmartDialog.dismiss();
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.error,
+            title: res['message'],
+            message: create_error_msg));
       }
       formKey.currentState!.reset();
       SmartDialog.dismiss();
@@ -101,14 +78,25 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
     // Form Error :
     else {
-      ErrorSnakbar(context);
+      SmartDialog.dismiss();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+        type: MySnackbarType.error,
+      ));
     }
   }
 
-  // SUBMIT  FORM :
+
+
+///////////////////////////////////////////
+// UPDATE FOUNDER FORM  :
+///////////////////////////////////////////
   UpdateFounderDetail(context) async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     formKey.currentState!.save();
-    StartLoading();
+    MyCustPageLoadingSpinner();
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
       final String founder_position =
@@ -125,22 +113,54 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         'other_contact': other_contact
       };
       final res = await founderStore.CreateFounder(founder);
-      final res1 = await updateStore.UpdateUserDetailandContact();
+      final update_resp = await founderConnector.UpdateFounderDetail();
 
-      if (!res['response'] ||!res['response']) {
-        ErrorSnakbar(context);
-      }
-      formKey.currentState!.reset();
-      SmartDialog.dismiss();
-      // Redirect to team page:
-      Get.toNamed(create_business_team);
+        if(res['response']){
+
+          // Update Success Handler : 
+          if(update_resp['response']){
+            SmartDialog.dismiss();
+            formKey.currentState!.reset();
+            Get.toNamed(create_business_team);
+          }
+
+          // Update Error Handler : 
+          if(!update_resp['response']){
+              SmartDialog.dismiss();
+              Get.closeAllSnackbars();
+              Get.showSnackbar(MyCustSnackbar(
+                  width: snack_width,
+                  type: MySnackbarType.error,
+                  title: res['message'],
+                  message: update_error_msg));
+                }
+        }
     }
 
     // Form Error :
     else {
-      ErrorSnakbar(context);
+    SmartDialog.dismiss();
+    Get.closeAllSnackbars();
+    Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+        type: MySnackbarType.error,));
     }
   }
+
+/////////////////////////////////////
+/// SET PAGE DEFAULT STATE : 
+/////////////////////////////////////
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

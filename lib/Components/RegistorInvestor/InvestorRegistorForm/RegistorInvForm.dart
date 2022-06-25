@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
 
@@ -17,7 +20,9 @@ class RegistorInvForm extends StatefulWidget {
 }
 
 class _RegistorInvFormState extends State<RegistorInvForm> {
-  bool is_password_visible = true;
+  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
+  var investor_connector = Get.put(InvestorConnector(), tag: 'user_onnector');
+
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
@@ -29,8 +34,25 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
   double contact_formfield_width = 350;
   double contact_text_margin_top = 0.05;
 
+  bool is_password_visible = true;
+
   ResetForm(field) {
     widget.formKey.currentState.fields[field].didChange('');
+  }
+
+//////////////////////////////////////
+// GET REQUIREMENTS :
+//////////////////////////////////////
+  GetLocalStorageData() async {
+    var error_resp;
+    try {
+      final resp = await investor_connector.FetchInvestorDetailandContact();
+      final data = await investorStore.GetInvestorDetail();
+      error_resp = data;
+      return data;
+    } catch (e) {
+      return error_resp;
+    }
   }
 
   @override
@@ -67,6 +89,30 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
       print('480');
     }
 
+    //////////////////////////////////////
+    /// SET REQUIREMENTS :
+    //////////////////////////////////////
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CustomShimmer(
+              text: 'Loading User Detail ',
+            );
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context, snapshot.data);
+          }
+          return MainMethod(context, snapshot.data);
+        });
+  }
+
+////////////////////////////////////
+  /// MAIN METHOD :
+////////////////////////////////////
+  Container MainMethod(BuildContext context, data) {
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
@@ -87,16 +133,17 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                             name: 'investor_name',
                             error_text: 'Founder name required',
                             lable_text: 'Full name',
-                            hind_text: 'full name'),
+                            hind_text: 'full name',
+                            initial_val: data['name']),
 
                         // POSITION:
                         InputField(
-                          context: context,
-                          name: 'investor_position',
-                          lable_text: 'Position',
-                          hind_text: 'position in company',
-                          error_text: 'position in company required',
-                        ),
+                            context: context,
+                            name: 'investor_position',
+                            lable_text: 'Position',
+                            hind_text: 'position in company',
+                            error_text: 'position in company required',
+                            initial_val: data['position']),
                       ],
                     ),
                   ),
@@ -141,6 +188,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                                   name: 'phone_no',
                                   lable_text: 'Phone no',
                                   hind_text: 'primary phone no ',
+                                  initial_val: data['phone_no'],
                                   error_text:
                                       'phone no required for investor purpose!',
                                 ),
@@ -150,15 +198,16 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                                   lable_text: 'Email',
                                   hind_text: 'personal email',
                                   error_text: 'primay eamil required ',
+                                  initial_val: data['primary_mail'],
                                 ),
                                 SecondaryInputField(
-                                  context: context,
-                                  name: 'other_info',
-                                  lable_text: 'Other',
-                                  hind_text: 'optional contact',
-                                  error_text: '',
-                                  require: false,
-                                ),
+                                    context: context,
+                                    name: 'other_info',
+                                    lable_text: 'Other',
+                                    hind_text: 'optional contact',
+                                    error_text: '',
+                                    require: false,
+                                    initial_val: data['other_contact']),
                               ],
                             ),
                           ),
@@ -172,8 +221,15 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
   }
 
   FormBuilderTextField InputField(
-      {context, name, error_text, lable_text, hind_text, require = true}) {
+      {context,
+      name,
+      error_text,
+      lable_text,
+      hind_text,
+      require = true,
+      initial_val}) {
     return FormBuilderTextField(
+      initialValue: initial_val,
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(
@@ -220,8 +276,15 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
 
   // Secondary Input field :
   FormBuilderTextField SecondaryInputField(
-      {context, name, error_text, lable_text, hind_text, require = true}) {
+      {context,
+      name,
+      error_text,
+      lable_text,
+      hind_text,
+      require = true,
+      initial_val}) {
     return FormBuilderTextField(
+      initialValue: initial_val,
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(

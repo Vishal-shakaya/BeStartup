@@ -1,6 +1,7 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Models/Models.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,12 +62,12 @@ class BusinessFounderStore extends GetxController {
         localStore.setString('FounderUserDetail', json.encode(resp));
         localStore.setString('FounderUserContact', json.encode(resp2));
 
-        return ResponseBack(response_type: true);
+        return ResponseBack(response_type: true,message: create_error_title);
       } catch (e) {
         ResponseBack(response_type: false, message: e);
       }
     } catch (e) {
-      return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false,message:e);
     }
   }
 
