@@ -31,8 +31,13 @@ String fetch_data_error_title = 'Somethig went wrong  or please Try Again ';
 String delete_error_title = 'Unable to Remove object';
 String delete_error_msg = 'Somethig went wrong  or please Try Again ';
 
-String cached_error='Data not found in Cached Storage';
+String cached_error = 'Data not found in Cached Storage';
 
+////////////////////////////////////////////////
+/// SUCCESS MESSAGE :
+////////////////////////////////////////////////
+String snack_success_msg = 'operation Successful';
+String snack_info_msg = 'Please Try Again';
 /////////////////
 // LOGIN PAGE :
 //////////////////

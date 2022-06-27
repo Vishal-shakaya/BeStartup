@@ -51,6 +51,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
   var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
   var userStore = Get.put(UserStore(), tag: 'user_store');
+
   // SUBMIT DATE AND CATIGORY :
   var catigories = [];
   SubmitExploreCatigory(context) async {
@@ -91,16 +92,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           });
     }
 
-    // CreateStartup :
+    //////////////////////////////////////////////////////////
+    /// CREATE STARTUP :
+    /// If the user has a plan, go to the create business
+    /// detail page. If the user doesn't have a plan, go
+    /// to the user type slide page
+    //////////////////////////////////////////////////////////
     CreateStatup() async {
-      var resp = await userStore.IsAlreadyPlanBuyed();
-      print(resp);
-      if (resp == IsUserPlanBuyedType.newplan) {
-        Get.toNamed(user_type_slide_url);
-      }
-      if (resp == IsUserPlanBuyedType.preplan) {
         Get.toNamed(create_business_detail_url);
-      }
     }
 
     return Container(

@@ -35,5 +35,6 @@ enum IsUserPlanBuyedType {
 
 enum MySnackbarType{
   error, 
-  success, 
+  success,
+  info ,  
 }

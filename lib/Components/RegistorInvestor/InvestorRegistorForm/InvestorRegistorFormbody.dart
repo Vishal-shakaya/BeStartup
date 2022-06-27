@@ -1,5 +1,5 @@
-import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
-import 'package:be_startup/Backend/Investor/InvestorDetailStore.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Components/RegistorInvestor/InvestorRegistorForm/InvestorImage.dart';
 import 'package:be_startup/Components/RegistorInvestor/InvestorRegistorForm/RegistorInvForm.dart';
 import 'package:be_startup/Utils/Colors.dart';

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Investor/InvestorCatigoryStorage.dart';
-import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorCatigoryStorage.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';

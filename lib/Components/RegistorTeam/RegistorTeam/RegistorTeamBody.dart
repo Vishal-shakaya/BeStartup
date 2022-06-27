@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
-import 'package:be_startup/Backend/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
@@ -76,6 +76,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
             ));
   }
 
+  // MAIN MODEL : 
   AddMember(context) {
     ShowDialog(context);
   }
@@ -103,11 +104,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
-    if (!resp['response']) {
-      print('Error Creating Startup model ${resp["message"]}');
-    } else {
-      print("**** Startup Model Created ****");
-    }
+    print(resp);
   }
 
   /////////////////////////////////////////////////////
@@ -148,6 +145,29 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     return true;
   }
 
+
+//////////////////////////////////////////////////////////////////////
+// if user already buy plan but not add startup on that plan : 
+// then it add a startup to that plan . no need to purchase new plan: 
+//////////////////////////////////////////////////////////////////////
+  IsPlanWithoutStartup() async {
+    final resp = userStore.IsAlreadyPlanBuyed();
+
+    if (resp['response']) {
+      // Create new plan :
+      if (resp['data'] == IsUserPlanBuyedType.newplan) {
+        Get.toNamed(create_business_detail_url);
+      }
+
+      // Create Startup andd add to user plan files  :
+      if (resp['data'] == IsUserPlanBuyedType.newplan) {
+        var resp = await SendDataToFireStore();
+        CloseCustomPageLoadingSpinner();
+        print('STARTUP ADDED');
+      }
+    }
+  }
+
   ////////////////////////////////////////////////////////
   // SUBMIT TEAM FORM :
   // 1. Create Team member :
@@ -158,18 +178,20 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     var resp = await memeberStore.PersistMembers();
+    
+    // Success Handler : 
+    if (resp['response']) {
+      await IsPlanWithoutStartup();
+    }
+
+    // Error Handler : 
     if (!resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
       return;
-    } else {
-      // Send data to firebase:
-      var resp = await SendDataToFireStore();
-      CloseCustomPageLoadingSpinner();
-      print('Upload Detail Successfull');
-      Get.toNamed(startup_view_url);
     }
+
   }
 
 /////////////////////////////////////////

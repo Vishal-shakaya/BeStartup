@@ -1,4 +1,4 @@
-import 'package:be_startup/Backend/Investor/InvestorCatigoryStorage.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorCatigoryStorage.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessCatigoryStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';

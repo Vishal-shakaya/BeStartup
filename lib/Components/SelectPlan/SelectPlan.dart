@@ -1,27 +1,27 @@
-import 'dart:convert';
-
-import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
-import 'package:be_startup/Helper/MailServer.dart';
-import 'package:be_startup/Models/Models.dart';
+import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
+import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
+import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:horizontal_card_pager/card_item.dart';
+import 'package:be_startup/Helper/MailServer.dart';
+import 'package:be_startup/Models/Models.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter/services.dart';
 import 'package:razorpay_web/razorpay_web.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:uuid/uuid_util.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
@@ -37,6 +37,14 @@ class SelectPlan extends StatefulWidget {
 class _SelectPlanState extends State<SelectPlan> {
   static const platform = MethodChannel("razorpay_flutter");
   var userStore = Get.put(UserStore(), tag: 'user_store');
+  var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
+  var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
+  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
+  var investorConnector =
+      Get.put(InvestorConnector(), tag: 'investor_connector');
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+
+  var my_context = Get.context;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   Color? unselect_color =
@@ -58,12 +66,13 @@ class _SelectPlanState extends State<SelectPlan> {
 
   String? select_plan_type = null;
   var _razorpay = Razorpay();
-
+  var options;
   int? planAmount;
   var mainData = '';
   var basic_plan_amount = 1000;
   var best_plan_amount = 1950;
   var business_plan_amount = 6000;
+
   ///////////////////////////////////////
   // CARD AND BUTTON  :
   // 1. WIDTH AND HEIGHT :
@@ -91,38 +100,38 @@ class _SelectPlanState extends State<SelectPlan> {
   var tax = 10;
   var total_amount;
 
-  // SHOW LOADING SPINNER :
-  StartLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ));
-    return dialog;
-  }
+  bool? is_new_startup;
+  var planType;
 
-// End Loading
-  EndLoading() async {
-    SmartDialog.dismiss();
-  }
-
-  // SNAKBAR :
-  ErrorSnakbar({title, message}) {
-    Get.closeAllSnackbars();
-    Get.snackbar(
-      '',
-      '',
-      margin: EdgeInsets.only(top: 10),
-      duration: Duration(seconds: 3),
-      backgroundColor: Colors.red.shade50,
-      titleText: MySnackbarTitle(title: 'Error ${title}'),
-      messageText:
-          MySnackbarContent(message: 'Something went wrong : $message'),
-      maxWidth: context.width * 0.50,
-    );
-  }
+//////////////////////////////////////////////
+  /// REQUIREMNTS AND HANDERL : [INDEX]
+  /// 1. Getexpiredate:
+  /// 2. Checkout alert dialog :
+  /// 3. Onpress continue function :
+  /// 4. Success Payment Alert:
+  /// 5. Create Business Alert :
+  /// 6. Send voice mail :
+  /// 7. Set user plan :
+  /// 8. Big Loading spinner :
+  /// 9. Create startup :
+  /// 10. Send data to firestore :
+  ///
+  /// RESPONSES :
+  /// 11. Success Handler :
+  ///   1. Bigloading spinner :
+  ///   2. SendVoice mail :
+  ///   3. Setuserplan :
+  ///   4. SendData to firestore :
+  ///   5. SuccessMailAlert :
+  ///
+  /// 12 EXTERNAL WALLET HANDLER  :
+  /// 13 ERROR PAYMENT HANDLER  :
+  /// 14 OPEN CHECKOUT :
+  /// 15 SELECT PLAN :
+  ///
+  /// 16 INITILIZE FUN :
+  /// 17 DISPOSE   FUN:
+//////////////////////////////////////////////
 
   // Helpong function for gettin expiration date :
   GetExpiredDate(plan_type) async {
@@ -215,9 +224,7 @@ class _SelectPlanState extends State<SelectPlan> {
   SuccessMailSendAlert() async {
     CoolAlert.show(
         onConfirmBtnTap: () {
-          Get.toNamed(
-            create_business_detail_url,
-          );
+          Get.toNamed(startup_view_url);
         },
         context: context,
         width: 200,
@@ -263,8 +270,9 @@ class _SelectPlanState extends State<SelectPlan> {
       required expired,
       required payer_name,
       phone_no}) async {
+    var resp;
     try {
-      await SendMailToUser(
+      resp = await SendMailToUser(
         transaction_id: paymentId,
         plan_type: selectedPlan['plan'],
         phone_no: phone_no == null ? '' : phone_no,
@@ -275,10 +283,9 @@ class _SelectPlanState extends State<SelectPlan> {
         expire_date: expired,
         payer_name: payer_name == null ? selectedPlan['mail'] : payer_name,
       );
-
-      EndLoading();
+      return resp;
     } catch (e) {
-      EndLoading();
+      return resp;
     }
   }
 
@@ -292,24 +299,105 @@ class _SelectPlanState extends State<SelectPlan> {
     required exact_amount,
     required orderd,
     required expired,
+    required buyer_name,
+    required phone_no,
+    required plan_type,
   }) async {
     // Activate User Plan :
     try {
       final plan = await PlanModel(
-        plan_name: selectedPlan['plan'],
-        phone_no: selectedPlan['phone_no'],
+        plan_name: plan_type,
+        phone_no: phone_no,
         amount: exact_amount,
         order_date: orderd,
         expire_date: expired,
         buyer_mail: selectedPlan['mail'],
+        buyer_name: buyer_name,
       );
 
-      await userStore.UpdateUserPlanAndStartup(field: 'plan', val: plan);
+      var resp =
+          await userStore.UpdateUserPlanAndStartup(field: 'plan', val: plan);
+      // Success Handler Creating plan :
+      if (resp['response']) {
+        return ResponseBack(
+            response_type: true, message: "plan Created ${resp['message']}");
+      }
+
+      // Error Handler Createing plan :
+      if (!resp['response']) {
+        return ResponseBack(
+            response_type: false,
+            message: "plan not created ${resp['message']}");
+      }
     } catch (e) {
-      EndLoading();
+      CloseCustomPageLoadingSpinner();
+      return ResponseBack(response_type: false, message: e);
     }
   }
 
+  // SHOW  BIG LOADING SPINNER :
+  StartBigLoading() {
+    var dialog = SmartDialog.showLoading(
+        background: Colors.white,
+        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+        widget: BigLoadingSpinner());
+    return dialog;
+  }
+
+///////////////////////////////////////////////////////////////
+// CREATE STARTUP :
+  /// It creates a startup model and .
+  /// pdates the user's plan and startup field in the database
+///////////////////////////////////////////////////////////////
+  CreateStartup() async {
+    var startup = await StartupModel(
+        user_id: await getUserId,
+        email: await getuserEmail,
+        startup_name: await getStartupName,
+        desire_amount: await getDesireAmount);
+
+    final resp = await userStore.UpdateUserPlanAndStartup(
+        field: 'startups', val: startup);
+    print(resp);
+  }
+
+  /////////////////////////////////////////////////////
+  // START STORING ALL FOUNDER DETIAL TO FIREBASE :
+  /////////////////////////////////////////////////////
+  SendDataToFireStore() async {
+    var resp = await startupConnector.CreateBusinessCatigory();
+    print(resp);
+
+    var resp2 = await startupConnector.CreateBusinessDetail();
+    print(resp2);
+
+    var resp4 = await startupConnector.CreateBusinessProduct();
+    print(resp4);
+
+    var resp5 = await startupConnector.CreateBusinessThumbnail();
+    print(resp5);
+
+    var resp6 = await startupConnector.CreateBusinessVision();
+    print(resp6);
+
+    var resp7 = await founderConnector.CreateFounderContact();
+    print(resp7);
+
+    var resp8 = await founderConnector.CreateFounderDetail();
+    print(resp8);
+
+    var resp9 = await startupConnector.CreateBusinessTeamMember();
+    print(resp9);
+
+    var resp10 = await investorConnector.CreateInvestorContact();
+    print(resp10);
+
+    var resp11 = await investorConnector.CreateInvestorDetail();
+    print(resp11);
+
+    await CreateStartup();
+    return ResponseBack(response_type: true);
+  }
 
   ///////////////////////////////////
   /// PAYMENT SUCCESS HANDLER :
@@ -319,33 +407,117 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 3. GetExpiredDate
   ///////////////////////////////////
   PaymentSuccess(PaymentSuccessResponse response) async {
-    StartLoading();
+    StartBigLoading();
+
     final orderd = DateTime.now().toUtc().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
     var exact_amount = selectedPlan['amount'] / 100;
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    // 1. Check if user already purcahase any plan
-    // then show alert about the plan :
-
-    // 2.  Send Bill to Founder Mail address :
-    await SendInvoiceMail(
-        paymentId: response.paymentId,
+    // Set UserPlan to its Profile DB :
+    var resp = await SetUserPlan(
         exact_amount: exact_amount,
         orderd: orderd,
         expired: expired,
-        payer_name: userName,
-        phone_no: phoneNo);
+        buyer_name: userName,
+        phone_no: phoneNo,
+        plan_type: plan_type);
 
-    // 3.  Set UserPlan to its Profile DB :
-    await SetUserPlan(
-        exact_amount: exact_amount, orderd: orderd, expired: expired);
-    await SuccessMailSendAlert();
+    //1. Successfuly plan created :
+    print('User Plan Response $resp');
 
-    await Future.delayed(Duration(seconds: 8));
-    Get.toNamed(create_business_detail_url);
+    if (resp['response']) {
+      final is_data_send = await SendDataToFireStore();
+      print('Data store in firebase  Resp $is_data_send');
 
-    print('SUCCESS RESPONSE ${response.paymentId}');
+      // 2. Success Data store in firestore :
+      if (is_data_send['response']) {
+        // 3. Send Bill to Founder Mail address :
+        final is_mail_send = await SendInvoiceMail(
+            paymentId: response.paymentId,
+            exact_amount: exact_amount,
+            orderd: orderd,
+            expired: expired,
+            payer_name: userName,
+            phone_no: phoneNo);
+
+        print('Mail Send resp $is_mail_send');
+        // 4. Success Mail send :
+        if (is_mail_send['response']) {
+          await SuccessMailSendAlert();
+        }
+      }
+      print('SUCCESS RESPONSE ${response.paymentId}');
+      Get.toNamed(startup_view_url);
+    }
+
+    
+    // Error Handler :
+    if (!resp['response']) {
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: resp['message'],
+          message: common_error_msg));
+    }
+  }
+
+////////////////////////////////////////
+  /// HANDEL EXTERNAL WALLET :
+////////////////////////////////////////
+  PayemtnFromExternalWallet(ExternalWalletResponse response) async {
+    StartBigLoading();
+
+    final orderd = DateTime.now().toUtc().toString();
+    final plan_type = selectedPlan['plan'].toString().toLowerCase();
+    final expired = await GetExpiredDate(plan_type);
+    var exact_amount = selectedPlan['amount'] / 100;
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
+    // Set UserPlan to its Profile DB :
+    var resp = await SetUserPlan(
+        exact_amount: exact_amount,
+        orderd: orderd,
+        expired: expired,
+        buyer_name: userName,
+        phone_no: phoneNo,
+        plan_type: plan_type);
+
+    //1. Successfuly plan created :
+    if (resp['response']) {
+      final is_data_send = await SendDataToFireStore();
+
+      // 2. Success Data store in firestore :
+      if (is_data_send['response']) {
+        // 3. Send Bill to Founder Mail address :
+        final is_mail_send = await SendInvoiceMail(
+            paymentId: response.walletName,
+            exact_amount: exact_amount,
+            orderd: orderd,
+            expired: expired,
+            payer_name: userName,
+            phone_no: phoneNo);
+
+        print('Is mail send :  ${is_mail_send}');
+
+        //3. Success Mail send :
+        if (is_mail_send['response']) {
+          await SuccessMailSendAlert();
+        }
+      }
+      print('SUCCESS RESPONSE ${response..walletName}');
+      Get.toNamed(startup_view_url);
+    }
+
+    // Error Handler :
+    if (!resp['response']) {
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: resp['message'],
+          message: common_error_msg));
+    }
   }
 
   /////////////////////////////////////////
@@ -354,61 +526,12 @@ class _SelectPlanState extends State<SelectPlan> {
   /////////////////////////////////////////
 
   PaymentError(PaymentFailureResponse response) async {
-    print('SUCCESS ERROR ${response.message}');
-    ErrorSnakbar(title: response.code, message: response.message);
-  }
-
-  ////////////////////////////////////////
-  /// HANDEL EXTERNAL WALLET :
-  ////////////////////////////////////////
-  PayemtnFromExternalWallet(ExternalWalletResponse response) async {
-    StartLoading();
-    final orderd = DateTime.now().toUtc().toString();
-    final plan_type = selectedPlan['plan'].toString().toLowerCase();
-    final expired = await GetExpiredDate(plan_type);
-    var exact_amount = selectedPlan['amount'] / 100;
-
-    // 1. Check if user already purcahase any plan
-    // then show alert about the plan :
-
-    // 2.  Send Bill to Founder Mail address :
-    await SendInvoiceMail(
-        paymentId: uuid.v4(),
-        exact_amount: exact_amount,
-        orderd: orderd,
-        expired: expired,
-        payer_name: userName,
-        phone_no: phoneNo);
-
-    // 3.  Set UserPlan to its Profile DB :
-    await SetUserPlan(
-        exact_amount: exact_amount, orderd: orderd, expired: expired);
-    await SuccessMailSendAlert();
-
-    await Future.delayed(Duration(seconds: 8));
-    Get.toNamed(create_business_detail_url);
-    print('SUCCESS RESPONSE ${response.walletName}');
-  }
-
-  bool? is_new_startup;
-  var planType;
-
-  @override
-  void initState() {
-    super.initState();
-    // Default Selected Plan :
-    SelectedPlan(PlanOption.bestPlan);
-
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, PaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, PaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, PayemtnFromExternalWallet);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _razorpay.clear();
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+        type: MySnackbarType.info,
+        title: snack_info_msg,
+        message: response.message));
   }
 
   ///////////////////////////////////////////////////////
@@ -420,12 +543,12 @@ class _SelectPlanState extends State<SelectPlan> {
   void openCheckout({amount, phone, email, plan_type, user_name}) async {
     userName = user_name;
     phoneNo = phone;
-    var options = {
+    options = {
       'key': 'rzp_test_XBqgVUXDkrs93M',
       'amount': amount,
       'name': 'BeStartup',
       'description': plan_type,
-      'retry': {'enabled': true, 'max_count': 1},
+      'retry': {'enabled': false, 'max_count': 1},
       'send_sms_hash': true,
       'prefill': {'contact': phone, 'email': email},
       'external': {
@@ -435,7 +558,7 @@ class _SelectPlanState extends State<SelectPlan> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint('Error: $e');
+      print('Custom Error ${e}');
     }
   }
 
@@ -478,9 +601,24 @@ class _SelectPlanState extends State<SelectPlan> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Default Selected Plan :
+    SelectedPlan(PlanOption.bestPlan);
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, PaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, PaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, PayemtnFromExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-
     ///////////////////////////////////////
     // BREAKPOINTS :
     // 1. TAB SIZE :
@@ -547,8 +685,6 @@ class _SelectPlanState extends State<SelectPlan> {
       card_padding = 9;
       heading_text_top_mar = 30;
     }
-
- 
 
     return Container(
         child: SingleChildScrollView(
@@ -769,4 +905,3 @@ class _SelectPlanState extends State<SelectPlan> {
     );
   }
 }
-

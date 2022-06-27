@@ -1,6 +1,6 @@
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
-import 'package:be_startup/Backend/Startup/Team/FounderConnector.dart';
-import 'package:be_startup/Backend/Startup/Team/FounderStore.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorFounder/FounderImage.dart';
 import 'package:be_startup/Components/RegistorTeam/RegistorFounder/RegistorFounderForm.dart';
 import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';

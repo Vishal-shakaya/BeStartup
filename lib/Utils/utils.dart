@@ -128,8 +128,9 @@ MyCustSnackbar({context, title, message, type, required width}) {
   var snack; 
   // var snack_width = MediaQuery.of(context).size.width * 0.50;
   try {
+
+    // ERROR SNACK : 
     if (type == MySnackbarType.error) {
-    // Error Snackbar:
        snack = GetSnackBar(
         snackPosition:SnackPosition.TOP ,
         margin: EdgeInsets.only(top: 10),
@@ -143,9 +144,34 @@ MyCustSnackbar({context, title, message, type, required width}) {
       return snack;
     }
 
+    // SUCCESS SNACK : 
     if (type == MySnackbarType.success) {
-    // Success Snackbar : 
+       snack = GetSnackBar(
+        snackPosition:SnackPosition.TOP ,
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.green.shade50,
+        titleText: MySnackbarTitle(title: title != null ? title : snack_success_msg),
+        messageText: MySnackbarContent(
+            message: message != null ? message : ''),
+        maxWidth: width,
+      );
+      return snack;
+    }
 
+    // INFOR SNACK :  : 
+    if (type == MySnackbarType.info) {
+       snack = GetSnackBar(
+        snackPosition:SnackPosition.TOP ,
+        margin: EdgeInsets.only(top: 10),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.blue.shade50,
+        titleText: MySnackbarTitle(title: title != null ? title : snack_info_msg),
+        messageText: MySnackbarContent(
+            message: message != null ? message : ''),
+        maxWidth: width,
+      );
+      return snack;
     }
 
   } catch (e) {
