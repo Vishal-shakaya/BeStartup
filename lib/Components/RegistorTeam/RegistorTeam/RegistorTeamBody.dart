@@ -76,7 +76,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
             ));
   }
 
-  // MAIN MODEL : 
+  // MAIN MODEL :
   AddMember(context) {
     ShowDialog(context);
   }
@@ -145,22 +145,24 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     return true;
   }
 
-
 //////////////////////////////////////////////////////////////////////
-// if user already buy plan but not add startup on that plan : 
-// then it add a startup to that plan . no need to purchase new plan: 
+// if user already buy plan but not add startup on that plan :
+// then it add a startup to that plan . no need to purchase new plan:
 //////////////////////////////////////////////////////////////////////
   IsPlanWithoutStartup() async {
-    final resp = userStore.IsAlreadyPlanBuyed();
+    final resp = await userStore.IsAlreadyPlanBuyed();
 
     if (resp['response']) {
       // Create new plan :
       if (resp['data'] == IsUserPlanBuyedType.newplan) {
-        Get.toNamed(create_business_detail_url);
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(select_plan_url);
       }
 
       // Create Startup andd add to user plan files  :
-      if (resp['data'] == IsUserPlanBuyedType.newplan) {
+      if (resp['data'] == IsUserPlanBuyedType.preplan) {
+        CloseCustomPageLoadingSpinner();
+        StartLoading();
         var resp = await SendDataToFireStore();
         CloseCustomPageLoadingSpinner();
         print('STARTUP ADDED');
@@ -174,24 +176,23 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   // 2. Create Startup upload detail to firestore :
   //////////////////////////////////////////////////////////
   SubmitTeamMemberDetails() async {
-    StartLoading();
+    MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     var resp = await memeberStore.PersistMembers();
-    
-    // Success Handler : 
+
+    // Success Handler :
     if (resp['response']) {
       await IsPlanWithoutStartup();
     }
 
-    // Error Handler : 
+    // Error Handler :
     if (!resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
       return;
     }
-
   }
 
 /////////////////////////////////////////

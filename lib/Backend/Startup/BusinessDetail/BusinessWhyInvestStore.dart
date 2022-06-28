@@ -22,15 +22,14 @@ class BusinessWhyInvestStore extends GetxController {
       why_text = visionText;
       try {
         var resp = await WhyInvestModel(
-            user_id: await getUserId,
-            email: await getuserEmail,
-            startup_name: await getStartupName,
-            why_text: why_text,
-            );
+          user_id: await getUserId,
+          email: await getuserEmail,
+          startup_name: await getStartupName,
+          why_text: why_text,
+        );
         localStore.setString('BusinessWhyInvest', json.encode(resp));
         return ResponseBack(response_type: true);
-      } 
-      catch (e) {
+      } catch (e) {
         return ResponseBack(response_type: false);
       }
 
@@ -40,9 +39,8 @@ class BusinessWhyInvestStore extends GetxController {
     }
   }
 
-
   // Return Vision:
-   GetWhyInvest() async {
+  GetWhyInvest() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       bool is_detail = localStore.containsKey('BusinessWhyInvest');
@@ -50,6 +48,8 @@ class BusinessWhyInvestStore extends GetxController {
         var data = localStore.getString('BusinessWhyInvest');
         var json_obj = jsonDecode(data!);
         return json_obj["why_text"];
+      } else {
+        return '' ;
       }
     } catch (e) {
       return '';

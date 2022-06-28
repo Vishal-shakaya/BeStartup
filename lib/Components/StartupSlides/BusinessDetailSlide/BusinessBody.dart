@@ -53,12 +53,13 @@ class _BusinessBodyState extends State<BusinessBody> {
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
       // 2. IF FORM IS NOT VALID OR NULL SHOW ERROR :
       if (res['response']) {
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.toNamed(create_business_thumbnail_url);
       }
 
       if (!res['response']) {
-        // Error Snack :
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
@@ -67,7 +68,7 @@ class _BusinessBodyState extends State<BusinessBody> {
         ));
       }
     } else {
-      // Error Snack :
+      CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
         width: snack_width,
@@ -78,7 +79,7 @@ class _BusinessBodyState extends State<BusinessBody> {
 
 ///////////////////////////////////////////////////
   /// UPDATE FORM HANDLER :
-/// It's a function that updates the business detail of a user
+  /// It's a function that updates the business detail of a user
 ///////////////////////////////////////////////////
   UpdateBusinessDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
@@ -89,50 +90,51 @@ class _BusinessBodyState extends State<BusinessBody> {
       var business_name = formKey.currentState!.value['startup_name'];
       // HANDLING RESPONSE :
       var resp = await detailStore.SetBusinessName(business_name);
-      if(resp['response']){
+      if (resp['response']) {
         var update_resp = await updateStore.UpdateBusinessDetail();
 
         // Update Success Handler :
         if (update_resp['response']) {
-            CloseCustomPageLoadingSpinner();
-            Get.closeAllSnackbars();
-            Get.toNamed(startup_view_url);
+          CloseCustomPageLoadingSpinner();
+          Get.closeAllSnackbars();
+          Get.toNamed(startup_view_url);
         }
 
         // Update Error Handler :
         if (!update_resp['response']) {
-            CloseCustomPageLoadingSpinner();
-            Get.closeAllSnackbars();
-
-            Get.showSnackbar(MyCustSnackbar(
-              width: snack_width,
-              type: MySnackbarType.error,
-              message: update_error_msg,
-              title: update_error_title,
-            ));
-        }
-      }
-
-      // Chached data Error Handler  : 
-      if(!resp['response']){
           CloseCustomPageLoadingSpinner();
           Get.closeAllSnackbars();
 
           Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.error,
-            title: resp['message'],
             message: update_error_msg,
+            title: update_error_title,
           ));
+        }
+      }
+
+      // Chached data Error Handler  :
+      if (!resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.closeAllSnackbars();
+
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.error,
+          title: resp['message'],
+          message: update_error_msg,
+        ));
       }
 
       // Invalid form :
     } else {
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.error,
-        ));
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+        type: MySnackbarType.error,
+      ));
     }
   }
 

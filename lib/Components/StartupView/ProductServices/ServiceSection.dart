@@ -40,10 +40,10 @@ class _ServiceSectionState extends State<ServiceSection> {
     GetLocalStorageData() async {
       try {
         final data = await startupConnect.FetchServices();
-        services = data;
+        services = data['data'];
         return data;
       } catch (e) {
-        return '';
+        return services;
       }
     }
 

@@ -22,7 +22,7 @@ class BusinessCatigoryStore extends GetxController {
     }
   }
 
-  // Store catigory for temprory for update catigory purpose: 
+  // Store catigory for temprory for update catigory purpose:
   SetTempCatigory({cat}) async {
     try {
       temp_catigories.add(cat);
@@ -53,7 +53,12 @@ class BusinessCatigoryStore extends GetxController {
         var data = localStore.getString('BusinessCatigory');
         var json_obj = jsonDecode(data!);
         return json_obj["catigories"].toList();
+      } 
+      
+      else {
+        return catigories;
       }
+
     } catch (e) {
       return catigories;
     }

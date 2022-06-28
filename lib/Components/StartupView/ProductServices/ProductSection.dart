@@ -19,7 +19,7 @@ class _ProductSectionState extends State<ProductSection> {
   var products = [];
 
   EditProductAndService() {
-    Get.toNamed(create_business_product_url, parameters:{'type':'update'});
+    Get.toNamed(create_business_product_url, parameters: {'type': 'update'});
   }
 
   @override
@@ -44,10 +44,10 @@ class _ProductSectionState extends State<ProductSection> {
     GetLocalStorageData() async {
       try {
         final data = await startupConnect.FetchProducts();
-        products = data;
-        return data;
+        products = data['data'];
+        return products;
       } catch (e) {
-        return '';
+        return products;
       }
     }
 
@@ -59,7 +59,9 @@ class _ProductSectionState extends State<ProductSection> {
                 child: Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child: Products(product: temp_product,),
+              child: Products(
+                product: temp_product,
+              ),
             ));
           }
           if (snapshot.hasError) return ErrorPage();
@@ -67,7 +69,7 @@ class _ProductSectionState extends State<ProductSection> {
           if (snapshot.hasData) {
             return MainMethodSection(context);
           }
-            return MainMethodSection(context);
+          return MainMethodSection(context);
         });
   }
 

@@ -56,12 +56,11 @@ class _VisionBodyState extends State<VisionBody> {
   bool? updateMode = false;
   String? inital_val = '';
 
-
-
   /////////////////////////////
   /// SUBMIT FORM :
   /////////////////////////////
   SubmitVisionForm() async {
+    MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
@@ -70,12 +69,14 @@ class _VisionBodyState extends State<VisionBody> {
 
       // Success Handler :
       if (res['response']) {
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.toNamed(create_business_catigory_url);
       }
 
       // Error Handler
       if (!res['response']) {
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.showSnackbar(
             MyCustSnackbar(width: snack_width, message: res['message']));
@@ -84,6 +85,7 @@ class _VisionBodyState extends State<VisionBody> {
 
     // Invalid Form :
     else {
+      CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
         width: snack_width,
@@ -91,37 +93,39 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
-
-
   /////////////////////////////
   /// UPDATE VISION  FORM :
   /////////////////////////////
   UpdatetVisionFrom() async {
+    MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
       var res = await visionStore.SetVision(visionText: vision);
       var resp = await startupUpdater.UpdatehBusinessVision();
+
       // Success Handler Cached Data:
       if (res['response']) {
-
-         // Update Success Handler :  
-        if(resp['response']){
+        // Update Success Handler :
+        if (resp['response']) {
+          CloseCustomPageLoadingSpinner();
           Get.closeAllSnackbars();
           Get.toNamed(create_business_catigory_url);
         }
 
-        //  Update Error Handler : 
-        if(!resp['response']){
+        //  Update Error Handler :
+        if (!resp['response']) {
+          CloseCustomPageLoadingSpinner();
           Get.closeAllSnackbars();
           Get.showSnackbar(
               MyCustSnackbar(width: snack_width, message: res['message']));
         }
       }
 
-      // Error Handler Data : 
+      // Error Handler Data :
       if (!res['response']) {
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.showSnackbar(
             MyCustSnackbar(width: snack_width, message: res['message']));
@@ -130,6 +134,7 @@ class _VisionBodyState extends State<VisionBody> {
 
     // Invalid Form :
     else {
+      CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
         width: snack_width,
@@ -137,9 +142,8 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
-  
   /////////////////////////////////////
-  // SET PAGE DEFAULT STATE : 
+  // SET PAGE DEFAULT STATE :
   /////////////////////////////////////
   @override
   void initState() {
@@ -150,8 +154,6 @@ class _VisionBodyState extends State<VisionBody> {
     }
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -196,32 +198,22 @@ class _VisionBodyState extends State<VisionBody> {
       vision_cont_height = 0.70;
     }
 
-
-
     ////////////////////////////
-    // GET REQUIREMENTS : 
+    // GET REQUIREMENTS :
     ////////////////////////////
-    Future<String?> GetLocalStorageData() async {
+    GetLocalStorageData() async {
+      MyCustPageLoadingSpinner();
       var snack_width = MediaQuery.of(context).size.width * 0.50;
       try {
         final resp = await startupConnector.FetchBusinessVision();
-        print(resp['message']);
         // Success Handler :
-        if (resp['response']) {
-          final data = await visionStore.GetVision();
-          inital_val = data;
-          return data;
-        }
-
-        // Error Handler :
-        if (!resp['response']) {
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(
-              width: snack_width,
-              message: fetch_data_error_msg,
-              title: fetch_data_error_title));
-        }
+        final data = await visionStore.GetVision();
+        inital_val = data;
+        CloseCustomPageLoadingSpinner();
+        return data;
       } catch (e) {
+        print('Vision Fetchng error $e');
+        CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width, message: e, title: fetch_data_error_title));
@@ -229,11 +221,9 @@ class _VisionBodyState extends State<VisionBody> {
       }
     }
 
-
-
-  /////////////////////////////
-  /// SET REQUIREMENTS : 
-  /////////////////////////////
+    /////////////////////////////
+    /// SET REQUIREMENTS :
+    /////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -242,20 +232,21 @@ class _VisionBodyState extends State<VisionBody> {
               text: 'Loading Vision',
             );
           }
-          if (snapshot.hasError) return ErrorPage();
+          if (snapshot.hasError) {
+            return ErrorPage();
+          }
 
           if (snapshot.hasData) {
-            print(snapshot.data);
             return MainMethod(
                 context,
                 snapshot
                     .data); // snapshot.data  :- get your object which is pass from your downloadData() function
           }
+
           inital_val = snapshot.data.toString();
           return MainMethod(context, snapshot.data);
         });
   }
-
 
   //////////////////////////////////////////
   // MAIN METHOD SECTION :
@@ -291,11 +282,10 @@ class _VisionBodyState extends State<VisionBody> {
     );
   }
 
-
   //////////////////////////////
-  /// EXTERNAL METHODS : 
+  /// EXTERNAL METHODS :
   /// 1. WhyInputFiels
-  /// 2. 
+  /// 2.
   //////////////////////////////
   Container WhyInputField(BuildContext context) {
     return Container(

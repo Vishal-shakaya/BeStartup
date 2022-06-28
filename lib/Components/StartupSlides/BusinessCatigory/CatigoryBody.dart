@@ -24,7 +24,6 @@ class CatigoryBody extends StatefulWidget {
 }
 
 class _CatigoryBodyState extends State<CatigoryBody> {
-
   var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
   var startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
@@ -53,9 +52,8 @@ class _CatigoryBodyState extends State<CatigoryBody> {
 // SUBMIT CATIGORY FORM :
 //////////////////////////////////
   SubmitCatigory() async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
-
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var resp = await catigoryStore.PersistCatigory();
     print(resp); // Test
 
@@ -68,16 +66,15 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     CloseCustomPageLoadingSpinner();
   }
 
-
   ///////////////////////////////////////////////////
-  /// UPDATE CATIGORIES :   
-  /// It's a function that updates a catigory , 
+  /// UPDATE CATIGORIES :
+  /// It's a function that updates a catigory ,
   /// in a database.
-  ///////////////////////////////////////////////////  
+  ///////////////////////////////////////////////////
   UpdateCatigory() async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
 
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var resp = await catigoryStore.PersistCatigory();
     var resp1 = updateStore.UpdateBusinessCatigory(); // Test
 
@@ -98,7 +95,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
   }
 
 ////////////////////////////////////////
-/// SET DEFAULT CATIGORIES
+  /// SET DEFAULT CATIGORIES
 ////////////////////////////////////////
 
   SetDefaultCatigory(List default_catigory) async {
@@ -130,9 +127,6 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     }
     super.initState();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +179,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       try {
         final resp = await startupConnector.FetchBusinessCatigory();
         print(resp['message']);
-
+        
         default_catigory = await catigoryStore.GetCatigory();
         erro_resp = default_catigory;
         await SetDefaultCatigory(default_catigory);
@@ -276,20 +270,20 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                 )
               ],
             )),
-       updateMode==true
-       ?UpdateButton(context)     
-       : BusinessSlideNav(
-          slide: SlideType.catigory,
-          submitform: SubmitCatigory,
-        )
+        updateMode == true
+            ? UpdateButton(context)
+            : BusinessSlideNav(
+                slide: SlideType.catigory,
+                submitform: SubmitCatigory,
+              )
       ],
     );
   }
-    
+
   //////////////////////////////////////////
-  /// External Methods:  
+  /// External Methods:
   ///////////////////////////////////////////
-    Container UpdateButton(BuildContext context) {
+  Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(

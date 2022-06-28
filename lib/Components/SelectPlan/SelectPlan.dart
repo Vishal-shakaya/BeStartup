@@ -119,9 +119,9 @@ class _SelectPlanState extends State<SelectPlan> {
   /// RESPONSES :
   /// 11. Success Handler :
   ///   1. Bigloading spinner :
-  ///   2. SendVoice mail :
-  ///   3. Setuserplan :
-  ///   4. SendData to firestore :
+  ///   2. Setuserplan :
+  ///   3. SendData to firestore :
+  ///   4. SendVoice mail :
   ///   5. SuccessMailAlert :
   ///
   /// 12 EXTERNAL WALLET HANDLER  :
@@ -311,7 +311,7 @@ class _SelectPlanState extends State<SelectPlan> {
         amount: exact_amount,
         order_date: orderd,
         expire_date: expired,
-        buyer_mail: selectedPlan['mail'],
+        buyer_mail: auth.currentUser?.email,
         buyer_name: buyer_name,
       );
 
@@ -330,7 +330,8 @@ class _SelectPlanState extends State<SelectPlan> {
             message: "plan not created ${resp['message']}");
       }
     } catch (e) {
-      CloseCustomPageLoadingSpinner();
+      print(e);
+      // CloseCustomPageLoadingSpinner();
       return ResponseBack(response_type: false, message: e);
     }
   }
@@ -358,7 +359,7 @@ class _SelectPlanState extends State<SelectPlan> {
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
-    print(resp);
+    return resp;
   }
 
   /////////////////////////////////////////////////////
@@ -395,7 +396,9 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp11 = await investorConnector.CreateInvestorDetail();
     print(resp11);
 
-    await CreateStartup();
+    var resp12 = await CreateStartup();
+    print(resp12);
+    
     return ResponseBack(response_type: true);
   }
 
@@ -452,7 +455,6 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.toNamed(startup_view_url);
     }
 
-    
     // Error Handler :
     if (!resp['response']) {
       Get.showSnackbar(MyCustSnackbar(
@@ -507,24 +509,27 @@ class _SelectPlanState extends State<SelectPlan> {
         }
       }
       print('SUCCESS RESPONSE ${response..walletName}');
+      CloseCustomPageLoadingSpinner();
       Get.toNamed(startup_view_url);
     }
 
     // Error Handler :
     if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
           type: MySnackbarType.info,
           title: resp['message'],
           message: common_error_msg));
     }
+
+    CloseCustomPageLoadingSpinner();
   }
 
   /////////////////////////////////////////
   /// ERROR HANDLER :
   /// 1. Show Error Snakbar with message:
   /////////////////////////////////////////
-
   PaymentError(PaymentFailureResponse response) async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     Get.showSnackbar(MyCustSnackbar(
@@ -753,7 +758,7 @@ class _SelectPlanState extends State<SelectPlan> {
         highlightColor: primary_light_hover,
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
-        onTap: () {
+        onTap: () async {
           OnpressContinue(context);
         },
         child: Card(

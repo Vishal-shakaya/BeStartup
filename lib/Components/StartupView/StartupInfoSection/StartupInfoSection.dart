@@ -31,7 +31,7 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
   EditThumbnail() {
-    Get.toNamed(create_business_thumbnail_url, parameters: {'type':'update'});
+    Get.toNamed(create_business_thumbnail_url, parameters: {'type': 'update'});
   }
 
   @override
@@ -39,13 +39,17 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
     // INITILIZE DEFAULT STATE :
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
+      var my_data;
       try {
-        final data1 = await startupConnect.FetchBusinessDetail();
-        final data = await startupConnect.FetchThumbnail();
-        var temp_data = {'thumbnail': data, 'logo': data1};
-        return temp_data;
+        final business_name_resp = await startupConnect.FetchBusinessDetail();
+        final business_thum_resp = await startupConnect.FetchThumbnail();
+        final thumbnail = business_thum_resp['data']['thumbnail'];
+        final logo = business_name_resp['data']['logo'];
+        var my_data = {'thumbnail': thumbnail, 'logo': logo};
+
+        return my_data;
       } catch (e) {
-        return '';
+        return my_data;
       }
     }
 

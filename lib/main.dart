@@ -146,9 +146,9 @@ class _MyAppState extends State<MyApp> {
                     if (snapshot.hasData) {
                       // Check Login user complete profile setup or not :
                       // if Complete then redirect to
-
                       // Configure App local state :
                       SetAppLocalState();
+                      
                       return HomeView();
                     }
                     return LoginHandler();

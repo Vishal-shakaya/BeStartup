@@ -10,7 +10,7 @@ class UserStore extends GetxController {
   static Map<String, dynamic>? user;
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-  
+
   /// It checks if the user is already created in
   /// the database, if not then it creates the user in the
   /// database
@@ -72,10 +72,10 @@ class UserStore extends GetxController {
       }
 
       // else add value in pre define list :
-      if (old_user[field].length >= 0) {
+      else {
         old_user[field] = old_user[field].add(val);
       }
-
+      
       // Update object to DB :
       user.doc(obj_id).update(old_user);
 

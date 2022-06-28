@@ -186,7 +186,7 @@ MyCustSnackbar({context, title, message, type, required width}) {
 ////////////////////////////////////////////
 MyCustomButtonSpinner({color, width}) {
   var spinner = Container(
-    padding: EdgeInsets.all(8),
+    padding: EdgeInsets.all(5),
     child: CircularProgressIndicator(
       color: color != null ? color : dartk_color_type3,
       strokeWidth: width != null ? width : 4,

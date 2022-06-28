@@ -23,10 +23,10 @@ class RegistorFounderBody extends StatefulWidget {
 
 class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
-  var founderConnector = Get.put(FounderConnector(),tag:'founder_connector');
+  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_store');
   final formKey = GlobalKey<FormBuilderState>();
-  var my_context = Get.context; 
+  var my_context = Get.context;
 
   double con_button_width = 150;
   double con_button_height = 40;
@@ -38,11 +38,11 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   /////////////////////////////////////////
   // CREATE FOUNDER  FORM :
   /////////////////////////////////////////
-  SubmitFounderDetail(context) async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
-    formKey.currentState!.save();
+  SubmitFounderDetail() async {
     MyCustPageLoadingSpinner();
+
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    formKey.currentState!.save();
 
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
@@ -62,6 +62,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       final res = await founderStore.CreateFounder(founder);
 
       if (!res['response']) {
+        CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(
@@ -69,11 +70,13 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
             type: MySnackbarType.error,
             title: res['message'],
             message: create_error_msg));
+      } else {
+        CloseCustomPageLoadingSpinner();
+        SmartDialog.dismiss();
+        formKey.currentState!.reset();
+        // Redirect to team page:
+        Get.toNamed(create_business_team);
       }
-      formKey.currentState!.reset();
-      SmartDialog.dismiss();
-      // Redirect to team page:
-      Get.toNamed(create_business_team);
     }
 
     // Form Error :
@@ -87,16 +90,15 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
-
-
 ///////////////////////////////////////////
 // UPDATE FOUNDER FORM  :
 ///////////////////////////////////////////
-  UpdateFounderDetail(context) async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
-    formKey.currentState!.save();
+  UpdateFounderDetail() async {
     MyCustPageLoadingSpinner();
+
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    formKey.currentState!.save();
+
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
       final String founder_position =
@@ -115,40 +117,43 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       final res = await founderStore.CreateFounder(founder);
       final update_resp = await founderConnector.UpdateFounderDetail();
 
-        if(res['response']){
-
-          // Update Success Handler : 
-          if(update_resp['response']){
-            SmartDialog.dismiss();
-            formKey.currentState!.reset();
-            Get.toNamed(create_business_team);
-          }
-
-          // Update Error Handler : 
-          if(!update_resp['response']){
-              SmartDialog.dismiss();
-              Get.closeAllSnackbars();
-              Get.showSnackbar(MyCustSnackbar(
-                  width: snack_width,
-                  type: MySnackbarType.error,
-                  title: res['message'],
-                  message: update_error_msg));
-                }
+      if (res['response']) {
+        // Update Success Handler :
+        if (update_resp['response']) {
+          CloseCustomPageLoadingSpinner();
+          SmartDialog.dismiss();
+          formKey.currentState!.reset();
+          Get.toNamed(create_business_team);
         }
+
+        // Update Error Handler :
+        if (!update_resp['response']) {
+          CloseCustomPageLoadingSpinner();
+          SmartDialog.dismiss();
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+              width: snack_width,
+              type: MySnackbarType.error,
+              title: res['message'],
+              message: update_error_msg));
+        }
+      }
     }
 
     // Form Error :
     else {
-    SmartDialog.dismiss();
-    Get.closeAllSnackbars();
-    Get.showSnackbar(MyCustSnackbar(
+      CloseCustomPageLoadingSpinner();
+      SmartDialog.dismiss();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
         width: snack_width,
-        type: MySnackbarType.error,));
+        type: MySnackbarType.error,
+      ));
     }
   }
 
 /////////////////////////////////////
-/// SET PAGE DEFAULT STATE : 
+  /// SET PAGE DEFAULT STATE :
 /////////////////////////////////////
   @override
   void initState() {
@@ -159,8 +164,6 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +208,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
-          await UpdateFounderDetail(context);
+          await UpdateFounderDetail();
         },
         child: Card(
           elevation: 10,
