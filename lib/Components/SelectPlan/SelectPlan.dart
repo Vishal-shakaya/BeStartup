@@ -398,7 +398,7 @@ class _SelectPlanState extends State<SelectPlan> {
 
     var resp12 = await CreateStartup();
     print(resp12);
-    
+
     return ResponseBack(response_type: true);
   }
 
@@ -451,12 +451,14 @@ class _SelectPlanState extends State<SelectPlan> {
           await SuccessMailSendAlert();
         }
       }
+      CloseCustomPageLoadingSpinner();
       print('SUCCESS RESPONSE ${response.paymentId}');
       Get.toNamed(startup_view_url);
     }
 
     // Error Handler :
     if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
           type: MySnackbarType.info,

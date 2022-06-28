@@ -208,9 +208,9 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     GetLocalStorageData() async {
       try {
         final resp = await startupConnector.FetchBusinessWhy();
-          final data = await whyInvestStore.GetWhyInvest();
-          inital_val = data;
-          return data;
+        final data = await whyInvestStore.GetWhyInvest();
+        inital_val = data;
+        return data;
         
       } catch (e) {
         Get.closeAllSnackbars();

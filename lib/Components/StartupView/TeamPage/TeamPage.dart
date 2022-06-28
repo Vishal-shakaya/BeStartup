@@ -20,11 +20,12 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
+  var team_member;
   @override
   Widget build(BuildContext context) {
     // REDIRECT TO CREATE MEMEBER PAGE :
     EditMember() {
-      Get.toNamed(create_business_team,parameters: {'type':'update'});
+      Get.toNamed(create_business_team, parameters: {'type': 'update'});
     }
 
     double page_width = 0.80;
@@ -38,8 +39,10 @@ class _TeamPageState extends State<TeamPage> {
     GetLocalStorageData() async {
       try {
         final data = await founderConnector.FetchBusinessTeamMember();
+        team_member = data['data']['members'];
+        return team_member;
       } catch (e) {
-        return '';
+        return team_member;
       }
     }
 
@@ -57,7 +60,6 @@ class _TeamPageState extends State<TeamPage> {
                       context: context,
                       page_width: page_width,
                       EditMember: EditMember,
-                       
                       data: snapshot.data),
             ));
           }
@@ -68,14 +70,12 @@ class _TeamPageState extends State<TeamPage> {
                 context: context,
                 page_width: page_width,
                 EditMember: EditMember,
-                 
                 data: snapshot.data);
           }
           return MainMethod(
               context: context,
               page_width: page_width,
               EditMember: EditMember,
-               
               data: snapshot.data);
         });
 
@@ -83,7 +83,7 @@ class _TeamPageState extends State<TeamPage> {
   }
 
   Container MainMethod(
-      {context, page_width, required Null EditMember(),data}) {
+      {context, page_width, required Null EditMember(), data}) {
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(
@@ -98,7 +98,6 @@ class _TeamPageState extends State<TeamPage> {
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            
 
               // Member List Section :
               Column(
@@ -266,13 +265,12 @@ class _TeamPageState extends State<TeamPage> {
 
   Container MemName() {
     return Container(
-      alignment: Alignment.center,
-        child: AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+        alignment: Alignment.center,
+        child: AutoSizeText.rich(
+            TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
-            text: 'vishal shakaya',
-            style: TextStyle(
-              color: Colors.blueGrey.shade700,
-              fontSize: 13))
+              text: 'vishal shakaya',
+              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 13))
         ])));
   }
 

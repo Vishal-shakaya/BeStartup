@@ -45,9 +45,9 @@ class _BusinessBodyState extends State<BusinessBody> {
 
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      var business_name = formKey.currentState!.value['startup_name'];
+      String business_name = formKey.currentState!.value['startup_name'];
       // HANDLING RESPONSE :
-      var res = await detailStore.SetBusinessName(business_name);
+      var res = await detailStore.SetBusinessName(business_name.trim());
 
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :

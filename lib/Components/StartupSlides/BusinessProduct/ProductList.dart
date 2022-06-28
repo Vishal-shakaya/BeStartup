@@ -283,7 +283,7 @@ class _ProductListViewState extends State<ProductListView> {
           child: Image.network(widget.product!['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
-              fit: BoxFit.contain),
+              fit: BoxFit.cover),
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(

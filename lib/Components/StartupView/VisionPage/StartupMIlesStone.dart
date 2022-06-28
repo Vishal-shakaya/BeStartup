@@ -25,11 +25,6 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   }
 
   @override
-  void dispose() {
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
@@ -39,10 +34,10 @@ class _StartupMileStoneState extends State<StartupMileStone> {
     GetLocalStorageData() async {
       try {
         final miles = await startupConnect.FetchBusinessMilestone();
-        miles_data = miles;
+        miles_data = miles['data']['milestone'];
         return miles;
       } catch (e) {
-        return '';
+        return miles_data;
       }
     }
 
@@ -63,13 +58,19 @@ class _StartupMileStoneState extends State<StartupMileStone> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, );
+            return MainMethod(
+              context,
+            );
           }
-          return MainMethod(context, );
+          return MainMethod(
+            context,
+          );
         });
   }
 
-  Container MainMethod(BuildContext context, ) {
+  Container MainMethod(
+    BuildContext context,
+  ) {
     List<Widget> mile_title = [];
     List<Widget> mile_desc = [];
     _controller = TabContainerController(length: miles_data.length);
@@ -108,11 +109,10 @@ class _StartupMileStoneState extends State<StartupMileStone> {
       TextSpan(
           text: title.toString().capitalizeFirst,
           style: GoogleFonts.robotoSlab(
-            textStyle: TextStyle(),
-            color: light_color_type4,
-            fontSize: 16,
-            fontWeight:FontWeight.w600
-          )),
+              textStyle: TextStyle(),
+              color: light_color_type4,
+              fontSize: 16,
+              fontWeight: FontWeight.w600)),
       style: Get.textTheme.headline2,
     );
   }

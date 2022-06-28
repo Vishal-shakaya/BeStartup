@@ -19,36 +19,45 @@ class VisionPage extends StatefulWidget {
 }
 
 class _VisionPageState extends State<VisionPage> {
+  var startupConnect =
+      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  
   var final_data;
+  double page_width = 0.80;
+
+
+  EditVision() {
+    Get.toNamed(create_business_vision_url, parameters: {'type': 'update'});
+  }
+  
+  EditMilestone() {
+    Get.toNamed(create_business_milestone_url,
+        parameters: {'type': 'update'});
+  }
+
+
+  //////////////////////////////////
+  // GET REQUIREMENTS : 
+  //////////////////////////////////
+  GetLocalStorageData() async {
+    try {
+      // await Future.delayed(Duration(seconds: 3));
+      final vision = await startupConnect.FetchBusinessVision();
+      final_data = vision['data']['vision'];
+      return final_data;
+    } catch (e) {
+      return final_data;
+    }
+  }
+    
+
+
 
   @override
   Widget build(BuildContext context) {
-    double page_width = 0.80;
-
-    EditVision() {
-      Get.toNamed(create_business_vision_url, parameters: {'type':'update'});
-    }
-
-    EditMilestone() {
-      Get.toNamed(create_business_milestone_url , parameters: {'type':'update'});
-    }
-
-    var startupConnect =
-        Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        // await Future.delayed(Duration(seconds: 3));
-        final vision = await startupConnect.FetchBusinessVision();
-        final_data = vision;
-        return vision;
-      } catch (e) {
-        return '';
-      }
-    }
-
+  //////////////////////////////////
+  // SET REQUIREMENTS : 
+  //////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -66,14 +75,13 @@ class _VisionPageState extends State<VisionPage> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context, page_width, EditVision, EditMilestone);
+            return MainMethod(context);
           }
-          return MainMethod(context, page_width, EditVision, EditMilestone);
+          return MainMethod(context);
         });
   }
 
-  Container MainMethod(BuildContext context, double page_width,
-      Null EditVision(), Null EditMilestone()) {
+  Container MainMethod(BuildContext context) {
     return Container(
       width: context.width * page_width,
       child: Container(
