@@ -104,7 +104,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
-    print(resp);
+    final resp1 = await userStore.AddStartupToUserPlan(startup);
+    return ResponseBack(response_type: true, data: resp1);
   }
 
   /////////////////////////////////////////////////////
@@ -141,7 +142,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var resp11 = await investorConnector.CreateInvestorDetail();
     print(resp11);
 
-    await CreateStartup();
+    var startup_resp = await CreateStartup();
+    print(startup_resp);
+    
     return true;
   }
 

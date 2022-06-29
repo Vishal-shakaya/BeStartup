@@ -75,7 +75,7 @@ class UserStore extends GetxController {
       else {
         old_user[field] = old_user[field].add(val);
       }
-      
+
       // Update object to DB :
       user.doc(obj_id).update(old_user);
 
@@ -87,9 +87,11 @@ class UserStore extends GetxController {
     }
   }
 
-  ////////////////////////////////////
+////////////////////////////////////
   /// Check if user Already buy plan :
-  ////////////////////////////////////
+  /// I want to check if the user has a plan without a startup,
+  /// if so, return true response, if not, return
+////////////////////////////////////
   IsAlreadyPlanBuyed() async {
     // Get User from firebase update ints field :
     final id = auth.currentUser?.uid;
@@ -114,12 +116,59 @@ class UserStore extends GetxController {
       // 2. Check if user has plan without startup
       if (plan.length >= 1) {
         plan.forEach((el) {
-          print(el['startup']);
+          if (el['startup'] == null || el['startup'] == []) {
+            return ResponseBack(
+                response_type: true,
+                data: IsUserPlanBuyedType.preplan,
+                message: 'Pre Plan Found ');
+          }
         });
-        return ResponseBack(
-            response_type: true,
-            data: IsUserPlanBuyedType.preplan,
-            message: 'Pre Plan Found ');
+      }
+
+      return ResponseBack(
+        response_type: false,
+      );
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+//////////////////////////////////////
+  /// UPDATE USER PLAN :
+//////////////////////////////////////
+  AddStartupToUserPlan(val) async {
+    // Get User from firebase update ints field :
+    final id = auth.currentUser?.uid;
+    final email = auth.currentUser?.email;
+    final user = store.collection('users');
+    var old_user;
+    var plan;
+    var obj_id;
+
+    try {
+      await user.where('email', isEqualTo: email).get().then((value) {
+        old_user = value.docs.first.data();
+        obj_id = value.docs.first.id;
+        plan = old_user['plan'];
+      });
+
+      // 1. Check if user purchase plan without startup : Add startup withdout pay :
+      if (plan == null || plan == []) {
+        return ResponseBack(response_type: false, message: 'No Plan Found ');
+      }
+
+      // 2. Check if user has plan without startup then add startup
+      if (plan.length >= 1) {
+        plan.forEach((el) {
+          if (el['startup'] == null || el['startup'] == []) {
+            el['startup'] = val;
+          }
+        });
+
+        old_user['plan'] = plan; 
+        
+        user.doc(obj_id).update(old_user);
+        return ResponseBack(response_type: true, message: 'Startup added  ');
       }
 
       return ResponseBack(

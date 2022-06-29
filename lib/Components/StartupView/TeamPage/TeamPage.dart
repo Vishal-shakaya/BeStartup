@@ -20,32 +20,41 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
+  var startupConnect =
+      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  var founderConnector =
+  Get.put(FounderConnector(), tag: 'startup_view_first_connector');
+  
   var team_member;
+  double page_width = 0.80;
+
+
+  // REDIRECT TO CREATE MEMEBER PAGE :
+  EditMember() {
+    Get.toNamed(create_business_team, parameters: {'type': 'update'});
+  }
+
+
+  //////////////////////////////////////////
+  // GET REQUIREMTNS : 
+  //////////////////////////////////////////
+  GetLocalStorageData() async {
+    try {
+      final data = await founderConnector.FetchBusinessTeamMember();
+      team_member = data['data']['members'];
+      return team_member;
+    } catch (e) {
+      return team_member;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    // REDIRECT TO CREATE MEMEBER PAGE :
-    EditMember() {
-      Get.toNamed(create_business_team, parameters: {'type': 'update'});
-    }
 
-    double page_width = 0.80;
-    var startupConnect =
-        Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-    var founderConnector =
-        Get.put(FounderConnector(), tag: 'startup_view_first_connector');
-
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        final data = await founderConnector.FetchBusinessTeamMember();
-        team_member = data['data']['members'];
-        return team_member;
-      } catch (e) {
-        return team_member;
-      }
-    }
-
+  //////////////////////////////////////////
+  // SET REQUIREMTNS : 
+  //////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -58,8 +67,6 @@ class _TeamPageState extends State<TeamPage> {
                   ? Text('Loading Members', style: Get.textTheme.headline2)
                   : MainMethod(
                       context: context,
-                      page_width: page_width,
-                      EditMember: EditMember,
                       data: snapshot.data),
             ));
           }
@@ -68,22 +75,17 @@ class _TeamPageState extends State<TeamPage> {
           if (snapshot.hasData) {
             return MainMethod(
                 context: context,
-                page_width: page_width,
-                EditMember: EditMember,
                 data: snapshot.data);
           }
           return MainMethod(
               context: context,
-              page_width: page_width,
-              EditMember: EditMember,
               data: snapshot.data);
         });
 
     // TEAM MEMBER   SECTION :
   }
 
-  Container MainMethod(
-      {context, page_width, required Null EditMember(), data}) {
+  Container MainMethod({context, data}) {
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(

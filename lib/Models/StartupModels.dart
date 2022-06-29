@@ -12,7 +12,8 @@ StartupModel({
   timestamp,  
   desire_amount, 
   achived_amount,
-  invested 
+  invested,
+  activate,  
 })async{
  try {
     Map<String, dynamic> temp_obj = {
@@ -24,6 +25,7 @@ StartupModel({
       'achived_amount':achived_amount, 
       'invested':invested, // bool : true if achived desired amount : 
       'registor_date':DateTime.now().toString(), 
+      'activate':activate, // check if startup plan expired or not : 
     };
     return temp_obj;
   } catch (e) {

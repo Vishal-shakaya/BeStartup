@@ -18,7 +18,23 @@ class StartupMileStone extends StatefulWidget {
 
 class _StartupMileStoneState extends State<StartupMileStone> {
   late final TabContainerController _controller;
+  var startupConnect =
+      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
   var miles_data = [];
+
+/////////////////////////////////////
+  /// GET REQUIREMENTS ; 
+/////////////////////////////////////
+  GetLocalStorageData() async {
+    try {
+      final miles = await startupConnect.FetchBusinessMilestone();
+      miles_data = miles['data']['milestone'];
+      return miles;
+    } catch (e) {
+      return miles_data;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -26,21 +42,9 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
   @override
   Widget build(BuildContext context) {
-    var startupConnect =
-        Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
-    GetLocalStorageData() async {
-      try {
-        final miles = await startupConnect.FetchBusinessMilestone();
-        miles_data = miles['data']['milestone'];
-        return miles;
-      } catch (e) {
-        return miles_data;
-      }
-    }
-
+  /////////////////////////////////////
+  /// SET  REQUIREMENTS ; 
+  /////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {

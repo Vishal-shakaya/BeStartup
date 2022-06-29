@@ -305,6 +305,13 @@ class _SelectPlanState extends State<SelectPlan> {
   }) async {
     // Activate User Plan :
     try {
+      var startup = await StartupModel(
+        user_id: await getUserId,
+        email: await getuserEmail,
+        startup_name: await getStartupName,
+        desire_amount: await getDesireAmount, 
+        activate: true, );
+
       final plan = await PlanModel(
         plan_name: plan_type,
         phone_no: phone_no,
@@ -313,6 +320,7 @@ class _SelectPlanState extends State<SelectPlan> {
         expire_date: expired,
         buyer_mail: auth.currentUser?.email,
         buyer_name: buyer_name,
+        startup: startup, 
       );
 
       var resp =
@@ -330,7 +338,7 @@ class _SelectPlanState extends State<SelectPlan> {
             message: "plan not created ${resp['message']}");
       }
     } catch (e) {
-      print(e);
+
       // CloseCustomPageLoadingSpinner();
       return ResponseBack(response_type: false, message: e);
     }
@@ -355,7 +363,8 @@ class _SelectPlanState extends State<SelectPlan> {
         user_id: await getUserId,
         email: await getuserEmail,
         startup_name: await getStartupName,
-        desire_amount: await getDesireAmount);
+        desire_amount: await getDesireAmount,
+        activate: true,  );
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
