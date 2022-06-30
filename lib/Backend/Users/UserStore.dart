@@ -42,13 +42,13 @@ class UserStore extends GetxController {
   }
 
 /////////////////////////////////////////////////////
-  /// UPDATE USER PLAN AND STARTUP FIELD :
-  /// Plan and Startups may more than one  :
-  /// It takes a field and a value, and then updates the user's
-  /// profile with the value in the field
-  /// Args:
-  ///   field: The field you want to update in the user's profile.
-  ///   val: The value to be added to the array
+/// UPDATE USER PLAN AND STARTUP FIELD :
+/// Plan and Startups may more than one  :
+/// It takes a field and a value, and then updates the user's
+/// profile with the value in the field
+/// Args:
+///   field: The field you want to update in the user's profile.
+///   val: The value to be added to the array
 /////////////////////////////////////////////////////
   UpdateUserPlanAndStartup({field, val}) async {
     var temp_plan = [];

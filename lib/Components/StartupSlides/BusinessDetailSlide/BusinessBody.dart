@@ -46,8 +46,14 @@ class _BusinessBodyState extends State<BusinessBody> {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       String business_name = formKey.currentState!.value['startup_name'];
+      String desire_amount = formKey.currentState!.value['desire_amount'];
+      business_name = business_name.trim();
+      desire_amount =desire_amount.trim();
+
       // HANDLING RESPONSE :
-      var res = await detailStore.SetBusinessName(business_name.trim());
+      var res = await detailStore.SetBusinessDetail(
+        businessName:business_name,
+        amount: desire_amount );
 
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
@@ -87,9 +93,16 @@ class _BusinessBodyState extends State<BusinessBody> {
 
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      var business_name = formKey.currentState!.value['startup_name'];
-      // HANDLING RESPONSE :
-      var resp = await detailStore.SetBusinessName(business_name);
+        String business_name = formKey.currentState!.value['startup_name'];
+        String desire_amount = formKey.currentState!.value['desire_amount'];
+        business_name = business_name.trim();
+        desire_amount =desire_amount.trim();
+
+        // HANDLING RESPONSE :
+        var resp = await detailStore.SetBusinessDetail(
+          businessName:business_name,
+          amount: desire_amount );
+
       if (resp['response']) {
         var update_resp = await updateStore.UpdateBusinessDetail();
 

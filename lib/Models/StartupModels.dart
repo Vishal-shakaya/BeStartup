@@ -39,7 +39,7 @@ BusinessInfoModel({
   logo, 
   name, 
   email,
-  disire_amount,
+  amount='',
   investor_no}) async {
   try {
     Map<String, dynamic> temp_obj = {
@@ -48,7 +48,7 @@ BusinessInfoModel({
       'email': email,
       'logo': logo,
       'name': name,
-      'desire_amount':disire_amount,
+      'desire_amount':amount,
       'investor_no':investor_no
     };
     return temp_obj;

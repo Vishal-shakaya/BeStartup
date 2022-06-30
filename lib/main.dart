@@ -97,6 +97,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+  /// It sets the local state of the app to 
+  /// the current user's email and uid
     SetAppLocalState() async {
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);

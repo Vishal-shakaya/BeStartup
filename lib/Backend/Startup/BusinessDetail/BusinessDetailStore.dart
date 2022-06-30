@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BusinessDetailStore extends GetxController {
   static String? image_url;
   static String? business_name;
+  static String? amount;
 
 /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
@@ -24,13 +25,13 @@ class BusinessDetailStore extends GetxController {
       // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
       image_url = await UploadImage(image: logo, filename: filename);
 
-      // Update Image in Local Storage : 
+      // Update Image in Local Storage :
       bool is_detail = localStore.containsKey('BusinessDetail');
       if (is_detail) {
         var data = localStore.getString('BusinessDetail');
         var json_obj = jsonDecode(data!);
         json_obj["logo"] = image_url;
-        
+
         localStore.setString('BusinessDetail', json.encode(json_obj));
       }
 
@@ -46,7 +47,7 @@ class BusinessDetailStore extends GetxController {
   // 2. ERROR CHECK :
   // 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :
 //////////////////////////////////////////////////////
-  SetBusinessName(businessName) async {
+  SetBusinessDetail({businessName, amount}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
       if (businessName == null) {
@@ -54,15 +55,19 @@ class BusinessDetailStore extends GetxController {
             response_type: false, message: 'Startup name required');
       }
 
-      businessName = businessName.toString();
+      // Validate Name :
       if (businessName == '' || businessName.length < 1) {
         return ResponseBack(response_type: false, message: 'Enter Valid Name');
       }
+
+      // Validate Image :
       if (image_url == '' || image_url == null) {
         return ResponseBack(
             response_type: false, message: 'Startup Logo required');
       }
+
       business_name = businessName;
+      amount = amount;
 
       // STORE DATA LOCALY FOR PERSISTANCE :
       final user_mail = await getuserEmail;
@@ -71,13 +76,15 @@ class BusinessDetailStore extends GetxController {
           logo: image_url,
           email: user_mail,
           name: businessName,
+          amount: amount,
           user_id: userId.toString());
 
       try {
+        await SedDesireAmount(amount);
         await SetStartupName(businessName);
+
         localStore.setString('BusinessDetail', json.encode(resp));
         return ResponseBack(response_type: true);
-        
       } catch (e) {
         return ResponseBack(response_type: false, message: e);
       }
@@ -86,21 +93,27 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-  GetBusinessName() async {
+  GetBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       bool is_detail = localStore.containsKey('BusinessDetail');
       if (is_detail) {
         var data = localStore.getString('BusinessDetail');
         var json_obj = jsonDecode(data!);
-        return json_obj["name"];
+        return {
+          'name':json_obj["name"], 
+          'amount':json_obj["amount"], 
+        };
       }
     } catch (e) {
-      return '';
+      return  {
+          'name':'', 
+          'amount':'', 
+        };
     }
   }
-  
-    // GET BUSINESS LOGO:
+
+  // GET BUSINESS LOGO:
   GetBusinessLogo() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -115,5 +128,4 @@ class BusinessDetailStore extends GetxController {
       return '';
     }
   }
-
 }
