@@ -177,8 +177,10 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
       var erro_resp;
       try {
-        final resp = await startupConnector.FetchBusinessCatigory();
-        print(resp['message']);
+        if(updateMode==true){
+          final resp = await startupConnector.FetchBusinessCatigory();
+          print(resp['message']);
+        }
         
         default_catigory = await catigoryStore.GetCatigory();
         erro_resp = default_catigory;

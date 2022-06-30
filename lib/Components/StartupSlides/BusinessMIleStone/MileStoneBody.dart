@@ -154,6 +154,24 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     }
   }
 
+
+  //////////////////////////////////////
+  //  GET REQUIREMENTS :
+  //////////////////////////////////////
+  GetLocalStorageData() async {
+    try {
+      if(updateMode ==true){
+        final resp = await startupConnector.FetchBusinessMilestone();
+        print(resp['message']);
+      }
+      
+      final data = await mileStore.GetMileStonesList();
+      milestones = data;
+      return milestones;
+    } catch (e) {
+      return milestones;
+    }
+  }
 ///////////////////////////////////////////
 // SET PAGE DEFAULT STATE :
 ///////////////////////////////////////////
@@ -219,20 +237,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       print('480');
     }
 
-    //////////////////////////////////////
-    //  GET REQUIREMENTS :
-    //////////////////////////////////////
-    GetLocalStorageData() async {
-      try {
-        final resp = await startupConnector.FetchBusinessMilestone();
-        print(resp['message']);
-        final data = await mileStore.GetMileStonesList();
-        milestones = data;
-        return milestones;
-      } catch (e) {
-        return milestones;
-      }
-    }
+
 
     //////////////////////////////////////
     //  SET  REQUIREMENTS :

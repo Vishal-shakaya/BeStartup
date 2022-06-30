@@ -45,8 +45,14 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   double upload_btn_width = 50;
   double upload_btn_height = 50;
 
+  var pageParam;
+  bool? updateMode = false;
+
+
+///////////////////////////////////////////////////////
   // CALL FUNCTION TO UPLOAD IMAGE :
   // THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
+///////////////////////////////////////////////////////
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -77,6 +83,39 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
       });
     }
   }
+
+  ////////////////////////////////////////////////
+  /// GET REQUIREMENTS :
+  ////////////////////////////////////////////////
+  GetLocalStorageData() async {
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    try {
+      if(updateMode==true){
+        final resp = await startupConnector.FetchThumbnail();
+        print(resp['message']);
+      }
+
+      final data = await thumbStore.GetThumbnail();
+      upload_image_url = data;
+      return upload_image_url;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  ////////////////////////////////////////////
+  /// SET PAGE DEFAULT STATE 
+  ////////////////////////////////////////////
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,22 +156,6 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
 
 
-    ////////////////////////////////////////////////
-    /// GET REQUIREMENTS :
-    ////////////////////////////////////////////////
-    GetLocalStorageData() async {
-      var snack_width = MediaQuery.of(context).size.width * 0.50;
-      try {
-        final resp = await startupConnector.FetchThumbnail();
-        print(resp['message']);
-
-        final data = await thumbStore.GetThumbnail();
-        upload_image_url = data;
-        return upload_image_url;
-      } catch (e) {
-        return '';
-      }
-    }
 
     ////////////////////////////////////////////////
     /// SET REQUIREMENTS :

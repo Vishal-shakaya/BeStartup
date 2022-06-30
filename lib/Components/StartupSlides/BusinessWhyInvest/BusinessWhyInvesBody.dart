@@ -144,6 +144,33 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     }
   }
 
+  ///////////////////////////////
+  // GET REQUIREMENTS
+  ///////////////////////////////
+  GetLocalStorageData() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    try {
+      if(updateMode==true){
+        final resp = await startupConnector.FetchBusinessWhy(); 
+      }
+      
+      final data = await whyInvestStore.GetWhyInvest();
+      inital_val = data;
+      return data;
+      
+    } catch (e) {
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+        width: snack_width,
+        type: MySnackbarType.error,
+        message: e,
+        title: fetch_data_error_title,
+      ));
+
+      return '';
+    }
+  }
+
   //////////////////////////////////
   // SET PAGE DEFAULT STATE :
   //////////////////////////////////
@@ -159,7 +186,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
 
   @override
   Widget build(BuildContext context) {
-    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    
 
     if (context.width > 1200) {
       maxlines = 15;
@@ -202,28 +229,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       vision_cont_height = 0.70;
     }
 
-    ///////////////////////////////
-    // GET REQUIREMENTS
-    ///////////////////////////////
-    GetLocalStorageData() async {
-      try {
-        final resp = await startupConnector.FetchBusinessWhy();
-        final data = await whyInvestStore.GetWhyInvest();
-        inital_val = data;
-        return data;
-        
-      } catch (e) {
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.error,
-          message: e,
-          title: fetch_data_error_title,
-        ));
 
-        return '';
-      }
-    }
 
     /////////////////////////////
     /// SET REQUIREMTNS :

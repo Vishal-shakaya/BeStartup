@@ -1,4 +1,5 @@
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessIcon.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BusinessBody extends StatefulWidget {
   const BusinessBody({Key? key}) : super(key: key);
@@ -23,6 +25,8 @@ class BusinessBody extends StatefulWidget {
 class _BusinessBodyState extends State<BusinessBody> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var startupConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_connector');
 
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
@@ -48,12 +52,11 @@ class _BusinessBodyState extends State<BusinessBody> {
       String business_name = formKey.currentState!.value['startup_name'];
       String desire_amount = formKey.currentState!.value['desire_amount'];
       business_name = business_name.trim();
-      desire_amount =desire_amount.trim();
+      desire_amount = desire_amount.trim();
 
       // HANDLING RESPONSE :
       var res = await detailStore.SetBusinessDetail(
-        businessName:business_name,
-        amount: desire_amount );
+          businessName: business_name, amount: desire_amount);
 
       // RESPONSE HANDLING :
       // 1. SUCCESS RESPONSE THEN REDIRECT TO NEXT SLIDE :
@@ -93,15 +96,14 @@ class _BusinessBodyState extends State<BusinessBody> {
 
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-        String business_name = formKey.currentState!.value['startup_name'];
-        String desire_amount = formKey.currentState!.value['desire_amount'];
-        business_name = business_name.trim();
-        desire_amount =desire_amount.trim();
+      String business_name = formKey.currentState!.value['startup_name'];
+      String desire_amount = formKey.currentState!.value['desire_amount'];
+      business_name = business_name.trim();
+      desire_amount = desire_amount.trim();
 
-        // HANDLING RESPONSE :
-        var resp = await detailStore.SetBusinessDetail(
-          businessName:business_name,
-          amount: desire_amount );
+      // HANDLING RESPONSE :
+      var resp = await detailStore.SetBusinessDetail(
+          businessName: business_name, amount: desire_amount);
 
       if (resp['response']) {
         var update_resp = await updateStore.UpdateBusinessDetail();
@@ -164,8 +166,45 @@ class _BusinessBodyState extends State<BusinessBody> {
     super.initState();
   }
 
+/////////////////////////////////
+  /// GET REQUIREMENTS :
+/////////////////////////////////
+  GetRequirements() async {
+    try {
+      if(updateMode == true){
+        final data = await startupConnector.FetchBusinessDetail();    
+      }
+    } catch (e) {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: GetRequirements(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading Business Details',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  Container MainMethod(BuildContext context) {
     return Container(
         height: context.height * 0.80,
         /////////////////////////////////////////

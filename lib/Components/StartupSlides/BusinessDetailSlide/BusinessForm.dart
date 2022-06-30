@@ -1,4 +1,5 @@
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -19,10 +20,9 @@ class BusinessForm extends StatefulWidget {
 
 class _BusinessFormState extends State<BusinessForm> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
-
   bool is_password_visible = true;
   String? value = '';
-  String? initial_val = '';
+  var initial_val;
 
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -42,7 +42,7 @@ class _BusinessFormState extends State<BusinessForm> {
     try {
       var data = await detailStore.GetBusinessDetail();
       initial_val = data;
-      return data;
+      return initial_val;
     } catch (e) {
       return initial_val;
     }

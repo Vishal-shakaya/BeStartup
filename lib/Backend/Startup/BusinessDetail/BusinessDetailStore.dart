@@ -79,10 +79,10 @@ class BusinessDetailStore extends GetxController {
           amount: amount,
           user_id: userId.toString());
 
-      try {
+        // Set App state amount and startup name : 
         await SedDesireAmount(amount);
         await SetStartupName(businessName);
-
+      try {
         localStore.setString('BusinessDetail', json.encode(resp));
         return ResponseBack(response_type: true);
       } catch (e) {

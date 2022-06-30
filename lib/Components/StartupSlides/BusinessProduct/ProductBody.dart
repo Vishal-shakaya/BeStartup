@@ -98,6 +98,32 @@ class _ProductBodyState extends State<ProductBody> {
     CloseCustomPageLoadingSpinner();
   }
 
+  ///////////////////////////////////////////////////
+  /// GET REQUIREMENTS DATA :
+  /// It fetches data from the server and stores. it in the local storage.
+  ///  If the server is down, it
+  /// returns the data from the local storage
+  /// Returns:
+  ///   The return value is a Future&lt;dynamic&gt;.
+  ///////////////////////////////////////////////////
+    GetLocalStorageData() async {
+      var error_resp;
+      try {
+        if(updateMode==true){
+          final resp = await startupConnector.FetchProducts();
+          print(resp['message']);
+        }
+
+        final data = await productStore.GetProductList();
+        error_resp = data;
+        return data;
+      } catch (e) {
+        return error_resp;
+      }
+    }
+
+
+
 ///////////////////////////////
 // Set page Default State :
 ///////////////////////////////
@@ -113,27 +139,6 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
-  ///////////////////////////////////////////////////
-  /// GET REQUIREMENTS DATA :
-  /// It fetches data from the server and stores. it in the local storage.
-  ///  If the server is down, it
-  /// returns the data from the local storage
-  /// Returns:
-  ///   The return value is a Future&lt;dynamic&gt;.
-  ///////////////////////////////////////////////////
-    GetLocalStorageData() async {
-      var error_resp;
-      try {
-        final resp = await startupConnector.FetchProducts();
-        print(resp['message']);
-
-        final data = await productStore.GetProductList();
-        error_resp = data;
-        return data;
-      } catch (e) {
-        return error_resp;
-      }
-    }
 
     ///////////////////////////////////
     /// SET REQUIREMNTS :
