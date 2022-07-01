@@ -42,10 +42,10 @@ dynamic get getDesireAmount async {
   return temp_obj;
 }
 
-dynamic get getStartupId async {
+dynamic get getStartupId async {  
   var temp_obj;
   final localStore = await SharedPreferences.getInstance();
-  temp_obj = await localStore.getString('DesireAmount');
+  temp_obj = await localStore.getString('StartupId');
   return temp_obj;
 }
 
@@ -98,12 +98,13 @@ SedDesireAmount(value) async {
     print('PARAM SETED $value');
   }
 
+}
+
   SetStartupId(value) async {
     final localStore = await SharedPreferences.getInstance();
-    final key_found = localStore.containsKey('DesireAmount');
-    final resp = await localStore.setString('DesireAmount', value);
+    final key_found = localStore.containsKey('StartupId');
+    final resp = await localStore.setString('StartupId', value);
     if (resp) {
       print('PARAM SETED $value');
     }
   }
-}

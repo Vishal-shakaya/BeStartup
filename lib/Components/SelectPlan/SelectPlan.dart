@@ -309,8 +309,9 @@ class _SelectPlanState extends State<SelectPlan> {
         user_id: await getUserId,
         email: await getuserEmail,
         startup_name: await getStartupName,
-        desire_amount: await getDesireAmount, 
-        activate: true, );
+        desire_amount: await getDesireAmount,
+        activate: true,
+      );
 
       final plan = await PlanModel(
         plan_name: plan_type,
@@ -320,7 +321,7 @@ class _SelectPlanState extends State<SelectPlan> {
         expire_date: expired,
         buyer_mail: auth.currentUser?.email,
         buyer_name: buyer_name,
-        startup: startup, 
+        startup: startup,
       );
 
       var resp =
@@ -338,13 +339,9 @@ class _SelectPlanState extends State<SelectPlan> {
             message: "plan not created ${resp['message']}");
       }
     } catch (e) {
-
-      // CloseCustomPageLoadingSpinner();
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
 
   // SHOW  BIG LOADING SPINNER :
   StartBigLoading() {
@@ -362,14 +359,18 @@ class _SelectPlanState extends State<SelectPlan> {
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var startup = await StartupModel(
-        user_id: await getUserId,
-        email: await getuserEmail,
-        startup_name: await getStartupName,
-        desire_amount: await getDesireAmount,
-        activate: true,  );
+      user_id: await getUserId,
+      email: await getuserEmail,
+      startup_name: await getStartupName,
+      desire_amount: await getDesireAmount,
+      activate: true,
+    );
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
+
+    // Set startup id for detail view:
+    await SetStartupId(startup['id']);
     return resp;
   }
 
@@ -407,9 +408,6 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp11 = await investorConnector.CreateInvestorDetail();
     print(resp11);
 
-    var resp12 = await CreateStartup();
-    print(resp12);
-
     return ResponseBack(response_type: true);
   }
 
@@ -429,25 +427,19 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    // Set UserPlan to its Profile DB :
-    var resp = await SetUserPlan(
-        exact_amount: exact_amount,
-        orderd: orderd,
-        expired: expired,
-        buyer_name: userName,
-        phone_no: phoneNo,
-        plan_type: plan_type);
+    var create_resp = await CreateStartup();
+    if (create_resp['response']) {
+      var resp = await SetUserPlan(
+          exact_amount: exact_amount,
+          orderd: orderd,
+          expired: expired,
+          buyer_name: userName,
+          phone_no: phoneNo,
+          plan_type: plan_type);
 
-    //1. Successfuly plan created :
-    print('User Plan Response $resp');
 
-    if (resp['response']) {
-      final is_data_send = await SendDataToFireStore();
-      print('Data store in firebase  Resp $is_data_send');
-
-      // 2. Success Data store in firestore :
-      if (is_data_send['response']) {
-        // 3. Send Bill to Founder Mail address :
+      // Mail if plan and startup creaded succesfully :
+      if (resp['response']) {
         final is_mail_send = await SendInvoiceMail(
             paymentId: response.paymentId,
             exact_amount: exact_amount,
@@ -455,26 +447,41 @@ class _SelectPlanState extends State<SelectPlan> {
             expired: expired,
             payer_name: userName,
             phone_no: phoneNo);
-
         print('Mail Send resp $is_mail_send');
-        // 4. Success Mail send :
-        if (is_mail_send['response']) {
-          await SuccessMailSendAlert();
-        }
       }
+    }
+
+    // Error Handler  Start Refund Process : :
+    if (!create_resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: create_resp['message'],
+          message:
+              'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
+    }
+
+
+    // Start Uploading startup data fot firebase db :
+    // then show success alert : and redirect to
+    // startup detail page :
+    final is_data_send = await SendDataToFireStore();
+    if (is_data_send['response']) {
+      print('Data store in firebase  Resp $is_data_send');
+      await SuccessMailSendAlert();
+      await Future.delayed(Duration(seconds: 5));
+
       CloseCustomPageLoadingSpinner();
       print('SUCCESS RESPONSE ${response.paymentId}');
       Get.toNamed(startup_view_url);
     }
 
-    // Error Handler :
-    if (!resp['response']) {
+    // If data not uploaded completely then 
+    // redirect user to home view :  
+    if (!is_data_send['response']) {
       CloseCustomPageLoadingSpinner();
-      Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.info,
-          title: resp['message'],
-          message: common_error_msg));
+      return Get.toNamed(home_page_url);
     }
   }
 
@@ -490,53 +497,62 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    // Set UserPlan to its Profile DB :
-    var resp = await SetUserPlan(
-        exact_amount: exact_amount,
-        orderd: orderd,
-        expired: expired,
-        buyer_name: userName,
-        phone_no: phoneNo,
-        plan_type: plan_type);
+    var create_resp = await CreateStartup();
+    if (create_resp['response']) {
+      var resp = await SetUserPlan(
+          exact_amount: exact_amount,
+          orderd: orderd,
+          expired: expired,
+          buyer_name: userName,
+          phone_no: phoneNo,
+          plan_type: plan_type);
 
-    //1. Successfuly plan created :
-    if (resp['response']) {
-      final is_data_send = await SendDataToFireStore();
 
-      // 2. Success Data store in firestore :
-      if (is_data_send['response']) {
-        // 3. Send Bill to Founder Mail address :
+      // Mail if plan and startup creaded succesfully :
+      if (resp['response']) {
         final is_mail_send = await SendInvoiceMail(
-            paymentId: response.walletName,
+            paymentId: uuid.v4().toString() ,
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
             payer_name: userName,
             phone_no: phoneNo);
-
-        print('Is mail send :  ${is_mail_send}');
-
-        //3. Success Mail send :
-        if (is_mail_send['response']) {
-          await SuccessMailSendAlert();
-        }
+        print('Mail Send resp $is_mail_send');
       }
-      print('SUCCESS RESPONSE ${response..walletName}');
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(startup_view_url);
     }
 
-    // Error Handler :
-    if (!resp['response']) {
+    // Error Handler  Start Refund Process : :
+    if (!create_resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
           type: MySnackbarType.info,
-          title: resp['message'],
-          message: common_error_msg));
+          title: create_resp['message'],
+          message:
+              'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
     }
 
-    CloseCustomPageLoadingSpinner();
+
+    // Start Uploading startup data fot firebase db :
+    // then show success alert : and redirect to
+    // startup detail page :
+    final is_data_send = await SendDataToFireStore();
+    if (is_data_send['response']) {
+      print('Data store in firebase  Resp $is_data_send');
+      await SuccessMailSendAlert();
+      await Future.delayed(Duration(seconds: 5));
+
+      CloseCustomPageLoadingSpinner();
+      print('SUCCESS RESPONSE ${response..walletName}');
+      Get.toNamed(startup_view_url);
+    }
+
+    // If data not uploaded completely then 
+    // redirect user to home view :  
+    if (!is_data_send['response']) {
+      CloseCustomPageLoadingSpinner();
+      return Get.toNamed(home_page_url);
+    }
   }
 
   /////////////////////////////////////////

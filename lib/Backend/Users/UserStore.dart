@@ -80,12 +80,14 @@ class UserStore extends GetxController {
       user.doc(obj_id).update(old_user);
 
       return ResponseBack(
-          response_type: true, message: '$field Crated to user profile');
+          response_type: true, message: '$field Crated Successfuly');
     } catch (e) {
       return ResponseBack(
           response_type: false, message: 'Unable to Create $field');
     }
   }
+
+
 
 ////////////////////////////////////
   /// Check if user Already buy plan :

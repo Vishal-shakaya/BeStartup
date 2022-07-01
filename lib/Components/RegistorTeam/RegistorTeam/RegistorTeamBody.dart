@@ -92,8 +92,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
 ///////////////////////////////////////////////////////////////
 // CREATE STARTUP :
-  /// It creates a startup model and .
-  /// pdates the user's plan and startup field in the database
+/// It creates a startup model and .
+/// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var startup = await StartupModel(
@@ -185,9 +185,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var resp = await memeberStore.PersistMembers();
 
     // Success Handler :
-    if (resp['response']) {
-      await IsPlanWithoutStartup();
-    }
+    // if (resp['response']) {
+    //   await IsPlanWithoutStartup();
+    // }
 
     // Error Handler :
     if (!resp['response']) {
