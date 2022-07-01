@@ -5,7 +5,7 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flutter_glow/flutter_glow.dart';
 class Services extends StatelessWidget {
   var service; 
   Services({
@@ -19,7 +19,7 @@ class Services extends StatelessWidget {
     double image_cont_height = 0.27;
 
     double desc_cont_width = 0.41;
-    double desc_cont_height = 0.21;
+    double desc_cont_height = 0.26;
 
     double mem_dialog_width = 0.60;
 
@@ -72,7 +72,7 @@ class Services extends StatelessWidget {
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade200)),
+            border: Border.all(width: 1, color: Colors.grey.shade300)),
         child: Column(
           children: [
             Container(
@@ -114,6 +114,47 @@ class Services extends StatelessWidget {
                 maxLines: 5,
               ),
             ),
+
+            // IMPORTANT Links : 
+            Container(
+              width:context.width*0.35, 
+              height: 50,
+              child: 
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                 Padding(
+                   padding: const EdgeInsets.all(5.0),
+                   child: Tooltip(
+                    message: 'play video',
+                     child: IconButton(
+                      onPressed: () {}, 
+                      icon: GlowIcon(
+                        Icons.play_circle_fill,
+                        blurRadius: 12,
+                        color:Colors.red.shade300,
+                        size:25 )),
+                   ),
+                 ), 
+
+                 Padding(
+                   padding: const EdgeInsets.all(5.0),
+                   child: Tooltip(
+                    message: 'content detail',
+                     child: IconButton(
+                      onPressed: () {}, 
+                      icon: GlowIcon(
+                        Icons.link_rounded,
+                        blurRadius: 8,
+                        color: Colors.blue.shade300, 
+                        size: 25,
+                        
+                        )),
+                   ),
+                 ) 
+              ],)
+            )
           ],
         ));
   }

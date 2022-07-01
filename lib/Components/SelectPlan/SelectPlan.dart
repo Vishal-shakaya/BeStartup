@@ -370,7 +370,12 @@ class _SelectPlanState extends State<SelectPlan> {
         field: 'startups', val: startup);
 
     // Set startup id for detail view:
-    await SetStartupId(startup['id']);
+    try {
+      await SetStartupId(startup['id']);
+    } catch (e) {
+      print('STARTUP ID NOT ADDED $e');
+    }
+    
     return resp;
   }
 
@@ -437,7 +442,6 @@ class _SelectPlanState extends State<SelectPlan> {
           phone_no: phoneNo,
           plan_type: plan_type);
 
-
       // Mail if plan and startup creaded succesfully :
       if (resp['response']) {
         final is_mail_send = await SendInvoiceMail(
@@ -462,7 +466,6 @@ class _SelectPlanState extends State<SelectPlan> {
               'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
     }
 
-
     // Start Uploading startup data fot firebase db :
     // then show success alert : and redirect to
     // startup detail page :
@@ -477,8 +480,8 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.toNamed(startup_view_url);
     }
 
-    // If data not uploaded completely then 
-    // redirect user to home view :  
+    // If data not uploaded completely then
+    // redirect user to home view :
     if (!is_data_send['response']) {
       CloseCustomPageLoadingSpinner();
       return Get.toNamed(home_page_url);
@@ -507,11 +510,10 @@ class _SelectPlanState extends State<SelectPlan> {
           phone_no: phoneNo,
           plan_type: plan_type);
 
-
       // Mail if plan and startup creaded succesfully :
       if (resp['response']) {
         final is_mail_send = await SendInvoiceMail(
-            paymentId: uuid.v4().toString() ,
+            paymentId: uuid.v4().toString(),
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
@@ -532,7 +534,6 @@ class _SelectPlanState extends State<SelectPlan> {
               'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
     }
 
-
     // Start Uploading startup data fot firebase db :
     // then show success alert : and redirect to
     // startup detail page :
@@ -547,8 +548,8 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.toNamed(startup_view_url);
     }
 
-    // If data not uploaded completely then 
-    // redirect user to home view :  
+    // If data not uploaded completely then
+    // redirect user to home view :
     if (!is_data_send['response']) {
       CloseCustomPageLoadingSpinner();
       return Get.toNamed(home_page_url);

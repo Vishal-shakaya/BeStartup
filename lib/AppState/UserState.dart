@@ -51,7 +51,8 @@ dynamic get getStartupId async {
 
 ////////////////////////////////////////////////
 /// SETTERS :
-/// 1 username , email , id , startup name
+/// 1 username , email , id , startup name, 
+/// startup id 
 ////////////////////////////////////////////////
 SetLoginUserName(value) async {
   final localStore = await SharedPreferences.getInstance();

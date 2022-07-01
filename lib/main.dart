@@ -43,7 +43,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter_glow/flutter_glow.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
