@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -177,11 +178,11 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       // Check local store for product :
-      bool is_detail = localStore.containsKey('BusinessProducts');
+      bool is_detail = localStore.containsKey(getBusinessProductStoreName);
       if (is_detail) {
         // Retrive Product  then convert in list then update
         // Product list :
-        var data = localStore.getString('BusinessProducts');
+        var data = localStore.getString(getBusinessProductStoreName);
         var json_obj = jsonDecode(data!);
 
         var temp_list = json_obj['products'].toList();
@@ -218,7 +219,7 @@ class BusinessProductStore extends GetxController {
         products: product_list,
       );
 
-      localStore.setString('BusinessProducts', json.encode(resp));
+      localStore.setString(getBusinessProductStoreName, json.encode(resp));
       product_list.clear();
       return ResponseBack(response_type: true);
     } catch (e) {

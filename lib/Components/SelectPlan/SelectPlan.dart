@@ -407,11 +407,11 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp9 = await startupConnector.CreateBusinessTeamMember();
     print(resp9);
 
-    var resp10 = await investorConnector.CreateInvestorContact();
-    print(resp10);
+    // var resp10 = await investorConnector.CreateInvestorContact();
+    // print(resp10);
 
-    var resp11 = await investorConnector.CreateInvestorDetail();
-    print(resp11);
+    // var resp11 = await investorConnector.CreateInvestorDetail();
+    // print(resp11);
 
     return ResponseBack(response_type: true);
   }

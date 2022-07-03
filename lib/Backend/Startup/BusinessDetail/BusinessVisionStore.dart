@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -27,7 +28,7 @@ class BusinessVisionStore extends GetxController {
             email:  await  getuserEmail,
             vision: vision,
             startup_name: await  getStartupName);
-        localStore.setString('BusinessVision', json.encode(resp));
+        localStore.setString(getBusinessVisiontStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
       } 
       catch (e) {
@@ -44,9 +45,9 @@ class BusinessVisionStore extends GetxController {
    GetVision() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessVision');
+      bool is_detail = localStore.containsKey(getBusinessVisiontStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessVision');
+        var data = localStore.getString(getBusinessVisiontStoreName);
         var json_obj = jsonDecode(data!);
         return json_obj["vision"];
       }

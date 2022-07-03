@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,7 +56,7 @@ class StartupViewConnector extends GetxController {
     var data;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessDetail');
+      final cacheData = await GetCachedData(getBusinessDetailStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -64,7 +65,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessDetail');
+      var store = FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
       var query = store
           .where(
             'email',
@@ -79,7 +80,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessDetail', data: data);
+      await StoreCacheData(fromModel: getBusinessDetailStoreName, data: data);
       print('Business Detail Store to Cached Storage');
 
       return ResponseBack(
@@ -103,7 +104,7 @@ class StartupViewConnector extends GetxController {
       // Check if Thumbnail is cached then send it else
       // fetch form DB:
       ////////////////////////////////////////////////////
-      final cacheData = await GetCachedData('BusinessThumbnail');
+      final cacheData = await GetCachedData(getBusinessThumbnailStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -114,7 +115,7 @@ class StartupViewConnector extends GetxController {
       // FETCHING DATA FROM FIREBASE:
       var data;
       var thumbnail =
-          FirebaseFirestore.instance.collection('BusinessThumbnail');
+          FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
       var query = thumbnail
           .where(
             'email',
@@ -129,7 +130,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // STORE DATA TO DB :
-      await StoreCacheData(fromModel: 'BusinessThumbnail', data: data);
+      await StoreCacheData(fromModel: getBusinessThumbnailStoreName, data: data);
 
       return ResponseBack(
           response_type: true,
@@ -148,7 +149,7 @@ class StartupViewConnector extends GetxController {
     var data;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessVision');
+      final cacheData = await GetCachedData(getBusinessVisiontStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -157,7 +158,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessVision');
+      var store = FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
       final name = await getStartupName;
       print(name);
       var query = store
@@ -171,7 +172,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessVision', data: data);
+      await StoreCacheData(fromModel: getBusinessVisiontStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -189,7 +190,7 @@ class StartupViewConnector extends GetxController {
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessWhyInvest');
+      final cacheData = await GetCachedData(getBusinessWhyInvesttStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -198,7 +199,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessWhyInvest');
+      var store = FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
       var query = store
           .where(
             'email',
@@ -213,7 +214,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
+      await StoreCacheData(fromModel: getBusinessWhyInvesttStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -231,7 +232,7 @@ class StartupViewConnector extends GetxController {
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessCatigory');
+      final cacheData = await GetCachedData(getBusinessCatigoryStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -240,7 +241,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessCatigory');
+      var store = FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
       var query = store
           .where(
             'email',
@@ -255,7 +256,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessCatigory', data: data);
+      await StoreCacheData(fromModel: getBusinessCatigoryStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -270,7 +271,7 @@ class StartupViewConnector extends GetxController {
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessMilestones');
+      final cacheData = await GetCachedData(getBusinessMilestoneStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -279,7 +280,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessMilestones');
+      var store = FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
       var query = store
           .where(
             'email',
@@ -294,7 +295,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessMilestones', data: data);
+      await StoreCacheData(fromModel: getBusinessMilestoneStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -313,7 +314,7 @@ class StartupViewConnector extends GetxController {
     var only_product = [];
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessProducts');
+      final cacheData = await GetCachedData(getBusinessProductStoreName);
       if (cacheData != false && cacheData != null) {
         // filter product :
         product_list = cacheData['products'];
@@ -329,7 +330,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING PRODUCT AND SERVICE FROM FIREBASE DB:
-      var store = FirebaseFirestore.instance.collection('BusinessProducts');
+      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store
           .where(
             'email',
@@ -344,7 +345,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+      await StoreCacheData(fromModel: getBusinessProductStoreName, data: data);
 
       // FILETER PRODUCT
       product_list = data['products'];
@@ -373,7 +374,7 @@ class StartupViewConnector extends GetxController {
     var only_services = [];
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessProducts');
+      final cacheData = await GetCachedData(getBusinessProductStoreName);
       if (cacheData != false && cacheData != null) {
         service_list = cacheData['products'];
         service_list.forEach((element) {
@@ -388,7 +389,7 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessProducts');
+      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store
           .where(
             'email',
@@ -403,7 +404,7 @@ class StartupViewConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+      await StoreCacheData(fromModel: getBusinessProductStoreName, data: data);
 
       // FILETER PRODUCT
       service_list = data['products'];

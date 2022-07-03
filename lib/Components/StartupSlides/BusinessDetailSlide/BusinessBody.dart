@@ -50,7 +50,7 @@ class _BusinessBodyState extends State<BusinessBody> {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       String business_name = formKey.currentState!.value['startup_name'];
-      String desire_amount = formKey.currentState!.value['desire_amount'];
+      var desire_amount = formKey.currentState!.value['desire_amount'];
       business_name = business_name.trim();
       desire_amount = desire_amount.trim();
 
@@ -97,7 +97,7 @@ class _BusinessBodyState extends State<BusinessBody> {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       String business_name = formKey.currentState!.value['startup_name'];
-      String desire_amount = formKey.currentState!.value['desire_amount'];
+      var desire_amount = formKey.currentState!.value['desire_amount'];
       business_name = business_name.trim();
       desire_amount = desire_amount.trim();
 
@@ -171,8 +171,8 @@ class _BusinessBodyState extends State<BusinessBody> {
 /////////////////////////////////
   GetRequirements() async {
     try {
-      if(updateMode == true){
-        final data = await startupConnector.FetchBusinessDetail();    
+      if (updateMode == true) {
+        final data = await startupConnector.FetchBusinessDetail();
       }
     } catch (e) {
       return '';

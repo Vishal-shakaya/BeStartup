@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -102,11 +103,11 @@ class BusinessTeamMemberStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       // Check local store for product :
-      bool is_detail = localStore.containsKey('BusinessTeamMember');
+      bool is_detail = localStore.containsKey(getBusinessTeamMemberStoreName);
       if (is_detail) {
         // Retrive Product  then convert in list then update
         // Product list :
-        var data = localStore.getString('BusinessTeamMember');
+        var data = localStore.getString(getBusinessTeamMemberStoreName);
         var json_obj = jsonDecode(data!);
 
         var temp_list = json_obj['members'].toList();
@@ -147,7 +148,7 @@ class BusinessTeamMemberStore extends GetxController {
         members: member_list,
       );
 
-      localStore.setString('BusinessTeamMember', json.encode(resp));
+      localStore.setString(getBusinessTeamMemberStoreName, json.encode(resp));
 
       // Remove Dublication for local storage and cache storage: 
       member_list.clear();

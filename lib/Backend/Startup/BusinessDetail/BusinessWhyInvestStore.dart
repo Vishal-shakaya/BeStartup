@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,7 @@ class BusinessWhyInvestStore extends GetxController {
           startup_name: await getStartupName,
           why_text: why_text,
         );
-        localStore.setString('BusinessWhyInvest', json.encode(resp));
+        localStore.setString(getBusinessWhyInvesttStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
       } catch (e) {
         return ResponseBack(response_type: false);
@@ -43,9 +44,9 @@ class BusinessWhyInvestStore extends GetxController {
   GetWhyInvest() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessWhyInvest');
+      bool is_detail = localStore.containsKey(getBusinessWhyInvesttStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessWhyInvest');
+        var data = localStore.getString(getBusinessWhyInvesttStoreName);
         var json_obj = jsonDecode(data!);
         return json_obj["why_text"];
       } else {

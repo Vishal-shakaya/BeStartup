@@ -39,13 +39,13 @@ class _FounderImageState extends State<FounderImage> {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    setState(() {
-      is_uploading = true;
-    });
 
     // if rsult null then return :
     if (result == null) return;
 
+    setState(() {
+      is_uploading = true;
+    });
     // if file single then gets ist path :
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;

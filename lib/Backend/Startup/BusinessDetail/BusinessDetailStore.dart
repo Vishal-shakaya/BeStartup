@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,13 +27,13 @@ class BusinessDetailStore extends GetxController {
       image_url = await UploadImage(image: logo, filename: filename);
 
       // Update Image in Local Storage :
-      bool is_detail = localStore.containsKey('BusinessDetail');
+      bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessDetail');
+        var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
         json_obj["logo"] = image_url;
 
-        localStore.setString('BusinessDetail', json.encode(json_obj));
+        localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
       }
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
@@ -60,6 +61,7 @@ class BusinessDetailStore extends GetxController {
         return ResponseBack(response_type: false, message: 'Enter Valid Name');
       }
 
+      
       // Validate Image :
       if (image_url == '' || image_url == null) {
         return ResponseBack(
@@ -83,7 +85,7 @@ class BusinessDetailStore extends GetxController {
         await SedDesireAmount(amount);
         await SetStartupName(businessName);
       try {
-        localStore.setString('BusinessDetail', json.encode(resp));
+        localStore.setString(getBusinessDetailStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
       } catch (e) {
         return ResponseBack(response_type: false, message: e);
@@ -96,19 +98,27 @@ class BusinessDetailStore extends GetxController {
   GetBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessDetail');
+      bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessDetail');
+        var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
         return {
           'name':json_obj["name"], 
-          'amount':json_obj["amount"], 
+          'desire_amount':json_obj["desire_amount"], 
         };
+      }
+      
+      else{
+        return  {
+            'name':'', 
+            'desire_amount':'', 
+          };
+        
       }
     } catch (e) {
       return  {
           'name':'', 
-          'amount':'', 
+          'desire_amount':'', 
         };
     }
   }
@@ -117,9 +127,9 @@ class BusinessDetailStore extends GetxController {
   GetBusinessLogo() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessDetail');
+      bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessDetail');
+        var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
         image_url = json_obj["logo"];
         return json_obj["logo"];

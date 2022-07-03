@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,8 +61,8 @@ class FounderConnector extends GetxController {
     var temp_userContact;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData('FounderUserDetail');
-      final userContactCach = await GetCachedData('FounderUserContact');
+      final userDetailCach = await GetCachedData(getBusinessFounderDetailStoreName);
+      final userContactCach = await GetCachedData(getBusinessFounderContactStoreName);
       if (userDetailCach != false || userContactCach != false) {
         return ResponseBack(
         response_type: true, 
@@ -72,8 +73,8 @@ class FounderConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('FounderUserDetail');
-      var store1 = FirebaseFirestore.instance.collection('FounderUserContact');
+      var store = FirebaseFirestore.instance.collection(getBusinessFounderDetailStoreName);
+      var store1 = FirebaseFirestore.instance.collection(getBusinessFounderContactStoreName);
 
       // Get User Detial Document :
       var query = store
@@ -106,9 +107,9 @@ class FounderConnector extends GetxController {
       });
 
       await StoreCacheData(
-          fromModel: 'FounderUserDetail', data: data_userDetail);
+          fromModel: getBusinessFounderDetailStoreName, data: data_userDetail);
       await StoreCacheData(
-          fromModel: 'FounderUserContact', data: data_userContact);
+          fromModel: getBusinessFounderContactStoreName, data: data_userContact);
 
       return ResponseBack(
         response_type: true, 
@@ -127,14 +128,14 @@ class FounderConnector extends GetxController {
   CreateFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('FounderUserDetail');
+      final myStore = store.collection(getBusinessFounderDetailStoreName);
 
       // fetch catigories for local storage :
       // kye : FounderUserDetail
-      bool is_data = localStore.containsKey('FounderUserDetail');
+      bool is_data = localStore.containsKey(getBusinessFounderDetailStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('FounderUserDetail');
+        String? temp_data = localStore.getString(getBusinessFounderDetailStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -151,14 +152,14 @@ class FounderConnector extends GetxController {
   CreateFounderContact() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('FounderUserContact');
+      final myStore = store.collection(getBusinessFounderContactStoreName);
 
       // fetch catigories for local storage :
       // kye : FounderUserContact
 
-      bool is_data = localStore.containsKey('FounderUserContact');
+      bool is_data = localStore.containsKey(getBusinessFounderContactStoreName);
       if (is_data) {
-        String? temp_data = localStore.getString('FounderUserContact');
+        String? temp_data = localStore.getString(getBusinessFounderContactStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -178,7 +179,7 @@ class FounderConnector extends GetxController {
     var data;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData('BusinessTeamMember');
+      final cacheData = await GetCachedData(getBusinessTeamMemberStoreName);
       if (cacheData != false) {
         return ResponseBack(
             response_type: true,
@@ -187,7 +188,7 @@ class FounderConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('BusinessTeamMember');
+      var store = FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
       var query = store
           .where(
             'email',
@@ -202,7 +203,7 @@ class FounderConnector extends GetxController {
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: 'BusinessTeamMember', data: data);
+      await StoreCacheData(fromModel: getBusinessTeamMemberStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -227,17 +228,17 @@ class FounderConnector extends GetxController {
     var temp_userContact;
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData('FounderUserDetail');
-      final userContactCach = await GetCachedData('FounderUserContact');
+      final userDetailCach = await GetCachedData(getBusinessFounderDetailStoreName);
+      final userContactCach = await GetCachedData(getBusinessFounderContactStoreName);
       if (userDetailCach != false || userContactCach != false) {
         temp_userContact = userContactCach;
         temp_userDetail = userContactCach;
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection('FounderUserDetail');
+      var store = FirebaseFirestore.instance.collection(getBusinessFounderDetailStoreName);
 
-      var store1 = FirebaseFirestore.instance.collection('FounderUserContact');
+      var store1 = FirebaseFirestore.instance.collection(getBusinessFounderContactStoreName);
 
       // Get User Detial Document :
       var query = store
@@ -283,9 +284,9 @@ class FounderConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(
-          fromModel: 'FounderUserDetail', data: data_userDetail);
+          fromModel: getBusinessFounderDetailStoreName, data: data_userDetail);
       await StoreCacheData(
-          fromModel: 'FounderUserContact', data: data_userContact);
+          fromModel: getBusinessFounderContactStoreName, data: data_userContact);
 
       return ResponseBack(response_type: true);
     } catch (e) {

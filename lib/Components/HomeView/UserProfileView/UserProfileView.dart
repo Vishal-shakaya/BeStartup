@@ -5,10 +5,6 @@ import 'package:be_startup/Components/HomeView/UserProfileView/Thumbnail.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/HomeView/StoryView/StoryView.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:card_swiper/card_swiper.dart';
 class UserProfileView extends StatefulWidget {
   UserProfileView({Key? key}) : super(key: key);

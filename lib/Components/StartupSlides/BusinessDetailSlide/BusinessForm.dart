@@ -5,6 +5,7 @@ import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -42,6 +43,7 @@ class _BusinessFormState extends State<BusinessForm> {
     try {
       var data = await detailStore.GetBusinessDetail();
       initial_val = data;
+      print(initial_val);
       return initial_val;
     } catch (e) {
       return initial_val;
@@ -105,13 +107,13 @@ class _BusinessFormState extends State<BusinessForm> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: context.height * 0.04),
+                    margin: EdgeInsets.only(top: context.height * 0.06),
                     child: DetailViewInputField(
-                      initial_val: data['amount'],
+                      initial_val: '${data['desire_amount']}',
                       context: context,
                       field_name: 'desire_amount',
                       error_text: 'Desire amount required',
-                      hint_text: 'Desire Amount',
+                      hint_text: '₹ Desire Amount ',
                     ),
                   ),
                 ],
@@ -127,14 +129,28 @@ class _BusinessFormState extends State<BusinessForm> {
       initialValue: initial_val,
       textAlign: TextAlign.center,
       name: field_name,
-      style: Get.textTheme.headline3,
+      style: GoogleFonts.robotoSlab(
+        textStyle: TextStyle(),
+        color: light_color_type2,
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+      ),
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+      validator: field_name == 'desire_amount'
+          ? FormBuilderValidators.compose([
+              FormBuilderValidators.minLength(context, 1,
+                  errorText: error_text),
+              FormBuilderValidators.integer(context,
+                  errorText: 'enter valid amount')
+            ])
+          : FormBuilderValidators.compose([
+              FormBuilderValidators.minLength(context, 1,
+                  errorText: error_text),
+            ]),
       decoration: InputDecoration(
         hintText: hint_text,
         contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 25, color: Colors.grey.shade300),
+        hintStyle: TextStyle(fontSize: 22, color: Colors.grey.shade300),
 
         suffix: InkWell(
           onTap: () {

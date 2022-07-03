@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -74,11 +75,11 @@ class BusinessFounderStore extends GetxController {
   GetFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('FounderUserDetail');
-      bool is_contanct = localStore.containsKey('FounderUserContact');
+      bool is_detail = localStore.containsKey(getBusinessFounderDetailStoreName);
+      bool is_contanct = localStore.containsKey(getBusinessFounderContactStoreName);
       if (is_detail && is_contanct) {
-        var detail = localStore.getString('FounderUserDetail');
-        var contact = localStore.getString('FounderUserContact');
+        var detail = localStore.getString(getBusinessFounderDetailStoreName);
+        var contact = localStore.getString(getBusinessFounderContactStoreName);
 
         var detail_obj = jsonDecode(detail!);
         var contact_obj = jsonDecode(contact!);

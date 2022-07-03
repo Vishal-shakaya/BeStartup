@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,9 +49,9 @@ class BusinessCatigoryStore extends GetxController {
   GetCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessCatigory');
+      bool is_detail = localStore.containsKey(getBusinessCatigoryStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessCatigory');
+        var data = localStore.getString(getBusinessCatigoryStoreName);
         var json_obj = jsonDecode(data!);
         return json_obj["catigories"].toList();
       } 
@@ -75,7 +76,7 @@ class BusinessCatigoryStore extends GetxController {
           startup_name: await getStartupName,
           catigory: catigories);
 
-      localStore.setString('BusinessCatigory', json.encode(resp));
+      localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);

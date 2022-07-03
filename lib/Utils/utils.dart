@@ -1,3 +1,4 @@
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -50,7 +51,22 @@ final localStorageKeyes = [
   'loginUserName',
   'loginUserEmail',
   'loginUserId',
-  'StartupName'
+  'StartupName',
+  'DesireAmount',
+  'StartupId'
+];
+
+final startupSlideStorageKeys = [
+  getBusinessDetailStoreName,
+  getBusinessCatigoryStoreName,
+  getBusinessMilestoneStoreName,
+  getBusinessProductStoreName,
+  getBusinessVisiontStoreName,
+  getBusinessWhyInvesttStoreName,
+  getBusinessThumbnailStoreName,
+  getBusinessTeamMemberStoreName, 
+  getBusinessFounderContactStoreName,
+  getBusinessFounderDetailStoreName 
 ];
 
 ////////////////////////////////////////////
@@ -125,18 +141,18 @@ Row MySnackbarContent({message = 'processing... '}) {
 /// //////////////////////////////////////////
 
 MyCustSnackbar({context, title, message, type, required width}) {
-  var snack; 
+  var snack;
   // var snack_width = MediaQuery.of(context).size.width * 0.50;
   try {
-
-    // ERROR SNACK : 
+    // ERROR SNACK :
     if (type == MySnackbarType.error) {
-       snack = GetSnackBar(
-        snackPosition:SnackPosition.TOP ,
+      snack = GetSnackBar(
+        snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.only(top: 10),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: title != null ? title : common_error_title),
+        titleText:
+            MySnackbarTitle(title: title != null ? title : common_error_title),
         messageText: MySnackbarContent(
             message: message != null ? message : common_error_msg),
         maxWidth: width,
@@ -144,49 +160,46 @@ MyCustSnackbar({context, title, message, type, required width}) {
       return snack;
     }
 
-    // SUCCESS SNACK : 
+    // SUCCESS SNACK :
     if (type == MySnackbarType.success) {
-       snack = GetSnackBar(
-        snackPosition:SnackPosition.TOP ,
+      snack = GetSnackBar(
+        snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.only(top: 10),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.green.shade50,
-        titleText: MySnackbarTitle(title: title != null ? title : snack_success_msg),
-        messageText: MySnackbarContent(
-            message: message != null ? message : ''),
+        titleText:
+            MySnackbarTitle(title: title != null ? title : snack_success_msg),
+        messageText: MySnackbarContent(message: message != null ? message : ''),
         maxWidth: width,
       );
       return snack;
     }
 
-    // INFOR SNACK :  : 
+    // INFOR SNACK :  :
     if (type == MySnackbarType.info) {
-       snack = GetSnackBar(
-        snackPosition:SnackPosition.TOP ,
+      snack = GetSnackBar(
+        snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.only(top: 10),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.blue.shade50,
-        titleText: MySnackbarTitle(title: title != null ? title : snack_info_msg),
-        messageText: MySnackbarContent(
-            message: message != null ? message : ''),
+        titleText:
+            MySnackbarTitle(title: title != null ? title : snack_info_msg),
+        messageText: MySnackbarContent(message: message != null ? message : ''),
         maxWidth: width,
       );
       return snack;
     }
-
   } catch (e) {
     print('Snackbar Creating Error $e');
   }
 }
-
-
 
 ////////////////////////////////////////////
 /// MY CUSTOM LOADING SPINNER :
 ////////////////////////////////////////////
 MyCustomButtonSpinner({color, width}) {
   var spinner = Container(
-    padding: EdgeInsets.all(2),
+    margin: EdgeInsets.all(1),
     child: CircularProgressIndicator(
       color: color != null ? color : dartk_color_type3,
       strokeWidth: width != null ? width : 4,
@@ -195,9 +208,8 @@ MyCustomButtonSpinner({color, width}) {
   return spinner;
 }
 
-
-MyCustPageLoadingSpinner(){
-    var dialog = SmartDialog.showLoading(
+MyCustPageLoadingSpinner() {
+  var dialog = SmartDialog.showLoading(
       background: Colors.white,
       maskColorTemp: Color.fromARGB(146, 252, 250, 250),
       widget: CircularProgressIndicator(
@@ -207,12 +219,12 @@ MyCustPageLoadingSpinner(){
   return dialog;
 }
 
-CloseCustomPageLoadingSpinner(){
+CloseCustomPageLoadingSpinner() {
   SmartDialog.dismiss();
 }
 
 ////////////////////////////////////////////////////////
-/// ERROR PAGE : 
+/// ERROR PAGE :
 ////////////////////////////////////////////////////////
 class ErrorPage extends StatefulWidget {
   ErrorPage({Key? key}) : super(key: key);
@@ -232,9 +244,9 @@ class _ErrorPageState extends State<ErrorPage> {
 }
 
 ////////////////////////////////////////////////////
-/// Custom Chimmer for loading : 
-/// 1. Take widget for shape shimmer: 
-/// 2. Take text or show text shimmer : 
+/// Custom Chimmer for loading :
+/// 1. Take widget for shape shimmer:
+/// 2. Take text or show text shimmer :
 /////////////////////////////////////////////////////
 class CustomShimmer extends StatefulWidget {
   Widget? shape = null;
@@ -243,6 +255,7 @@ class CustomShimmer extends StatefulWidget {
   @override
   State<CustomShimmer> createState() => _CustomShimmerState();
 }
+
 class _CustomShimmerState extends State<CustomShimmer> {
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:be_startup/Utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,17 +43,23 @@ dynamic get getDesireAmount async {
   return temp_obj;
 }
 
-dynamic get getStartupId async {  
+dynamic get getStartupId async {
   var temp_obj;
   final localStore = await SharedPreferences.getInstance();
   temp_obj = await localStore.getString('StartupId');
   return temp_obj;
 }
+dynamic get getUserType async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  temp_obj = await localStore.getString('UserType');
+  return temp_obj;
+}
 
 ////////////////////////////////////////////////
 /// SETTERS :
-/// 1 username , email , id , startup name, 
-/// startup id 
+/// 1 username , email , id , startup name,
+/// startup id
 ////////////////////////////////////////////////
 SetLoginUserName(value) async {
   final localStore = await SharedPreferences.getInstance();
@@ -98,14 +105,38 @@ SedDesireAmount(value) async {
   if (resp) {
     print('PARAM SETED $value');
   }
-
 }
 
-  SetStartupId(value) async {
-    final localStore = await SharedPreferences.getInstance();
-    final key_found = localStore.containsKey('StartupId');
-    final resp = await localStore.setString('StartupId', value);
-    if (resp) {
-      print('PARAM SETED $value');
-    }
+SetStartupId(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('StartupId');
+  final resp = await localStore.setString('StartupId', value);
+  if (resp) {
+    print('PARAM SETED $value');
   }
+}
+
+SetUserType(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('StartupId');
+  final resp = await localStore.setString('StartupId', value);
+  if (resp) {
+    print('PARAM SETED $value');
+  }
+}
+
+
+
+////////////////////////////////////////////
+/// CACHE STORE MANAGE
+////////////////////////////////////////////
+ClearStartupSlideCached() async {
+  final localStore = await SharedPreferences.getInstance();
+  startupSlideStorageKeys.forEach((element) async{
+    final key_found = localStore.containsKey(element);
+    final resp = await localStore.remove(element);
+    if (resp) {
+      print('PARAM Removed $element');
+    }
+  });
+}

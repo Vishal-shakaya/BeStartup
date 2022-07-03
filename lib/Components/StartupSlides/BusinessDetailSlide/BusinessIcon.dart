@@ -37,15 +37,17 @@ class _BusinessIconState extends State<BusinessIcon> {
   Future<void> PickImage() async {
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    setState(() {
-      is_uploading = true;
-    });
+
     // if rsult null then return :
     if (result == null) return;
     // if file single then gets ist path :
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+    
+      setState(() {
+        is_uploading = true;
+      });
       // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
       var resp =
           await detailStore.SetBusinessLogo(logo: image, filename: filename);
@@ -86,13 +88,9 @@ class _BusinessIconState extends State<BusinessIcon> {
         width: snack_width);
 
     try {
-      final resp = await startupConnector.FetchBusinessDetail();
-      print(resp['message']);  
-
       final logo = await detailStore.GetBusinessLogo();
       upload_image_url = logo;
       return upload_image_url;
-
 
     } catch (e) {
       return upload_image_url;

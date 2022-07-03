@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
@@ -110,9 +111,9 @@ class MileStoneStore extends GetxController {
   GetMileStonesList() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessMilestones');
+      bool is_detail = localStore.containsKey(getBusinessMilestoneStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessMilestones');
+        var data = localStore.getString(getBusinessMilestoneStoreName);
         var json_obj = jsonDecode(data!);
 
         var temp_list = json_obj['milestone'].toList();
@@ -141,7 +142,7 @@ class MileStoneStore extends GetxController {
           email: await getuserEmail,
           startup_name: await getStartupName,
           milestone: milestones);
-      localStore.setString('BusinessMilestones', json.encode(resp));
+      localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
 
       // Clear memory allocation : to remove content Dublication: 
       milestones.clear();

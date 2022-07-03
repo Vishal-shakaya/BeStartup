@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -53,7 +54,7 @@ class _UserTypeState extends State<UserType> {
   /// 1.CHECK SELECT USER TYPE :
   /// 2. REDIRECT TO SLIDE PAGE :
 ///////////////////////////////////////////
-  OnpressContinue(context) {
+  OnpressContinue(context) async {
     // REQUIRED TO SELECT USER TYPE:
     if (selected_user_type == null) {
       CoolAlert.show(
@@ -71,12 +72,19 @@ class _UserTypeState extends State<UserType> {
 
     // REDIRECT TO CREATE STARTUP PAGE :
     if (selected_user_type == 'founder') {
-      Get.toNamed(create_business_detail_url ,);
+      await ClearStartupSlideCached();
+      await SetUserType('founder');
+      Get.toNamed(
+        create_business_detail_url,
+      );
     }
     // REDIERCT TO STARTUPS VIEW:
     if (selected_user_type == 'investor') {
-      print('User Type investor');
-      Get.toNamed(investor_registration_form ,);
+      await ClearStartupSlideCached();
+      await SetUserType('investor');
+      Get.toNamed(
+        investor_registration_form,
+      );
     }
   }
 
@@ -260,7 +268,6 @@ class _UserTypeState extends State<UserType> {
                 // INVESTOR SECTION :
                 //////////////////////////////
                 Container(
-                    
                   padding: EdgeInsets.all(card_padding),
                   child: InkWell(
                     borderRadius: BorderRadius.all(Radius.circular(22)),

@@ -1,28 +1,20 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
-import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
 import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
-import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:paginated_search_bar/widgets/line_spacer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HomeHeaderSection extends StatefulWidget {
@@ -99,7 +91,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     /// to the user type slide page
     //////////////////////////////////////////////////////////
     CreateStatup() async {
-        Get.toNamed(create_business_detail_url);
+      await ClearStartupSlideCached();
+      Get.toNamed(create_business_detail_url);
     }
 
     return Container(

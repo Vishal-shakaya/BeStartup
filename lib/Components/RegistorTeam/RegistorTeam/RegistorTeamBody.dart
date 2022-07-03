@@ -185,9 +185,11 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var resp = await memeberStore.PersistMembers();
 
     // Success Handler :
-    // if (resp['response']) {
-    //   await IsPlanWithoutStartup();
-    // }
+    if (resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(select_plan_url);
+      // await IsPlanWithoutStartup();
+    }
 
     // Error Handler :
     if (!resp['response']) {
@@ -256,7 +258,10 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      final fetch_resp = founderConnector.FetchBusinessTeamMember();
+      if(updateMode==true){
+        final fetch_resp = founderConnector.FetchBusinessTeamMember();
+      }
+      
       final data = await memeberStore.GetMembers();
       error_resp = data;
       return data;

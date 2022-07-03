@@ -37,6 +37,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   double contact_formfield_width = 350;
   double contact_text_margin_top = 0.05;
 
+  var pageParam;
+  bool? updateMode = false;
+
   ResetForm(field) {
     widget.formKey.currentState.fields[field].didChange('');
   }
@@ -47,13 +50,29 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      final resp = await founde_connector.FetchFounderDetailandContact();
+      if (updateMode == true) {
+        final resp = await founde_connector.FetchFounderDetailandContact();
+        print(resp);
+      }
       final data = await founderStore.GetFounderDetail();
       error_resp = data;
       return data;
     } catch (e) {
       return error_resp;
     }
+  }
+
+/////////////////////////////////////
+  /// SET PAGE DEFAULT STATE :
+/////////////////////////////////////
+  @override
+  void initState() {
+    // TODO: implement initState
+    pageParam = Get.parameters;
+    if (pageParam['type'] == 'update') {
+      updateMode = true;
+    }
+    super.initState();
   }
 
   @override

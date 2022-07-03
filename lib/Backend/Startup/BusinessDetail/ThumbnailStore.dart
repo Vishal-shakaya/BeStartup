@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +27,7 @@ class ThumbnailStore extends GetxController {
             email: await getuserEmail,
             startup_name: await getStartupName);
 
-        localStore.setString('BusinessThumbnail', json.encode(resp));
+        localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
         return ResponseBack(response_type: true, data: image_url);
       } catch (e) {
         return ResponseBack(response_type: false);
@@ -39,9 +40,9 @@ class ThumbnailStore extends GetxController {
   GetThumbnail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey('BusinessThumbnail');
+      bool is_detail = localStore.containsKey(getBusinessThumbnailStoreName);
       if (is_detail) {
-        var data = localStore.getString('BusinessThumbnail');
+        var data = localStore.getString(getBusinessThumbnailStoreName);
         var json_obj = jsonDecode(data!);
         return json_obj["thumbnail"];
       }
