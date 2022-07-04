@@ -195,7 +195,6 @@ class StartupUpdater extends GetxController {
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessVision', data: data);
       return ResponseBack(response_type: true);
-      
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
@@ -235,7 +234,7 @@ class StartupUpdater extends GetxController {
       data['why_text'] = why_text;
       store.doc(doc_id).update(data);
 
-      // Cached data 
+      // Cached data
       await StoreCacheData(fromModel: 'BusinessWhyInvest', data: data);
 
       return ResponseBack(response_type: true);
@@ -324,6 +323,7 @@ class StartupUpdater extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: 'BusinessProducts', data: data);
+      return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
@@ -415,7 +415,6 @@ class StartupUpdater extends GetxController {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
-
 
   /// It fetches data from cache storage,
   /// updates it and then stores it back to cache storage

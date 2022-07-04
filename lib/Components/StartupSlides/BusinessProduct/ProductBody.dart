@@ -70,7 +70,7 @@ class _ProductBodyState extends State<ProductBody> {
     if (resp['response']) {
       var update_resp = await updateStore.UpdateProducts();
 
-      // Update Success Handler :
+      // Update Success Handler    :
       if (update_resp['response']) {
         MyCustPageLoadingSpinner();
         Get.toNamed(startup_view_url);
@@ -232,7 +232,7 @@ class _ProductBodyState extends State<ProductBody> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
-          await SubmitProduct();
+          await UpdateProduct();
         },
         child: Card(
           elevation: 10,

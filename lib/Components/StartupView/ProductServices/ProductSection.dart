@@ -24,6 +24,8 @@ class _ProductSectionState extends State<ProductSection> {
 
   @override
   Widget build(BuildContext context) {
+
+
     Map<String, dynamic?> temp_product = {
       'id': 'some_randodnjflks',
       'title': 'word famous watter battle  cleane',
@@ -39,11 +41,13 @@ class _ProductSectionState extends State<ProductSection> {
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
+////////////////////////////////////////
+///  GET REQUIREMENTS : 
+////////////////////////////////////////
     GetLocalStorageData() async {
       try {
         final data = await startupConnect.FetchProducts();
+        print('products ${data}');
         products = data['data'];
         return products;
       } catch (e) {
@@ -51,6 +55,10 @@ class _ProductSectionState extends State<ProductSection> {
       }
     }
 
+
+////////////////////////////////////////
+///  SET REQUIREMENTS : 
+////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -72,6 +80,8 @@ class _ProductSectionState extends State<ProductSection> {
           return MainMethodSection(context);
         });
   }
+
+
 
   Column MainMethodSection(BuildContext contex) {
     return Column(
