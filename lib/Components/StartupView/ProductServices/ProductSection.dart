@@ -47,7 +47,6 @@ class _ProductSectionState extends State<ProductSection> {
     GetLocalStorageData() async {
       try {
         final data = await startupConnect.FetchProducts();
-        print('products ${data}');
         products = data['data'];
         return products;
       } catch (e) {

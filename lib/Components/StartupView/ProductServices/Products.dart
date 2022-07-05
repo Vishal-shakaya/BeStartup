@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './ProductDetailDialog.dart';
 import 'package:flutter_glow/flutter_glow.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Products extends StatefulWidget {
   var product;
@@ -28,15 +29,35 @@ class _ProductsState extends State<Products> {
   double mem_dialog_width = 0.60;
 
 
-  // Redirect to youtube video : 
-  YoutubeLink(){
 
+  // Open link in web :
+  Future<void> launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.platformDefault,
+      webViewConfiguration: const WebViewConfiguration(enableJavaScript: false),
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 
-  // Redirect user to detail page ; 
-  DocumentLink(){
-    
+
+
+  // Redirect to youtube video :
+  YoutubeLink() async {
+    var url = widget.product['youtube_link'];
+    url = Uri.parse(url);
+    final resp = await launchInBrowser(url);
   }
+
+
+  // Redirect user to detail page ;
+  DocumentLink() async {
+    var url = widget.product['content_link'];
+    url = Uri.parse(url);
+    final resp = await launchInBrowser(url);
+  }
+
 
 
   @override
@@ -144,8 +165,8 @@ class _ProductsState extends State<Products> {
                       child: Tooltip(
                         message: 'play video',
                         child: IconButton(
-                            onPressed: () {
-                              YoutubeLink() {}
+                            onPressed: () async {
+                              await YoutubeLink();
                             },
                             icon: GlowIcon(Icons.play_circle_fill,
                                 blurRadius: 12,
@@ -158,8 +179,8 @@ class _ProductsState extends State<Products> {
                       child: Tooltip(
                         message: 'content detail',
                         child: IconButton(
-                            onPressed: () {
-                              DocumentLink() {}
+                            onPressed: () async {
+                              await DocumentLink();
                             },
                             icon: GlowIcon(
                               Icons.link_rounded,

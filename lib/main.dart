@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
@@ -44,6 +43,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_glow/flutter_glow.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
