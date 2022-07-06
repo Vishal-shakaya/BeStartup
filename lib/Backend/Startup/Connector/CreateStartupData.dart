@@ -13,6 +13,60 @@ class StartupConnector extends GetxController {
   // 1. Get Data form local storage :
   // 2. if has data then Store in Firebase Databse :
   //////////////////////////////////////////////////////
+  CreateStartup() async {
+    final localStore = await SharedPreferences.getInstance();
+    final myStore = store.collection(getStartupStoreName);
+    try {
+      // kye : BusinessCatigory
+      bool is_data = localStore.containsKey(getStartupStoreName);
+
+      if (is_data) {
+        String? temp_data = localStore.getString(getStartupStoreName);
+        Map<String, dynamic> data = json.decode(temp_data!);
+
+        await myStore.add(data);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create Startup Successfully');
+      } else {
+        return ResponseBack(
+            response_type: false, message: 'Startup ${cached_error} ');
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+  CreateBusinessPlans() async {
+    final localStore = await SharedPreferences.getInstance();
+    final myStore = store.collection(getStartupPlansStoreName);
+    try {
+      // kye : BusinessCatigory
+      bool is_data = localStore.containsKey(getStartupPlansStoreName);
+
+      if (is_data) {
+        String? temp_data = localStore.getString(getStartupPlansStoreName);
+        Map<String, dynamic> data = json.decode(temp_data!);
+
+        await myStore.add(data);
+        return ResponseBack(
+            response_type: true,
+            message: 'Create Plan Successfully');
+      } else {
+        return ResponseBack(
+            response_type: false, message: 'Plan ${cached_error} ');
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+  ///////////////////////////////////////////////////////
+  // 1. Get Data form local storage :
+  // 2. if has data then Store in Firebase Databse :
+  //////////////////////////////////////////////////////
   CreateBusinessCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     final myStore = store.collection(getBusinessCatigoryStoreName);

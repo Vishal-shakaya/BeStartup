@@ -78,11 +78,12 @@ class BusinessDetailStore extends GetxController {
           email: await getuserEmail,
           startup_name: business_name,
           timestamp: DateTime.now().toUtc().toString());
-
       // Success Response :
       if (startup_resp != false) {
         await SetStartupId(startup_resp['id']);
+        localStore.setString(getStartupStoreName, json.encode(startup_resp));
       }
+      
       if(startup_resp==false){
         return ResponseBack(
           response_type: false, 

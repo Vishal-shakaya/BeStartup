@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/AppState/UserState.dart';
@@ -7,6 +9,7 @@ import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -23,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
 enum PlanOption { basicPlan, bestPlan, businessPlan }
@@ -303,6 +307,8 @@ class _SelectPlanState extends State<SelectPlan> {
     required phone_no,
     required plan_type,
   }) async {
+
+    final localStore = await SharedPreferences.getInstance();
     // Activate User Plan :
     try {
       final plan = await PlanModel(
@@ -313,23 +319,28 @@ class _SelectPlanState extends State<SelectPlan> {
         expire_date: expired,
         buyer_mail: auth.currentUser?.email,
         buyer_name: buyer_name,
-        startup_id: await getStartupId
+        startup_id: await getStartupId, 
+        user_id : await getUserId
       );
 
-      var resp =
-          await userStore.UpdateUserPlanAndStartup(field: 'plan', val: plan);
-      // Success Handler Creating plan :
-      if (resp['response']) {
-        return ResponseBack(
-            response_type: true, message: "plan Created ${resp['message']}");
+      final is_planCreate = await localStore.setString(getStartupPlansStoreName, json.encode(plan));
+      if(is_planCreate){
+
+        var resp = await startupConnector.CreateBusinessPlans();
+        // Success Handler Creating plan :
+        if (resp['response']) {
+          return ResponseBack(
+              response_type: true, message: "plan Created ${resp['message']}");
+        }
+        // Error Handler Createing plan :
+        if (!resp['response']) {
+          return ResponseBack(
+              response_type: false,
+              message: "plan not created ${resp['message']}");
+        }
       }
 
-      // Error Handler Createing plan :
-      if (!resp['response']) {
-        return ResponseBack(
-            response_type: false,
-            message: "plan not created ${resp['message']}");
-      }
+
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -350,21 +361,8 @@ class _SelectPlanState extends State<SelectPlan> {
   /// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
-    var startup = await StartupModel(
-      user_id: await getUserId,
-      email: await getuserEmail,
-      startup_name: await getStartupName,
-    );
-
-    final resp = await userStore.UpdateUserPlanAndStartup(
-        field: 'startups', val: startup);
-
-    try {
-    } catch (e) {
-      print('STARTUP ID NOT ADDED $e');
-    }
-    
-    return resp;
+   var resp = await startupConnector.CreateStartup();
+   return resp;
   }
 
   /////////////////////////////////////////////////////
@@ -463,10 +461,9 @@ class _SelectPlanState extends State<SelectPlan> {
     final is_data_send = await SendDataToFireStore();
     if (is_data_send['response']) {
       print('Data store in firebase  Resp $is_data_send');
+      CloseCustomPageLoadingSpinner();
       await SuccessMailSendAlert();
       await Future.delayed(Duration(seconds: 5));
-
-      CloseCustomPageLoadingSpinner();
       print('SUCCESS RESPONSE ${response.paymentId}');
       Get.toNamed(startup_view_url);
     }

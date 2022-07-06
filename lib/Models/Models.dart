@@ -92,6 +92,7 @@ UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
 
 PlanModel({
   required startup_id,
+  required user_id, 
   plan_name,
   phone_no, 
   buyer_mail, 
@@ -102,8 +103,9 @@ PlanModel({
   try {
     Map<String, dynamic> plan = {
       'id': uuid.v4(),
+      'startup_id':startup_id,
+      'user_id':user_id,
       'plan_name': plan_name,
-      'startup':startup_id,
       'buyer_mail': buyer_mail,
       'buyer_name':buyer_name, 
       'phone_no':phone_no, 

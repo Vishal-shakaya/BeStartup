@@ -1,3 +1,6 @@
+String getStartupStoreName = 'Startups';
+String getStartupPlansStoreName = 'Plans';
+
 String getBusinessDetailStoreName = 'BusinessDetail';
 String getBusinessCatigoryStoreName = 'BusinessCatigory';
 String getBusinessMilestoneStoreName = 'BusinessMilestones';
@@ -9,4 +12,3 @@ String getBusinessTeamMemberStoreName = 'BusinessTeamMember';
 
 String getBusinessFounderContactStoreName = 'FounderUserContact';
 String getBusinessFounderDetailStoreName = 'FounderUserDetail';
-
