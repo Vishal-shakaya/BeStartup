@@ -29,8 +29,7 @@ class FounderConnector extends GetxController {
       if (data != null || data != '') {
         var final_data = json.decode(data!);
         Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['email'] == await getuserEmail &&
-            cacheData['user_id'] == await getUserId) {
+        if (cacheData['user_id'] == await getUserId) {
           return final_data;
         }
       }
@@ -52,6 +51,11 @@ class FounderConnector extends GetxController {
     }
   }
 
+
+
+/////////////////////////////////////////////
+/// GET FOUNDER DETAIL : 
+/////////////////////////////////////////////
   FetchFounderDetailandContact() async {
     var data_userContact;
     var data_userDetail;
@@ -78,12 +82,7 @@ class FounderConnector extends GetxController {
 
       // Get User Detial Document :
       var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
           .where('user_id', isEqualTo: await getUserId)
-          // .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -93,12 +92,7 @@ class FounderConnector extends GetxController {
 
       // Get User  Conctact Document:
       var query1 = store1
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
           .where('user_id', isEqualTo: await getUserId)
-          // .where('startup_name', isEqualTo: await getStartupName)
           .get();
 
       await query.then((value) {
@@ -125,6 +119,9 @@ class FounderConnector extends GetxController {
     }
   }
 
+
+
+  // Create Founder Detail : 
   CreateFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -149,6 +146,10 @@ class FounderConnector extends GetxController {
     }
   }
 
+
+
+
+  // Create Founder Contact : 
   CreateFounderContact() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -175,43 +176,9 @@ class FounderConnector extends GetxController {
     }
   }
 
-  FetchBusinessTeamMember() async {
-    var data;
-    try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessTeamMemberStoreName);
-      if (cacheData != false) {
-        return ResponseBack(
-            response_type: true,
-            data: cacheData,
-            message: 'BusinessTeamMember  Fetch from Cache DB');
-      }
 
-      // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
 
-      await query.then((value) {
-        data = value.docs.first.data();
-      });
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessTeamMemberStoreName, data: data);
-      return ResponseBack(
-          response_type: true,
-          data: data,
-          message: 'BusinessTeamMember Fetch from Firestore DB');
-    } catch (e) {
-      return ResponseBack(response_type: false, data: data, message: e);
-    }
-  }
 
 ////////////////////////////////////////////////////
   /// UPDATIN USER DETAIL AND CONTACT BOTH:

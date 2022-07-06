@@ -23,9 +23,7 @@ class ThumbnailStore extends GetxController {
       try {
         var resp = await ThumbnailModel(
             thumbnail: image_url,
-            user_id: await getUserId,
-            email: await getuserEmail,
-            startup_name: await getStartupName);
+            startup_id: await getStartupId,);
 
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
         return ResponseBack(response_type: true, data: image_url);

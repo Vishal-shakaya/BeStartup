@@ -71,9 +71,7 @@ class BusinessCatigoryStore extends GetxController {
     var main_cat = catigories + temp_catigories;
     try {
       var resp = await CatigoryModel(
-          user_id: await getUserId,
-          email: await getuserEmail,
-          startup_name: await getStartupName,
+          startup_id: await getStartupId,
           catigory: catigories);
 
       localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));

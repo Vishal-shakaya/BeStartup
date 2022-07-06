@@ -6,14 +6,10 @@ import 'package:get/get.dart';
 var uuid = Uuid();
 
 StartupModel({
-  user_id,
-  email,
-  startup_name,
-  timestamp,  
-  desire_amount, 
-  achived_amount,
-  invested,
-  activate,  
+  required user_id,
+  required email,
+  required startup_name,
+   timestamp,  
 })async{
  try {
     Map<String, dynamic> temp_obj = {
@@ -21,11 +17,7 @@ StartupModel({
       'user_id': user_id,
       'email': email,
       'startup_name':startup_name,
-      'desire_amount':desire_amount, 
-      'achived_amount':achived_amount, 
-      'invested':invested, // bool : true if achived desired amount : 
-      'registor_date':DateTime.now().toString(), 
-      'activate':activate, // check if startup plan expired or not : 
+      'timestamp':timestamp, 
     };
     return temp_obj;
   } catch (e) {
@@ -35,21 +27,27 @@ StartupModel({
 
 
 BusinessInfoModel({
-  user_id, 
+  startup_id, 
   logo, 
   name, 
-  email,
-  amount='',
-  investor_no}) async {
+  investor_no, 
+  timestamp,  
+  desire_amount, 
+  achived_amount,
+  invested,
+  activate, }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id, 
-      'email': email,
+      'startup_id':startup_id,
       'logo': logo,
       'name': name,
-      'desire_amount':amount,
-      'investor_no':investor_no
+      'investor_no':investor_no,
+      'desire_amount':desire_amount, 
+      'achived_amount':achived_amount, 
+      'invested':invested, // bool : true if achived desired amount : 
+      'registor_date':DateTime.now().toString(), 
+      'activate':activate, // check if startup plan expired or not :  
     };
     return temp_obj;
   } catch (e) {
@@ -57,18 +55,16 @@ BusinessInfoModel({
   }
 }
 
+
 ThumbnailModel({
   thumbnail,
-  user_id,
-  email,
+  required startup_id, 
   startup_name,
 }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
+      'startup_id':startup_id, 
       'thumbnail': thumbnail,
     };
     return temp_obj;
@@ -77,13 +73,15 @@ ThumbnailModel({
   }
 }
 
-VisionModel({user_id, email, vision, startup_name}) async {
+
+
+VisionModel({
+vision, 
+required startup_id}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
+      'startup_id': startup_id, 
       'vision': vision,
     };
     return temp_obj;
@@ -92,13 +90,13 @@ VisionModel({user_id, email, vision, startup_name}) async {
   }
 }
 
-WhyInvestModel({user_id, email, why_text, startup_name}) async {
+WhyInvestModel({
+  why_text,
+  required startup_id}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
+      'startup_id': startup_id,
       'why_text': why_text,
     };
     return temp_obj;
@@ -107,13 +105,15 @@ WhyInvestModel({user_id, email, why_text, startup_name}) async {
   }
 }
 
-CatigoryModel({user_id, email, startup_name, catigory}) async {
+
+CatigoryModel(
+  {
+  startup_id,   
+  catigory}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
+      'startup_id': startup_id,
       'catigories': catigory
     };
     return temp_obj;
@@ -123,15 +123,33 @@ CatigoryModel({user_id, email, startup_name, catigory}) async {
 }
 
 
-BusinessProductsList({user_id, email, startup_name,  products, timestamp}) async {
+InvestorCatigoryModel(
+  {
+  user_id,   
+  catigory}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'email':email, 
-      'startup_name':startup_name, 
-      'timestamp': timestamp,
+      'catigories': catigory
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
+
+
+BusinessProductsList({
+required startup_id, 
+products}) async {
+  try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'startup_id':startup_id, 
       'products': products,
+      'timestamp': '',
+
     };
     return temp_obj;    
   } catch (e) {
@@ -139,32 +157,29 @@ BusinessProductsList({user_id, email, startup_name,  products, timestamp}) async
   }
 }
 
-BusinessServiceList({user_id, email, startup_name, services, timestamp}) {
+BusinessServiceList({user_id, required startup_id,  services,}) {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'email': email,
-      'user_id': user_id,
-      'timestamp': timestamp,
-      'services': services
+      'startup_id':startup_id, 
+      'services': services, 
+      'timestamp': '',
     };
     return temp_obj;    
   } catch (e) {
     return false; 
   }
 }
+
 
 MileStoneModel(
-    {user_id,
-    email,
-    startup_name,
+    {
+    required startup_id,   
     milestone}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name': startup_name,
+      'startup_id':startup_id, 
       'milestone':milestone
     };
     return temp_obj;
@@ -175,9 +190,7 @@ MileStoneModel(
 
 
 BusinessTeamMembersModel({
-  user_id,
-  email,
-  startup_name,
+  required startup_id, 
   members,
   timestamp,  
 
@@ -185,9 +198,7 @@ BusinessTeamMembersModel({
  try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'user_id': user_id,
-      'startup_name':startup_name,
-      'email': email,
+      'startup_id': startup_id,
       'members':members, 
       'timestamp':timestamp, 
 

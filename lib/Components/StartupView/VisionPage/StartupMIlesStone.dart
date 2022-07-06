@@ -23,13 +23,13 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   var miles_data = [];
 
 /////////////////////////////////////
-  /// GET REQUIREMENTS ; 
+  /// GET REQUIREMENTS ;
 /////////////////////////////////////
   GetLocalStorageData() async {
     try {
       final miles = await startupConnect.FetchBusinessMilestone();
       miles_data = miles['data']['milestone'];
-      return miles;
+      return miles_data;
     } catch (e) {
       return miles_data;
     }
@@ -42,9 +42,9 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
   @override
   Widget build(BuildContext context) {
-  /////////////////////////////////////
-  /// SET  REQUIREMENTS ; 
-  /////////////////////////////////////
+    /////////////////////////////////////
+    /// SET  REQUIREMENTS ;
+    /////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -66,9 +66,10 @@ class _StartupMileStoneState extends State<StartupMileStone> {
               context,
             );
           }
-          return MainMethod(
-            context,
-          );
+            return MainMethod(
+              context,
+            );
+
         });
   }
 
@@ -77,6 +78,12 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   ) {
     List<Widget> mile_title = [];
     List<Widget> mile_desc = [];
+
+    // NULL CHECK : 
+    if (miles_data == [] || miles_data.length <= 0) {
+      return Container();
+    }
+
     _controller = TabContainerController(length: miles_data.length);
     miles_data.forEach((el) {
       final desc = MileDescriptionSection(

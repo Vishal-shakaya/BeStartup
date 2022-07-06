@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
-import 'package:be_startup/Components/StartupView/TeamPage/AllMembers.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -22,6 +21,7 @@ class TeamPage extends StatefulWidget {
 class _TeamPageState extends State<TeamPage> {
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  var startupviewConnector = Get.put(StartupViewConnector(), tag: 'startup_view_connector');
   var founderConnector =
   Get.put(FounderConnector(), tag: 'startup_view_first_connector');
   
@@ -40,7 +40,7 @@ class _TeamPageState extends State<TeamPage> {
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      final data = await founderConnector.FetchBusinessTeamMember();
+      final data = await startupviewConnector.FetchBusinessTeamMember();
       team_member = data['data']['members'];
       return team_member;
     } catch (e) {

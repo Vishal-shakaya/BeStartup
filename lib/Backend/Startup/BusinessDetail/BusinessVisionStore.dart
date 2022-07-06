@@ -24,10 +24,9 @@ class BusinessVisionStore extends GetxController {
       vision = visionText;
       try {
         var resp = await VisionModel(
-            user_id: await getUserId,
-            email:  await  getuserEmail,
+            startup_id: await getStartupId,
             vision: vision,
-            startup_name: await  getStartupName);
+            );
         localStore.setString(getBusinessVisiontStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
       } 

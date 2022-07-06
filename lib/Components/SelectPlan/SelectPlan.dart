@@ -305,14 +305,6 @@ class _SelectPlanState extends State<SelectPlan> {
   }) async {
     // Activate User Plan :
     try {
-      var startup = await StartupModel(
-        user_id: await getUserId,
-        email: await getuserEmail,
-        startup_name: await getStartupName,
-        desire_amount: await getDesireAmount,
-        activate: true,
-      );
-
       final plan = await PlanModel(
         plan_name: plan_type,
         phone_no: phone_no,
@@ -321,7 +313,7 @@ class _SelectPlanState extends State<SelectPlan> {
         expire_date: expired,
         buyer_mail: auth.currentUser?.email,
         buyer_name: buyer_name,
-        startup: startup,
+        startup_id: await getStartupId
       );
 
       var resp =
@@ -362,16 +354,12 @@ class _SelectPlanState extends State<SelectPlan> {
       user_id: await getUserId,
       email: await getuserEmail,
       startup_name: await getStartupName,
-      desire_amount: await getDesireAmount,
-      activate: true,
     );
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
 
-    // Set startup id for detail view:
     try {
-      await SetStartupId(startup['id']);
     } catch (e) {
       print('STARTUP ID NOT ADDED $e');
     }
@@ -397,6 +385,9 @@ class _SelectPlanState extends State<SelectPlan> {
 
     var resp6 = await startupConnector.CreateBusinessVision();
     print(resp6);
+
+    var resp10 = await startupConnector.CreateBusinessWhyInvest();
+    print(resp10);
 
     var resp7 = await founderConnector.CreateFounderContact();
     print(resp7);

@@ -23,9 +23,7 @@ class BusinessWhyInvestStore extends GetxController {
       why_text = visionText;
       try {
         var resp = await WhyInvestModel(
-          user_id: await getUserId,
-          email: await getuserEmail,
-          startup_name: await getStartupName,
+          startup_id: await getStartupId,
           why_text: why_text,
         );
         localStore.setString(getBusinessWhyInvesttStoreName, json.encode(resp));

@@ -18,16 +18,13 @@ class StartupViewConnector extends GetxController {
   GetCachedData(fromModel) async {
     final localStore = await SharedPreferences.getInstance();
     var is_localy_store = localStore.containsKey(fromModel);
-
     if (is_localy_store) {
       var data = localStore.getString(fromModel);
-
       // Validata data :
       if (data != null || data != '') {
         var final_data = json.decode(data!);
         Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['email'] == await getuserEmail &&
-            cacheData['user_id'] == await getUserId) {
+        if (cacheData['startup_id'] == await getStartupId) {
           return final_data;
         }
       }
@@ -49,7 +46,6 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-  // 1. Retrive thumbnial using [ id , email , startup name ]
   // 2. Send it to ui
   // 3. Store data in local storage:
   FetchBusinessDetail() async {
@@ -57,7 +53,7 @@ class StartupViewConnector extends GetxController {
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(getBusinessDetailStoreName);
-      if (cacheData != false) {
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -65,15 +61,10 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('id', isEqualTo: await getStartupId)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -81,7 +72,6 @@ class StartupViewConnector extends GetxController {
 
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: getBusinessDetailStoreName, data: data);
-      print('Business Detail Store to Cached Storage');
 
       return ResponseBack(
           response_type: true,
@@ -95,17 +85,16 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-  // 1. Retrive thumbnial using [ id , email , startup name ]
-  // 2. Send it to ui
-  // 3. Store data in local storage:
+/////////////////////////////////////////
+  /// FETCH THUMBNAIL :
+/////////////////////////////////////////
   FetchThumbnail() async {
     try {
-      ////////////////////////////////////////////////////
       // Check if Thumbnail is cached then send it else
       // fetch form DB:
-      ////////////////////////////////////////////////////
       final cacheData = await GetCachedData(getBusinessThumbnailStoreName);
-      if (cacheData != false) {
+
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -116,21 +105,16 @@ class StartupViewConnector extends GetxController {
       var data;
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
-      var query = thumbnail
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var query =
+          thumbnail.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
       // STORE DATA TO DB :
-      await StoreCacheData(fromModel: getBusinessThumbnailStoreName, data: data);
+      await StoreCacheData(
+          fromModel: getBusinessThumbnailStoreName, data: data);
 
       return ResponseBack(
           response_type: true,
@@ -150,7 +134,7 @@ class StartupViewConnector extends GetxController {
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(getBusinessVisiontStoreName);
-      if (cacheData != false) {
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -158,14 +142,12 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
       final name = await getStartupName;
       print(name);
-      var query = store
-          .where('email', isEqualTo: await getuserEmail)
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -182,16 +164,16 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-  ///////////////////////////////////
+///////////////////////////////////////////
   /// FETCH STARTUP VISION :
-  ///////////////////////////////////
+////////////////////////////////////////////
   FetchBusinessWhy() async {
     var data;
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(getBusinessWhyInvesttStoreName);
-      if (cacheData != false) {
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -199,22 +181,18 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessWhyInvesttStoreName, data: data);
+      await StoreCacheData(
+          fromModel: getBusinessWhyInvesttStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -229,11 +207,10 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   FetchBusinessCatigory() async {
     var data;
-
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(getBusinessCatigoryStoreName);
-      if (cacheData != false) {
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -241,15 +218,10 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -266,13 +238,15 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+  ////////////////////////////////////
+  /// FETCH MILESTONE :
+  ////////////////////////////////////
   FetchBusinessMilestone() async {
     var data;
-
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(getBusinessMilestoneStoreName);
-      if (cacheData != false) {
+      if (cacheData != false || cacheData != null) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -280,22 +254,18 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
       // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessMilestoneStoreName, data: data);
+      await StoreCacheData(
+          fromModel: getBusinessMilestoneStoreName, data: data);
       return ResponseBack(
           response_type: true,
           data: data,
@@ -330,16 +300,10 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING PRODUCT AND SERVICE FROM FIREBASE DB:
-      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
-
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
@@ -389,15 +353,10 @@ class StartupViewConnector extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store
-          .where(
-            'email',
-            isEqualTo: await getuserEmail,
-          )
-          .where('user_id', isEqualTo: await getUserId)
-          .where('startup_name', isEqualTo: await getStartupName)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -421,6 +380,43 @@ class StartupViewConnector extends GetxController {
           message: 'BusinessProducts Fetch Services from Firstore  DB');
     } catch (e) {
       return ResponseBack(response_type: false, data: [], message: e);
+    }
+  }
+
+  ///////////////////////////////////
+  // Fetch Team Member :
+  ///////////////////////////////////
+  FetchBusinessTeamMember() async {
+    var data;
+    try {
+      // FETCHING DATA FROM CACHE STORAGE :
+      final cacheData = await GetCachedData(getBusinessTeamMemberStoreName);
+      if (cacheData != false || cacheData != null) {
+        return ResponseBack(
+            response_type: true,
+            data: cacheData,
+            message: 'BusinessTeamMember  Fetch from Cache DB');
+      }
+
+      // FETCHING DATA FROM FIREBASE
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
+      var query =
+          store.where('startup_id', isEqualTo: await getStartupId).get();
+
+      await query.then((value) {
+        data = value.docs.first.data();
+      });
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(
+          fromModel: getBusinessTeamMemberStoreName, data: data);
+      return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'BusinessTeamMember Fetch from Firestore DB');
+    } catch (e) {
+      return ResponseBack(response_type: false, data: data, message: e);
     }
   }
 }

@@ -24,8 +24,7 @@ class InvestorConnector extends GetxController {
       if (data != null || data != '') {
         var final_data = json.decode(data!);
         Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['email'] == await getuserEmail &&
-            cacheData['user_id'] == await getUserId) {
+        if (cacheData['user_id'] == await getUserId) {
           return final_data;
         }
       }

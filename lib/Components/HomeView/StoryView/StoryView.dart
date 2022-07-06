@@ -20,12 +20,15 @@ class _StoryViewState extends State<StoryView> {
   double header_section_height = 0.35;
   bool is_saved = false;
 
+
+
   @override
   void initState() {
     // TODO: implement initState
     is_saved = false;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Card(

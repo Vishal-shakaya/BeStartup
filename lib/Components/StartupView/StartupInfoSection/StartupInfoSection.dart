@@ -36,15 +36,32 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
 
   @override
   Widget build(BuildContext context) {
-    // INITILIZE DEFAULT STATE :
-    // GET IMAGE IF HAS IS LOCAL STORAGE :
+    //////////////////////////////////////////
+    /// GET REQUIRED PARAMETER :
+    //////////////////////////////////////////
     GetLocalStorageData() async {
       var my_data;
+      var thumbnail;
+      var logo;
       try {
         final business_name_resp = await startupConnect.FetchBusinessDetail();
         final business_thum_resp = await startupConnect.FetchThumbnail();
-        final thumbnail = business_thum_resp['data']['thumbnail'];
-        final logo = business_name_resp['data']['logo'];
+
+        // Thumbnail Handler :
+        if (business_thum_resp['response']) {
+          thumbnail = business_thum_resp['data']['thumbnail'];
+        }
+        if (!business_thum_resp['response']) {
+          thumbnail = business_thum_resp['data'];
+        }
+
+        // Logo Handler :
+        if (business_name_resp['response']) {
+          logo = business_name_resp['data']['logo'];
+        }
+        if (!business_name_resp['response']) {
+          logo = business_name_resp['data'];
+        }
         var my_data = {'thumbnail': thumbnail, 'logo': logo};
 
         return my_data;
@@ -53,6 +70,9 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
       }
     }
 
+    //////////////////////////////////////////
+    /// SET REQUIRED PARAMETER :
+    //////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -79,6 +99,9 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
         });
   }
 
+///////////////////////////////////////
+  /// MAIN METHOD :
+///////////////////////////////////////
   Container MainMethod(BuildContext context, data) {
     return Container(
         height: context.height * 0.45,

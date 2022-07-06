@@ -142,9 +142,7 @@ class BusinessTeamMemberStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessTeamMembersModel(
-        user_id: await  getUserId,
-        email: await getuserEmail,
-        startup_name: await getStartupName,
+        startup_id: await  getStartupId,
         members: member_list,
       );
 

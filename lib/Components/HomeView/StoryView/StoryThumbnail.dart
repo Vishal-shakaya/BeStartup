@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StoryThumbnail extends StatelessWidget {
+class StoryThumbnail extends StatefulWidget {
   const StoryThumbnail({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<StoryThumbnail> createState() => _StoryThumbnailState();
+}
+
+class _StoryThumbnailState extends State<StoryThumbnail> {
+  double image_cont_width = 0.46;
+  double image_cont_height = 0.18;
+
+  double image_thumb_width = 0.46;
+  double image_thumb_height = 0.15;
 
   @override
   Widget build(BuildContext context) {
-    double image_cont_width = 0.46;
-    double image_cont_height = 0.18;
-
-    double image_thumb_width = 0.46;
-    double image_thumb_height = 0.15;
-
+    
+  
     return Card(
       elevation: 5,
       shadowColor: Colors.grey,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.horizontal(
-        left: Radius.circular(19),
+        left: Radius.circular(19), 
         right: Radius.circular(19),
       )),
       child: Container(
@@ -43,6 +49,6 @@ class StoryThumbnail extends StatelessWidget {
               height:context.height * image_thumb_height,
               fit: BoxFit.cover),
         )),
-                      );
+    );
   }
 }

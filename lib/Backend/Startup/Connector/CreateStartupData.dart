@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,13 +15,13 @@ class StartupConnector extends GetxController {
   //////////////////////////////////////////////////////
   CreateBusinessCatigory() async {
     final localStore = await SharedPreferences.getInstance();
-    final myStore = store.collection('BusinessCatigory');
+    final myStore = store.collection(getBusinessCatigoryStoreName);
     try {
       // kye : BusinessCatigory
-      bool is_data = localStore.containsKey('BusinessCatigory');
+      bool is_data = localStore.containsKey(getBusinessCatigoryStoreName);
 
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessCatigory');
+        String? temp_data = localStore.getString(getBusinessCatigoryStoreName);
         Map<String, dynamic> data = json.decode(temp_data!);
 
         await myStore.add(data);
@@ -36,17 +37,23 @@ class StartupConnector extends GetxController {
     }
   }
 
+
+/////////////////////////////////////////
+/// Upload Business Detial : 
+// 1. Get Data form local storage :
+// 2. if has data then Store in Firebase Databse :
+/////////////////////////////////////////
   CreateBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessDetail');
+      final myStore = store.collection(getBusinessDetailStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessDetail
-      bool is_data = localStore.containsKey('BusinessDetail');
+      bool is_data = localStore.containsKey(getBusinessDetailStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessDetail');
+        String? temp_data = localStore.getString(getBusinessDetailStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -64,17 +71,20 @@ class StartupConnector extends GetxController {
     }
   }
 
+  /////////////////////////////////////////
+  // Upload Milestone : 
+  /////////////////////////////////////////
   CreateBusinessMileStone() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessMilestones');
+      final myStore = store.collection(getBusinessMilestoneStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessMilestones
-      bool is_data = localStore.containsKey('BusinessMilestones');
+      bool is_data = localStore.containsKey(getBusinessMilestoneStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessMilestones');
+        String? temp_data = localStore.getString(getBusinessMilestoneStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -93,6 +103,10 @@ class StartupConnector extends GetxController {
     }
   }
 
+
+  //////////////////////////////////////////
+  /// Upload Products :
+  //////////////////////////////////////////
   CreateBusinessProduct() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -121,17 +135,21 @@ class StartupConnector extends GetxController {
     }
   }
 
+
+/////////////////////////////////////////////////
+/// Upload Vision : 
+/////////////////////////////////////////////////
   CreateBusinessVision() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessVision');
+      final myStore = store.collection(getBusinessVisiontStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessVision
-      bool is_data = localStore.containsKey('BusinessVision');
+      bool is_data = localStore.containsKey(getBusinessVisiontStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessVision');
+        String? temp_data = localStore.getString(getBusinessVisiontStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -147,18 +165,54 @@ class StartupConnector extends GetxController {
     }
   }
 
+
+/////////////////////////////////////////////////
+/// Upload Why Text : 
+/////////////////////////////////////////////////
+  CreateBusinessWhyInvest() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      final myStore = store.collection(getBusinessWhyInvesttStoreName);
+
+      // fetch catigories for local storage :
+      // kye : BusinessVision
+      bool is_data = localStore.containsKey(getBusinessWhyInvesttStoreName);
+      // Validate key :
+      if (is_data) {
+        String? temp_data = localStore.getString(getBusinessWhyInvesttStoreName);
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(
+            response_type: true, message: 'Create BusinessWhyInvest Successfully');
+      } else {
+        return ResponseBack(
+            response_type: false, message: 'BusinessWhyInvest ${cached_error} ');
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+
+
+/////////////////////////////////////////////////
+/// Upload Thumbnail :  
+/////////////////////////////////////////////////
   CreateBusinessThumbnail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessThumbnail');
+      final myStore = store.collection(getBusinessThumbnailStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessThumbnail
 
-      bool is_data = localStore.containsKey('BusinessThumbnail');
+      bool is_data = localStore.containsKey(getBusinessThumbnailStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessThumbnail');
+        String? temp_data = localStore.getString(getBusinessThumbnailStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
@@ -176,17 +230,20 @@ class StartupConnector extends GetxController {
     }
   }
 
+///////////////////////////////////////////////
+/// Upload Team Member : 
+///////////////////////////////////////////////
   CreateBusinessTeamMember() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessTeamMember');
+      final myStore = store.collection(getBusinessTeamMemberStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessTeamMember
-      bool is_data = localStore.containsKey('BusinessTeamMember');
+      bool is_data = localStore.containsKey(getBusinessTeamMemberStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessTeamMember');
+        String? temp_data = localStore.getString(getBusinessTeamMemberStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :

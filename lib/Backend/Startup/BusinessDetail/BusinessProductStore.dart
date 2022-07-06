@@ -213,9 +213,7 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessProductsList(
-        user_id: await getUserId,
-        email: await getuserEmail,
-        startup_name: await getStartupName,
+        startup_id: await getStartupId,
         products: product_list,
       );
 

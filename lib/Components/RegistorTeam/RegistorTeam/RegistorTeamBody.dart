@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -32,6 +33,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
+  var startupviewConnector = Get.put(StartupViewConnector(), tag: 'startup_view_connector');
   var investorConnector =
       Get.put(InvestorConnector(), tag: 'investor_connector');
 
@@ -99,8 +101,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var startup = await StartupModel(
         user_id: await getUserId,
         email: await getuserEmail,
-        startup_name: await getStartupName,
-        desire_amount: await getDesireAmount);
+        startup_name: await getStartupName);
 
     final resp = await userStore.UpdateUserPlanAndStartup(
         field: 'startups', val: startup);
@@ -259,7 +260,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var error_resp;
     try {
       if(updateMode==true){
-        final fetch_resp = founderConnector.FetchBusinessTeamMember();
+        final fetch_resp = await startupviewConnector.FetchBusinessTeamMember();
       }
       
       final data = await memeberStore.GetMembers();
