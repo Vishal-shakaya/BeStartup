@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StoryView extends StatefulWidget {
-  const StoryView({
+  var startup_id;
+  StoryView({
     Key? key,
+    // required this.startup_id,
   }) : super(key: key);
 
   @override
@@ -19,9 +21,6 @@ class StoryView extends StatefulWidget {
 class _StoryViewState extends State<StoryView> {
   double header_section_height = 0.35;
   bool is_saved = false;
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -31,6 +30,7 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.startup_id);
     return Card(
       elevation: 10,
       shadowColor: Colors.blueGrey,
@@ -106,31 +106,30 @@ class _StoryViewState extends State<StoryView> {
 
   Row SaveStoryButton(BuildContext context) {
     return Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    is_saved ? is_saved=false : is_saved=true;
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.all(1),
-                  margin:
-                      EdgeInsets.only(right: context.width * 0.02, top: 5),
-                  child: is_saved
-                    ? const Icon(
-                        Icons.bookmark,
-                        size: 26,
-                        color: Colors.grey,
-                      )
-                    : const Icon(
-                        Icons.bookmark_border_rounded,
-                        size: 26,
-                        color: Colors.grey,
-                      )),
-              )
-            ],
-          );
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              is_saved ? is_saved = false : is_saved = true;
+            });
+          },
+          child: Container(
+              padding: EdgeInsets.all(1),
+              margin: EdgeInsets.only(right: context.width * 0.02, top: 5),
+              child: is_saved
+                  ? const Icon(
+                      Icons.bookmark,
+                      size: 26,
+                      color: Colors.grey,
+                    )
+                  : const Icon(
+                      Icons.bookmark_border_rounded,
+                      size: 26,
+                      color: Colors.grey,
+                    )),
+        )
+      ],
+    );
   }
 }

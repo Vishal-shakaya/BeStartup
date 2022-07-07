@@ -66,7 +66,9 @@ final startupSlideStorageKeys = [
   getBusinessThumbnailStoreName,
   getBusinessTeamMemberStoreName, 
   getBusinessFounderContactStoreName,
-  getBusinessFounderDetailStoreName 
+  getBusinessFounderDetailStoreName , 
+  getStartupPlansStoreName,
+  getStartupStoreName
 ];
 
 ////////////////////////////////////////////
