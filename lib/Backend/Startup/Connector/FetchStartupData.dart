@@ -15,24 +15,32 @@ class StartupViewConnector extends GetxController {
   // CUSTOM CACHING  SYSTEM :
   // GET DATA FROM LOCAL STORGE
   ////////////////////////////////////////
-  GetCachedData(fromModel) async {
+  GetCachedData({fromModel, startup_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var is_localy_store = localStore.containsKey(fromModel);
     if (is_localy_store) {
       var data = localStore.getString(fromModel);
+
       // Validata data :
       if (data != null || data != '') {
         var final_data = json.decode(data!);
         Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['startup_id'] == await getStartupId) {
+        if (cacheData['startup_id'] == startup_id) {
           return final_data;
+        } else {
+          return false;
         }
+      } else {
+        return false;
       }
     } else {
       return false;
     }
   }
 
+///////////////////////////////////////////
+  /// ADD DATA TO CACHED :
+///////////////////////////////////////////
   StoreCacheData({fromModel, data}) async {
     try {
       final localStore = await SharedPreferences.getInstance();
@@ -48,12 +56,24 @@ class StartupViewConnector extends GetxController {
 
   // 2. Send it to ui
   // 3. Store data in local storage:
-  FetchBusinessDetail() async {
+  FetchBusinessDetail({startup_id = false}) async {
     var data;
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessDetailStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessDetailStoreName,
+          startup_id: final_startup_id);
+
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -88,13 +108,23 @@ class StartupViewConnector extends GetxController {
 /////////////////////////////////////////
   /// FETCH THUMBNAIL :
 /////////////////////////////////////////
-  FetchThumbnail() async {
+  FetchThumbnail({startup_id = false}) async {
+    var final_startup_id;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // Check if Thumbnail is cached then send it else
       // fetch form DB:
-      final cacheData = await GetCachedData(getBusinessThumbnailStoreName);
-
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -106,8 +136,7 @@ class StartupViewConnector extends GetxController {
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
       var query =
-          thumbnail.where('startup_id', isEqualTo: await getStartupId).get();
-
+          thumbnail.where('startup_id', isEqualTo: final_startup_id).get();
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
@@ -129,12 +158,24 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
-  FetchBusinessVision() async {
+  FetchBusinessVision({startup_id = false}) async {
     var data;
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessVisiontStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -167,13 +208,23 @@ class StartupViewConnector extends GetxController {
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :
 ////////////////////////////////////////////
-  FetchBusinessWhy() async {
+  FetchBusinessWhy({startup_id = false}) async {
     var data;
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessWhyInvesttStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -205,12 +256,24 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
-  FetchBusinessCatigory() async {
+  FetchBusinessCatigory({startup_id = false}) async {
     var data;
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessCatigoryStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -241,12 +304,23 @@ class StartupViewConnector extends GetxController {
   ////////////////////////////////////
   /// FETCH MILESTONE :
   ////////////////////////////////////
-  FetchBusinessMilestone() async {
+  FetchBusinessMilestone({startup_id = false}) async {
     var data;
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessMilestoneStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,
@@ -278,14 +352,26 @@ class StartupViewConnector extends GetxController {
   //////////////////////////////////
   /// Fetch Product :
   //////////////////////////////////
-  FetchProducts() async {
+  FetchProducts({startup_id = false}) async {
+    var final_startup_id = await getStartupId;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     var data;
     var product_list = [];
     var only_product = [];
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessProductStoreName);
-      if (cacheData != false && cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+
+      if (cacheData != false) {
         // filter product :
         product_list = cacheData['products'];
         product_list.forEach((element) {
@@ -332,14 +418,31 @@ class StartupViewConnector extends GetxController {
   /// It fetches data from firestore
   /// and stores it in cache storage
 /////////////////////////////////////////////////////
-  FetchServices() async {
+  FetchServices({startup_id = false}) async {
+    var final_startup_id = await getStartupId;
     var data;
     var service_list = [];
     var only_services = [];
+
+    // Filter Startup Id :
+    // if (startup_id != null || startup_id != '') {
+    //   final_startup_id = startup_id;
+    // }
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessProductStoreName);
-      if (cacheData != false && cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+
+      if (cacheData != false) {
         service_list = cacheData['products'];
         service_list.forEach((element) {
           if (element['type'] == 'service') {
@@ -386,12 +489,23 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   // Fetch Team Member :
   ///////////////////////////////////
-  FetchBusinessTeamMember() async {
+  FetchBusinessTeamMember({startup_id = false}) async {
+    var final_startup_id = await getStartupId;
     var data;
+
+    // Filter Startup Id :
+    if (startup_id!='' || startup_id!=false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(getBusinessTeamMemberStoreName);
-      if (cacheData != false || cacheData != null) {
+      final cacheData = await GetCachedData(
+          fromModel: getBusinessThumbnailStoreName,
+          startup_id: final_startup_id);
+      if (cacheData != false) {
         return ResponseBack(
             response_type: true,
             data: cacheData,

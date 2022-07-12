@@ -8,12 +8,18 @@ import 'package:get/get.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'package:carousel_slider/carousel_slider.dart';
+
 class StoryListView extends StatelessWidget {
   StoryListView({Key? key}) : super(key: key);
 
   var homeViewConnector = Get.put(HomeViewConnector());
   var startups_length;
+  var startup_names;
   var startup_ids;
+  var founder_ids;
+
+  CarouselController buttonCarouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +32,8 @@ class StoryListView extends StatelessWidget {
         if (resp['response']) {
           startups_length = resp['data']['startup_len'];
           startup_ids = resp['data']['startup_ids'];
+          founder_ids = resp['data']['founder_id'];
+          startup_names = resp['data']['startup_name'];
         }
         if (!resp['response']) {
           startups_length = 0;
@@ -69,25 +77,69 @@ class StoryListView extends StatelessWidget {
     return Container(
         width: context.width * 0.45,
         height: context.height * 0.67,
-        child: Swiper(
-          // containerHeight: 200,
-          // containerWidth: 200,
-          // CONTENT SECTION :
-          itemBuilder: ((context, index) {
-            print(index);
-            return StoryView(
-              key: UniqueKey(),
-              // startup_id: startup_ids[index],
-            );
-          }),
-          index: 0,
-          scrollDirection: Axis.horizontal,
-          itemCount: 3,
-          pagination: SwiperPagination(builder: SwiperPagination.dots),
-          control: SwiperControl(
-            color: Colors.blueGrey.shade100,
-            padding: EdgeInsets.only(top: context.height * 0.04, right: 8.0),
-          ),
+        child: Stack(
+          children: [
+            //////////////////////////////////
+            // CAURSEL SLIDER :
+            //////////////////////////////////
+            CarouselSlider.builder(
+                carouselController: buttonCarouselController,
+                itemCount: startups_length,
+                itemBuilder:
+                    (BuildContext context, int itemIndex, int pageViewIndex) {                
+                  return Container(
+                    child: StoryView(
+                      key: UniqueKey(),
+                      startup_id: startup_ids[itemIndex],
+                      founder_id: founder_ids[itemIndex],
+                      startup_name: startup_names[itemIndex],
+                    ),
+                  );
+                },
+                options: CarouselOptions(
+                    height: context.height * 0.67, viewportFraction: 1)),
+
+            // Back Button :
+            BackButton(context),
+            ForwordButton(context)
+          ],
+        ));
+  }
+
+//////////////////////////////////////////////////
+  /// EXTERNAL METHOD  :
+//////////////////////////////////////////////////
+  Positioned ForwordButton(BuildContext context) {
+    return Positioned(
+        top: context.height * 0.32,
+        left: context.width * 0.42,
+        child: Container(
+          child: IconButton(
+              onPressed: () {
+                buttonCarouselController.nextPage(
+                    duration: Duration(milliseconds: 450),
+                    curve: Curves.linear);
+              },
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey.shade300,
+              )),
+        ));
+  }
+
+  Positioned BackButton(BuildContext context) {
+    return Positioned(
+        top: context.height * 0.32,
+        left: context.width * 0.01,
+        child: Container(
+          child: IconButton(
+              onPressed: () {
+                buttonCarouselController.previousPage();
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.grey.shade300,
+              )),
         ));
   }
 }
