@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/StartupMIlesStone.dart';
@@ -21,43 +22,38 @@ class VisionPage extends StatefulWidget {
 class _VisionPageState extends State<VisionPage> {
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-  
+
   var final_data;
   double page_width = 0.80;
-
 
   EditVision() {
     Get.toNamed(create_business_vision_url, parameters: {'type': 'update'});
   }
-  
+
   EditMilestone() {
-    Get.toNamed(create_business_milestone_url,
-        parameters: {'type': 'update'});
+    Get.toNamed(create_business_milestone_url, parameters: {'type': 'update'});
   }
 
-
   //////////////////////////////////
-  // GET REQUIREMENTS : 
+  // GET REQUIREMENTS :
   //////////////////////////////////
   GetLocalStorageData() async {
+    final startup_id = await getStartupDetailViewId; 
     try {
-      // await Future.delayed(Duration(seconds: 3));
-      final vision = await startupConnect.FetchBusinessVision();
+      final vision = await startupConnect.FetchBusinessVision(
+          startup_id: startup_id);
       final_data = vision['data']['vision'];
       return final_data;
     } catch (e) {
       return final_data;
     }
   }
-    
-
-
 
   @override
   Widget build(BuildContext context) {
-  //////////////////////////////////
-  // SET REQUIREMENTS : 
-  //////////////////////////////////
+    //////////////////////////////////
+    // SET REQUIREMENTS :
+    //////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {

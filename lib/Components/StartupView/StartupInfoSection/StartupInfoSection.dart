@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
@@ -17,19 +18,15 @@ enum StartupPageRoute {
   invest,
 }
 
-class StartupInfoSection extends StatefulWidget {
+class StartupInfoSection extends StatelessWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
-  @override
-  State<StartupInfoSection> createState() => _StartupInfoSectionState();
-}
-
-class _StartupInfoSectionState extends State<StartupInfoSection> {
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
+  // Edit Thumbnail :
   EditThumbnail() {
     Get.toNamed(create_business_thumbnail_url, parameters: {'type': 'update'});
   }
@@ -43,9 +40,12 @@ class _StartupInfoSectionState extends State<StartupInfoSection> {
       var my_data;
       var thumbnail;
       var logo;
+      final startup_id=await getStartupDetailViewId;
       try {
-        final business_name_resp = await startupConnect.FetchBusinessDetail();
-        final business_thum_resp = await startupConnect.FetchThumbnail();
+        final business_name_resp = await startupConnect.FetchBusinessDetail(
+            startup_id: startup_id);
+        final business_thum_resp = await startupConnect.FetchThumbnail(
+            startup_id: startup_id);
 
         // Thumbnail Handler :
         if (business_thum_resp['response']) {

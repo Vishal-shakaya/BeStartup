@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
@@ -29,8 +30,12 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     // INITILIZE DEFAULT STATE :
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
+      final startup_id = await getStartupDetailViewId;
       try {
-        final resp = await startupConnect.FetchBusinessVision();
+        final resp = await startupConnect.FetchBusinessVision(
+          startup_id: startup_id
+        );
+
         vision_text = resp['data']['vision'];
         return vision_text;
       } catch (e) {

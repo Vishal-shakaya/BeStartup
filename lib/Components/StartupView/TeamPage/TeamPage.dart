@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
@@ -25,7 +26,7 @@ class _TeamPageState extends State<TeamPage> {
   var founderConnector =
   Get.put(FounderConnector(), tag: 'startup_view_first_connector');
   
-  var team_member;
+  var team_member =[];
   double page_width = 0.80;
 
 
@@ -40,7 +41,9 @@ class _TeamPageState extends State<TeamPage> {
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      final data = await startupviewConnector.FetchBusinessTeamMember();
+      final data = await startupviewConnector.FetchBusinessTeamMember(
+        startup_id: await getStartupDetailViewId
+      );
       team_member = data['data']['members'];
       return team_member;
     } catch (e) {
@@ -190,7 +193,8 @@ class _TeamPageState extends State<TeamPage> {
                       ),
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10),
-                      child: ListView.builder(
+                      child: team_member.length <=0? Container()
+                      : ListView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: data.length,
                         itemBuilder: (context, index) {

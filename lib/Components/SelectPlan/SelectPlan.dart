@@ -384,9 +384,6 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp6 = await startupConnector.CreateBusinessVision();
     print(resp6);
 
-    var resp10 = await startupConnector.CreateBusinessWhyInvest();
-    print(resp10);
-
     var resp7 = await founderConnector.CreateFounderContact();
     print(resp7);
 
@@ -395,6 +392,12 @@ class _SelectPlanState extends State<SelectPlan> {
 
     var resp9 = await startupConnector.CreateBusinessTeamMember();
     print(resp9);
+
+    var resp10 = await startupConnector.CreateBusinessWhyInvest();
+    print(resp10);
+
+    var resp11 = await startupConnector.CreateBusinessMileStone();
+    print(resp11);
 
     // var resp10 = await investorConnector.CreateInvestorContact();
     // print(resp10);

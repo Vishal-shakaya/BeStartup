@@ -76,7 +76,10 @@ class _StoryViewState extends State<StoryView> {
 
                     // INFO MINI CHART :
                     // StoryInfoChart(),
-                    ViewStoryButton()
+                    ViewStoryButton(
+                      founder_id: widget.founder_id,
+                      startup_id: widget.startup_id,
+                    )
                   ],
                 ),
               ),

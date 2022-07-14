@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -36,8 +37,10 @@ class _InvestPageState extends State<InvestPage> {
   /// GET REQUIREMENTS :
   ////////////////////////////////
   GetLocalStorageData() async {
+    final startup_id = await getStartupDetailViewId;
     try {
-      final resp = await startupConnector.FetchBusinessWhy();
+      final resp =
+          await startupConnector.FetchBusinessWhy(startup_id: startup_id);
       why_text = resp['data']['why_text'];
       return why_text;
     } catch (e) {
@@ -73,7 +76,9 @@ class _InvestPageState extends State<InvestPage> {
         });
   }
 
-  Container MainMethod( BuildContext context,) {
+  Container MainMethod(
+    BuildContext context,
+  ) {
     return Container(
       width: context.width * page_width,
       child: Container(

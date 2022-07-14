@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Products.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Services.dart';
@@ -39,7 +40,8 @@ class _ServiceSectionState extends State<ServiceSection> {
     // GET IMAGE IF HAS IS LOCAL STORAGE :
     GetLocalStorageData() async {
       try {
-        final data = await startupConnect.FetchServices();
+        final startup_id = await getStartupDetailViewId;
+        final data = await startupConnect.FetchServices(startup_id: startup_id);
         services = data['data'];
         return data;
       } catch (e) {
