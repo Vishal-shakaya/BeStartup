@@ -1,3 +1,4 @@
+import 'package:be_startup/Components/HomeView/StoryView/SaveStoryButton.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryCeoProfile.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHeading.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryMileStone.dart';
@@ -25,15 +26,6 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   double header_section_height = 0.35;
-  bool is_saved = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    is_saved = false;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -85,10 +77,16 @@ class _StoryViewState extends State<StoryView> {
               ),
 
               // MILESTONES:
-              StoryMileStone(),
+              StoryMileStone(
+                founder_id: widget.founder_id,
+                startup_id: widget.startup_id,
+              ),
 
               // SAVE BUTTON :
-              SaveStoryButton(context)
+              SaveStoryButton(
+                founder_id: widget.founder_id,
+                startup_id: widget.startup_id,
+              )
             ],
           ),
         ),
@@ -96,33 +94,5 @@ class _StoryViewState extends State<StoryView> {
     );
   }
 
-  Row SaveStoryButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              is_saved ? is_saved = false : is_saved = true;
-            });
-          },
-          child: Container(
-              padding: EdgeInsets.all(1),
-              margin: EdgeInsets.only(right: context.width * 0.02, top: 5),
-              child: is_saved
-                  ? const Icon(
-                      Icons.bookmark,
-                      size: 26,
-                      color: Colors.grey,
-                    )
-                  : const Icon(
-                      Icons.bookmark_border_rounded,
-                      size: 26,
-                      color: Colors.grey,
-                    )),
-        )
-      ],
-    );
-  }
 }
 

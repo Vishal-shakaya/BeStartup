@@ -90,6 +90,8 @@ UserContact({user_id, email,  primary_mail, other_contact, phone_no}) async {
   }
 }
 
+
+
 PlanModel({
   required startup_id,
   required user_id, 
@@ -120,14 +122,14 @@ PlanModel({
   }
 }
 
-SaveIdeasModel({user_id, logo, name, email, timestamp}) async {
+
+SaveStartupsModel({user_id, timestamp,startup_ids}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'name': name,
-      'email': email,
       'user_id': user_id,
-      'timestamp': timestamp
+      'startup_ids':startup_ids,
+      'timestamp': DateTime.now().toString()
     };
     return temp_obj;
   } catch (e) {

@@ -465,17 +465,14 @@ class _SelectPlanState extends State<SelectPlan> {
     if (is_data_send['response']) {
       print('Data store in firebase  Resp $is_data_send');
       CloseCustomPageLoadingSpinner();
-      await SuccessMailSendAlert();
-      await Future.delayed(Duration(seconds: 5));
-      print('SUCCESS RESPONSE ${response.paymentId}');
-      Get.toNamed(startup_view_url);
+      Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
     // redirect user to home view :
     if (!is_data_send['response']) {
       CloseCustomPageLoadingSpinner();
-      return Get.toNamed(home_page_url);
+      Get.toNamed(home_page_url);
     }
   }
 
@@ -530,20 +527,15 @@ class _SelectPlanState extends State<SelectPlan> {
     // startup detail page :
     final is_data_send = await SendDataToFireStore();
     if (is_data_send['response']) {
-      print('Data store in firebase  Resp $is_data_send');
-      await SuccessMailSendAlert();
-      await Future.delayed(Duration(seconds: 5));
-
       CloseCustomPageLoadingSpinner();
-      print('SUCCESS RESPONSE ${response..walletName}');
-      Get.toNamed(startup_view_url);
+      Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
     // redirect user to home view :
     if (!is_data_send['response']) {
       CloseCustomPageLoadingSpinner();
-      return Get.toNamed(home_page_url);
+      Get.toNamed(home_page_url);
     }
   }
 

@@ -66,7 +66,7 @@ class StartupViewConnector extends GetxController {
     } else {
       final_startup_id = await getStartupId;
     }
-
+    
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(
@@ -409,7 +409,7 @@ class StartupViewConnector extends GetxController {
   /// and stores it in cache storage
 /////////////////////////////////////////////////////
   FetchServices({startup_id = false}) async {
-    var final_startup_id ;
+    var final_startup_id;
     var data;
     var service_list = [];
     var only_services = [];
@@ -471,7 +471,7 @@ class StartupViewConnector extends GetxController {
   // Fetch Team Member :
   ///////////////////////////////////
   FetchBusinessTeamMember({startup_id = false}) async {
-    var final_startup_id ;
+    var final_startup_id;
     var data;
 
     // Filter Startup Id :

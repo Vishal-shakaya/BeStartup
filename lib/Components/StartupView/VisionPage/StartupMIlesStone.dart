@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -26,8 +27,10 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   /// GET REQUIREMENTS ;
 /////////////////////////////////////
   GetLocalStorageData() async {
+    final startup_id = await getStartupDetailViewId;
     try {
-      final miles = await startupConnect.FetchBusinessMilestone();
+      final miles =
+          await startupConnect.FetchBusinessMilestone(startup_id: startup_id);
       miles_data = miles['data']['milestone'];
       return miles_data;
     } catch (e) {
@@ -35,10 +38,6 @@ class _StartupMileStoneState extends State<StartupMileStone> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,20 +65,20 @@ class _StartupMileStoneState extends State<StartupMileStone> {
               context,
             );
           }
-            return MainMethod(
-              context,
-            );
-
+          return MainMethod(
+            context,
+          );
         });
   }
 
   Container MainMethod(
     BuildContext context,
   ) {
+
     List<Widget> mile_title = [];
     List<Widget> mile_desc = [];
 
-    // NULL CHECK : 
+    // NULL CHECK :
     if (miles_data == [] || miles_data.length <= 0) {
       return Container();
     }
