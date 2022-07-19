@@ -51,45 +51,52 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     Navigator.of(context).pop();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    String? selectedValue;
-
+  String? selectedValue;
+    //////////////////////////////////////
+    /// Investor Dialog : 
+    //////////////////////////////////////
     ShowDialog(context) {
       showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => AlertDialog(
-                alignment: Alignment.center,
-                // title:  MileDialogHeading(context),
-                content: SizedBox(
-                  width: mem_dialog_width,
-                  child: AddInvestorDialogAlert(
-                    form_type: InvestorFormType.create,
-                  ),
-                ),
-              ));
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+          alignment: Alignment.center,
+          // title:  MileDialogHeading(context),
+          content: SizedBox(
+            width: mem_dialog_width,
+            child: AddInvestorDialogAlert(
+              form_type: InvestorFormType.create,
+            ),
+          ),
+        ));
     }
 
-    AddInvestor(context) {
-      ShowDialog(context);
-    }
 
-    // Explore Topics
-    ExploreFunction() {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(content: ExploreCatigoryAlert());
-          });
-    }
+  //////////////////////////////
+  /// ADD INVESTOR :   
+  //////////////////////////////  
+  AddInvestor(context) {
+    ShowDialog(context);
+  }
 
-    //////////////////////////////////////////////////////////
-    /// CREATE STARTUP :
-    /// If the user has a plan, go to the create business
-    /// detail page. If the user doesn't have a plan, go
-    /// to the user type slide page
-    //////////////////////////////////////////////////////////
+  //////////////////////////
+  // Explore Topics
+  //////////////////////////
+  ExploreFunction() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(content: ExploreCatigoryAlert());
+        });
+  }
+
+  //////////////////////////////////////////////////////////
+  /// Create Startup Url  :
+  //////////////////////////////////////////////////////////
     CreateStatup() async {
       await ClearStartupSlideCached();
       Get.toNamed(create_business_detail_url);
@@ -130,104 +137,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              is_home_view = true;
-                              is_save_view = false;
-                            });
-                            widget.changeView(HomePageViews.storyView);
-                          },
-                          icon: is_home_view
-                              ? Icon(
-                                  Icons.home,
-                                  size: 28,
-                                )
-                              : Icon(
-                                  Icons.home_outlined,
-                                  size: 28,
-                                )),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              is_home_view = false;
-                              is_save_view = true;
-                            });
-                            widget.changeView(HomePageViews.safeStory);
-                          },
-                          icon: is_save_view
-                              ? Icon(
-                                  Icons.bookmark,
-                                  size: 28,
-                                )
-                              : Icon(
-                                  Icons.bookmark_border_outlined,
-                                  size: 28,
-                                )),
-                      Container(
-                        width: context.width * 0.08,
-                        child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                          items: [
-                            ...MenuItems.firstItems.map(
-                              (item) => DropdownMenuItem<MenuItem>(
-                                value: item,
-                                child: MenuItems.buildItem(item),
-                              ),
-                            ),
-                            // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
-                            ...MenuItems.secondItems.map(
-                              (item) => DropdownMenuItem<MenuItem>(
-                                value: item,
-                                child: MenuItems.buildItem(item),
-                              ),
-                            ),
-                          ],
-                          onChanged: (value) async {
-                            // MenuItems.onChanged(context, value as MenuItem);
-                            switch (value) {
-                              case MenuItems.profile:
-                                widget.changeView(HomePageViews.profileView);
-                                setState(() {
-                                  is_home_view = false;
-                                  is_save_view = false;
-                                });
-                                //Do something
-                                break;
-                              case MenuItems.investor:
-                                await AddInvestor(context);
-                                //Do something
-                                break;
-                              case MenuItems.startup:
-                                CreateStatup();
-                                //Do something
-                                break;
-                              case MenuItems.settings:
-                                widget.changeView(HomePageViews.settingView);
-                                setState(() {
-                                  is_home_view = false;
-                                  is_save_view = false;
-                                });
-                                //Do something
-                                break;
-                              case MenuItems.logout:
-                                //Do something
-                                await socialAuth.Logout();
-                                break;
-                            }
-                          },
-                          openWithLongPress: true,
-                          customItemsHeight: 8,
-                          customButton: Container(
-                            margin: EdgeInsets.only(top: context.height * 0.01),
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage:
-                                  NetworkImage(temp_avtar_image, scale: 1),
-                            ),
-                          ),
-                        )),
-                      )
+                      // Home Button : 
+                      StartupViewLink(),
+
+                      // Save Startup Button: 
+                      SaveStartupLink(),
+
+                      // Dropdown menu :   
+                      DropDownMenu(context, AddInvestor, CreateStatup)
                     ],
                   ))
             ],
@@ -235,6 +152,126 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         ),
       ),
     );
+  }
+
+
+
+////////////////////////////////////////
+/// External Methods  : 
+////////////////////////////////////////
+  IconButton SaveStartupLink() {
+    return IconButton(
+        onPressed: () {
+          setState(() {
+            is_home_view = false;
+            is_save_view = true;
+          });
+          widget.changeView(HomePageViews.safeStory);
+        },
+        icon: is_save_view
+            ? Icon(
+                Icons.bookmark,
+                size: 28,
+              )
+            : Icon(
+                Icons.bookmark_border_outlined,
+                size: 28,
+              ));
+  }
+
+
+
+  IconButton StartupViewLink() {
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          is_home_view = true;
+          is_save_view = false;
+        });
+        widget.changeView(HomePageViews.storyView);
+      },
+      icon: is_home_view
+          ? Icon(
+              Icons.home,
+              size: 28,
+            )
+          : Icon(
+              Icons.home_outlined,
+              size: 28,
+            ));
+  }
+
+
+
+
+////////////////////////////////////////
+/// Dropdown Menu : 
+////////////////////////////////////////
+  Container DropDownMenu(BuildContext context, Null AddInvestor(dynamic context), Future<Null> CreateStatup()) {
+    return Container(
+                      width: context.width * 0.08,
+                      child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                        items: [
+                          ...MenuItems.firstItems.map(
+                            (item) => DropdownMenuItem<MenuItem>(
+                              value: item,
+                              child: MenuItems.buildItem(item),
+                            ),
+                          ),
+                          // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
+                          ...MenuItems.secondItems.map(
+                            (item) => DropdownMenuItem<MenuItem>(
+                              value: item,
+                              child: MenuItems.buildItem(item),
+                            ),
+                          ),
+                        ],
+                        onChanged: (value)  async {
+                          // MenuItems.onChanged(context, value as MenuItem);
+                          switch (value) {
+                            case MenuItems.profile:
+                              widget.changeView(HomePageViews.profileView);
+                              setState(() {
+                                is_home_view = false;
+                                is_save_view = false;
+                              });
+                              //Do something
+                              break;
+                            case MenuItems.investor:
+                               await AddInvestor(context);
+                              //Do something
+                              break;
+                            case MenuItems.startup:
+                             await  CreateStatup();
+                              //Do something
+                              break;
+                            case MenuItems.settings:
+                              widget.changeView(HomePageViews.settingView);
+                              setState(() {
+                                is_home_view = false;
+                                is_save_view = false;
+                              });
+                              //Do something
+                              break;
+                            case MenuItems.logout:
+                              //Do something
+                              await  socialAuth.Logout();
+                              break;
+                          }
+                        },
+                        openWithLongPress: true,
+                        customItemsHeight: 8,
+                        customButton: Container(
+                          margin: EdgeInsets.only(top: context.height * 0.01),
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage:
+                                NetworkImage(temp_avtar_image, scale: 1),
+                          ),
+                        ),
+                      )),
+                    );
   }
 
   Container ExploreButton(BuildContext context, Null ExploreFunction()) {

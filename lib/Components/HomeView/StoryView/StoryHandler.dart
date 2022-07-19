@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryView.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -11,7 +12,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class StoryListView extends StatelessWidget {
-  StoryListView({Key? key}) : super(key: key);
+  bool? is_save_page = false;
+  StoryListView({this.is_save_page, Key? key}) : super(key: key);
 
   var homeViewConnector = Get.put(HomeViewConnector());
   var startups_length;
@@ -27,8 +29,17 @@ class StoryListView extends StatelessWidget {
     /// GET SECTION :
 //////////////////////////////////////////////////////
     GetLocalStorageData() async {
+      final user_id = await getUserId;
+      var resp;
       try {
-        final resp = await homeViewConnector.FetchStartups();
+        print('is Save Page $is_save_page');
+        if (is_save_page == true) {
+          print('Fetch Save Startups ');
+          resp = await homeViewConnector.FetchSaveStartups(user_id: user_id);
+        } else {
+          print('Fectching All Post ');
+          resp = await homeViewConnector.FetchStartups();
+        }
         if (resp['response']) {
           startups_length = resp['data']['startup_len'];
           startup_ids = resp['data']['startup_ids'];
@@ -86,7 +97,7 @@ class StoryListView extends StatelessWidget {
                 carouselController: buttonCarouselController,
                 itemCount: startups_length,
                 itemBuilder:
-                    (BuildContext context, int itemIndex, int pageViewIndex) {                
+                    (BuildContext context, int itemIndex, int pageViewIndex) {
                   return Container(
                     child: StoryView(
                       key: UniqueKey(),

@@ -7,8 +7,6 @@ import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
@@ -19,7 +17,6 @@ class _HomeViewState extends State<HomeView> {
   var view = HomePageViews.storyView;
 
   SetHomeView(changeView) {
-
     if (changeView == HomePageViews.profileView) {
       setState(() {
         view = HomePageViews.profileView;
@@ -34,16 +31,15 @@ class _HomeViewState extends State<HomeView> {
 
     if (changeView == HomePageViews.storyView) {
       setState(() {
-        view = HomePageViews.safeStory;
+        view = HomePageViews.storyView;
       });
     }
-    
+
     if (changeView == HomePageViews.settingView) {
       setState(() {
         view = HomePageViews.settingView;
       });
     }
-
   }
 
   @override
@@ -61,11 +57,15 @@ class _HomeViewState extends State<HomeView> {
     }
 
     if (view == HomePageViews.safeStory) {
-      mainViewWidget = SaveStoryListView();
+      mainViewWidget = StoryListView(
+        is_save_page: true,
+      );
     }
 
     if (view == HomePageViews.storyView) {
-      mainViewWidget = StoryListView();
+      mainViewWidget = StoryListView(
+        is_save_page: false,
+      );
     }
 
     if (view == HomePageViews.settingView) {
