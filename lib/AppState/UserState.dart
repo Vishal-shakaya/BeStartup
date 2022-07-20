@@ -15,6 +15,22 @@ dynamic get getUserName async {
   return temp_obj;
 }
 
+dynamic get getUserPosition async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  temp_obj = await localStore.getString('loginUserPosition');
+  return temp_obj;
+}
+
+
+dynamic get getUserProfileImage async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  temp_obj = await localStore.getString('loginUserProfileImage');
+  return temp_obj;
+}
+
+
 dynamic get getuserEmail async {
   var temp_obj;
   final localStore = await SharedPreferences.getInstance();
@@ -75,6 +91,27 @@ SetLoginUserName(value) async {
     print('PARAM SETED $value');
   }
 }
+
+
+SetLoginUserPosition(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('loginUserPosition');
+  final resp = await localStore.setString('loginUserPosition', value);
+  if (resp) {
+    print('PARAM SETED $value');
+  }
+}
+
+
+SetLoginUserProfileImage(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('loginUserProfileImage');
+  final resp = await localStore.setString('loginUserProfileImage', value);
+  if (resp) {
+    print('PARAM SETED $value');
+  }
+}
+
 
 SetLoginUserMail(value) async {
   final localStore = await SharedPreferences.getInstance();

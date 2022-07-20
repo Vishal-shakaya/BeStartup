@@ -229,7 +229,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
                 beforeTextPaste: (text) {
                   return true;
                 }),
-
+            
             Container(
               margin: EdgeInsets.only(top:context.height * 0.01),
               padding: const EdgeInsets.all(8.0),

@@ -144,13 +144,13 @@ class _UserSettingsState extends State<UserSettings> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              content: SizedBox(
-                  width: context.width * 0.20,
-                  height: context.height * 0.30,
-                  child: PhoneNoVerifyDialogAlert(
-                      noOperation: NumberOperation.update, key: UniqueKey())));
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+            content: SizedBox(
+                width: context.width * 0.20,
+                height: context.height * 0.30,
+                child: PhoneNoVerifyDialogAlert(
+                  noOperation: NumberOperation.update, key: UniqueKey())));
         });
   }
 

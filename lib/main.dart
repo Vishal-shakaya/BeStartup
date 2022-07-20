@@ -107,7 +107,14 @@ class _MyAppState extends State<MyApp> {
       final user_resp = await founderConnector.FetchFounderDetailandContact(
           user_id: user?.uid);
       final phoneno = user_resp['data']['userContect']['phone_no'];
+      final profile_image = user_resp['data']['userDetail']['picture'];
+      final position = user_resp['data']['userDetail']['position'];
+      final username = user_resp['data']['userDetail']['name'];
+
       await SetLoginUserPhoneno(phoneno);
+      await SetLoginUserPosition(position);
+      await SetLoginUserProfileImage(profile_image);
+      await SetLoginUserName(username);
     }
 
     return GetMaterialApp(
