@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:get/get.dart';
-
+import 'package:slide_countdown/slide_countdown.dart';
 class PhoneNoVerifyDialogAlert extends StatefulWidget {
   var noOperation;
   PhoneNoVerifyDialogAlert({this.noOperation, Key? key}) : super(key: key);
@@ -180,10 +180,14 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
                   ))
             ],
           ),
+
+         // Input OPT and Number :  
           SizedBox(
             height: context.height * 0.03,
           ),
           is_otp_field ? OtpInputField(context) : InputNumberField(),
+
+          // Submit Button : 
           SizedBox(
             height: context.height * 0.05,
           ),
@@ -195,39 +199,55 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
 
   Container OtpInputField(BuildContext context) {
     return Container(
-        child: PinCodeTextField(
-            appContext: context,
-            length: 6,
-            obscureText: false,
-            animationType: AnimationType.fade,
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.underline,
-              borderRadius: BorderRadius.circular(20),
-              fieldHeight: 50,
-              fieldWidth: 40,
-              activeFillColor: Colors.white,
+        child: Column(
+          children: [
+            PinCodeTextField(
+                appContext: context,
+                length: 6,
+                obscureText: false,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.underline,
+                  borderRadius: BorderRadius.circular(20),
+                  fieldHeight: 50,
+                  fieldWidth: 40,
+                  activeFillColor: Colors.white,
+                ),
+                animationDuration: Duration(milliseconds: 300),
+                backgroundColor: Colors.white,
+                enableActiveFill: false,
+                // errorAnimationController: errorController,
+                controller: otpEditingController,
+                onCompleted: (v) {
+                  VerifingOtp();
+                },
+                onChanged: (value) {
+                  setState(() {
+                    final_otp = value;
+                  });
+                },
+                beforeTextPaste: (text) {
+                  return true;
+                }),
+
+            Container(
+              margin: EdgeInsets.only(top:context.height * 0.01),
+              padding: const EdgeInsets.all(8.0),
+              child: Text('If otp not received then Retry operation after 1 minute', 
+              style: TextStyle(
+                fontSize: 13,
+                color:Colors.blueGrey.shade400),),
+            ) , 
+
+            Container(
+              margin: EdgeInsets.only(top:context.height * 0.01),
+              child: SlideCountdownSeparated(
+              padding: EdgeInsets.all(10) ,
+              duration:  Duration(seconds: 59),
+              ),
             ),
-            animationDuration: Duration(milliseconds: 300),
-            backgroundColor: Colors.white,
-            enableActiveFill: false,
-            // errorAnimationController: errorController,
-            controller: otpEditingController,
-            onCompleted: (v) {
-              print("Completed $v");
-              VerifingOtp();
-            },
-            onChanged: (value) {
-              print(value);
-              setState(() {
-                final_otp = value;
-              });
-            },
-            beforeTextPaste: (text) {
-              print("Allowing to paste $text");
-              //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-              //but you can show anything you want here, like your pop up saying wrong paste format or etc
-              return true;
-            }));
+          ],
+        ));
   }
 
   Form InputNumberField() {

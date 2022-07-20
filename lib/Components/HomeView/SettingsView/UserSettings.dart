@@ -83,6 +83,37 @@ class _UserSettingsState extends State<UserSettings> {
         ));
   }
 
+///////////////////////////////////////////
+  /// Showing a dialog box with two buttons,
+  /// one is cancel and another is confirm.
+///////////////////////////////////////////
+  AskBeforeRemoveUserProfile(context) async {
+    CoolAlert.show(
+        context: context,
+        width: 200,
+        title: 'Confirm',
+        type: CoolAlertType.warning,
+        onCancelBtnTap: () {
+          Navigator.of(context).pop();
+        },
+        onConfirmBtnTap: () async {
+          final resp = await auth.ResetPasswordWithEmail();
+          if (resp['response']) {
+            Navigator.of(context).pop();
+            await ReauthenticateDialog(
+              task: ReautheticateTask.deleteProfile,
+            );
+          }
+        },
+        widget: Text(
+          'After confirm your Profile and Statups will remove completely',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 14,
+              color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade500),
+        ));
+  }
+
   /////////////////////////////////////////////////
   /// Reaunthenticate user Before Update Mail :
   /////////////////////////////////////////////////
@@ -123,6 +154,11 @@ class _UserSettingsState extends State<UserSettings> {
         });
   }
 
+
+
+//////////////////////////////////
+/// HANDLERS : 
+//////////////////////////////////
   // Reset Password Handler :
   ResetPassword() async {
     await AskForPasswordRestDialot(my_context);
@@ -147,33 +183,31 @@ class _UserSettingsState extends State<UserSettings> {
 
   // Delete User Handler :
   DeleteUser() async {
-    await ReauthenticateDialog(
-      task: ReautheticateTask.deleteProfile,
-    );
+    await AskBeforeRemoveUserProfile(my_context);
   }
 
+  // Verify Phone no : 
   VerifyPhoneno() async {
     PhoneNoVerificationDialog();
   }
 
   @override
   Widget build(BuildContext context) {
-
 ////////////////////////////////////////////
-/// GET REQUIREMENTS : 
+    /// GET REQUIREMENTS :
 ////////////////////////////////////////////
     GetLocalStorageData() async {
-    if (fireInstance.currentUser?.phoneNumber != null) {
-      user_phone_no = fireInstance.currentUser?.phoneNumber;
-    } else {
-      user_phone_no = await getUserPhoneno;
+      if (fireInstance.currentUser?.phoneNumber != null) {
+        user_phone_no = fireInstance.currentUser?.phoneNumber;
+      } else {
+        user_phone_no = await getUserPhoneno;
+      }
     }
-  }
 
 ////////////////////////////////////
-/// SET REQUIREMENTS : 
+    /// SET REQUIREMENTS :
 ////////////////////////////////////
-return FutureBuilder(
+    return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -190,79 +224,74 @@ return FutureBuilder(
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context,); 
+            return MainMethod(
+              context,
+            );
           }
-          return MainMethod(context,);
+          return MainMethod(
+            context,
+          );
         });
-
   }
 
   Container MainMethod(BuildContext context) {
     return Container(
-      width: context.width * 0.45,
-      height: context.height * 0.45,
-      child: Card(
-          elevation: 10,
-          shadowColor: Colors.blueGrey,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Container(
-              width: context.width * 0.20,
-              height: context.height * 0.30,
-              margin: EdgeInsets.only(left: context.width * 0.03),
-              child: ListView(
-                children: [
+        width: context.width * 0.45,
+        height: context.height * 0.45,
+        child: Card(
+            elevation: 10,
+            shadowColor: Colors.blueGrey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Container(
+                width: context.width * 0.20,
+                height: context.height * 0.30,
+                margin: EdgeInsets.only(left: context.width * 0.03),
+                child: ListView(
+                  children: [
+                    SettingItem(
+                      title: 'Rest Pasword',
+                      icon: Icons.settings,
+                      fun: ResetPassword,
+                    ),
 
-                  
-                  SettingItem(
-                    title: 'Rest Pasword',
-                    icon: Icons.settings,
-                    fun: ResetPassword,
-                  ),
+                    // SettingItem(
+                    //   title: '2 Factor Auth',
+                    //   icon: Icons.verified_rounded,
+                    //   fun: SecondFactAuth,
+                    // ),
 
+                    is_update_mail
+                        ? TakeEmailAddress(fun: UpdateEmail)
+                        : EditEmailItem(
+                            title: fireInstance.currentUser?.email,
+                            icon: Icons.email,
+                            fun: () {},
+                          ),
 
-                  // SettingItem(
-                  //   title: '2 Factor Auth',
-                  //   icon: Icons.verified_rounded,
-                  //   fun: SecondFactAuth,
-                  // ),
-                  
-                  
-                  is_update_mail
-                      ? TakeEmailAddress(fun: UpdateEmail)
-                      : EditEmailItem(
-                          title: fireInstance.currentUser?.email,
-                          icon: Icons.email,
-                          fun: () {},
-                        ),
+                    EditPhoneNo(
+                        title: user_phone_no,
+                        icon: Icons.phone,
+                        fun: VerifyPhoneno),
 
+                    SettingItem(
+                      title: 'Edit Profile',
+                      icon: Icons.person,
+                      fun: EditProfile,
+                    ),
 
-                  EditPhoneNo(
-                      title: user_phone_no,
-                      icon: Icons.phone, 
-                      fun: VerifyPhoneno),
-
-
-                  SettingItem(
-                    title: 'Edit Profile',
-                    icon: Icons.person,
-                    fun: EditProfile,
-                  ),
-
-
-                  WarningItem(
-                      title: 'Delete Account',
-                      icon: Icons.delete_rounded,
-                      fun: DeleteUser)
-                ],
-              ))));
+                    WarningItem(
+                        title: 'Delete Account',
+                        icon: Icons.delete_rounded,
+                        fun: DeleteUser)
+                  ],
+                ))));
   }
 
-
- //////////////////////////////////////////////
- /// EXTERNAL METHOD :  
- ////////////////////////////////////////////// 
+  //////////////////////////////////////////////
+  /// EXTERNAL METHOD :
+  //////////////////////////////////////////////
   Container SettingItem({title, icon, fun}) {
     return Container(
       padding: EdgeInsets.all(4),
@@ -389,43 +418,42 @@ return FutureBuilder(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              fireInstance.currentUser?.phoneNumber != null?
-              Container(
-                width: 90,
-                height: 30,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.blueGrey.shade300)),
-                child: TextButton.icon(
-                    icon: Icon(
-                      Icons.edit,
-                      size: 15,
-                    ),
-                    onPressed: () async {
-                      await fun();
-                    },
-                    label: Text('update')),
-              )
-              : 
-
-              fireInstance.currentUser?.phoneNumber == null
+              fireInstance.currentUser?.phoneNumber != null
                   ? Container(
-                      width: 110,
+                      width: 90,
                       height: 30,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(color: Colors.blueGrey.shade300)),
                       child: TextButton.icon(
                           icon: Icon(
-                            Icons.check,
+                            Icons.edit,
                             size: 15,
                           ),
                           onPressed: () async {
                             await fun();
                           },
-                          label: Text('verify now')),
+                          label: Text('update')),
                     )
-                  : Container()
+                  : fireInstance.currentUser?.phoneNumber == null
+                      ? Container(
+                          width: 110,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border:
+                                  Border.all(color: Colors.blueGrey.shade300)),
+                          child: TextButton.icon(
+                              icon: Icon(
+                                Icons.check,
+                                size: 15,
+                              ),
+                              onPressed: () async {
+                                await fun();
+                              },
+                              label: Text('verify now')),
+                        )
+                      : Container()
             ],
           ),
         ),
