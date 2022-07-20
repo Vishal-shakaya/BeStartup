@@ -35,66 +35,62 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
   double profile_top_pos = 0.14;
   double profile_left_pos = 0.01;
 
+  ////////////////////////////////////
+  /// GET REQUIRED PARAMATERS :
+  ////////////////////////////////////
+  GetLocalStorageData() async {
+    var bus_resp;
+    var found_resp;
+    try {
+      bus_resp = await startupConnector.FetchBusinessDetail(
+          startup_id: widget.startup_id);
 
+      found_resp = await founderConnector.FetchFounderDetailandContact(
+          user_id: widget.founder_id);
 
-    ////////////////////////////////////
-    /// GET REQUIRED PARAMATERS :
-    ////////////////////////////////////
-    GetLocalStorageData() async {
-      var bus_resp;
-      var found_resp;
-      try {
-        bus_resp = await startupConnector.FetchBusinessDetail(
-            startup_id: widget.startup_id);
+      /////////////////////////////////
+      /// Business Detial Handler :
+      /////////////////////////////////
 
-        found_resp = await founderConnector.FetchFounderDetailandContact(
-            user_id: widget.founder_id);
-
-        /////////////////////////////////
-        /// Business Detial Handler :
-        /////////////////////////////////
-
-        // Business Success Handler :
-        if (bus_resp['response']) {
-          startup_logo = bus_resp['data']['logo'];
-        }
-
-        // Business Error Handler :
-        if (!bus_resp['response']) {
-          startup_logo = bus_resp['data'];
-        }
-
-        ////////////////////////////////////
-        /// Founder detail handler :
-        ////////////////////////////////////
-
-        // Founder Success Handler :
-        if (found_resp['response']) {
-          founder_profile = found_resp['data']['userDetail']['picture'];
-          founder_name = found_resp['data']['userDetail']['name'];
-        }
-
-        // Founder Error Handler :
-        if (!found_resp['response']) {
-          founder_profile = found_resp['data'];
-        }
-
-        return '';
-      } catch (e) {
-        return '';
+      // Business Success Handler :
+      if (bus_resp['response']) {
+        startup_logo = bus_resp['data']['logo'];
       }
+
+      // Business Error Handler :
+      if (!bus_resp['response']) {
+        startup_logo = bus_resp['data'];
+      }
+
+      ////////////////////////////////////
+      /// Founder detail handler :
+      ////////////////////////////////////
+
+      // Founder Success Handler :
+      if (found_resp['response']) {
+        founder_profile = found_resp['data']['userDetail']['picture'];
+        founder_name = found_resp['data']['userDetail']['name'];
+      }
+
+      // Founder Error Handler :
+      if (!found_resp['response']) {
+        founder_profile = found_resp['data'];
+      }
+
+      return '';
+    } catch (e) {
+      return '';
     }
-
-
+  }
 
   @override
   void initState() {
     super.initState();
     _controller = FlipCardController();
   }
+
   @override
   Widget build(BuildContext context) {
-
     /////////////////////////////////////
     /// SET REQUIREMENTS :
     /////////////////////////////////////

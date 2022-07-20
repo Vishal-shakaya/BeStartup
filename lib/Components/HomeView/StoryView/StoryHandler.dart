@@ -26,18 +26,16 @@ class StoryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //////////////////////////////////////////////////////
-    /// GET SECTION :
+/// GET SECTION :
 //////////////////////////////////////////////////////
     GetLocalStorageData() async {
       final user_id = await getUserId;
       var resp;
       try {
-        print('is Save Page $is_save_page');
+        // print('is Save Page $is_save_page');
         if (is_save_page == true) {
-          print('Fetch Save Startups ');
           resp = await homeViewConnector.FetchSaveStartups(user_id: user_id);
         } else {
-          print('Fectching All Post ');
           resp = await homeViewConnector.FetchStartups();
         }
         if (resp['response']) {

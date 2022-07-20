@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
@@ -43,7 +44,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_glow/flutter_glow.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,14 +97,18 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-  /// It sets the local state of the app to 
-  /// the current user's email and uid
+    /// It sets the local state of the app to
+    /// the current user's email and uid
     SetAppLocalState() async {
+      var founderConnector = Get.put(FounderConnector());
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);
       await SetLoginUserId(user?.uid);
+      final user_resp = await founderConnector.FetchFounderDetailandContact(
+          user_id: user?.uid);
+      final phoneno = user_resp['data']['userContect']['phone_no'];
+      await SetLoginUserPhoneno(phoneno);
     }
-
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -137,7 +141,7 @@ class _MyAppState extends State<MyApp> {
             page: () {
               return StreamBuilder(
                   stream: FirebaseAuth.instance.authStateChanges(),
-                  builder: (context, snapshot)  {
+                  builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       // SHOW ERROR :
                       ErrorPage();
@@ -150,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                       // if Complete then redirect to
                       // Configure App local state :
                       SetAppLocalState();
-                      
+
                       return HomeView();
                     }
                     return LoginHandler();

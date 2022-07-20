@@ -21,6 +21,12 @@ dynamic get getuserEmail async {
   temp_obj = await localStore.getString('loginUserEmail');
   return temp_obj;
 }
+dynamic get getUserPhoneno async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  temp_obj = await localStore.getString('loginUserPhoneno');
+  return temp_obj;
+}
 
 dynamic get getUserId async {
   var temp_obj;
@@ -75,6 +81,15 @@ SetLoginUserMail(value) async {
   final key_found = localStore.containsKey('loginUserEmail');
 
   final resp = await localStore.setString('loginUserEmail', value);
+  if (resp) {
+    print('PARAM SETED $value');
+  }
+}
+SetLoginUserPhoneno(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('loginUserPhoneno');
+
+  final resp = await localStore.setString('loginUserPhoneno', value);
   if (resp) {
     print('PARAM SETED $value');
   }

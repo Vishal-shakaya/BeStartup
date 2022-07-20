@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -75,9 +76,11 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
         ));
   }
 
+
+
   ///////////////////////////////////////////////////////
-  // Verify Phone and send otp to phone numbser : 
-  // Handle Update and Link Phone no to current user : 
+  // Verify Phone and send otp to phone numbser :
+  // Handle Update and Link Phone no to current user :
   ////////////////////////////////////////////////////////
   SubmitPhoneNo() async {
     final is_valid = formKey.currentState!.validate();
@@ -85,13 +88,12 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
       formKey.currentState!.save();
 
       var resp = await auth.VerifyPhoneNo(
-        number:valid_number.toString(),
-        is_update:NumberOperation.update );
-        
+          number: valid_number.toString(), is_update: NumberOperation.update);
+
       if (resp['response']) {
         currentUser = resp['data']['currentUser'];
         verificanId = resp['data']['verificanId'];
-        confirmResult=resp['data']['confirmationResult'];
+        confirmResult = resp['data']['confirmationResult'];
         setState(() {
           is_otp_field = true;
         });
@@ -102,6 +104,8 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
+
+
   ///////////////////////////////////////////////////////
   // GET OTP AND SEND FOR VERIFICATION:
   // If Success then link phone no to login user :
@@ -109,9 +113,10 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
   ///////////////////////////////////////////////////////
   VerifyNumber() async {
     final resp = await auth.VerifyOtp(
-        currentUser: currentUser,
-        confirmationResult: confirmResult,
-        otp: final_otp, );
+      currentUser: currentUser,
+      confirmationResult: confirmResult,
+      otp: final_otp,
+    );
     if (!resp['response']) {
       await ErrorSnakbar(title: 'Re-check OTP', message: resp['message']);
     }
@@ -122,14 +127,15 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
+
+
   //////////////////////////////////////////////////////
   // Updating Phone number:
-  // Send required params : verificationId and otp: 
+  // Send required params : verificationId and otp:
   //////////////////////////////////////////////////////
   UpdatePhoneNo() async {
-        final resp = await auth.UpdatePhoneNo(
-        verificationId: verificanId,
-        otp: final_otp);
+    final resp =
+        await auth.UpdatePhoneNo(verificationId: verificanId, otp: final_otp);
     if (!resp['response']) {
       await ErrorSnakbar(title: 'Re-check OTP', message: resp['message']);
     }
@@ -137,8 +143,11 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     if (resp['response']) {
       Navigator.of(context).pop();
       SuccessAlert(message: 'Number Updateded ');
+      await SetLoginUserPhoneno(valid_number);
     }
   }
+
+
 
 
   // Check if update phone no or just vrify : process accordingly :
@@ -149,7 +158,8 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
       await VerifyNumber();
     }
   }
-  
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +187,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
           SizedBox(
             height: context.height * 0.05,
           ),
-          SubmitFormButton(),
+          is_otp_field ? Container() : SubmitFormButton(),
         ],
       ),
     );

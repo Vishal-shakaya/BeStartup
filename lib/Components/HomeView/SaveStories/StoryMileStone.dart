@@ -1,13 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Components/HomeView/StoryView/StoryCeoProfile.dart';
-import 'package:be_startup/Components/HomeView/StoryView/StoryHeading.dart';
-import 'package:be_startup/Components/HomeView/StoryView/StoryInfoChart.dart';
-import 'package:be_startup/Components/HomeView/StoryView/StoryThumbnail.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tab_container/tab_container.dart';
 
