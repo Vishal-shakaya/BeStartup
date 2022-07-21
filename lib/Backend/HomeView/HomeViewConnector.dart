@@ -48,6 +48,41 @@ class HomeViewConnector extends GetxController {
     }
   }
 
+
+
+  FetchUserStartups({user_id}) async {
+    var startup_data;
+    var startup_ids = [];
+    var founder_ids = [];
+    var startup_len;
+    var startup_names = [];
+
+    // FETCHING DATA FROM FIREBASE
+    try {
+      var startup = await FirebaseFirestore.instance
+          .collection(getStartupStoreName).where('user_id', isEqualTo: user_id)
+          .get()
+          .then((value) {
+        startup_len = value.size;
+        for (var doc in value.docs) {
+          startup_ids.add(doc.data()['id']);
+          founder_ids.add(doc.data()['user_id']);
+          startup_names.add(doc.data()['startup_name']);
+        }
+      });
+      startup_data = {
+        'startup_ids': startup_ids,
+        'founder_id': founder_ids,
+        'startup_len': startup_len,
+        'startup_name': startup_names
+      };
+
+      return ResponseBack(response_type: true, data: startup_data);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
   
 /////////////////////////////////////////////
 /// It fetches the data from the firestore database

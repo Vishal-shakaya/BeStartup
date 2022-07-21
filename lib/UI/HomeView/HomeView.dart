@@ -2,7 +2,7 @@ import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
 import 'package:be_startup/Components/HomeView/SaveStories/StoryListView.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHandler.dart';
-import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileView.dart';
+import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileHandler.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
