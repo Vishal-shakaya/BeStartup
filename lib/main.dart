@@ -115,7 +115,9 @@ class _MyAppState extends State<MyApp> {
       await SetLoginUserPosition(position);
       await SetLoginUserProfileImage(profile_image);
       await SetLoginUserName(username);
-      
+
+      // Setting things up : 
+      await Future.delayed(Duration(seconds: 2));
     }
 
     return GetMaterialApp(

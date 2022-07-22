@@ -24,6 +24,7 @@ class ProfileStoryThumbnail extends StatelessWidget {
   ///////////////////////////
   GetLocalStorageData() async {
     final resp = await startupConnector.FetchThumbnail(startup_id: startup_id);
+    print(resp);
     if (resp['response']) {
       thumbnail = resp['data']['thumbnail'];
     }
@@ -41,11 +42,7 @@ class ProfileStoryThumbnail extends StatelessWidget {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-                    baseColor: shimmer_base_color,
-                    highlightColor: shimmer_highlight_color,
-                    child: MainMethod(context)));
+            return ShimmerModel(context);
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -84,13 +81,41 @@ class ProfileStoryThumbnail extends StatelessWidget {
                 left: Radius.circular(19),
                 right: Radius.circular(19),
               ),
-              child: Image.network(
-                  thumbnail,
+              child: Image.network(thumbnail,
                   width: context.width * image_thumb_width,
                   height: context.height * image_thumb_height,
                   fit: BoxFit.cover),
             )),
       ),
     );
+  }
+
+  Center ShimmerModel(BuildContext context) {
+    return Center(
+        child: Shimmer.fromColors(
+            baseColor: shimmer_base_color,
+            highlightColor: shimmer_highlight_color,
+            child: Container(
+              margin: EdgeInsets.only(top: context.height * 0.03),
+              child: Card(
+                elevation: 5,
+                shadowColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(19),
+                  right: Radius.circular(19),
+                )),
+                child: Container(
+                  height: context.height * image_cont_height,
+                  width: context.width * image_cont_width,
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.circular(20), right: Radius.circular(20)),
+                  ),
+                ),
+              ),
+            )));
   }
 }

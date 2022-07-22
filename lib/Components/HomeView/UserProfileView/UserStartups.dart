@@ -74,21 +74,26 @@ class HomeViewUserStartups extends StatelessWidget {
                     itemCount: startups_length,
                     itemBuilder: (BuildContext context, int itemIndex,
                         int pageViewIndex) {
+
                       return Container(
                         alignment: Alignment.topCenter,
                         margin: EdgeInsets.only(top: context.height * 0.03),
                         child: SizedBox(
                           height: context.height * 0.43,
-                          child: Stack(
-                            children: [
-                              ProfileStoryThumbnail(
-                                startup_id: startup_ids[itemIndex],
-                              ),
-                              ProfileStoryHeading(
-                                startup_name: startup_name[itemIndex],
-                              ),
-                              ProfileInfoChart(),
-                            ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                ProfileStoryThumbnail(
+                                  startup_id: startup_ids[itemIndex],
+                                ),
+                                ProfileStoryHeading(
+                                  startup_name: startup_name[itemIndex],
+                                ),
+                                ProfileInfoChart(
+                                  startup_id: startup_ids[itemIndex],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

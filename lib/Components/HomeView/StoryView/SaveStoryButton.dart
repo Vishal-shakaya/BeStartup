@@ -31,7 +31,6 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
         user_id: widget.founder_id,
       );
 
-      print(resp);
       if (resp['code'] == 101) {
         is_saved = true;
       }

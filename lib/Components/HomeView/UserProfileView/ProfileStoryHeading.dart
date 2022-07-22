@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileStoryHeading extends StatelessWidget {
-  var startup_name;
+  var startup_name='';
   ProfileStoryHeading({
     required this.startup_name,
     Key? key,
@@ -42,22 +42,19 @@ class ProfileStoryHeading extends StatelessWidget {
   //////////////////////////////////
   /// SET REQUIRED PARAM :
   //////////////////////////////////
-  Positioned MainMethod(BuildContext context) {
-    return Positioned(
-        top: context.height * 0.18,
-        left: context.width * 0.05,
-        child: Container(
-          width: context.width * 0.23,
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(top: context.height * 0.02),
-          child: AutoSizeText.rich(
-            TextSpan(
-                text: startup_name.toString().capitalize,
-                style: TextStyle(fontSize: 18)),
-            style: context.textTheme.headline2,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ));
+   MainMethod(BuildContext context) {
+    return Container(
+      width: context.width * 0.30,
+      alignment: Alignment.topCenter,
+      margin: EdgeInsets.only(top: context.height * 0.03),
+      child: AutoSizeText.rich(
+        TextSpan(
+            text: startup_name.toString().capitalize,
+            style: TextStyle(fontSize: 18)),
+        style: context.textTheme.headline2,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
   }
 }
