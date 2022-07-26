@@ -36,6 +36,7 @@ BusinessInfoModel({
   achived_amount,
   invested,
   team_members,
+  founder_name, 
   activate, }) async {
   try {
     Map<String, dynamic> temp_obj = {
@@ -44,6 +45,7 @@ BusinessInfoModel({
       'startup_id':startup_id,
       'logo': logo,
       'name': name,
+      'founder_name':founder_name, 
       'investor_no':investor_no,
       'desire_amount':desire_amount, 
       'achived_amount':achived_amount, 

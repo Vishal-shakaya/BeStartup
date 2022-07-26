@@ -48,8 +48,6 @@ class HomeViewConnector extends GetxController {
     }
   }
 
-
-
   FetchUserStartups({user_id}) async {
     var startup_data;
     var startup_ids = [];
@@ -60,7 +58,8 @@ class HomeViewConnector extends GetxController {
     // FETCHING DATA FROM FIREBASE
     try {
       var startup = await FirebaseFirestore.instance
-          .collection(getStartupStoreName).where('user_id', isEqualTo: user_id)
+          .collection(getStartupStoreName)
+          .where('user_id', isEqualTo: user_id)
           .get()
           .then((value) {
         startup_len = value.size;
@@ -83,14 +82,13 @@ class HomeViewConnector extends GetxController {
     }
   }
 
-  
 /////////////////////////////////////////////
-/// It fetches the data from the firestore database
-/// and returns the data in the form of a map
-/// Args:
-///   user_id: The user id of the user whose saved startups are to be fetched.
-/// Returns:
-///   A ResponseBack object.
+  /// It fetches the data from the firestore database
+  /// and returns the data in the form of a map
+  /// Args:
+  ///   user_id: The user id of the user whose saved startups are to be fetched.
+  /// Returns:
+  ///   A ResponseBack object.
 /////////////////////////////////////////////
   FetchSaveStartups({user_id}) async {
     var startup_data;

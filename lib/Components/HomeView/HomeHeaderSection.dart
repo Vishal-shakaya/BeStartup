@@ -119,10 +119,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             spacing: 10,
             alignment: WrapAlignment.center,
             children: [
+
+
               // Explore Menu :
               ExploreButton(context, ExploreFunction),
-              // SEARCH BAR :
-              BusinessSearchBar(),
+
+              Container(
+                width: context.width * 0.20,
+              ), 
 
               // Menu Icon :
               Container(

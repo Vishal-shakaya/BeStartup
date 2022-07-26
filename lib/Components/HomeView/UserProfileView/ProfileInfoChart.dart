@@ -20,6 +20,7 @@ class ProfileInfoChart extends StatelessWidget {
   double static_sec_width = 0.28;
   double static_sec_height = 0.12;
   double statis_row_width = 0.04;
+  
   var desire_amount;
   var achived_amount;
   var team_members;
