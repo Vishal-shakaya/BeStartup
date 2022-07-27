@@ -282,3 +282,19 @@ class _CustomShimmerState extends State<CustomShimmer> {
     ));
   }
 }
+
+
+///////////////////////////////////////
+ // Search Index Creator : 
+///////////////////////////////////////
+CreateSearchIndexParam(String val)async  {
+    String  pureString = val.toLowerCase().trim(); 
+    var searchIndexArray = [];  
+      for(var i=0 ; i<pureString.length; i++){
+        if(pureString[i] != ' '){
+            searchIndexArray.add(pureString[i]);
+        }     
+      }
+  return searchIndexArray; 
+  }  
+  

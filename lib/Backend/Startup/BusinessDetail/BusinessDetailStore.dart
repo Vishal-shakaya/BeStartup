@@ -83,22 +83,22 @@ class BusinessDetailStore extends GetxController {
         await SetStartupId(startup_resp['id']);
         localStore.setString(getStartupStoreName, json.encode(startup_resp));
       }
-      
-      if(startup_resp==false){
+
+      if (startup_resp == false) {
         return ResponseBack(
-          response_type: false, 
-          message: 'Startup not created try again ');
+            response_type: false, message: 'Startup not created try again ');
       }
-
-
 
       // Create Business Info and Cached :
       final user_mail = await getuserEmail;
       final userId = await getUserId;
+      final startup_searching_index =await  CreateSearchIndexParam(businessName);
+
       var resp = await BusinessInfoModel(
           logo: image_url,
           name: businessName,
           desire_amount: amount,
+          startup_search_index:startup_searching_index, 
           startup_id: await getStartupId);
 
       // Set App state amount and startup name :
@@ -114,8 +114,6 @@ class BusinessDetailStore extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
 
   GetBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
@@ -155,6 +153,23 @@ class BusinessDetailStore extends GetxController {
       }
     } catch (e) {
       return '';
+    }
+  }
+
+  // Update Business Detail
+  UpdateBusinessDetail({field, val}) async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
+      if (is_detail) {
+        var data = localStore.getString(getBusinessDetailStoreName);
+        var json_obj = jsonDecode(data!);
+        json_obj["$field"] = val;
+        localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
+      }
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
     }
   }
 }

@@ -17,7 +17,7 @@ StartupModel({
       'user_id': user_id,
       'email': email,
       'startup_name':startup_name,
-      'timestamp':timestamp, 
+      'timestamp':DateTime.now().toUtc().toString() , 
     };
     return temp_obj;
   } catch (e) {
@@ -37,7 +37,10 @@ BusinessInfoModel({
   invested,
   team_members,
   founder_name, 
-  activate, }) async {
+  activate, 
+  startup_search_index, 
+  founder_search_index, 
+  }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
@@ -50,8 +53,10 @@ BusinessInfoModel({
       'desire_amount':desire_amount, 
       'achived_amount':achived_amount, 
       'invested':invested, // bool : true if achived desired amount : 
-      'registor_date':DateTime.now().toString(), 
+      'registor_date':DateTime.now().toUtc().toString() , 
       'activate':activate, // check if startup plan expired or not :  
+      'startup_searching_index':startup_search_index, 
+      'founder_searching_index':founder_search_index, 
     };
     return temp_obj;
   } catch (e) {
@@ -118,7 +123,8 @@ CatigoryModel(
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'startup_id': startup_id,
-      'catigories': catigory
+      'catigories': catigory,
+      'timestamp':DateTime.now().toUtc().toString() 
     };
     return temp_obj;
   } catch (e) {
@@ -135,7 +141,8 @@ InvestorCatigoryModel(
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'catigories': catigory
+      'catigories': catigory,
+      'timestamp':DateTime.now().toUtc().toString()  
     };
     return temp_obj;
   } catch (e) {
@@ -152,7 +159,7 @@ products}) async {
       'id': uuid.v4(),
       'startup_id':startup_id, 
       'products': products,
-      'timestamp': '',
+      'timestamp': DateTime.now().toUtc().toString() ,
 
     };
     return temp_obj;    
@@ -167,7 +174,7 @@ BusinessServiceList({user_id, required startup_id,  services,}) {
       'id': uuid.v4(),
       'startup_id':startup_id, 
       'services': services, 
-      'timestamp': '',
+      'timestamp': DateTime.now().toUtc().toString() ,
     };
     return temp_obj;    
   } catch (e) {
@@ -204,7 +211,7 @@ BusinessTeamMembersModel({
       'id': uuid.v4(),
       'startup_id': startup_id,
       'members':members, 
-      'timestamp':timestamp, 
+      'timestamp':DateTime.now().toUtc().toString() , 
 
     };
     return temp_obj;

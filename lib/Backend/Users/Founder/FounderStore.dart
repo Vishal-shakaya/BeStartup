@@ -41,7 +41,6 @@ class BusinessFounderStore extends GetxController {
   // CRATE FOUNDER :
   CreateFounder(founder) async {
     var localStore = await SharedPreferences.getInstance();
-    print(founder);
     try {
 
       try {
@@ -60,8 +59,8 @@ class BusinessFounderStore extends GetxController {
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);
 
-        localStore.setString('FounderUserDetail', json.encode(resp));
-        localStore.setString('FounderUserContact', json.encode(resp2));
+        localStore.setString(getBusinessFounderDetailStoreName, json.encode(resp));
+        localStore.setString(getBusinessFounderContactStoreName, json.encode(resp2));
 
         return ResponseBack(response_type: true,message: create_error_title);
       } catch (e) {

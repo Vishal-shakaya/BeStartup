@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/AppState/UserState.dart';
@@ -44,6 +45,7 @@ class _SelectPlanState extends State<SelectPlan> {
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
+  var businessStore = Get.put(BusinessDetailStore());
   var investorConnector =
       Get.put(InvestorConnector(), tag: 'investor_connector');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
@@ -307,25 +309,23 @@ class _SelectPlanState extends State<SelectPlan> {
     required phone_no,
     required plan_type,
   }) async {
-
     final localStore = await SharedPreferences.getInstance();
     // Activate User Plan :
     try {
       final plan = await PlanModel(
-        plan_name: plan_type,
-        phone_no: phone_no,
-        amount: exact_amount,
-        order_date: orderd,
-        expire_date: expired,
-        buyer_mail: auth.currentUser?.email,
-        buyer_name: buyer_name,
-        startup_id: await getStartupId, 
-        user_id : await getUserId
-      );
+          plan_name: plan_type,
+          phone_no: phone_no,
+          amount: exact_amount,
+          order_date: orderd,
+          expire_date: expired,
+          buyer_mail: auth.currentUser?.email,
+          buyer_name: buyer_name,
+          startup_id: await getStartupId,
+          user_id: await getUserId);
 
-      final is_planCreate = await localStore.setString(getStartupPlansStoreName, json.encode(plan));
-      if(is_planCreate){
-
+      final is_planCreate = await localStore.setString(
+          getStartupPlansStoreName, json.encode(plan));
+      if (is_planCreate) {
         var resp = await startupConnector.CreateBusinessPlans();
         // Success Handler Creating plan :
         if (resp['response']) {
@@ -339,8 +339,6 @@ class _SelectPlanState extends State<SelectPlan> {
               message: "plan not created ${resp['message']}");
         }
       }
-
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -361,14 +359,53 @@ class _SelectPlanState extends State<SelectPlan> {
   /// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
-   var resp = await startupConnector.CreateStartup();
-   return resp;
+    var resp = await startupConnector.CreateStartup();
+    return resp;
+  }
+
+
+  //////////////////////////////////////////////////
+  /// Update Seraching index of founder and its name:
+  /// to business detail view : 
+  //////////////////////////////////////////////////
+  UpdateSearchIndexandDetail() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      bool is_detail =
+          localStore.containsKey(getBusinessFounderDetailStoreName);
+
+      if (is_detail) {
+        var detail = localStore.getString(getBusinessFounderDetailStoreName);
+        var detail_obj = jsonDecode(detail!);
+
+        print(detail_obj['name']);
+        final founder_name = detail_obj['name'];
+        final founder_search_index = await CreateSearchIndexParam(founder_name);
+
+        // Update Founder name and serach index :
+        await businessStore.UpdateBusinessDetail(
+            field: 'founder_name', val: founder_name);
+
+        await businessStore.UpdateBusinessDetail(
+            field: 'founder_search_index', val: founder_search_index);
+
+        return ResponseBack(
+          response_type: true, 
+          message: 'Update Business Detial Search Index');
+      }
+    } catch (e) {
+        return ResponseBack(response_type: false);
+    }
   }
 
   /////////////////////////////////////////////////////
   // START STORING ALL FOUNDER DETIAL TO FIREBASE :
   /////////////////////////////////////////////////////
   SendDataToFireStore() async {
+    
+    var imp_resp = await UpdateSearchIndexandDetail();
+    print(imp_resp);
+
     var resp = await startupConnector.CreateBusinessCatigory();
     print(resp);
 
@@ -507,7 +544,7 @@ class _SelectPlanState extends State<SelectPlan> {
             expired: expired,
             payer_name: userName,
             phone_no: phoneNo);
-        print('Mail Send resp $is_mail_send');
+        // print('Mail Send resp $is_mail_send');
       }
     }
 
