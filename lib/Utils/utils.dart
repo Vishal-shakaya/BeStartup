@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 double alert_width = 320;
 final snackbar_show_time = 4;
@@ -298,3 +301,50 @@ CreateSearchIndexParam(String val)async  {
   return searchIndexArray; 
   }  
   
+
+
+/////////////////////////////////////////////
+/// LOCAL STORAGE HANDLERS : 
+/// /////////////////////////////////////////
+  ////////////////////////////////////////
+  // CUSTOM CACHING  SYSTEM :
+  // GET DATA FROM LOCAL STORGE
+  ////////////////////////////////////////
+  GetCachedData({fromModel, startup_id}) async {
+    final localStore = await SharedPreferences.getInstance();
+    var is_localy_store = localStore.containsKey(fromModel);
+    if (is_localy_store) {
+      var data = localStore.getString(fromModel);
+
+      // Validata data :
+      if (data != null || data != '') {
+        var final_data = json.decode(data!);
+        Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
+        if (cacheData['startup_id'] == startup_id) {
+          return final_data;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  //////////////////////////////////////////
+  // Cached Update Data :
+  //////////////////////////////////////////
+  StoreCacheData({fromModel, data}) async {
+    try {
+      final localStore = await SharedPreferences.getInstance();
+      if (data != null || data != '') {
+        localStore.setString(fromModel, json.encode(data));
+        print('Cached Data Successfully');
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+  }

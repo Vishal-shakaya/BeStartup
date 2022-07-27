@@ -92,13 +92,14 @@ class BusinessDetailStore extends GetxController {
       // Create Business Info and Cached :
       final user_mail = await getuserEmail;
       final userId = await getUserId;
-      final startup_searching_index =await  CreateSearchIndexParam(businessName);
+      final startup_searching_index =
+          await CreateSearchIndexParam(businessName);
 
       var resp = await BusinessInfoModel(
           logo: image_url,
           name: businessName,
           desire_amount: amount,
-          startup_search_index:startup_searching_index, 
+          startup_search_index: startup_searching_index,
           startup_id: await getStartupId);
 
       // Set App state amount and startup name :
@@ -156,17 +157,57 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-  // Update Business Detail
-  UpdateBusinessDetail({field, val}) async {
-    final localStore = await SharedPreferences.getInstance();
+
+////////////////////////////////////////////////
+/// Update Perticular Business Detail field 
+///  required param val and update field name : 
+////////////////////////////////////////////////
+
+UpdateBusinessDetailCacheField({required field, required val}) async {
+  final localStore = await SharedPreferences.getInstance();
+  try {
+    bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
+
+    if (is_detail) {
+      var data = localStore.getString(getBusinessDetailStoreName);
+      var json_obj = jsonDecode(data!);
+      json_obj[field] = val;
+      
+      localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
+      return ResponseBack(response_type: true);
+    }
+  } catch (e) {
+    return ResponseBack(response_type: false);
+  }
+}
+
+
+////////////////////////////////////////////////////////
+// Update Business Detail: 
+// First update database online then :
+// update localy for mantain local app state : 
+////////////////////////////////////////////////////////
+  UpdateBusinessDetailDatabaseField({field, val, startup_id}) async {
+    // FETCHING DATA FROM FIREBASE
+    var data;
+    var doc_id;
+
     try {
-      bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
-      if (is_detail) {
-        var data = localStore.getString(getBusinessDetailStoreName);
-        var json_obj = jsonDecode(data!);
-        json_obj["$field"] = val;
-        localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
-      }
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
+      var query = store.where('user_id', isEqualTo: startup_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Logo:
+      data['$field'] = val;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: getBusinessDetailStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);

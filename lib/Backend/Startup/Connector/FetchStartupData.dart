@@ -53,9 +53,11 @@ class StartupViewConnector extends GetxController {
       return false;
     }
   }
-
+  
+//////////////////////////////////////
   // 2. Send it to ui
   // 3. Store data in local storage:
+//////////////////////////////////////
   FetchBusinessDetail({startup_id = false}) async {
     var data;
     var final_startup_id;
@@ -103,8 +105,10 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+
 /////////////////////////////////////////
-  /// FETCH THUMBNAIL :
+/// FETCH THUMBNAIL :
 /////////////////////////////////////////
   FetchThumbnail({startup_id = false}) async {
     var final_startup_id;
@@ -153,6 +157,8 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
@@ -199,6 +205,7 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
 
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :

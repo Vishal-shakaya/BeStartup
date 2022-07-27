@@ -364,47 +364,10 @@ class _SelectPlanState extends State<SelectPlan> {
   }
 
 
-  //////////////////////////////////////////////////
-  /// Update Seraching index of founder and its name:
-  /// to business detail view : 
-  //////////////////////////////////////////////////
-  UpdateSearchIndexandDetail() async {
-    final localStore = await SharedPreferences.getInstance();
-    try {
-      bool is_detail =
-          localStore.containsKey(getBusinessFounderDetailStoreName);
-
-      if (is_detail) {
-        var detail = localStore.getString(getBusinessFounderDetailStoreName);
-        var detail_obj = jsonDecode(detail!);
-
-        print(detail_obj['name']);
-        final founder_name = detail_obj['name'];
-        final founder_search_index = await CreateSearchIndexParam(founder_name);
-
-        // Update Founder name and serach index :
-        await businessStore.UpdateBusinessDetail(
-            field: 'founder_name', val: founder_name);
-
-        await businessStore.UpdateBusinessDetail(
-            field: 'founder_search_index', val: founder_search_index);
-
-        return ResponseBack(
-          response_type: true, 
-          message: 'Update Business Detial Search Index');
-      }
-    } catch (e) {
-        return ResponseBack(response_type: false);
-    }
-  }
-
   /////////////////////////////////////////////////////
   // START STORING ALL FOUNDER DETIAL TO FIREBASE :
   /////////////////////////////////////////////////////
   SendDataToFireStore() async {
-    
-    var imp_resp = await UpdateSearchIndexandDetail();
-    print(imp_resp);
 
     var resp = await startupConnector.CreateBusinessCatigory();
     print(resp);

@@ -61,7 +61,7 @@ class BusinessTeamMemberStore extends GetxController {
         'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
-        'timestamp': DateTime.now().toString(),
+        'timestamp': DateTime.now().toUtc().toString()
       };
       member = temp_member;
       member_list.add(member);
@@ -80,7 +80,7 @@ class BusinessTeamMemberStore extends GetxController {
         'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
-        'timestamp': DateTime.now().toString(),
+        'timestamp':  DateTime.now().toUtc().toString(),
       };
       member_list[index] = temp_member;
       profile_image = null;

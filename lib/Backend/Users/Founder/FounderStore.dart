@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class BusinessFounderStore extends GetxController {
+  var businessDetailStore = Get.put(BusinessDetailStore());
   static Map<String, dynamic>? founder;
   static String? image_url;
   Map<String, dynamic> clean_resp = {
@@ -41,13 +43,13 @@ class BusinessFounderStore extends GetxController {
   // CRATE FOUNDER :
   CreateFounder(founder) async {
     var localStore = await SharedPreferences.getInstance();
-    try {
 
+    try {
       try {
         var resp = await FounderModel(
             user_id: await getUserId,
             email: await getuserEmail,
-            startup_name: await  getStartupName,
+            startup_name: await getStartupName,
             name: founder['name'],
             position: founder['position'],
             picture: image_url);
@@ -59,23 +61,42 @@ class BusinessFounderStore extends GetxController {
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);
 
-        localStore.setString(getBusinessFounderDetailStoreName, json.encode(resp));
-        localStore.setString(getBusinessFounderContactStoreName, json.encode(resp2));
+        localStore.setString(
+            getBusinessFounderDetailStoreName, json.encode(resp));
+        localStore.setString(
+            getBusinessFounderContactStoreName, json.encode(resp2));
 
-        return ResponseBack(response_type: true,message: create_error_title);
+        ///////////////////////////////////////////
+        // Updating BusinessDetial Field 
+        // 1. Founder name and search index : 
+        ///////////////////////////////////////////
+        final founder_name_search_index =
+            await CreateSearchIndexParam(founder['name']);
+
+        await businessDetailStore.UpdateBusinessDetailCacheField(
+            field: 'founder_name', val: founder['name']);
+
+        await businessDetailStore.UpdateBusinessDetailCacheField(
+            field: 'founder_searching_index', val: founder_name_search_index);
+
+
+
+        return ResponseBack(response_type: true, message: create_error_title);
       } catch (e) {
         ResponseBack(response_type: false, message: e);
       }
     } catch (e) {
-      return ResponseBack(response_type: false,message:e);
+      return ResponseBack(response_type: false, message: e);
     }
   }
 
   GetFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      bool is_detail = localStore.containsKey(getBusinessFounderDetailStoreName);
-      bool is_contanct = localStore.containsKey(getBusinessFounderContactStoreName);
+      bool is_detail =
+          localStore.containsKey(getBusinessFounderDetailStoreName);
+      bool is_contanct =
+          localStore.containsKey(getBusinessFounderContactStoreName);
       if (is_detail && is_contanct) {
         var detail = localStore.getString(getBusinessFounderDetailStoreName);
         var contact = localStore.getString(getBusinessFounderContactStoreName);
@@ -92,7 +113,6 @@ class BusinessFounderStore extends GetxController {
           'other_contact': contact_obj['other_contact'],
         };
         return temp_founder;
-      
       } else {
         return clean_resp;
       }
