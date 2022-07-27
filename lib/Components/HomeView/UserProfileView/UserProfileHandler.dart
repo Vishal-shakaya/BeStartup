@@ -13,7 +13,7 @@ class UserProfileView extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Column(children: [
+        child: Stack(children: [
 
           // User Profile View
           HomeViewUserProfile(),
