@@ -44,7 +44,7 @@ class StartupUpdater extends GetxController {
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
       var query = thumbnail
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -103,7 +103,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -161,7 +161,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -211,7 +211,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -262,7 +262,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -316,7 +316,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -368,7 +368,7 @@ class StartupUpdater extends GetxController {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -421,7 +421,7 @@ class StartupUpdater extends GetxController {
       // UPDATE DATA TO FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {
@@ -472,7 +472,7 @@ class StartupUpdater extends GetxController {
       // UPDATE DATA TO FIREBASE
       var store = FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
       var query = store
-          .where('user_id', isEqualTo: final_startup_id)
+          .where('startup_id', isEqualTo: final_startup_id)
           .get();
 
       await query.then((value) {

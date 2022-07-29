@@ -22,7 +22,7 @@ class ProfileInfoChart extends StatelessWidget {
   double statis_row_width = 0.04;
   
   var desire_amount;
-  var achived_amount;
+  var invested_amount;
   var team_members;
 
   ///////////////////////////
@@ -33,14 +33,14 @@ class ProfileInfoChart extends StatelessWidget {
         await startupConnector.FetchBusinessDetail(startup_id: startup_id);
     // Success Handler:
     if (resp['response']) {
-      achived_amount = resp['data']['achived_amount'] ?? '';
+      invested_amount = resp['data']['achived_amount'] ?? '';
       team_members = resp['data']['team_members'] ?? '';
       desire_amount = resp['data']['desire_amount']?? '';
     }
 
     // Error Handler :
     if (!resp['response']) {
-      achived_amount = '';
+      invested_amount = '';
       team_members = '';
       desire_amount = '';
     }
@@ -112,8 +112,8 @@ class ProfileInfoChart extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      StaticRow(title: 'Achived'),
-                      StaticRow(title: '₹ $achived_amount')
+                      StaticRow(title: 'Invest'),
+                      StaticRow(title: '₹ $invested_amount')
                     ],
                   ),
                 ],

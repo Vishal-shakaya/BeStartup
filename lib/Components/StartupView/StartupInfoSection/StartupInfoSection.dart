@@ -21,10 +21,12 @@ enum StartupPageRoute {
 class StartupInfoSection extends StatelessWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
-  double image_cont_width = 0.6;
-  double image_cont_height = 0.20;
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+
+  double image_cont_width = 0.6;
+  double image_cont_height = 0.20;
+  bool? is_admin;
 
   // Edit Thumbnail :
   EditThumbnail() {
@@ -40,12 +42,13 @@ class StartupInfoSection extends StatelessWidget {
       var my_data;
       var thumbnail;
       var logo;
-      final startup_id=await getStartupDetailViewId;
+      is_admin = await getIsUserAdmin;
+      final startup_id = await getStartupDetailViewId;
       try {
-        final business_name_resp = await startupConnect.FetchBusinessDetail(
-            startup_id: startup_id);
-        final business_thum_resp = await startupConnect.FetchThumbnail(
-            startup_id: startup_id);
+        final business_name_resp =
+            await startupConnect.FetchBusinessDetail(startup_id: startup_id);
+        final business_thum_resp =
+            await startupConnect.FetchThumbnail(startup_id: startup_id);
 
         // Thumbnail Handler :
         if (business_thum_resp['response']) {
@@ -115,12 +118,18 @@ class StartupInfoSection extends StatelessWidget {
               logo: data['logo'],
             ),
 
+            Positioned(
+              left: context.width * 0.50,
+              top: context.height * 0.25,
+              child: InvestmentChart()), 
+
+
             // TABS
             Positioned(
               top: context.height * 0.25,
               left: context.width * 0.10,
               child: Container(
-                  width: context.width * 0.55,
+                  width: context.width * 0.39,
                   height: 65,
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
@@ -132,8 +141,6 @@ class StartupInfoSection extends StatelessWidget {
                       StartupNavigation(
                           title: 'Invest', route: StartupPageRoute.invest),
 
-                      // STATIC SECTION WITH INVEST BUTTON :
-                      InvestmentChart()
                     ],
                   )),
             )
@@ -176,6 +183,8 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
+
+        is_admin==true? 
         Positioned(
             left: context.width * 0.53,
             top: context.height * 0.02,
@@ -194,7 +203,8 @@ class StartupInfoSection extends StatelessWidget {
                     size: 15,
                   ),
                   label: Text('Edit')),
-            )),
+            ))
+           : Container()  
       ],
     );
   }

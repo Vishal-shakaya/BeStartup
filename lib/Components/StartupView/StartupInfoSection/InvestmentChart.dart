@@ -1,96 +1,196 @@
+import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Components/StartupView/StartupInfoSection/UpdateInvestmentDialog.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-
-
-class InvestmentChart extends StatelessWidget {
-  const InvestmentChart({Key? key}) : super(key: key);
+class InvestmentChart extends StatefulWidget {
+  InvestmentChart({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<InvestmentChart> createState() => _InvestmentChartState();
+}
+
+class _InvestmentChartState extends State<InvestmentChart> {
+  var startupConnector = Get.put(StartupViewConnector());
+
   double invest_btn_width = 150;
+
   double invest_btn_height = 37;
 
   double static_sec_width = 210;
-  double static_sec_height = 205; 
 
-    return Container(
-            width: static_sec_width,
-            height: static_sec_height,
+  double static_sec_height = 205;
 
-            padding: EdgeInsets.all(10),
-            
-            child: Card(
-              elevation: 5,
-              shadowColor: primary_light,
-              shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(20))),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(20)),
-                    border: Border.all(
-                      color: Colors.grey.shade200,
-                      width: 2,
-                    )),
-                child: SingleChildScrollView(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    StaticRow(title: 'Team', value: "50"),
-                    StaticRow(title: 'Vision', value: "50"),
-                    StaticRow(title: 'Investor', value: "50"),
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                      child: InkWell(
-                        highlightColor: primary_light_hover,
-                        borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(20),
-                            right: Radius.circular(20)),
-                        onTap: () {},
-                        child: Card(
-                          elevation: 10,
-                          shadowColor: light_color_type3,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(20))),
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(5),
-                            width: invest_btn_width,
-                            height: invest_btn_height,
-                            decoration: BoxDecoration(
-                                color: primary_light,
-                                borderRadius:
-                                    const BorderRadius.horizontal(
-                                        left: Radius.circular(20),
-                                        right:
-                                            Radius.circular(20))),
-                            child: const Text(
-                              'Invest now',
-                              style: TextStyle(
-                                  letterSpacing: 2.5,
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                )),
-              ),
-            ),
-          );
+  var my_context = Get.context;
+
+  var desire_amount;
+
+  var invested_amount;
+
+  var team_members;
+
+  var is_admin;
+
+  // Update Investment amount UI : 
+  UpdateInvestmentAmount({required data}) async {
+    setState(() {
+      invested_amount = data; 
+    });
   }
 
-    Container StaticRow({title, value}) {
+  //////////////////////////////////////////////
+  /// Verify Phoneno :
+  ///////////////////////////////////////////////
+  UpdateInvetAlert({task, updateMail}) async {
+    showDialog(
+        barrierDismissible: false,
+        context: my_context!,
+        builder: (context) {
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                  width: context.width * 0.20,
+                  height: context.height * 0.30,
+                  child: UpdateInvestmentDialog(
+                    updateInvestmentFun: UpdateInvestmentAmount,
+                  )));
+        });
+  }
+
+  ///////////////////////////
+  /// GET REQUIREMENTS :
+  ///////////////////////////
+  GetLocalStorageData() async {
+    final startup_id = await getStartupDetailViewId;
+    is_admin = await getIsUserAdmin;
+    final resp =
+        await startupConnector.FetchBusinessDetail(startup_id: startup_id);
+    // Success Handler:
+    if (resp['response']) {
+      invested_amount = resp['data']['achived_amount'] ?? '';
+      team_members = resp['data']['team_members'] ?? '';
+      desire_amount = resp['data']['desire_amount'] ?? '';
+    }
+
+    // Error Handler :
+    if (!resp['response']) {
+      invested_amount = '';
+      team_members = '';
+      desire_amount = '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //////////////////////////////////
+    /// SET REQUIREMENTS :
+    //////////////////////////////////
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+                    baseColor: shimmer_base_color,
+                    highlightColor: shimmer_highlight_color,
+                    child: MainMethod(context)));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  //////////////////////////////////////////
+  /// MAIN METHOD :
+  //////////////////////////////////////////
+  Container MainMethod(context) {
+    return Container(
+      width: static_sec_width,
+      height: static_sec_height,
+      padding: EdgeInsets.all(10),
+      child: Card(
+        elevation: 5,
+        shadowColor: primary_light,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              border: Border.all(
+                color: Colors.grey.shade200,
+                width: 2,
+              )),
+          child: SingleChildScrollView(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              StaticRow(title: 'Team', value: "$team_members"),
+              StaticRow(title: 'Desire', value: "₹ $desire_amount"),
+              StaticRow(title: 'Invest', value: "₹ $invested_amount"),
+
+              // Submit Button :
+              SubmitButton()
+            ],
+          )),
+        ),
+      ),
+    );
+  }
+
+/////////////////////////////////////////////
+  /// External Methods :
+/////////////////////////////////////////////
+  Container SubmitButton() {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () {
+          is_admin ? UpdateInvetAlert() : () {};
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: invest_btn_width,
+            height: invest_btn_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: Text(
+              is_admin == true ? 'Update' : 'Invest now',
+              style: TextStyle(
+                  letterSpacing: 2.5,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container StaticRow({title, value}) {
     return Container(
       width: 200,
       padding: EdgeInsets.all(7),
@@ -107,17 +207,26 @@ class InvestmentChart extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 )),
             style: Get.textTheme.headline5,
+             overflow: TextOverflow.ellipsis
           ),
-          AutoSizeText.rich(
-            TextSpan(
-                text: value,
-                style: GoogleFonts.openSans(
-                  textStyle: TextStyle(),
-                  color: light_color_type2,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                )),
-            style: Get.textTheme.headline5,
+          Tooltip(
+            message:value ,
+            child: Container(
+              width:80,
+              child: AutoSizeText.rich(
+                TextSpan(
+                    text: value,
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(),
+                      color: light_color_type2,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+          
+                    )),
+                style: Get.textTheme.headline5,
+                overflow: TextOverflow.ellipsis
+              ),
+            ),
           ),
         ],
       ),
