@@ -27,13 +27,16 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
-  var updateEmailFeild = TextEditingController();
-  var founderConnector = Get.put(FounderConnector());
   FirebaseAuth fireInstance = FirebaseAuth.instance;
+
+  var updateEmailFeild = TextEditingController();
+  var updateAchiveAmount = TextEditingController();
+  var founderConnector = Get.put(FounderConnector());
   var my_context = Get.context;
 
   double mem_dialog_width = 900;
   var is_update_mail = false;
+  var is_update_achive_amount = false;
   var user_phone_no;
 
   //////////////////////////////////////////////////////
@@ -144,20 +147,18 @@ class _UserSettingsState extends State<UserSettings> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-            content: SizedBox(
-                width: context.width * 0.20,
-                height: context.height * 0.30,
-                child: PhoneNoVerifyDialogAlert(
-                  noOperation: NumberOperation.update, key: UniqueKey())));
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                  width: context.width * 0.20,
+                  height: context.height * 0.30,
+                  child: PhoneNoVerifyDialogAlert(
+                      noOperation: NumberOperation.update, key: UniqueKey())));
         });
   }
 
-
-
 //////////////////////////////////
-/// HANDLERS : 
+  /// HANDLERS :
 //////////////////////////////////
   // Reset Password Handler :
   ResetPassword() async {
@@ -169,6 +170,12 @@ class _UserSettingsState extends State<UserSettings> {
     var email = updateEmailFeild.text;
     ReauthenticateDialog(
         task: ReautheticateTask.updateEmail, updateMail: email);
+  }
+
+  // Update Achived amount :
+  UpdateAchivedAmount() async {
+    var amount = updateAchiveAmount.text;
+    print(amount);
   }
 
   // Two Factor Auth :
@@ -186,10 +193,11 @@ class _UserSettingsState extends State<UserSettings> {
     await AskBeforeRemoveUserProfile(my_context);
   }
 
-  // Verify Phone no : 
+  // Verify Phone no :
   VerifyPhoneno() async {
     PhoneNoVerificationDialog();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -250,9 +258,19 @@ class _UserSettingsState extends State<UserSettings> {
                 margin: EdgeInsets.only(left: context.width * 0.03),
                 child: ListView(
                   children: [
+                    
+                    // Edit Profile :
+                    SettingItem(
+                      title: 'Edit Profile',
+                      icon: Icons.person,
+                      fun: EditProfile,
+                    ),
+
+
+                    // Resting password
                     SettingItem(
                       title: 'Rest Pasword',
-                      icon: Icons.settings,
+                      icon: Icons.lock,
                       fun: ResetPassword,
                     ),
 
@@ -262,6 +280,7 @@ class _UserSettingsState extends State<UserSettings> {
                     //   fun: SecondFactAuth,
                     // ),
 
+                    // Edit Mail field :
                     is_update_mail
                         ? TakeEmailAddress(fun: UpdateEmail)
                         : EditEmailItem(
@@ -270,17 +289,26 @@ class _UserSettingsState extends State<UserSettings> {
                             fun: () {},
                           ),
 
+
+                    // Edit phoneno Field :
                     EditPhoneNo(
                         title: user_phone_no,
                         icon: Icons.phone,
                         fun: VerifyPhoneno),
 
-                    SettingItem(
-                      title: 'Edit Profile',
-                      icon: Icons.person,
-                      fun: EditProfile,
-                    ),
 
+
+                    // // Update Achived Amount :
+                    // is_update_achive_amount
+                    //     ? TakeAchiveAmount(fun: UpdateAchivedAmount)
+                    //     : EditAchivedAmount(
+                    //         title: 'Achived Amount',
+                    //         icon: Icons.currency_rupee_sharp,
+                    //         amount: '  ${30000}',
+                    //         fun: () {},
+                    //       ),
+
+                    // Delete or Remove user field :
                     WarningItem(
                         title: 'Delete Account',
                         icon: Icons.delete_rounded,
@@ -378,6 +406,75 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
+
+
+  Container EditAchivedAmount({title,amount, icon, fun}) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      child: ListTile(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        style: ListTileStyle.drawer,
+        hoverColor: Colors.grey.shade200,
+        selected: true,
+        mouseCursor: MouseCursor.defer,
+        onTap: () {},
+        autofocus: true,
+        leading: Icon(icon, size: 20, color: light_color_type2),
+        title: Container(
+          width: context.width * 0.06,
+          child: Row(
+            children: [
+              AutoSizeText.rich(
+                TextSpan(
+                  text: title ,
+                  children: [
+                    TextSpan(
+                      text: amount,
+                      style: TextStyle(
+                      fontSize: 17, 
+                      color: light_color_type1), )
+                  ] ),
+                style: TextStyle(
+                  fontSize: 15, 
+                  color: light_color_type1),
+              ),
+            ],
+          ),
+        ),
+        trailing: Container(
+          width: 200,
+          height: 30,
+          child: Row(
+            children: [
+              Container(
+                width: 90,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.blueGrey.shade300)),
+                child: TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        is_update_achive_amount
+                            ? is_update_achive_amount = false
+                            : is_update_achive_amount = true;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      size: 15,
+                    ),
+                    label: Text('update')),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 
   Container EditPhoneNo({title, icon, fun}) {
     return Container(
@@ -516,6 +613,76 @@ class _UserSettingsState extends State<UserSettings> {
                     onTap: () {
                       setState(() {
                         is_update_mail = false;
+                      });
+                    },
+                    child: Icon(
+                      Icons.cancel_outlined,
+                      size: 22,
+                    )),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Container TakeAchiveAmount({title, icon, fun}) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(4),
+      child: ListTile(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        style: ListTileStyle.drawer,
+        hoverColor: Colors.grey.shade200,
+        selected: true,
+        mouseCursor: MouseCursor.defer,
+        onTap: () {
+          // fun();
+        },
+        autofocus: true,
+        leading: Icon(icon, size: 20, color: light_color_type2),
+        title: Container(
+          child: TextField(
+              controller: updateAchiveAmount,
+              decoration: InputDecoration(
+                  hintText: 'enter amount',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ))),
+        ),
+        trailing: Container(
+          width: 200,
+          height: 30,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 90,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.blueGrey)),
+                child: TextButton(
+                    onPressed: () async {
+                      await fun();
+                      setState(() {
+                        is_update_achive_amount = false;
+                      });
+                    },
+                    child: Text('Done')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        is_update_achive_amount = false;
                       });
                     },
                     child: Icon(

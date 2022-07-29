@@ -1,13 +1,10 @@
+import 'package:be_startup/Components/HomeView/SearhBar/StartupResultTIle.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
-import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:paginated_search_bar/paginated_search_bar.dart';
-import 'package:endless/endless.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 
 // tITLE TO SHOW SEARCH RESULTS :
 class SearchStartupInfo {
@@ -204,7 +201,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
                     }
 
 
-                    return ResultStartupTile(
+                    return StartupReslutTile(
                         snapshot: snapshot);
                   }),
             ),
@@ -245,53 +242,4 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
   }
 }
 
-class ResultStartupTile extends StatelessWidget {
-  var snapshot;
-  ResultStartupTile({
-    required this.snapshot,
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-          key: UniqueKey(),
-          primary: true,
-          scrollDirection: Axis.vertical,
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            // Data Conversion :
-            var result_data =
-                snapshot.data!.docs[index].data() as Map<String, dynamic>;
-            final startup_name = result_data['name'];
-            final founder_name = result_data['founder_name'];
-            final startup_id = result_data['startup_id'];
-            final startup_logo = result_data['logo'];
-
-            return Container(
-              padding: EdgeInsets.all(3),
-              child: ListTile(
-                onTap: () {},
-
-                // Startup Logo :
-                leading: CircleAvatar(
-                    backgroundImage: NetworkImage(startup_logo, scale: 1)),
-
-                // Startrup Hading :
-                title: Text('${startup_name}',
-                    style: TextStyle(color: light_color_type1, fontSize: 15),
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis),
-
-                // Username :
-                subtitle: Text('@${founder_name}',
-                    style: TextStyle(color: light_color_type3, fontSize: 12),
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            );
-          }),
-    );
-  }
-}

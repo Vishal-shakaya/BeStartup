@@ -1,59 +1,14 @@
-import 'dart:convert';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
 
 class StartupViewConnector extends GetxController {
-  ////////////////////////////////////////
-  // CUSTOM CACHING  SYSTEM :
-  // GET DATA FROM LOCAL STORGE
-  ////////////////////////////////////////
-  GetCachedData({fromModel, startup_id}) async {
-    final localStore = await SharedPreferences.getInstance();
-    var is_localy_store = localStore.containsKey(fromModel);
-    if (is_localy_store) {
-      var data = localStore.getString(fromModel);
-
-      // Validata data :
-      if (data != null || data != '') {
-        var final_data = json.decode(data!);
-        Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['startup_id'] == startup_id) {
-          return final_data;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
-///////////////////////////////////////////
-  /// ADD DATA TO CACHED :
-///////////////////////////////////////////
-  StoreCacheData({fromModel, data}) async {
-    try {
-      final localStore = await SharedPreferences.getInstance();
-      if (data != null || data != '') {
-        localStore.setString(fromModel, json.encode(data));
-        print('Cached $fromModel Successfully');
-        return true;
-      }
-    } catch (e) {
-      return false;
-    }
-  }
-  
 //////////////////////////////////////
   // 2. Send it to ui
   // 3. Store data in local storage:

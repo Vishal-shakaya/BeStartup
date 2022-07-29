@@ -1,13 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorBlock.dart';
-import 'package:be_startup/Components/StartupView/MemberDetailDialog.dart';
-import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:horizontal_card_pager/card_item.dart';
-import 'package:horizontal_card_pager/horizontal_card_pager.dart';
 
 class InvestorSection extends StatelessWidget {
   const InvestorSection({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:be_startup/AppState/PageState.dart';
-import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';

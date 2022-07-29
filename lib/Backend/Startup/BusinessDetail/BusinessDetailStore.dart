@@ -98,6 +98,7 @@ class BusinessDetailStore extends GetxController {
       var resp = await BusinessInfoModel(
           logo: image_url,
           name: businessName,
+          founder_id: userId,
           desire_amount: amount,
           startup_search_index: startup_searching_index,
           startup_id: await getStartupId);

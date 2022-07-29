@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
-import 'package:be_startup/Backend/Startup/connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
 import 'package:be_startup/Utils/Colors.dart';
