@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -100,9 +101,10 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   ///////////////////////////////
   UpdateMileStone() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final startup_id = await getStartupDetailViewId;
     StartLoading();
     var res = await mileStore.PersistMileStone();
-    var resp = await updateStore.UpdateBusinessMilestone();
+    var resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
 
     // Success Handler Cached Data :
     if (res['response']) {
@@ -154,17 +156,16 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     }
   }
 
-
   //////////////////////////////////////
   //  GET REQUIREMENTS :
   //////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      if(updateMode ==true){
+      if (updateMode == true) {
         final resp = await startupConnector.FetchBusinessMilestone();
         print(resp['message']);
       }
-      
+
       final data = await mileStore.GetMileStonesList();
       milestones = data;
       return milestones;
@@ -172,6 +173,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       return milestones;
     }
   }
+
 ///////////////////////////////////////////
 // SET PAGE DEFAULT STATE :
 ///////////////////////////////////////////
@@ -236,8 +238,6 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     if (context.width < 480) {
       print('480');
     }
-
-
 
     //////////////////////////////////////
     //  SET  REQUIREMENTS :

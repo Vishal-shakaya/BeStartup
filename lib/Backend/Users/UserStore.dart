@@ -11,11 +11,15 @@ class UserStore extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
+
+
+  //////////////////////////////////////////////////////
   /// It checks if the user is already created in
   /// the database, if not then it creates the user in the
   /// database
   /// Returns:
   ///   Nothing.
+  //////////////////////////////////////////////////////
   CreateUser() async {
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
@@ -40,6 +44,9 @@ class UserStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
+
+
+
 
 /////////////////////////////////////////////////////
 /// UPDATE USER PLAN AND STARTUP FIELD :
@@ -89,10 +96,11 @@ class UserStore extends GetxController {
 
 
 
+
 ////////////////////////////////////
-  /// Check if user Already buy plan :
-  /// I want to check if the user has a plan without a startup,
-  /// if so, return true response, if not, return
+/// Check if user Already buy plan :
+/// I want to check if the user has a plan without a startup,
+/// if so, return true response, if not, return
 ////////////////////////////////////
   IsAlreadyPlanBuyed() async {
     // Get User from firebase update ints field :
@@ -135,9 +143,16 @@ class UserStore extends GetxController {
     }
   }
 
-//////////////////////////////////////
+
+
+
+
+  //////////////////////////////////////
   /// UPDATE USER PLAN :
-//////////////////////////////////////
+  /// Checking if the user has a plan without a startup, if so,
+  ///  it returns true response, if not, it
+  /// returns false.
+  //////////////////////////////////////
   AddStartupToUserPlan(val) async {
     // Get User from firebase update ints field :
     final id = auth.currentUser?.uid;
@@ -180,4 +195,58 @@ class UserStore extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
+  ////////////////////////////////////////////////
+  /// Update user Perticular field in database : 
+  /// Param required val and field : 
+  ////////////////////////////////////////////////
+  UpdateUserDatabaseField({required val , required field}) async {
+    // Get User from firebase update ints field :
+    final id = auth.currentUser?.uid;
+    final email = auth.currentUser?.email;
+    final user = store.collection('users');
+    var userData;
+    var obj_id;
+
+    try {
+      await user.where('email', isEqualTo: email).get().then((value) {
+        userData = value.docs.first.data();
+        obj_id = value.docs.first.id;
+      });
+
+      userData[field] = val; 
+      user.doc(obj_id).update(userData);
+
+      return ResponseBack( response_type: true,);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+
+
+
+  //////////////////////////////////////
+  // FetchUser Detail : 
+  //////////////////////////////////////
+  FetchUserDetail() async {
+    // Get User from firebase update ints field :
+    final id = auth.currentUser?.uid;
+    final email = auth.currentUser?.email;
+    final user = store.collection('users');
+    var old_user;
+    try {
+      await user.where('email', isEqualTo: email).get().then((value) {
+        old_user = value.docs.first.data();
+      });
+
+      return ResponseBack(response_type: true, data: old_user);
+
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
 }

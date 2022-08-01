@@ -18,6 +18,9 @@ class MyAuthentication extends GetxController {
   var userStore = UserStore();
   var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
 
+
+
+
   ////////////////////////////////////////
   /// Verify Phone No :
   ////////////////////////////////////////
@@ -41,6 +44,8 @@ class MyAuthentication extends GetxController {
   }
 
 
+
+
   // Verify Otp :
   VerifyOtp({currentUser, confirmationResult, otp}) async {
     try {
@@ -52,6 +57,8 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
+
 
 
   // Update phone no of currently login user :
@@ -67,6 +74,8 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
+
 
 
 // Phone number verification and link no in Android or ios device :
@@ -109,6 +118,9 @@ class MyAuthentication extends GetxController {
     );
   }
 
+
+
+
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -122,7 +134,8 @@ class MyAuthentication extends GetxController {
       final user = auth.currentUser;
       // Verify user email :
       await user?.sendEmailVerification();
-
+      
+      await userStore.CreateUser();
       return ResponseBack(response_type: true);
 
       // Error Exception :
@@ -136,6 +149,9 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, data: e);
     }
   }
+
+
+
 
 ////////////////////////////////////////////
   // LOGIN USER WITH EMAIL AND PASSWORD :
@@ -152,12 +168,10 @@ class MyAuthentication extends GetxController {
       if (verify_email == false) {
         return ResponseBack(response_type: false, data: 'email_not_verify');
       } else {
-
         try {
           if (GetPlatform.isWeb) {
             await auth.setPersistence(Persistence.SESSION);
           }
-
           return ResponseBack(response_type: true);
         } catch (e) {
           return ResponseBack(response_type: false);
@@ -173,6 +187,9 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
+
+
   // RESET USER PASSWORD BY SENDING EMAIL LINK:
   ResetPasswordWithEmail() async {
     try {
@@ -187,6 +204,9 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
+
+ 
   ForgotPassword(email) async {
     try {
       final method =
@@ -205,6 +225,8 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
+
   // PERMANENT DELETE USER :
   Deleteuser() async {
     final user = auth.currentUser;
@@ -216,6 +238,8 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
+
   UpdateUserMail(email) async {
     final user = auth.currentUser;
     try {
@@ -225,6 +249,8 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
+
 
   // UPLOAD IMAGE :
   UploadProfileImage({image, filename}) async {

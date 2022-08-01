@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -106,7 +107,8 @@ class _BusinessBodyState extends State<BusinessBody> {
           businessName: business_name, amount: desire_amount);
 
       if (resp['response']) {
-        var update_resp = await updateStore.UpdateBusinessDetail();
+        final startup_id = await getStartupDetailViewId; 
+        var update_resp = await updateStore.UpdateBusinessDetail(startup_id: startup_id);
 
         // Update Success Handler :
         if (update_resp['response']) {

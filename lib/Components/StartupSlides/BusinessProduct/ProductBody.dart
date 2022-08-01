@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
@@ -66,9 +67,10 @@ class _ProductBodyState extends State<ProductBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
     var resp = await productStore.PersistProduct();
+    final startup_id = await getStartupDetailViewId;
     // Cached Data Success Handler:
     if (resp['response']) {
-      var update_resp = await updateStore.UpdateProducts();
+      var update_resp = await updateStore.UpdateProducts(startup_id: startup_id);
 
       // Update Success Handler    :
       if (update_resp['response']) {
@@ -106,23 +108,21 @@ class _ProductBodyState extends State<ProductBody> {
   /// Returns:
   ///   The return value is a Future&lt;dynamic&gt;.
   ///////////////////////////////////////////////////
-    GetLocalStorageData() async {
-      var error_resp;
-      try {
-        if(updateMode==true){
-          final resp = await startupConnector.FetchProducts();
-          print(resp['message']);
-        }
-
-        final data = await productStore.GetProductList();
-        error_resp = data;
-        return data;
-      } catch (e) {
-        return error_resp;
+  GetLocalStorageData() async {
+    var error_resp;
+    try {
+      if (updateMode == true) {
+        final resp = await startupConnector.FetchProducts();
+        print(resp['message']);
       }
+
+      final data = await productStore.GetProductList();
+      error_resp = data;
+      return data;
+    } catch (e) {
+      return error_resp;
     }
-
-
+  }
 
 ///////////////////////////////
 // Set page Default State :
@@ -139,7 +139,6 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
-
     ///////////////////////////////////
     /// SET REQUIREMNTS :
     ///////////////////////////////////
@@ -159,8 +158,6 @@ class _ProductBodyState extends State<ProductBody> {
           return MainMethod(context, snapshot.data);
         });
   }
-
-
 
 //////////////////////////////
 // MAIN METHOD SECTION:

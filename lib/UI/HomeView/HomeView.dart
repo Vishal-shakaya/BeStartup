@@ -1,10 +1,13 @@
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
-import 'package:be_startup/Components/HomeView/SaveStories/StoryListView.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHandler.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileHandler.dart';
+import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +18,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  dynamic mainViewWidget = StoryListView();
+  var userStore = Get.put(UserStore());
   var view = HomePageViews.storyView;
+
+  var  usertype;
+  double page_width = 0.80;
+  double page_height = 0.90;
 
   SetHomeView(changeView) {
     if (changeView == HomePageViews.profileView) {
@@ -43,12 +52,21 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  // LOADING SPINNER :
+  var spinner = Container(
+    width: 60,
+    height: 60,
+    alignment: Alignment.center,
+    padding: EdgeInsets.all(8),
+    child: CircularProgressIndicator(
+      backgroundColor: Colors.transparent,
+      color: dartk_color_type3,
+      strokeWidth: 5,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    double page_width = 0.80;
-    double page_height = 0.90;
-    dynamic mainViewWidget = StoryListView();
-
     ///////////////////////////////////////////
     /// ASSIGNING VIEW  :
     /// DEFAULT VIEW IS STORYVIEW :
@@ -70,30 +88,75 @@ class _HomeViewState extends State<HomeView> {
     }
 
     if (view == HomePageViews.settingView) {
-      mainViewWidget = UserSettings();
+      mainViewWidget = UserSettings(
+        usertype: usertype,
+      );
     }
 
+    ///////////////////////////////////////////
+    /// GET REQUIRED PARAM : 
+    ///////////////////////////////////////////
+    GetLocalStorageData() async {
+      final resp = await userStore.FetchUserDetail();
+
+      // 1 CHECK  :
+      // If user user type is investor or founder
+      // if both are false then show user type page :
+      if (resp['data']['is_investor'] == false && resp['data']['is_founder'] == false) {
+        Get.toNamed(user_type_slide_url);
+      }
+
+      // 2 CHECK  :
+      // If user user type is investor or founder
+      // if any one is true then send Home View
+      if (resp['data']['is_investor'] == true || resp['data']['is_founder'] == true) {
+        
+
+        if (resp['data']['is_investor'] == true) {
+          usertype = UserType.investor;
+        }
+
+        if (resp['data']['is_founder'] == true) {
+          usertype = UserType.founder;
+        }
+      }
+    }
+
+
+
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return spinner;
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  ///////////////////////////////////////////
+  /// MAIN METHOD :
+  ///////////////////////////////////////////
+  Container MainMethod(BuildContext context) {
     return Container(
         width: page_width,
         height: page_height,
         margin: EdgeInsets.only(top: context.height * 0.02),
         child: Stack(
           children: [
-            // 2. MAIN SECTION : 
-            Container(
-              alignment: Alignment.center,
-              child:mainViewWidget
-            ),
+            // 2. MAIN SECTION :
+            Container(alignment: Alignment.center, child: mainViewWidget),
 
+            // Header SEction:
+            HomeHeaderSection(changeView: SetHomeView, usertype:usertype),
 
-            // Header SEction: 
-            HomeHeaderSection(changeView: SetHomeView),
-            
             // SEARCH BAR :
             BusinessSearchBar()
-
-
-            
           ],
         ));
   }

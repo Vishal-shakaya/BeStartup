@@ -137,13 +137,13 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                             initial_val: data['name']),
 
                         // POSITION:
-                        InputField(
-                            context: context,
-                            name: 'investor_position',
-                            lable_text: 'Position',
-                            hind_text: 'position in company',
-                            error_text: 'position in company required',
-                            initial_val: data['position']),
+                        // InputField(
+                        //     context: context,
+                        //     name: 'investor_position',
+                        //     lable_text: 'Position',
+                        //     hind_text: 'position in company',
+                        //     error_text: 'position in company required',
+                        //     initial_val: data['position']),
                       ],
                     ),
                   ),

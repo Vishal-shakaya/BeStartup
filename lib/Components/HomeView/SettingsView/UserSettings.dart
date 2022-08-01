@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
-import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
-import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
+
 import 'package:be_startup/Components/Widgets/PhoneNoVerification.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -15,11 +15,11 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:stylish_dialog/stylish_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserSettings extends StatefulWidget {
-  UserSettings({Key? key}) : super(key: key);
+  var usertype;
+  UserSettings({this.usertype, Key? key}) : super(key: key);
 
   @override
   State<UserSettings> createState() => _UserSettingsState();
@@ -32,6 +32,8 @@ class _UserSettingsState extends State<UserSettings> {
   var updateEmailFeild = TextEditingController();
   var updateAchiveAmount = TextEditingController();
   var founderConnector = Get.put(FounderConnector());
+  var userStore = Get.put(UserStore());
+  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
   var my_context = Get.context;
 
   double mem_dialog_width = 900;
@@ -198,6 +200,28 @@ class _UserSettingsState extends State<UserSettings> {
     PhoneNoVerificationDialog();
   }
 
+  // Switch Investor to Founder :
+  SwitchInvestorToFounder() async {
+    try {
+      final resp1 = await userStore.UpdateUserDatabaseField(
+        val: true,
+        field: 'is_founder',
+      );
+
+      final resp2 = await userStore.UpdateUserDatabaseField(
+        val: false,
+        field: 'is_investor',
+      );
+      
+       await socialAuth.Logout();
+
+    } catch (e) {
+      var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      Get.closeAllSnackbars();
+      Get.showSnackbar(
+          MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,14 +282,12 @@ class _UserSettingsState extends State<UserSettings> {
                 margin: EdgeInsets.only(left: context.width * 0.03),
                 child: ListView(
                   children: [
-                    
                     // Edit Profile :
                     SettingItem(
                       title: 'Edit Profile',
                       icon: Icons.person,
                       fun: EditProfile,
                     ),
-
 
                     // Resting password
                     SettingItem(
@@ -289,14 +311,11 @@ class _UserSettingsState extends State<UserSettings> {
                             fun: () {},
                           ),
 
-
                     // Edit phoneno Field :
                     EditPhoneNo(
                         title: user_phone_no,
                         icon: Icons.phone,
                         fun: VerifyPhoneno),
-
-
 
                     // // Update Achived Amount :
                     // is_update_achive_amount
@@ -308,11 +327,19 @@ class _UserSettingsState extends State<UserSettings> {
                     //         fun: () {},
                     //       ),
 
+                    // Switch user type;
+                    widget.usertype == UserType.investor
+                        ? SettingItem(
+                            title: 'Switch to founder',
+                            icon: Icons.refresh_rounded,
+                            fun: SwitchInvestorToFounder,
+                          )
+                        : Container(),
                     // Delete or Remove user field :
                     WarningItem(
                         title: 'Delete Account',
                         icon: Icons.delete_rounded,
-                        fun: DeleteUser)
+                        fun: DeleteUser),
                   ],
                 ))));
   }
@@ -407,8 +434,7 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-
-  Container EditAchivedAmount({title,amount, icon, fun}) {
+  Container EditAchivedAmount({title, amount, icon, fun}) {
     return Container(
       padding: EdgeInsets.all(4),
       child: ListTile(
@@ -426,18 +452,13 @@ class _UserSettingsState extends State<UserSettings> {
           child: Row(
             children: [
               AutoSizeText.rich(
-                TextSpan(
-                  text: title ,
-                  children: [
-                    TextSpan(
-                      text: amount,
-                      style: TextStyle(
-                      fontSize: 17, 
-                      color: light_color_type1), )
-                  ] ),
-                style: TextStyle(
-                  fontSize: 15, 
-                  color: light_color_type1),
+                TextSpan(text: title, children: [
+                  TextSpan(
+                    text: amount,
+                    style: TextStyle(fontSize: 17, color: light_color_type1),
+                  )
+                ]),
+                style: TextStyle(fontSize: 15, color: light_color_type1),
               ),
             ],
           ),
@@ -473,8 +494,6 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
-
-
 
   Container EditPhoneNo({title, icon, fun}) {
     return Container(
@@ -626,7 +645,6 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
-
 
   Container TakeAchiveAmount({title, icon, fun}) {
     return Container(

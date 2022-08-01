@@ -19,7 +19,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HomeHeaderSection extends StatefulWidget {
   Function changeView;
-  HomeHeaderSection({required this.changeView, Key? key}) : super(key: key);
+  var usertype;
+  HomeHeaderSection(
+      {required this.changeView, required this.usertype, Key? key})
+      : super(key: key);
   @override
   State<HomeHeaderSection> createState() => _HomeHeaderSectionState();
 }
@@ -51,56 +54,61 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     Navigator.of(context).pop();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-  String? selectedValue;
+    String? selectedValue;
     //////////////////////////////////////
-    /// Investor Dialog : 
+    /// Investor Dialog :
     //////////////////////////////////////
+
     ShowDialog(context) {
       showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => AlertDialog(
-          alignment: Alignment.center,
-          // title:  MileDialogHeading(context),
-          content: SizedBox(
-            width: mem_dialog_width,
-            child: AddInvestorDialogAlert(
-              form_type: InvestorFormType.create,
-            ),
-          ),
-        ));
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => AlertDialog(
+                alignment: Alignment.center,
+                // title:  MileDialogHeading(context),
+                content: SizedBox(
+                  width: mem_dialog_width,
+                  child: AddInvestorDialogAlert(
+                    form_type: InvestorFormType.create,
+                  ),
+                ),
+              ));
     }
 
+    //////////////////////////////
+    /// ADD INVESTOR :
+    //////////////////////////////
+    AddInvestor(context) {
+      ShowDialog(context);
+    }
 
-  //////////////////////////////
-  /// ADD INVESTOR :   
-  //////////////////////////////  
-  AddInvestor(context) {
-    ShowDialog(context);
-  }
+    //////////////////////////
+    // Explore Topics
+    //////////////////////////
+    ExploreFunction() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(content: ExploreCatigoryAlert());
+          });
+    }
 
-  //////////////////////////
-  // Explore Topics
-  //////////////////////////
-  ExploreFunction() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(content: ExploreCatigoryAlert());
-        });
-  }
-
-  //////////////////////////////////////////////////////////
-  /// Create Startup Url  :
-  //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    /// Create Startup Url  :
+    //////////////////////////////////////////////////////////
     CreateStatup() async {
       await ClearStartupSlideCached();
       Get.toNamed(create_business_detail_url);
     }
+
+    //////////////////////////////////////
+    /// INVESTOR ITEMS :
+    //////////////////////////////////////
+    // SwitchInvestorToFounder() async {
+    //   print('Switch to founder ');
+    // }
 
     return Container(
       width: context.width * header_sec_width,
@@ -119,14 +127,12 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             spacing: 10,
             alignment: WrapAlignment.center,
             children: [
-
-
               // Explore Menu :
               ExploreButton(context, ExploreFunction),
 
               Container(
                 width: context.width * 0.20,
-              ), 
+              ),
 
               // Menu Icon :
               Container(
@@ -141,14 +147,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Home Button : 
+                      // Home Button :
                       StartupViewLink(),
 
-                      // Save Startup Button: 
+                      // Save Startup Button:
                       SaveStartupLink(),
 
-                      // Dropdown menu :   
-                      DropDownMenu(context, AddInvestor, CreateStatup)
+                      FounderDropDownMenu(context, AddInvestor, CreateStatup)
+                          
                     ],
                   ))
             ],
@@ -158,11 +164,10 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     );
   }
 
-
-
 ////////////////////////////////////////
-/// External Methods  : 
+  /// External Methods  :
 ////////////////////////////////////////
+
   IconButton SaveStartupLink() {
     return IconButton(
         onPressed: () {
@@ -183,101 +188,29 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               ));
   }
 
-
-
   IconButton StartupViewLink() {
     return IconButton(
-      onPressed: () {
-        setState(() {
-          is_home_view = true;
-          is_save_view = false;
-        });
-        widget.changeView(HomePageViews.storyView);
-      },
-      icon: is_home_view
-          ? Icon(
-              Icons.home,
-              size: 28,
-            )
-          : Icon(
-              Icons.home_outlined,
-              size: 28,
-            ));
+        onPressed: () {
+          setState(() {
+            is_home_view = true;
+            is_save_view = false;
+          });
+          widget.changeView(HomePageViews.storyView);
+        },
+        icon: is_home_view
+            ? Icon(
+                Icons.home,
+                size: 28,
+              )
+            : Icon(
+                Icons.home_outlined,
+                size: 28,
+              ));
   }
 
-
-
-
-////////////////////////////////////////
-/// Dropdown Menu : 
-////////////////////////////////////////
-  Container DropDownMenu(BuildContext context, Null AddInvestor(dynamic context), Future<Null> CreateStatup()) {
-    return Container(
-                      width: context.width * 0.08,
-                      child: DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                        items: [
-                          ...MenuItems.firstItems.map(
-                            (item) => DropdownMenuItem<MenuItem>(
-                              value: item,
-                              child: MenuItems.buildItem(item),
-                            ),
-                          ),
-                          // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
-                          ...MenuItems.secondItems.map(
-                            (item) => DropdownMenuItem<MenuItem>(
-                              value: item,
-                              child: MenuItems.buildItem(item),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value)  async {
-                          // MenuItems.onChanged(context, value as MenuItem);
-                          switch (value) {
-                            case MenuItems.profile:
-                              widget.changeView(HomePageViews.profileView);
-                              setState(() {
-                                is_home_view = false;
-                                is_save_view = false;
-                              });
-                              //Do something
-                              break;
-                            case MenuItems.investor:
-                               await AddInvestor(context);
-                              //Do something
-                              break;
-                            case MenuItems.startup:
-                             await  CreateStatup();
-                              //Do something
-                              break;
-                            case MenuItems.settings:
-                              widget.changeView(HomePageViews.settingView);
-                              setState(() {
-                                is_home_view = false;
-                                is_save_view = false;
-                              });
-                              //Do something
-                              break;
-                            case MenuItems.logout:
-                              //Do something
-                              await  socialAuth.Logout();
-                              break;
-                          }
-                        },
-                        openWithLongPress: true,
-                        customItemsHeight: 8,
-                        customButton: Container(
-                          margin: EdgeInsets.only(top: context.height * 0.01),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage:
-                                NetworkImage(temp_avtar_image, scale: 1),
-                          ),
-                        ),
-                      )),
-                    );
-  }
-
+//////////////////////////////////////////
+  // Explore Button :
+//////////////////////////////////////////
   Container ExploreButton(BuildContext context, Null ExploreFunction()) {
     return Container(
         margin: EdgeInsets.only(
@@ -299,6 +232,144 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               label: Text('Explore')),
         ));
   }
+
+////////////////////////////////////////
+  /// Investor Dropdown Menu :
+////////////////////////////////////////
+  // Container InvestorDropDownMenu(
+  //     BuildContext context,
+  //     SwitchInvestorToFounder,
+  //     CreateStatup) {
+
+  //   return Container(
+  //     width: context.width * 0.08,
+  //     child: DropdownButtonHideUnderline(
+  //         child: DropdownButton2(
+  //       items: [
+  //         ...InvestorMenuItems.firstItems.map(
+  //           (item) => DropdownMenuItem<MenuItem>(
+  //             value: item,
+  //             child: InvestorMenuItems.buildItem(item),
+  //           ),
+  //         ),
+  //         // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
+  //         ...InvestorMenuItems.secondItems.map(
+  //           (item) => DropdownMenuItem<MenuItem>(
+  //             value: item,
+  //             child: InvestorMenuItems.buildItem(item),
+  //           ),
+  //         ),
+  //       ],
+  //       onChanged: (value) async {
+  //         // InvestorMenuItems.onChanged(context, value as MenuItem);
+  //         switch (value) {
+  //           case InvestorMenuItems.profile:
+  //             widget.changeView(HomePageViews.profileView);
+  //             setState(() {
+  //               is_home_view = false;
+  //               is_save_view = false;
+  //             });
+  //             break;
+
+  //           case InvestorMenuItems.settings:
+  //             widget.changeView(HomePageViews.settingView);
+  //             setState(() {
+  //               is_home_view = false;
+  //               is_save_view = false;
+  //             });
+  //             break;
+
+  //           case InvestorMenuItems.logout:
+  //             await socialAuth.Logout();
+  //             break;
+
+  //           case InvestorMenuItems.swich_to_founder:
+  //             // await socialAuth.Logout();
+  //             await SwitchInvestorToFounder();
+  //             break;
+  //         }
+  //       },
+  //       openWithLongPress: true,
+  //       customItemsHeight: 8,
+  //       customButton: Container(
+  //         margin: EdgeInsets.only(top: context.height * 0.01),
+  //         child: CircleAvatar(
+  //           radius: 20,
+  //           backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
+  //         ),
+  //       ),
+  //     )),
+  //   );
+  // }
+
+////////////////////////////////////////
+  /// Dropdown Menu :
+////////////////////////////////////////
+  Container FounderDropDownMenu(BuildContext context,
+      Null AddInvestor(dynamic context), Future<Null> CreateStatup()) {
+    return Container(
+      width: context.width * 0.08,
+      child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+        items: [
+          ...FounderMenuItems.firstItems.map(
+            (item) => DropdownMenuItem<MenuItem>(
+              value: item,
+              child: FounderMenuItems.buildItem(item),
+            ),
+          ),
+          // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
+          ...FounderMenuItems.secondItems.map(
+            (item) => DropdownMenuItem<MenuItem>(
+              value: item,
+              child: FounderMenuItems.buildItem(item),
+            ),
+          ),
+        ],
+        onChanged: (value) async {
+          // FounderMenuItems.onChanged(context, value as MenuItem);
+          switch (value) {
+            case FounderMenuItems.profile:
+              widget.changeView(HomePageViews.profileView);
+              setState(() {
+                is_home_view = false;
+                is_save_view = false;
+              });
+              break;
+
+            // case FounderMenuItems.investor:
+            //    await AddInvestor(context);
+            //   break;
+
+            case FounderMenuItems.startup:
+              await CreateStatup();
+              break;
+
+            case FounderMenuItems.settings:
+              widget.changeView(HomePageViews.settingView);
+              setState(() {
+                is_home_view = false;
+                is_save_view = false;
+              });
+              break;
+
+            case FounderMenuItems.logout:
+              await socialAuth.Logout();
+              break;
+          }
+        },
+        openWithLongPress: true,
+        customItemsHeight: 8,
+        customButton: Container(
+          margin: EdgeInsets.only(top: context.height * 0.01),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
+          ),
+        ),
+      )),
+    );
+  }
 }
 
 class MenuItem {
@@ -311,20 +382,26 @@ class MenuItem {
   });
 }
 
-class MenuItems {
+class FounderMenuItems {
   static const List<MenuItem> firstItems = [
     profile,
-    investor,
+    // investor,
     startup,
-    settings
+    settings,
   ];
+
   static const List<MenuItem> secondItems = [logout];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-  static const investor =
-      MenuItem(text: 'investor', icon: Icons.add_box_outlined);
+  // static const investor =
+  //     MenuItem(text: 'investor', icon: Icons.add_box_outlined);
+
   static const startup =
       MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+
+  // static const swich_to_founder =
+  //     MenuItem(text: 'switch founder', icon: Icons.rotate_left_outlined);
+
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
 
@@ -349,3 +426,47 @@ class MenuItems {
     );
   }
 }
+
+// class InvestorMenuItems {
+//   static const List<MenuItem> firstItems = [
+//     profile,
+//     settings,
+//     swich_to_founder
+//   ];
+
+//   static const List<MenuItem> secondItems = [logout];
+
+//   static const profile = MenuItem(text: 'profile', icon: Icons.person);
+//   // static const investor =
+//   //     MenuItem(text: 'investor', icon: Icons.add_box_outlined);
+
+//   // static const startup =
+//   //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+
+//   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
+//   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+
+//   static const swich_to_founder =
+//       MenuItem(text: 'switch founder', icon: Icons.rotate_left_outlined);
+
+//   static Widget buildItem(MenuItem item) {
+//     return Row(
+//       children: [
+//         Icon(
+//           item.icon,
+//           color: light_color_type2,
+//           size: 22,
+//         ),
+//         const SizedBox(
+//           width: 10,
+//         ),
+//         Text(
+//           item.text,
+//           style: TextStyle(
+//             color: light_color_type2,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

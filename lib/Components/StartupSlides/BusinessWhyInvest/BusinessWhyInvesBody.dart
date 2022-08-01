@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessWhyInvestStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
@@ -101,11 +102,12 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     MyCustPageLoadingSpinner();
 
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final startup_id = await getStartupDetailViewId;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var whyInvest = formKey.currentState!.value['whyinvest'];
       var res = await whyInvestStore.SetWhyInvest(visionText: whyInvest);
-      var resp = await startupUpdater.UpdatehBusinessWhy();
+      var resp = await startupUpdater.UpdatehBusinessWhy(startup_id: startup_id);
       // Success Handler Cached data :
       if (res['response']) {
         // Update Success Handler :
@@ -150,14 +152,13 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   GetLocalStorageData() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     try {
-      if(updateMode==true){
-        final resp = await startupConnector.FetchBusinessWhy(); 
+      if (updateMode == true) {
+        final resp = await startupConnector.FetchBusinessWhy();
       }
-      
+
       final data = await whyInvestStore.GetWhyInvest();
       inital_val = data;
       return data;
-      
     } catch (e) {
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
@@ -186,8 +187,6 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     if (context.width > 1200) {
       maxlines = 15;
       vision_subheading_text = 20;
@@ -228,8 +227,6 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       vision_cont_width = 0.60;
       vision_cont_height = 0.70;
     }
-
-
 
     /////////////////////////////
     /// SET REQUIREMTNS :

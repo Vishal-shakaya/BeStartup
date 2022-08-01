@@ -93,6 +93,8 @@ class _MyAppState extends State<MyApp> {
       strokeWidth: 5,
     ),
   );
+
+  
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -104,6 +106,7 @@ class _MyAppState extends State<MyApp> {
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);
       await SetLoginUserId(user?.uid);
+     
       final user_resp = await founderConnector.FetchFounderDetailandContact(
           user_id: user?.uid);
       final phoneno = user_resp['data']['userContect']['phone_no'];
@@ -119,6 +122,7 @@ class _MyAppState extends State<MyApp> {
       // Setting things up : 
       await Future.delayed(Duration(seconds: 2));
     }
+
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

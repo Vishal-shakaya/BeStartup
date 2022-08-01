@@ -4,7 +4,12 @@ import 'package:uuid/uuid_util.dart';
 
 var uuid = Uuid();
 
-UserModel({email , is_profile_complete, id , plan,startups,is_founder}) async {
+UserModel({email,
+ is_profile_complete, 
+ id , 
+ plan,startups,
+ is_founder,
+ is_investor}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': id,
@@ -12,7 +17,7 @@ UserModel({email , is_profile_complete, id , plan,startups,is_founder}) async {
       'is_profile_complete':is_profile_complete,
       'plan':plan,  // list
       'startups':startups, // list
-      'is_investor':true, 
+      'is_investor':is_investor, 
       'is_founder':is_founder
     };
     return temp_obj;
@@ -33,7 +38,6 @@ InvestorModel(
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id,
-      'position':position, 
       'email':email, 
       'name': name,
       'picture': picture,

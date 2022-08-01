@@ -1,8 +1,11 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +20,9 @@ class UserType extends StatefulWidget {
 }
 
 class _UserTypeState extends State<UserType> {
+  var userStore = Get.put(UserStore());
+  var my_context = Get.context;
+
   Color? unselect_color =
       Get.isDarkMode ? dartk_color_type4 : light_color_type2;
   Color? select_color = Get.isDarkMode ? tealAccent : primary_light;
@@ -72,19 +78,31 @@ class _UserTypeState extends State<UserType> {
 
     // REDIRECT TO CREATE STARTUP PAGE :
     if (selected_user_type == 'founder') {
-      await ClearStartupSlideCached();
-      await SetUserType('founder');
-      Get.toNamed(
-        create_business_detail_url,
-      );
+      final resp = await userStore.UpdateUserDatabaseField(
+          field: 'is_founder', val: true);
+
+      // Success Response Handler :
+      if (resp['response']) {
+        await ClearStartupSlideCached();
+        await SetUserType('founder');
+        Get.toNamed(
+          create_business_detail_url,
+        );
+      }
+
+      // Error Response Handler :
+      if (!resp['response']) {
+        var snack_width = MediaQuery.of(context).size.width * 0.50;
+        Get.showSnackbar(
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+      }
     }
-    // REDIERCT TO STARTUPS VIEW:
+
+    // REDIERCT TO STARTUPS HOMEVIEW:
     if (selected_user_type == 'investor') {
-      await ClearStartupSlideCached();
-      await SetUserType('investor');
-      Get.toNamed(
-        investor_registration_form,
-      );
+        Get.toNamed(
+          investor_registration_form,
+        );
     }
   }
 

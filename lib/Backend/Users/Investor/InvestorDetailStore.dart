@@ -14,7 +14,6 @@ class InvestorDetailStore extends GetxController {
     Map<String, dynamic> clean_resp = {
     'picture': '',
     'name': '',
-    'position': '',
     'phone_no': '',
     'primary_mail': '',
     'other_contact': '',
@@ -47,7 +46,6 @@ class InvestorDetailStore extends GetxController {
             user_id: await getUserId,
             email: await getuserEmail,
             name: investor['name'],
-            position: investor['position'],
             picture: image_url
             );
 
@@ -87,7 +85,7 @@ class InvestorDetailStore extends GetxController {
         Map<String, dynamic> temp_founder = {
           'picture': detail_obj['picture'],
           'name': detail_obj['name'],
-          'position': detail_obj['position'],
+          // 'position': detail_obj['position'],
           'phone_no': contact_obj['phone_no'],
           'primary_mail': contact_obj['primary_mail'],
           'other_contact': contact_obj['other_contact'],

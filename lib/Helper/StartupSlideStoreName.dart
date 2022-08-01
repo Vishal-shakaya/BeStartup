@@ -13,3 +13,7 @@ String getBusinessTeamMemberStoreName = 'BusinessTeamMember';
 
 String getBusinessFounderContactStoreName = 'FounderUserContact';
 String getBusinessFounderDetailStoreName = 'FounderUserDetail';
+
+String getInvestorUserDetail = 'InvestorUserDetail';
+String getInvestorUserContacts = 'InvestorUserContact';
+String getInvestorUserChooseCatigory = 'InvestorChooseCatigory';

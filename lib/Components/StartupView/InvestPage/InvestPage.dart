@@ -4,6 +4,7 @@ import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,7 +81,6 @@ class _InvestPageState extends State<InvestPage> {
     BuildContext context,
   ) {
     return Container(
-      width: context.width * page_width,
       child: Container(
         width: context.width * 0.50,
         height: context.height * 0.38,
@@ -95,14 +95,18 @@ class _InvestPageState extends State<InvestPage> {
                 title: 'Invest',
                 font_size: 35,
               ),
-              SizedBox(
-                height: context.height * 0.03,
+              
+              // Edit BUtton 
+              EditButton(context), 
+
+              // SubHeading : 
+              Container(
+                child: StartupHeaderText(
+                  title: 'Why you invest in us !',
+                  font_size: 15,
+                ),
               ),
 
-              StartupHeaderText(
-                title: 'Why you invest in us !',
-                font_size: 15,
-              ),
               SizedBox(
                 height: context.height * 0.02,
               ),
@@ -113,6 +117,8 @@ class _InvestPageState extends State<InvestPage> {
               SizedBox(
                 height: context.height * 0.05,
               ),
+
+
               StartupHeaderText(
                 title: 'Terms & Conditions',
                 font_size: 19,
@@ -130,6 +136,29 @@ class _InvestPageState extends State<InvestPage> {
         ),
       ),
     );
+  }
+
+  Container EditButton(BuildContext context) {
+    return Container(
+              width: context.width * 0.48,
+              alignment: Alignment.topRight,
+              child: Container(
+                width: 90,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: border_color)),
+                child: TextButton.icon(
+                    onPressed: () {
+                      Get.toNamed(create_business_whyInvest_url);
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      size: 15,
+                    ),
+                    label: Text('Edit')),
+              ),
+            );
   }
 
   ClipPath Description(BuildContext context) {

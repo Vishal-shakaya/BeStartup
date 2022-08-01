@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
@@ -33,7 +34,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var startupviewConnector = Get.put(StartupViewConnector(), tag: 'startup_view_connector');
+  var startupviewConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_view_connector');
   var investorConnector =
       Get.put(InvestorConnector(), tag: 'investor_connector');
 
@@ -94,8 +96,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
 ///////////////////////////////////////////////////////////////
 // CREATE STARTUP :
-/// It creates a startup model and .
-/// pdates the user's plan and startup field in the database
+  /// It creates a startup model and .
+  /// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var startup = await StartupModel(
@@ -145,7 +147,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
     var startup_resp = await CreateStartup();
     print(startup_resp);
-    
+
     return true;
   }
 
@@ -208,8 +210,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     MyCustPageLoadingSpinner();
+    final startup_id = await getStartupDetailViewId;
     var resp = await memeberStore.PersistMembers();
-    final upload_resp = await updateStore.UpdateBusinessTeamMember();
+    final upload_resp = await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
 
     if (resp['response']) {
       // Upload Succes response :
@@ -259,10 +262,10 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      if(updateMode==true){
+      if (updateMode == true) {
         final fetch_resp = await startupviewConnector.FetchBusinessTeamMember();
       }
-      
+
       final data = await memeberStore.GetMembers();
       error_resp = data;
       return data;

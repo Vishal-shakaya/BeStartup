@@ -1,5 +1,11 @@
 import 'package:get/get.dart';
 
+enum UserType{
+  founder, 
+  investor, 
+  none, 
+}
+
 enum ProductType {
   service,
   product,

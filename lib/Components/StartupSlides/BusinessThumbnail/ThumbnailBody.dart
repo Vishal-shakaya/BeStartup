@@ -1,19 +1,15 @@
 import 'dart:typed_data';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Firebase/FileStorage.dart';
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/NoticeSection.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/ThumbnailSection.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class ThumbnailBody extends StatefulWidget {
   ThumbnailBody({Key? key}) : super(key: key);
@@ -47,18 +43,18 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double body_height = 0.70;
   double image_hint_text_size = 22;
 
-
 /////////////////////////////////////////////
-/// UPDATE THUMBNAIL : 
-/// The function is called when the user clicks on the "Update" button. The function then calls the
-/// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
-/// response object. The response object is then used to determine whether the update was successful or
-/// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
-/// update was not successful, a snackbar is displayed to the user
+  /// UPDATE THUMBNAIL :
+  /// The function is called when the user clicks on the "Update" button. The function then calls the
+  /// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
+  /// response object. The response object is then used to determine whether the update was successful or
+  /// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
+  /// update was not successful, a snackbar is displayed to the user
 /////////////////////////////////////////////
   UpdateThumbnail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final resp = await updateStore.UpdateThumbnail();
+    final startup_id = await getStartupDetailViewId;
+    final resp = await updateStore.UpdateThumbnail(startup_id: startup_id);
     // Update Success Handler :
     if (resp['response']) {
       Get.toNamed(startup_view_url);
@@ -72,7 +68,7 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   }
 
   ////////////////////////////////////////////
-  /// SET PAGE DEFAULT STATE 
+  /// SET PAGE DEFAULT STATE
   ////////////////////////////////////////////
   @override
   void initState() {
@@ -86,8 +82,6 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
   @override
   Widget build(BuildContext context) {
-
-    
     // PC:
     if (context.width > 1500) {
       body_cont_width = 0.5;
@@ -110,9 +104,6 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
     // PHONE:
     if (context.width < 480) {}
-
-
-
 
     return SingleChildScrollView(
       child: Column(
@@ -141,9 +132,8 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     );
   }
 
-
 ///////////////////////////////////////////
-/// EXTERNAL METHODS : 
+  /// EXTERNAL METHODS :
 ///////////////////////////////////////////
 
   Container UpdateButton(BuildContext context) {

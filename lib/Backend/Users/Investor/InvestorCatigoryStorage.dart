@@ -53,7 +53,6 @@ class InvestorCatigoryStore extends GetxController {
       localStore.setString('InvestorChooseCatigory', json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
-      print(e);
       return ResponseBack(response_type: false);
     }
   }

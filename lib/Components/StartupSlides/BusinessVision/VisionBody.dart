@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -101,9 +102,10 @@ class _VisionBodyState extends State<VisionBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
+      final startup_id = await getStartupDetailViewId;
       var vision = formKey.currentState!.value['vision'];
       var res = await visionStore.SetVision(visionText: vision);
-      var resp = await startupUpdater.UpdatehBusinessVision();
+      var resp = await startupUpdater.UpdatehBusinessVision(startup_id: startup_id);
 
       // Success Handler Cached Data:
       if (res['response']) {
@@ -142,32 +144,31 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
-
-    ////////////////////////////
-    // GET REQUIREMENTS :
-    ////////////////////////////
-    GetLocalStorageData() async {
-      MyCustPageLoadingSpinner();
-      var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-      try {
-        if(updateMode==true){
-          final resp = await startupConnector.FetchBusinessVision();
-        }
-
-        final data = await visionStore.GetVision();
-        inital_val = data;
-        CloseCustomPageLoadingSpinner();
-        return data;
-      } catch (e) {
-        print('Vision Fetchng error $e');
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(
-            width: snack_width, message: e, title: fetch_data_error_title));
-        return '';
+  ////////////////////////////
+  // GET REQUIREMENTS :
+  ////////////////////////////
+  GetLocalStorageData() async {
+    MyCustPageLoadingSpinner();
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    try {
+      if (updateMode == true) {
+        final resp = await startupConnector.FetchBusinessVision();
       }
+
+      final data = await visionStore.GetVision();
+      inital_val = data;
+      CloseCustomPageLoadingSpinner();
+      return data;
+    } catch (e) {
+      print('Vision Fetchng error $e');
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(
+          width: snack_width, message: e, title: fetch_data_error_title));
+      return '';
     }
-    
+  }
+
   /////////////////////////////////////
   // SET PAGE DEFAULT STATE :
   /////////////////////////////////////
@@ -223,8 +224,6 @@ class _VisionBodyState extends State<VisionBody> {
       vision_cont_width = 0.60;
       vision_cont_height = 0.70;
     }
-
-
 
     /////////////////////////////
     /// SET REQUIREMENTS :

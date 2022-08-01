@@ -43,11 +43,11 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 
   bool? updateMode = false;
 
-
   //////////////////////////////////////////////
   // CREATE INVESTOR FORM :
   //////////////////////////////////////////////
   SubmitInvestorDetail() async {
+    print('Submit Detail');
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     formKey.currentState!.save();
@@ -55,22 +55,21 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 
     if (formKey.currentState!.validate()) {
       String investor_name = formKey.currentState!.value['investor_name'];
-      String investor_position =
-          formKey.currentState!.value['investor_position'];
+      // String investor_position =
+      //     formKey.currentState!.value['investor_position'];
       String phone_no = formKey.currentState!.value['phone_no'];
       String email = formKey.currentState!.value['email'];
       String other_contact = formKey.currentState!.value['other_info'];
 
-      Map<String, dynamic> founder = {
+      Map<String, dynamic> investor = {
         'id': UniqueKey(),
         'user': '',
         'name': investor_name,
-        'position': investor_name,
         'phone_no': phone_no,
         'email': email,
         'other_contact': other_contact
       };
-      var res = await investorStore.CreateInvestor(founder);
+      var res = await investorStore.CreateInvestor(investor);
 
       // Success Handler :
       if (res['response']) {
@@ -117,16 +116,15 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
       String email = formKey.currentState!.value['email'];
       String other_contact = formKey.currentState!.value['other_info'];
 
-      Map<String, dynamic> founder = {
+      Map<String, dynamic> investor = {
         'id': UniqueKey(),
         'user': '',
         'name': investor_name,
-        'position': investor_name,
         'phone_no': phone_no,
         'email': email,
         'other_contact': other_contact
       };
-      var res = await investorStore.CreateInvestor(founder);
+      var res = await investorStore.CreateInvestor(investor);
       var update_resp = await investorConnector.UpdateInvestorDetail();
 
       // Success Handler :
@@ -211,9 +209,9 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
                 // BOTTOM NAVIGATION:
               ),
             )),
-        updateMode==true?
-         DoneButton(done_btn_width, done_btn_height, SubmitInvestorDetail)
-        :DoneButton(done_btn_width, done_btn_height, UpdateInvestorDetail())
+        updateMode == true
+            ? DoneButton(done_btn_width, done_btn_height, UpdateInvestorDetail)
+            : DoneButton(done_btn_width, done_btn_height, SubmitInvestorDetail)
       ],
     );
   }
@@ -222,8 +220,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
   /// EXTERNAL METHODS;
 //////////////////////////////////
 
-  Container DoneButton(double done_btn_width, double done_btn_height,
-      Function SubmitDetail) {
+  Container DoneButton(
+      double done_btn_width, double done_btn_height, Function SubmitDetail) {
     return Container(
       margin: EdgeInsets.only(top: 50, bottom: 20),
       child: InkWell(
@@ -231,7 +229,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
-          SubmitDetail();
+          await SubmitDetail();
         },
         child: Card(
           elevation: 10,
