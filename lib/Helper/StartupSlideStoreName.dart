@@ -1,6 +1,7 @@
 String getStartupStoreName = 'Startups';
 String getStartupPlansStoreName = 'Plans';
 String getSaveStartupStoreName = 'SaveStartups';
+String getLikeStartupStoreName = 'LikeStartups';
 
 String getBusinessDetailStoreName = 'BusinessDetail';
 String getBusinessCatigoryStoreName = 'BusinessCatigory';

@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
@@ -22,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
   var userStore = Get.put(UserStore());
   var view = HomePageViews.storyView;
 
-  var  usertype;
+  var usertype;
   double page_width = 0.80;
   double page_height = 0.90;
 
@@ -94,35 +95,35 @@ class _HomeViewState extends State<HomeView> {
     }
 
     ///////////////////////////////////////////
-    /// GET REQUIRED PARAM : 
+    /// GET REQUIRED PARAM :
     ///////////////////////////////////////////
     GetLocalStorageData() async {
+      await Future.delayed(Duration(seconds: 2));
       final resp = await userStore.FetchUserDetail();
-
       // 1 CHECK  :
       // If user user type is investor or founder
       // if both are false then show user type page :
-      if (resp['data']['is_investor'] == false && resp['data']['is_founder'] == false) {
+      if (resp['data']['is_investor'] == false &&
+          resp['data']['is_founder'] == false) {
         Get.toNamed(user_type_slide_url);
       }
 
       // 2 CHECK  :
       // If user user type is investor or founder
       // if any one is true then send Home View
-      if (resp['data']['is_investor'] == true || resp['data']['is_founder'] == true) {
-        
-
+      if (resp['data']['is_investor'] == true ||
+          resp['data']['is_founder'] == true) {
         if (resp['data']['is_investor'] == true) {
           usertype = UserType.investor;
+          await SetUserType('investor');
         }
 
         if (resp['data']['is_founder'] == true) {
           usertype = UserType.founder;
+          await SetUserType('founder');
         }
       }
     }
-
-
 
     return FutureBuilder(
         future: GetLocalStorageData(),
@@ -130,7 +131,10 @@ class _HomeViewState extends State<HomeView> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return spinner;
           }
-          if (snapshot.hasError) return ErrorPage();
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return ErrorPage();
+          }
 
           if (snapshot.hasData) {
             return MainMethod(context);
@@ -153,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
             Container(alignment: Alignment.center, child: mainViewWidget),
 
             // Header SEction:
-            HomeHeaderSection(changeView: SetHomeView, usertype:usertype),
+            HomeHeaderSection(changeView: SetHomeView, usertype: usertype),
 
             // SEARCH BAR :
             BusinessSearchBar()

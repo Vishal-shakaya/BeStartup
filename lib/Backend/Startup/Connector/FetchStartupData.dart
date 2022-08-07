@@ -5,10 +5,13 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+import 'package:be_startup/Models/Models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
 
 class StartupViewConnector extends GetxController {
+  FirebaseFirestore store = FirebaseFirestore.instance;
 //////////////////////////////////////
   // 2. Send it to ui
   // 3. Store data in local storage:
@@ -473,6 +476,141 @@ class StartupViewConnector extends GetxController {
           message: 'BusinessTeamMember Fetch from Firestore DB');
     } catch (e) {
       return ResponseBack(response_type: false, data: data, message: e);
+    }
+  }
+
+
+
+     LikeStartup({startup_id, user_id}) async {
+    final localStore = await SharedPreferences.getInstance();
+    var doc_id;
+    var data;
+    var save_post_len;
+    var startup_list = [];
+    try {
+      final myStore = store.collection(getLikeStartupStoreName);
+      // Check if saveStartup model exist or not :
+      // doc size 0 then no created :
+      var query = myStore.where('user_id', isEqualTo: user_id).get();
+      await query.then((value) {
+        save_post_len = value.size;
+        // print('size $save_post_len');
+        if (save_post_len > 0) {
+          // print(' 1. Save Post Process Start');
+          startup_list = value.docs.first.data()['startup_ids'];
+          // print(' 2. Get startup list $startup_list');
+          data = value.docs.first.data();
+          // print(' 3. Data $data');
+          doc_id = value.docs.first.id;
+          // print(' 4. Document ID  $doc_id');
+        }
+      });
+
+      // Check if post already Saved :
+      if (startup_list.contains(startup_id)) {
+        return ResponseBack(
+            response_type: false, message: 'Startup Already Liked', code: 101);
+      }
+
+      // Add new Save Story Doc :
+      if (save_post_len <= 0) {
+        startup_list.add(startup_id);
+        var save_startup = await LikeStartupsModel(
+          user_id: user_id,
+          startup_ids: startup_list,
+        );
+        await myStore.add(save_startup);
+        // print('5. Add First Startup $startup_list ');
+        return ResponseBack(
+            response_type: true, message: 'First Startup Add to List ');
+      }
+
+      if (save_post_len > 0) {
+        // print("5. Update Startup List with new list ");
+        startup_list.add(startup_id);
+        data['startup_ids'] = startup_list;
+        await myStore.doc(doc_id).update(data);
+        // print('6. Update Startup List');
+        return ResponseBack(response_type: true, message: 'Startup Saved');
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+
+  UnLikeStartup({startup_id, user_id}) async {
+    final localStore = await SharedPreferences.getInstance();
+    var doc_id;
+    var data;
+    var save_post_len;
+    var startup_list = [];
+    try {
+      final myStore = store.collection(getLikeStartupStoreName);
+      var query = myStore.where('user_id', isEqualTo: user_id).get();
+      await query.then((value) {
+        save_post_len = value.size;
+        // print('size $save_post_len');
+        if (save_post_len > 0) {
+          // print(' 1. UnSave Post Process Start');
+          startup_list = value.docs.first.data()['startup_ids'];
+          // print(' 2. Get startup list $startup_list');
+          data = value.docs.first.data();
+          // print(' 3. Data $data');
+          doc_id = value.docs.first.id;
+          // print(' 4. Document ID  $doc_id');
+        }
+      });
+
+      // Validate :
+      if (save_post_len <= 0) {
+        return ResponseBack(response_type: false);
+      }
+
+      if (save_post_len > 0) {
+        // print("5. Update Startup List with new list ");
+        startup_list.remove(startup_id);
+        data['startup_ids'] = startup_list;
+        await myStore.doc(doc_id).update(data);
+        // print('6. Unsave Update Startup List');
+        return ResponseBack(response_type: true, message: 'Startup UnSaved');
+      }
+    } catch (e) {
+      ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+
+  IsStartupLiked({startup_id, user_id}) async {
+    var save_post_len;
+    var startup_list = [];
+
+    try {
+      final myStore = store.collection(getLikeStartupStoreName);
+      // Check if saveStartup model exist or not :
+      // doc size 0 then no created :
+      var query = myStore.where('user_id', isEqualTo: user_id).get();
+      await query.then((value) {
+        save_post_len = value.size;
+        // print('size $save_post_len');
+        if (save_post_len > 0) {
+          // print(' Check if startup save or not');
+          startup_list = value.docs.first.data()['startup_ids'];
+        }
+      });
+
+      // Check if post already Saved :
+      if (startup_list.contains(startup_id)) {
+        // print('Startup Already Saved');
+        return ResponseBack(
+            response_type: true, message: 'Startup Already Liked', code: 101);
+      } else {
+        return ResponseBack(response_type: true, code: 111);
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }

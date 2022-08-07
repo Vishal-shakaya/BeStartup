@@ -14,7 +14,7 @@ class InvestorRegistorForm extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(top:50,bottom: 20),
                 child: AutoSizeText.rich(
-                  TextSpan(text: 'Fillup Required Details',
+                  TextSpan(text: 'Investor Detail',
                   style: TextStyle(
                     fontSize: 25,
                   ) ),

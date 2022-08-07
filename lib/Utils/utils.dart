@@ -272,6 +272,8 @@ class _CustomShimmerState extends State<CustomShimmer> {
     Widget mainWidget = Text(
       text,
       style: Get.textTheme.headline2,
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
     );
 
     if (widget.shape != null) {

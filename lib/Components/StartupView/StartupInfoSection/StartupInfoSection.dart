@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
@@ -23,10 +24,18 @@ class StartupInfoSection extends StatelessWidget {
 
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  var founderConnector = Get.put(FounderConnector());
 
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
   bool? is_admin;
+
+  var startup_logo;
+  var founder_profile;
+  String? founder_name;
+  var primary_mail;
+  var registor_mail;
+  var default_mail;
 
   // Edit Thumbnail :
   EditThumbnail() {
@@ -44,13 +53,41 @@ class StartupInfoSection extends StatelessWidget {
       var logo;
       is_admin = await getIsUserAdmin;
       final startup_id = await getStartupDetailViewId;
+      final founder_id = await getStartupFounderId;
+
       try {
         final business_name_resp =
             await startupConnect.FetchBusinessDetail(startup_id: startup_id);
         final business_thum_resp =
             await startupConnect.FetchThumbnail(startup_id: startup_id);
 
+        final found_resp = await founderConnector.FetchFounderDetailandContact(
+            user_id: founder_id);
+
+        ////////////////////////////////////////
+        // Founder Success Handler :
+        ////////////////////////////////////////
+        if (found_resp['response']) {
+          founder_profile = found_resp['data']['userDetail']['picture'];
+          founder_name = found_resp['data']['userDetail']['name'];
+
+          registor_mail = found_resp['data']['userDetail']['email'];
+          primary_mail = found_resp['data']['userContect']['primary_mail'];
+
+          if (primary_mail != '') {
+            registor_mail = primary_mail;
+          }
+
+          await SetStartupFounderEmail(registor_mail);
+          
+        }
+        if (!found_resp['response']) {
+          founder_profile = found_resp['data'];
+        }
+
+        /////////////////////////////////////
         // Thumbnail Handler :
+        /////////////////////////////////////
         if (business_thum_resp['response']) {
           thumbnail = business_thum_resp['data']['thumbnail'];
         }
@@ -58,7 +95,9 @@ class StartupInfoSection extends StatelessWidget {
           thumbnail = business_thum_resp['data'];
         }
 
-        // Logo Handler :
+        ////////////////////////////////////
+        // Business Detial  Handler :
+        ////////////////////////////////////
         if (business_name_resp['response']) {
           logo = business_name_resp['data']['logo'];
         }
@@ -119,10 +158,9 @@ class StartupInfoSection extends StatelessWidget {
             ),
 
             Positioned(
-              left: context.width * 0.50,
-              top: context.height * 0.25,
-              child: InvestmentChart()), 
-
+                left: context.width * 0.50,
+                top: context.height * 0.25,
+                child: InvestmentChart()),
 
             // TABS
             Positioned(
@@ -140,7 +178,6 @@ class StartupInfoSection extends StatelessWidget {
                           title: 'Vision', route: StartupPageRoute.vision),
                       StartupNavigation(
                           title: 'Invest', route: StartupPageRoute.invest),
-
                     ],
                   )),
             )
@@ -183,28 +220,33 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
-
-        is_admin==true? 
-        Positioned(
-            left: context.width * 0.53,
-            top: context.height * 0.02,
-            child: Container(
-              width: 80,
-              height: 30,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: border_color)),
-              child: TextButton.icon(
-                  onPressed: () {
-                    EditThumbnail();
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    size: 15,
-                  ),
-                  label: Text('Edit')),
-            ))
-           : Container()  
+        is_admin == true
+            ? Positioned(
+                left: context.width * 0.53,
+                top: context.height * 0.02,
+                child: Container(
+                  width: 80,
+                  height: 30,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: border_color)),
+                  child: TextButton.icon(
+                      onPressed: () {
+                        EditThumbnail();
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        size: 15,
+                      ),
+                      label: Text('Edit')),
+                ))
+            : Positioned(
+                left: context.width * 0.53,
+                top: context.height * 0.02,
+                child: Container(
+                  width: 80,
+                  height: 30,
+                ))
       ],
     );
   }

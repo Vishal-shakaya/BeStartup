@@ -45,6 +45,9 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // FACEBOOK SDK INITILIZE :
@@ -60,13 +63,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -94,7 +95,6 @@ class _MyAppState extends State<MyApp> {
     ),
   );
 
-  
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -106,23 +106,26 @@ class _MyAppState extends State<MyApp> {
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);
       await SetLoginUserId(user?.uid);
-     
+
       final user_resp = await founderConnector.FetchFounderDetailandContact(
           user_id: user?.uid);
-      final phoneno = user_resp['data']['userContect']['phone_no'];
-      final profile_image = user_resp['data']['userDetail']['picture'];
-      final position = user_resp['data']['userDetail']['position'];
-      final username = user_resp['data']['userDetail']['name'];
 
-      await SetLoginUserPhoneno(phoneno);
-      await SetLoginUserPosition(position);
-      await SetLoginUserProfileImage(profile_image);
-      await SetLoginUserName(username);
+      if(user_resp['response']){
+        final phoneno = user_resp['data']['userContect']['phone_no'];
+        final profile_image = user_resp['data']['userDetail']['picture'];
+        final position = user_resp['data']['userDetail']['position'];
+        final username = user_resp['data']['userDetail']['name'];
 
-      // Setting things up : 
+        await SetLoginUserPhoneno(phoneno);
+        await SetLoginUserPosition(position);
+        await SetLoginUserProfileImage(profile_image);
+        await SetLoginUserName(username);
+
+      }
+
+      // Setting things up :
       await Future.delayed(Duration(seconds: 2));
     }
-
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

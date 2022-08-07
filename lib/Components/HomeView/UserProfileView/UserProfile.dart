@@ -1,33 +1,35 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-
-
 class HomeViewUserProfile extends StatelessWidget {
-   HomeViewUserProfile({Key? key}) : super(key: key);
-  
-  
-  var user_image='';
-  var user_position='_____________';
-  var user_email='_____________';
-  var user_phoneno='____________';
-  var user_name='_____________';
+  HomeViewUserProfile({Key? key}) : super(key: key);
+
+  var user_image = temp_avtar_image;
+  var user_position = '_____________';
+  var user_email = '_____________';
+  var user_phoneno = '____________';
+  var user_name = '_____________';
   ///////////////////////////
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    await Future.delayed(Duration(seconds: 2));
-    user_image = await getUserProfileImage;
-    user_position = await getUserPosition;
-    user_email = await getuserEmail;
-    user_phoneno = await getUserPhoneno;
-    user_name = await getUserName;
+    user_image = await getUserProfileImage ?? temp_avtar_image;
+    user_position = await getUserPosition ?? '';
+    user_email = await getuserEmail ?? user_email;
+    user_phoneno = await getUserPhoneno ?? user_phoneno;
+    user_name = await getUserName ?? user_name;
+
+    // print(user_name);
+    // print(user_image);
+    // print(user_email);
+    // print(user_position);
+    // print(user_phoneno);
   }
 
   @override
@@ -41,10 +43,9 @@ class HomeViewUserProfile extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: MainMethod()
-            ));
+                    baseColor: shimmer_base_color,
+                    highlightColor: shimmer_highlight_color,
+                    child: MainMethod()));
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -55,40 +56,46 @@ class HomeViewUserProfile extends StatelessWidget {
         });
   }
 
-
 ///////////////////////////////////////
-/// MainMethod: 
+  /// MainMethod:
 ///////////////////////////////////////
   Column MainMethod() {
     return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      ProfileImage(),
-      // POSITION:
-      SizedBox(
-        width: 200,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 5,
-            ),
-            MemName(),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ProfileImage(),
+        // POSITION:
+        SizedBox(
+          width: 200,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 5,
+              ),
+              MemName(),
 
-            SizedBox(
-              height: 5,
-            ),
-            // CONTACT EMAIL ADDRESS :
-            MemPosition(),
+              SizedBox(
+                height: 5,
+              ),
+              // CONTACT EMAIL ADDRESS :
+              MemPosition(),
 
-            MemContact()
-          ],
+              MemContact(
+                text: user_email.toString().capitalizeFirst,
+                icon: Icons.mail_outline_outlined ), 
+
+              MemContact(
+                text: user_phoneno,
+                icon: Icons.call,
+              ), 
+            ],
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
   }
 
-    Card ProfileImage() {
+  Card ProfileImage() {
     return Card(
       elevation: 3,
       shadowColor: Colors.red,
@@ -125,13 +132,13 @@ class HomeViewUserProfile extends StatelessWidget {
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
-          text: '@$user_position',
+          text: user_position,
           style: TextStyle(
               fontWeight: FontWeight.w600, color: Colors.black87, fontSize: 12))
     ])));
   }
 
-  Container MemContact() {
+  Container MemContact({text , icon}) {
     return Container(
         child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -139,14 +146,17 @@ class HomeViewUserProfile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: Icon(
-            Icons.mail_outline_outlined,
+            icon,
             color: Colors.orange.shade800,
             size: 16,
           ),
         ),
-        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+        AutoSizeText.rich(
           TextSpan(
-              text: user_email.toString().capitalizeFirst,
+            style: Get.textTheme.headline5,
+             children: [
+          TextSpan(
+              text: text,
               style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.blueGrey.shade700,

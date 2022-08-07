@@ -22,6 +22,13 @@ dynamic get getStartupFounderId async {
   return temp_obj;
 }
 
+dynamic get getStartupFounderEmail async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  temp_obj = await localStore.getString('StartupFounderEmail');
+  return temp_obj;
+}
+
 
 
 dynamic get getStartupDetailViewId async {
@@ -41,6 +48,15 @@ SetStartupFounderId(value) async {
   final localStore = await SharedPreferences.getInstance();
   final key_found = localStore.containsKey('StartupFounderId');
   final resp = await localStore.setString('StartupFounderId', value);
+  if (resp) {
+    print('PARAM SETED $value');
+  }
+}
+
+SetStartupFounderEmail(value) async {
+  final localStore = await SharedPreferences.getInstance();
+  final key_found = localStore.containsKey('StartupFounderEmail');
+  final resp = await localStore.setString('StartupFounderEmail', value);
   if (resp) {
     print('PARAM SETED $value');
   }

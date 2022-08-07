@@ -137,6 +137,53 @@ class HomeViewConnector extends GetxController {
     }
   }
 
+  FetchLikeStartups({user_id}) async {
+    var startup_data;
+    var startup_ids = [];
+    var founder_ids = [];
+    var startup_len;
+    var startup_names = [];
+
+    try {
+      ////////////////////////////////////
+      // Fetch user Sava Startups :
+      ////////////////////////////////////
+      var save_startups = await store.collection(getLikeStartupStoreName);
+      var query = save_startups.where("user_id", isEqualTo: user_id).get();
+
+      await query.then((value) {
+        for (var data in value.docs) {
+          startup_ids = data.data()['startup_ids'];
+        }
+      });
+
+      //////////////////////////////////
+      /// Fetch Startups Data :
+      /// /////////////////////////////////
+      var startup_store = await store.collection(getStartupStoreName);
+      var query2 = startup_store.where('id', whereIn: startup_ids).get();
+
+      await query2.then((value) {
+        for (var doc in value.docs) {
+          founder_ids.add(doc.data()['user_id']);
+          startup_names.add(doc.data()['startup_name']);
+        }
+      });
+
+      startup_data = {
+        'startup_ids': startup_ids,
+        'founder_id': founder_ids,
+        'startup_len': startup_ids.length,
+        'startup_name': startup_names
+      };
+
+      // print(startup_data);
+      return ResponseBack(response_type: true, data: startup_data);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
   /////////////////////////////////////////////////////
   /// It checks if the user has saved any query  before, if not,
   /// it creates a new document with the user

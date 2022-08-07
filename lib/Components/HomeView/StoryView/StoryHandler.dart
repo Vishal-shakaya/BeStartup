@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryView.dart';
+import 'package:be_startup/Loader/Shimmer/HomeView/MainHomeViewShimmer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class StoryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //////////////////////////////////////////////////////
-/// GET SECTION :
+    /// GET SECTION :
 //////////////////////////////////////////////////////
     GetLocalStorageData() async {
       final user_id = await getUserId;
@@ -83,36 +84,48 @@ class StoryListView extends StatelessWidget {
   /// MAIN SECTION :
   //////////////////////////////////////////////////////
   Container MainMethod(BuildContext context) {
-    return Container(
-        width: context.width * 0.45,
-        height: context.height * 0.67,
-        child: Stack(
-          children: [
-            //////////////////////////////////
-            // CAURSEL SLIDER :
-            //////////////////////////////////
-            CarouselSlider.builder(
-                carouselController: buttonCarouselController,
-                itemCount: startups_length,
-                itemBuilder:
-                    (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return Container(
-                    child: StoryView(
-                      key: UniqueKey(),
-                      startup_id: startup_ids[itemIndex],
-                      founder_id: founder_ids[itemIndex],
-                      startup_name: startup_names[itemIndex],
-                    ),
-                  );
-                },
-                options: CarouselOptions(
-                    height: context.height * 0.67, viewportFraction: 1)),
+    var mainWidget;
 
-            // Back Button :
-            BackButton(context),
-            ForwordButton(context)
-          ],
-        ));
+    // when there is no startups then show this container :
+    if (startups_length <= 0) {
+      mainWidget = MainHomeViewShimmer(context);
+    }
+
+    // Container with Startups :
+    else {
+      mainWidget = Container(
+          width: context.width * 0.45,
+          height: context.height * 0.67,
+          child: Stack(
+            children: [
+              //////////////////////////////////
+              // CAURSEL SLIDER :
+              //////////////////////////////////
+              CarouselSlider.builder(
+                  carouselController: buttonCarouselController,
+                  itemCount: startups_length,
+                  itemBuilder:
+                      (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return Container(
+                      child: StoryView(
+                        key: UniqueKey(),
+                        startup_id: startup_ids[itemIndex],
+                        founder_id: founder_ids[itemIndex],
+                        startup_name: startup_names[itemIndex],
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                      height: context.height * 0.67, viewportFraction: 1)),
+
+              // Back Button :
+              BackButton(context),
+              ForwordButton(context)
+            ],
+          ));
+    }
+
+    return mainWidget;
   }
 
 //////////////////////////////////////////////////

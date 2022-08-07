@@ -77,6 +77,21 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
         final resp4 = await userStore.UpdateUserDatabaseField(
             field: 'is_investor', val: true);
 
+        final user_id = await getUserId;
+        final user_resp = await investorConct.FetchInvestorDetailandContact(
+            user_id: user_id);
+
+        print('Registor Investor detial $user_resp');
+        if (user_resp['response']) {
+          final phoneno = user_resp['data']['userContect']['phone_no'];
+          final profile_image = user_resp['data']['userDetail']['picture'];
+          final username = user_resp['data']['userDetail']['name'];
+
+          await SetLoginUserPhoneno(phoneno);
+          await SetLoginUserProfileImage(profile_image);
+          await SetLoginUserName(username);
+        }
+
         // Success Response Handler :
         if (resp['response']) {
           await ClearStartupSlideCached();

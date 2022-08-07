@@ -28,6 +28,11 @@ class HomeHeaderSection extends StatefulWidget {
 }
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
+  var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
+  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
+  var userStore = Get.put(UserStore(), tag: 'user_store');
+  var my_context = Get.context;
+
   double header_sec_width = 1;
   double header_sec_height = 0.10;
 
@@ -43,10 +48,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   bool is_home_view = true;
   bool is_save_view = false;
 
-  var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
-  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
-  var userStore = Get.put(UserStore(), tag: 'user_store');
-
   // SUBMIT DATE AND CATIGORY :
   var catigories = [];
   SubmitExploreCatigory(context) async {
@@ -56,6 +57,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   @override
   Widget build(BuildContext context) {
+
     String? selectedValue;
     //////////////////////////////////////
     /// Investor Dialog :
@@ -127,12 +129,15 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             spacing: 10,
             alignment: WrapAlignment.center,
             children: [
+              
               // Explore Menu :
               ExploreButton(context, ExploreFunction),
+
 
               Container(
                 width: context.width * 0.20,
               ),
+
 
               // Menu Icon :
               Container(
@@ -153,8 +158,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                       // Save Startup Button:
                       SaveStartupLink(),
 
-                      FounderDropDownMenu(context, AddInvestor, CreateStatup)
-                          
+                      widget.usertype == UserType.investor 
+                      ? InvestorDropDownMenu(context: context,) 
+
+                      : FounderDropDownMenu(
+                          context: context,
+                          AddInvestor: AddInvestor,
+                          CreateStatup: CreateStatup,), 
+                      
                     ],
                   ))
             ],
@@ -234,90 +245,21 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   }
 
 ////////////////////////////////////////
-  /// Investor Dropdown Menu :
+///  Founder Dropdown Menu :
 ////////////////////////////////////////
-  // Container InvestorDropDownMenu(
-  //     BuildContext context,
-  //     SwitchInvestorToFounder,
-  //     CreateStatup) {
-
-  //   return Container(
-  //     width: context.width * 0.08,
-  //     child: DropdownButtonHideUnderline(
-  //         child: DropdownButton2(
-  //       items: [
-  //         ...InvestorMenuItems.firstItems.map(
-  //           (item) => DropdownMenuItem<MenuItem>(
-  //             value: item,
-  //             child: InvestorMenuItems.buildItem(item),
-  //           ),
-  //         ),
-  //         // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
-  //         ...InvestorMenuItems.secondItems.map(
-  //           (item) => DropdownMenuItem<MenuItem>(
-  //             value: item,
-  //             child: InvestorMenuItems.buildItem(item),
-  //           ),
-  //         ),
-  //       ],
-  //       onChanged: (value) async {
-  //         // InvestorMenuItems.onChanged(context, value as MenuItem);
-  //         switch (value) {
-  //           case InvestorMenuItems.profile:
-  //             widget.changeView(HomePageViews.profileView);
-  //             setState(() {
-  //               is_home_view = false;
-  //               is_save_view = false;
-  //             });
-  //             break;
-
-  //           case InvestorMenuItems.settings:
-  //             widget.changeView(HomePageViews.settingView);
-  //             setState(() {
-  //               is_home_view = false;
-  //               is_save_view = false;
-  //             });
-  //             break;
-
-  //           case InvestorMenuItems.logout:
-  //             await socialAuth.Logout();
-  //             break;
-
-  //           case InvestorMenuItems.swich_to_founder:
-  //             // await socialAuth.Logout();
-  //             await SwitchInvestorToFounder();
-  //             break;
-  //         }
-  //       },
-  //       openWithLongPress: true,
-  //       customItemsHeight: 8,
-  //       customButton: Container(
-  //         margin: EdgeInsets.only(top: context.height * 0.01),
-  //         child: CircleAvatar(
-  //           radius: 20,
-  //           backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
-  //         ),
-  //       ),
-  //     )),
-  //   );
-  // }
-
-////////////////////////////////////////
-  /// Dropdown Menu :
-////////////////////////////////////////
-  Container FounderDropDownMenu(BuildContext context,
-      Null AddInvestor(dynamic context), Future<Null> CreateStatup()) {
+  Container FounderDropDownMenu(
+      {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
     return Container(
-      width: context.width * 0.08,
+      width: context!.width * 0.08,
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
         items: [
-          ...FounderMenuItems.firstItems.map(
-            (item) => DropdownMenuItem<MenuItem>(
+          ...FounderMenuItems.firstItems.map((item) {
+            return DropdownMenuItem<MenuItem>(
               value: item,
               child: FounderMenuItems.buildItem(item),
-            ),
-          ),
+            );
+          }),
           // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
           ...FounderMenuItems.secondItems.map(
             (item) => DropdownMenuItem<MenuItem>(
@@ -370,8 +312,73 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       )),
     );
   }
+////////////////////////////////////////
+///  Founder Dropdown Menu :
+////////////////////////////////////////
+  Container InvestorDropDownMenu(
+      {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
+    return Container(
+      width: context!.width * 0.08,
+      child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+        items: [
+          ...InvestorMenuItems.firstItems.map((item) {
+            return DropdownMenuItem<MenuItem>(
+              value: item,
+              child: InvestorMenuItems.buildItem(item),
+            );
+          }),
+          ...InvestorMenuItems.secondItems.map(
+            (item) => DropdownMenuItem<MenuItem>(
+              value: item,
+              child: InvestorMenuItems.buildItem(item),
+            ),
+          ),
+        ],
+        onChanged: (value) async {
+          switch (value) {
+            case FounderMenuItems.profile:
+              widget.changeView(HomePageViews.profileView);
+              setState(() {
+                is_home_view = false;
+                is_save_view = false;
+              });
+              break;
+
+            case FounderMenuItems.settings:
+              widget.changeView(HomePageViews.settingView);
+              setState(() {
+                is_home_view = false;
+                is_save_view = false;
+              });
+              break;
+
+            case FounderMenuItems.logout:
+              await socialAuth.Logout();
+              break;
+          }
+        },
+        openWithLongPress: true,
+        customItemsHeight: 8,
+        customButton: Container(
+          margin: EdgeInsets.only(top: context.height * 0.01),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
+          ),
+        ),
+      )),
+    );
+  }
 }
 
+
+
+
+
+//////////////////////////
+/// Menu Item Class : 
+//////////////////////////
 class MenuItem {
   final String text;
   final IconData icon;
@@ -382,6 +389,11 @@ class MenuItem {
   });
 }
 
+
+
+////////////////////////////////////
+/// Founder Menu Items 
+////////////////////////////////////
 class FounderMenuItems {
   static const List<MenuItem> firstItems = [
     profile,
@@ -393,16 +405,12 @@ class FounderMenuItems {
   static const List<MenuItem> secondItems = [logout];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-  // static const investor =
-  //     MenuItem(text: 'investor', icon: Icons.add_box_outlined);
 
   static const startup =
       MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 
-  // static const swich_to_founder =
-  //     MenuItem(text: 'switch founder', icon: Icons.rotate_left_outlined);
-
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
+
   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
 
   static Widget buildItem(MenuItem item) {
@@ -427,46 +435,46 @@ class FounderMenuItems {
   }
 }
 
-// class InvestorMenuItems {
-//   static const List<MenuItem> firstItems = [
-//     profile,
-//     settings,
-//     swich_to_founder
-//   ];
 
-//   static const List<MenuItem> secondItems = [logout];
 
-//   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-//   // static const investor =
-//   //     MenuItem(text: 'investor', icon: Icons.add_box_outlined);
+////////////////////////////////////
+/// Investor Menu Items 
+////////////////////////////////////
+class InvestorMenuItems {
+  static const List<MenuItem> firstItems = [
+    profile,
+    // investor,
+    settings,
+  ];
 
-//   // static const startup =
-//   //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+  static const List<MenuItem> secondItems = [logout];
 
-//   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
-//   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+  static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
-//   static const swich_to_founder =
-//       MenuItem(text: 'switch founder', icon: Icons.rotate_left_outlined);
 
-//   static Widget buildItem(MenuItem item) {
-//     return Row(
-//       children: [
-//         Icon(
-//           item.icon,
-//           color: light_color_type2,
-//           size: 22,
-//         ),
-//         const SizedBox(
-//           width: 10,
-//         ),
-//         Text(
-//           item.text,
-//           style: TextStyle(
-//             color: light_color_type2,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+  static const settings = MenuItem(text: 'settings', icon: Icons.settings);
+
+  static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+
+  static Widget buildItem(MenuItem item) {
+    return Row(
+      children: [
+        Icon(
+          item.icon,
+          color: light_color_type2,
+          size: 22,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          item.text,
+          style: TextStyle(
+            color: light_color_type2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+

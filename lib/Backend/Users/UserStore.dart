@@ -23,7 +23,11 @@ class UserStore extends GetxController {
   CreateUser() async {
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
-    final temp_user = await UserModel(email: email, id: id);
+    final temp_user = await UserModel(
+      email: email, id: id, 
+      is_founder: false,
+      is_investor:false);
+
     final user = store.collection('users');
     var is_user_found;
     try {

@@ -170,8 +170,8 @@ SetStartupId(value) async {
 
 SetUserType(value) async {
   final localStore = await SharedPreferences.getInstance();
-  final key_found = localStore.containsKey('StartupId');
-  final resp = await localStore.setString('StartupId', value);
+  final key_found = localStore.containsKey('UserType');
+  final resp = await localStore.setString('UserType', value);
   if (resp) {
     print('PARAM SETED $value');
   }

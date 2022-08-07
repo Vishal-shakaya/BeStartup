@@ -140,3 +140,18 @@ SaveStartupsModel({user_id, timestamp,startup_ids}) async {
     return false;
   }
 }
+
+
+LikeStartupsModel({user_id, timestamp,startup_ids}) async {
+  try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'startup_ids':startup_ids,
+      'timestamp': DateTime.now().toString()
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}

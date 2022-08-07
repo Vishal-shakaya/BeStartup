@@ -154,7 +154,7 @@ class _InvestorImageState extends State<InvestorImage> {
                         radius: image_radius,
                         backgroundColor: Colors.blueGrey[100],
                         child: AutoSizeText(
-                          'Startup Logo',
+                          'Profile Image',
                           style: TextStyle(
                               color: light_color_type3,
                               fontWeight: FontWeight.bold),

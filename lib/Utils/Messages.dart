@@ -115,3 +115,8 @@ String business_why_sub_text =
 
 // SELECT PLAN :
 String select_plan_heading = 'Our Best Plans';
+
+
+// Mail Request messages :
+String startupInterestSubject= 'Like your startup';
+String startupInterestBody= '';

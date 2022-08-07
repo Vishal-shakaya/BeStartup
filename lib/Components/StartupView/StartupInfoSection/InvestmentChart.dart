@@ -1,5 +1,7 @@
 import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/UpdateInvestmentDialog.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +39,31 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   var is_admin;
 
-  // Update Investment amount UI : 
+  var startup_id;
+  var user_id;
+  bool? is_liked=false;
+
+/////////////////////////////////////////
+  /// GET REQUIRED PARAM :
+/////////////////////////////////////////
+  IsStartupLiked() async {
+    final resp = await startupConnector.IsStartupLiked(
+      startup_id: startup_id,
+      user_id: user_id,
+    );
+
+    if (resp['code'] == 101) {
+      is_liked = true;
+    }
+    if (resp['code'] == 111) {
+      is_liked = false;
+    }
+  }
+
+  // Update Investment amount UI :
   UpdateInvestmentAmount({required data}) async {
     setState(() {
-      invested_amount = data; 
+      invested_amount = data;
     });
   }
 
@@ -68,8 +91,10 @@ class _InvestmentChartState extends State<InvestmentChart> {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    final startup_id = await getStartupDetailViewId;
+    startup_id = await getStartupDetailViewId;
+    user_id = await getUserId;
     is_admin = await getIsUserAdmin;
+
     final resp =
         await startupConnector.FetchBusinessDetail(startup_id: startup_id);
     // Success Handler:
@@ -85,6 +110,9 @@ class _InvestmentChartState extends State<InvestmentChart> {
       team_members = '';
       desire_amount = '';
     }
+
+    // Set liked default state :
+    await IsStartupLiked();
   }
 
   @override
@@ -141,7 +169,13 @@ class _InvestmentChartState extends State<InvestmentChart> {
               StaticRow(title: 'Invest', value: "₹ $invested_amount"),
 
               // Submit Button :
-              SubmitButton()
+              is_admin == true
+                  ? SubmitButton()
+                  : StartupDetailButtons(
+                      startup_id: startup_id,
+                      user_id: user_id,
+                      is_saved: is_liked,
+                    )
             ],
           )),
         ),
@@ -198,34 +232,31 @@ class _InvestmentChartState extends State<InvestmentChart> {
         alignment: WrapAlignment.spaceBetween,
         children: [
           AutoSizeText.rich(
-            TextSpan(
-                text: title,
-                style: GoogleFonts.openSans(
-                  textStyle: TextStyle(),
-                  color: light_color_type2,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                )),
-            style: Get.textTheme.headline5,
-             overflow: TextOverflow.ellipsis
-          ),
+              TextSpan(
+                  text: title,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(),
+                    color: light_color_type2,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  )),
+              style: Get.textTheme.headline5,
+              overflow: TextOverflow.ellipsis),
           Tooltip(
-            message:value ,
+            message: value,
             child: Container(
-              width:80,
+              width: 80,
               child: AutoSizeText.rich(
-                TextSpan(
-                    text: value,
-                    style: GoogleFonts.openSans(
-                      textStyle: TextStyle(),
-                      color: light_color_type2,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-          
-                    )),
-                style: Get.textTheme.headline5,
-                overflow: TextOverflow.ellipsis
-              ),
+                  TextSpan(
+                      text: value,
+                      style: GoogleFonts.openSans(
+                        textStyle: TextStyle(),
+                        color: light_color_type2,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  style: Get.textTheme.headline5,
+                  overflow: TextOverflow.ellipsis),
             ),
           ),
         ],

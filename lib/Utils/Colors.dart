@@ -50,6 +50,7 @@ Color chip_activate_background = primary_light;
 
 Color shimmer_base_color = Colors.blueGrey;
 Color shimmer_highlight_color =Colors.blueGrey.shade200;
+Color shimmer_background_color =Colors.blueGrey.shade50;
 
 
 Gradient g1 = const LinearGradient(

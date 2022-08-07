@@ -84,6 +84,7 @@ class MySocialAuth extends GetxController {
         await FirebaseAuth.instance.signInWithCredential(credintail);
         await userStore.CreateUser();
         await auth.setPersistence(Persistence.SESSION);
+      
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
