@@ -24,7 +24,6 @@ class ProfileStoryThumbnail extends StatelessWidget {
   ///////////////////////////
   GetLocalStorageData() async {
     final resp = await startupConnector.FetchThumbnail(startup_id: startup_id);
-    print(resp);
     if (resp['response']) {
       thumbnail = resp['data']['thumbnail'];
     }

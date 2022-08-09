@@ -12,67 +12,58 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shimmer/shimmer.dart';
 
-class HomeViewUserStartups extends StatefulWidget {
-  HomeViewUserStartups({Key? key}) : super(key: key);
+/////////////////////////////////////////
+///  Container main startup Container
+///  Has coursel and other method:
+///  1. thumbnail :
+///  2. startup info : moree..
+/////////////////////////////////////////
+class StartupContainer extends StatelessWidget {
+  var menutype;
+  StartupContainer({this.menutype, Key? key}) : super(key: key);
 
-  @override
-  State<HomeViewUserStartups> createState() => _HomeViewUserStartupsState();
-}
-
-class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   var homeviewConnector = Get.put(HomeViewConnector());
   CarouselController buttonCarouselController = CarouselController();
-
   var startups_length = 0;
 
   var startup_name = [];
 
   var startup_ids = [];
 
-  var usertype;
-  var menuType = FounderStartupMenu.my_startup;
-  var frontText = 'My SUP';
-  var backText = 'Interested';
-
-  ///////////////////////////
-  /// GET REQUIREMENTS :
-  ///////////////////////////
-  GetLocalStorageData() async {
-    final user_id = await getUserId;
-    usertype = await getUserType;
-    var resp;
-
-    if (usertype != null) {
-      if (usertype == 'investor') {
-        resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
-      }
-
-      // If user type founder then check selected menu type:
-      // 1. if menu === intrested then show intrested startups :
-      // 2. menu == my_startup show his startups: [ Default ] :
-      if (usertype == 'founder') {
-        if (menuType == FounderStartupMenu.my_startup) {
-          resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
-          print('Fetch my startup');
-        } else {
-          resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
-          print('fetch intrested startup');
-        }
-      }
-    }
-
-    if (resp['response']) {
-      startups_length = resp['data']['startup_len'];
-      startup_ids = resp['data']['startup_ids'];
-      startup_name = resp['data']['startup_name'];
-    }
-
-    await Future.delayed(Duration(milliseconds: 100));
-  }
+  var mainWidget;
 
   @override
   Widget build(BuildContext context) {
+    ///////////////////////////
+    /// GET REQUIREMENTS :
+    ///////////////////////////
+    GetLocalStorageData() async {
+      final user_id = await getUserId;
+      final usertype = await getUserType;
+      var resp;
+      print(menutype);
+      if (usertype != null) {
+        if (usertype == 'investor') {
+          resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
+        }
+
+        // If user type founder then check selected menu type:
+        // 1. if menu === intrested then show intrested startups :
+        // 2. menu == my_startup show his startups: [ Default ] :
+        if (usertype == 'founder') {
+          resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
+        }
+      }
+
+      if (resp['response']) {
+        startups_length = resp['data']['startup_len'];
+        startup_ids = resp['data']['startup_ids'];
+        startup_name = resp['data']['startup_name'];
+      }
+    }
+
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -91,48 +82,16 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         });
   }
 
-  ////////////////////////////
-  /// MainMethod :
-  ////////////////////////////
-  MainMethod(BuildContext context) {
-    var mainWidget;
-
+  Container MainMethod(BuildContext context) {
     if (startups_length <= 0) {
       mainWidget = MainUserStartupsShimmer(context);
     } else {
-      mainWidget = Column(
-        children: [
-          // Swith Menu button only show if user is founder :
-          usertype == 'founder'
-              ?
-              // Swith Menu Switcher :
-              StartupSwitcherButton(
-                  context,
-                )
-
-              // Spacer :
-              : Container(
-                  margin: EdgeInsets.only(
-                    top: context.height * 0.04,
-                  ),
-                ),
-
-          // Main Startup Container :
-          StartupMethod(context),
-        ],
-      );
+      mainWidget = StartupCont(context);
     }
-
     return mainWidget;
   }
 
-/////////////////////////////////////////
-  ///  Container main startup Container
-  ///  Has coursel and other method:
-  ///  1. thumbnail :
-  ///  2. startup info : moree..
-/////////////////////////////////////////
-  Container StartupMethod(BuildContext context) {
+  Container StartupCont(BuildContext context) {
     return Container(
         width: context.width * 0.45,
         height: context.height * 0.42,
@@ -182,70 +141,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
           ],
         ));
   }
-
-////////////////////////////////////////////
-  /// Startup Switcher button :
-  /// 1 Switch interested to own startup:
-  /// for founder :
-////////////////////////////////////////////
-  Container StartupSwitcherButton(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: context.height * 0.04,
-        right: context.height * 0.60,
-      ),
-      child: FlipCard(
-        onFlipDone: (done) {
-          if (done) {
-            if (menuType == FounderStartupMenu.intrested) {
-              menuType = FounderStartupMenu.my_startup;
-              frontText = 'My SUP';
-              backText = 'Interested';
-            } else {
-              menuType = FounderStartupMenu.intrested;
-              frontText = 'Interested';
-              backText = 'My SUP';
-            }
-
-            setState(() {});
-          }
-        },
-        direction: FlipDirection.VERTICAL,
-        alignment: Alignment.topRight,
-        front: StartupMenuSwitcher(title: '$frontText'),
-        back: StartupMenuSwitcher(title: '$backText'),
-      ),
-    );
-  }
-
-////////////////////////////////
-  /// Startup Siwther Text:
-////////////////////////////////
-  SizedBox StartupMenuSwitcher({title, func}) {
-    return SizedBox(
-      width: 100,
-      child: Container(
-        width: 100,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: shimmer_base_color)),
-        child: AutoSizeText.rich(
-          TextSpan(
-              text: '$title',
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: light_color_type2,
-                  letterSpacing: 1.3)),
-        ),
-      ),
-    );
-  }
-
-//////////////////////////////////////////////////
-  /// EXTERNAL METHOD  :
-//////////////////////////////////////////////////
 
   BackButton(BuildContext context) {
     return Container(

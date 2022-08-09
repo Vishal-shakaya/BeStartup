@@ -155,6 +155,8 @@ class StartupInfoSection extends StatelessWidget {
             // PROFILE PICTURE :
             Picture(
               logo: data['logo'],
+              founder_name: founder_name,
+              founder_profile: founder_profile,
             ),
 
             Positioned(

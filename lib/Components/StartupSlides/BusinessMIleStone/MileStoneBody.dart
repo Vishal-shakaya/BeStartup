@@ -104,10 +104,11 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     final startup_id = await getStartupDetailViewId;
     StartLoading();
     var res = await mileStore.PersistMileStone();
-    var resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
+    var resp;
 
     // Success Handler Cached Data :
     if (res['response']) {
+        resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
       // Update Success Handler :
       if (resp['response']) {
         EndLoading();
@@ -123,11 +124,23 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     }
 
     // Error Hander Cached Data ;
+    if (!resp['response'] && resp['code'] == 101) {
+      var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      EndLoading();
+      Get.closeAllSnackbars();
+      MyCustSnackbar(
+        title: 'Complete Requirements First ',
+        message: 'Define at leat 5 milestones ',
+        width: snack_width,
+      );
+    } 
+    
     if (!res['response']) {
       EndLoading();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
+    
   }
 
 //////////////////////////////////
@@ -138,6 +151,17 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     var resp = await mileStore.PersistMileStone();
     if (!resp['response']) {
       EndLoading();
+    }
+
+    if (!resp['response'] && resp['code'] == 101) {
+      var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      EndLoading();
+      Get.closeAllSnackbars();
+      MyCustSnackbar(
+        title: 'Complete Requirements First ',
+        message: 'Define at leat 5 milestones ',
+        width: snack_width,
+      );
     } else {
       await EndLoading();
       _controllerCenter.play();

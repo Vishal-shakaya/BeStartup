@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 import 'package:get/get.dart';
@@ -33,9 +34,9 @@ BusinessInfoModel({
   investor_no, 
   timestamp,  
   desire_amount, 
-  achived_amount,
+  achived_amount=0,
   invested,
-  team_members,
+  team_members=0,
   founder_name,
   founder_id,  
   activate, 

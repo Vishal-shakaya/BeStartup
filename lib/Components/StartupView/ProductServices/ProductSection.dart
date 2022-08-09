@@ -46,10 +46,12 @@ class _ProductSectionState extends State<ProductSection> {
 ////////////////////////////////////////
     GetLocalStorageData() async {
       final startup_id = await getStartupDetailViewId;
+
       /// A boolean value that is used to check if the user is admin or not.
       is_admin = await getIsUserAdmin;
       try {
         final data = await startupConnect.FetchProducts(startup_id: startup_id);
+        // print(data);
         products = data['data'];
         return products;
       } catch (e) {
@@ -86,9 +88,8 @@ class _ProductSectionState extends State<ProductSection> {
     return Column(
       children: [
         is_admin == true
-        ? EditButton(context, EditProductAndService)
-        : Container(),
-        
+            ? EditButton(context, EditProductAndService)
+            : Container(),
         Container(
             width: context.width * 0.75,
             height: context.height * 0.60,

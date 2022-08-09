@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -13,9 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 var uuid = Uuid();
 
 class BusinessTeamMemberStore extends GetxController {
+  var businessDetailStore = Get.put(BusinessDetailStore());
+
   static Map<String, dynamic> temp_member = {
     'id': uuid.v4(),
-    'email':  '124@gmail.ocm',
+    'email': '124@gmail.ocm',
     'startup_name': 'xyz ltd',
     'name': 'Vishal',
     'position': 'Ceo',
@@ -80,7 +83,7 @@ class BusinessTeamMemberStore extends GetxController {
         'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
-        'timestamp':  DateTime.now().toUtc().toString(),
+        'timestamp': DateTime.now().toUtc().toString(),
       };
       member_list[index] = temp_member;
       profile_image = null;
@@ -94,7 +97,6 @@ class BusinessTeamMemberStore extends GetxController {
   RemoveMember(id) async {
     member_list.removeWhere((element) => element!['id'] == id);
   }
-
 
   ////////////////////////////////////////////////////
   // GET MEMBERS
@@ -130,25 +132,23 @@ class BusinessTeamMemberStore extends GetxController {
     }
   }
 
-
-
-
   /////////////////////////////////////////
   /// STORE MEMBER TO LOCAL STORAGE :
-  /// The function is used to save the data to 
+  /// The function is used to save the data to
   /// the local storage and cache storage
   /////////////////////////////////////////
   PersistMembers() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessTeamMembersModel(
-        startup_id: await  getStartupId,
+        startup_id: await getStartupId,
         members: member_list,
       );
 
       localStore.setString(getBusinessTeamMemberStoreName, json.encode(resp));
-
-      // Remove Dublication for local storage and cache storage: 
+      businessDetailStore.UpdateBusinessDetailCacheField(
+          field: 'team_members', val: member_list.length);
+      // Remove Dublication for local storage and cache storage:
       member_list.clear();
       return ResponseBack(response_type: true);
     } catch (e) {

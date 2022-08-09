@@ -26,7 +26,7 @@ class StartupViewConnector extends GetxController {
     } else {
       final_startup_id = await getStartupId;
     }
-    
+
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(
@@ -63,10 +63,8 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
 /////////////////////////////////////////
-/// FETCH THUMBNAIL :
+  /// FETCH THUMBNAIL :
 /////////////////////////////////////////
   FetchThumbnail({startup_id = false}) async {
     var final_startup_id;
@@ -115,8 +113,6 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
@@ -163,7 +159,6 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :
@@ -359,7 +354,7 @@ class StartupViewConnector extends GetxController {
           only_product.add(element);
         }
       });
-
+      
       return ResponseBack(
           response_type: true,
           data: only_product,
@@ -479,9 +474,7 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
-     LikeStartup({startup_id, user_id}) async {
+  LikeStartup({startup_id, user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -538,8 +531,6 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
   UnLikeStartup({startup_id, user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
@@ -580,8 +571,6 @@ class StartupViewConnector extends GetxController {
       ResponseBack(response_type: false, message: e);
     }
   }
-
-
 
   IsStartupLiked({startup_id, user_id}) async {
     var save_post_len;

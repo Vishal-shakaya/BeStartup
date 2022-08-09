@@ -138,11 +138,15 @@ class MileStoneStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await MileStoneModel(
-          startup_id: await getStartupId,
-          milestone: milestones);
+          startup_id: await getStartupId, milestone: milestones);
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
-
-      // Clear memory allocation : to remove content Dublication: 
+      if (milestones.length < 5) {
+        return ResponseBack(
+            response_type: false, 
+            message: 'At leat Define 5 Milestone'
+            ,code:101);
+      }
+      // Clear memory allocation : to remove content Dublication:
       milestones.clear();
       return ResponseBack(response_type: true);
     } catch (e) {

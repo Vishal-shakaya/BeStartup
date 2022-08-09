@@ -44,3 +44,8 @@ enum MySnackbarType{
   success,
   info ,  
 }
+
+enum FounderStartupMenu {
+  intrested, 
+  my_startup, 
+}

@@ -208,13 +208,14 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 /////////////////////////////////////////
   UpdateTeamMemberDetails() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    var upload_resp;
 
     MyCustPageLoadingSpinner();
     final startup_id = await getStartupDetailViewId;
     var resp = await memeberStore.PersistMembers();
-    final upload_resp = await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
 
     if (resp['response']) {
+      upload_resp = await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
       // Upload Succes response :
       if (upload_resp['response']) {
         CloseCustomPageLoadingSpinner();
