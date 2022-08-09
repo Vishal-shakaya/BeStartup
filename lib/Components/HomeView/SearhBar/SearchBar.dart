@@ -178,7 +178,6 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<QuerySnapshot>(
-
                 //Fetching Data :
                 stream: store
                     .collection(getBusinessDetailStoreName)

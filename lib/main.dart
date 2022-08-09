@@ -45,9 +45,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // FACEBOOK SDK INITILIZE :
@@ -73,16 +70,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
+  //////////////////////////////////
   // LOADING SPINNER :
+  //////////////////////////////////
   var spinner = Container(
     width: 60,
     height: 60,
@@ -99,34 +93,25 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+
+    ////////////////////////////////////////////////////
+    /// SET APP DEFAULT STATE : 
     /// It sets the local state of the app to
     /// the current user's email and uid
+    ////////////////////////////////////////////////////
     SetAppLocalState() async {
-      var founderConnector = Get.put(FounderConnector());
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);
       await SetLoginUserId(user?.uid);
-
-      final user_resp = await founderConnector.FetchFounderDetailandContact(
-          user_id: user?.uid);
-
-      if(user_resp['response']){
-        final phoneno = user_resp['data']['userContect']['phone_no'];
-        final profile_image = user_resp['data']['userDetail']['picture'];
-        final position = user_resp['data']['userDetail']['position'];
-        final username = user_resp['data']['userDetail']['name'];
-
-        await SetLoginUserPhoneno(phoneno);
-        await SetLoginUserPosition(position);
-        await SetLoginUserProfileImage(profile_image);
-        await SetLoginUserName(username);
-
-      }
-
       // Setting things up :
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(milliseconds:500));
     }
 
+
+
+    /////////////////////////////////
+    /// MY APP : 
+    /////////////////////////////////
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),

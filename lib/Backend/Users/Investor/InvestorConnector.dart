@@ -110,7 +110,7 @@ class InvestorConnector extends GetxController {
       var query1 = store1
           .where('user_id', isEqualTo: final_user_id).get();
 
-      await query.then((value) {
+      await query1.then((value) {
         data_userContact = value.docs.first.data();
         doc_id_userContact = value.docs.first.id;
       });

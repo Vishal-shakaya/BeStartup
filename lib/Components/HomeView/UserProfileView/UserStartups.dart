@@ -71,6 +71,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     await Future.delayed(Duration(milliseconds: 100));
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     //////////////////////////////////
@@ -91,9 +94,12 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         });
   }
 
-  ////////////////////////////
+
+
+
+  ////////////////////////////////////////////////
   /// MainMethod :
-  ////////////////////////////
+  ////////////////////////////////////////////////
   MainMethod(BuildContext context) {
     var mainWidget;
 
@@ -104,27 +110,28 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         children: [
           // Swith Menu button only show if user is founder :
           usertype == 'founder'
-              ?
-              // Swith Menu Switcher :
-              StartupSwitcherButton(
-                  context,
-                )
+            ?
+            // Swith Menu Switcher :
+            StartupSwitcherButton(context)
+            
+            // Spacer :
+            : Spacer(context),
 
-              // Spacer :
-              : Container(
-                  margin: EdgeInsets.only(
-                    top: context.height * 0.04,
-                  ),
-                ),
-
-          // Main Startup Container :
-          StartupMethod(context),
+            // Main Startup Container :
+            StartupMethod(context),
         ],
       );
     }
 
     return mainWidget;
   }
+
+
+
+//////////////////////////////////////////////////
+/// EXTERNAL METHOD  :
+//////////////////////////////////////////////////
+
 
 /////////////////////////////////////////
   ///  Container main startup Container
@@ -183,6 +190,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         ));
   }
 
+
+
+
 ////////////////////////////////////////////
   /// Startup Switcher button :
   /// 1 Switch interested to own startup:
@@ -218,6 +228,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
+
+
+
 ////////////////////////////////
   /// Startup Siwther Text:
 ////////////////////////////////
@@ -243,9 +256,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
-//////////////////////////////////////////////////
-  /// EXTERNAL METHOD  :
-//////////////////////////////////////////////////
+
+
+
 
   BackButton(BuildContext context) {
     return Container(
@@ -261,6 +274,8 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
+
+
   ForwordButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 20),
@@ -275,4 +290,15 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
           )),
     );
   }
+
+
+  // Spacer : 
+  Container Spacer(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(
+          top: context.height * 0.04,
+        ),
+      );
+  }
+
 }

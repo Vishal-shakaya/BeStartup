@@ -300,9 +300,29 @@ CreateSearchIndexParam(String val)async  {
             searchIndexArray.add(pureString[i]);
         }     
       }
+      // output : ['v' ,'i' ,'s' ,'h]
   return searchIndexArray; 
   }  
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////
