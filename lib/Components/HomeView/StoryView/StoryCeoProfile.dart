@@ -9,6 +9,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
+
 class StoryCeoProfile extends StatefulWidget {
   var startup_id;
   var founder_id;
@@ -34,6 +35,11 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
 
   double profile_top_pos = 0.14;
   double profile_left_pos = 0.01;
+
+
+
+
+
 
   ////////////////////////////////////
   /// GET REQUIRED PARAMATERS :

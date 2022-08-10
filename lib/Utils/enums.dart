@@ -18,6 +18,7 @@ enum HomePageViews {
   safeStory,
   settingView,
   profileView,
+  exploreView, 
 }
 
 enum ReautheticateTask{

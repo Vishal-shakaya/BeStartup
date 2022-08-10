@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -18,7 +19,8 @@ UserModel({email,
       'plan':plan,  // list
       'startups':startups, // list
       'is_investor':is_investor, 
-      'is_founder':is_founder
+      'is_founder':is_founder,
+      'timestamp':await GetFormatedDate() 
     };
     return temp_obj;
   } catch (e) {

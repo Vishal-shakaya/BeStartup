@@ -4,15 +4,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/YearRangeSelector.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+
 class ExploreCatigoryAlert extends StatefulWidget {
-  ExploreCatigoryAlert({Key? key}) : super(key: key);
+  var changeView;
+
+  ExploreCatigoryAlert({this.changeView, Key? key}) : super(key: key);
 
   @override
   State<ExploreCatigoryAlert> createState() => _ExploreCatigoryAlertState();
@@ -25,15 +26,19 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
   double con_button_width = 80;
   double con_button_height = 40;
   double con_btn_top_margin = 40;
+
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
 
   var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
 
+
   // SUBMIT DATE AND CATIGORY :
   var catigories = [];
   SubmitExploreCatigory(context) async {
     exploreStore.SetCatigory(catigories);
+    
+    await widget.changeView(HomePageViews.exploreView);
     Navigator.of(context).pop();
   }
 
@@ -71,8 +76,7 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
                       decoration: BoxDecoration(
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(50),
-                          border: Border.all(
-                              color: Colors.grey.shade300)),
+                          border: Border.all(color: Colors.grey.shade300)),
                       selectedDecoration: BoxDecoration(
                           color: primary_light,
                           borderRadius: BorderRadius.circular(50),
@@ -101,8 +105,7 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
                       decoration: BoxDecoration(
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(50),
-                          border: Border.all(
-                              color: Colors.grey.shade300)),
+                          border: Border.all(color: Colors.grey.shade300)),
                       selectedDecoration: BoxDecoration(
                           color: primary_light,
                           borderRadius: BorderRadius.circular(50),
@@ -126,13 +129,11 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
               // 1 GET DATE RANGE  ,
               // 2 TOP AND OTHER CATIGORIES :
               Container(
-                margin: EdgeInsets.only(
-                    top: con_btn_top_margin, bottom: 20),
+                margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
                 child: InkWell(
                   highlightColor: primary_light_hover,
                   borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(20),
-                      right: Radius.circular(20)),
+                      left: Radius.circular(20), right: Radius.circular(20)),
                   onTap: () async {
                     await SubmitExploreCatigory(context);
                   },
@@ -140,8 +141,7 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
                     elevation: 10,
                     shadowColor: light_color_type3,
                     shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(20))),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(5),
@@ -170,7 +170,8 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
       ),
     );
   }
-   Container CustomDivider(BuildContext context, width) {
+
+  Container CustomDivider(BuildContext context, width) {
     return Container(
         margin: EdgeInsets.only(top: context.height * width), child: Divider());
   }

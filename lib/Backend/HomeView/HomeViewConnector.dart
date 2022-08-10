@@ -137,6 +137,74 @@ class HomeViewConnector extends GetxController {
     }
   }
 
+  FetchExploreStartups(
+      {DateTime? start_date, DateTime? end_date, catigories}) async {
+    print('start at $start_date');
+    print('end at $end_date');
+    print('catigory $catigories');
+
+    var startup_data;
+    var startup_ids ;
+    var founder_ids = [];
+    var startup_len;
+    var startup_names = [];
+
+    try {
+
+      ////////////////////////////////////
+      // Fetch user Sava Startups :
+      ////////////////////////////////////
+      var save_startups = await store.collection(getBusinessCatigoryStoreName);
+      var lessThan = save_startups
+          .where('timestamp', isLessThanOrEqualTo:end_date)
+          .get();
+
+      var greaterThan = save_startups
+          .where('timestamp', isGreaterThanOrEqualTo:start_date)
+          .get();
+
+      await lessThan.then((value) {
+        for (var data in value.docs) {
+          startup_ids = data.data()['startup_id'];
+          print(data.data());
+        }
+      });
+
+      await greaterThan.then((value) {
+        for (var data in value.docs) {
+          startup_ids = data.data()['startup_id'];
+          print(data.data());
+        }
+      });
+
+      //////////////////////////////////
+      /// Fetch Startups Data :
+      /// /////////////////////////////////
+      // var startup_store = await store.collection(getStartupStoreName);
+      // var query2 = startup_store.where('id', whereIn: startup_ids).get();
+
+      // await query2.then((value) {
+      //   for (var doc in value.docs) {
+      //     founder_ids.add(doc.data()['user_id']);
+      //     startup_names.add(doc.data()['startup_name']);
+      //   }
+      // });
+
+      // startup_data = {
+      //   'startup_ids': startup_ids,
+      //   'founder_id': founder_ids,
+      //   'startup_len': startup_ids.length,
+      //   'startup_name': startup_names
+      // };
+
+      // print(startup_data);
+      return ResponseBack(response_type: true, data: startup_data);
+    } catch (e) {
+      print(e);
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
   FetchLikeStartups({user_id}) async {
     var startup_data;
     var startup_ids = [];

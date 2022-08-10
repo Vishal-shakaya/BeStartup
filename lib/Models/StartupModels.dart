@@ -1,4 +1,5 @@
 
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
@@ -18,7 +19,7 @@ StartupModel({
       'user_id': user_id,
       'email': email,
       'startup_name':startup_name,
-      'timestamp':DateTime.now().toUtc().toString() , 
+      'timestamp':await GetFormatedDate()
     };
     return temp_obj;
   } catch (e) {
@@ -56,7 +57,7 @@ BusinessInfoModel({
       'desire_amount':desire_amount, 
       'achived_amount':achived_amount, 
       'invested':invested, // bool : true if achived desired amount : 
-      'registor_date':DateTime.now().toUtc().toString() , 
+      'registor_date':await GetFormatedDate(), 
       'activate':activate, // check if startup plan expired or not :  
       'startup_searching_index':startup_search_index, 
       'founder_searching_index':founder_search_index, 
@@ -127,7 +128,7 @@ CatigoryModel(
       'id': uuid.v4(),
       'startup_id': startup_id,
       'catigories': catigory,
-      'timestamp':DateTime.now().toUtc().toString() 
+      'timestamp':await GetFormatedDate()
     };
     return temp_obj;
   } catch (e) {
@@ -145,7 +146,7 @@ InvestorCatigoryModel(
       'id': uuid.v4(),
       'user_id': user_id,
       'catigories': catigory,
-      'timestamp':DateTime.now().toUtc().toString()  
+      'timestamp':await GetFormatedDate()
     };
     return temp_obj;
   } catch (e) {
@@ -162,7 +163,7 @@ products}) async {
       'id': uuid.v4(),
       'startup_id':startup_id, 
       'products': products,
-      'timestamp': DateTime.now().toUtc().toString() ,
+      'timestamp': await GetFormatedDate() ,
 
     };
     return temp_obj;    
@@ -171,13 +172,13 @@ products}) async {
   }
 }
 
-BusinessServiceList({user_id, required startup_id,  services,}) {
+BusinessServiceList({user_id, required startup_id,  services,})async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'startup_id':startup_id, 
       'services': services, 
-      'timestamp': DateTime.now().toUtc().toString() ,
+      'timestamp':await GetFormatedDate(),
     };
     return temp_obj;    
   } catch (e) {
@@ -214,7 +215,7 @@ BusinessTeamMembersModel({
       'id': uuid.v4(),
       'startup_id': startup_id,
       'members':members, 
-      'timestamp':DateTime.now().toUtc().toString() , 
+      'timestamp':await GetFormatedDate() , 
 
     };
     return temp_obj;

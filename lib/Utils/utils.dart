@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 double alert_width = 320;
 final snackbar_show_time = 4;
@@ -67,9 +68,9 @@ final startupSlideStorageKeys = [
   getBusinessVisiontStoreName,
   getBusinessWhyInvesttStoreName,
   getBusinessThumbnailStoreName,
-  getBusinessTeamMemberStoreName, 
+  getBusinessTeamMemberStoreName,
   getBusinessFounderContactStoreName,
-  getBusinessFounderDetailStoreName , 
+  getBusinessFounderDetailStoreName,
   getStartupPlansStoreName,
   getStartupStoreName
 ];
@@ -78,7 +79,7 @@ final startupSlideStorageKeys = [
 // CREATE RESPONSE ERROR OR SUCCESSFUL :
 ////////////////////////////////////////////
 ResponseBack(
-    {required response_type, code = null, data = null, message = null})  {
+    {required response_type, code = null, data = null, message = null}) {
   var response;
   // Error Response :
   if (!response_type) {
@@ -288,22 +289,36 @@ class _CustomShimmerState extends State<CustomShimmer> {
   }
 }
 
-
 ///////////////////////////////////////
- // Search Index Creator : 
+// Search Index Creator :
 ///////////////////////////////////////
-CreateSearchIndexParam(String val)async  {
-    String  pureString = val.toLowerCase().trim(); 
-    var searchIndexArray = [];  
-      for(var i=0 ; i<pureString.length; i++){
-        if(pureString[i] != ' '){
-            searchIndexArray.add(pureString[i]);
-        }     
-      }
-      // output : ['v' ,'i' ,'s' ,'h]
-  return searchIndexArray; 
-  }  
-  
+CreateSearchIndexParam(String val) async {
+  String pureString = val.toLowerCase().trim();
+  var searchIndexArray = [];
+  for (var i = 0; i < pureString.length; i++) {
+    if (pureString[i] != ' ') {
+      searchIndexArray.add(pureString[i]);
+    }
+  }
+  // output : ['v' ,'i' ,'s' ,'h]
+  return searchIndexArray;
+}
+
+
+
+  /////////////////////////////////////
+  /// Get Formated Date : 
+  /////////////////////////////////////
+  GetFormatedDate() async {
+    try {
+      final DateTime now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formatted = formatter.format(now);
+      return formatted;
+    } catch (err) {
+      return '';
+    }
+  }
 
 
 
@@ -314,59 +329,45 @@ CreateSearchIndexParam(String val)async  {
 
 
 
+////////////////////////////////////////
+// CUSTOM CACHING  SYSTEM :
+// GET DATA FROM LOCAL STORGE
+////////////////////////////////////////
+GetCachedData({fromModel, startup_id}) async {
+  final localStore = await SharedPreferences.getInstance();
+  var is_localy_store = localStore.containsKey(fromModel);
+  if (is_localy_store) {
+    var data = localStore.getString(fromModel);
 
-
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////
-/// LOCAL STORAGE HANDLERS : 
-/// /////////////////////////////////////////
-  ////////////////////////////////////////
-  // CUSTOM CACHING  SYSTEM :
-  // GET DATA FROM LOCAL STORGE
-  ////////////////////////////////////////
-  GetCachedData({fromModel, startup_id}) async {
-    final localStore = await SharedPreferences.getInstance();
-    var is_localy_store = localStore.containsKey(fromModel);
-    if (is_localy_store) {
-      var data = localStore.getString(fromModel);
-
-      // Validata data :
-      if (data != null || data != '') {
-        var final_data = json.decode(data!);
-        Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
-        if (cacheData['startup_id'] == startup_id) {
-          return final_data;
-        } else {
-          return false;
-        }
+    // Validata data :
+    if (data != null || data != '') {
+      var final_data = json.decode(data!);
+      Map<String, dynamic> cacheData = final_data as Map<String, dynamic>;
+      if (cacheData['startup_id'] == startup_id) {
+        return final_data;
       } else {
         return false;
       }
     } else {
       return false;
     }
+  } else {
+    return false;
   }
+}
 
-  //////////////////////////////////////////
-  // Cached Update Data :
-  //////////////////////////////////////////
-  StoreCacheData({fromModel, data}) async {
-    try {
-      final localStore = await SharedPreferences.getInstance();
-      if (data != null || data != '') {
-        localStore.setString(fromModel, json.encode(data));
-        print('Cached Data Successfully');
-        return true;
-      }
-    } catch (e) {
-      return false;
+//////////////////////////////////////////
+// Cached Update Data :
+//////////////////////////////////////////
+StoreCacheData({fromModel, data}) async {
+  try {
+    final localStore = await SharedPreferences.getInstance();
+    if (data != null || data != '') {
+      localStore.setString(fromModel, json.encode(data));
+      print('Cached Data Successfully');
+      return true;
     }
+  } catch (e) {
+    return false;
   }
+}

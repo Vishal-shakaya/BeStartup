@@ -57,7 +57,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   @override
   Widget build(BuildContext context) {
-
     String? selectedValue;
     //////////////////////////////////////
     /// Investor Dialog :
@@ -93,7 +92,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(content: ExploreCatigoryAlert());
+            return AlertDialog(
+              content:ExploreCatigoryAlert(
+                changeView: widget.changeView,));
           });
     }
 
@@ -129,15 +130,12 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             spacing: 10,
             alignment: WrapAlignment.center,
             children: [
-              
               // Explore Menu :
               ExploreButton(context, ExploreFunction),
-
 
               Container(
                 width: context.width * 0.20,
               ),
-
 
               // Menu Icon :
               Container(
@@ -158,14 +156,15 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                       // Save Startup Button:
                       SaveStartupLink(),
 
-                      widget.usertype == UserType.investor 
-                      ? InvestorDropDownMenu(context: context,) 
-
-                      : FounderDropDownMenu(
-                          context: context,
-                          AddInvestor: AddInvestor,
-                          CreateStatup: CreateStatup,), 
-                      
+                      widget.usertype == UserType.investor
+                          ? InvestorDropDownMenu(
+                              context: context,
+                            )
+                          : FounderDropDownMenu(
+                              context: context,
+                              AddInvestor: AddInvestor,
+                              CreateStatup: CreateStatup,
+                            ),
                     ],
                   ))
             ],
@@ -245,7 +244,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   }
 
 ////////////////////////////////////////
-///  Founder Dropdown Menu :
+  ///  Founder Dropdown Menu :
 ////////////////////////////////////////
   Container FounderDropDownMenu(
       {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
@@ -272,7 +271,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           // FounderMenuItems.onChanged(context, value as MenuItem);
           switch (value) {
             case FounderMenuItems.profile:
-              widget.changeView(HomePageViews.profileView);
+             await  widget.changeView(HomePageViews.profileView);
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -288,7 +287,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               break;
 
             case FounderMenuItems.settings:
-              widget.changeView(HomePageViews.settingView);
+             await  widget.changeView(HomePageViews.settingView);
+            
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -312,8 +312,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       )),
     );
   }
+
 ////////////////////////////////////////
-///  Founder Dropdown Menu :
+  ///  Founder Dropdown Menu :
 ////////////////////////////////////////
   Container InvestorDropDownMenu(
       {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
@@ -338,7 +339,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         onChanged: (value) async {
           switch (value) {
             case FounderMenuItems.profile:
-              widget.changeView(HomePageViews.profileView);
+             await  widget.changeView(HomePageViews.profileView);
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -346,7 +347,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               break;
 
             case FounderMenuItems.settings:
-              widget.changeView(HomePageViews.settingView);
+             await  widget.changeView(HomePageViews.settingView);
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -372,12 +373,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   }
 }
 
-
-
-
-
 //////////////////////////
-/// Menu Item Class : 
+/// Menu Item Class :
 //////////////////////////
 class MenuItem {
   final String text;
@@ -389,10 +386,8 @@ class MenuItem {
   });
 }
 
-
-
 ////////////////////////////////////
-/// Founder Menu Items 
+/// Founder Menu Items
 ////////////////////////////////////
 class FounderMenuItems {
   static const List<MenuItem> firstItems = [
@@ -435,10 +430,8 @@ class FounderMenuItems {
   }
 }
 
-
-
 ////////////////////////////////////
-/// Investor Menu Items 
+/// Investor Menu Items
 ////////////////////////////////////
 class InvestorMenuItems {
   static const List<MenuItem> firstItems = [
@@ -450,7 +443,6 @@ class InvestorMenuItems {
   static const List<MenuItem> secondItems = [logout];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-
 
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 
@@ -477,4 +469,3 @@ class InvestorMenuItems {
     );
   }
 }
-

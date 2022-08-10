@@ -1,5 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryView.dart';
 import 'package:be_startup/Loader/Shimmer/HomeView/MainHomeViewShimmer.dart';
@@ -7,20 +7,25 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 
 class StoryListView extends StatelessWidget {
   bool? is_save_page = false;
-  StoryListView({this.is_save_page, Key? key}) : super(key: key);
+  bool? is_explore = false;
+
+  StoryListView({this.is_explore = false, this.is_save_page, Key? key})
+      : super(key: key);
 
   var homeViewConnector = Get.put(HomeViewConnector());
+  var exploreStore = Get.put(ExploreCatigoryStore());
   var startups_length;
   var startup_names;
   var startup_ids;
   var founder_ids;
+  var catigory;
+  var date_range;
 
   CarouselController buttonCarouselController = CarouselController();
 
@@ -32,6 +37,19 @@ class StoryListView extends StatelessWidget {
     GetLocalStorageData() async {
       final user_id = await getUserId;
       var resp;
+      print('is explore $is_explore');
+      if (is_explore == true) {
+        catigory = await exploreStore.GetCatigories();
+        date_range = await exploreStore.GetDateRange();
+        // print(catigory);
+        // print(date_range);
+        var new_resp = await homeViewConnector.FetchExploreStartups(
+          start_date: date_range['start'],
+          end_date: date_range['end'],
+          catigories: catigory
+        );
+      }
+
       try {
         // print('is Save Page $is_save_page');
         if (is_save_page == true) {
@@ -39,12 +57,14 @@ class StoryListView extends StatelessWidget {
         } else {
           resp = await homeViewConnector.FetchStartups();
         }
+
         if (resp['response']) {
           startups_length = resp['data']['startup_len'];
           startup_ids = resp['data']['startup_ids'];
           founder_ids = resp['data']['founder_id'];
           startup_names = resp['data']['startup_name'];
         }
+
         if (!resp['response']) {
           startups_length = 0;
         }

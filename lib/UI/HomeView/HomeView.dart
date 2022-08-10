@@ -26,12 +26,14 @@ class _HomeViewState extends State<HomeView> {
   dynamic mainViewWidget = StoryListView();
   var userStore = Get.put(UserStore());
   var view = HomePageViews.storyView;
+  var catigory;
+  var date_range;
 
   var usertype;
   double page_width = 0.80;
   double page_height = 0.90;
 
-  SetHomeView(changeView) {
+  SetHomeView(changeView) async {
     if (changeView == HomePageViews.profileView) {
       setState(() {
         view = HomePageViews.profileView;
@@ -55,6 +57,16 @@ class _HomeViewState extends State<HomeView> {
         view = HomePageViews.settingView;
       });
     }
+
+    if (changeView == HomePageViews.exploreView) {
+      setState(() {
+        view = HomePageViews.exploreView;
+      });
+
+      // setState(() {
+      //   view = HomePageViews.exploreView;
+      // });
+    }
   }
 
   // LOADING SPINNER :
@@ -76,6 +88,7 @@ class _HomeViewState extends State<HomeView> {
     /// ASSIGNING VIEW  :
     /// DEFAULT VIEW IS STORYVIEW :
     ///////////////////////////////////////////
+
     if (view == HomePageViews.profileView) {
       mainViewWidget = UserProfileView();
     }
@@ -83,6 +96,18 @@ class _HomeViewState extends State<HomeView> {
     if (view == HomePageViews.safeStory) {
       mainViewWidget = StoryListView(
         is_save_page: true,
+      );
+    }
+
+    if (view == HomePageViews.safeStory) {
+      mainViewWidget = StoryListView(
+        is_save_page: true,
+      );
+    }
+
+    if (view == HomePageViews.exploreView) {
+      mainViewWidget = StoryListView(
+        is_explore: true,
       );
     }
 
@@ -105,11 +130,11 @@ class _HomeViewState extends State<HomeView> {
       var founderConnector = Get.put(FounderConnector());
       var investorConnector = Get.put(InvestorConnector());
       FirebaseAuth auth = FirebaseAuth.instance;
-      
+
       var phoneno;
       var profile_image;
       var username;
-      var position; 
+      var position;
 
       final resp = await userStore.FetchUserDetail();
       final user = auth.currentUser;
@@ -127,15 +152,14 @@ class _HomeViewState extends State<HomeView> {
       // if any one is true then send Home View
       if (resp['data']['is_investor'] == true ||
           resp['data']['is_founder'] == true) {
-        
-        
         ////////////////////////////////////////
-        // INVESTOR HANDLER : 
+        // INVESTOR HANDLER :
         ////////////////////////////////////////
         if (resp['data']['is_investor'] == true) {
           usertype = UserType.investor;
 
-        final investor_resp = await investorConnector.FetchInvestorDetailandContact(
+          final investor_resp =
+              await investorConnector.FetchInvestorDetailandContact(
                   user_id: user?.uid);
 
           if (investor_resp['response']) {
@@ -143,13 +167,12 @@ class _HomeViewState extends State<HomeView> {
             username = investor_resp['data']['userDetail']['name'];
             profile_image = investor_resp['data']['userDetail']['picture'];
 
-            await SetLoginUserPhoneno(phoneno??'');
-            await SetLoginUserProfileImage(profile_image??temp_avtar_image);
+            await SetLoginUserPhoneno(phoneno ?? '');
+            await SetLoginUserProfileImage(profile_image ?? temp_avtar_image);
             await SetLoginUserName(username ?? '');
           }
           await SetUserType('investor');
         }
-
 
         /////////////////////////////////////////////
         // FOUNDER HANDLER :
@@ -168,7 +191,7 @@ class _HomeViewState extends State<HomeView> {
             profile_image = founder_resp['data']['userDetail']['picture'];
 
             await SetLoginUserPhoneno(phoneno ?? '');
-            await SetLoginUserPosition(position?? '');
+            await SetLoginUserPosition(position ?? '');
             await SetLoginUserProfileImage(profile_image ?? temp_avtar_image);
             await SetLoginUserName(username ?? '');
           }
@@ -179,12 +202,9 @@ class _HomeViewState extends State<HomeView> {
       await Future.delayed(Duration(seconds: 2));
     }
 
-
-
-    
-  ///////////////////////////////////////////
-  /// SET REQUIRED PARAM :
-  ///////////////////////////////////////////
+    ///////////////////////////////////////////
+    /// SET REQUIRED PARAM :
+    ///////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -192,7 +212,6 @@ class _HomeViewState extends State<HomeView> {
             return spinner;
           }
           if (snapshot.hasError) {
-            print(snapshot.error);
             return ErrorPage();
           }
 
@@ -202,8 +221,6 @@ class _HomeViewState extends State<HomeView> {
           return MainMethod(context);
         });
   }
-
-
 
   ///////////////////////////////////////////
   /// MAIN METHOD :
@@ -218,7 +235,7 @@ class _HomeViewState extends State<HomeView> {
             // 2. MAIN SECTION :
             Container(alignment: Alignment.center, child: mainViewWidget),
 
-            // Header SEction:
+            // Header Section:
             HomeHeaderSection(changeView: SetHomeView, usertype: usertype),
 
             // SEARCH BAR :

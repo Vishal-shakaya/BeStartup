@@ -142,7 +142,7 @@ class StoryMileStone extends StatelessWidget {
                     style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
                         color: light_color_type1,
-                        fontSize: 15,
+                        fontSize: 14,
                         height: 1.6)),
                 style: Get.textTheme.headline2,
                 textAlign: TextAlign.left,

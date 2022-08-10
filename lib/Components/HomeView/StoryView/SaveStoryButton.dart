@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -19,17 +20,18 @@ class SaveStoryButton extends StatefulWidget {
 class _SaveStoryButtonState extends State<SaveStoryButton> {
   var homeviewConnector = Get.put(HomeViewConnector());
   bool is_saved = false;
+  var user_id;
 
   @override
   Widget build(BuildContext context) {
-
     /////////////////////////////////////////
     /// GET REQUIRED PARAM :
     /////////////////////////////////////////
     IsPostSaved() async {
+      user_id = await getUserId;
       final resp = await homeviewConnector.IsStartupSaved(
         startup_id: widget.startup_id,
-        user_id: widget.founder_id,
+        user_id: user_id,
       );
 
       if (resp['code'] == 101) {
@@ -74,23 +76,21 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
   MainMethod(BuildContext context) {
     return SaveUnsaveIcon(
         is_saved: is_saved,
-        founder_id: widget.founder_id,
+        user_id: user_id,
         startup_id: widget.startup_id);
   }
 }
-
-
 
 ////////////////////////////
 /// EXTERNAL WIDGET:
 ////////////////////////////
 class SaveUnsaveIcon extends StatefulWidget {
-  var founder_id;
+  var user_id;
   var startup_id;
   var is_saved;
   SaveUnsaveIcon(
       {this.is_saved,
-      required this.founder_id,
+      required this.user_id,
       required this.startup_id,
       Key? key})
       : super(key: key);
@@ -103,7 +103,6 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   var homeviewConnector = Get.put(HomeViewConnector());
   bool is_saved = false;
 
-
   ///////////////////////////////////////////////////////////
   /// It checks if the startup is already saved, if it is,
   /// it unsaves it. If it isn't, it saves it
@@ -111,7 +110,7 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   SavingPostProcess() async {
     final resp = await homeviewConnector.SaveStartup(
       startup_id: widget.startup_id,
-      user_id: widget.founder_id,
+      user_id: widget.user_id,
     );
 
     /////////////////////////////////////////////
@@ -119,17 +118,17 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     /////////////////////////////////////////////
     if (resp['response']) {
       setState(() {
-        is_saved = true; 
+        is_saved = true;
       });
     }
 
-    ///////////////////////////////////////////   
+    ///////////////////////////////////////////
     // If startup already save then Unsave :
-    ///////////////////////////////////////////   
+    ///////////////////////////////////////////
     if (resp['code'] == 101) {
       final unsave_resp = await homeviewConnector.UnsaveStartup(
         startup_id: widget.startup_id,
-        user_id: widget.founder_id,
+        user_id: widget.user_id,
       );
 
       // Update UI :
@@ -140,7 +139,6 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
       }
     }
   }
-
 
   @override
   void initState() {
