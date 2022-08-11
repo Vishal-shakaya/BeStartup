@@ -37,24 +37,26 @@ class StoryListView extends StatelessWidget {
     GetLocalStorageData() async {
       final user_id = await getUserId;
       var resp;
-      print('is explore $is_explore');
-      if (is_explore == true) {
-        catigory = await exploreStore.GetCatigories();
-        date_range = await exploreStore.GetDateRange();
-        // print(catigory);
-        // print(date_range);
-        var new_resp = await homeViewConnector.FetchExploreStartups(
-          start_date: date_range['start'],
-          end_date: date_range['end'],
-          catigories: catigory
-        );
-      }
 
       try {
-        // print('is Save Page $is_save_page');
+
+        if (is_explore == true) {
+          catigory = await exploreStore.GetCatigories();
+          date_range = await exploreStore.GetDateRange();
+
+          resp = await homeViewConnector.FetchExploreStartups(
+              start_date: date_range['start'],
+              end_date: date_range['end'],
+              catigories: catigory);
+        }
+
+
         if (is_save_page == true) {
           resp = await homeViewConnector.FetchSaveStartups(user_id: user_id);
-        } else {
+        } 
+        
+        
+        else {
           resp = await homeViewConnector.FetchStartups();
         }
 

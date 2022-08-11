@@ -314,7 +314,8 @@ CreateSearchIndexParam(String val) async {
       final DateTime now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formatted = formatter.format(now);
-      return formatted;
+    
+      return now;
     } catch (err) {
       return '';
     }

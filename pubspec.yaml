@@ -70,6 +70,7 @@ dependencies:
   
   slide_countdown: ^0.2.8
   flip_card: ^0.6.0
+  encrypt: ^5.0.1
   cupertino_icons: ^1.0.2
   google_fonts: ^2.2.0
   flutter_form_builder: ^7.0.0

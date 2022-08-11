@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
@@ -70,7 +71,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -93,9 +93,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-
     ////////////////////////////////////////////////////
-    /// SET APP DEFAULT STATE : 
+    /// SET APP DEFAULT STATE :
     /// It sets the local state of the app to
     /// the current user's email and uid
     ////////////////////////////////////////////////////
@@ -103,14 +102,11 @@ class _MyAppState extends State<MyApp> {
       final user = auth.currentUser;
       await SetLoginUserMail(user?.email);
       await SetLoginUserId(user?.uid);
-      // Setting things up :
-      await Future.delayed(Duration(milliseconds:500));
+      await Future.delayed(Duration(milliseconds: 500));
     }
 
-
-
     /////////////////////////////////
-    /// MY APP : 
+    /// MY APP :
     /////////////////////////////////
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
