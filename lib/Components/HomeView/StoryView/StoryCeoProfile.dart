@@ -20,9 +20,11 @@ class StoryCeoProfile extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+
   @override
   State<StoryCeoProfile> createState() => _StoryCeoProfileState();
 }
+
 
 class _StoryCeoProfileState extends State<StoryCeoProfile> {
   var startupConnector = Get.put(StartupViewConnector());
@@ -35,8 +37,6 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
 
   double profile_top_pos = 0.14;
   double profile_left_pos = 0.01;
-
-
 
 
 

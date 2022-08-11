@@ -1,5 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
+import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
@@ -99,9 +100,6 @@ class _MyAppState extends State<MyApp> {
     /// the current user's email and uid
     ////////////////////////////////////////////////////
     SetAppLocalState() async {
-      final user = auth.currentUser;
-      await SetLoginUserMail(user?.email);
-      await SetLoginUserId(user?.uid);
       await Future.delayed(Duration(milliseconds: 500));
     }
 

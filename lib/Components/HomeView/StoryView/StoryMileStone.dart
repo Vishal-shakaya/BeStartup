@@ -6,7 +6,6 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tab_container/tab_container.dart';
@@ -74,12 +73,14 @@ class StoryMileStone extends StatelessWidget {
 
   Container MainMethod(BuildContext context) {
     // NULL CHECK :
-    if (miles_data == [] || miles_data.length <= 0) {
+    if (miles_data == [] || miles_data.length <= 0 || miles_data==null) {
       return Container(
         width: context.width * 0.40,
         height: context.height * 0.24,
       );
     }
+
+
     _controller = TabContainerController(length: miles_data.length);
     miles_data.forEach((el) {
       final desc = MileDescriptionSection(
@@ -110,6 +111,7 @@ class StoryMileStone extends StatelessWidget {
     );
   }
 
+
 // MILESTONE SIDE BAR TITLE TAB  :
 // REQUIRED PARAM : Title
   AutoSizeText MiltTitleTab({title}) {
@@ -124,6 +126,7 @@ class StoryMileStone extends StatelessWidget {
       style: Get.textTheme.headline2,
     );
   }
+
 
 // MILESTONE DESCRIPTION COLUMN :
 // 1 REQUIRED PARAM :  TITLE AND DESCRIPTION ,

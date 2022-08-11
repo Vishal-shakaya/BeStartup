@@ -1,4 +1,5 @@
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Loader/Shimmer/HomeView/StartupThumbnailShimmer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,14 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
 
   double image_thumb_width = 0.46;
   double image_thumb_height = 0.15;
+
   var final_data = '';
   @override
   Widget build(BuildContext context) {
-    ///////////////////////////////////////////////
-    /// GET REQUIREMENTS ;
-    ///////////////////////////////////////////////
+
+  ///////////////////////////////////////////////
+  /// GET REQUIREMENTS ;
+  ///////////////////////////////////////////////
     GetLocalStorageData() async {
       try {
         final resp = await startupView_connector.FetchThumbnail(
@@ -48,9 +51,9 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
       }
     }
 
-/////////////////////////////////////
-    /// SET REQUIREMENTS :
-/////////////////////////////////////
+  /////////////////////////////////////
+  /// SET REQUIREMENTS :
+  /////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -58,24 +61,10 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
             return Shimmer.fromColors(
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
-              child: Container(
-              height: context.height * image_cont_height,
-              width: context.width * image_cont_width,
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20), right: Radius.circular(20)),
-              ),
-              child: ClipRRect(
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(19),
-              right: Radius.circular(19),
-            ),)),
+              child: StartupThumbnailShimmer(context),
             );
 
           }
-
 
           if (snapshot.hasError) return ErrorPage();
 
@@ -87,6 +76,8 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
           );
         });
   }
+
+
 
   Card MainMethod(BuildContext context) {
     return Card(
@@ -101,16 +92,19 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
           height: context.height * image_cont_height,
           width: context.width * image_cont_width,
           padding: EdgeInsets.all(2),
+
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20)),
           ),
+          
           child: ClipRRect(
             borderRadius: BorderRadius.horizontal(
               left: Radius.circular(19),
               right: Radius.circular(19),
             ),
+          
             child: Image.network(
               final_data,
               width: context.width * image_thumb_width,

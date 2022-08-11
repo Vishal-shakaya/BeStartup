@@ -1,4 +1,6 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
+import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
@@ -123,13 +125,10 @@ class _HomeViewState extends State<HomeView> {
       );
     }
 
-    ///////////////////////////////////////////
-    /// GET REQUIRED PARAM :
-    ///////////////////////////////////////////
+  ///////////////////////////////////////////
+  /// GET REQUIRED PARAM :
+  ///////////////////////////////////////////
     GetLocalStorageData() async {
-      var founderConnector = Get.put(FounderConnector());
-      var investorConnector = Get.put(InvestorConnector());
-      FirebaseAuth auth = FirebaseAuth.instance;
 
       var phoneno;
       var profile_image;
@@ -137,8 +136,6 @@ class _HomeViewState extends State<HomeView> {
       var position;
 
       final resp = await userStore.FetchUserDetail();
-      final user = auth.currentUser;
-
       // 1 CHECK  :
       // If user user type is investor or founder
       // if both are false then show user type page :
@@ -157,21 +154,7 @@ class _HomeViewState extends State<HomeView> {
         ////////////////////////////////////////
         if (resp['data']['is_investor'] == true) {
           usertype = UserType.investor;
-
-          final investor_resp =
-              await investorConnector.FetchInvestorDetailandContact(
-                  user_id: user?.uid);
-
-          if (investor_resp['response']) {
-            phoneno = investor_resp['data']['userContect']['phone_no'];
-            username = investor_resp['data']['userDetail']['name'];
-            profile_image = investor_resp['data']['userDetail']['picture'];
-
-            await SetLoginUserPhoneno(phoneno ?? '');
-            await SetLoginUserProfileImage(profile_image ?? temp_avtar_image);
-            await SetLoginUserName(username ?? '');
-          }
-          await SetUserType('investor');
+          await CachedMyData(key: getUserTypeKey, value: 'investor');
         }
 
         /////////////////////////////////////////////
@@ -179,28 +162,14 @@ class _HomeViewState extends State<HomeView> {
         /////////////////////////////////////////////
         if (resp['data']['is_founder'] == true) {
           usertype = UserType.founder;
-
-          final founder_resp =
-              await founderConnector.FetchFounderDetailandContact(
-                  user_id: user?.uid);
-
-          if (founder_resp['response']) {
-            phoneno = founder_resp['data']['userContect']['phone_no'];
-            position = founder_resp['data']['userDetail']['position'];
-            username = founder_resp['data']['userDetail']['name'];
-            profile_image = founder_resp['data']['userDetail']['picture'];
-
-            await SetLoginUserPhoneno(phoneno ?? '');
-            await SetLoginUserPosition(position ?? '');
-            await SetLoginUserProfileImage(profile_image ?? temp_avtar_image);
-            await SetLoginUserName(username ?? '');
-          }
-          await SetUserType('founder');
+          await CachedMyData(key: getUserTypeKey, value: 'founder');
         }
       }
 
       await Future.delayed(Duration(seconds: 2));
     }
+
+
 
     ///////////////////////////////////////////
     /// SET REQUIRED PARAM :
@@ -221,6 +190,8 @@ class _HomeViewState extends State<HomeView> {
           return MainMethod(context);
         });
   }
+
+
 
   ///////////////////////////////////////////
   /// MAIN METHOD :

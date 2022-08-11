@@ -7,6 +7,15 @@ var key = Key.fromSecureRandom(32);
 var iv = IV.fromSecureRandom(16);
 var encrypter = Encrypter(AES(key));
 
+////////////////////////////////////////////////////////////
+/// It takes a key as a parameter, gets the encrypted 
+/// data from the local storage, decrypts it and
+/// returns the decrypted data
+/// Args:
+///   key: The key to be used to store the data.
+/// Returns:
+///   A string.
+////////////////////////////////////////////////////////////
 getMycachedData({required key}) async {
   var temp_obj;
   final localStore = await SharedPreferences.getInstance();
@@ -16,6 +25,16 @@ getMycachedData({required key}) async {
   return decrypted;
 }
 
+
+
+//////////////////////////////////////////////////////////
+/// It takes a key and a value, encrypts the value, 
+/// stores the encrypted value in the local storage, and
+/// returns the decrypted value
+/// Args:
+///   key: The key to store the data under.
+///   value: The value to be encrypted.
+//////////////////////////////////////////////////////////
 CachedMyData({required key, required value}) async {
   final encrypted = encrypter.encrypt(value, iv: iv);
   final descrypt = encrypter.decrypt(encrypted, iv: iv);
@@ -23,6 +42,6 @@ CachedMyData({required key, required value}) async {
   final localStore = await SharedPreferences.getInstance();
   final resp = await localStore.setString('$key', encrypted.base64);
   if (resp) {
-    print('Descrytp Param Set $descrypt');
+    print('Set $descrypt');
   }
 }

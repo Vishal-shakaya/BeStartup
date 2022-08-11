@@ -37,7 +37,6 @@ class Picture extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    is_admin = await getIsUserAdmin;
   }
 
   @override

@@ -42,6 +42,7 @@ class _StoryViewState extends State<StoryView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              
               // HEADER SECTION :
               // 1 Thumbnail
               // 2 Ceo Profile :
@@ -50,10 +51,14 @@ class _StoryViewState extends State<StoryView> {
                 height: context.height * header_section_height,
                 child: Stack(
                   children: [
+
+
                     // THUMBNAIL SECTION :
                     StoryThumbnail(
                       startup_id: widget.startup_id,
                     ),
+
+
 
                     // STARTUP CEO  PROFILE WITH NAME :
                     StoryCeoProfile(
@@ -61,11 +66,15 @@ class _StoryViewState extends State<StoryView> {
                       startup_id: widget.startup_id,
                     ),
 
+                   
+                   
                     // STARTUP NAME OR HEADING :
                     StoryHeading(
                       startup_name: widget.startup_name,
                     ),
 
+                  
+                  
                     // INFO MINI CHART :
                     // StoryInfoChart(),
                     ViewStoryButton(
@@ -76,11 +85,15 @@ class _StoryViewState extends State<StoryView> {
                 ),
               ),
 
+             
+             
               // MILESTONES:
               StoryMileStone(
                 founder_id: widget.founder_id,
                 startup_id: widget.startup_id,
               ),
+
+
 
               // SAVE BUTTON :
               SaveStoryButton(

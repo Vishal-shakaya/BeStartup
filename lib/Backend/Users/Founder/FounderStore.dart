@@ -13,7 +13,7 @@ class BusinessFounderStore extends GetxController {
   var businessDetailStore = Get.put(BusinessDetailStore());
   static Map<String, dynamic>? founder;
   static String? image_url;
-  Map<String, dynamic> clean_resp = {
+  Map<String, dynamic> founder_obj = {
     'picture': '',
     'name': '',
     'position': '',
@@ -90,6 +90,8 @@ class BusinessFounderStore extends GetxController {
     }
   }
 
+
+
   GetFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -113,11 +115,34 @@ class BusinessFounderStore extends GetxController {
           'other_contact': contact_obj['other_contact'],
         };
         return temp_founder;
-      } else {
-        return clean_resp;
+      } 
+      else {
+        return founder_obj;
       }
     } catch (e) {
-      return clean_resp;
+      return founder_obj;
+    }
+  }
+
+
+
+
+
+  SetFounderDetail({detail, contact}) async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+        var detail_obj = jsonDecode(detail!);
+        var contact_obj = jsonDecode(contact!);
+        founder_obj = {
+          'picture': detail_obj['picture'],
+          'name': detail_obj['name'],
+          'position': detail_obj['position'],
+          'phone_no': contact_obj['phone_no'],
+          'primary_mail': contact_obj['primary_mail'],
+          'other_contact': contact_obj['other_contact'],
+        };
+    } catch (e) {
+      return founder_obj;
     }
   }
 }

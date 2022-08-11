@@ -55,6 +55,7 @@ class FounderConnector extends GetxController {
     }
   }
 
+
 ////////////////////////////////////
   // Create Founder Detail :
 ////////////////////////////////////
@@ -86,6 +87,7 @@ class FounderConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
 
 //////////////////////////////////////
   // Create Founder Contact :
@@ -140,28 +142,29 @@ class FounderConnector extends GetxController {
     }
 
     try {
+
       // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData(
-          fromModel: getBusinessFounderDetailStoreName,
-          user_id: final_user_id);
+      // final userDetailCach = await GetCachedData(
+      //     fromModel: getBusinessFounderDetailStoreName,
+      //     user_id: final_user_id);
 
 
-      final userContactCach = await GetCachedData(
-        fromModel: getBusinessFounderContactStoreName,
-        user_id: final_user_id,
-      );
+      // final userContactCach = await GetCachedData(
+      //   fromModel: getBusinessFounderContactStoreName,
+      //   user_id: final_user_id,
+      // );
 
 
-      // First Hit Cached : 
-      if (userDetailCach != false || userContactCach != false) {
-        return ResponseBack(
-            response_type: true,
-            message: 'Fetch Founder Detail from cached storage',
-            data: {
-              'userDetail': userDetailCach,
-              'userContect': userContactCach
-            });
-      }
+      // // First Hit Cached : 
+      // if (userDetailCach != false || userContactCach != false) {
+      //   return ResponseBack(
+      //       response_type: true,
+      //       message: 'Fetch Founder Detail from cached storage',
+      //       data: {
+      //         'userDetail': userDetailCach,
+      //         'userContect': userContactCach
+      //       });
+      // }
 
 
       // FETCHING DATA FROM FIREBASE
@@ -188,11 +191,11 @@ class FounderConnector extends GetxController {
 
 
       // Cached data : 
-      await StoreCacheData(
-          fromModel: getBusinessFounderDetailStoreName, data: data_userDetail);
-      await StoreCacheData(
-          fromModel: getBusinessFounderContactStoreName,
-          data: data_userContact);
+      // await StoreCacheData(
+      //     fromModel: getBusinessFounderDetailStoreName, data: data_userDetail);
+      // await StoreCacheData(
+      //     fromModel: getBusinessFounderContactStoreName,
+      //     data: data_userContact);
 
 
 

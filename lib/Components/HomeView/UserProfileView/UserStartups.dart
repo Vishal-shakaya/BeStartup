@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
+import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileInfoChart.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileStoryHeading.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/Thumbnail.dart';
@@ -8,6 +10,7 @@ import 'package:be_startup/Loader/Shimmer/HomeView/MainUserStartupsShimmer.dart'
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +34,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   var startup_ids = [];
 
   var usertype;
+  var user_id;
+  User? user;
+
   var menuType = FounderStartupMenu.my_startup;
   var frontText = 'My SUP';
   var backText = 'Interested';
@@ -39,40 +45,43 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    final user_id = await getUserId;
-    usertype = await getUserType;
+    user = FirebaseAuth.instance.currentUser;
+    usertype = await getMycachedData(key: getUserTypeKey);
+    user_id = user?.uid;
+
     var resp;
 
     if (usertype != null) {
+
+      ///////////////////////////////////////////
+      /// If user is Investor : 
+      ///////////////////////////////////////////
       if (usertype == 'investor') {
         resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
       }
 
+      /////////////////////////////////////////////////////////////
       // If user type founder then check selected menu type:
       // 1. if menu === intrested then show intrested startups :
       // 2. menu == my_startup show his startups: [ Default ] :
+      /////////////////////////////////////////////////////////////
       if (usertype == 'founder') {
         if (menuType == FounderStartupMenu.my_startup) {
           resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
-          print('Fetch my startup');
         } else {
           resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
-          print('fetch intrested startup');
         }
       }
     }
 
+    // Response Handler : 
     if (resp['response']) {
       startups_length = resp['data']['startup_len'];
       startup_ids = resp['data']['startup_ids'];
       startup_name = resp['data']['startup_name'];
     }
 
-    await Future.delayed(Duration(milliseconds: 100));
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +103,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         });
   }
 
-
-
-
   ////////////////////////////////////////////////
   /// MainMethod :
   ////////////////////////////////////////////////
@@ -110,15 +116,15 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         children: [
           // Swith Menu button only show if user is founder :
           usertype == 'founder'
-            ?
-            // Swith Menu Switcher :
-            StartupSwitcherButton(context)
-            
-            // Spacer :
-            : Spacer(context),
+              ?
+              // Swith Menu Switcher :
+              StartupSwitcherButton(context)
 
-            // Main Startup Container :
-            StartupMethod(context),
+              // Spacer :
+              : Spacer(context),
+
+          // Main Startup Container :
+          StartupMethod(context),
         ],
       );
     }
@@ -126,12 +132,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     return mainWidget;
   }
 
-
-
 //////////////////////////////////////////////////
-/// EXTERNAL METHOD  :
+  /// EXTERNAL METHOD  :
 //////////////////////////////////////////////////
-
 
 /////////////////////////////////////////
   ///  Container main startup Container
@@ -190,9 +193,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         ));
   }
 
-
-
-
 ////////////////////////////////////////////
   /// Startup Switcher button :
   /// 1 Switch interested to own startup:
@@ -228,9 +228,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
-
-
-
 ////////////////////////////////
   /// Startup Siwther Text:
 ////////////////////////////////
@@ -256,10 +253,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
-
-
-
-
   BackButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 20),
@@ -273,8 +266,6 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
           )),
     );
   }
-
-
 
   ForwordButton(BuildContext context) {
     return Container(
@@ -291,14 +282,12 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     );
   }
 
-
-  // Spacer : 
+  // Spacer :
   Container Spacer(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(
-          top: context.height * 0.04,
-        ),
-      );
+      margin: EdgeInsets.only(
+        top: context.height * 0.04,
+      ),
+    );
   }
-
 }

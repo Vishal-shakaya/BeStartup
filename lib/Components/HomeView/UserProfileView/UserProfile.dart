@@ -1,5 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
+import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -9,15 +13,17 @@ import 'package:shimmer/shimmer.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeViewUserProfile extends StatelessWidget {
   HomeViewUserProfile({Key? key}) : super(key: key);
 
   var user_image = temp_avtar_image;
   var user_position = '_____________';
-  var user_email = '_____________';
+  String? user_email = '_____________';
   var user_phoneno = '____________';
-  var user_name = '_____________';
+  var username = '_____________';
+  var usertype; 
 
   ////////////////////////////////////
   /// Open Mail Box: to send mail:
@@ -51,18 +57,44 @@ class HomeViewUserProfile extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    user_image = await getUserProfileImage ?? temp_avtar_image;
-    user_position = await getUserPosition ?? '';
-    user_email = await getuserEmail ?? user_email;
-    user_phoneno = await getUserPhoneno ?? user_phoneno;
-    user_name = await getUserName ?? user_name;
+    var user = FirebaseAuth.instance.currentUser;
+     usertype = await getMycachedData(key: getUserTypeKey);
+    final user_id = user?.uid;
+    user_email = user?.email;
 
-    // print(user_name);
-    // print(user_image);
-    // print(user_email);
-    // print(user_position);
-    // print(user_phoneno);
+    //////////////////////////////////////////
+    // If User Type Investor :
+    //////////////////////////////////////////
+    if (usertype == 'investor') {
+      final investorConnector = Get.put(InvestorConnector());
+      final investor_resp =
+          await investorConnector.FetchInvestorDetailandContact(
+              user_id: user_id);
+
+      if (investor_resp['response']) {
+        user_phoneno = investor_resp['data']['userContect']['phone_no'];
+        username = investor_resp['data']['userDetail']['name'];
+        profile_image = investor_resp['data']['userDetail']['picture'];
+      }
+    }
+
+    //////////////////////////////////////////
+    /// If User Type Founder then :
+    //////////////////////////////////////////
+    if (usertype == 'founder') {
+      final founderConnector = Get.put(FounderConnector());
+      final founder_resp = await founderConnector.FetchFounderDetailandContact(
+          user_id: user?.uid);
+
+      if (founder_resp['response']) {
+        user_phoneno = founder_resp['data']['userContect']['phone_no'];
+        user_position = founder_resp['data']['userDetail']['position'];
+        username = founder_resp['data']['userDetail']['name'];
+        profile_image = founder_resp['data']['userDetail']['picture'];
+      }
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +142,7 @@ class HomeViewUserProfile extends StatelessWidget {
                 height: 5,
               ),
               // CONTACT EMAIL ADDRESS :
-              MemPosition(),
+             usertype=='founder'? MemPosition():
 
               MemContact(
                   func: SendMail,
@@ -127,8 +159,6 @@ class HomeViewUserProfile extends StatelessWidget {
       ],
     );
   }
-
-
 
   Card ProfileImage() {
     return Card(
@@ -150,20 +180,16 @@ class HomeViewUserProfile extends StatelessWidget {
     );
   }
 
-
-
   Container MemName() {
     return Container(
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
-          text: user_name,
+          text: username,
           style: TextStyle(
               fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
     ])));
   }
-
-
 
   Container MemPosition() {
     return Container(
@@ -177,14 +203,10 @@ class HomeViewUserProfile extends StatelessWidget {
     ])));
   }
 
-
-
-
   InkWell MemContact({text, icon, func}) {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
-      
-      onTap: ()  async {
+      onTap: () async {
         await func();
       },
       child: Container(
