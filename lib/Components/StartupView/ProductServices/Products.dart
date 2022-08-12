@@ -75,48 +75,60 @@ class _ProductsState extends State<Products> {
 
     return Container(
       padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Wrap(
-            children: [
-              // PRODUCT iMAGE :
-              InkWell(
-                  onTap: () {
-                    ProductDetailView();
-                  },
-                  child: ProductImage(
-                      context, image_cont_width, image_cont_height)),
-              // DESCRIPTION :
-              ProductDescription(context, desc_cont_width, desc_cont_height)
-            ],
-          ),
-          SizedBox(
-            height: 50,
-          )
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Wrap(
+              children: [
+                // Produt Dialog : 
+                InkWell(
+                    onTap: () {
+                      ProductDetailView();
+                    },
+
+                   // PRODUCT iMAGE :
+                    child: ProductImage(
+                        context, image_cont_width, image_cont_height)),
+                  // DESCRIPTION :
+                  ProductDescription(context, desc_cont_width, desc_cont_height)
+              ],
+
+
+            ),
+            SizedBox(
+              height: 50,
+            )
+          ],
+        ),
       ),
     );
   }
+
+
+
 
   Container ProductDescription(
       BuildContext context, double desc_cont_width, double desc_cont_height) {
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.only(left: context.width * 0.05),
+      
         width: context.width * desc_cont_width,
         height: context.height * desc_cont_height,
+      
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+        border: Border.all(width: 1, color: Colors.grey.shade300)),
+     
         child: Column(
           children: [
             Container(
-              // padding: EdgeInsets.only(bottom: 20),
               child: RichText(
                 text: TextSpan(children: [
+                 
                   // Heading Texct :
                   TextSpan(
                     text: widget.product['title'],
@@ -132,6 +144,8 @@ class _ProductsState extends State<Products> {
               ),
             ),
 
+
+
             // Description:
             Container(
               child: AutoSizeText.rich(
@@ -145,6 +159,7 @@ class _ProductsState extends State<Products> {
                       wordSpacing: 2,
                       height: 1.8),
                 ),
+             
                 textAlign: TextAlign.left,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
@@ -152,6 +167,7 @@ class _ProductsState extends State<Products> {
               ),
             ),
 
+            
             // Important Links :
             Container(
                 width: context.width * 0.35,
@@ -159,7 +175,12 @@ class _ProductsState extends State<Products> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
+                
                   children: [
+
+                    ////////////////////////////////
+                    // Video Play Button : 
+                    ////////////////////////////////
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Tooltip(
@@ -174,6 +195,10 @@ class _ProductsState extends State<Products> {
                                 size: 25)),
                       ),
                     ),
+                  
+                    /////////////////////////
+                    // Content Link: 
+                    /////////////////////////
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Tooltip(
@@ -196,30 +221,38 @@ class _ProductsState extends State<Products> {
         ));
   }
 
+
+
+
   Card ProductImage(
       BuildContext context, double image_cont_width, double image_cont_height) {
     return Card(
       elevation: 3,
       shadowColor: Colors.blueGrey,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(
           left: Radius.circular(15),
           right: Radius.circular(15),
         ),
       ),
+      
+      
       child: Container(
+
         child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(15),
             right: Radius.circular(15),
           ),
+        
           child: Image.network(widget.product['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
               fit: BoxFit.fill),
         ),
+      
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(15),
               right: Radius.circular(15),
             ),

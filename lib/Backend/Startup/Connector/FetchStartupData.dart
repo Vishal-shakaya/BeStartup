@@ -13,8 +13,6 @@ var uuid = Uuid();
 class StartupViewConnector extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
 
-
-
 //////////////////////////////////////
 // 2. Send it to ui
 // 3. Store data in local storage:
@@ -39,7 +37,6 @@ class StartupViewConnector extends GetxController {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
-
       return ResponseBack(
           response_type: true,
           data: data,
@@ -52,11 +49,8 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
-
 /////////////////////////////////////////
- /// FETCH THUMBNAIL :
+  /// FETCH THUMBNAIL :
 /////////////////////////////////////////
   FetchThumbnail({startup_id = false}) async {
     var final_startup_id;
@@ -65,7 +59,7 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -73,29 +67,23 @@ class StartupViewConnector extends GetxController {
       var data;
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
-      
+
       var query =
           thumbnail.where('startup_id', isEqualTo: final_startup_id).get();
-     
-     
+
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
-
 
       return ResponseBack(
           response_type: true,
           data: data,
           message: 'Thumbnail Fetch from Firebase');
-          
     } catch (e) {
       return ResponseBack(
           response_type: false, data: shimmer_image, message: e);
     }
   }
-
-
-
 
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
@@ -108,7 +96,7 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -118,25 +106,18 @@ class StartupViewConnector extends GetxController {
       final name = await getStartupName;
       var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
-
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
-
 
       return ResponseBack(
           response_type: true,
           data: data,
           message: 'Vision Fetch from Firestore DB');
-
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
 
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :
@@ -145,14 +126,12 @@ class StartupViewConnector extends GetxController {
     var data;
     var final_startup_id;
 
-
     // Filter Startup Id :
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
-
 
     try {
       var store =
@@ -163,8 +142,6 @@ class StartupViewConnector extends GetxController {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
-
-
       return ResponseBack(
           response_type: true,
           data: data,
@@ -173,8 +150,6 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
 
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
@@ -187,7 +162,7 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -199,8 +174,6 @@ class StartupViewConnector extends GetxController {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
-
-
       return ResponseBack(
           response_type: true,
           data: data,
@@ -209,9 +182,6 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
 
   ////////////////////////////////////
   /// FETCH MILESTONE :
@@ -224,7 +194,7 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -236,7 +206,6 @@ class StartupViewConnector extends GetxController {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
-
       return ResponseBack(
           response_type: true,
           data: data,
@@ -245,10 +214,6 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, data: [], message: e);
     }
   }
-
-
-
-
 
   //////////////////////////////////
   /// Fetch Product :
@@ -260,24 +225,20 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     var data;
     var product_list = [];
     var only_product = [];
     try {
-    
       var store =
           FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store.where('startup_id', isEqualTo: final_startup_id).get();
-    
-    
+
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
-
-
 
       // FILETER PRODUCT
       product_list = data['products'];
@@ -286,7 +247,7 @@ class StartupViewConnector extends GetxController {
           only_product.add(element);
         }
       });
-      
+
       return ResponseBack(
           response_type: true,
           data: only_product,
@@ -310,9 +271,8 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
-
 
     try {
       var store =
@@ -323,8 +283,6 @@ class StartupViewConnector extends GetxController {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
 
-
-
       // FILETER PRODUCT
       service_list = data['products'];
       service_list.forEach((element) {
@@ -333,13 +291,10 @@ class StartupViewConnector extends GetxController {
         }
       });
 
-
       return ResponseBack(
           response_type: true,
           data: only_services,
           message: 'BusinessProducts Fetch Services from Firstore  DB');
-
-
     } catch (e) {
       return ResponseBack(response_type: false, data: [], message: e);
     }
@@ -356,7 +311,7 @@ class StartupViewConnector extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -384,7 +339,6 @@ class StartupViewConnector extends GetxController {
       // await StoreCacheData(
       //     fromModel: getBusinessTeamMemberStoreName, data: data);
 
-      
       return ResponseBack(
           response_type: true,
           data: data,
@@ -394,14 +348,12 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
 /////////////////////////////////////////////////////////////
-/// I'm trying to add a new startup_id to the 
-/// startup_ids array in the document
-/// Args:
-///   startup_id: The id of the startup you want to like
-///   user_id: The user id of the user who liked the startup
+  /// I'm trying to add a new startup_id to the
+  /// startup_ids array in the document
+  /// Args:
+  ///   startup_id: The id of the startup you want to like
+  ///   user_id: The user id of the user who liked the startup
 ///////////////////////////////////////////////////////////////
   LikeStartup({startup_id, user_id}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -410,24 +362,20 @@ class StartupViewConnector extends GetxController {
     var save_post_len;
     var startup_list = [];
 
-
     try {
       final myStore = store.collection(getLikeStartupStoreName);
       // Check if saveStartup model exist or not :
       // doc size 0 then no created :
       var query = myStore.where('user_id', isEqualTo: user_id).get();
       await query.then((value) {
-       
         save_post_len = value.size;
 
         if (save_post_len > 0) {
-
           startup_list = value.docs.first.data()['startup_ids'];
 
           data = value.docs.first.data();
-          
-          doc_id = value.docs.first.id;
 
+          doc_id = value.docs.first.id;
         }
       });
 
@@ -437,17 +385,14 @@ class StartupViewConnector extends GetxController {
             response_type: false, message: 'Startup Already Liked', code: 101);
       }
 
-
       // Add new Save Story Doc :
       if (save_post_len <= 0) {
-        
         startup_list.add(startup_id);
-        
+
         var save_startup = await LikeStartupsModel(
           user_id: user_id,
           startup_ids: startup_list,
         );
-
 
         await myStore.add(save_startup);
 
@@ -456,13 +401,11 @@ class StartupViewConnector extends GetxController {
       }
 
       if (save_post_len > 0) {
-
         startup_list.add(startup_id);
 
         data['startup_ids'] = startup_list;
 
         await myStore.doc(doc_id).update(data);
-
 
         return ResponseBack(response_type: true, message: 'Startup Saved');
       }
@@ -471,18 +414,17 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
 //////////////////////////////////////////////////////////////
-/// It checks if the user has saved any startup before, 
-/// if yes, it removes the startup_id from the list
-/// of saved startups and updates the document
-/// 
-/// Args:
-///   startup_id: The id of the startup you want to like
-///   user_id: The user's ID
-/// 
-/// Returns:
-///   A Future<ResponseBack>
+  /// It checks if the user has saved any startup before,
+  /// if yes, it removes the startup_id from the list
+  /// of saved startups and updates the document
+  ///
+  /// Args:
+  ///   startup_id: The id of the startup you want to like
+  ///   user_id: The user's ID
+  ///
+  /// Returns:
+  ///   A Future<ResponseBack>
 //////////////////////////////////////////////////////////////
   UnLikeStartup({startup_id, user_id}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -498,13 +440,11 @@ class StartupViewConnector extends GetxController {
         save_post_len = value.size;
 
         if (save_post_len > 0) {
-
           startup_list = value.docs.first.data()['startup_ids'];
 
           data = value.docs.first.data();
 
           doc_id = value.docs.first.id;
-
         }
       });
 
@@ -514,9 +454,8 @@ class StartupViewConnector extends GetxController {
       }
 
       if (save_post_len > 0) {
-
         startup_list.remove(startup_id);
-        
+
         data['startup_ids'] = startup_list;
 
         await myStore.doc(doc_id).update(data);
@@ -528,12 +467,11 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
 ////////////////////////////////////////////////////////
-/// It checks if a startup is liked by a user or not
-/// Args:
-///   startup_id: The id of the startup that the user wants to like.
-///   user_id: The user id of the user who liked the post
+  /// It checks if a startup is liked by a user or not
+  /// Args:
+  ///   startup_id: The id of the startup that the user wants to like.
+  ///   user_id: The user id of the user who liked the post
 ////////////////////////////////////////////////////////
   IsStartupLiked({startup_id, user_id}) async {
     var save_post_len;
@@ -544,36 +482,24 @@ class StartupViewConnector extends GetxController {
       // Check if saveStartup model exist or not :
       // doc size 0 then no created :
       var query = myStore.where('user_id', isEqualTo: user_id).get();
-     
+
       await query.then((value) {
-      
         save_post_len = value.size;
-      
+
         if (save_post_len > 0) {
           startup_list = value.docs.first.data()['startup_ids'];
         }
       });
 
-    
       // Check if post already Saved :
       if (startup_list.contains(startup_id)) {
-        
         return ResponseBack(
             response_type: true, message: 'Startup Already Liked', code: 101);
-      } 
-      
-      else {
+      } else {
         return ResponseBack(response_type: true, code: 111);
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
-
-
-
-
 }

@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/Loader/Shimmer/StartupView/StartupViewAvtarShimmer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -8,20 +8,16 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flip_card/flip_card_controller.dart';
-
 
 class Picture extends StatelessWidget {
   String? logo = temp_logo;
   var founder_profile;
-  var founder_name; 
+  var founder_name;
 
-  Picture({
-    this.founder_name, 
-    this.founder_profile, 
-    this.logo, Key? key}) : super(key: key);
+  Picture({this.founder_name, this.founder_profile, this.logo, Key? key})
+      : super(key: key);
 
   var is_admin;
   double profile_top_pos = 0.19;
@@ -37,10 +33,12 @@ class Picture extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
+    return '';
   }
 
   @override
   Widget build(BuildContext context) {
+
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -48,14 +46,7 @@ class Picture extends StatelessWidget {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-                    baseColor: shimmer_base_color,
-                    highlightColor: shimmer_highlight_color,
-                    child: CustomShimmer(
-                      text: 'profiel',
-                      shape: ShimmerAvtar(),
-                    )));
+            return StartupViewAvtarShimmer();
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -65,6 +56,8 @@ class Picture extends StatelessWidget {
           return MainMethod(context);
         });
   }
+
+
 
   //////////////////////////////////////////
   /// MAIN METHOD :
@@ -77,8 +70,8 @@ class Picture extends StatelessWidget {
           children: [
             FlipCard(
               front: StartupLogo(),
-              back: CeoDetail(),), 
-            
+              back: CeoDetail(),
+            ),
 
             ////////////////////////////////////////////
             /// If user is admin then show edit button :
@@ -104,19 +97,17 @@ class Picture extends StatelessWidget {
 
   Card StartupLogo() {
     return Card(
-            elevation: 5,
-            shadowColor: light_color_type3,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(62)),
-            child: Container(
-              child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.blueGrey[100],
-                  foregroundImage: NetworkImage(logo!)),
-            ),
-          );
+      elevation: 5,
+      shadowColor: light_color_type3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
+      child: Container(
+        child: CircleAvatar(
+            radius: 60,
+            backgroundColor: Colors.blueGrey[100],
+            foregroundImage: NetworkImage(logo?? temp_image)),
+      ),
+    );
   }
-
 
   Column CeoDetail() {
     return Column(
@@ -130,7 +121,7 @@ class Picture extends StatelessWidget {
               child: CircleAvatar(
             radius: 45,
             backgroundColor: Colors.blueGrey[100],
-            foregroundImage: NetworkImage(founder_profile, scale: 1),
+            foregroundImage: NetworkImage(founder_profile??temp_image, scale: 1),
           )),
         ),
 
@@ -146,20 +137,7 @@ class Picture extends StatelessWidget {
       ],
     );
   }
-  //////////////////////////////////////
-  /// Shimmer Section :
-  //////////////////////////////////////
-  Card ShimmerAvtar() {
-    return Card(
-      elevation: 5,
-      shadowColor: light_color_type3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
-      child: Container(
-        child: CircleAvatar(
-            radius: 60,
-            backgroundColor: Colors.blueGrey[100],
-            foregroundImage: NetworkImage(logo!)),
-      ),
-    );
-  }
+
+
+
 }

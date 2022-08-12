@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Products.dart';
@@ -17,8 +18,22 @@ class ProductSection extends StatefulWidget {
 }
 
 class _ProductSectionState extends State<ProductSection> {
+  var detailViewState = Get.put(StartupDetailViewState());
   var products = [];
   var is_admin;
+
+  Map<String, dynamic?> temp_product = {
+    'id': 'some_randodnjflks',
+    'title': 'word famous watter battle  cleane',
+    'description': long_string,
+    'type': 'product',
+    'image_url': temp_image,
+    'timestamp': DateTime.now().toString(),
+    'youtube_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
+    'content_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
+    'belong_to': '',
+    'catigory': '',
+  };
 
   EditProductAndService() {
     Get.toNamed(create_business_product_url, parameters: {'type': 'update'});
@@ -26,29 +41,16 @@ class _ProductSectionState extends State<ProductSection> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic?> temp_product = {
-      'id': 'some_randodnjflks',
-      'title': 'word famous watter battle  cleane',
-      'description': long_string,
-      'type': 'product',
-      'image_url': temp_image,
-      'timestamp': DateTime.now().toString(),
-      'youtube_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
-      'content_link': 'https://www.youtube.com/watch?v=-ImJeamG0As',
-      'belong_to': '',
-      'catigory': '',
-    };
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
-////////////////////////////////////////
-    ///  GET REQUIREMENTS :
-////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///  GET REQUIREMENTS :
+  ////////////////////////////////////////////
     GetLocalStorageData() async {
-      final startup_id = await getStartupDetailViewId;
+      final startup_id = await detailViewState.GetStartupId();
+      is_admin = await detailViewState.GetIsUserAdmin();
 
-      /// A boolean value that is used to check if the user is admin or not.
-      is_admin = await getIsUserAdmin;
       try {
         final data = await startupConnect.FetchProducts(startup_id: startup_id);
         // print(data);
@@ -59,21 +61,14 @@ class _ProductSectionState extends State<ProductSection> {
       }
     }
 
-////////////////////////////////////////
-    ///  SET REQUIREMENTS :
-////////////////////////////////////////
+  ////////////////////////////////////////
+  ///  SET REQUIREMENTS :
+  ////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: Products(
-                product: temp_product,
-              ),
-            ));
+            return ProductShimmer();
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -84,21 +79,30 @@ class _ProductSectionState extends State<ProductSection> {
         });
   }
 
+
+
+////////////////////////////////////////
+/// Main Method : 
+////////////////////////////////////////
   Column MainMethodSection(BuildContext contex) {
     return Column(
       children: [
         is_admin == true
             ? EditButton(context, EditProductAndService)
             : Container(),
+        
         Container(
             width: context.width * 0.75,
             height: context.height * 0.60,
             margin: EdgeInsets.only(
                 bottom: context.height * 0.06, top: context.height * 0.02),
+            
+            
             child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: products.length,
                 itemBuilder: (context, index) {
+            
                   return Products(
                     product: products[index],
                     key: UniqueKey(),
@@ -107,6 +111,8 @@ class _ProductSectionState extends State<ProductSection> {
       ],
     );
   }
+
+
 
   Container EditButton(BuildContext context, EditProductAndService) {
     return Container(
@@ -129,5 +135,18 @@ class _ProductSectionState extends State<ProductSection> {
               ),
               label: Text('Edit')),
         ));
+  }
+
+
+
+  Center ProductShimmer() {
+    return Center(
+        child: Shimmer.fromColors(
+          baseColor: shimmer_base_color,
+          highlightColor: shimmer_highlight_color,
+        child: Products(
+          product: temp_product,
+        ),
+      ));
   }
 }

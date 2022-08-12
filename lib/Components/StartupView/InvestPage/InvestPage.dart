@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
@@ -21,6 +22,7 @@ class InvestPage extends StatefulWidget {
 class _InvestPageState extends State<InvestPage> {
   var startupConnector =
       Get.put(StartupViewConnector(), tag: "startup_connector");
+  var detailViewState = Get.put(StartupDetailViewState());
 
   var why_text;
 
@@ -34,11 +36,13 @@ class _InvestPageState extends State<InvestPage> {
 
   double page_width = 0.80;
 
+  var startup_id;
   ////////////////////////////////
   /// GET REQUIREMENTS :
   ////////////////////////////////
   GetLocalStorageData() async {
-    final startup_id = await getStartupDetailViewId;
+    startup_id = await detailViewState.GetStartupId();
+
     try {
       final resp =
           await startupConnector.FetchBusinessWhy(startup_id: startup_id);
@@ -58,15 +62,9 @@ class _InvestPageState extends State<InvestPage> {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: Text(
-                'Loading Input Section',
-                style: Get.textTheme.headline2,
-              ),
-            ));
+            return CustomShimmer(
+              text: 'Loading Startup Vision',
+            );
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -77,14 +75,16 @@ class _InvestPageState extends State<InvestPage> {
         });
   }
 
-  Container MainMethod(
-    BuildContext context,
-  ) {
+  Container MainMethod(BuildContext context,) {
+
     return Container(
+    
       child: Container(
         width: context.width * 0.50,
         height: context.height * 0.38,
+    
         child: SingleChildScrollView(
+    
           child: Column(
             children: [
               // HEADING :
@@ -95,11 +95,11 @@ class _InvestPageState extends State<InvestPage> {
                 title: 'Invest',
                 font_size: 35,
               ),
-              
-              // Edit BUtton 
-              EditButton(context), 
 
-              // SubHeading : 
+              // Edit BUtton
+              EditButton(context),
+
+              // SubHeading :
               Container(
                 child: StartupHeaderText(
                   title: 'Why you invest in us !',
@@ -117,7 +117,6 @@ class _InvestPageState extends State<InvestPage> {
               SizedBox(
                 height: context.height * 0.05,
               ),
-
 
               StartupHeaderText(
                 title: 'Terms & Conditions',
@@ -140,25 +139,25 @@ class _InvestPageState extends State<InvestPage> {
 
   Container EditButton(BuildContext context) {
     return Container(
-              width: context.width * 0.48,
-              alignment: Alignment.topRight,
-              child: Container(
-                width: 90,
-                height: 30,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: border_color)),
-                child: TextButton.icon(
-                    onPressed: () {
-                      Get.toNamed(create_business_whyInvest_url);
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      size: 15,
-                    ),
-                    label: Text('Edit')),
-              ),
-            );
+      width: context.width * 0.48,
+      alignment: Alignment.topRight,
+      child: Container(
+        width: 90,
+        height: 30,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: border_color)),
+        child: TextButton.icon(
+            onPressed: () {
+              Get.toNamed(create_business_whyInvest_url);
+            },
+            icon: Icon(
+              Icons.edit,
+              size: 15,
+            ),
+            label: Text('Edit')),
+      ),
+    );
   }
 
   ClipPath Description(BuildContext context) {

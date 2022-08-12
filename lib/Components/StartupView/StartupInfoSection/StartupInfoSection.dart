@@ -1,4 +1,6 @@
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
@@ -32,11 +34,14 @@ class StartupInfoSection extends StatelessWidget {
 
   var startup_logo;
   var founder_profile;
+
   String? founder_name;
+  var startup_id;
+  var founder_id;
+
   var primary_mail;
   var registor_mail;
   var default_mail;
-
   // Edit Thumbnail :
   EditThumbnail() {
     Get.toNamed(create_business_thumbnail_url, parameters: {'type': 'update'});
@@ -51,9 +56,13 @@ class StartupInfoSection extends StatelessWidget {
       var my_data;
       var thumbnail;
       var logo;
-      is_admin = await getIsUserAdmin;
-      final startup_id = await getStartupDetailViewId;
-      final founder_id = await getStartupFounderId;
+      
+      var startupDetialView = Get.put(StartupDetailViewState());
+      var userStateView = Get.put(UserStateView());
+
+      is_admin = await startupDetialView.GetIsUserAdmin();
+      startup_id = await startupDetialView.GetStartupId();
+      founder_id = await startupDetialView.GetFounderId();
 
       try {
         final business_name_resp =
@@ -76,11 +85,11 @@ class StartupInfoSection extends StatelessWidget {
 
           if (primary_mail != '') {
             registor_mail = primary_mail;
+            await userStateView.SetPrimaryMail(mail: registor_mail);
           }
-
-          await SetStartupFounderEmail(registor_mail);
-          
         }
+
+        // Founder Error Handler :
         if (!found_resp['response']) {
           founder_profile = found_resp['data'];
         }
@@ -104,7 +113,7 @@ class StartupInfoSection extends StatelessWidget {
         if (!business_name_resp['response']) {
           logo = business_name_resp['data'];
         }
-        var my_data = {'thumbnail': thumbnail, 'logo': logo};
+         my_data = {'thumbnail': thumbnail, 'logo': logo};
 
         return my_data;
       } catch (e) {
@@ -119,18 +128,7 @@ class StartupInfoSection extends StatelessWidget {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-                    baseColor: shimmer_base_color,
-                    highlightColor: shimmer_highlight_color,
-                    child: MainMethod(
-                        context,
-                        snapshot.data == null
-                            ? {
-                                'thumbnail': shimmer_image,
-                                'logo': shimmer_image
-                              }
-                            : snapshot.data)));
+            return StoryViewThumbnailAndLogoShimmer(context, snapshot) ;
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -200,6 +198,8 @@ class StartupInfoSection extends StatelessWidget {
           )),
           child: InkWell(
             onHover: (flag) {},
+            
+            
             child: Container(
                 height: context.height * 0.23,
                 padding: EdgeInsets.all(2),
@@ -208,11 +208,15 @@ class StartupInfoSection extends StatelessWidget {
                   borderRadius: BorderRadius.horizontal(
                       left: Radius.circular(20), right: Radius.circular(20)),
                 ),
+               
+               
                 child: ClipRRect(
                   borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(19),
                     right: Radius.circular(19),
                   ),
+                  
+                  
                   child: CachedNetworkImage(
                     imageUrl: thumbnail_image,
                     width: context.width * image_cont_width,
@@ -222,26 +226,34 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
+       
+       
         is_admin == true
             ? Positioned(
                 left: context.width * 0.53,
                 top: context.height * 0.02,
+               
+               
                 child: Container(
                   width: 80,
                   height: 30,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: border_color)),
+                
+                
                   child: TextButton.icon(
                       onPressed: () {
                         EditThumbnail();
                       },
+                    
                       icon: Icon(
                         Icons.edit,
                         size: 15,
                       ),
                       label: Text('Edit')),
                 ))
+            
             : Positioned(
                 left: context.width * 0.53,
                 top: context.height * 0.02,
@@ -252,4 +264,21 @@ class StartupInfoSection extends StatelessWidget {
       ],
     );
   }
+
+
+
+
+  Center StoryViewThumbnailAndLogoShimmer(
+      BuildContext context, AsyncSnapshot<Object?> snapshot) {
+    return Center(
+        child: Shimmer.fromColors(
+          baseColor: shimmer_base_color,
+          highlightColor: shimmer_highlight_color,
+          child: MainMethod(
+          context,
+          snapshot.data == null
+              ? {
+                'thumbnail': shimmer_image, 'logo': shimmer_image}
+              : snapshot.data)));
+}
 }

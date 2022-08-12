@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -19,25 +20,28 @@ class StartupMileStone extends StatefulWidget {
 
 class _StartupMileStoneState extends State<StartupMileStone> {
   late final TabContainerController _controller;
+  var detailViewState = Get.put(StartupDetailViewState());
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
   var miles_data = [];
+  var startup_id;
 
 /////////////////////////////////////
   /// GET REQUIREMENTS ;
 /////////////////////////////////////
   GetLocalStorageData() async {
-    final startup_id = await getStartupDetailViewId;
+    startup_id = await detailViewState.GetStartupId();
+
     try {
       final miles =
           await startupConnect.FetchBusinessMilestone(startup_id: startup_id);
       miles_data = miles['data']['milestone'];
+
       return miles_data;
     } catch (e) {
       return miles_data;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,38 +52,29 @@ class _StartupMileStoneState extends State<StartupMileStone> {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: Text(
-                'Loading MileStone Section',
-                style: Get.textTheme.headline2,
-              ),
-            ));
+            return CustomShimmer(text: 'Loading MileStone Section');
           }
+
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(
-              context,
-            );
+            return MainMethod(context);
           }
-          return MainMethod(
-            context,
-          );
+
+          return MainMethod(context);
         });
   }
 
-  Container MainMethod(
-    BuildContext context,
-  ) {
+////////////////////////////////////////
+  /// Main Method; 
+////////////////////////////////////////
+  Container MainMethod(BuildContext context) {
 
     List<Widget> mile_title = [];
     List<Widget> mile_desc = [];
 
     // NULL CHECK :
-    if (miles_data == [] || miles_data.length <= 0) {
+    if (miles_data == [] || miles_data.length <= 0 || miles_data == null) {
       return Container();
     }
 
@@ -97,10 +92,12 @@ class _StartupMileStoneState extends State<StartupMileStone> {
       mile_desc.add(desc);
     });
 
+
     return Container(
       width: context.width * 0.55,
       height: context.height * 0.45,
       margin: EdgeInsets.only(bottom: 50, top: 10),
+     
       child: TabContainer(
           childPadding: EdgeInsets.all(50),
           controller: _controller,
@@ -111,6 +108,8 @@ class _StartupMileStoneState extends State<StartupMileStone> {
           tabs: mile_title),
     );
   }
+
+
 
 // MILESTONE SIDE BAR TITLE TAB  :
 // REQUIRED PARAM : Title
@@ -126,6 +125,9 @@ class _StartupMileStoneState extends State<StartupMileStone> {
       style: Get.textTheme.headline2,
     );
   }
+
+
+
 
 // MILESTONE DESCRIPTION COLUMN :
 // 1 REQUIRED PARAM :  TITLE AND DESCRIPTION ,
@@ -150,6 +152,8 @@ class _StartupMileStoneState extends State<StartupMileStone> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+      
+      
           AutoSizeText.rich(
             TextSpan(
                 text: description,

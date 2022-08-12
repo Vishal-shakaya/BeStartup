@@ -1,4 +1,6 @@
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
@@ -91,9 +93,12 @@ class _InvestmentChartState extends State<InvestmentChart> {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    startup_id = await getStartupDetailViewId;
-    user_id = await getUserId;
-    is_admin = await getIsUserAdmin;
+    var startupDetialView = Get.put(StartupDetailViewState());
+    var userStateView = Get.put(UserStateView());
+ 
+    startup_id =  await startupDetialView.GetStartupId();
+    user_id = await startupDetialView.GetFounderId();
+    is_admin =await startupDetialView.GetIsUserAdmin();
 
     final resp =
         await startupConnector.FetchBusinessDetail(startup_id: startup_id);

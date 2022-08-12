@@ -20,6 +20,7 @@ class AllMembers extends StatelessWidget {
               height: context.height * 0.30,
               width: context.width * 0.70,
               color: Colors.orange.shade300,
+            
               child: ListView.builder(
                   itemCount: 10,
                   scrollDirection: Axis.horizontal,

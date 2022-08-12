@@ -125,11 +125,10 @@ class _HomeViewState extends State<HomeView> {
       );
     }
 
-  ///////////////////////////////////////////
-  /// GET REQUIRED PARAM :
-  ///////////////////////////////////////////
+    ///////////////////////////////////////////
+    /// GET REQUIRED PARAM :
+    ///////////////////////////////////////////
     GetLocalStorageData() async {
-
       var phoneno;
       var profile_image;
       var username;
@@ -169,8 +168,6 @@ class _HomeViewState extends State<HomeView> {
       await Future.delayed(Duration(seconds: 2));
     }
 
-
-
     ///////////////////////////////////////////
     /// SET REQUIRED PARAM :
     ///////////////////////////////////////////
@@ -190,8 +187,6 @@ class _HomeViewState extends State<HomeView> {
           return MainMethod(context);
         });
   }
-
-
 
   ///////////////////////////////////////////
   /// MAIN METHOD :

@@ -1,16 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/StartupMIlesStone.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 
 class VisionPage extends StatefulWidget {
   const VisionPage({Key? key}) : super(key: key);
@@ -20,11 +18,13 @@ class VisionPage extends StatefulWidget {
 }
 
 class _VisionPageState extends State<VisionPage> {
+  var detailViewState = Get.put(StartupDetailViewState());
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
   var final_data;
   double page_width = 0.80;
+  var startup_id;
 
   EditVision() {
     Get.toNamed(create_business_vision_url, parameters: {'type': 'update'});
@@ -38,11 +38,12 @@ class _VisionPageState extends State<VisionPage> {
   // GET REQUIREMENTS :
   //////////////////////////////////
   GetLocalStorageData() async {
-    final startup_id = await getStartupDetailViewId; 
+    startup_id = await detailViewState.GetStartupId();
     try {
-      final vision = await startupConnect.FetchBusinessVision(
-          startup_id: startup_id);
+      final vision =
+          await startupConnect.FetchBusinessVision(startup_id: startup_id);
       final_data = vision['data']['vision'];
+
       return final_data;
     } catch (e) {
       return final_data;
@@ -58,15 +59,9 @@ class _VisionPageState extends State<VisionPage> {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Shimmer.fromColors(
-              baseColor: shimmer_base_color,
-              highlightColor: shimmer_highlight_color,
-              child: Text(
-                'Loading Vision Section',
-                style: Get.textTheme.headline2,
-              ),
-            ));
+            return CustomShimmer(
+              text: 'Loading Startup Vision',
+            );
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -77,6 +72,10 @@ class _VisionPageState extends State<VisionPage> {
         });
   }
 
+
+//////////////////////////////////////////
+/// Main Method : 
+//////////////////////////////////////////
   Container MainMethod(BuildContext context) {
     return Container(
       width: context.width * page_width,
@@ -86,43 +85,56 @@ class _VisionPageState extends State<VisionPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               // HEADING :
               SizedBox(
                 height: context.height * 0.01,
               ),
+
+
               StartupHeaderText(
                 title: 'Vision',
                 font_size: 30,
               ),
+
+
               SizedBox(
                 height: context.height * 0.01,
               ),
+
 
               // EDIT BUTTON :
               EditButton(context, EditVision),
 
+
               SizedBox(
                 height: context.height * 0.01,
               ),
+
 
               // VISION TEXT:
               ClipPath(
                 child: Card(
                   elevation: 1,
                   shadowColor: shadow_color1,
-                  shape: RoundedRectangleBorder(
+                
+                  shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(15),
                     right: Radius.circular(15),
                   )),
+                 
+                 
                   child: Container(
                       width: context.width * 0.45,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           border: Border.all(color: border_color),
-                          borderRadius: BorderRadius.horizontal(
+                          borderRadius: const BorderRadius.horizontal(
                               left: Radius.circular(15),
                               right: Radius.circular(15))),
+                    
+                    
                       child: AutoSizeText.rich(
                         TextSpan(
                             text: final_data,
@@ -137,6 +149,8 @@ class _VisionPageState extends State<VisionPage> {
                       )),
                 ),
               ),
+
+
 
               SizedBox(
                 height: context.height * 0.02,
@@ -159,6 +173,7 @@ class _VisionPageState extends State<VisionPage> {
                 height: context.height * 0.02,
               ),
 
+
               // MILESTONES :
               StartupMileStone()
             ],
@@ -167,6 +182,8 @@ class _VisionPageState extends State<VisionPage> {
       ),
     );
   }
+
+
 
   Container EditButton(BuildContext context, Function Edit) {
     return Container(

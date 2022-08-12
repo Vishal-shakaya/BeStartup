@@ -16,6 +16,7 @@ class InvestorSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+         
           Container(
               height: context.height * 0.30,
               width: context.width *0.60,
@@ -25,6 +26,7 @@ class InvestorSection extends StatelessWidget {
                 itemCount: 10,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index){
+         
                 return InvestorBlock();
               })),
         ],

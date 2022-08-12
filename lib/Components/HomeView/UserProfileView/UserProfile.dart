@@ -133,16 +133,15 @@ class HomeViewUserProfile extends StatelessWidget {
           width: 200,
           child: Column(
             children: [
-              SizedBox(
-                height: 5,
-              ),
+
+              const SizedBox(height: 5),
               MemName(),
 
-              SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
+              
               // CONTACT EMAIL ADDRESS :
-             usertype=='founder'? MemPosition():
+
+            //  usertype=='founder'? MemPosition():Container(),
 
               MemContact(
                   func: SendMail,
@@ -180,15 +179,18 @@ class HomeViewUserProfile extends StatelessWidget {
     );
   }
 
-  Container MemName() {
-    return Container(
-        child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline5, children: [
-      TextSpan(
-          text: username,
-          style: TextStyle(
-              fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
-    ])));
+  Tooltip MemName() {
+    return Tooltip(
+      message: user_position,
+      child: Container(
+          child: AutoSizeText.rich(
+              TextSpan(style: Get.textTheme.headline5, children: [
+        TextSpan(
+            text: username,
+            style: TextStyle(
+                fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
+      ]))),
+    );
   }
 
   Container MemPosition() {
@@ -196,10 +198,12 @@ class HomeViewUserProfile extends StatelessWidget {
         // margin: EdgeInsets.only(bottom: 10),
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
-      TextSpan(
-          text: user_position,
-          style: TextStyle(
-              fontWeight: FontWeight.w600, color: Colors.black87, fontSize: 12))
+            TextSpan(
+            text: user_position,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+               fontSize: 11))
     ])));
   }
 

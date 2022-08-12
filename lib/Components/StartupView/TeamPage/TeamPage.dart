@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/PageState.dart';
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
@@ -22,28 +22,30 @@ class TeamPage extends StatefulWidget {
 class _TeamPageState extends State<TeamPage> {
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-  var startupviewConnector = Get.put(StartupViewConnector(), tag: 'startup_view_connector');
+  var startupviewConnector =
+      Get.put(StartupViewConnector(), tag: 'startup_view_connector');
   var founderConnector =
-  Get.put(FounderConnector(), tag: 'startup_view_first_connector');
-  
-  var team_member =[];
-  double page_width = 0.80;
+      Get.put(FounderConnector(), tag: 'startup_view_first_connector');
 
+  var detailViewState = Get.put(StartupDetailViewState());
+ 
+  var team_member = [];
+  double page_width = 0.80;
+  var startup_id;
 
   // REDIRECT TO CREATE MEMEBER PAGE :
   EditMember() {
     Get.toNamed(create_business_team, parameters: {'type': 'update'});
   }
 
-
   //////////////////////////////////////////
-  // GET REQUIREMTNS : 
+  // GET REQUIREMTNS :
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
+      startup_id = await detailViewState.GetStartupId();
       final data = await startupviewConnector.FetchBusinessTeamMember(
-        startup_id: await getStartupDetailViewId
-      );
+          startup_id: startup_id);
       team_member = data['data']['members'];
       return team_member;
     } catch (e) {
@@ -51,13 +53,11 @@ class _TeamPageState extends State<TeamPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-  //////////////////////////////////////////
-  // SET REQUIREMTNS : 
-  //////////////////////////////////////////
+    //////////////////////////////////////////
+    // SET REQUIREMTNS :
+    //////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -68,21 +68,15 @@ class _TeamPageState extends State<TeamPage> {
               highlightColor: shimmer_highlight_color,
               child: snapshot.data == null
                   ? Text('Loading Members', style: Get.textTheme.headline2)
-                  : MainMethod(
-                      context: context,
-                      data: snapshot.data),
+                  : MainMethod(context: context, data: snapshot.data),
             ));
           }
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(
-                context: context,
-                data: snapshot.data);
+            return MainMethod(context: context, data: snapshot.data);
           }
-          return MainMethod(
-              context: context,
-              data: snapshot.data);
+          return MainMethod(context: context, data: snapshot.data);
         });
 
     // TEAM MEMBER   SECTION :
@@ -117,6 +111,7 @@ class _TeamPageState extends State<TeamPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                     
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.20,
                           height: MediaQuery.of(context).size.height * 0.34,
@@ -126,8 +121,10 @@ class _TeamPageState extends State<TeamPage> {
                             // border: Border.all(color: border_color),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                         
                           alignment: Alignment.topCenter,
                           margin: EdgeInsets.only(top: 10),
+                         
                           child: Container(
                             padding: EdgeInsets.all(12),
 
@@ -171,42 +168,52 @@ class _TeamPageState extends State<TeamPage> {
                     font_size: 32,
                   ),
 
+
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                   // EDIT TEAM MEMBER :
                   // REDIRECT TO CREATE TEAME PAGE :
                   EditButton(context, EditMember),
+              
                   Card(
                     elevation: 1,
                     shadowColor: Colors.blueGrey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    
+                    
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.50,
                       height: MediaQuery.of(context).size.height * 0.70,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       decoration: BoxDecoration(
                         // border: Border.all(color: border_color),
                         borderRadius: BorderRadius.circular(10),
                       ),
+                    
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10),
-                      child: team_member.length <=0? Container()
-                      : ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return MemberBlock(member: data[index]);
-                        },
-                      ),
+                      child: team_member.length <= 0
+                        
+                          ? Container()
+                        
+                          : ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return MemberBlock(member: data[index]);
+                              },
+                            ),
                     ),
                   ),
 
-                  // // Spacing :
+                  // Spacing :
+                  
                   // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  // // Headign :
+                  // Headign :
+
                   // StartupHeaderText(
                   //   title: 'Members',
                   //   font_size: 32,
