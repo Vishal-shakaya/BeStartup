@@ -1,6 +1,5 @@
+import 'dart:convert';
 import 'dart:math';
-
-import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -55,6 +54,10 @@ class _VisionBodyState extends State<VisionBody> {
 
   var pageParam;
   bool? updateMode = false;
+  var founder_id;
+  var startup_id;
+  var is_admin;
+
   String? inital_val = '';
 
   /////////////////////////////
@@ -64,6 +67,7 @@ class _VisionBodyState extends State<VisionBody> {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     formKey.currentState!.save();
+
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
       var res = await visionStore.SetVision(visionText: vision);
@@ -100,37 +104,29 @@ class _VisionBodyState extends State<VisionBody> {
   UpdatetVisionFrom() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      final startup_id = await getStartupDetailViewId;
       var vision = formKey.currentState!.value['vision'];
-      var res = await visionStore.SetVision(visionText: vision);
-      var resp = await startupUpdater.UpdatehBusinessVision(startup_id: startup_id);
+      await visionStore.SetVisionParam(data: vision);
+      
+      var resp =
+          await startupUpdater.UpdatehBusinessVision(startup_id: startup_id);
 
       // Success Handler Cached Data:
-      if (res['response']) {
-        // Update Success Handler :
-        if (resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          Get.closeAllSnackbars();
-          Get.toNamed(create_business_catigory_url);
-        }
-
-        //  Update Error Handler :
-        if (!resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          Get.closeAllSnackbars();
-          Get.showSnackbar(
-              MyCustSnackbar(width: snack_width, message: res['message']));
-        }
+      // Update Success Handler :
+      if (resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.closeAllSnackbars();
+        Get.toNamed(vision_page_url);
       }
 
-      // Error Handler Data :
-      if (!res['response']) {
+      //  Update Error Handler :
+      if (!resp['response']) {
         CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, message: res['message']));
+            MyCustSnackbar(width: snack_width, message: resp['message']));
       }
     }
 
@@ -150,17 +146,24 @@ class _VisionBodyState extends State<VisionBody> {
   GetLocalStorageData() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     try {
+      // Update :
       if (updateMode == true) {
-        final resp = await startupConnector.FetchBusinessVision();
+        final resp =
+            await startupConnector.FetchBusinessVision(startup_id: startup_id);
+        await visionStore.SetVisionParam(data: resp['data']['vision']);
       }
 
+      // Get :
       final data = await visionStore.GetVision();
       inital_val = data;
+
       CloseCustomPageLoadingSpinner();
       return data;
     } catch (e) {
       print('Vision Fetchng error $e');
+
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
@@ -175,7 +178,12 @@ class _VisionBodyState extends State<VisionBody> {
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+
+    founder_id = pageParam['founder_id'];
+    startup_id = pageParam['startup_id'];
+    is_admin = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -232,10 +240,9 @@ class _VisionBodyState extends State<VisionBody> {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CustomShimmer(
-              text: 'Loading Vision',
-            );
+            return CustomShimmer(text: 'Loading Vision Section');
           }
+
           if (snapshot.hasError) {
             return ErrorPage();
           }
@@ -303,8 +310,7 @@ class _VisionBodyState extends State<VisionBody> {
           name: 'vision',
           maxLength: 2000,
           style: GoogleFonts.robotoSlab(
-            fontSize: 15,
-          ),
+              fontSize: 15, wordSpacing: 1.5, height: 1.5),
           validator: FormBuilderValidators.compose([
             // Remove Comment in  Production mode:
             FormBuilderValidators.minLength(context, 500,

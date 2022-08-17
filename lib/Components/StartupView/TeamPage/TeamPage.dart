@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
@@ -28,14 +30,23 @@ class _TeamPageState extends State<TeamPage> {
       Get.put(FounderConnector(), tag: 'startup_view_first_connector');
 
   var detailViewState = Get.put(StartupDetailViewState());
- 
+
   var team_member = [];
   double page_width = 0.80;
   var startup_id;
-
+  var founder_id;
+  var is_admin; 
   // REDIRECT TO CREATE MEMEBER PAGE :
   EditMember() {
-    Get.toNamed(create_business_team, parameters: {'type': 'update'});
+    var param = jsonEncode({
+    'type': 'update',
+    'founder_id': founder_id,
+    'startup_id': startup_id,
+    'is_admin': is_admin,
+   });
+
+    Get.toNamed(create_business_team,
+        parameters: {'data': param});
   }
 
   //////////////////////////////////////////
@@ -43,7 +54,10 @@ class _TeamPageState extends State<TeamPage> {
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      startup_id = await detailViewState.GetStartupId();
+       startup_id = await detailViewState.GetStartupId();
+       is_admin =   await detailViewState.GetIsUserAdmin();
+       founder_id = await detailViewState.GetFounderId();
+
       final data = await startupviewConnector.FetchBusinessTeamMember(
           startup_id: startup_id);
       team_member = data['data']['members'];
@@ -111,7 +125,6 @@ class _TeamPageState extends State<TeamPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                     
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.20,
                           height: MediaQuery.of(context).size.height * 0.34,
@@ -121,10 +134,8 @@ class _TeamPageState extends State<TeamPage> {
                             // border: Border.all(color: border_color),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                         
                           alignment: Alignment.topCenter,
                           margin: EdgeInsets.only(top: 10),
-                         
                           child: Container(
                             padding: EdgeInsets.all(12),
 
@@ -168,37 +179,31 @@ class _TeamPageState extends State<TeamPage> {
                     font_size: 32,
                   ),
 
-
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                   // EDIT TEAM MEMBER :
                   // REDIRECT TO CREATE TEAME PAGE :
                   EditButton(context, EditMember),
-              
+
                   Card(
                     elevation: 1,
                     shadowColor: Colors.blueGrey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    
-                    
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.50,
                       height: MediaQuery.of(context).size.height * 0.70,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 20),
                       decoration: BoxDecoration(
                         // border: Border.all(color: border_color),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                    
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10),
                       child: team_member.length <= 0
-                        
                           ? Container()
-                        
                           : ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: data.length,
@@ -210,7 +215,7 @@ class _TeamPageState extends State<TeamPage> {
                   ),
 
                   // Spacing :
-                  
+
                   // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   // Headign :
 

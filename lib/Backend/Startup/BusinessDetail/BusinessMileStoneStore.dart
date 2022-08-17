@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -17,7 +18,7 @@ class MileStoneStore extends GetxController {
   };
   var response;
 
-  RxList milestones = [].obs;
+  static RxList milestones = [].obs;
 
 ////////////////////////////////////////
   /// ADD MILE STONE :
@@ -33,12 +34,12 @@ class MileStoneStore extends GetxController {
       };
 
       milestones.add(milestone);
+
       response = {
         'response': true,
         'code': 100,
         'description': 'milestone added successfully'
       };
-      return response;
     }
     // return error respnse :
     catch (e) {
@@ -50,6 +51,33 @@ class MileStoneStore extends GetxController {
 
       return response;
     }
+  }
+
+///////////////////////////////////////////////////////
+  /// It takes a list of objects, clears the list, removes
+  /// the cached data, and then adds the objects to
+  /// the list
+  ///
+  /// Args:
+  ///   list: List of Milestone objects
+  ///////////////////////////////////////////////////////
+  SetMilestoneParam({list}) async {
+    milestones.clear();
+    await RemoveCachedData(key: getBusinessMilestoneStoreName);
+    list.forEach((el) {
+      milestones.add(el);
+    });
+  }
+
+
+////////////////////////////////////////////////////
+/// It returns the value of the variable milestones.
+/// 
+/// Returns:
+///   the value of the variable milestones.
+///////////////////////////////////////////////////////
+  GetMilestoneParam() {
+    return milestones;
   }
 
 ////////////////////////////////////////
@@ -142,9 +170,9 @@ class MileStoneStore extends GetxController {
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
       if (milestones.length < 5) {
         return ResponseBack(
-            response_type: false, 
-            message: 'At leat Define 5 Milestone'
-            ,code:101);
+            response_type: false,
+            message: 'At leat Define 5 Milestone',
+            code: 101);
       }
       // Clear memory allocation : to remove content Dublication:
       milestones.clear();

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:html';
 
+import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/Loader/Shimmer/StartupView/StartupViewAvtarShimmer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -19,26 +21,42 @@ class Picture extends StatelessWidget {
   Picture({this.founder_name, this.founder_profile, this.logo, Key? key})
       : super(key: key);
 
+  var detailViewState = Get.put(StartupDetailViewState());
+  FlipCardController? _controller;
+
   var is_admin;
+  var founder_id;
+  var startup_id;
+
   double profile_top_pos = 0.19;
   double profile_left_pos = 0.01;
 
-  FlipCardController? _controller;
-
   EditBusinessLogo() {
-    Get.toNamed(create_business_detail_url, parameters: {'type': 'update'});
+    var param = jsonEncode({
+      'type': 'update',
+      'founder_id':founder_id,
+      'startup_id':startup_id,
+      'is_admin':is_admin  
+    });
+
+    Get.toNamed(
+     create_business_detail_url,
+     parameters: {'data': param});
   }
 
   ///////////////////////////
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
+    is_admin = await detailViewState.GetIsUserAdmin();
+    founder_id = await detailViewState.GetFounderId();
+    startup_id = await detailViewState.GetStartupId();
+
     return '';
   }
 
   @override
   Widget build(BuildContext context) {
-
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -57,8 +75,6 @@ class Picture extends StatelessWidget {
         });
   }
 
-
-
   //////////////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////////////
@@ -72,7 +88,6 @@ class Picture extends StatelessWidget {
               front: StartupLogo(),
               back: CeoDetail(),
             ),
-
             ////////////////////////////////////////////
             /// If user is admin then show edit button :
             /// else show container :
@@ -87,8 +102,8 @@ class Picture extends StatelessWidget {
                           onPressed: () {
                             EditBusinessLogo();
                           },
-                          icon: Icon(Icons.edit,
-                              size: 19, color: light_color_type3)),
+                          icon: const Icon(Icons.edit,
+                              size: 19, color: Colors.black)),
                     ))
                 : Container()
           ],
@@ -104,7 +119,7 @@ class Picture extends StatelessWidget {
         child: CircleAvatar(
             radius: 60,
             backgroundColor: Colors.blueGrey[100],
-            foregroundImage: NetworkImage(logo?? temp_image)),
+            foregroundImage: NetworkImage(logo ?? temp_image)),
       ),
     );
   }
@@ -121,7 +136,8 @@ class Picture extends StatelessWidget {
               child: CircleAvatar(
             radius: 45,
             backgroundColor: Colors.blueGrey[100],
-            foregroundImage: NetworkImage(founder_profile??temp_image, scale: 1),
+            foregroundImage:
+                NetworkImage(founder_profile ?? temp_image, scale: 1),
           )),
         ),
 
@@ -137,7 +153,4 @@ class Picture extends StatelessWidget {
       ],
     );
   }
-
-
-
 }

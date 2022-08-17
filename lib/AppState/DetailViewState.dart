@@ -28,15 +28,15 @@ class StartupDetailViewState {
   /////////////////////////////
     /// Getter :
   /////////////////////////////
-  GetStartupId({id}) async {
+  GetStartupId() async {
     return startup_id;
   }
 
-  GetFounderId({id}) async {
+  GetFounderId() async {
     return founder_id;
   }
 
-  GetIsUserAdmin({is_admin}) async {
+  GetIsUserAdmin() async {
     return is_admin;
   }
 

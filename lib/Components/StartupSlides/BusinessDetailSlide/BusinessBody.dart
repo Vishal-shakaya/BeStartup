@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
@@ -24,25 +26,29 @@ class BusinessBody extends StatefulWidget {
 }
 
 class _BusinessBodyState extends State<BusinessBody> {
-  var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
-  var startupConnector =
+  final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
+  final updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  final startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
 
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   var my_context = Get.context;
-  // update params :
-  var pageParam;
-  bool? updateMode;
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
 
+  // update params :
+  var pageParam;
+  bool? updateMode;
+  var founder_id;
+  var startup_id;
+  var is_admin;
+
 ///////////////////////////////////////////////////
-  /// HANDLE SUBMIT FORM :
-  /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
-  /// 2. ELSE SHOW ERRO ALERT :
+/// HANDLE SUBMIT FORM :
+/// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
+/// 2. ELSE SHOW ERRO ALERT :
 ///////////////////////////////////////////////////
   SubmitBusinessDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
@@ -87,9 +93,11 @@ class _BusinessBodyState extends State<BusinessBody> {
     }
   }
 
+
+
 ///////////////////////////////////////////////////
-  /// UPDATE FORM HANDLER :
-  /// It's a function that updates the business detail of a user
+/// UPDATE FORM HANDLER :
+/// It's a function that updates the business detail of a user
 ///////////////////////////////////////////////////
   UpdateBusinessDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
@@ -97,24 +105,26 @@ class _BusinessBodyState extends State<BusinessBody> {
 
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
+      
       String business_name = formKey.currentState!.value['startup_name'];
       var desire_amount = formKey.currentState!.value['desire_amount'];
+      
       business_name = business_name.trim();
       desire_amount = desire_amount.trim();
 
-      // HANDLING RESPONSE :
-      var resp = await detailStore.SetBusinessDetail(
-          businessName: business_name, amount: desire_amount);
-
-      if (resp['response']) {
-        final startup_id = await getStartupDetailViewId; 
-        var update_resp = await updateStore.UpdateBusinessDetail(startup_id: startup_id);
+        var update_resp =
+            await updateStore.UpdateBusinessDetail(startup_id: startup_id);
 
         // Update Success Handler :
         if (update_resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          Get.closeAllSnackbars();
-          Get.toNamed(startup_view_url);
+            var param = jsonEncode({
+              'founder_id': founder_id,
+              'startup_id': startup_id,
+              'is_admin': is_admin,
+            });
+            CloseCustomPageLoadingSpinner();
+            Get.closeAllSnackbars();
+            Get.toNamed(startup_view_url, parameters: {'data':param});
         }
 
         // Update Error Handler :
@@ -130,22 +140,11 @@ class _BusinessBodyState extends State<BusinessBody> {
           ));
         }
       }
-
-      // Chached data Error Handler  :
-      if (!resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-
-        Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.error,
-          title: resp['message'],
-          message: update_error_msg,
-        ));
-      }
-
-      // Invalid form :
-    } else {
+    
+    
+    
+    // Invalid form :
+    else {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
@@ -161,7 +160,11 @@ class _BusinessBodyState extends State<BusinessBody> {
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    founder_id = pageParam['founder_id'];
+    startup_id = pageParam['startup_id'];
+    is_admin = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -174,7 +177,15 @@ class _BusinessBodyState extends State<BusinessBody> {
   GetRequirements() async {
     try {
       if (updateMode == true) {
-        final data = await startupConnector.FetchBusinessDetail();
+        final resp = await startupConnector.FetchBusinessDetail(startup_id: startup_id);
+        
+        final amount = resp['data']['desire_amount'];
+        final logo = resp['data']['logo'];
+        final name = resp['data']['name'];
+
+        await detailStore.SetBusinessAmountParam(data: amount);
+        await detailStore.SetBusinessLogoParam(data: logo);
+        await detailStore.SetBusinessNameParam(data: name );
       }
     } catch (e) {
       return '';
@@ -233,21 +244,30 @@ class _BusinessBodyState extends State<BusinessBody> {
         ));
   }
 
+
+
+//////////////////////////////////////
+/// Updaload Button : 
+//////////////////////////////////////
   Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
+      
       child: InkWell(
         highlightColor: primary_light_hover,
         borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
+       
         onTap: () async {
-          await SubmitBusinessDetail();
+          await UpdateBusinessDetail();
         },
+      
         child: Card(
           elevation: 10,
           shadowColor: light_color_type3,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
+      
           child: Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(5),
@@ -257,6 +277,7 @@ class _BusinessBodyState extends State<BusinessBody> {
                 color: primary_light,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
+            
             child: const Text(
               'Update',
               style: TextStyle(

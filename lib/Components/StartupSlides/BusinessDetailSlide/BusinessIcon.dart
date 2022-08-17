@@ -29,7 +29,7 @@ class _BusinessIconState extends State<BusinessIcon> {
   bool is_uploading = false;
 
   // STORAGE :
-  final detailStore = Get.put(BusinessDetailStore(), tag: 'startup_deatil');
+  final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   final startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
 
@@ -125,6 +125,8 @@ class _BusinessIconState extends State<BusinessIcon> {
         });
   }
 
+
+
 /////////////////////////////////////
 /// MAIN METHOD : 
 /////////////////////////////////////
@@ -169,6 +171,9 @@ return Card(
                   fontWeight: FontWeight.bold),
       )));
 }
+
+
+
 
 Positioned UploadButton(Container spinner) {
   return Positioned(

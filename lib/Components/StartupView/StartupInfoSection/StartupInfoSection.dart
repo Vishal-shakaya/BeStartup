@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/AppState/User.dart';
@@ -30,12 +32,12 @@ class StartupInfoSection extends StatelessWidget {
 
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
-  bool? is_admin;
 
   var startup_logo;
   var founder_profile;
 
   String? founder_name;
+  bool? is_admin;
   var startup_id;
   var founder_id;
 
@@ -44,7 +46,16 @@ class StartupInfoSection extends StatelessWidget {
   var default_mail;
   // Edit Thumbnail :
   EditThumbnail() {
-    Get.toNamed(create_business_thumbnail_url, parameters: {'type': 'update'});
+    var param = jsonEncode({
+    'type' : 'update', 
+    'founder_id': founder_id,
+    'startup_id': startup_id,
+    'is_admin': is_admin,
+    });
+    
+    Get.toNamed(
+      create_business_thumbnail_url,
+      parameters: {'data': param});
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
@@ -46,8 +47,11 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   double upload_btn_height = 50;
 
   var pageParam;
-  bool? updateMode = false;
+  var is_admin;
+  var founder_id;
+  var startup_id;
 
+  bool? updateMode = false;
 
 ///////////////////////////////////////////////////////
   // CALL FUNCTION TO UPLOAD IMAGE :
@@ -71,6 +75,8 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
       var resp =
           await thumbStore.SetThumbnail(thumbnail: image, filename: filename);
+
+
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(width: snack_width));
@@ -90,9 +96,14 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   GetLocalStorageData() async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
     try {
-      if(updateMode==true){
-        final resp = await startupConnector.FetchThumbnail();
-        print(resp['message']);
+      if (updateMode == true) {
+        final resp =
+            await startupConnector.FetchThumbnail(startup_id: startup_id);
+        final temp_thumb = resp['data']['thumbnail'];
+
+        if(upload_image_url == ''){
+          await thumbStore.SetThumbnailParam(data: temp_thumb);
+        }  
       }
 
       final data = await thumbStore.GetThumbnail();
@@ -104,18 +115,21 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   }
 
   ////////////////////////////////////////////
-  /// SET PAGE DEFAULT STATE 
+  /// SET PAGE DEFAULT STATE
   ////////////////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    is_admin = pageParam['is_admin'];
+    founder_id = pageParam['founder_id'];
+    startup_id = pageParam['startup_id'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +168,6 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     // PHONE:
     if (context.width < 480) {}
 
-
-
-
     ////////////////////////////////////////////////
     /// SET REQUIREMENTS :
     ////////////////////////////////////////////////
@@ -174,7 +185,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(context,spinner,snapshot.data); 
+            return MainMethod(context, spinner, snapshot.data);
           }
           return MainMethod(context, spinner, snapshot.data);
         });
@@ -182,9 +193,9 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
 //////////////////////////////////////
   // MAIN WIDGET SECTION :
-  // 1. Thumbnal Image section: 
-  // 2. Thumbnail upload button : 
-  // 3. Thumbnail Container : 
+  // 1. Thumbnal Image section:
+  // 2. Thumbnail upload button :
+  // 3. Thumbnail Container :
 //////////////////////////////////////
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(

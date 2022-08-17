@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 
 class BusinessWhyInvestStore extends GetxController {
   static var why_text;
+
   // Set Vision
   SetWhyInvest({visionText}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -38,7 +40,41 @@ class BusinessWhyInvestStore extends GetxController {
     }
   }
 
-  // Return Vision:
+///////////////////////////////////////////////////////
+  /// It's a function that sets a variable to a value
+  ///
+  /// Args:
+  ///   data: The data that is to be stored in the cache.
+///////////////////////////////////////////////////////
+  SetWhytextParam({data}) async {
+    why_text = '';
+    await RemoveCachedData(key: getBusinessWhyInvesttStoreName);
+    why_text = data;
+  }
+
+
+/////////////////////////////////////////////
+/// It returns a string that is the value of 
+/// the variable why_text
+/// 
+/// Returns:
+///   The value of the variable why_text.
+/////////////////////////////////////////////
+  GetWhytextParam() async {
+    return why_text;
+  }
+
+
+
+
+////////////////////////////////////////////////////
+/// It checks if the key exists in the local store, 
+/// if it does, it returns the value of the key, if it
+/// doesn't, it returns the default value
+/// 
+/// Returns:
+///   A Future.
+//////////////////////////////////////////////////////  
   GetWhyInvest() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -48,10 +84,12 @@ class BusinessWhyInvestStore extends GetxController {
         var json_obj = jsonDecode(data!);
         return json_obj["why_text"];
       } else {
-        return '' ;
+        return why_text;
       }
     } catch (e) {
-      return '';
+      return why_text;
     }
   }
+
+  
 }

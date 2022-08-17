@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
@@ -30,7 +31,7 @@ class BusinessProductStore extends GetxController {
     'catigory': '',
   };
 
-  RxList product_list = [].obs;
+  static RxList product_list = [].obs;
   static String? image_url;
   static String? product_type = 'product';
   static String? youtube_link = '';
@@ -61,13 +62,13 @@ class BusinessProductStore extends GetxController {
   SetProductType(type) async {
     try {
       if (ProductType.product == type) {
-        print('Set Type Product');
         product_type = 'product';
       }
+
       if (ProductType.service == type) {
-        print('Set Type Servivce');
         product_type = 'service';
       }
+
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -83,6 +84,23 @@ class BusinessProductStore extends GetxController {
     }
   }
 
+
+  SetProductList({list}) async {
+    product_list.clear();
+    RemoveCachedData(key: getBusinessProductStoreName);
+
+    list.forEach((el) {
+      product_list.add(el);
+    });
+  }
+
+
+  GetProducts() async {
+    return product_list;
+  }
+
+
+
   // ADD PRODUCT :
   CreateProduct({title, description}) {
     Map<String, dynamic?> product = {
@@ -91,7 +109,7 @@ class BusinessProductStore extends GetxController {
       'description': description,
       'type': product_type,
       'image_url': image_url,
-      'timestamp': DateTime.now().toString(),
+      'timestamp': DateTime.now(),
       'youtube_link': youtube_link,
       'content_link': content_link,
       'belong_to': '',
@@ -109,6 +127,8 @@ class BusinessProductStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
+
+
 
   // ADD PRODUCT :
   UpdateProduct({title, description, id, index}) async {
@@ -156,6 +176,9 @@ class BusinessProductStore extends GetxController {
     }
   }
 
+
+
+
 // REMOVE PRODUCT FROM LIST USING ID param:
   RemoveProduct(id) async {
     try {
@@ -165,14 +188,14 @@ class BusinessProductStore extends GetxController {
     }
   }
 
-  /// GETTERS
+
 
 ///////////////////////////////////////////////////
-/// GETTING PRODUCT LIST :
-/// 1. CHECK IF PRODUCT IS STORE IN LOCAL STORAGE :
-/// 2. IF STORE THEN UPDATE product_list ;
-/// 3. INSTED OF CREATEING NEW LIST , WE USE UPDATE
-/// METHOD BZ OF product_list has Observer attach :
+  /// GETTING PRODUCT LIST :
+  /// 1. CHECK IF PRODUCT IS STORE IN LOCAL STORAGE :
+  /// 2. IF STORE THEN UPDATE product_list ;
+  /// 3. INSTED OF CREATEING NEW LIST , WE USE UPDATE
+  /// METHOD BZ OF product_list has Observer attach :
 ///////////////////////////////////////////////////
   GetProductList() async {
     final localStore = await SharedPreferences.getInstance();
@@ -186,23 +209,28 @@ class BusinessProductStore extends GetxController {
         var json_obj = jsonDecode(data!);
 
         var temp_list = json_obj['products'].toList();
+
         for (int i = 0; i < temp_list.length; i++) {
           product_list.add(temp_list[i]);
         }
         return product_list;
 
         // If there is no product then just add temp prodcut to list :
+        // or send Set Products :
         // and send for example purpose :
       } else {
         return product_list;
       }
 
+
+
       // To Save widget from crash if error occure then send temp product:
     } catch (e) {
-      print('Error While Get Product ${e}');
       return product_list;
     }
   }
+
+
 
   ///////////////////////////////////////////////////////////////
   // STORE PRODUCT LIST LOCALY : PERSIST DATA FOR FURTHUR USAGE:

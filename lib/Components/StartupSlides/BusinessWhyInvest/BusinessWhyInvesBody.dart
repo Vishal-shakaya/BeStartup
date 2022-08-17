@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessWhyInvestStore.dart';
@@ -47,7 +49,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
 
   double vision_cont_width = 0.50;
   double vision_cont_height = 0.70;
-  double vision_subheading_text = 20;
+  double vision_subheading_text = 17;
   int maxlines = 15;
   String? inital_val = '';
 
@@ -55,7 +57,11 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
+
   var pageParam;
+  var founder_id;
+  var startup_id;
+  var is_admin;
   bool? updateMode = false;
 
   /////////////////////////////////
@@ -99,41 +105,32 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   /// UPDATE FORM :
   //////////////////////////////
   UpdateWhyInvest() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
 
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final startup_id = await getStartupDetailViewId;
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var whyInvest = formKey.currentState!.value['whyinvest'];
-      var res = await whyInvestStore.SetWhyInvest(visionText: whyInvest);
-      var resp = await startupUpdater.UpdatehBusinessWhy(startup_id: startup_id);
-      // Success Handler Cached data :
-      if (res['response']) {
-        // Update Success Handler :
-        if (resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          Get.closeAllSnackbars();
-          Get.toNamed(create_business_milestone_url);
-        }
-        // Update Error Handler :
-        if (!resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(
-              width: snack_width,
-              type: MySnackbarType.error,
-              title: update_error_title,
-              message: update_error_msg));
-        }
-      }
+      await whyInvestStore.SetWhytextParam(data: whyInvest);
 
-      // Error Handler Cached data :
-      if (!res['response']) {
+      var resp =
+          await startupUpdater.UpdatehBusinessWhy(startup_id: startup_id);
+
+      if (resp['response']) {
         CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
-        Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+        Get.toNamed(invest_page_url);
+      }
+
+      // Update Error Handler :
+      if (!resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.error,
+            title: update_error_title,
+            message: update_error_msg));
       }
     }
 
@@ -151,11 +148,17 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   ///////////////////////////////
   GetLocalStorageData() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     try {
+      // Update :
       if (updateMode == true) {
-        final resp = await startupConnector.FetchBusinessWhy();
+        final resp =
+            await startupConnector.FetchBusinessWhy(startup_id: startup_id);
+        final temp_why = resp['data']['why_text'];
+        await whyInvestStore.SetWhytextParam(data: temp_why);
       }
 
+      // Get Data :
       final data = await whyInvestStore.GetWhyInvest();
       inital_val = data;
       return data;
@@ -178,7 +181,11 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    startup_id = pageParam['startup_id'];
+    founder_id = pageParam['founder_id'];
+    is_admin = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -189,7 +196,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   Widget build(BuildContext context) {
     if (context.width > 1200) {
       maxlines = 15;
-      vision_subheading_text = 20;
+      vision_subheading_text = 17;
       vision_cont_width = 0.50;
       vision_cont_height = 0.70;
     }
@@ -197,7 +204,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     // PC:
     if (context.width < 1200) {
       maxlines = 15;
-      vision_subheading_text = 20;
+      vision_subheading_text = 17;
       vision_cont_width = 0.70;
       vision_cont_height = 0.70;
     }

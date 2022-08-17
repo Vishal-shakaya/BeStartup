@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
@@ -21,6 +23,8 @@ class _ProductSectionState extends State<ProductSection> {
   var detailViewState = Get.put(StartupDetailViewState());
   var products = [];
   var is_admin;
+  var startup_id;
+  var founder_id;
 
   Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
@@ -36,7 +40,14 @@ class _ProductSectionState extends State<ProductSection> {
   };
 
   EditProductAndService() {
-    Get.toNamed(create_business_product_url, parameters: {'type': 'update'});
+    var pageParam = jsonEncode( {
+          'type': 'update',
+          'startup_id': startup_id,
+          'is_admin':is_admin,
+          'founder_id':founder_id });
+
+    Get.toNamed(create_business_product_url,
+        parameters:{'data':pageParam});
   }
 
   @override
@@ -44,16 +55,16 @@ class _ProductSectionState extends State<ProductSection> {
     var startupConnect =
         Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
 
-  ////////////////////////////////////////////
-  ///  GET REQUIREMENTS :
-  ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ///  GET REQUIREMENTS :
+    ////////////////////////////////////////////
     GetLocalStorageData() async {
-      final startup_id = await detailViewState.GetStartupId();
-      is_admin = await detailViewState.GetIsUserAdmin();
+      startup_id = await detailViewState.GetStartupId();
+      is_admin =   await detailViewState.GetIsUserAdmin();
+      founder_id = await detailViewState.GetFounderId();
 
       try {
         final data = await startupConnect.FetchProducts(startup_id: startup_id);
-        // print(data);
         products = data['data'];
         return products;
       } catch (e) {
@@ -61,9 +72,9 @@ class _ProductSectionState extends State<ProductSection> {
       }
     }
 
-  ////////////////////////////////////////
-  ///  SET REQUIREMENTS :
-  ////////////////////////////////////////
+    ////////////////////////////////////////
+    ///  SET REQUIREMENTS :
+    ////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -79,10 +90,8 @@ class _ProductSectionState extends State<ProductSection> {
         });
   }
 
-
-
 ////////////////////////////////////////
-/// Main Method : 
+  /// Main Method :
 ////////////////////////////////////////
   Column MainMethodSection(BuildContext contex) {
     return Column(
@@ -90,19 +99,15 @@ class _ProductSectionState extends State<ProductSection> {
         is_admin == true
             ? EditButton(context, EditProductAndService)
             : Container(),
-        
         Container(
             width: context.width * 0.75,
             height: context.height * 0.60,
             margin: EdgeInsets.only(
                 bottom: context.height * 0.06, top: context.height * 0.02),
-            
-            
             child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-            
                   return Products(
                     product: products[index],
                     key: UniqueKey(),
@@ -111,8 +116,6 @@ class _ProductSectionState extends State<ProductSection> {
       ],
     );
   }
-
-
 
   Container EditButton(BuildContext context, EditProductAndService) {
     return Container(
@@ -137,16 +140,14 @@ class _ProductSectionState extends State<ProductSection> {
         ));
   }
 
-
-
   Center ProductShimmer() {
     return Center(
         child: Shimmer.fromColors(
-          baseColor: shimmer_base_color,
-          highlightColor: shimmer_highlight_color,
-        child: Products(
-          product: temp_product,
-        ),
-      ));
+      baseColor: shimmer_base_color,
+      highlightColor: shimmer_highlight_color,
+      child: Products(
+        product: temp_product,
+      ),
+    ));
   }
 }

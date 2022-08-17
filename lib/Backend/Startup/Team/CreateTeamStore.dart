@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
@@ -31,7 +32,7 @@ class BusinessTeamMemberStore extends GetxController {
   static Map<String, dynamic>? member;
   static String? profile_image;
 
-  RxList member_list = [].obs;
+  static RxList member_list = [].obs;
 
   // SET PROFILE IMAGE :
   SetProfileImage(image) async {
@@ -51,6 +52,25 @@ class BusinessTeamMemberStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
+
+
+
+  // SetTeam Membesr
+  SetTeamMembers({list}) async {
+    member_list.clear();
+    await RemoveCachedData(key: getBusinessTeamMemberStoreName);
+    list.forEach((el) {
+      member_list.add(el);
+    });
+  }
+
+
+  // Get Team Members :
+  GetTeamMembers() async {
+    return member_list;
+  }
+
+
 
   // CREATE MEMEBER WITH REQUIRED DETAIL :
   CreateTeamMember(member) async {

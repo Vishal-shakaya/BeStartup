@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/AppState/UserState.dart';
@@ -49,6 +51,10 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   double mem_dialog_width = 900;
 
   var pageParam;
+  var startup_id;
+  var founder_id;
+  var is_admin;
+
   bool? updateMode = false;
 
 /////////////////////////////////////////////
@@ -83,97 +89,6 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   // MAIN MODEL :
   AddMember(context) {
     ShowDialog(context);
-  }
-
-  // SHOW  BIG LOADING SPINNER :
-  StartLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: BigLoadingSpinner());
-    return dialog;
-  }
-
-///////////////////////////////////////////////////////////////
-// CREATE STARTUP :
-  /// It creates a startup model and .
-  /// pdates the user's plan and startup field in the database
-///////////////////////////////////////////////////////////////
-  CreateStartup() async {
-    var startup = await StartupModel(
-        user_id: await getUserId,
-        email: await getuserEmail,
-        startup_name: await getStartupName);
-
-    final resp = await userStore.UpdateUserPlanAndStartup(
-        field: 'startups', val: startup);
-    final resp1 = await userStore.AddStartupToUserPlan(startup);
-    return ResponseBack(response_type: true, data: resp1);
-  }
-
-  /////////////////////////////////////////////////////
-  // START STORING ALL FOUNDER DETIAL TO FIREBASE :
-  /////////////////////////////////////////////////////
-  SendDataToFireStore() async {
-    var resp = await startupConnector.CreateBusinessCatigory();
-    print(resp);
-
-    var resp2 = await startupConnector.CreateBusinessDetail();
-    print(resp2);
-
-    var resp4 = await startupConnector.CreateBusinessProduct();
-    print(resp4);
-
-    var resp5 = await startupConnector.CreateBusinessThumbnail();
-    print(resp5);
-
-    var resp6 = await startupConnector.CreateBusinessVision();
-    print(resp6);
-
-    var resp7 = await founderConnector.CreateFounderContact();
-    print(resp7);
-
-    var resp8 = await founderConnector.CreateFounderDetail();
-    print(resp8);
-
-    var resp9 = await startupConnector.CreateBusinessTeamMember();
-    print(resp9);
-
-    var resp10 = await investorConnector.CreateInvestorContact();
-    print(resp10);
-
-    var resp11 = await investorConnector.CreateInvestorDetail();
-    print(resp11);
-
-    var startup_resp = await CreateStartup();
-    print(startup_resp);
-
-    return true;
-  }
-
-//////////////////////////////////////////////////////////////////////
-// if user already buy plan but not add startup on that plan :
-// then it add a startup to that plan . no need to purchase new plan:
-//////////////////////////////////////////////////////////////////////
-  IsPlanWithoutStartup() async {
-    final resp = await userStore.IsAlreadyPlanBuyed();
-
-    if (resp['response']) {
-      // Create new plan :
-      if (resp['data'] == IsUserPlanBuyedType.newplan) {
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(select_plan_url);
-      }
-
-      // Create Startup andd add to user plan files  :
-      if (resp['data'] == IsUserPlanBuyedType.preplan) {
-        CloseCustomPageLoadingSpinner();
-        StartLoading();
-        var resp = await SendDataToFireStore();
-        CloseCustomPageLoadingSpinner();
-        print('STARTUP ADDED');
-      }
-    }
   }
 
   ////////////////////////////////////////////////////////
@@ -211,30 +126,23 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var upload_resp;
 
     MyCustPageLoadingSpinner();
-    final startup_id = await getStartupDetailViewId;
-    var resp = await memeberStore.PersistMembers();
+    upload_resp =
+        await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
 
-    if (resp['response']) {
-      upload_resp = await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
-      // Upload Succes response :
-      if (upload_resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(startup_view_url);
-      }
+    // Upload Succes response :
+    if (upload_resp['response']) {
+      var param = jsonEncode({
+        'founder_id': founder_id,
+        'startup_id': startup_id,
+        'is_admin': is_admin,
+      });
 
-      // Upload Error Response
-      if (!upload_resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            type: MySnackbarType.error,
-            title: update_error_title,
-            message: update_error_msg));
-      }
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(team_page_url);
     }
 
-    // Update error Handler :
-    if (!resp['response']) {
+    // Upload Error Response
+    if (!upload_resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
@@ -249,8 +157,11 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 //////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    startup_id = pageParam['startup_id'];
+    founder_id = pageParam['founder_id'];
+    is_admin   = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -263,10 +174,28 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   GetLocalStorageData() async {
     var error_resp;
     try {
+      //////////////////////////////////////////
+      /// UPDATE TEAM MEMBERS :
+      //////////////////////////////////////////
       if (updateMode == true) {
-        final fetch_resp = await startupviewConnector.FetchBusinessTeamMember();
+        final fetch_resp = await startupviewConnector.FetchBusinessTeamMember(
+            startup_id: startup_id);
+
+        if (fetch_resp['response']) {
+          await memeberStore.SetTeamMembers(
+              list: fetch_resp['data']['members']);
+        }
+
+        if (!fetch_resp['response']) {
+          print('Fetch Team Member Error $fetch_resp');
+        }
       }
 
+      //////////////////////////////////////////
+      /// GET TEAM MEMEMBERS :
+      /// 1. Localy :
+      /// 2. Globaly :
+      //////////////////////////////////////////
       final data = await memeberStore.GetMembers();
       error_resp = data;
       return data;
@@ -295,9 +224,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
         });
   }
 
-/////////////////////////////////////////
+  /////////////////////////////////////////
   /// MAIN METHOD :
-/////////////////////////////////////////
+  /////////////////////////////////////////
   Column MainMethod(BuildContext context, member_list) {
     return Column(
       children: [

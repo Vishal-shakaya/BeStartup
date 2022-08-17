@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -5,6 +7,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionBu
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -28,6 +31,7 @@ class _ProductBodyState extends State<ProductBody> {
   var productStore = Get.put(BusinessProductStore(), tag: 'productList');
   var startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
+  var my_context = Get.context;
 
   double prod_cont_width = 0.80;
   double prod_cont_height = 0.70;
@@ -37,9 +41,14 @@ class _ProductBodyState extends State<ProductBody> {
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
+
   var pageParam;
+  var pageArguments;
+
+  String? startup_id;
+  String? founder_id;
+  bool? is_admin;
   bool? updateMode = false;
-  var my_context = Get.context;
 
   /////////////////////////////////////////
   /// SUBMIT PRODUCT :
@@ -66,30 +75,21 @@ class _ProductBodyState extends State<ProductBody> {
   UpdateProduct() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
-    var resp = await productStore.PersistProduct();
-    final startup_id = await getStartupDetailViewId;
-    // Cached Data Success Handler:
-    if (resp['response']) {
-      var update_resp = await updateStore.UpdateProducts(startup_id: startup_id);
 
-      // Update Success Handler    :
-      if (update_resp['response']) {
-        MyCustPageLoadingSpinner();
-        Get.toNamed(startup_view_url);
-      }
+    var update_resp = await updateStore.UpdateProducts(startup_id: startup_id);
 
-      if (!update_resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            message: fetch_data_error_msg,
-            title: fetch_data_error_title));
-      }
+    // Update Success Handler    :
+    if (update_resp['response']) {
+      var param = jsonEncode( {
+        'founder_id': founder_id,
+        'startup_id': startup_id,
+        'is_admin': is_admin,
+      });
+      MyCustPageLoadingSpinner();
+      Get.toNamed(startup_view_url, parameters: {'data': param});
     }
 
-    // Error Handerl :
-    if (!resp['response']) {
+    if (!update_resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
@@ -97,6 +97,7 @@ class _ProductBodyState extends State<ProductBody> {
           message: fetch_data_error_msg,
           title: fetch_data_error_title));
     }
+
     CloseCustomPageLoadingSpinner();
   }
 
@@ -110,10 +111,28 @@ class _ProductBodyState extends State<ProductBody> {
   ///////////////////////////////////////////////////
   GetLocalStorageData() async {
     var error_resp;
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     try {
       if (updateMode == true) {
-        final resp = await startupConnector.FetchProducts();
-        print(resp['message']);
+        final resp = await startupConnector.FetchProductsAndServices(
+            startup_id: startup_id);
+
+        // Fetch product Success Handler :
+        if (resp['response']) {
+          await productStore.SetProductList(list: resp['data']);
+        }
+
+        // Fetch Product Error Handler :
+        if (!resp['response']) {
+          // CloseCustomPageLoadingSpinner();
+          // Get.closeAllSnackbars();
+          // Get.showSnackbar(MyCustSnackbar(
+          //   width: snack_width,
+          //   message: fetch_data_error_msg,
+          //   title: fetch_data_error_title));
+
+        }
       }
 
       final data = await productStore.GetProductList();
@@ -130,7 +149,12 @@ class _ProductBodyState extends State<ProductBody> {
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+
+    startup_id = pageParam['startup_id'];
+    founder_id = pageParam['founder_id'];
+    is_admin = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }

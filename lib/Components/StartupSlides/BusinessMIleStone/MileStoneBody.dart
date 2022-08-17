@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
@@ -52,6 +54,10 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   double con_btn_top_margin = 30;
 
   var pageParam;
+  var startup_id;
+  var founder_id;
+  var is_admin;
+
   bool? updateMode = false;
 
   //////////////////////////////////////////
@@ -101,29 +107,18 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   ///////////////////////////////
   UpdateMileStone() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final startup_id = await getStartupDetailViewId;
-    StartLoading();
-    var res = await mileStore.PersistMileStone();
     var resp;
+    StartLoading();
+    
+    resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
 
-    // Success Handler Cached Data :
-    if (res['response']) {
-        resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
-      // Update Success Handler :
-      if (resp['response']) {
-        EndLoading();
-        Get.toNamed(vision_page_url);
-      }
-
-      // Update Error Handler :
-      if (!resp['response']) {
-        EndLoading();
-        Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
-      }
+    // Update Success Handler :
+    if (resp['response']) {
+      EndLoading();
+      Get.toNamed(vision_page_url);
     }
 
-    // Error Hander Cached Data ;
+    // Update Error Handler :
     if (!resp['response'] && resp['code'] == 101) {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
       EndLoading();
@@ -133,14 +128,13 @@ class _MileStoneBodyState extends State<MileStoneBody> {
         message: 'Define at leat 5 milestones ',
         width: snack_width,
       );
-    } 
-    
-    if (!res['response']) {
+    }
+
+    if (!resp['response']) {
       EndLoading();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
-    
   }
 
 //////////////////////////////////
@@ -155,27 +149,35 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
     if (!resp['response'] && resp['code'] == 101) {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-      EndLoading();
+    
+      EndLoading();  
       Get.closeAllSnackbars();
       MyCustSnackbar(
         title: 'Complete Requirements First ',
         message: 'Define at leat 5 milestones ',
         width: snack_width,
       );
-    } else {
+
+    }
+    
+     else {
       await EndLoading();
       _controllerCenter.play();
+      
       CoolAlert.show(
           barrierDismissible: false,
           title: 'First Step Completed!!',
           text: 'Now you have to complete final step.',
           width: alert_width,
+        
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
             _controllerCenter.stop();
             Get.toNamed(create_founder, preventDuplicates: false);
           },
+        
           context: my_context!,
+        
           type: CoolAlertType.success);
     }
   }
@@ -186,8 +188,10 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   GetLocalStorageData() async {
     try {
       if (updateMode == true) {
-        final resp = await startupConnector.FetchBusinessMilestone();
-        print(resp['message']);
+        final resp = await startupConnector.FetchBusinessMilestone( startup_id: startup_id);
+
+        final miles = resp['data']['milestone'];
+        await mileStore.SetMilestoneParam(list: miles);
       }
 
       final data = await mileStore.GetMileStonesList();
@@ -203,7 +207,12 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 ///////////////////////////////////////////
   @override
   void initState() {
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+
+    founder_id = pageParam['founder_id'];
+    startup_id = pageParam['startup_id'];
+    is_admin = pageParam['is_admin'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -275,7 +284,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
               baseColor: shimmer_base_color,
               highlightColor: shimmer_highlight_color,
               child: Text(
-                'Loading Input Section',
+                'Loading Milestones ',
                 style: Get.textTheme.headline2,
               ),
             ));

@@ -5,6 +5,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ViewStoryButton extends StatelessWidget {
   var startup_id;
@@ -17,8 +18,9 @@ class ViewStoryButton extends StatelessWidget {
 
   // Startup Detail Link :
   StartupDetailView() async {
+    var user = FirebaseAuth.instance.currentUser;
     var is_admin = false;
-    var user_id = await getUserId;
+    var user_id = user?.uid;
 
     if (user_id == founder_id) {
       is_admin = true;
@@ -28,9 +30,8 @@ class ViewStoryButton extends StatelessWidget {
       'startup_id': startup_id,
       'is_admin': is_admin,
     };
-    Get.toNamed(startup_view_url, parameters: {'data':jsonEncode(param)} );
+    Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(param)});
   }
-
 
   @override
   Widget build(BuildContext context) {

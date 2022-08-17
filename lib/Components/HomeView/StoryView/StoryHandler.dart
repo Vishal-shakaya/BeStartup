@@ -161,6 +161,8 @@ class StoryListView extends StatelessWidget {
                       child: StoryView(
                         key: UniqueKey(),
                         startup_id: startup_ids[itemIndex],
+                        /// A variable that is used to fetch the founder details of the startup.
+                        /// A variable that is used to fetch the founder details of the startup.
                         founder_id: founder_ids[itemIndex],
                         startup_name: startup_names[itemIndex],
                       ),

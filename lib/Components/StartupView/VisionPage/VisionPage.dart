@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/DetailViewState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
@@ -25,13 +27,34 @@ class _VisionPageState extends State<VisionPage> {
   var final_data;
   double page_width = 0.80;
   var startup_id;
+  var founder_id;
+  var is_admin; 
 
   EditVision() {
-    Get.toNamed(create_business_vision_url, parameters: {'type': 'update'});
+    final  param = jsonEncode({
+      'type':'update', 
+      'founder_id': founder_id,
+      'startup_id': startup_id,
+      'is_admin': is_admin,
+    });
+
+
+    Get.toNamed(
+      create_business_vision_url,
+       parameters: {'data':param});
   }
 
+
   EditMilestone() {
-    Get.toNamed(create_business_milestone_url, parameters: {'type': 'update'});
+    final  param = jsonEncode({
+      'type':'update', 
+      'founder_id': founder_id,
+      'startup_id': startup_id,
+      'is_admin': is_admin,
+    });
+    Get.toNamed(
+      create_business_milestone_url,
+      parameters: {'data': param});
   }
 
   //////////////////////////////////
@@ -39,6 +62,9 @@ class _VisionPageState extends State<VisionPage> {
   //////////////////////////////////
   GetLocalStorageData() async {
     startup_id = await detailViewState.GetStartupId();
+    founder_id = await detailViewState.GetFounderId();
+    is_admin =   await detailViewState.GetIsUserAdmin();
+    
     try {
       final vision =
           await startupConnect.FetchBusinessVision(startup_id: startup_id);
@@ -72,9 +98,8 @@ class _VisionPageState extends State<VisionPage> {
         });
   }
 
-
 //////////////////////////////////////////
-/// Main Method : 
+  /// Main Method :
 //////////////////////////////////////////
   Container MainMethod(BuildContext context) {
     return Container(
@@ -85,46 +110,37 @@ class _VisionPageState extends State<VisionPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               // HEADING :
               SizedBox(
                 height: context.height * 0.01,
               ),
-
 
               StartupHeaderText(
                 title: 'Vision',
                 font_size: 30,
               ),
 
-
               SizedBox(
                 height: context.height * 0.01,
               ),
-
 
               // EDIT BUTTON :
               EditButton(context, EditVision),
 
-
               SizedBox(
                 height: context.height * 0.01,
               ),
-
 
               // VISION TEXT:
               ClipPath(
                 child: Card(
                   elevation: 1,
                   shadowColor: shadow_color1,
-                
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(15),
                     right: Radius.circular(15),
                   )),
-                 
-                 
                   child: Container(
                       width: context.width * 0.45,
                       padding: EdgeInsets.all(20),
@@ -133,8 +149,6 @@ class _VisionPageState extends State<VisionPage> {
                           borderRadius: const BorderRadius.horizontal(
                               left: Radius.circular(15),
                               right: Radius.circular(15))),
-                    
-                    
                       child: AutoSizeText.rich(
                         TextSpan(
                             text: final_data,
@@ -149,8 +163,6 @@ class _VisionPageState extends State<VisionPage> {
                       )),
                 ),
               ),
-
-
 
               SizedBox(
                 height: context.height * 0.02,
@@ -173,7 +185,6 @@ class _VisionPageState extends State<VisionPage> {
                 height: context.height * 0.02,
               ),
 
-
               // MILESTONES :
               StartupMileStone()
             ],
@@ -182,8 +193,6 @@ class _VisionPageState extends State<VisionPage> {
       ),
     );
   }
-
-
 
   Container EditButton(BuildContext context, Function Edit) {
     return Container(

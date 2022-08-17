@@ -43,7 +43,6 @@ class _BusinessFormState extends State<BusinessForm> {
     try {
       var data = await detailStore.GetBusinessDetail();
       initial_val = data;
-      print(initial_val);
       return initial_val;
     } catch (e) {
       return initial_val;

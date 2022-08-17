@@ -5,7 +5,7 @@ import 'package:be_startup/Components/HomeView/StoryView/StoryMileStone.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryThumbnail.dart';
 import 'package:be_startup/Components/HomeView/StoryView/ViewStoryButton.dart';
 
-import 'package:be_startup/Utils/Colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

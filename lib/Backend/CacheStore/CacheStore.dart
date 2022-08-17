@@ -8,7 +8,7 @@ var iv = IV.fromSecureRandom(16);
 var encrypter = Encrypter(AES(key));
 
 ////////////////////////////////////////////////////////////
-/// It takes a key as a parameter, gets the encrypted 
+/// It takes a key as a parameter, gets the encrypted
 /// data from the local storage, decrypts it and
 /// returns the decrypted data
 /// Args:
@@ -28,7 +28,7 @@ getMycachedData({required key}) async {
 
 
 //////////////////////////////////////////////////////////
-/// It takes a key and a value, encrypts the value, 
+/// It takes a key and a value, encrypts the value,
 /// stores the encrypted value in the local storage, and
 /// returns the decrypted value
 /// Args:
@@ -43,5 +43,21 @@ CachedMyData({required key, required value}) async {
   final resp = await localStore.setString('$key', encrypted.base64);
   if (resp) {
     print('Set $descrypt');
+  }
+}
+
+
+
+/// It removes the cached data from the local storage
+/// 
+/// Args:
+///   key: The key of the data you want to remove.
+RemoveCachedData({required key}) async {
+  var temp_obj;
+  final localStore = await SharedPreferences.getInstance();
+  final is_contain = await localStore.containsKey(key);
+  
+  if(is_contain){
+    temp_obj = await localStore.remove('$key');
   }
 }

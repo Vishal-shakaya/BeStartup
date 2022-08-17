@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -34,6 +35,10 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double con_btn_top_margin = 30;
 
   var pageParam;
+  var is_admin;
+  var founder_id;
+  var startup_id;
+
   bool? updateMode = false;
 
   ///////////////////////////////////
@@ -44,20 +49,24 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double image_hint_text_size = 22;
 
 /////////////////////////////////////////////
-  /// UPDATE THUMBNAIL :
-  /// The function is called when the user clicks on the "Update" button. The function then calls the
-  /// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
-  /// response object. The response object is then used to determine whether the update was successful or
-  /// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
-  /// update was not successful, a snackbar is displayed to the user
+/// UPDATE THUMBNAIL :
+/// The function is called when the user clicks on the "Update" button. The function then calls the
+/// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
+/// response object. The response object is then used to determine whether the update was successful or
+/// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
+/// update was not successful, a snackbar is displayed to the user
 /////////////////////////////////////////////
   UpdateThumbnail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final startup_id = await getStartupDetailViewId;
     final resp = await updateStore.UpdateThumbnail(startup_id: startup_id);
     // Update Success Handler :
     if (resp['response']) {
-      Get.toNamed(startup_view_url);
+      var param = jsonEncode({
+        'founder_id': founder_id,
+        'startup_id': startup_id,
+        'is_admin': is_admin,
+      });
+      Get.toNamed(startup_view_url,parameters: {'data':param});
     }
 
     // Update Error Handler :
@@ -67,18 +76,26 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     }
   }
 
+
+
   ////////////////////////////////////////////
   /// SET PAGE DEFAULT STATE
   ////////////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    is_admin = pageParam['is_admin'];
+    founder_id = pageParam['founder_id'];
+    startup_id = pageParam['startup_id'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

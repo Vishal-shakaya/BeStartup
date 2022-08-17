@@ -1,5 +1,12 @@
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessWhyInvestStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
+import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -11,6 +18,8 @@ var uuid = Uuid();
 
 class StartupUpdater extends GetxController {
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
+
+  
 ////////////////////////////////////////////////
 // UPDATE THUMBNAIL :
 // 1. Get Thum from local storage:
@@ -19,6 +28,7 @@ class StartupUpdater extends GetxController {
 // 4. Update Firestore and localStorage :
 ////////////////////////////////////////////////
   UpdateThumbnail({startup_id = false}) async {
+    var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
     var temp_data;
     var doc_id;
     var final_startup_id;
@@ -27,25 +37,18 @@ class StartupUpdater extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
-      /// Fetch thumbnail from localStorage :
-      final cacheData = await GetCachedData(
-      fromModel: getBusinessThumbnailStoreName,
-      startup_id: final_startup_id);
-      if (cacheData != false) {
-        temp_data = cacheData['thumbnail'];
-      }
-
       // FETCHING DOCUMENT FROM FIREBASE:
+      temp_data = await thumbStore.GetThumbnailParam();
+
       var data;
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
-      var query = thumbnail
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var query =
+          thumbnail.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -59,7 +62,8 @@ class StartupUpdater extends GetxController {
       thumbnail.doc(doc_id).update(data);
 
       // Cached Image for loacal use :
-      await StoreCacheData(fromModel: getBusinessThumbnailStoreName, data: data);
+      await StoreCacheData(
+          fromModel: getBusinessThumbnailStoreName, data: data);
 
       return ResponseBack(
         response_type: true,
@@ -71,53 +75,60 @@ class StartupUpdater extends GetxController {
 
 
 
-//////////////////////////////////////////////
-  /// Update Business  :
-  /// 1 logo and Name :
-  /// Update Firestore :
-  /// Then Cached Data :
-//////////////////////////////////////////////
+
+ 
+/////////////////////////////////////////////////////////////
+/// Update Business  :
+/// It fetches data from firebase, updates it and
+///  then updates the firebase document
+/// 
+/// Args:
+///   startup_id: This is the id of the business. Defaults to false
+/// 
+/// Returns:
+///   A Future object.
+/////////////////////////////////////////////////////////////
   UpdateBusinessDetail({startup_id = false}) async {
+    final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
     var data;
     var name;
     var logo;
+    var desire_amount;
     var doc_id;
     var final_startup_id;
 
     // Filter Startup Id :
-      if (startup_id != '' || startup_id != false) {
-        final_startup_id = startup_id;
-      } else {
-        final_startup_id = await getStartupId;
-      }
-    
-    try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessDetailStoreName, startup_id: final_startup_id);
-      if (cacheData != false) {
-        logo = cacheData['logo'];
-        name = cacheData['name'];
-      }
+    if (startup_id != '' || startup_id != false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = '';
+    }
 
+    try {
+      
+      name = await detailStore.GetBusinessNameParam();
+      logo = await detailStore.GetBusinessLogoParam();
+      desire_amount = await detailStore.GetBusinessAmountParam();
+    
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
         doc_id = value.docs.first.id;
       });
 
-      // Update Logo:
+      // Update Detials:
       data['logo'] = logo;
       data['name'] = name;
-      store.doc(doc_id).update(data);
+      data['desire_amount'] = desire_amount;
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessDetailStoreName, data: data);
+      print(name);
+      print(desire_amount);
+
+      store.doc(doc_id).update(data);
 
       return ResponseBack(response_type: true);
     } catch (e) {
@@ -125,17 +136,16 @@ class StartupUpdater extends GetxController {
     }
   }
 
-
-
 /////////////////////////////////////////
-/// Update Vision :
-/// It fetches data from cache storage, fetches data 
-/// from firebase, updates the data in firebase and
-/// then updates the cache storage
-/// Returns:
-///   ResponseBack(response_type: false, message: e);
+  /// Update Vision :
+  /// It fetches data from cache storage, fetches data
+  /// from firebase, updates the data in firebase and
+  /// then updates the cache storage
+  /// Returns:
+  ///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
   UpdatehBusinessVision({startup_id = false}) async {
+    var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
     var data;
     var vision;
     var doc_id;
@@ -144,25 +154,17 @@ class StartupUpdater extends GetxController {
 
     // Filter Startup Id :
     if (startup_id != '' || startup_id != false) {
-        final_startup_id = startup_id;
-      } else {
-        final_startup_id = await getStartupId;
-      }
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = await getStartupId;
+    }
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessVisiontStoreName, startup_id: final_startup_id);
+      vision = await visionStore.GetVisionParam();
 
-      if (cacheData != false) {
-        vision = cacheData['vision'];
-      }
-
-      // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -180,12 +182,13 @@ class StartupUpdater extends GetxController {
     }
   }
 
-
-
 /////////////////////////////////////////
   /// Update Why :
 /////////////////////////////////////////
   UpdatehBusinessWhy({startup_id = false}) async {
+    var whyInvestStore =
+        Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
+
     var data;
     var why_text;
     var doc_id;
@@ -194,25 +197,17 @@ class StartupUpdater extends GetxController {
     // Filter Startup Id :
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
-      } else {
-        final_startup_id = await getStartupId;
-      }
+    } else {
+      final_startup_id = '';
+    }
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessWhyInvesttStoreName,
-          startup_id: final_startup_id);
-
-      if (cacheData != false) {
-        why_text = cacheData['why_text'];
-      }
+      why_text = await whyInvestStore.GetWhytextParam();
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -222,22 +217,17 @@ class StartupUpdater extends GetxController {
       data['why_text'] = why_text;
       store.doc(doc_id).update(data);
 
-      // Cached data
-      await StoreCacheData(fromModel: getBusinessWhyInvesttStoreName, data: data);
-
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
-
-
-
   ///////////////////////////////////////
   /// Milestone Update :
   ///////////////////////////////////////
   UpdateBusinessMilestone({startup_id = false}) async {
+    var mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
     var data;
     var temp_miles;
     var doc_id;
@@ -246,24 +236,17 @@ class StartupUpdater extends GetxController {
     // Filter Startup Id :
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
-      } else {
-        final_startup_id = await getStartupId;
-      }
+    } else {
+      final_startup_id = '';
+    }
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-      fromModel: getBusinessMilestoneStoreName,
-      startup_id: final_startup_id);
-      if (cacheData != false) {
-        temp_miles = cacheData['milestone'];
-      }
+      temp_miles = await mileStore.GetMilestoneParam();
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -274,21 +257,17 @@ class StartupUpdater extends GetxController {
       data['milestone'] = temp_miles;
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      StoreCacheData(fromModel: getBusinessMilestoneStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 
-
-
-
   ///////////////////////////////////////////
   /// UPDATE PRODUCTS :
   ///////////////////////////////////////////
   UpdateProducts({startup_id = false}) async {
+    var productStore = Get.put(BusinessProductStore(), tag: 'productList');
     var data;
     var product_list = [];
     var only_product = [];
@@ -303,21 +282,13 @@ class StartupUpdater extends GetxController {
       final_startup_id = await getStartupId;
     }
 
-
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessProductStoreName, startup_id: final_startup_id);
-
-      if (cacheData != false && cacheData != null) {
-        temp_products = cacheData['products'];
-      }
+      temp_products = await productStore.GetProducts();
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -326,20 +297,13 @@ class StartupUpdater extends GetxController {
 
       // Update Product :
       data['products'] = temp_products;
-
-      // Uppdate product in firestore :
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessProductStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
-
-
-
 
   FetchServices({startup_id = false}) async {
     var data;
@@ -356,7 +320,6 @@ class StartupUpdater extends GetxController {
       final_startup_id = await getStartupId;
     }
 
-
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final cacheData = await GetCachedData(
@@ -366,10 +329,9 @@ class StartupUpdater extends GetxController {
       }
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -391,38 +353,28 @@ class StartupUpdater extends GetxController {
     }
   }
 
-
   //////////////////////////////////
   /// UPDATE TEAM MEMEBER :
   //////////////////////////////////
   UpdateBusinessTeamMember({startup_id = false}) async {
+    var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
     var data;
     var doc_id;
     var temp_mem;
     var final_startup_id;
-        // Filter Startup Id :
+
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
-
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessTeamMemberStoreName,
-          startup_id: final_startup_id);
-
-      if (cacheData != false) {
-        temp_mem = cacheData['members'];
-      }
-
-      // UPDATE DATA TO FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      temp_mem = await memeberStore.GetTeamMembers();
+      print(temp_mem);
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data();
@@ -432,8 +384,6 @@ class StartupUpdater extends GetxController {
       data['members'] = temp_mem;
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessTeamMemberStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
@@ -470,10 +420,9 @@ class StartupUpdater extends GetxController {
       }
 
       // UPDATE DATA TO FIREBASE
-      var store = FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
-      var query = store
-          .where('startup_id', isEqualTo: final_startup_id)
-          .get();
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;

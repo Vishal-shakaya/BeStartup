@@ -257,9 +257,49 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+////////////////////////////////////////////
+/// Fetch All Product and services for
+///  Update View : 
+////////////////////////////////////////////
+  FetchProductsAndServices({startup_id = false}) async {
+    var final_startup_id;
+
+    // Filter Startup Id :
+    if (startup_id != '' || startup_id != false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = '';
+    }
+
+    var data;
+    var product_list = [];
+    var only_product = [];
+    try {
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+
+      return ResponseBack(
+          response_type: true,
+          data: data['products'],
+          message: 'BusinessProducts Fetch from Firebase  DB');
+    } catch (e) {
+      return ResponseBack(response_type: false, data: [], message: e);
+    }
+  }
+
+
+
+
 ///////////////////////////////////////////////////
-  /// It fetches data from firestore
-  /// and stores it in cache storage
+/// It fetches data from firestore
+/// and stores it in cache storage
 /////////////////////////////////////////////////////
   FetchServices({startup_id = false}) async {
     var final_startup_id;

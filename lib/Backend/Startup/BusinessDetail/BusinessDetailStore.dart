@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,42 @@ class BusinessDetailStore extends GetxController {
   static String? image_url;
   static String? business_name;
   static String? amount;
+
+  ////////////////////////////////////////////
+  /// Param Setter :
+  ////////////////////////////////////////////
+  SetBusinessLogoParam({data}) async {
+    image_url = '';
+    await RemoveCachedData(key: getBusinessDetailStoreName);
+    image_url = data;
+  }
+
+  SetBusinessNameParam({data}) async {
+    business_name = '';
+    await RemoveCachedData(key: getBusinessDetailStoreName);
+    business_name = data;
+  }
+
+  SetBusinessAmountParam({data}) async {
+    amount = '';
+    await RemoveCachedData(key: getBusinessDetailStoreName);
+    amount = data;
+  }
+
+  //////////////////////////////////////////
+  /// Param Getter :
+  //////////////////////////////////////////
+  GetBusinessNameParam() async {
+    return business_name;
+  }
+
+  GetBusinessLogoParam() async {
+    return image_url;
+  }
+
+  GetBusinessAmountParam() async {
+    return amount;
+  }
 
 /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
@@ -130,8 +168,8 @@ class BusinessDetailStore extends GetxController {
         };
       } else {
         return {
-          'name': '',
-          'desire_amount': '',
+          'name': business_name,
+          'desire_amount': amount,
         };
       }
     } catch (e) {
@@ -151,12 +189,18 @@ class BusinessDetailStore extends GetxController {
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
         image_url = json_obj["logo"];
-        return json_obj["logo"];
+        return image_url;
+      } 
+      
+      else {
+        return image_url;
       }
     } catch (e) {
-      return '';
+      return shimmer_image;
     }
   }
+
+
 
 ////////////////////////////////////////////////
   /// Update Perticular Business Detail field
