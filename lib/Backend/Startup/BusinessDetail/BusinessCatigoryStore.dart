@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
@@ -8,7 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class BusinessCatigoryStore extends GetxController {
-  // LOCAL STORAGE:
+
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
 
   static List<String> catigories = [];
   static List<String> temp_catigories = [];
@@ -65,13 +69,15 @@ class BusinessCatigoryStore extends GetxController {
     }
   }
 
+
+
   // STORE CATIGORY LOCALY :
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     var main_cat = catigories + temp_catigories;
     try {
       var resp = await CatigoryModel(
-          startup_id: await getStartupId,
+          startup_id: await startupState.GetStartupId(),
           catigory: catigories);
 
       localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));

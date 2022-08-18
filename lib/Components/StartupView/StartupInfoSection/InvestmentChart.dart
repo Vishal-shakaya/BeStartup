@@ -1,4 +1,4 @@
-import 'package:be_startup/AppState/DetailViewState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
@@ -94,7 +94,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   ///////////////////////////
   GetLocalStorageData() async {
     var startupDetialView = Get.put(StartupDetailViewState());
-    var userStateView = Get.put(UserStateView());
+    var userStateView = Get.put(UserState());
  
     startup_id =  await startupDetialView.GetStartupId();
     user_id = await startupDetialView.GetFounderId();

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
@@ -29,17 +32,23 @@ class _UserSettingsState extends State<UserSettings> {
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
   FirebaseAuth fireInstance = FirebaseAuth.instance;
 
-  var updateEmailFeild = TextEditingController();
-  var updateAchiveAmount = TextEditingController();
-  var founderConnector = Get.put(FounderConnector());
-  var userStore = Get.put(UserStore());
-  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
-  var my_context = Get.context;
+  final updateEmailFeild = TextEditingController();
+  final updateAchiveAmount = TextEditingController();
+  final founderConnector = Get.put(FounderConnector());
+  final userStore = Get.put(UserStore());
+  final homeViewState = Get.put(UserState());
+  final socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
+  final my_context = Get.context;
 
   double mem_dialog_width = 900;
   var is_update_mail = false;
   var is_update_achive_amount = false;
   var user_phone_no;
+
+  var user_id;
+  var startup_id;
+  var is_admin;
+  var usertype; 
 
   //////////////////////////////////////////////////////
   // Password Reset Links Send Succfull Dialog :
@@ -185,15 +194,29 @@ class _UserSettingsState extends State<UserSettings> {
     print('SecondFactAuth ');
   }
 
+
   // Edit Profile Link :
   EditProfile() async {
-    Get.toNamed(create_founder, parameters: {'type': 'update'});
+    var param = jsonEncode({
+      'type': 'update',
+      'user_id': user_id,
+    });
+
+    if(usertype == UserType.investor){
+       Get.toNamed(investor_registration_form, parameters: {'data': param});
+    }
+
+    if(usertype == UserType.founder){
+       Get.toNamed(create_founder, parameters: {'data': param});
+    }
   }
+
 
   // Delete User Handler :
   DeleteUser() async {
     await AskBeforeRemoveUserProfile(my_context);
   }
+
 
   // Verify Phone no :
   VerifyPhoneno() async {
@@ -212,9 +235,8 @@ class _UserSettingsState extends State<UserSettings> {
         val: false,
         field: 'is_investor',
       );
-      
-       await socialAuth.Logout();
 
+      await socialAuth.Logout();
     } catch (e) {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
       Get.closeAllSnackbars();
@@ -229,6 +251,9 @@ class _UserSettingsState extends State<UserSettings> {
     /// GET REQUIREMENTS :
 ////////////////////////////////////////////
     GetLocalStorageData() async {
+      user_id = await homeViewState.GetUserId();
+      usertype = await homeViewState.GetUserType();
+
       if (fireInstance.currentUser?.phoneNumber != null) {
         user_phone_no = fireInstance.currentUser?.phoneNumber;
       } else {

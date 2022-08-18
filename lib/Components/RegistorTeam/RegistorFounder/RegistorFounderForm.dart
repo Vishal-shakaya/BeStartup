@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
@@ -21,7 +23,7 @@ class RegistorFounderForm extends StatefulWidget {
 }
 
 class _RegistorFounderFormState extends State<RegistorFounderForm> {
-  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  var founderStore = Get.put(BusinessFounderStore());
   var founde_connector = Get.put(FounderConnector(), tag: 'user_onnector');
 
   bool is_password_visible = true;
@@ -38,6 +40,10 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   double contact_text_margin_top = 0.05;
 
   var pageParam;
+  var user_id;
+  var startup_id;
+  var is_admin;
+
   bool? updateMode = false;
 
   ResetForm(field) {
@@ -50,10 +56,6 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      if (updateMode == true) {
-        final resp = await founde_connector.FetchFounderDetailandContact();
-        print(resp);
-      }
       final data = await founderStore.GetFounderDetail();
       error_resp = data;
       return data;
@@ -68,12 +70,16 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    user_id = pageParam['user_id'];
+
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +123,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CustomShimmer(
-              text: 'Loading User Detail Form',
+              text: 'Loading User Details',
             );
           }
           if (snapshot.hasError) return ErrorPage();

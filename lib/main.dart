@@ -80,6 +80,7 @@ class MyApp extends StatefulWidget {
 
 
 class _MyAppState extends State<MyApp> {
+  
   // Razorpay Channel initilize: 
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;

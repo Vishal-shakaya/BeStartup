@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
@@ -26,10 +27,24 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   dynamic mainViewWidget = StoryListView();
+  var founderConnector = Get.put(FounderConnector());
+  var investorConnector = Get.put(InvestorConnector());
+
+  final userState = Get.put(UserState());
   var userStore = Get.put(UserStore());
   var view = HomePageViews.storyView;
+  var user_id;
+
   var catigory;
   var date_range;
+
+  var user_name;
+  var user_profile;
+  var primary_mail;
+  var registor_mail;
+  var default_mail;
+  var phoneNo;
+  var otherContact;
 
   var usertype;
   double page_width = 0.80;
@@ -135,6 +150,10 @@ class _HomeViewState extends State<HomeView> {
       var position;
 
       final resp = await userStore.FetchUserDetail();
+      user_id = resp['data']['id'];
+
+      await userState.SetUserId(id: user_id);
+
       // 1 CHECK  :
       // If user user type is investor or founder
       // if both are false then show user type page :
@@ -148,20 +167,100 @@ class _HomeViewState extends State<HomeView> {
       // if any one is true then send Home View
       if (resp['data']['is_investor'] == true ||
           resp['data']['is_founder'] == true) {
+      
+
+
         ////////////////////////////////////////
         // INVESTOR HANDLER :
         ////////////////////////////////////////
         if (resp['data']['is_investor'] == true) {
+          final invest_resp =
+              await investorConnector.FetchInvestorDetailandContact(
+                  user_id: user_id);
+       
+          // Investor Success Handler :
+          if (invest_resp['response']) {
+            
+            print(' [ SETUP INVESTOR DETAIL ] ');
+            
+            user_profile = invest_resp['data']['userDetail']['picture'];
+            user_name = invest_resp['data']['userDetail']['name'];
+            registor_mail = invest_resp['data']['userDetail']['email'];
+
+            primary_mail = invest_resp['data']['userContect']['primary_mail'];
+            phoneNo = invest_resp['data']['userContect']['phone_no'];
+            otherContact = invest_resp['data']['userContect']['other_contact'];
+
+            primary_mail = await CheckAndGetPrimaryMail(
+                primary_mail: primary_mail, default_mail: registor_mail);
+
+            await userState.SetProfileImage(image: user_profile);
+            await userState.SetProfileName(name: user_name);
+            await userState.SetDefaultUserMail(mail: registor_mail);
+            await userState.SetPrimaryMail(mail: primary_mail);
+            await userState.SetPhoneNo(number: phoneNo);
+            await userState.SetOtherContact(contact: otherContact);
+            await userState.SetPrimaryMail(mail: primary_mail);
+          }
+          usertype = UserType.founder;
+          await userState.SetUserType(type: UserType.founder);
+
+
+          // Founder Error Handler :
+          if (!invest_resp['response']) {
+            print(
+                ' ****** Fetch Investor Profile Error  [ HomeView ]******** ');
+            print(invest_resp);
+          }
+
           usertype = UserType.investor;
-          await CachedMyData(key: getUserTypeKey, value: 'investor');
+          await userState.SetUserType(type: UserType.investor);
         }
 
-        /////////////////////////////////////////////
-        // FOUNDER HANDLER :
-        /////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////
+        /// FOUNDER HANDLER : 
+        ////////////////////////////////////////////
         if (resp['data']['is_founder'] == true) {
+          final found_resp =
+              await founderConnector.FetchFounderDetailandContact(
+                  user_id: user_id);
+
+          // Founder Success Handler :
+          if (found_resp['response']) {
+            print('[ SETUP FOUNDER DETAIL ] ');
+           
+            user_profile = found_resp['data']['userDetail']['picture'];
+            user_name = found_resp['data']['userDetail']['name'];
+            registor_mail = found_resp['data']['userDetail']['email'];
+
+            primary_mail = found_resp['data']['userContect']['primary_mail'];
+            phoneNo = found_resp['data']['userContect']['phone_no'];
+            otherContact = found_resp['data']['userContect']['other_contact'];
+            
+            primary_mail = await CheckAndGetPrimaryMail(
+                primary_mail: primary_mail, default_mail: registor_mail);
+
+            await userState.SetProfileImage(image: user_profile);
+            await userState.SetProfileName(name: user_name);
+            await userState.SetDefaultUserMail(mail: registor_mail);
+            await userState.SetPrimaryMail(mail: primary_mail);
+            await userState.SetPhoneNo(number: phoneNo);
+            await userState.SetOtherContact(contact: otherContact);
+            await userState.SetPrimaryMail(mail: primary_mail);
+          }
+         
           usertype = UserType.founder;
-          await CachedMyData(key: getUserTypeKey, value: 'founder');
+          await userState.SetUserType(type: UserType.founder);
+
+         
+          // Founder Error Handler :
+          if (!found_resp['response']) {
+            print('****** Fetch Founder Profile Error  [ HomeView ]******** ');
+            print(found_resp);
+          }
         }
       }
 

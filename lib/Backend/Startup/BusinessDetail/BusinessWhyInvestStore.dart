@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
@@ -9,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class BusinessWhyInvestStore extends GetxController {
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
   static var why_text;
 
   // Set Vision
@@ -25,7 +30,7 @@ class BusinessWhyInvestStore extends GetxController {
       why_text = visionText;
       try {
         var resp = await WhyInvestModel(
-          startup_id: await getStartupId,
+          startup_id: await startupState.GetStartupId(),
           why_text: why_text,
         );
         localStore.setString(getBusinessWhyInvesttStoreName, json.encode(resp));

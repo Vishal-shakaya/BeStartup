@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:html';
 
-import 'package:be_startup/AppState/DetailViewState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Loader/Shimmer/StartupView/StartupViewAvtarShimmer.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';

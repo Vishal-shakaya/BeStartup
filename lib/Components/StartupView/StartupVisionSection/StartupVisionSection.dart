@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/DetailViewState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';

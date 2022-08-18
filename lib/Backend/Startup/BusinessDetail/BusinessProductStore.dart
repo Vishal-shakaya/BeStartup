@@ -1,4 +1,5 @@
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
@@ -16,7 +17,12 @@ enum ProductType {
 }
 
 class BusinessProductStore extends GetxController {
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
   var uuid = Uuid();
+
+
+
   // Test Product :
   static Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
@@ -241,7 +247,7 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessProductsList(
-        startup_id: await getStartupId,
+        startup_id: await startupState.GetStartupId(),
         products: product_list,
       );
 

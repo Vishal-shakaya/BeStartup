@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
@@ -13,6 +15,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RegistorFounderBody extends StatefulWidget {
   const RegistorFounderBody({Key? key}) : super(key: key);
@@ -22,9 +25,9 @@ class RegistorFounderBody extends StatefulWidget {
 }
 
 class _RegistorFounderBodyState extends State<RegistorFounderBody> {
-  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
-  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_store');
+  var founderStore = Get.put(BusinessFounderStore());
+  var founderConnector = Get.put(FounderConnector());
+  var updateStore = Get.put(StartupUpdater());
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
 
@@ -33,6 +36,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   double con_btn_top_margin = 30;
 
   var pageParam;
+  var user_id;
   bool? updateMode = false;
 
   /////////////////////////////////////////
@@ -111,32 +115,33 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         'name': founder_name,
         'position': founder_position,
         'phone_no': phone_no,
-        'email': email,
+        'primary_mail': email,
         'other_contact': other_contact
       };
-      final res = await founderStore.CreateFounder(founder);
-      final update_resp = await founderConnector.UpdateFounderDetail();
 
-      if (res['response']) {
-        // Update Success Handler :
-        if (update_resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          SmartDialog.dismiss();
-          formKey.currentState!.reset();
-          Get.toNamed(create_business_team);
-        }
+      final res = await founderStore.SetFounderParam(data: founder);
+      
+      final update_resp =
+          await founderConnector.UpdateFounderDetail(user_id: user_id);
 
-        // Update Error Handler :
-        if (!update_resp['response']) {
-          CloseCustomPageLoadingSpinner();
-          SmartDialog.dismiss();
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(
-              width: snack_width,
-              type: MySnackbarType.error,
-              title: res['message'],
-              message: update_error_msg));
-        }
+      // Update Success Handler :
+      if (update_resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        SmartDialog.dismiss();
+        formKey.currentState!.reset();
+        Get.toNamed(home_page_url);
+      }
+
+      // Update Error Handler :
+      if (!update_resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        SmartDialog.dismiss();
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.error,
+            title: res['message'],
+            message: update_error_msg));
       }
     }
 
@@ -152,13 +157,36 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
-/////////////////////////////////////
+  GetLocalStorageData() async {
+    if (updateMode == true) {
+      final resp =
+          await founderConnector.FetchFounderDetailandContact(user_id: user_id);
+      final picture = resp['data']['userDetail']['picture'];
+      final startup_name = resp['data']['userDetail']['name'];
+      final position = resp['data']['userDetail']['position'];
+      final phone_no = resp['data']['userContect']['phone_no'];
+      final primary_mail = resp['data']['userContect']['primary_mail'];
+      final other_contact = resp['data']['userContect']['other_contact'];
+
+      final data = {
+        'picture': picture,
+        'name': startup_name,
+        'position': position,
+        'phone_no': phone_no,
+        'primary_mail': primary_mail,
+        'other_contact': other_contact,
+      };
+      await founderStore.SetFounderParam(data: data);
+      await founderStore.SetFounderPicture(data: picture);
+    }
+  }
+
   /// SET PAGE DEFAULT STATE :
-/////////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = Get.parameters;
+    pageParam = jsonDecode(Get.parameters['data']!);
+    user_id = pageParam['user_id'];
     if (pageParam['type'] == 'update') {
       updateMode = true;
     }
@@ -167,6 +195,30 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading User Detail',
+                style: Get.textTheme.headline2,
+              ),
+            ));
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  Column MainMethod(BuildContext context) {
     return Column(
       children: [
         Container(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
@@ -12,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThumbnailStore extends GetxController {
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
   static String? image_url;
 
   SetThumbnail({thumbnail, filename}) async {
@@ -25,7 +29,7 @@ class ThumbnailStore extends GetxController {
       try {
         var resp = await ThumbnailModel(
           thumbnail: image_url,
-          startup_id: await getStartupId,
+          startup_id:await startupState.GetStartupId(),
         );
 
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));

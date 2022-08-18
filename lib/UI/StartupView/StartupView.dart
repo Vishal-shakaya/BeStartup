@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:be_startup/AppState/DetailViewState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ProductSection.dart';

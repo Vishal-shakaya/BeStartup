@@ -66,31 +66,10 @@ class InvestorConnector extends GetxController {
     if (user_id!='' || user_id!=false) {
       final_user_id = user_id;
     } else {
-      final_user_id = await getUserId;
+      final_user_id = '';
     }
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData(
-        fromModel: getInvestorUserDetail,
-        user_id: final_user_id );
-
-      final userContactCach = await GetCachedData(
-        fromModel: getInvestorUserContacts,
-        user_id: final_user_id );
-      
-      
-      if (userDetailCach != false || userContactCach != false) {
-        
-        return ResponseBack(
-        response_type: true, 
-        message: 'Fetch Investor Detail from cached storage',
-        data: {
-        'userDetail':userDetailCach,
-        'userContect':userContactCach});
-      }
-
-
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getInvestorUserDetail);
       var store1 = FirebaseFirestore.instance.collection(getInvestorUserContacts);
@@ -115,10 +94,6 @@ class InvestorConnector extends GetxController {
         doc_id_userContact = value.docs.first.id;
       });
 
-
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getInvestorUserDetail, data: data_userDetail);
-      await StoreCacheData(fromModel: getInvestorUserContacts, data: data_userContact);
 
       return ResponseBack(
         response_type: true, 

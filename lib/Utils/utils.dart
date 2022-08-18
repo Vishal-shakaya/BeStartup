@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -289,6 +290,7 @@ class _CustomShimmerState extends State<CustomShimmer> {
   }
 }
 
+
 ///////////////////////////////////////
 // Search Index Creator :
 ///////////////////////////////////////
@@ -305,10 +307,37 @@ CreateSearchIndexParam(String val) async {
 }
 
 
+/////////////////////////////////////////////////////////
+/// If the primary_mail is not empty, then set 
+/// the primary_mail to the mail variable and return the mail
+/// variable. 
+/// If the primary_mail is empty, then set the
+///  default_mail to the mail variable and return the mail
+/// variable.
+/// 
+/// Args:
+///   primary_mail: String
+///   default_mail: the default mail of the user
+/// 
+/// Returns:
+///   The return value is a Future&lt;String&gt;.
+/////////////////////////////////////////////////////////
+CheckAndGetPrimaryMail({required primary_mail , required default_mail})async {
+var userState = Get.put(UserState());
+var mail = default_mail; 
+if (primary_mail != ''){
+  mail = primary_mail;
+  await userState.SetPrimaryMail(mail: mail);
+  return mail; 
+  }
+}
 
-  /////////////////////////////////////
-  /// Get Formated Date : 
-  /////////////////////////////////////
+
+
+
+/////////////////////////////////////
+/// Get Formated Date : 
+/////////////////////////////////////
   GetFormatedDate() async {
     try {
       final DateTime now = DateTime.now();

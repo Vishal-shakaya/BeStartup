@@ -1,4 +1,5 @@
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
@@ -11,6 +12,10 @@ import 'package:uuid/uuid.dart';
 var uuid = Uuid();
 
 class MileStoneStore extends GetxController {
+
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
+
   static Map<String, dynamic> default_tag = {
     'id': uuid.v4(),
     'title': 'same age',
@@ -166,8 +171,11 @@ class MileStoneStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await MileStoneModel(
-          startup_id: await getStartupId, milestone: milestones);
+          startup_id: await startupState.GetStartupId(),
+          milestone: milestones);
+
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
+      
       if (milestones.length < 5) {
         return ResponseBack(
             response_type: false,

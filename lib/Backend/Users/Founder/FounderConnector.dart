@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -55,7 +57,6 @@ class FounderConnector extends GetxController {
     }
   }
 
-
 ////////////////////////////////////
   // Create Founder Detail :
 ////////////////////////////////////
@@ -68,7 +69,6 @@ class FounderConnector extends GetxController {
       // kye : FounderUserDetail
       bool is_data = localStore.containsKey(getBusinessFounderDetailStoreName);
 
-      
       // Validate key :
       if (is_data) {
         String? temp_data =
@@ -78,8 +78,6 @@ class FounderConnector extends GetxController {
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
-
       } else {
         return ResponseBack(response_type: false);
       }
@@ -87,7 +85,6 @@ class FounderConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
 //////////////////////////////////////
   // Create Founder Contact :
@@ -106,18 +103,14 @@ class FounderConnector extends GetxController {
             localStore.getString(getBusinessFounderContactStoreName);
         var data = json.decode(temp_data!);
 
-
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
-
-
       } else {
         return ResponseBack(
           response_type: false,
         );
       }
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
@@ -126,7 +119,7 @@ class FounderConnector extends GetxController {
 /////////////////////////////////////////////
   /// GET FOUNDER DETAIL :
 /////////////////////////////////////////////
-  FetchFounderDetailandContact({user_id=false}) async {
+  FetchFounderDetailandContact({user_id = false}) async {
     var data_userContact;
     var data_userDetail;
     var doc_id_userDetail;
@@ -135,44 +128,18 @@ class FounderConnector extends GetxController {
     var temp_userContact;
     var final_user_id;
 
-    if (user_id!='' || user_id!=false) {
+    if (user_id != '' || user_id != false) {
       final_user_id = user_id;
     } else {
-      final_user_id = await getUserId;
+      final_user_id = '';
     }
 
     try {
-
-      // FETCHING DATA FROM CACHE STORAGE :
-      // final userDetailCach = await GetCachedData(
-      //     fromModel: getBusinessFounderDetailStoreName,
-      //     user_id: final_user_id);
-
-
-      // final userContactCach = await GetCachedData(
-      //   fromModel: getBusinessFounderContactStoreName,
-      //   user_id: final_user_id,
-      // );
-
-
-      // // First Hit Cached : 
-      // if (userDetailCach != false || userContactCach != false) {
-      //   return ResponseBack(
-      //       response_type: true,
-      //       message: 'Fetch Founder Detail from cached storage',
-      //       data: {
-      //         'userDetail': userDetailCach,
-      //         'userContect': userContactCach
-      //       });
-      // }
-
-
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance
           .collection(getBusinessFounderDetailStoreName);
       var store1 = FirebaseFirestore.instance
           .collection(getBusinessFounderContactStoreName);
-
 
       // Get User Detial Document :
       var query = store.where('user_id', isEqualTo: final_user_id).get();
@@ -180,7 +147,6 @@ class FounderConnector extends GetxController {
         data_userDetail = value.docs.first.data();
         doc_id_userDetail = value.docs.first.id;
       });
-
 
       // Get User  Conctact Document:
       var query1 = store1.where('user_id', isEqualTo: final_user_id).get();
@@ -189,16 +155,6 @@ class FounderConnector extends GetxController {
         doc_id_userContact = value.docs.first.id;
       });
 
-
-      // Cached data : 
-      // await StoreCacheData(
-      //     fromModel: getBusinessFounderDetailStoreName, data: data_userDetail);
-      // await StoreCacheData(
-      //     fromModel: getBusinessFounderContactStoreName,
-      //     data: data_userContact);
-
-
-
       return ResponseBack(
           response_type: true,
           message: 'Fetch Founder Detail from Firebase storage',
@@ -206,113 +162,114 @@ class FounderConnector extends GetxController {
             'userDetail': data_userDetail,
             'userContect': data_userContact
           });
-
-
     } catch (e) {
       return ResponseBack(
-          response_type: false, 
+          response_type: false,
           message: fetch_data_error_title,
-          data: shimmer_image );
+          data: shimmer_image);
     }
   }
 
 ////////////////////////////////////////////////////
   /// UPDATIN USER DETAIL AND CONTACT BOTH:
-  /// I'm fetching data from firebase and storing it in a variable, then I'm fetching data from cache
-  /// storage and storing it in a variable, then I'm updating the data in firebase with the data from
+  /// I'm fetching data from firebase and storing it in a
+  /// variable, then I'm fetching data from cache
+  /// storage and storing it in a variable, then
+  /// I'm updating the data in firebase with the data from
   /// cache storage
 ////////////////////////////////////////////////////
-  UpdateFounderDetail({user_id=false}) async {
+  UpdateFounderDetail({user_id = false}) async {
+    var founderStore = Get.put(BusinessFounderStore());
+  
     var data_userContact;
     var data_userDetail;
+
     var doc_id_userDetail;
     var doc_id_userContact;
-    var temp_userDetail;
-    var temp_userContact;
+    
     var final_user_id;
+    var data;
 
-    if (user_id!='' || user_id!=false) {
+    var picture = '';
+    var name = '';
+    var position = '';
+    var phone_no = '';
+    var primary_mail = '';
+    var other_contact = '';
+
+    if (user_id != '' || user_id != false) {
       final_user_id = user_id;
     } else {
-      final_user_id = user_id;
+      final_user_id = '';
     }
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final userDetailCach = await GetCachedData(
-        fromModel: getBusinessFounderDetailStoreName,
-        user_id: final_user_id,
-      );
+      data = await founderStore.GetFounderParam();
+      picture = await founderStore.GetFounderPicture();
 
-      final userContactCach = await GetCachedData(
-        fromModel: getBusinessFounderContactStoreName,
-        user_id: final_user_id,
-      );
+      name = data['name'];
+      position = data['position'];
+      phone_no = data['phone_no'];
+      primary_mail = data['primary_mail'];
+      other_contact = data['other_contact'];
 
-      // Check if data found in cached or not : 
-      if (userDetailCach != false || userContactCach != false) {
-        temp_userContact = userContactCach;
-        temp_userDetail = userContactCach;
-      }
+      // print(name);
+      // print(position);
+      // print(phone_no);
+      // print(primary_mail);
+      // print(other_contact);
+      // print(picture);
 
       // FETCHING DATA FROM FIREBASE
-      var store = FirebaseFirestore.instance
+      var detailStore = FirebaseFirestore.instance
           .collection(getBusinessFounderDetailStoreName);
 
-      var store1 = FirebaseFirestore.instance
+      var contactStore = FirebaseFirestore.instance
           .collection(getBusinessFounderContactStoreName);
 
       // Get User Detial Document :
-      var query = store.where('user_id', isEqualTo: final_user_id).get();
+      var query = detailStore.where('user_id', isEqualTo: final_user_id).get();
       await query.then((value) {
         data_userDetail = value.docs.first.data();
         doc_id_userDetail = value.docs.first.id;
       });
 
-
       // Get User  Conctact Document:
-      var query1 = store1.where('user_id', isEqualTo: final_user_id).get();
-      await query.then((value) {
+      var query1 = contactStore.where('user_id', isEqualTo: final_user_id).get();
+      await query1.then((value) {
         data_userContact = value.docs.first.data();
         doc_id_userContact = value.docs.first.id;
       });
 
+      // print('user detail id ${doc_id_userDetail}');
+      // print('user Contact id ${doc_id_userContact}');
 
+      // print('user Detail Before ${data_userDetail}');
+      // print('user Contact Befor ${data_userContact}');
 
       // Update Detail fields;
-      data_userDetail['name'] = temp_userDetail['name'];
-      data_userDetail['position'] = temp_userDetail['position'];
-      data_userDetail['name'] = temp_userDetail['picture'];
+      data_userDetail['name'] = name;
+      data_userDetail['position'] = position;
+      data_userDetail['picture'] = picture;
 
-      // Update Contact field: 
-      data_userContact['email'] = temp_userContact['email'];
-      data_userContact['phone_no'] = temp_userContact['phone_no'];
-      data_userContact['other_contact'] = temp_userContact['other_contact'];
+      // Update Contact field:
+      data_userContact['primary_mail'] = primary_mail;
+      data_userContact['phone_no'] = phone_no;
+      data_userContact['other_contact'] = other_contact;
 
-
+      // print('user Detail Before ${data_userDetail}');
+      // print('user Dontact Befor ${data_userContact}');
 
       // Update Data in DB :
-      store.doc(doc_id_userDetail).update(data_userDetail);
-      store.doc(doc_id_userContact).update(data_userContact);
-
-
-
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(
-          fromModel: getBusinessFounderDetailStoreName, 
-          data: data_userDetail);
-      await StoreCacheData(
-          fromModel: getBusinessFounderContactStoreName,
-          data: data_userContact);
-
-
+      contactStore.doc(doc_id_userContact).update(data_userContact);
+      detailStore.doc(doc_id_userDetail).update(data_userDetail);
 
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(
-        response_type: false,
-         message: update_error_title,
-         data: shimmer_image );
+          response_type: false,
+          message: update_error_title,
+          data: shimmer_image);
     }
   }
 }

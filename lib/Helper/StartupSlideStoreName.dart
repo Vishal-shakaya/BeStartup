@@ -12,8 +12,8 @@ String getBusinessWhyInvesttStoreName = 'BusinessWhyInvest';
 String getBusinessThumbnailStoreName = 'BusinessThumbnail';
 String getBusinessTeamMemberStoreName = 'BusinessTeamMember';
 
-String getBusinessFounderContactStoreName = 'FounderUserContact';
 String getBusinessFounderDetailStoreName = 'FounderUserDetail';
+String getBusinessFounderContactStoreName = 'FounderUserContact';
 
 String getInvestorUserDetail = 'InvestorUserDetail';
 String getInvestorUserContacts = 'InvestorUserContact';

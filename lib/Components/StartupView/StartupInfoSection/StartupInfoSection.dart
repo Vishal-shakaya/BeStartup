@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:be_startup/AppState/DetailViewState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
@@ -27,35 +26,34 @@ class StartupInfoSection extends StatelessWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
   var startupConnect =
-      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+      Get.put(StartupViewConnector());
   var founderConnector = Get.put(FounderConnector());
 
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
 
   var startup_logo;
-  var founder_profile;
 
-  String? founder_name;
   bool? is_admin;
   var startup_id;
   var founder_id;
 
+  String? founder_name;
+  var founder_profile;
   var primary_mail;
   var registor_mail;
   var default_mail;
+
   // Edit Thumbnail :
   EditThumbnail() {
     var param = jsonEncode({
-    'type' : 'update', 
-    'founder_id': founder_id,
-    'startup_id': startup_id,
-    'is_admin': is_admin,
+      'type': 'update',
+      'founder_id': founder_id,
+      'startup_id': startup_id,
+      'is_admin': is_admin,
     });
-    
-    Get.toNamed(
-      create_business_thumbnail_url,
-      parameters: {'data': param});
+
+    Get.toNamed(create_business_thumbnail_url, parameters: {'data': param});
   }
 
   @override
@@ -67,11 +65,11 @@ class StartupInfoSection extends StatelessWidget {
       var my_data;
       var thumbnail;
       var logo;
-      
-      var startupDetialView = Get.put(StartupDetailViewState());
-      var userStateView = Get.put(UserStateView());
 
-      is_admin = await startupDetialView.GetIsUserAdmin();
+      var startupDetialView = Get.put(StartupDetailViewState());
+      var userStateView = Get.put(UserState());
+
+      is_admin =   await startupDetialView.GetIsUserAdmin();
       startup_id = await startupDetialView.GetStartupId();
       founder_id = await startupDetialView.GetFounderId();
 
@@ -94,10 +92,8 @@ class StartupInfoSection extends StatelessWidget {
           registor_mail = found_resp['data']['userDetail']['email'];
           primary_mail = found_resp['data']['userContect']['primary_mail'];
 
-          if (primary_mail != '') {
-            registor_mail = primary_mail;
-            await userStateView.SetPrimaryMail(mail: registor_mail);
-          }
+          primary_mail =  await CheckAndGetPrimaryMail(
+              primary_mail: primary_mail, default_mail: registor_mail);
         }
 
         // Founder Error Handler :
@@ -124,7 +120,7 @@ class StartupInfoSection extends StatelessWidget {
         if (!business_name_resp['response']) {
           logo = business_name_resp['data'];
         }
-         my_data = {'thumbnail': thumbnail, 'logo': logo};
+        my_data = {'thumbnail': thumbnail, 'logo': logo};
 
         return my_data;
       } catch (e) {
@@ -139,7 +135,7 @@ class StartupInfoSection extends StatelessWidget {
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return StoryViewThumbnailAndLogoShimmer(context, snapshot) ;
+            return StoryViewThumbnailAndLogoShimmer(context, snapshot);
           }
           if (snapshot.hasError) return ErrorPage();
 
@@ -209,8 +205,6 @@ class StartupInfoSection extends StatelessWidget {
           )),
           child: InkWell(
             onHover: (flag) {},
-            
-            
             child: Container(
                 height: context.height * 0.23,
                 padding: EdgeInsets.all(2),
@@ -219,15 +213,11 @@ class StartupInfoSection extends StatelessWidget {
                   borderRadius: BorderRadius.horizontal(
                       left: Radius.circular(20), right: Radius.circular(20)),
                 ),
-               
-               
                 child: ClipRRect(
                   borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(19),
                     right: Radius.circular(19),
                   ),
-                  
-                  
                   child: CachedNetworkImage(
                     imageUrl: thumbnail_image,
                     width: context.width * image_cont_width,
@@ -237,34 +227,26 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
-       
-       
         is_admin == true
             ? Positioned(
                 left: context.width * 0.53,
                 top: context.height * 0.02,
-               
-               
                 child: Container(
                   width: 80,
                   height: 30,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: border_color)),
-                
-                
                   child: TextButton.icon(
                       onPressed: () {
                         EditThumbnail();
                       },
-                    
                       icon: Icon(
                         Icons.edit,
                         size: 15,
                       ),
                       label: Text('Edit')),
                 ))
-            
             : Positioned(
                 left: context.width * 0.53,
                 top: context.height * 0.02,
@@ -276,20 +258,16 @@ class StartupInfoSection extends StatelessWidget {
     );
   }
 
-
-
-
   Center StoryViewThumbnailAndLogoShimmer(
       BuildContext context, AsyncSnapshot<Object?> snapshot) {
     return Center(
         child: Shimmer.fromColors(
-          baseColor: shimmer_base_color,
-          highlightColor: shimmer_highlight_color,
-          child: MainMethod(
-          context,
-          snapshot.data == null
-              ? {
-                'thumbnail': shimmer_image, 'logo': shimmer_image}
-              : snapshot.data)));
-}
+            baseColor: shimmer_base_color,
+            highlightColor: shimmer_highlight_color,
+            child: MainMethod(
+                context,
+                snapshot.data == null
+                    ? {'thumbnail': shimmer_image, 'logo': shimmer_image}
+                    : snapshot.data)));
+  }
 }

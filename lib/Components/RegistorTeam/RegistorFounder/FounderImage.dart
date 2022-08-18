@@ -19,7 +19,7 @@ class FounderImage extends StatefulWidget {
 }
 
 class _FounderImageState extends State<FounderImage> {
-  var founderStore = Get.put(BusinessFounderStore(), tag: 'founder');
+  var founderStore = Get.put(BusinessFounderStore());
   var my_context = Get.context;
 
   Uint8List? image;
@@ -162,9 +162,8 @@ class _FounderImageState extends State<FounderImage> {
         });
   }
 
-
 ///////////////////////////////////
-/// MAIN METHOD : 
+  /// MAIN METHOD :
 ///////////////////////////////////
   Container MainMethod(Container spinner, Future<void> PickImage()) {
     return Container(

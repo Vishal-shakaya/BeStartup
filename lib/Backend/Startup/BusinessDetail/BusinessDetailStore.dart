@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
@@ -12,9 +14,15 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessDetailStore extends GetxController {
+  
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
+
   static String? image_url;
   static String? business_name;
   static String? amount;
+
+
 
   ////////////////////////////////////////////
   /// Param Setter :
@@ -82,9 +90,9 @@ class BusinessDetailStore extends GetxController {
   }
 
 ////////////////////////////////////////////////////
-  // 1. SET BUSINESS NAME :
-  // 2. ERROR CHECK :
-  // 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :
+// 1. SET BUSINESS NAME :
+// 2. ERROR CHECK :
+// 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :
 //////////////////////////////////////////////////////
   SetBusinessDetail({businessName, amount}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -108,24 +116,30 @@ class BusinessDetailStore extends GetxController {
       business_name = businessName;
       amount = amount;
 
-      ///////////////////////////////////
+      ///////////////////////////////////////////////
       // Create Startup
-      ///////////////////////////////////
+      ///////////////////////////////////////////////
       final startup_resp = await StartupModel(
-          user_id: await getUserId,
-          email: await getuserEmail,
+          user_id: await userState.GetUserId(),
+          email: await userState.GetDefaultMail(),
           startup_name: business_name,
           timestamp: DateTime.now().toUtc().toString());
+     
+      ////////////////////////////
       // Success Response :
+      // Set Set Startup Id : 
+      // Store localy startup : 
       if (startup_resp != false) {
-        await SetStartupId(startup_resp['id']);
+        await startupState.SetStartupId(id: startup_resp['id']);
         localStore.setString(getStartupStoreName, json.encode(startup_resp));
       }
 
+     
       if (startup_resp == false) {
         return ResponseBack(
             response_type: false, message: 'Startup not created try again ');
       }
+
 
       // Create Business Info and Cached :
       final user_mail = await getuserEmail;
@@ -139,7 +153,7 @@ class BusinessDetailStore extends GetxController {
           founder_id: userId,
           desire_amount: amount,
           startup_search_index: startup_searching_index,
-          startup_id: await getStartupId);
+          startup_id: await startupState.GetStartupId());
 
       // Set App state amount and startup name :
       await SedDesireAmount(amount);
@@ -155,6 +169,14 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
+///////////////////////////////////////////////////////////
+/// If the key exists in the local store, return
+/// the value of the key. If the key doesn't exist, return
+/// the default value
+///
+/// Returns:
+///   A map with two keys, name and desire_amount.
+///////////////////////////////////////////////////////////
   GetBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -180,7 +202,9 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-  // GET BUSINESS LOGO:
+////////////////////////////////////////////
+// GET BUSINESS LOGO:
+////////////////////////////////////////////
   GetBusinessLogo() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -190,17 +214,13 @@ class BusinessDetailStore extends GetxController {
         var json_obj = jsonDecode(data!);
         image_url = json_obj["logo"];
         return image_url;
-      } 
-      
-      else {
+      } else {
         return image_url;
       }
     } catch (e) {
       return shimmer_image;
     }
   }
-
-
 
 ////////////////////////////////////////////////
   /// Update Perticular Business Detail field
