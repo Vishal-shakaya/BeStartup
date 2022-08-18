@@ -1,4 +1,3 @@
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
@@ -19,7 +18,6 @@ var uuid = Uuid();
 class StartupUpdater extends GetxController {
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
 
-  
 ////////////////////////////////////////////////
 // UPDATE THUMBNAIL :
 // 1. Get Thum from local storage:
@@ -73,20 +71,16 @@ class StartupUpdater extends GetxController {
     }
   }
 
-
-
-
- 
 /////////////////////////////////////////////////////////////
-/// Update Business  :
-/// It fetches data from firebase, updates it and
-///  then updates the firebase document
-/// 
-/// Args:
-///   startup_id: This is the id of the business. Defaults to false
-/// 
-/// Returns:
-///   A Future object.
+  /// Update Business  :
+  /// It fetches data from firebase, updates it and
+  ///  then updates the firebase document
+  ///
+  /// Args:
+  ///   startup_id: This is the id of the business. Defaults to false
+  ///
+  /// Returns:
+  ///   A Future object.
 /////////////////////////////////////////////////////////////
   UpdateBusinessDetail({startup_id = false}) async {
     final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
@@ -105,11 +99,10 @@ class StartupUpdater extends GetxController {
     }
 
     try {
-      
       name = await detailStore.GetBusinessNameParam();
       logo = await detailStore.GetBusinessLogoParam();
       desire_amount = await detailStore.GetBusinessAmountParam();
-    
+
       // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
@@ -156,7 +149,7 @@ class StartupUpdater extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -182,8 +175,9 @@ class StartupUpdater extends GetxController {
     }
   }
 
+
 /////////////////////////////////////////
-  /// Update Why :
+/// Update Why :
 /////////////////////////////////////////
   UpdatehBusinessWhy({startup_id = false}) async {
     var whyInvestStore =
@@ -279,7 +273,7 @@ class StartupUpdater extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -317,7 +311,7 @@ class StartupUpdater extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {
@@ -406,7 +400,7 @@ class StartupUpdater extends GetxController {
     if (startup_id != '' || startup_id != false) {
       final_startup_id = startup_id;
     } else {
-      final_startup_id = await getStartupId;
+      final_startup_id = '';
     }
 
     try {

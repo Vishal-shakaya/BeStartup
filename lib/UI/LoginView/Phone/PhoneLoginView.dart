@@ -1,5 +1,3 @@
-import 'package:be_startup/AppState/PageState.dart';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHBottomBar.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHLoginIcon.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHSocialAuth.dart';

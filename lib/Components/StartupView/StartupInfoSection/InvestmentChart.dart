@@ -1,7 +1,6 @@
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/AppState/PageState.dart';
+
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/UpdateInvestmentDialog.dart';

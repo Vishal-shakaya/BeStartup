@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/PageState.dart';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';

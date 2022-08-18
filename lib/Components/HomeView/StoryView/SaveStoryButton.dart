@@ -1,5 +1,5 @@
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ class SaveStoryButton extends StatefulWidget {
 }
 
 class _SaveStoryButtonState extends State<SaveStoryButton> {
+  var userState = Get.put(UserState());
   var homeviewConnector = Get.put(HomeViewConnector());
   bool is_saved = false;
   var user_id;
@@ -28,7 +29,7 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
     /// GET REQUIRED PARAM :
     /////////////////////////////////////////
     IsPostSaved() async {
-      user_id = await getUserId;
+      user_id = await userState.GetUserId();
       final resp = await homeviewConnector.IsStartupSaved(
         startup_id: widget.startup_id,
         user_id: user_id,
@@ -75,9 +76,7 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
   //////////////////////////////////
   MainMethod(BuildContext context) {
     return SaveUnsaveIcon(
-        is_saved: is_saved,
-        user_id: user_id,
-        startup_id: widget.startup_id);
+        is_saved: is_saved, user_id: user_id, startup_id: widget.startup_id);
   }
 }
 

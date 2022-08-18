@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/utils.dart';

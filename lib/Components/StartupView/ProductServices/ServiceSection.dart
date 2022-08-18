@@ -1,5 +1,4 @@
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Services.dart';
 import 'package:be_startup/Utils/Colors.dart';

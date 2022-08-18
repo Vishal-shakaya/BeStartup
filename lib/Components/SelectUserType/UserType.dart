@@ -1,16 +1,17 @@
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
+import 'package:be_startup/Utils/enums.dart'as en;
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
-import 'package:be_startup/Utils/enums.dart';
-import 'package:be_startup/Utils/utils.dart';
+import 'package:be_startup/Utils/utils.dart' ;
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:get/get.dart';
 
-enum UserOption { founder, investor }
+// enum UserOption { founder, investor }
 
 class UserType extends StatefulWidget {
   const UserType({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class UserType extends StatefulWidget {
 
 class _UserTypeState extends State<UserType> {
   var userStore = Get.put(UserStore());
+  var userState = Get.put(UserState());
   var my_context = Get.context;
 
   Color? unselect_color =
@@ -55,6 +57,7 @@ class _UserTypeState extends State<UserType> {
   double heading_text_top_mar = 0;
 
   double bottom_heading_text_size = 27;
+
   ///////////////////////////////////////////
   /// HANDLER :
   /// 1.CHECK SELECT USER TYPE :
@@ -84,7 +87,7 @@ class _UserTypeState extends State<UserType> {
       // Success Response Handler :
       if (resp['response']) {
         await ClearStartupSlideCached();
-        await SetUserType('founder');
+        await userState.SetUserType(type:en.UserType.founder);
         Get.toNamed(
           create_business_detail_url,
         );
@@ -94,15 +97,15 @@ class _UserTypeState extends State<UserType> {
       if (!resp['response']) {
         var snack_width = MediaQuery.of(context).size.width * 0.50;
         Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+            MyCustSnackbar(width: snack_width, type: en.MySnackbarType.error));
       }
     }
 
     // REDIERCT TO STARTUPS HOMEVIEW:
     if (selected_user_type == 'investor') {
-        Get.toNamed(
-          investor_registration_form,
-        );
+      Get.toNamed(
+        investor_registration_form,
+      );
     }
   }
 
@@ -180,14 +183,14 @@ class _UserTypeState extends State<UserType> {
       setState(() {
         // 1. SELECT FOUNDER LOGIC:
         // 2. UNSELECT INVESTOR :
-        if (UserOption.founder == option) {
+        if (en.UserType.founder == option) {
           founder_bottom_heading = select_color;
           investor_bottom_heading = unselect_color;
           selected_user_type = 'founder';
 
           // 1. SELECT INVESTOR LOGIC:
           // 2. UNSELECT FOUNDER
-        } else if (UserOption.investor == option) {
+        } else if (en.UserType.investor == option) {
           investor_bottom_heading = select_color;
           founder_bottom_heading = unselect_color;
           selected_user_type = 'investor';
@@ -232,7 +235,7 @@ class _UserTypeState extends State<UserType> {
                   child: InkWell(
                     borderRadius: BorderRadius.all(Radius.circular(22)),
                     onTap: () {
-                      SelectUserType(UserOption.founder);
+                      SelectUserType(en.UserType.founder);
                     },
                     hoverColor: card_hover_color,
                     child: Card(
@@ -290,7 +293,7 @@ class _UserTypeState extends State<UserType> {
                   child: InkWell(
                     borderRadius: BorderRadius.all(Radius.circular(22)),
                     onTap: () {
-                      SelectUserType(UserOption.investor);
+                      SelectUserType(en.UserType.investor);
                     },
                     hoverColor: card_hover_color,
                     child: Card(

@@ -1,6 +1,8 @@
-import 'package:be_startup/AppState/PageState.dart';
+
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ class StartupDetailButtons extends StatefulWidget {
 class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   bool is_saved = false;
   var startupViewConnector = Get.put(StartupViewConnector());
+  var startupState = Get.put(StartupDetailViewState());
+  var userState = Get.put(UserState());
 
   /// It checks if the startup is already saved by the user,
   /// if yes then it unsaves it, if no then it
@@ -68,7 +72,7 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   /// 3 body : message
 ///////////////////////////////////////
   Future<void> SendMail() async {
-    final founder_mail = await getStartupFounderEmail ?? '';
+    final founder_mail = await startupState.GetFounderMail() ?? '';
 
     String? encodeQueryParameters(Map<String, String> params) {
       return params.entries

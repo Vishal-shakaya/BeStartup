@@ -1,12 +1,15 @@
 import 'dart:convert';
 
-import 'package:be_startup/AppState/UserState.dart';
+
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class InvestorCatigoryStore extends GetxController {
+    var userState = Get.put(UserState());
+
   // LOCAL STORAGE:
   static var catigories = [];
 
@@ -47,7 +50,7 @@ class InvestorCatigoryStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await InvestorCatigoryModel(
-          user_id: await getUserId,
+          user_id: await userState.GetUserId(),
           catigory: catigories);
 
       localStore.setString('InvestorChooseCatigory', json.encode(resp));

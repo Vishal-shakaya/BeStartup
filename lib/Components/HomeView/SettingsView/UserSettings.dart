@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
@@ -30,6 +30,7 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
+  var userState = Get.put(UserState());
   FirebaseAuth fireInstance = FirebaseAuth.instance;
 
   final updateEmailFeild = TextEditingController();
@@ -257,7 +258,7 @@ class _UserSettingsState extends State<UserSettings> {
       if (fireInstance.currentUser?.phoneNumber != null) {
         user_phone_no = fireInstance.currentUser?.phoneNumber;
       } else {
-        user_phone_no = await getUserPhoneno;
+        user_phone_no = await userState.GetPhoneNo();
       }
     }
 

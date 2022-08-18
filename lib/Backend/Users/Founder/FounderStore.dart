@@ -1,4 +1,5 @@
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
@@ -11,7 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class BusinessFounderStore extends GetxController {
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
   var businessDetailStore = Get.put(BusinessDetailStore());
+
   static Map<String, dynamic>? founder;
 
   static var image_url;
@@ -102,16 +106,16 @@ class BusinessFounderStore extends GetxController {
     try {
       try {
         var resp = await FounderModel(
-            user_id: await getUserId,
-            email: await getuserEmail,
-            startup_name: await getStartupName,
+            user_id: await userState.GetUserId(),
+            email: await userState.GetDefaultMail(),
+            startup_name: await startupState.GetStartupName(),
             name: founder['name'],
             position: founder['position'],
             picture: image_url);
 
         var resp2 = await UserContact(
-            user_id: await getUserId,
-            email: await getuserEmail,
+            user_id: await userState.GetUserId(),
+            email: await userState.GetDefaultMail(),
             primary_mail: founder['email'],
             phone_no: founder['phone_no'],
             other_contact: founder['other_contact']);

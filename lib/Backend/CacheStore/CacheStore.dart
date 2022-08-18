@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:be_startup/Utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart';
 
@@ -60,4 +61,15 @@ RemoveCachedData({required key}) async {
   if(is_contain){
     temp_obj = await localStore.remove('$key');
   }
+}
+
+ClearStartupSlideCached() async {
+  final localStore = await SharedPreferences.getInstance();
+  startupSlideStorageKeys.forEach((element) async{
+    final key_found = localStore.containsKey(element);
+    final resp = await localStore.remove(element);
+    if (resp) {
+      print('PARAM Removed $element');
+    }
+  });
 }

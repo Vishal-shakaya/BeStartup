@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -12,7 +10,6 @@ import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessIcon.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

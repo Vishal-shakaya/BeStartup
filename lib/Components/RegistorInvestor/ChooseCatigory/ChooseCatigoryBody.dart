@@ -1,17 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/UserState.dart';
+
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorCatigoryStorage.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseChip.dart';
-import 'package:be_startup/Components/StartupSlides/BusinessCatigory/CustomInputChip.dart';
-import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
+
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
-// import 'package:cool_alert/cool_alert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
   var catigoryStore = Get.put(InvestorCatigoryStore(), tag: 'catigories');
   var investorConct = Get.put(InvestorConnector(), tag: 'investor_connector');
   var userStore = Get.put(UserStore());
+  var userState = Get.put(UserState());
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +79,9 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
         final resp4 = await userStore.UpdateUserDatabaseField(
             field: 'is_investor', val: true);
 
-        final user_id = await getUserId;
-        final user_resp = await investorConct.FetchInvestorDetailandContact(
-            user_id: user_id);
+        final user_id = await userState.GetUserId();
+        final user_resp =
+            await investorConct.FetchInvestorDetailandContact(user_id: user_id);
 
         print('Registor Investor detial $user_resp');
         if (user_resp['response']) {
@@ -87,15 +89,15 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
           final profile_image = user_resp['data']['userDetail']['picture'];
           final username = user_resp['data']['userDetail']['name'];
 
-          await SetLoginUserPhoneno(phoneno);
-          await SetLoginUserProfileImage(profile_image);
-          await SetLoginUserName(username);
+          await userState.SetPhoneNo(number: phoneno);
+          await userState.SetProfileImage(image: profile_image);
+          await userState.SetProfileName(name: username);
         }
 
         // Success Response Handler :
         if (resp['response']) {
           await ClearStartupSlideCached();
-          await SetUserType('investor');
+          await userState.SetUserType(type: UserType.investor);
           EndLoading();
           Get.toNamed(home_page_url);
         }

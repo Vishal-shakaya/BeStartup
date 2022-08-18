@@ -1,18 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileInfoChart.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileStoryHeading.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/Thumbnail.dart';
 import 'package:be_startup/Loader/Shimmer/HomeView/MainUserStartupsShimmer.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:shimmer/shimmer.dart';
 
 /////////////////////////////////////////
 ///  Container main startup Container
@@ -25,6 +21,7 @@ class StartupContainer extends StatelessWidget {
   StartupContainer({this.menutype, Key? key}) : super(key: key);
 
   var homeviewConnector = Get.put(HomeViewConnector());
+  var userState = Get.put(UserState());
   CarouselController buttonCarouselController = CarouselController();
   var startups_length = 0;
 
@@ -40,19 +37,19 @@ class StartupContainer extends StatelessWidget {
     /// GET REQUIREMENTS :
     ///////////////////////////
     GetLocalStorageData() async {
-      final user_id = await getUserId;
-      final usertype = await getUserType;
+      final user_id = await userState.GetUserId();
+      final usertype = await userState.GetUserType();
       var resp;
-      print(menutype);
+
       if (usertype != null) {
-        if (usertype == 'investor') {
+        if (usertype == UserType.investor) {
           resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
         }
 
         // If user type founder then check selected menu type:
         // 1. if menu === intrested then show intrested startups :
         // 2. menu == my_startup show his startups: [ Default ] :
-        if (usertype == 'founder') {
+        if (usertype == UserType.founder) {
           resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
         }
       }

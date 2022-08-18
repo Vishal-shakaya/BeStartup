@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
@@ -15,6 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 var uuid = Uuid();
 
 class BusinessTeamMemberStore extends GetxController {
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
   var businessDetailStore = Get.put(BusinessDetailStore());
 
   static Map<String, dynamic> temp_member = {
@@ -77,8 +80,8 @@ class BusinessTeamMemberStore extends GetxController {
     try {
       Map<String, dynamic> temp_member = {
         'id': uuid.v4(),
-        'email': await getuserEmail,
-        'startup_name': await getStartupName,
+        'email': await userState.GetDefaultMail(),
+        'startup_name': await startupState.GetStartupName(),
         'name': member['name'],
         'position': member['position'],
         'member_mail': member['email'],
@@ -161,7 +164,7 @@ class BusinessTeamMemberStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessTeamMembersModel(
-        startup_id: await getStartupId,
+        startup_id: await startupState.GetStartupId(),
         members: member_list,
       );
 

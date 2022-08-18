@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,8 @@ class StartupReslutTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+
+  var userState = Get.put(UserState());
   @override
   Widget build(BuildContext context) {
 
@@ -24,7 +25,7 @@ class StartupReslutTile extends StatelessWidget {
       required startup_id,
     }) async {
       var is_admin = false;
-      var user_id = await getUserId;
+      var user_id = await userState.GetUserId();
 
       if (user_id == founder_id) {
         is_admin = true;

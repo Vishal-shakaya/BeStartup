@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';

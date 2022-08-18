@@ -1,5 +1,5 @@
 // Import the firebase_core and cloud_firestore plugin
-import 'package:be_startup/AppState/UserState.dart';
+
 import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';

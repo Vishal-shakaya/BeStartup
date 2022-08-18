@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';

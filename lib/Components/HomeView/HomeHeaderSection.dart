@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
+import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';

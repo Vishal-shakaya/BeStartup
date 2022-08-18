@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/AppState/UserState.dart';
+
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';

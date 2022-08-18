@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/AppState/UserState.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
@@ -142,8 +141,8 @@ class BusinessDetailStore extends GetxController {
 
 
       // Create Business Info and Cached :
-      final user_mail = await getuserEmail;
-      final userId = await getUserId;
+      final user_mail = await userState.GetDefaultMail();
+      final userId = await userState.GetUserId();
       final startup_searching_index =
           await CreateSearchIndexParam(businessName);
 
@@ -156,8 +155,8 @@ class BusinessDetailStore extends GetxController {
           startup_id: await startupState.GetStartupId());
 
       // Set App state amount and startup name :
-      await SedDesireAmount(amount);
-      await SetStartupName(businessName);
+      await startupState.SetDesireAmount(amount:amount);
+      await startupState.SetStartupName(name:businessName);
       try {
         localStore.setString(getBusinessDetailStoreName, json.encode(resp));
         return ResponseBack(response_type: true);

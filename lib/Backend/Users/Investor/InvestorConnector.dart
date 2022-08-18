@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:be_startup/AppState/UserState.dart';
+// import 'package:be_startup/AppState/StartupState.dart';
+// import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -8,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestorConnector extends GetxController {
+  // var userState = Get.put(UserState());
+  // var startupState = Get.put(StartupDetailViewState());
   FirebaseFirestore store = FirebaseFirestore.instance;
 
   ////////////////////////////////////////
@@ -123,7 +126,7 @@ class InvestorConnector extends GetxController {
     if (user_id!='' || user_id!=false) {
       final_user_id = user_id;
     } else {
-      final_user_id = await getUserId;
+      final_user_id = '';
     }
 
     try {

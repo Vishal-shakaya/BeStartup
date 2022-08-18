@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -11,7 +11,6 @@ import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
-import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -27,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var uuid = Uuid();
@@ -41,14 +41,17 @@ class SelectPlan extends StatefulWidget {
 
 class _SelectPlanState extends State<SelectPlan> {
   static const platform = MethodChannel("razorpay_flutter");
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
+
   var userStore = Get.put(UserStore(), tag: 'user_store');
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
+  var businessStore = Get.put(BusinessDetailStore());
+  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var businessStore = Get.put(BusinessDetailStore());
-  var investorConnector =
-      Get.put(InvestorConnector(), tag: 'investor_connector');
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var investorConnector = Get.put(InvestorConnector(), tag: 'investor_connector');
 
   var my_context = Get.context;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -320,8 +323,8 @@ class _SelectPlanState extends State<SelectPlan> {
           expire_date: expired,
           buyer_mail: auth.currentUser?.email,
           buyer_name: buyer_name,
-          startup_id: await getStartupId,
-          user_id: await getUserId);
+          startup_id: await startupState.GetStartupId(),
+          user_id: await userState.GetUserId());
 
       final is_planCreate = await localStore.setString(
           getStartupPlansStoreName, json.encode(plan));

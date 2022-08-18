@@ -2,6 +2,9 @@ class StartupDetailViewState {
   static var startup_id;
   static var is_admin;
   static var founder_id;
+  static var desire_amount;
+  static var startup_name;
+  static var founder_mail;
 
 
 
@@ -24,6 +27,22 @@ class StartupDetailViewState {
   }
 
 
+  SetDesireAmount({amount}) async {
+    desire_amount = amount;
+    print('Set $amount');
+  }
+
+  SetStartupName({name}) async {
+    startup_name = name;
+    print('Set $startup_name');
+  }
+
+  SetFounderMail({mail}) async {
+    founder_mail = mail;
+    print('Set $mail');
+  }
+
+
 
   /////////////////////////////
     /// Getter :
@@ -38,6 +57,19 @@ class StartupDetailViewState {
 
   GetIsUserAdmin() async {
     return is_admin;
+  }
+
+  GetDesireAmount() async {
+    return desire_amount;
+  }
+
+  GetStartupName() async {
+    return startup_name;
+  }
+
+
+  GetFounderMail() async {
+    return founder_mail;
   }
 
   

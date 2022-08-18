@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/AppState/PageState.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:be_startup/AppState/StartupState.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 
 class UpdateInvestmentDialog extends StatelessWidget {
@@ -17,34 +16,33 @@ class UpdateInvestmentDialog extends StatelessWidget {
 
   var investAmountController = TextEditingController();
   var detailController = Get.put(BusinessDetailStore());
+  var startupState = Get.put(StartupDetailViewState());
   var my_context = Get.context;
 
   SubmitAmount() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final amount = investAmountController.text;
-    final startup_id = await getStartupDetailViewId;
+    final startup_id = await startupState.GetStartupId();
     final resp = await detailController.UpdateBusinessDetailDatabaseField(
         field: 'achived_amount', val: amount, startup_id: startup_id);
 
     if (resp['response']) {
-      await updateInvestmentFun(data:amount);
+      await updateInvestmentFun(data: amount);
       Navigator.of(my_context!).pop();
 
       Get.closeAllSnackbars();
-      Get.showSnackbar(
-          MyCustSnackbar(
-            title: 'Amount Updated',
-            message: 'Investment Amount updated Successfully',
-            width: snack_width, type: MySnackbarType.success));
+      Get.showSnackbar(MyCustSnackbar(
+          title: 'Amount Updated',
+          message: 'Investment Amount updated Successfully',
+          width: snack_width,
+          type: MySnackbarType.success));
     }
-
 
     if (!resp['response']) {
       Get.closeAllSnackbars();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
-
   }
 
   @override

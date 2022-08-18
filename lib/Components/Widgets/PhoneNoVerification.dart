@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:get/get.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+
 class PhoneNoVerifyDialogAlert extends StatefulWidget {
   var noOperation;
   PhoneNoVerifyDialogAlert({this.noOperation, Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class PhoneNoVerifyDialogAlert extends StatefulWidget {
 }
 
 class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
+  var userState = Get.put(UserState());
   var auth = Get.put(MyAuthentication(), tag: 'my_auth');
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -76,8 +78,6 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
         ));
   }
 
-
-
   ///////////////////////////////////////////////////////
   // Verify Phone and send otp to phone numbser :
   // Handle Update and Link Phone no to current user :
@@ -104,8 +104,6 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
-
-
   ///////////////////////////////////////////////////////
   // GET OTP AND SEND FOR VERIFICATION:
   // If Success then link phone no to login user :
@@ -127,8 +125,6 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     }
   }
 
-
-
   //////////////////////////////////////////////////////
   // Updating Phone number:
   // Send required params : verificationId and otp:
@@ -143,12 +139,9 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     if (resp['response']) {
       Navigator.of(context).pop();
       SuccessAlert(message: 'Number Updateded ');
-      await SetLoginUserPhoneno(valid_number);
+      await userState.SetPhoneNo(number: valid_number);
     }
   }
-
-
-
 
   // Check if update phone no or just vrify : process accordingly :
   VerifingOtp() async {
@@ -158,8 +151,6 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
       await VerifyNumber();
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,13 +172,13 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
             ],
           ),
 
-         // Input OPT and Number :  
+          // Input OPT and Number :
           SizedBox(
             height: context.height * 0.03,
           ),
           is_otp_field ? OtpInputField(context) : InputNumberField(),
 
-          // Submit Button : 
+          // Submit Button :
           SizedBox(
             height: context.height * 0.05,
           ),
@@ -200,54 +191,52 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
   Container OtpInputField(BuildContext context) {
     return Container(
         child: Column(
-          children: [
-            PinCodeTextField(
-                appContext: context,
-                length: 6,
-                obscureText: false,
-                animationType: AnimationType.fade,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.underline,
-                  borderRadius: BorderRadius.circular(20),
-                  fieldHeight: 50,
-                  fieldWidth: 40,
-                  activeFillColor: Colors.white,
-                ),
-                animationDuration: Duration(milliseconds: 300),
-                backgroundColor: Colors.white,
-                enableActiveFill: false,
-                // errorAnimationController: errorController,
-                controller: otpEditingController,
-                onCompleted: (v) {
-                  VerifingOtp();
-                },
-                onChanged: (value) {
-                  setState(() {
-                    final_otp = value;
-                  });
-                },
-                beforeTextPaste: (text) {
-                  return true;
-                }),
-            
-            Container(
-              margin: EdgeInsets.only(top:context.height * 0.01),
-              padding: const EdgeInsets.all(8.0),
-              child: Text('If otp not received then Retry operation after 1 minute', 
-              style: TextStyle(
-                fontSize: 13,
-                color:Colors.blueGrey.shade400),),
-            ) , 
-
-            Container(
-              margin: EdgeInsets.only(top:context.height * 0.01),
-              child: SlideCountdownSeparated(
-              padding: EdgeInsets.all(10) ,
-              duration:  Duration(seconds: 59),
-              ),
+      children: [
+        PinCodeTextField(
+            appContext: context,
+            length: 6,
+            obscureText: false,
+            animationType: AnimationType.fade,
+            pinTheme: PinTheme(
+              shape: PinCodeFieldShape.underline,
+              borderRadius: BorderRadius.circular(20),
+              fieldHeight: 50,
+              fieldWidth: 40,
+              activeFillColor: Colors.white,
             ),
-          ],
-        ));
+            animationDuration: Duration(milliseconds: 300),
+            backgroundColor: Colors.white,
+            enableActiveFill: false,
+            // errorAnimationController: errorController,
+            controller: otpEditingController,
+            onCompleted: (v) {
+              VerifingOtp();
+            },
+            onChanged: (value) {
+              setState(() {
+                final_otp = value;
+              });
+            },
+            beforeTextPaste: (text) {
+              return true;
+            }),
+        Container(
+          margin: EdgeInsets.only(top: context.height * 0.01),
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'If otp not received then Retry operation after 1 minute',
+            style: TextStyle(fontSize: 13, color: Colors.blueGrey.shade400),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: context.height * 0.01),
+          child: SlideCountdownSeparated(
+            padding: EdgeInsets.all(10),
+            duration: Duration(seconds: 59),
+          ),
+        ),
+      ],
+    ));
   }
 
   Form InputNumberField() {

@@ -1,4 +1,5 @@
-import 'package:be_startup/AppState/UserState.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -8,11 +9,13 @@ import 'package:uuid/uuid.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 var uuid = Uuid();
 
 class StartupViewConnector extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
-
+  var userState = Get.put(UserState());
+  var startupState = Get.put(StartupDetailViewState());
 //////////////////////////////////////
 // 2. Send it to ui
 // 3. Store data in local storage:
@@ -49,8 +52,10 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+
 /////////////////////////////////////////
-  /// FETCH THUMBNAIL :
+/// FETCH THUMBNAIL :
 /////////////////////////////////////////
   FetchThumbnail({startup_id = false}) async {
     var final_startup_id;
@@ -85,6 +90,9 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+
+
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
@@ -103,7 +111,7 @@ class StartupViewConnector extends GetxController {
       var store =
           FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
 
-      final name = await getStartupName;
+      final name = await startupState.GetStartupName();
       var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
       await query.then((value) {
