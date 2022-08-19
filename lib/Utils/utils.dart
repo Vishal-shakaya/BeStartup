@@ -294,18 +294,19 @@ class _CustomShimmerState extends State<CustomShimmer> {
 ///////////////////////////////////////
 // Search Index Creator :
 ///////////////////////////////////////
-CreateSearchIndexParam(String val) async {
+CreateSearchIndexParam(String val)  {
   String pureString = val.toLowerCase().trim();
   var searchIndexArray = [];
+  var temp =''; 
+  
   for (var i = 0; i < pureString.length; i++) {
     if (pureString[i] != ' ') {
-      searchIndexArray.add(pureString[i]);
+       temp = temp + pureString[i];
+      searchIndexArray.add(temp);
     }
   }
-  // output : ['v' ,'i' ,'s' ,'h]
   return searchIndexArray;
 }
-
 
 /////////////////////////////////////////////////////////
 /// If the primary_mail is not empty, then set 

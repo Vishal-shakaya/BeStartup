@@ -12,13 +12,11 @@ class StartupReslutTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   var userState = Get.put(UserState());
   @override
   Widget build(BuildContext context) {
-
     //////////////////////////////////
-    /// Detail view url : 
+    /// Detail view url :
     //////////////////////////////////
     StartupDetailView({
       required founder_id,
@@ -40,8 +38,6 @@ class StartupReslutTile extends StatelessWidget {
       Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(param)});
     }
 
-
-  
     return Container(
       child: ListView.builder(
           key: UniqueKey(),
@@ -52,6 +48,7 @@ class StartupReslutTile extends StatelessWidget {
             // Data Conversion :
             var result_data =
                 snapshot.data!.docs[index].data() as Map<String, dynamic>;
+            print(result_data);
             final startup_name = result_data['name'];
             final founder_name = result_data['founder_name'];
             final startup_id = result_data['startup_id'];
