@@ -11,6 +11,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -19,8 +20,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 class HomeHeaderSection extends StatefulWidget {
   Function changeView;
   var usertype;
-  HomeHeaderSection(
-      {required this.changeView, required this.usertype, Key? key})
+  var profile_image; 
+
+  HomeHeaderSection({
+        required this.profile_image, 
+        required this.changeView, 
+        required this.usertype, Key? key})
       : super(key: key);
   @override
   State<HomeHeaderSection> createState() => _HomeHeaderSectionState();
@@ -304,8 +309,16 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         customButton: Container(
           margin: EdgeInsets.only(top: context.height * 0.01),
           child: CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
+            // backgroundColor: Colors.orange.shade100,
+            radius: 30,
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl:  widget.profile_image,
+                fit: BoxFit.cover,
+                width: 51,
+                height: 51,
+              ),
+            ),
           ),
         ),
       )),

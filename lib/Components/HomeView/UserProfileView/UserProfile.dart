@@ -1,10 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
-import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,23 +13,25 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/AppState/User.dart';
+
+
 class HomeViewUserProfile extends StatelessWidget {
   HomeViewUserProfile({Key? key}) : super(key: key);
-  
+
   var userState = Get.put(UserState());
   var user_image = temp_avtar_image;
   var user_position = '_____________';
   String? user_email = '_____________';
   var user_phoneno = '____________';
   var username = '_____________';
-  var usertype; 
+  var usertype;
 
   ////////////////////////////////////
   /// Open Mail Box: to send mail:
   ////////////////////////////////////
   Future<void> SendMail() async {
     var startupState = Get.put(StartupDetailViewState());
+    var userState = Get.put(UserState());
 
     final founder_mail = await startupState.GetFounderMail() ?? '';
 
@@ -61,14 +62,14 @@ class HomeViewUserProfile extends StatelessWidget {
   ///////////////////////////
   GetLocalStorageData() async {
     var user = FirebaseAuth.instance.currentUser;
-     usertype = await getMycachedData(key: getUserTypeKey);
+    usertype = await userState.GetUserType();
     final user_id = user?.uid;
     user_email = user?.email;
 
     //////////////////////////////////////////
     // If User Type Investor :
     //////////////////////////////////////////
-    if (usertype == 'investor') {
+    if (usertype == UserType.investor) {
       final investorConnector = Get.put(InvestorConnector());
       final investor_resp =
           await investorConnector.FetchInvestorDetailandContact(
@@ -77,14 +78,15 @@ class HomeViewUserProfile extends StatelessWidget {
       if (investor_resp['response']) {
         user_phoneno = investor_resp['data']['userContect']['phone_no'];
         username = investor_resp['data']['userDetail']['name'];
-        profile_image = investor_resp['data']['userDetail']['picture'];
+        user_image = investor_resp['data']['userDetail']['picture'];
       }
     }
+
 
     //////////////////////////////////////////
     /// If User Type Founder then :
     //////////////////////////////////////////
-    if (usertype == 'founder') {
+    if (usertype == UserType.founder) {
       final founderConnector = Get.put(FounderConnector());
       final founder_resp = await founderConnector.FetchFounderDetailandContact(
           user_id: user?.uid);
@@ -93,11 +95,10 @@ class HomeViewUserProfile extends StatelessWidget {
         user_phoneno = founder_resp['data']['userContect']['phone_no'];
         user_position = founder_resp['data']['userDetail']['position'];
         username = founder_resp['data']['userDetail']['name'];
-        profile_image = founder_resp['data']['userDetail']['picture'];
+        user_image = founder_resp['data']['userDetail']['picture'];
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +137,14 @@ class HomeViewUserProfile extends StatelessWidget {
           width: 200,
           child: Column(
             children: [
-
               const SizedBox(height: 5),
               MemName(),
 
               const SizedBox(height: 5),
-              
+
               // CONTACT EMAIL ADDRESS :
 
-            //  usertype=='founder'? MemPosition():Container(),
+              //  usertype=='founder'? MemPosition():Container(),
 
               MemContact(
                   func: SendMail,
@@ -167,7 +167,7 @@ class HomeViewUserProfile extends StatelessWidget {
       elevation: 3,
       shadowColor: Colors.red,
       color: Colors.transparent,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(
           left: Radius.circular(80),
           right: Radius.circular(80),
@@ -191,7 +191,9 @@ class HomeViewUserProfile extends StatelessWidget {
         TextSpan(
             text: username,
             style: TextStyle(
-                fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
+                fontWeight: FontWeight.w900,
+                color: Colors.black87,
+                fontSize: 16))
       ]))),
     );
   }
@@ -201,12 +203,10 @@ class HomeViewUserProfile extends StatelessWidget {
         // margin: EdgeInsets.only(bottom: 10),
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
-            TextSpan(
-            text: user_position,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-               fontSize: 11))
+      TextSpan(
+          text: user_position,
+          style: TextStyle(
+              fontWeight: FontWeight.w600, color: Colors.black87, fontSize: 11))
     ])));
   }
 

@@ -14,6 +14,8 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/AppState/StartupState.dart';
 
 class HomeViewUserStartups extends StatefulWidget {
   HomeViewUserStartups({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class HomeViewUserStartups extends StatefulWidget {
 
 class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   var homeviewConnector = Get.put(HomeViewConnector());
+  var startupState = Get.put(StartupDetailViewState());
+  var userState = Get.put(UserState());
   CarouselController buttonCarouselController = CarouselController();
 
   var startups_length = 0;
@@ -45,17 +49,16 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   ///////////////////////////
   GetLocalStorageData() async {
     user = FirebaseAuth.instance.currentUser;
-    usertype = await getMycachedData(key: getUserTypeKey);
+    usertype = await userState.GetUserType();
     user_id = user?.uid;
 
     var resp;
 
     if (usertype != null) {
-
       ///////////////////////////////////////////
-      /// If user is Investor : 
+      /// If user is Investor :
       ///////////////////////////////////////////
-      if (usertype == 'investor') {
+      if (usertype == UserType.investor) {
         resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
       }
 
@@ -64,7 +67,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       // 1. if menu === intrested then show intrested startups :
       // 2. menu == my_startup show his startups: [ Default ] :
       /////////////////////////////////////////////////////////////
-      if (usertype == 'founder') {
+      if (usertype == UserType.founder) {
         if (menuType == FounderStartupMenu.my_startup) {
           resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
         } else {
@@ -73,13 +76,12 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       }
     }
 
-    // Response Handler : 
+    // Response Handler :
     if (resp['response']) {
       startups_length = resp['data']['startup_len'];
       startup_ids = resp['data']['startup_ids'];
       startup_name = resp['data']['startup_name'];
     }
-
   }
 
   @override
@@ -114,7 +116,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       mainWidget = Column(
         children: [
           // Swith Menu button only show if user is founder :
-          usertype == 'founder'
+          usertype == UserType.founder
               ?
               // Swith Menu Switcher :
               StartupSwitcherButton(context)

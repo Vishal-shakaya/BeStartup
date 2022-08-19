@@ -7,7 +7,6 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:tab_container/tab_container.dart';
 
 class StartupMileStone extends StatefulWidget {

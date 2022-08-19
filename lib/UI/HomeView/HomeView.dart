@@ -1,6 +1,4 @@
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
-import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
@@ -10,13 +8,13 @@ import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHandler.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileHandler.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Images.dart';
+import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -97,6 +95,8 @@ class _HomeViewState extends State<HomeView> {
       strokeWidth: 5,
     ),
   );
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -223,9 +223,7 @@ class _HomeViewState extends State<HomeView> {
         /// FOUNDER HANDLER : 
         ////////////////////////////////////////////
         if (resp['data']['is_founder'] == true) {
-          final found_resp =
-              await founderConnector.FetchFounderDetailandContact(
-                  user_id: user_id);
+          final found_resp = await founderConnector.FetchFounderDetailandContact(user_id: user_id);
 
           // Founder Success Handler :
           if (found_resp['response']) {
@@ -297,10 +295,15 @@ class _HomeViewState extends State<HomeView> {
         child: Stack(
           children: [
             // 2. MAIN SECTION :
-            Container(alignment: Alignment.center, child: mainViewWidget),
+            Container(
+              alignment:Alignment.center,
+              child: mainViewWidget),
 
             // Header Section:
-            HomeHeaderSection(changeView: SetHomeView, usertype: usertype),
+            HomeHeaderSection(
+             profile_image:user_profile,
+             changeView: SetHomeView,
+             usertype: usertype),
 
             // SEARCH BAR :
             BusinessSearchBar()

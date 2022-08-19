@@ -60,9 +60,9 @@ class BusinessDetailStore extends GetxController {
   }
 
 /////////////////////////////////////
-  /// UPLOAD IMAGE IN FIREBASE :
-  /// CHECK ERROR OR SUCCESS RESP :
-  /// SET BUSINESS LOGO:
+/// UPLOAD IMAGE IN FIREBASE :
+/// CHECK ERROR OR SUCCESS RESP :
+/// SET BUSINESS LOGO:
 ////////////////////////////////////////
   SetBusinessLogo({logo, filename}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -168,6 +168,8 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
+
+
 ///////////////////////////////////////////////////////////
 /// If the key exists in the local store, return
 /// the value of the key. If the key doesn't exist, return
@@ -200,6 +202,9 @@ class BusinessDetailStore extends GetxController {
       };
     }
   }
+
+
+
 
 ////////////////////////////////////////////
 // GET BUSINESS LOGO:
