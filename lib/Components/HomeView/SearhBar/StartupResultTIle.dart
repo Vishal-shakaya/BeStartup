@@ -48,7 +48,7 @@ class StartupReslutTile extends StatelessWidget {
             // Data Conversion :
             var result_data =
                 snapshot.data!.docs[index].data() as Map<String, dynamic>;
-            print(result_data);
+            // print(result_data);
             final startup_name = result_data['name'];
             final founder_name = result_data['founder_name'];
             final startup_id = result_data['startup_id'];
@@ -63,7 +63,7 @@ class StartupReslutTile extends StatelessWidget {
                       startup_id: startup_id, founder_id: founder_id);
                 },
 
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
 
                 // Startup Logo :

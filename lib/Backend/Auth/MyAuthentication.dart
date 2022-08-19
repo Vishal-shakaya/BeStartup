@@ -3,6 +3,7 @@
 import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
+import 'package:be_startup/Backend/Startup/Connector/DeleteStartup.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -17,9 +18,6 @@ class MyAuthentication extends GetxController {
   var manage_user = AuthUserManager();
   var userStore = UserStore();
   var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
-
-
-
 
   ////////////////////////////////////////
   /// Verify Phone No :
@@ -43,9 +41,6 @@ class MyAuthentication extends GetxController {
     }
   }
 
-
-
-
   // Verify Otp :
   VerifyOtp({currentUser, confirmationResult, otp}) async {
     try {
@@ -57,9 +52,6 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
 
   // Update phone no of currently login user :
   UpdatePhoneNo({verificationId, otp}) {
@@ -74,9 +66,6 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
-
 
 // Phone number verification and link no in Android or ios device :
   AndroidPhoneVerificaiton(number) async {
@@ -118,9 +107,6 @@ class MyAuthentication extends GetxController {
     );
   }
 
-
-
-
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -134,7 +120,7 @@ class MyAuthentication extends GetxController {
       final user = auth.currentUser;
       // Verify user email :
       await user?.sendEmailVerification();
-      
+
       await userStore.CreateUser();
       return ResponseBack(response_type: true);
 
@@ -149,9 +135,6 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, data: e);
     }
   }
-
-
-
 
 ////////////////////////////////////////////
   // LOGIN USER WITH EMAIL AND PASSWORD :
@@ -187,9 +170,6 @@ class MyAuthentication extends GetxController {
     }
   }
 
-
-
-
   // RESET USER PASSWORD BY SENDING EMAIL LINK:
   ResetPasswordWithEmail() async {
     try {
@@ -204,9 +184,6 @@ class MyAuthentication extends GetxController {
     }
   }
 
-
-
- 
   ForgotPassword(email) async {
     try {
       final method =
@@ -225,20 +202,21 @@ class MyAuthentication extends GetxController {
     }
   }
 
-
-
   // PERMANENT DELETE USER :
   Deleteuser() async {
+    var removeStore = Get.put(Removetartup());
     final user = auth.currentUser;
-    try {
-      await user?.delete();
-      return ResponseBack(response_type: true);
-    } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+    
+    final resp  = await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
+    if(resp['response']){
+      try {
+        await user?.delete();
+        return ResponseBack(response_type: true);
+      } catch (e) {
+        return ResponseBack(response_type: false, message: e);
+      }
     }
   }
-
-
 
   UpdateUserMail(email) async {
     final user = auth.currentUser;
@@ -249,8 +227,6 @@ class MyAuthentication extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
 
   // UPLOAD IMAGE :
   UploadProfileImage({image, filename}) async {

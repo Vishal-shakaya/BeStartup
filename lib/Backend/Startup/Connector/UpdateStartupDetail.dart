@@ -59,10 +59,6 @@ class StartupUpdater extends GetxController {
       //  Update Database :
       thumbnail.doc(doc_id).update(data);
 
-      // Cached Image for loacal use :
-      await StoreCacheData(
-          fromModel: getBusinessThumbnailStoreName, data: data);
-
       return ResponseBack(
         response_type: true,
       );
@@ -118,8 +114,6 @@ class StartupUpdater extends GetxController {
       data['name'] = name;
       data['desire_amount'] = desire_amount;
 
-      print(name);
-      print(desire_amount);
 
       store.doc(doc_id).update(data);
 

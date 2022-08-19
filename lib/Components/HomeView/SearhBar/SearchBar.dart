@@ -24,19 +24,20 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
   bool? is_searching_process = false;
   double searchResultContainerHeight = 0.35;
 
-
- /////////////////////////////////////////////////////
- /// It takes a string as input and returns 
- /// a stream of documents from firestore
- /// 
- /// Returns:
- ///   A stream of QuerySnapshot<Map<String, dynamic>>
- /////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////
+  /// It takes a string as input and returns
+  /// a stream of documents from firestore
+  ///
+  /// 1. If Serach keyword containts @ then Search with [Founder Name]
+  /// 2. else serch with [Startup Name]
+  /// Returns:
+  ///   A stream of QuerySnapshot<Map<String, dynamic>>
+  ////////////////////////////////////////////////////////////////////
   SearchingAlgo() {
-    Stream<QuerySnapshot<Map<String, dynamic>>> startupStream;
-    Stream<QuerySnapshot<Map<String, dynamic>>> founderStream;
     Stream<QuerySnapshot<Map<String, dynamic>>>? mainStream;
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> dataList = [];
+    // Stream<QuerySnapshot<Map<String, dynamic>>> startupStream;
+    // Stream<QuerySnapshot<Map<String, dynamic>>> founderStream;
+    // List<QueryDocumentSnapshot<Map<String, dynamic>>> dataList = [];
 
     if (queryKeywords.contains('@')) {
       var new_key = queryKeywords.replaceAll('@', '');
@@ -45,16 +46,14 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
           .collection(getBusinessDetailStoreName)
           .where('founder_searching_index', arrayContains: new_key)
           .snapshots();
-
-    } 
-
-    else {
+    } else {
       mainStream = store
           .collection(getBusinessDetailStoreName)
           .where('startup_searching_index', arrayContains: queryKeywords)
           .snapshots();
     }
 
+    // Trying to merge two string results : Not wroking: 
     // var merge = MergeStream([startupStream, founderStream]);
     // merge.forEach((element) {
     //   dataList.addAll(element.docs);
@@ -100,12 +99,16 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
     );
   }
 
+
+
+
+
 /////////////////////////////////////////////
-  /// External Methods:
-  /// 1. Search input field :
-  /// 2. Result Startup Contaienr :
-  /// 3. Error Text widget :
-  /// 4. Spinnser widget :
+/// External Methods:
+/// 1. Search input field :
+/// 2. Result Startup Contaienr :
+/// 3. Error Text widget :
+/// 4. Spinnser widget :
 /////////////////////////////////////////////
 
 ////////////////////////////////////////////

@@ -107,10 +107,11 @@ class _UserSettingsState extends State<UserSettings> {
         context: context,
         width: 200,
         title: 'Confirm',
-        type: CoolAlertType.warning,
+        type: CoolAlertType.confirm,
         onCancelBtnTap: () {
           Navigator.of(context).pop();
         },
+        
         onConfirmBtnTap: () async {
           final resp = await auth.ResetPasswordWithEmail();
           if (resp['response']) {
@@ -217,7 +218,7 @@ class _UserSettingsState extends State<UserSettings> {
   DeleteUser() async {
     await AskBeforeRemoveUserProfile(my_context);
   }
-
+  
 
   // Verify Phone no :
   VerifyPhoneno() async {
@@ -361,6 +362,13 @@ class _UserSettingsState extends State<UserSettings> {
                             fun: SwitchInvestorToFounder,
                           )
                         : Container(),
+
+                    // Delete or Remove user field :
+                    WarningItem(
+                        title: 'Delete Startup',
+                        icon: Icons.home_max_outlined, 
+                        fun: DeleteUser),
+
                     // Delete or Remove user field :
                     WarningItem(
                         title: 'Delete Account',
@@ -447,7 +455,7 @@ class _UserSettingsState extends State<UserSettings> {
                             : is_update_mail = true;
                       });
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       size: 15,
                     ),
@@ -508,7 +516,7 @@ class _UserSettingsState extends State<UserSettings> {
                             : is_update_achive_amount = true;
                       });
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       size: 15,
                     ),
@@ -568,7 +576,7 @@ class _UserSettingsState extends State<UserSettings> {
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(color: Colors.blueGrey.shade300)),
                       child: TextButton.icon(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.edit,
                             size: 15,
                           ),
@@ -586,7 +594,7 @@ class _UserSettingsState extends State<UserSettings> {
                               border:
                                   Border.all(color: Colors.blueGrey.shade300)),
                           child: TextButton.icon(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.check,
                                 size: 15,
                               ),
@@ -622,7 +630,7 @@ class _UserSettingsState extends State<UserSettings> {
         title: Container(
           child: TextField(
               controller: updateEmailFeild,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: 'Enter mail',
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -660,7 +668,7 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_mail = false;
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.cancel_outlined,
                       size: 22,
                     )),
@@ -691,7 +699,7 @@ class _UserSettingsState extends State<UserSettings> {
         title: Container(
           child: TextField(
               controller: updateAchiveAmount,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: 'enter amount',
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -729,7 +737,7 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_achive_amount = false;
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.cancel_outlined,
                       size: 22,
                     )),
@@ -757,7 +765,7 @@ class _UserSettingsState extends State<UserSettings> {
         autofocus: true,
         leading: Icon(icon, size: 20, color: Colors.red.shade300),
         title: AutoSizeText.rich(TextSpan(text: title),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               color: Colors.red,
             )),
