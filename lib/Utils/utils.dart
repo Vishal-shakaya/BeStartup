@@ -341,10 +341,7 @@ if (primary_mail != ''){
 /////////////////////////////////////
   GetFormatedDate() async {
     try {
-      final DateTime now = DateTime.now();
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final String formatted = formatter.format(now);
-    
+       var  now = DateTime.now().toString();    
       return now;
     } catch (err) {
       return '';

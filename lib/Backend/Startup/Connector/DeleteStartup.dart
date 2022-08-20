@@ -36,6 +36,18 @@ class Removetartup extends GetxController {
     });
   }
 
+
+
+/////////////////////////////////////////////////////////
+/// Delete user and its startup Slides 
+/// It deletes all the data of a user from the database
+/// 
+/// Args:
+///   user_id: The user id of the user to be deleted
+/// 
+/// Returns:
+///   ResponseBack(response_type: true,)
+  /////////////////////////////////////////////////////////
   DeleteFounderWithStartups({required user_id}) async {
     var final_startup_id;
     var data;
@@ -123,4 +135,10 @@ class Removetartup extends GetxController {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
+
+
+
+
+
+
 }

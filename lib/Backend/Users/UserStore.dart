@@ -32,7 +32,7 @@ class UserStore extends GetxController {
     var is_user_found;
     try {
       // Check if user already exist :
-      // if not then create use in DB :
+      // if not then create user in DB :
       final query = user.where('email', isEqualTo: email).get();
       await query.then((value) {
         is_user_found = value.docs.length;

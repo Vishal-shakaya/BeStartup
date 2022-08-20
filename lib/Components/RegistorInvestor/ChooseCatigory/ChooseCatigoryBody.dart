@@ -43,7 +43,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
       var dialog = SmartDialog.showLoading(
           background: Colors.white,
           maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
+          widget: const CircularProgressIndicator(
             backgroundColor: Colors.white,
             color: Colors.orangeAccent,
           ));
@@ -57,16 +57,21 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
 
     // SUBMIT CATIGORY :
     SubmitCatigory() async {
+      
       StartLoading();
+      
+      var snack_width = MediaQuery.of(context).size.width * 0.50;
       var resp = await catigoryStore.PersistCatigory();
+      
       if (resp['response'] == false) {
         EndLoading();
-
-        var snack_width = MediaQuery.of(context).size.width * 0.50;
         Get.showSnackbar(
             MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
         return;
-      } else {
+      }
+      
+      
+       else {
         var resp = await investorConct.CreateInvestorCatigory();
         print(resp);
 

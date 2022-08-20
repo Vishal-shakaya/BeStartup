@@ -136,16 +136,16 @@ class _SocailAuthState extends State<SocailAuth> {
       var resp;
       if (GetPlatform.isWeb) {
         resp = await auth.SignInWithGoogleInWeb();
-
         print('Sing in response $resp');
         if (!resp['response']) {
           var data = resp['data'];
           var message = resp['message'];
           await LinkAccountWithWeb(message, data);
         }
-      } else {
+      } 
+      
+      else {
         resp = await auth.SigninWithGoogleInAndroid();
-
         print('Sing in response $resp');
         if (!resp['response']) {
           var data = resp['data'];

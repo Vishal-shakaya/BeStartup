@@ -8,6 +8,7 @@ import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
 import 'package:be_startup/Helper/HorizontalScroll.dart';
 import 'package:be_startup/UI/HomeView/HomeView.dart';
+import 'package:be_startup/UI/HomeWIdget.dart';
 import 'package:be_startup/UI/RegistorInvestor/ChooseCatigoryView.dart';
 import 'package:be_startup/UI/RegistorInvestor/InvestorRegistorFormView.dart';
 import 'package:be_startup/UI/RegistorTeam/RegistorFounderView.dart';
@@ -139,7 +140,8 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
       ),
 
-     
+
+      home: MainHomeWidget(),
      ////////////////////////////////
      /// Routes : 
      ////////////////////////////////
@@ -148,44 +150,10 @@ class _MyAppState extends State<MyApp> {
      
       // Default Route : 
       initialRoute: '/',
-     
       getPages: [
-        GetPage(
-            name: home_route,
-            page: () {
-              return StreamBuilder(
-                  stream: FirebaseAuth.instance.authStateChanges(),
-                  
-                  
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      // SHOW ERROR :
-                      ErrorPage();
-                    }
 
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return spinner;
-                    }
-                  
-                  
-                    if (snapshot.hasData) {
-                      // Check Login user complete profile setup or not :
-                      // if Complete then redirect to
-                      // Configure App local state :
-                      SetAppLocalState();
-
-
-                      return HomeView();
-
-                    }
-                    return LoginHandler();
-
-
-                  });
-            }),
-
-
+        GetPage(name: '/',
+             page: () => MainHomeWidget()),
 
         GetPage(name: user_registration_url,
              page: () => RegistrationView()),

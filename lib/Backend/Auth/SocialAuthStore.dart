@@ -237,6 +237,8 @@ class MySocialAuth extends GetxController {
   /// ////////////////////////////////
   Logout() async {
     final localStore = await SharedPreferences.getInstance();
+    // Logout from firebase :
+    FirebaseAuth.instance.signOut();
    
     localStorageKeyes.forEach((objKey) {
       final key_found = localStore.containsKey(objKey);
@@ -245,8 +247,6 @@ class MySocialAuth extends GetxController {
       }
     });
 
-    // Logout from firebase :
-    FirebaseAuth.instance.signOut();
     // Facebook signout :
     try {
       await FacebookAuth.instance.logOut();
@@ -261,4 +261,7 @@ class MySocialAuth extends GetxController {
       print('google logout error');
     }
   }
+
+
+  
 }
