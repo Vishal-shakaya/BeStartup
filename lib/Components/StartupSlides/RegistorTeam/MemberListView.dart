@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDialog.dart';
+
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,7 +80,7 @@ class _MemberListViewState extends State<MemberListView> {
                   ProfileImage(),
       
                   // SPACING:
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
       
@@ -132,7 +133,7 @@ class _MemberListViewState extends State<MemberListView> {
                           backgroundColor: Colors.red.shade300,
                           child: Container(
                               padding: EdgeInsets.all(2),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.delete,
                                 color: Colors.white,
                                 size: 15,
@@ -141,7 +142,7 @@ class _MemberListViewState extends State<MemberListView> {
                   ),
       
                   // SPACING :
-                  SizedBox(
+                 const  SizedBox(
                     height: 5,
                   ),
       

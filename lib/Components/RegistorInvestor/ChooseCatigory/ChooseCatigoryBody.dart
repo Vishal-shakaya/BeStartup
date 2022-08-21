@@ -43,7 +43,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
       var dialog = SmartDialog.showLoading(
           background: Colors.white,
           maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
+          widget: const CircularProgressIndicator(
             backgroundColor: Colors.white,
             color: Colors.orangeAccent,
           ));
@@ -57,16 +57,20 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
 
     // SUBMIT CATIGORY :
     SubmitCatigory() async {
+      
       StartLoading();
       var resp = await catigoryStore.PersistCatigory();
+      
       if (resp['response'] == false) {
         EndLoading();
-
         var snack_width = MediaQuery.of(context).size.width * 0.50;
         Get.showSnackbar(
             MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
-        return;
-      } else {
+          return;
+      } 
+      
+      
+      else {
         var resp = await investorConct.CreateInvestorCatigory();
         print(resp);
 
@@ -79,39 +83,11 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
         final resp4 = await userStore.UpdateUserDatabaseField(
             field: 'is_investor', val: true);
 
-        final user_id = await userState.GetUserId();
-        final user_resp =
-            await investorConct.FetchInvestorDetailandContact(user_id: user_id);
-
-        print('Registor Investor detial $user_resp');
-        if (user_resp['response']) {
-          final phoneno = user_resp['data']['userContect']['phone_no'];
-          final profile_image = user_resp['data']['userDetail']['picture'];
-          final username = user_resp['data']['userDetail']['name'];
-
-          await userState.SetPhoneNo(number: phoneno);
-          await userState.SetProfileImage(image: profile_image);
-          await userState.SetProfileName(name: username);
-        }
-
-        // Success Response Handler :
-        if (resp['response']) {
-          await ClearStartupSlideCached();
-          await userState.SetUserType(type: UserType.investor);
-          EndLoading();
-          Get.toNamed(home_page_url);
-        }
-
-        // Error Response Handler :
-        if (!resp['response']) {
-          var snack_width = MediaQuery.of(context).size.width * 0.50;
-          EndLoading();
-          Get.showSnackbar(
-              MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
-        }
-
+        await ClearCachedData();
         EndLoading();
+        Get.toNamed(home_page_url);
       }
+      
     }
 
     // DEFAULT :
@@ -210,7 +186,7 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
       //     EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           await submitCatigory();

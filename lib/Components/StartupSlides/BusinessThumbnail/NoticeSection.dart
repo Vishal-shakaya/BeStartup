@@ -105,7 +105,7 @@ class _NoticeSectionState extends State<NoticeSection> {
           decoration: BoxDecoration(
             color: Colors.yellow.shade50,
             border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(10),
                 right: Radius.circular(10))),
           child: Visibility(
@@ -113,7 +113,7 @@ class _NoticeSectionState extends State<NoticeSection> {
             child: Container(
                 width: context.width * notice_cont_width,
                 child: AutoSizeText.rich(TextSpan(
-                  style: TextStyle(
+                  style: const TextStyle(
                       wordSpacing: 5, color: Colors.black),
                   children: [
                     TextSpan(text: thumbnail_important_text)

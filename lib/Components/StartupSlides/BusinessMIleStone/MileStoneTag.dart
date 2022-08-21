@@ -23,11 +23,14 @@ class MileStoneTag extends StatefulWidget {
 }
 
 class _MileStoneTagState extends State<MileStoneTag> {
+  var my_context = Get.context; 
   Color mil_default_text_color = Colors.black;
   Color mil_activate_text_color = Colors.teal.shade300;
   Color mil_deactivate_text_color = Colors.black;
+ 
   final formKey = GlobalKey<FormBuilderState>();
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+ 
   double milestone_width = 900;
   double milestone_height = 900;
 
@@ -81,7 +84,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
       // Decoration:
       decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20),
             right: Radius.circular(20),
           )),
@@ -101,7 +104,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
           onTap: () {
             // MileStoneInfo();
           },
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.horizontal(
             left: Radius.circular(20),
             right: Radius.circular(20),

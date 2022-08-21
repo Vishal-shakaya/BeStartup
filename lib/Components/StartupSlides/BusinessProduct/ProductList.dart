@@ -161,7 +161,7 @@ class _ProductListViewState extends State<ProductListView> {
                   backgroundColor: Colors.red.shade300,
                   child: Container(
                       padding: EdgeInsets.all(2),
-                      child: Icon(
+                      child: const Icon(
                         Icons.delete,
                         color: Colors.white,
                         size: 15,
@@ -170,7 +170,7 @@ class _ProductListViewState extends State<ProductListView> {
           ),
 
           // SPACING :
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
 
@@ -193,7 +193,7 @@ class _ProductListViewState extends State<ProductListView> {
                   backgroundColor: Colors.blue.shade300,
                   child: Container(
                       padding: EdgeInsets.all(2),
-                      child: Icon(
+                      child: const Icon(
                         Icons.edit,
                         color: Colors.white,
                         size: 15,
@@ -212,7 +212,7 @@ class _ProductListViewState extends State<ProductListView> {
         width: context.width * desc_cont_width,
         height: context.height * desc_cont_height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),
@@ -266,7 +266,7 @@ class _ProductListViewState extends State<ProductListView> {
     return Card(
       elevation: 3,
       shadowColor: Colors.blueGrey,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(
           left: Radius.circular(19),
           right: Radius.circular(19),
@@ -276,7 +276,7 @@ class _ProductListViewState extends State<ProductListView> {
         width: context.width * image_cont_width,
         height: context.height * image_cont_height,
         child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(19),
             right: Radius.circular(19),
           ),
@@ -286,7 +286,7 @@ class _ProductListViewState extends State<ProductListView> {
               fit: BoxFit.cover),
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),

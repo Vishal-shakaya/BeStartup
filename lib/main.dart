@@ -192,6 +192,10 @@ class _MyAppState extends State<MyApp> {
 
         GetPage(name: signup_url,
              page: () => SignupView()),
+
+        GetPage(name: login_handler_url,
+             page: () => LoginHandler()),
+
         GetPage(name: startup_slides_url,
              page: () => StartupSlides()),
 

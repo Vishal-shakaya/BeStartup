@@ -81,25 +81,26 @@ class _UserTypeState extends State<UserType> {
 
     // REDIRECT TO CREATE STARTUP PAGE :
     if (selected_user_type == 'founder') {
-      final resp = await userStore.UpdateUserDatabaseField(
-          field: 'is_founder', val: true);
+        final resp = await userStore.UpdateUserDatabaseField(
+            field: 'is_founder', val: true);
 
-      // Success Response Handler :
-      if (resp['response']) {
-        await ClearStartupSlideCached();
-        await userState.SetUserType(type:en.UserType.founder);
-        Get.toNamed(
-          create_business_detail_url,
-        );
-      }
 
-      // Error Response Handler :
-      if (!resp['response']) {
-        var snack_width = MediaQuery.of(context).size.width * 0.50;
-        Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: en.MySnackbarType.error));
-      }
+        // Success Response Handler :
+        if (resp['response']) {
+          await ClearCachedData();
+          await userState.SetUserType(type:en.UserType.founder);
+          Get.toNamed(create_founder);
+        }
+
+
+        // Error Response Handler :
+        if (!resp['response']) {
+          var snack_width = MediaQuery.of(context).size.width * 0.50;
+          Get.showSnackbar(
+              MyCustSnackbar(width: snack_width, type: en.MySnackbarType.error));
+        }
     }
+
 
     // REDIERCT TO STARTUPS HOMEVIEW:
     if (selected_user_type == 'investor') {
@@ -108,6 +109,8 @@ class _UserTypeState extends State<UserType> {
       );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

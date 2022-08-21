@@ -68,7 +68,7 @@ FounderModel(
       'user_id': user_id,
       'startup_name':startup_name,  
       'name': name,
-      'position':position, 
+      // 'position':position, 
       'email':email, 
       'picture': picture,
       'plan': plan // plan id :

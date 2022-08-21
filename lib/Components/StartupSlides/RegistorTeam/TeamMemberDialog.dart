@@ -1,8 +1,9 @@
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberInfoForm.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDetailForm.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberProfileImage.dart';
+
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberInfoForm.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDetailForm.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberProfileImage.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -56,7 +57,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
       SmartDialog.showLoading(
           background: Colors.white,
           maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
+          widget: const CircularProgressIndicator(
             backgroundColor: Colors.white,
             color: Colors.orangeAccent,
           ));
@@ -204,14 +205,14 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
       heightFactor: 0.64,
       child: Container(
         padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
 

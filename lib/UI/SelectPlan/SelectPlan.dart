@@ -1,4 +1,3 @@
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/RegistorTeamBody.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:flutter/material.dart';
 

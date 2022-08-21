@@ -17,12 +17,14 @@ class InvestorImage extends StatefulWidget {
 }
 
 class _InvestorImageState extends State<InvestorImage> {
+  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
+ 
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
-  late UploadTask? upload_process;
   bool is_uploading = false; 
-  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
+ 
+  late UploadTask? upload_process;
 
   double image_radius = 85;
   double upload_icon_position_top = 129;
@@ -68,7 +70,7 @@ class _InvestorImageState extends State<InvestorImage> {
       if (result != null && result.files.isNotEmpty) {
         image = result.files.first.bytes;
         filename = result.files.first.name;
-        var resp = await investorStore.UploadFounderImage(
+        var resp = await investorStore.UploadProfileImage(
             image: image, filename: filename);
 
         if (!resp['response']) {

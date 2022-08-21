@@ -120,10 +120,13 @@ class _CatigoryBodyState extends State<CatigoryBody> {
   ///////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = Get.parameters;
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+    
+    if(Get.parameters.isNotEmpty){
+      pageParam = Get.parameters;
+
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
     super.initState();
   }

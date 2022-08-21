@@ -6,7 +6,6 @@ import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionBu
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/ProductList.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
-import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -14,9 +13,7 @@ import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProductBody extends StatefulWidget {
   const ProductBody({Key? key}) : super(key: key);
@@ -147,18 +144,20 @@ class _ProductBodyState extends State<ProductBody> {
 ///////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
+    if(Get.parameters.isNotEmpty){
+      pageParam = jsonDecode(Get.parameters['data']!);
 
-    startup_id = pageParam['startup_id'];
-    founder_id = pageParam['founder_id'];
-    is_admin = pageParam['is_admin'];
+      startup_id = pageParam['startup_id'];
+      founder_id = pageParam['founder_id'];
+      is_admin = pageParam['is_admin'];
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {

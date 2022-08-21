@@ -119,15 +119,20 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   ////////////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
-    is_admin = pageParam['is_admin'];
-    founder_id = pageParam['founder_id'];
-    startup_id = pageParam['startup_id'];
+    
+    if(Get.parameters.isNotEmpty){
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      pageParam = jsonDecode(Get.parameters['data']!);
+
+      is_admin = pageParam['is_admin'];
+      founder_id = pageParam['founder_id'];
+      startup_id = pageParam['startup_id'];
+
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
+
     super.initState();
   }
 

@@ -177,15 +177,18 @@ class _VisionBodyState extends State<VisionBody> {
   /////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
+    if(Get.parameters.isNotEmpty){
+      
+      pageParam = jsonDecode(Get.parameters['data']!);
 
-    founder_id = pageParam['founder_id'];
-    startup_id = pageParam['startup_id'];
-    is_admin = pageParam['is_admin'];
+      founder_id = pageParam['founder_id'];
+      startup_id = pageParam['startup_id'];
+      is_admin = pageParam['is_admin'];
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
+
     }
     super.initState();
   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
@@ -8,20 +7,20 @@ import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDialog.dart';
-import 'package:be_startup/Components/RegistorTeam/TeamSlideNav.dart';
-import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
-import 'package:be_startup/Models/StartupModels.dart';
+
+
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDialog.dart';
+
+
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
 class RegistorTeamBody extends StatefulWidget {
   const RegistorTeamBody({Key? key}) : super(key: key);
@@ -155,13 +154,16 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 //////////////////////////////////////
   @override
   void initState() {
-    pageParam = jsonDecode(Get.parameters['data']!);
-    startup_id = pageParam['startup_id'];
-    founder_id = pageParam['founder_id'];
-    is_admin   = pageParam['is_admin'];
+    if (Get.parameters.isNotEmpty) {
+      pageParam = jsonDecode(Get.parameters['data']!);
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      startup_id = pageParam['startup_id'];
+      founder_id = pageParam['founder_id'];
+      is_admin = pageParam['is_admin'];
+
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
     super.initState();
   }
@@ -172,9 +174,6 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      //////////////////////////////////////////
-      /// UPDATE TEAM MEMBERS :
-      //////////////////////////////////////////
       if (updateMode == true) {
         final fetch_resp = await startupviewConnector.FetchBusinessTeamMember(
             startup_id: startup_id);
@@ -188,12 +187,6 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
           print('Fetch Team Member Error $fetch_resp');
         }
       }
-
-      //////////////////////////////////////////
-      /// GET TEAM MEMEMBERS :
-      /// 1. Localy :
-      /// 2. Globaly :
-      //////////////////////////////////////////
       final data = await memeberStore.GetMembers();
       error_resp = data;
       return data;
@@ -250,8 +243,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                             onPressed: () {
                               AddMember(context);
                             },
-                            icon: Icon(Icons.add),
-                            label: Text('Add'))),
+                            icon: const Icon(Icons.add),
+                            label: const Text('Add'))),
                   ],
                 ),
 
@@ -274,26 +267,26 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
               ],
             )),
         updateMode == true
-            ? UpdateButton(context)
-            : TeamSlideNav(
-                submitform: SubmitTeamMemberDetails, slide: TeamSlideType.team)
+            ? SubmitAndUpdateButton(context, UpdateTeamMemberDetails)
+            : SubmitAndUpdateButton(context, SubmitTeamMemberDetails)
       ],
     );
   }
 
+
 ///////////////////////////////////
-  /// EXTERNAL METHODS :
-  /// 1. Update buttopn :
+/// EXTERNAL METHODS :
+/// 1. Update buttopn :
 ///////////////////////////////////
-  Container UpdateButton(BuildContext context) {
+  Container SubmitAndUpdateButton(BuildContext context, fun) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
-          await UpdateTeamMemberDetails();
+          await fun();
         },
         child: Card(
           elevation: 10,
@@ -310,7 +303,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: const Text(
-              'Update',
+              'Submit',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,

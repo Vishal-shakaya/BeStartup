@@ -1,4 +1,4 @@
-import 'package:be_startup/Components/RegistorTeam/RegistorFounder/RegistorFounderBody.dart';
+import 'package:be_startup/Components/RegistorFounder/RegistorFounderBody.dart';
 import 'package:be_startup/Components/StartupSlides/SlideHeading.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';

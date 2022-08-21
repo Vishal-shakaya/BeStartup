@@ -9,27 +9,28 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
 class InvestorDetailStore extends GetxController {
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
 
   static Map<String, dynamic>? investor;
-  
+
   static String? image_url;
-    Map<String, dynamic> clean_resp = {
+  Map<String, dynamic> clean_resp = {
     'picture': '',
     'name': '',
     'phone_no': '',
     'primary_mail': '',
     'other_contact': '',
   };
-  
+
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
   /// SET PRODUCT IMAGE:
   ////////////////////////////////////////
-  UploadFounderImage({image, filename}) async {
+  UploadProfileImage({image, filename}) async {
     try {
       // STORE IMAGE IN FIREBASE :
       // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
@@ -42,39 +43,38 @@ class InvestorDetailStore extends GetxController {
     }
   }
 
-
   // CRATE investor :
   CreateInvestor(investor) async {
     var localStore = await SharedPreferences.getInstance();
     try {
       try {
-        var resp = await InvestorModel(
+        var investor_detail = await InvestorModel(
             user_id: await userState.GetUserId(),
             email: await userState.GetDefaultMail(),
             name: investor['name'],
-            picture: image_url
-            );
+            picture: image_url);
 
-        var resp2 =  await UserContact(
+        var investor_contact = await UserContact(
             user_id: await userState.GetUserId(),
             email: await userState.GetDefaultMail(),
             primary_mail: investor['email'],
             phone_no: investor['phone_no'],
             other_contact: investor['other_contact']);
 
-        localStore.setString('InvestorUserDetail', json.encode(resp));
-        localStore.setString('InvestorUserContact', json.encode(resp2));
+        localStore.setString('InvestorUserDetail', json.encode(investor_detail));
+        localStore.setString('InvestorUserContact', json.encode(investor_contact));
 
-        return ResponseBack(response_type: true );
+        print('Investor Detail $investor_detail');
+        print('Investor Contact $investor_contact');
+
+        return ResponseBack(response_type: true);
       } catch (e) {
-        return ResponseBack(response_type: false, message:create_error_title );
+        return ResponseBack(response_type: false, message: create_error_title);
       }
     } catch (e) {
       return ResponseBack(response_type: false, message: create_error_title);
     }
   }
-
-
 
   GetInvestorDetail() async {
     final localStore = await SharedPreferences.getInstance();
@@ -97,7 +97,6 @@ class InvestorDetailStore extends GetxController {
           'other_contact': contact_obj['other_contact'],
         };
         return temp_founder;
-      
       } else {
         return clean_resp;
       }
@@ -105,6 +104,4 @@ class InvestorDetailStore extends GetxController {
       return clean_resp;
     }
   }
-
-  
 }

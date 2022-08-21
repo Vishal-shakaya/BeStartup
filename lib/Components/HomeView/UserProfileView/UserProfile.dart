@@ -14,7 +14,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/StartupState.dart';
 
-
 class HomeViewUserProfile extends StatelessWidget {
   HomeViewUserProfile({Key? key}) : super(key: key);
 
@@ -25,6 +24,7 @@ class HomeViewUserProfile extends StatelessWidget {
   var user_phoneno = '____________';
   var username = '_____________';
   var usertype;
+  var user_id;
 
   ////////////////////////////////////
   /// Open Mail Box: to send mail:
@@ -61,10 +61,12 @@ class HomeViewUserProfile extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    var user = FirebaseAuth.instance.currentUser;
     usertype = await userState.GetUserType();
-    final user_id = user?.uid;
-    user_email = user?.email;
+    user_id = await userState.GetUserId();
+    user_email = await userState.GetPrimaryMail();
+    // print('login user type $usertype');
+    // print('Login user id $user_id');
+    // print('Login user mail $user_email');
 
     //////////////////////////////////////////
     // If User Type Investor :
@@ -75,6 +77,7 @@ class HomeViewUserProfile extends StatelessWidget {
           await investorConnector.FetchInvestorDetailandContact(
               user_id: user_id);
 
+      print('Founder Response $investor_resp');
       if (investor_resp['response']) {
         user_phoneno = investor_resp['data']['userContect']['phone_no'];
         username = investor_resp['data']['userDetail']['name'];
@@ -82,18 +85,16 @@ class HomeViewUserProfile extends StatelessWidget {
       }
     }
 
-
     //////////////////////////////////////////
     /// If User Type Founder then :
     //////////////////////////////////////////
     if (usertype == UserType.founder) {
       final founderConnector = Get.put(FounderConnector());
-      final founder_resp = await founderConnector.FetchFounderDetailandContact(
-          user_id: user?.uid);
+      final founder_resp =
+          await founderConnector.FetchFounderDetailandContact(user_id: user_id);
 
       if (founder_resp['response']) {
         user_phoneno = founder_resp['data']['userContect']['phone_no'];
-        user_position = founder_resp['data']['userDetail']['position'];
         username = founder_resp['data']['userDetail']['name'];
         user_image = founder_resp['data']['userDetail']['picture'];
       }
@@ -190,7 +191,7 @@ class HomeViewUserProfile extends StatelessWidget {
               TextSpan(style: Get.textTheme.headline5, children: [
         TextSpan(
             text: username,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.black87,
                 fontSize: 16))
@@ -210,6 +211,8 @@ class HomeViewUserProfile extends StatelessWidget {
     ])));
   }
 
+
+
   InkWell MemContact({text, icon, func}) {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
@@ -228,6 +231,7 @@ class HomeViewUserProfile extends StatelessWidget {
               size: 16,
             ),
           ),
+          
           AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
             TextSpan(
                 text: text,

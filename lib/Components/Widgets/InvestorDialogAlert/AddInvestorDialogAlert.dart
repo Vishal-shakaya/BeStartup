@@ -1,8 +1,4 @@
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberInfoForm.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberDetailForm.dart';
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/TeamMemberProfileImage.dart';
 import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorDetailForm.dart';
 import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorInfoForm.dart';
 import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorProfileImage.dart';

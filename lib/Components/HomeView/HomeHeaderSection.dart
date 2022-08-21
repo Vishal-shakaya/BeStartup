@@ -106,7 +106,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     /// Create Startup Url  :
     //////////////////////////////////////////////////////////
     CreateStatup() async {
-      await ClearStartupSlideCached();
+      await ClearCachedData();
       Get.toNamed(create_business_detail_url);
     }
 
@@ -376,12 +376,19 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         customButton: Container(
           margin: EdgeInsets.only(top: context.height * 0.01),
           child: CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(temp_avtar_image, scale: 1),
-          ),
-        ),
+            // backgroundColor: Colors.orange.shade100,
+            radius: 30,
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl:  widget.profile_image,
+                fit: BoxFit.cover,
+                width: 51,
+                height: 51,
+              ),
+            ),
+          ), 
       )),
-    );
+    ));
   }
 }
 

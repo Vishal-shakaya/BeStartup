@@ -152,19 +152,23 @@ class _BusinessBodyState extends State<BusinessBody> {
   }
 
 /////////////////////////////////
-  /// SET PAGE DEFAULT STATE :
+/// SET PAGE DEFAULT STATE :
 /////////////////////////////////
   @override
   void initState() {
     // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
-    founder_id = pageParam['founder_id'];
-    startup_id = pageParam['startup_id'];
-    is_admin = pageParam['is_admin'];
+    
+    if(Get.parameters.isNotEmpty){
+      pageParam = jsonDecode(Get.parameters['data']!);
+      founder_id = pageParam['founder_id'];
+      startup_id = pageParam['startup_id'];
+      is_admin = pageParam['is_admin'];
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
+
     super.initState();
   }
 
@@ -175,7 +179,6 @@ class _BusinessBodyState extends State<BusinessBody> {
     try {
       if (updateMode == true) {
         final resp = await startupConnector.FetchBusinessDetail(startup_id: startup_id);
-        
         final amount = resp['data']['desire_amount'];
         final logo = resp['data']['logo'];
         final name = resp['data']['name'];

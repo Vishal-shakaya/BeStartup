@@ -83,14 +83,20 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   ////////////////////////////////////////////
   @override
   void initState() {
-    pageParam = jsonDecode(Get.parameters['data']!);
-    is_admin = pageParam['is_admin'];
-    founder_id = pageParam['founder_id'];
-    startup_id = pageParam['startup_id'];
+    
+    if(Get.parameters.isNotEmpty){
+      
+      pageParam = jsonDecode(Get.parameters['data']!);
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      is_admin = pageParam['is_admin'];
+      founder_id = pageParam['founder_id'];
+      startup_id = pageParam['startup_id'];
+
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
+
     super.initState();
   }
 

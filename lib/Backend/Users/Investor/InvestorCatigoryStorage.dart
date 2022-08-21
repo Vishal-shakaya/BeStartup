@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -8,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class InvestorCatigoryStore extends GetxController {
-    var userState = Get.put(UserState());
+  var userState = Get.put(UserState());
 
   // LOCAL STORAGE:
   static var catigories = [];
@@ -43,19 +42,17 @@ class InvestorCatigoryStore extends GetxController {
     }
   }
 
-
-
-    // STORE CATIGORY LOCALY :
+  // STORE CATIGORY LOCALY :
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await InvestorCatigoryModel(
-          user_id: await userState.GetUserId(),
-          catigory: catigories);
+          user_id: await userState.GetUserId(), catigory: catigories);
 
       localStore.setString('InvestorChooseCatigory', json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
+      print('Error While Submiting Catigory $e');
       return ResponseBack(response_type: false);
     }
   }

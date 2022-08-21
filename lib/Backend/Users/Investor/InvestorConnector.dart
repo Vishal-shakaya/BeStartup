@@ -54,9 +54,7 @@ class InvestorConnector extends GetxController {
     }
   }
 
-
-
-  FetchInvestorDetailandContact({user_id=false}) async {
+  FetchInvestorDetailandContact({user_id = false}) async {
     var data_userContact;
     var data_userDetail;
     var doc_id_userDetail;
@@ -66,7 +64,7 @@ class InvestorConnector extends GetxController {
 
     var final_user_id;
 
-    if (user_id!='' || user_id!=false) {
+    if (user_id != '' || user_id != false) {
       final_user_id = user_id;
     } else {
       final_user_id = '';
@@ -75,45 +73,39 @@ class InvestorConnector extends GetxController {
     try {
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getInvestorUserDetail);
-      var store1 = FirebaseFirestore.instance.collection(getInvestorUserContacts);
-
+      var store1 =
+          FirebaseFirestore.instance.collection(getInvestorUserContacts);
 
       // Get User Detial Document :
-      var query = store
-          .where('user_id', isEqualTo: final_user_id).get();
+      var query = store.where('user_id', isEqualTo: final_user_id).get();
 
       await query.then((value) {
         data_userDetail = value.docs.first.data();
         doc_id_userDetail = value.docs.first.id;
       });
 
-
       // Get User  Conctact Document:
-      var query1 = store1
-          .where('user_id', isEqualTo: final_user_id).get();
+      var query1 = store1.where('user_id', isEqualTo: final_user_id).get();
 
       await query1.then((value) {
         data_userContact = value.docs.first.data();
         doc_id_userContact = value.docs.first.id;
       });
 
-
       return ResponseBack(
-        response_type: true, 
-        message: 'Fetch Investor Detail from Firebase storage',
-        data: {
-        'userDetail':data_userDetail,
-        'userContect':data_userContact});
-
+          response_type: true,
+          message: 'Fetch Investor Detail from Firebase storage',
+          data: {
+            'userDetail': data_userDetail,
+            'userContect': data_userContact
+          });
     } catch (e) {
-      return ResponseBack(response_type: false, message: fetch_data_error_title);
+      return ResponseBack(
+          response_type: false, message: fetch_data_error_title);
     }
   }
 
-
-
-
-  UpdateInvestorDetail({user_id=false}) async {
+  UpdateInvestorDetail({user_id = false}) async {
     var data_userContact;
     var data_userDetail;
     var doc_id_userDetail;
@@ -123,7 +115,7 @@ class InvestorConnector extends GetxController {
 
     var final_user_id;
 
-    if (user_id!='' || user_id!=false) {
+    if (user_id != '' || user_id != false) {
       final_user_id = user_id;
     } else {
       final_user_id = '';
@@ -132,25 +124,23 @@ class InvestorConnector extends GetxController {
     try {
       // FETCHING DATA FROM CACHE STORAGE :
       final userDetailCach = await GetCachedData(
-        fromModel: getInvestorUserDetail,
-        user_id: final_user_id );
+          fromModel: getInvestorUserDetail, user_id: final_user_id);
 
       final userContactCach = await GetCachedData(
-        fromModel: getInvestorUserContacts,
-        user_id: final_user_id );
+          fromModel: getInvestorUserContacts, user_id: final_user_id);
       if (userDetailCach != false || userContactCach != false) {
         temp_userDetail = userDetailCach;
-        temp_userContact = userContactCach;        
+        temp_userContact = userContactCach;
       }
 
       // FETCHING DATA FROM FIREBASE
       var store = FirebaseFirestore.instance.collection(getInvestorUserDetail);
 
-      var store1 = FirebaseFirestore.instance.collection(getInvestorUserContacts);
+      var store1 =
+          FirebaseFirestore.instance.collection(getInvestorUserContacts);
 
       // Get User Detial Document :
-      var query = store
-          .where('user_id', isEqualTo: final_user_id).get();
+      var query = store.where('user_id', isEqualTo: final_user_id).get();
 
       await query.then((value) {
         data_userDetail = value.docs.first.data();
@@ -158,14 +148,12 @@ class InvestorConnector extends GetxController {
       });
 
       // Get User  Conctact Document:
-      var query1 = store1
-          .where('user_id', isEqualTo: final_user_id).get();
+      var query1 = store1.where('user_id', isEqualTo: final_user_id).get();
 
       await query.then((value) {
         data_userContact = value.docs.first.data();
         doc_id_userContact = value.docs.first.id;
       });
-
 
       data_userDetail['name'] = temp_userDetail['name'];
       data_userDetail['name'] = temp_userDetail['picture'];
@@ -190,9 +178,6 @@ class InvestorConnector extends GetxController {
     }
   }
 
-
-
-
   CreateInvestorCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -201,39 +186,34 @@ class InvestorConnector extends GetxController {
       // fetch catigories for local storage :
       // kye : InvestorChooseCatigory
       bool is_data = localStore.containsKey(getInvestorUserChooseCatigory);
-      // Validate key : 
-      if(is_data){
+      // Validate key :
+      if (is_data) {
         String? temp_data = localStore.getString(getInvestorUserChooseCatigory);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(response_type: false);
       }
-
-      else{
-        return ResponseBack(response_type: false);  
-      }
-      
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateInvestorDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       final myStore = store.collection(getInvestorUserDetail);
-
-      // fetch catigories for local storage :
       // kye : InvestorUserDetail
-      
+
       bool is_data = localStore.containsKey(getInvestorUserDetail);
       if (is_data) {
         String? temp_data = localStore.getString(getInvestorUserDetail);
         var data = json.decode(temp_data!);
 
+        print('Fetch Investor Detail ${data}');
         // Store Data in Firebase :
         await myStore.add(data);
         return ResponseBack(response_type: true);
@@ -246,16 +226,16 @@ class InvestorConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   CreateInvestorContact() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection(getInvestorUserContacts);      
+      final myStore = store.collection(getInvestorUserContacts);
       bool is_data = localStore.containsKey(getInvestorUserContacts);
       if (is_data) {
         String? temp_data = localStore.getString(getInvestorUserContacts);
         var data = json.decode(temp_data!);
+        print('Fetch Investor Contact ${data}');
 
         // Store Data in Firebase :
         await myStore.add(data);
@@ -269,5 +249,4 @@ class InvestorConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 }

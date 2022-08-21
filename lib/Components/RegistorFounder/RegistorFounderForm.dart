@@ -69,13 +69,18 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
 /////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
-    user_id = pageParam['user_id'];
+    if(Get.parameters.isNotEmpty){
+    
+      pageParam = jsonDecode(Get.parameters['data']!);
+    
+      user_id = pageParam['user_id'];
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
+    
     }
+
     super.initState();
   }
 
@@ -159,19 +164,19 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                           name: 'founder_name',
                           error_text: 'Founder name required',
                           lable_text: 'founder',
-                          hind_text: 'founder or CEO',
+                          hind_text: 'founder name',
                           initial_val: data['name'],
                         ),
 
                         // POSITION:
-                        InputField(
-                          context: context,
-                          name: 'founder_position',
-                          lable_text: 'Position',
-                          hind_text: 'position in company',
-                          error_text: 'position in company required',
-                          initial_val: data['position'],
-                        ),
+                        // InputField(
+                        //   context: context,
+                        //   name: 'founder_position',
+                        //   lable_text: 'Position',
+                        //   hind_text: 'position in company',
+                        //   error_text: 'position in company required',
+                        //   initial_val: data['position'],
+                        // ),
                       ],
                     ),
                   ),
@@ -182,16 +187,18 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                     margin: EdgeInsets.only(
                         top: context.height * contact_text_margin_top),
                     child: AutoSizeText.rich(
-                        TextSpan(style: Get.textTheme.headline2, children: [
+                        TextSpan(style: Get.textTheme.headline2, children: const [
                       TextSpan(
                         text: 'Primary Contact',
                       )
                     ]))),
 
+
                 // TAKE FOUNDER INOF:
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
+
                 Card(
                   elevation: 4,
                   shadowColor: Colors.grey,
@@ -305,6 +312,8 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       ),
     );
   }
+
+
 
   // Secondary Input field :
   FormBuilderTextField SecondaryInputField({

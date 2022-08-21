@@ -91,7 +91,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     var dialog = SmartDialog.showLoading(
         background: Colors.white,
         maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
+        widget: const CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
         ));
@@ -109,7 +109,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var resp;
     StartLoading();
-    
+
     resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
 
     // Update Success Handler :
@@ -143,41 +143,38 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   SubmitMileStone() async {
     StartLoading();
     var resp = await mileStore.PersistMileStone();
+    print('Submit Milestones $resp');
     if (!resp['response']) {
       EndLoading();
     }
 
     if (!resp['response'] && resp['code'] == 101) {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    
-      EndLoading();  
+      EndLoading();
       Get.closeAllSnackbars();
-      MyCustSnackbar(
+
+      Get.showSnackbar(MyCustSnackbar(
         title: 'Complete Requirements First ',
         message: 'Define at leat 5 milestones ',
         width: snack_width,
-      );
-
-    }
-    
-     else {
+        type:MySnackbarType.error
+      ));
+      
+    } else {
       await EndLoading();
       _controllerCenter.play();
-      
+
       CoolAlert.show(
           barrierDismissible: false,
           title: 'First Step Completed!!',
           text: 'Now you have to complete final step.',
           width: alert_width,
-        
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
             _controllerCenter.stop();
-            Get.toNamed(create_founder, preventDuplicates: false);
+            Get.toNamed(create_business_team, preventDuplicates: false);
           },
-        
           context: my_context!,
-        
           type: CoolAlertType.success);
     }
   }
@@ -188,7 +185,8 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   GetLocalStorageData() async {
     try {
       if (updateMode == true) {
-        final resp = await startupConnector.FetchBusinessMilestone( startup_id: startup_id);
+        final resp = await startupConnector.FetchBusinessMilestone(
+            startup_id: startup_id);
 
         final miles = resp['data']['milestone'];
         await mileStore.SetMilestoneParam(list: miles);
@@ -207,14 +205,16 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 ///////////////////////////////////////////
   @override
   void initState() {
-    pageParam = jsonDecode(Get.parameters['data']!);
+    if (Get.parameters.isNotEmpty) {
+      pageParam = jsonDecode(Get.parameters['data']!);
 
-    founder_id = pageParam['founder_id'];
-    startup_id = pageParam['startup_id'];
-    is_admin = pageParam['is_admin'];
+      founder_id = pageParam['founder_id'];
+      startup_id = pageParam['startup_id'];
+      is_admin = pageParam['is_admin'];
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
     }
     super.initState();
     _controllerCenter =

@@ -110,7 +110,7 @@ class BusinessFounderStore extends GetxController {
             email: await userState.GetDefaultMail(),
             startup_name: await startupState.GetStartupName(),
             name: founder['name'],
-            position: founder['position'],
+            // position: founder['position'],
             picture: image_url);
 
         var resp2 = await UserContact(
@@ -125,18 +125,6 @@ class BusinessFounderStore extends GetxController {
         localStore.setString(
             getBusinessFounderContactStoreName, json.encode(resp2));
 
-        ///////////////////////////////////////////
-        // Updating BusinessDetial Field
-        // 1. Founder name and search index :
-        ///////////////////////////////////////////
-        final founder_name_search_index =
-            await CreateSearchIndexParam(founder['name']);
-
-        await businessDetailStore.UpdateBusinessDetailCacheField(
-            field: 'founder_name', val: founder['name']);
-
-        await businessDetailStore.UpdateBusinessDetailCacheField(
-            field: 'founder_searching_index', val: founder_name_search_index);
 
         return ResponseBack(response_type: true, message: create_error_title);
       } catch (e) {

@@ -8,13 +8,11 @@ import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHandler.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileHandler.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -96,8 +94,6 @@ class _HomeViewState extends State<HomeView> {
     ),
   );
 
-
-
   @override
   Widget build(BuildContext context) {
     ///////////////////////////////////////////
@@ -156,19 +152,16 @@ class _HomeViewState extends State<HomeView> {
       // 1 CHECK  :
       // If user user type is investor or founder
       // if both are false then show user type page :
-      if (resp['data']['is_investor'] == false &&
-          resp['data']['is_founder'] == false) {
-        Get.toNamed(user_type_slide_url);
-      }
+      // if (resp['data']['is_investor'] == false &&
+      //     resp['data']['is_founder'] == false) {
+      //   Get.toNamed(user_type_slide_url);
+      // }
 
       // 2 CHECK  :
       // If user user type is investor or founder
       // if any one is true then send Home View
       if (resp['data']['is_investor'] == true ||
           resp['data']['is_founder'] == true) {
-      
-
-
         ////////////////////////////////////////
         // INVESTOR HANDLER :
         ////////////////////////////////////////
@@ -176,12 +169,13 @@ class _HomeViewState extends State<HomeView> {
           final invest_resp =
               await investorConnector.FetchInvestorDetailandContact(
                   user_id: user_id);
-       
+
           // Investor Success Handler :
           if (invest_resp['response']) {
-            
+
+            print(invest_resp['data']);
             print(' [ SETUP INVESTOR DETAIL ] ');
-            
+
             user_profile = invest_resp['data']['userDetail']['picture'];
             user_name = invest_resp['data']['userDetail']['name'];
             registor_mail = invest_resp['data']['userDetail']['email'];
@@ -204,7 +198,6 @@ class _HomeViewState extends State<HomeView> {
           usertype = UserType.founder;
           await userState.SetUserType(type: UserType.founder);
 
-
           // Founder Error Handler :
           if (!invest_resp['response']) {
             print(
@@ -216,19 +209,18 @@ class _HomeViewState extends State<HomeView> {
           await userState.SetUserType(type: UserType.investor);
         }
 
-
-
-
         ////////////////////////////////////////////
-        /// FOUNDER HANDLER : 
+        /// FOUNDER HANDLER :
         ////////////////////////////////////////////
         if (resp['data']['is_founder'] == true) {
-          final found_resp = await founderConnector.FetchFounderDetailandContact(user_id: user_id);
+          final found_resp =
+              await founderConnector.FetchFounderDetailandContact(
+                  user_id: user_id);
 
           // Founder Success Handler :
           if (found_resp['response']) {
             print('[ SETUP FOUNDER DETAIL ] ');
-           
+
             user_profile = found_resp['data']['userDetail']['picture'];
             user_name = found_resp['data']['userDetail']['name'];
             registor_mail = found_resp['data']['userDetail']['email'];
@@ -236,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
             primary_mail = found_resp['data']['userContect']['primary_mail'];
             phoneNo = found_resp['data']['userContect']['phone_no'];
             otherContact = found_resp['data']['userContect']['other_contact'];
-            
+
             primary_mail = await CheckAndGetPrimaryMail(
                 primary_mail: primary_mail, default_mail: registor_mail);
 
@@ -248,11 +240,10 @@ class _HomeViewState extends State<HomeView> {
             await userState.SetOtherContact(contact: otherContact);
             await userState.SetPrimaryMail(mail: primary_mail);
           }
-         
+
           usertype = UserType.founder;
           await userState.SetUserType(type: UserType.founder);
 
-         
           // Founder Error Handler :
           if (!found_resp['response']) {
             print('****** Fetch Founder Profile Error  [ HomeView ]******** ');
@@ -295,15 +286,13 @@ class _HomeViewState extends State<HomeView> {
         child: Stack(
           children: [
             // 2. MAIN SECTION :
-            Container(
-              alignment:Alignment.center,
-              child: mainViewWidget),
+            Container(alignment: Alignment.center, child: mainViewWidget),
 
             // Header Section:
             HomeHeaderSection(
-             profile_image:user_profile,
-             changeView: SetHomeView,
-             usertype: usertype),
+                profile_image: user_profile,
+                changeView: SetHomeView,
+                usertype: usertype),
 
             // SEARCH BAR :
             BusinessSearchBar()

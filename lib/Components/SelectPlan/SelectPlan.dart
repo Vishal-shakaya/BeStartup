@@ -147,16 +147,16 @@ class _SelectPlanState extends State<SelectPlan> {
     var expired;
 
     if (plan_type == 'basic') {
-      expired = DateTime.now().add(Duration(days: 60)).toUtc().toString();
+      expired = DateTime.now().add(const Duration(days: 60)).toString();
       print('Basic plan Selected');
     }
     if (plan_type == 'best') {
-      expired = DateTime.now().add(Duration(days: 180)).toUtc().toString();
+      expired = DateTime.now().add(const Duration(days: 180)).toString();
       print('Best plan Selected');
     }
     if (plan_type == 'business') {
       print('Business plan Selected');
-      expired = DateTime.now().add(Duration(days: 360)).toUtc().toString();
+      expired = DateTime.now().add(const Duration(days: 360)).toString();
     }
     return expired;
   }
@@ -387,12 +387,6 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp6 = await startupConnector.CreateBusinessVision();
     print(resp6);
 
-    var resp7 = await founderConnector.CreateFounderContact();
-    print(resp7);
-
-    var resp8 = await founderConnector.CreateFounderDetail();
-    print(resp8);
-
     var resp9 = await startupConnector.CreateBusinessTeamMember();
     print(resp9);
 
@@ -402,11 +396,7 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp11 = await startupConnector.CreateBusinessMileStone();
     print(resp11);
 
-    // var resp10 = await investorConnector.CreateInvestorContact();
-    // print(resp10);
 
-    // var resp11 = await investorConnector.CreateInvestorDetail();
-    // print(resp11);
 
     return ResponseBack(response_type: true);
   }
@@ -421,9 +411,10 @@ class _SelectPlanState extends State<SelectPlan> {
   PaymentSuccess(PaymentSuccessResponse response) async {
     StartBigLoading();
 
-    final orderd = DateTime.now().toUtc().toString();
+    final orderd = DateTime.now().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
+    
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
@@ -488,6 +479,7 @@ class _SelectPlanState extends State<SelectPlan> {
     final orderd = DateTime.now().toUtc().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
+    
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 

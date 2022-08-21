@@ -1,5 +1,5 @@
-
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:twitter_login/twitter_login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class MySocialAuth extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
@@ -84,7 +84,6 @@ class MySocialAuth extends GetxController {
         await FirebaseAuth.instance.signInWithCredential(credintail);
         await userStore.CreateUser();
         await auth.setPersistence(Persistence.SESSION);
-      
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
@@ -235,30 +234,32 @@ class MySocialAuth extends GetxController {
 /////////////////////////////////////
   /// LOGOUT :
   /// ////////////////////////////////
-  Logout() async {
-    final localStore = await SharedPreferences.getInstance();
-   
-    localStorageKeyes.forEach((objKey) {
-      final key_found = localStore.containsKey(objKey);
-      if (key_found) {
-        localStore.remove(objKey);
+  Logout() async {   
+    try {
+
+
+      await FirebaseAuth.instance.signOut();
+
+      try {
+        await FacebookAuth.instance.logOut();
+      } catch (e) {
+        print('Facebook logout error $e');
       }
-    });
 
-    // Logout from firebase :
-    FirebaseAuth.instance.signOut();
-    // Facebook signout :
-    try {
-      await FacebookAuth.instance.logOut();
-    } catch (e) {
-      print('Facebook logout error');
+      // Google Error :
+      try {
+        googleSignIn.disconnect();
+      } catch (e) {
+        print('google logout error $e');
+      }
+     } 
+
+
+    catch (e) {
+      print('Logout Error $e');
+      }
+
     }
 
-    // Google Error :
-    try {
-      googleSignIn.disconnect();
-    } catch (e) {
-      print('google logout error');
-    }
   }
-}
+

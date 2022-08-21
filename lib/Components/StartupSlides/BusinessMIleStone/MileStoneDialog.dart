@@ -102,7 +102,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
       heightFactor: 0.55,
       child: Container(
         padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Scaffold(
@@ -112,7 +112,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
               alignment: Alignment.topCenter,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
 
@@ -129,7 +129,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                           child: Column(
                             children: [
                               // SPACER :
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
 
@@ -141,7 +141,7 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
                                   info_dialog: widget.info_dialog),
 
                               // SPACER :
-                              SizedBox(
+                              const SizedBox(
                                 height: 40,
                               ),
 

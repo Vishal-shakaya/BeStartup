@@ -1,4 +1,6 @@
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Models/Models.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +13,6 @@ class UserStore extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
-
-
   //////////////////////////////////////////////////////
   /// It checks if the user is already created in
   /// the database, if not then it creates the user in the
@@ -21,12 +21,11 @@ class UserStore extends GetxController {
   ///   Nothing.
   //////////////////////////////////////////////////////
   CreateUser() async {
+    final userState = Get.put(UserState());
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
     final temp_user = await UserModel(
-      email: email, id: id, 
-      is_founder: false,
-      is_investor:false);
+        email: email, id: id, is_founder: false, is_investor: false);
 
     final user = store.collection('users');
     var is_user_found;
@@ -42,24 +41,30 @@ class UserStore extends GetxController {
       if (is_user_found == 0) {
         Future<DocumentReference<Map<String, dynamic>>> ref =
             user.add(temp_user);
+            
+        print('After Create User Set User Id');
+        await userState.SetUserId(id: id);
+
+        print('Redirecting User to Select Usertye page');
+        Get.toNamed(user_type_slide_url);
       }
+
+
+
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
 
-
-
-
 /////////////////////////////////////////////////////
-/// UPDATE USER PLAN AND STARTUP FIELD :
-/// Plan and Startups may more than one  :
-/// It takes a field and a value, and then updates the user's
-/// profile with the value in the field
-/// Args:
-///   field: The field you want to update in the user's profile.
-///   val: The value to be added to the array
+  /// UPDATE USER PLAN AND STARTUP FIELD :
+  /// Plan and Startups may more than one  :
+  /// It takes a field and a value, and then updates the user's
+  /// profile with the value in the field
+  /// Args:
+  ///   field: The field you want to update in the user's profile.
+  ///   val: The value to be added to the array
 /////////////////////////////////////////////////////
   UpdateUserPlanAndStartup({field, val}) async {
     var temp_plan = [];
@@ -98,13 +103,10 @@ class UserStore extends GetxController {
     }
   }
 
-
-
-
 ////////////////////////////////////
-/// Check if user Already buy plan :
-/// I want to check if the user has a plan without a startup,
-/// if so, return true response, if not, return
+  /// Check if user Already buy plan :
+  /// I want to check if the user has a plan without a startup,
+  /// if so, return true response, if not, return
 ////////////////////////////////////
   IsAlreadyPlanBuyed() async {
     // Get User from firebase update ints field :
@@ -147,10 +149,6 @@ class UserStore extends GetxController {
     }
   }
 
-
-
-
-
   //////////////////////////////////////
   /// UPDATE USER PLAN :
   /// Checking if the user has a plan without a startup, if so,
@@ -186,8 +184,8 @@ class UserStore extends GetxController {
           }
         });
 
-        old_user['plan'] = plan; 
-        
+        old_user['plan'] = plan;
+
         user.doc(obj_id).update(old_user);
         return ResponseBack(response_type: true, message: 'Startup added  ');
       }
@@ -201,10 +199,10 @@ class UserStore extends GetxController {
   }
 
   ////////////////////////////////////////////////
-  /// Update user Perticular field in database : 
-  /// Param required val and field : 
+  /// Update user Perticular field in database :
+  /// Param required val and field :
   ////////////////////////////////////////////////
-  UpdateUserDatabaseField({required val , required field}) async {
+  UpdateUserDatabaseField({required val, required field}) async {
     // Get User from firebase update ints field :
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
@@ -218,21 +216,19 @@ class UserStore extends GetxController {
         obj_id = value.docs.first.id;
       });
 
-      userData[field] = val; 
+      userData[field] = val;
       user.doc(obj_id).update(userData);
 
-      return ResponseBack( response_type: true,);
+      return ResponseBack(
+        response_type: true,
+      );
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
 
-
-
-
-
   //////////////////////////////////////
-  // FetchUser Detail : 
+  // FetchUser Detail :
   //////////////////////////////////////
   FetchUserDetail() async {
     // Get User from firebase update ints field :
@@ -246,11 +242,8 @@ class UserStore extends GetxController {
       });
 
       return ResponseBack(response_type: true, data: old_user);
-
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
-
 }

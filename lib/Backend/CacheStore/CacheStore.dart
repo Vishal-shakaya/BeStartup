@@ -63,7 +63,7 @@ RemoveCachedData({required key}) async {
   }
 }
 
-ClearStartupSlideCached() async {
+ClearCachedData() async {
   final localStore = await SharedPreferences.getInstance();
   startupSlideStorageKeys.forEach((element) async{
     final key_found = localStore.containsKey(element);

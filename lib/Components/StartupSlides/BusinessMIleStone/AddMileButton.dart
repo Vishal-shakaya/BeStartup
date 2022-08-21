@@ -26,10 +26,13 @@ class _AddMileButtonState extends State<AddMileButton> {
   final formKey = GlobalKey<FormBuilderState>();
   Color suffix_icon_color = Colors.blueGrey.shade300;
   int maxlines = 7;
+
   double addbtn_bottom_margin = 0.05;
   double milestone_width = 900;
 
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+
+  var my_context = Get.context;
 
   ////////////////////////////////////
   /// ADD MILE STONE :
@@ -39,8 +42,8 @@ class _AddMileButtonState extends State<AddMileButton> {
   AddMileStone() {
     showDialog(
         barrierDismissible: false,
-        context: context,
-        builder: (context) => AlertDialog(
+        context: my_context!,
+        builder: (my_context) => AlertDialog(
               alignment: Alignment.center,
               title: Container(
                   alignment: Alignment.topRight,
@@ -84,6 +87,8 @@ class _AddMileButtonState extends State<AddMileButton> {
     );
   }
 
+
+
   SubmitMileForm() {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
@@ -93,11 +98,16 @@ class _AddMileButtonState extends State<AddMileButton> {
 
       // Add Milestone :
       var res = mileStore.AddMileStone(title: mile_tag, description: mile_desc);
+      print('adding milesonte $res');
+
+
       // Show success dialog :
       if (res['response']) {
         formKey.currentState!.reset();
-        Navigator.of(context).pop();
+        Navigator.of(my_context!).pop();
       }
+
+
       // Show error dialog :
       if (!res['response']) {
         ErrorSnakbar();
@@ -105,38 +115,48 @@ class _AddMileButtonState extends State<AddMileButton> {
     }
   }
 
+
+
   /// RESET FORM :
   ResetMileForm() {
     formKey.currentState!.reset();
   }
 
+
+
+  // Close Milestone Dialog : 
   CloseMilestoneDialog() {
-    Navigator.of(context).pop();
+    Navigator.of(my_context!).pop();
   }
 
+
+
+  ////////////////////////////////////////////////
   // RESULT ALERT AFTER OPERATION COMPLETE ;
   // 1 ADD OR DELET
+  ////////////////////////////////////////////////
   ResultAlert(alert_type) async {
     var dialog;
     if (alert_type == AlertType.success) {
       dialog = StylishDialog(
-          context: context,
+          context: my_context!,
           alertType: StylishDialogType.SUCCESS,
           titleText: 'successfull',
           controller: DialogController());
     }
     if (alert_type == AlertType.error) {
       dialog = StylishDialog(
-          context: context,
+          context: my_context!,
           alertType: StylishDialogType.ERROR,
           titleText: 'Error',
           controller: DialogController());
     }
-
     dialog.show();
     await Future.delayed(Duration(seconds: 1));
     dialog.dismiss();
   }
+
+
 
 // MAIN METHOD :
   @override

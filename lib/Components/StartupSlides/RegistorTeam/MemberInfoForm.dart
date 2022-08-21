@@ -1,4 +1,5 @@
-import 'package:be_startup/Components/RegistorTeam/RegistorTeam/MemberListView.dart';
+
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -108,7 +109,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
             child: Column(
               children: [
                 // TAKE FOUNDER INOF:
-                SizedBox(
+              const   SizedBox(
                   height: 25,
                 ),
                 SingleChildScrollView(

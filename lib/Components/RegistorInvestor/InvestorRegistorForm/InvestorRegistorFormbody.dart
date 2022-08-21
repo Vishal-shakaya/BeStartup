@@ -99,6 +99,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
     }
   }
 
+
   //////////////////////////////////
   // UPDATE INVESTOR FORM :
   //////////////////////////////////
@@ -174,11 +175,15 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 /////////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = Get.parameters;
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
-    }
+   if(Get.parameters.isNotEmpty){
+    
+      pageParam = Get.parameters;
+      
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
+
+   }
     super.initState();
   }
 

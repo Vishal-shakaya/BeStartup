@@ -73,7 +73,12 @@ final startupSlideStorageKeys = [
   getBusinessFounderContactStoreName,
   getBusinessFounderDetailStoreName,
   getStartupPlansStoreName,
-  getStartupStoreName
+  getStartupStoreName, 
+  getInvestorUserDetail, 
+  getInvestorUserContacts, 
+  getInvestorUserChooseCatigory , 
+  getBusinessFounderDetailStoreName,
+  getBusinessFounderContactStoreName,  
 ];
 
 ////////////////////////////////////////////
@@ -341,11 +346,11 @@ if (primary_mail != ''){
 /////////////////////////////////////
   GetFormatedDate() async {
     try {
-      final DateTime now = DateTime.now();
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final String formatted = formatter.format(now);
+      var today  = DateTime.now().toString();
+      // final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      // final String formatted = formatter.format(today);
     
-      return now;
+      return today;
     } catch (err) {
       return '';
     }

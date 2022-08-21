@@ -12,7 +12,6 @@ import 'package:uuid/uuid.dart';
 var uuid = Uuid();
 
 class MileStoneStore extends GetxController {
-
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
 
@@ -40,12 +39,12 @@ class MileStoneStore extends GetxController {
 
       milestones.add(milestone);
 
-      response = {
-        'response': true,
-        'code': 100,
-        'description': 'milestone added successfully'
-      };
+      return ResponseBack(
+          response_type: true,
+          code: 100,
+          message: 'milestone added successfully');
     }
+
     // return error respnse :
     catch (e) {
       response = {
@@ -54,7 +53,8 @@ class MileStoneStore extends GetxController {
         'description': 'Error to add milestone',
       };
 
-      return response;
+      return ResponseBack(
+          response_type: false, code: 001, message: 'Error to add milestone');
     }
   }
 
@@ -74,12 +74,11 @@ class MileStoneStore extends GetxController {
     });
   }
 
-
 ////////////////////////////////////////////////////
-/// It returns the value of the variable milestones.
-/// 
-/// Returns:
-///   the value of the variable milestones.
+  /// It returns the value of the variable milestones.
+  ///
+  /// Returns:
+  ///   the value of the variable milestones.
 ///////////////////////////////////////////////////////
   GetMilestoneParam() {
     return milestones;
@@ -95,15 +94,16 @@ class MileStoneStore extends GetxController {
         'title': title,
         'description': description,
       };
+
       milestones[index] = milestone;
-      // milestones
-      response = {
-        'response': true,
-        'code': 100,
-        'description': 'Successfully editmilestone',
-      };
-      return response;
+      
+      return ResponseBack(
+        response_type: true,
+        code: 100,
+        message:'Successfully editmilestone'  );
     }
+
+
     // return error respnse :
     catch (e) {
       response = {
@@ -112,7 +112,10 @@ class MileStoneStore extends GetxController {
         'description': 'Error to edit milestone',
       };
 
-      return response;
+      return ResponseBack(
+        response_type: false,
+        code: 001,
+        message:'Error to edit milestone'  );
     }
   }
 
@@ -171,11 +174,10 @@ class MileStoneStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await MileStoneModel(
-          startup_id: await startupState.GetStartupId(),
-          milestone: milestones);
+          startup_id: await startupState.GetStartupId(), milestone: milestones);
 
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
-      
+
       if (milestones.length < 5) {
         return ResponseBack(
             response_type: false,

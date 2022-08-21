@@ -178,15 +178,21 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   //////////////////////////////////
   @override
   void initState() {
-    // TODO: implement initState
-    pageParam = jsonDecode(Get.parameters['data']!);
-    startup_id = pageParam['startup_id'];
-    founder_id = pageParam['founder_id'];
-    is_admin = pageParam['is_admin'];
+    
+    if(Get.parameters.isNotEmpty){
 
-    if (pageParam['type'] == 'update') {
-      updateMode = true;
+      pageParam = jsonDecode(Get.parameters['data']!);
+      
+      startup_id = pageParam['startup_id'];
+      founder_id = pageParam['founder_id'];
+      is_admin = pageParam['is_admin'];
+
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+      }
+
     }
+
     super.initState();
   }
 

@@ -13,15 +13,12 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessDetailStore extends GetxController {
-  
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
 
   static String? image_url;
   static String? business_name;
   static String? amount;
-
-
 
   ////////////////////////////////////////////
   /// Param Setter :
@@ -59,10 +56,13 @@ class BusinessDetailStore extends GetxController {
     return amount;
   }
 
+
+
+
 /////////////////////////////////////
-/// UPLOAD IMAGE IN FIREBASE :
-/// CHECK ERROR OR SUCCESS RESP :
-/// SET BUSINESS LOGO:
+  /// UPLOAD IMAGE IN FIREBASE :
+  /// CHECK ERROR OR SUCCESS RESP :
+  /// SET BUSINESS LOGO:
 ////////////////////////////////////////
   SetBusinessLogo({logo, filename}) async {
     final localStore = await SharedPreferences.getInstance();
@@ -87,6 +87,9 @@ class BusinessDetailStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
+
+
+
 
 ////////////////////////////////////////////////////
 // 1. SET BUSINESS NAME :
@@ -123,17 +126,18 @@ class BusinessDetailStore extends GetxController {
           email: await userState.GetDefaultMail(),
           startup_name: business_name,
           timestamp: DateTime.now().toUtc().toString());
-     
-      ////////////////////////////
+
+      ///////////////////////////////////////////
       // Success Response :
-      // Set Set Startup Id : 
-      // Store localy startup : 
+      // Set Set Startup Id :
+      // Store localy startup :
+      ///////////////////////////////////////////
       if (startup_resp != false) {
         await startupState.SetStartupId(id: startup_resp['id']);
         localStore.setString(getStartupStoreName, json.encode(startup_resp));
       }
 
-     
+
       if (startup_resp == false) {
         return ResponseBack(
             response_type: false, message: 'Startup not created try again ');
@@ -143,8 +147,15 @@ class BusinessDetailStore extends GetxController {
       // Create Business Info and Cached :
       final user_mail = await userState.GetDefaultMail();
       final userId = await userState.GetUserId();
+      final founder_name = await userState.GetProfileName();
+
+
       final startup_searching_index =
           await CreateSearchIndexParam(businessName);
+
+      final founder_searching_index =
+          await CreateSearchIndexParam(founder_name);
+
 
       var resp = await BusinessInfoModel(
           logo: image_url,
@@ -152,14 +163,20 @@ class BusinessDetailStore extends GetxController {
           founder_id: userId,
           desire_amount: amount,
           startup_search_index: startup_searching_index,
+          founder_search_index: founder_searching_index,
           startup_id: await startupState.GetStartupId());
 
+
+
       // Set App state amount and startup name :
-      await startupState.SetDesireAmount(amount:amount);
-      await startupState.SetStartupName(name:businessName);
+      await startupState.SetDesireAmount(amount: amount);
+      await startupState.SetStartupName(name: businessName);
+    
+    
       try {
         localStore.setString(getBusinessDetailStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
+    
       } catch (e) {
         return ResponseBack(response_type: false, message: e);
       }
@@ -168,15 +185,13 @@ class BusinessDetailStore extends GetxController {
     }
   }
 
-
-
 ///////////////////////////////////////////////////////////
-/// If the key exists in the local store, return
-/// the value of the key. If the key doesn't exist, return
-/// the default value
-///
-/// Returns:
-///   A map with two keys, name and desire_amount.
+  /// If the key exists in the local store, return
+  /// the value of the key. If the key doesn't exist, return
+  /// the default value
+  ///
+  /// Returns:
+  ///   A map with two keys, name and desire_amount.
 ///////////////////////////////////////////////////////////
   GetBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
@@ -191,8 +206,8 @@ class BusinessDetailStore extends GetxController {
         };
       } else {
         return {
-          'name': business_name,
-          'desire_amount': amount,
+          'name': business_name ?? '',
+          'desire_amount': amount ?? '',
         };
       }
     } catch (e) {
@@ -202,9 +217,6 @@ class BusinessDetailStore extends GetxController {
       };
     }
   }
-
-
-
 
 ////////////////////////////////////////////
 // GET BUSINESS LOGO:

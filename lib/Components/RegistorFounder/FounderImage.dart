@@ -167,7 +167,6 @@ class _FounderImageState extends State<FounderImage> {
 ///////////////////////////////////
   Container MainMethod(Container spinner, Future<void> PickImage()) {
     return Container(
-        alignment: Alignment.center,
         child: Stack(
           children: [
             Card(
