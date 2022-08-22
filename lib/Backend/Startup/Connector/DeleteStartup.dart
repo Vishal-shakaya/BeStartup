@@ -6,7 +6,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-class Removetartup extends GetxController {
+class RemoveStartup extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
@@ -121,6 +121,73 @@ class Removetartup extends GetxController {
       );
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////
+  /// DELETE STARTUP AND ITS PLAN :
+  /// It deletes all the documents in the firestore database that
+  /// have the same startup_id as the
+  /// startup_id of the startup that the user wants to delete
+  ///
+  /// Args:
+  ///   final_startup_id: The id of the startup to be deleted
+////////////////////////////////////////////////////////////////////////
+  DeleteStartups({required final_startup_id}) async {
+    try {
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessDetailStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessCatigoryStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessThumbnailStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessMilestoneStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessTeamMemberStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessProductStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessVisiontStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getBusinessWhyInvesttStoreName);
+      await DeleteDocument(
+          field_name: 'id', id: final_startup_id, model: getStartupStoreName);
+
+      await DeleteDocument(
+          field_name: 'startup_id',
+          id: final_startup_id,
+          model: getStartupPlansStoreName);
+
+      return ResponseBack(response_type: true);
+
+    } catch (e) {
+      
+      print('Error while deleteing startup $e');
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }

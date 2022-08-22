@@ -234,11 +234,12 @@ class MySocialAuth extends GetxController {
 /////////////////////////////////////
   /// LOGOUT :
   /// ////////////////////////////////
-  Logout() async {   
+  Logout() async {
     try {
-
-
+      final mail = await FirebaseAuth.instance.currentUser?.uid;
       await FirebaseAuth.instance.signOut();
+
+      print(mail);
 
       try {
         await FacebookAuth.instance.logOut();
@@ -252,14 +253,8 @@ class MySocialAuth extends GetxController {
       } catch (e) {
         print('google logout error $e');
       }
-     } 
-
-
-    catch (e) {
+    } catch (e) {
       print('Logout Error $e');
-      }
-
     }
-
   }
-
+}

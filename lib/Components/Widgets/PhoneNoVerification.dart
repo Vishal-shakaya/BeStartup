@@ -165,7 +165,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.close,
                     color: Colors.grey,
                   ))
@@ -230,7 +230,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
         ),
         Container(
           margin: EdgeInsets.only(top: context.height * 0.01),
-          child: SlideCountdownSeparated(
+          child: const SlideCountdownSeparated(
             padding: EdgeInsets.all(10),
             duration: Duration(seconds: 59),
           ),
@@ -253,7 +253,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
               onInputValidated: (bool value) {
                 // print(value);
               },
-              selectorConfig: SelectorConfig(
+              selectorConfig: const SelectorConfig(
                 selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
               ),
               ignoreBlank: false,
@@ -279,7 +279,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
     return Container(
       width: 300,
       height: 42,
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 20,
       ),
       child: a.GradientElevatedButton(
@@ -293,7 +293,7 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
             borderRadius: BorderRadius.circular(18.0),
             // side: BorderSide(color: Colors.orange)
           ))),
-          child: Text('Next',
+          child: const Text('Next',
               style: TextStyle(
                 letterSpacing: 2,
                 fontWeight: FontWeight.w600,

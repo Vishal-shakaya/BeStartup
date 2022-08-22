@@ -5,13 +5,13 @@ import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
-import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
 import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:be_startup/Utils/Images.dart';
+
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -20,21 +20,24 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 class HomeHeaderSection extends StatefulWidget {
   Function changeView;
   var usertype;
-  var profile_image; 
+  var profile_image;
 
-  HomeHeaderSection({
-        required this.profile_image, 
-        required this.changeView, 
-        required this.usertype, Key? key})
+  HomeHeaderSection(
+      {required this.profile_image,
+      required this.changeView,
+      required this.usertype,
+      Key? key})
       : super(key: key);
   @override
   State<HomeHeaderSection> createState() => _HomeHeaderSectionState();
 }
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
-  var exploreStore = Get.put(ExploreCatigoryStore(), tag: 'explore_store');
-  var socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
-  var userStore = Get.put(UserStore(), tag: 'user_store');
+  var exploreStore = Get.put(ExploreCatigoryStore());
+  var socialAuth = Get.put(
+    MySocialAuth(),
+  );
+  var userStore = Get.put(UserStore());
   var my_context = Get.context;
 
   double header_sec_width = 1;
@@ -57,6 +60,15 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   SubmitExploreCatigory(context) async {
     exploreStore.SetCatigory(catigories);
     Navigator.of(context).pop();
+  }
+
+  LogoutUser() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // await socialAuth.Logout();
+    } catch (er) {
+      print('Logout Error');
+    }
   }
 
   @override
@@ -97,8 +109,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              content:ExploreCatigoryAlert(
-                changeView: widget.changeView,));
+                content: ExploreCatigoryAlert(
+              changeView: widget.changeView,
+            ));
           });
     }
 
@@ -192,11 +205,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           widget.changeView(HomePageViews.safeStory);
         },
         icon: is_save_view
-            ? Icon(
+            ? const Icon(
                 Icons.bookmark,
                 size: 28,
               )
-            : Icon(
+            : const Icon(
                 Icons.bookmark_border_outlined,
                 size: 28,
               ));
@@ -212,11 +225,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           widget.changeView(HomePageViews.storyView);
         },
         icon: is_home_view
-            ? Icon(
+            ? const Icon(
                 Icons.home,
                 size: 28,
               )
-            : Icon(
+            : const Icon(
                 Icons.home_outlined,
                 size: 28,
               ));
@@ -239,7 +252,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               onPressed: () {
                 ExploreFunction();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.wb_incandescent_sharp,
                 size: 15,
               ),
@@ -275,7 +288,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           // FounderMenuItems.onChanged(context, value as MenuItem);
           switch (value) {
             case FounderMenuItems.profile:
-             await  widget.changeView(HomePageViews.profileView);
+              await widget.changeView(HomePageViews.profileView);
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -291,8 +304,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               break;
 
             case FounderMenuItems.settings:
-             await  widget.changeView(HomePageViews.settingView);
-            
+              await widget.changeView(HomePageViews.settingView);
+
               setState(() {
                 is_home_view = false;
                 is_save_view = false;
@@ -313,7 +326,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             radius: 30,
             child: ClipOval(
               child: CachedNetworkImage(
-                imageUrl:  widget.profile_image,
+                imageUrl: widget.profile_image,
                 fit: BoxFit.cover,
                 width: 51,
                 height: 51,
@@ -331,64 +344,64 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   Container InvestorDropDownMenu(
       {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
     return Container(
-      width: context!.width * 0.08,
-      child: DropdownButtonHideUnderline(
+        width: context!.width * 0.08,
+        child: DropdownButtonHideUnderline(
           child: DropdownButton2(
-        items: [
-          ...InvestorMenuItems.firstItems.map((item) {
-            return DropdownMenuItem<MenuItem>(
-              value: item,
-              child: InvestorMenuItems.buildItem(item),
-            );
-          }),
-          ...InvestorMenuItems.secondItems.map(
-            (item) => DropdownMenuItem<MenuItem>(
-              value: item,
-              child: InvestorMenuItems.buildItem(item),
-            ),
-          ),
-        ],
-        onChanged: (value) async {
-          switch (value) {
-            case FounderMenuItems.profile:
-             await  widget.changeView(HomePageViews.profileView);
-              setState(() {
-                is_home_view = false;
-                is_save_view = false;
-              });
-              break;
+              items: [
+                ...InvestorMenuItems.firstItems.map((item) {
+                  return DropdownMenuItem<MenuItem>(
+                    value: item,
+                    child: InvestorMenuItems.buildItem(item),
+                  );
+                }),
+                ...InvestorMenuItems.secondItems.map(
+                  (item) => DropdownMenuItem<MenuItem>(
+                    value: item,
+                    child: InvestorMenuItems.buildItem(item),
+                  ),
+                ),
+              ],
+              onChanged: (value) async {
+                switch (value) {
+                  case FounderMenuItems.profile:
+                    await widget.changeView(HomePageViews.profileView);
+                    setState(() {
+                      is_home_view = false;
+                      is_save_view = false;
+                    });
+                    break;
 
-            case FounderMenuItems.settings:
-             await  widget.changeView(HomePageViews.settingView);
-              setState(() {
-                is_home_view = false;
-                is_save_view = false;
-              });
-              break;
+                  case FounderMenuItems.settings:
+                    await widget.changeView(HomePageViews.settingView);
+                    setState(() {
+                      is_home_view = false;
+                      is_save_view = false;
+                    });
+                    break;
 
-            case FounderMenuItems.logout:
-              await socialAuth.Logout();
-              break;
-          }
-        },
-        openWithLongPress: true,
-        customItemsHeight: 8,
-        customButton: Container(
-          margin: EdgeInsets.only(top: context.height * 0.01),
-          child: CircleAvatar(
-            // backgroundColor: Colors.orange.shade100,
-            radius: 30,
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl:  widget.profile_image,
-                fit: BoxFit.cover,
-                width: 51,
-                height: 51,
-              ),
-            ),
-          ), 
-      )),
-    ));
+                  case FounderMenuItems.logout:
+                    await LogoutUser();
+                    break;
+                }
+              },
+              openWithLongPress: true,
+              customItemsHeight: 8,
+              customButton: Container(
+                margin: EdgeInsets.only(top: context.height * 0.01),
+                child: CircleAvatar(
+                  // backgroundColor: Colors.orange.shade100,
+                  radius: 30,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.profile_image,
+                      fit: BoxFit.cover,
+                      width: 51,
+                      height: 51,
+                    ),
+                  ),
+                ),
+              )),
+        ));
   }
 }
 

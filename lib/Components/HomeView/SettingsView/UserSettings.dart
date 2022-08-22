@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/AppState/User.dart';
+
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Components/HomeView/SettingsView/DeleteStartupsDialogCont.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
 
 import 'package:be_startup/Components/Widgets/PhoneNoVerification.dart';
@@ -49,7 +50,7 @@ class _UserSettingsState extends State<UserSettings> {
   var user_id;
   var startup_id;
   var is_admin;
-  var usertype; 
+  var usertype;
 
   //////////////////////////////////////////////////////
   // Password Reset Links Send Succfull Dialog :
@@ -111,7 +112,6 @@ class _UserSettingsState extends State<UserSettings> {
         onCancelBtnTap: () {
           Navigator.of(context).pop();
         },
-        
         onConfirmBtnTap: () async {
           final resp = await auth.ResetPasswordWithEmail();
           if (resp['response']) {
@@ -170,6 +170,34 @@ class _UserSettingsState extends State<UserSettings> {
         });
   }
 
+  //////////////////////////////////////////////
+  /// DeleteStartups Dialog
+  ///////////////////////////////////////////////
+  DeleteStartupDialog(context) async {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Container(
+                alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.cancel_outlined,
+                          color: Colors.blueGrey.shade300, size: 20))),
+
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                width: context.width * 0.20,
+                height: context.height * 0.30,
+                child: DeleteStartupDialogCont(),
+              ));
+        });
+  }
+
 //////////////////////////////////
   /// HANDLERS :
 //////////////////////////////////
@@ -196,7 +224,6 @@ class _UserSettingsState extends State<UserSettings> {
     print('SecondFactAuth ');
   }
 
-
   // Edit Profile Link :
   EditProfile() async {
     var param = jsonEncode({
@@ -204,21 +231,22 @@ class _UserSettingsState extends State<UserSettings> {
       'user_id': user_id,
     });
 
-    if(usertype == UserType.investor){
-       Get.toNamed(investor_registration_form, parameters: {'data': param});
+    if (usertype == UserType.investor) {
+      Get.toNamed(investor_registration_form, parameters: {'data': param});
     }
 
-    if(usertype == UserType.founder){
-       Get.toNamed(create_founder, parameters: {'data': param});
+    if (usertype == UserType.founder) {
+      Get.toNamed(create_founder, parameters: {'data': param});
     }
   }
-
 
   // Delete User Handler :
   DeleteUser() async {
     await AskBeforeRemoveUserProfile(my_context);
   }
-  
+
+  // Delete Startups :
+  DeleteStartup() async {}
 
   // Verify Phone no :
   VerifyPhoneno() async {
@@ -365,12 +393,14 @@ class _UserSettingsState extends State<UserSettings> {
 
                     // Delete or Remove user field :
                     WarningItem(
+                        context: context,
                         title: 'Delete Startup',
-                        icon: Icons.home_max_outlined, 
-                        fun: DeleteUser),
+                        icon: Icons.home_max_outlined,
+                        fun: DeleteStartupDialog),
 
                     // Delete or Remove user field :
                     WarningItem(
+                        context: context,
                         title: 'Delete Account',
                         icon: Icons.delete_rounded,
                         fun: DeleteUser),
@@ -749,7 +779,7 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-  Container WarningItem({title, icon, fun}) {
+  Container WarningItem({context, title, icon, fun}) {
     return Container(
       padding: EdgeInsets.all(4),
       child: ListTile(
@@ -759,8 +789,8 @@ class _UserSettingsState extends State<UserSettings> {
         hoverColor: Colors.grey.shade200,
         selected: true,
         mouseCursor: MouseCursor.defer,
-        onTap: () {
-          fun();
+        onTap: () async {
+          await fun(context);
         },
         autofocus: true,
         leading: Icon(icon, size: 20, color: Colors.red.shade300),

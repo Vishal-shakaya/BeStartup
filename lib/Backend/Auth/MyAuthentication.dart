@@ -204,7 +204,7 @@ class MyAuthentication extends GetxController {
 
   // PERMANENT DELETE USER :
   Deleteuser() async {
-    var removeStore = Get.put(Removetartup());
+    var removeStore = Get.put(RemoveStartup());
     final user = auth.currentUser;
     
     final resp  = await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
