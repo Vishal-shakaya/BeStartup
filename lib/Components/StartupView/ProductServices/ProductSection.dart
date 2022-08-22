@@ -133,7 +133,7 @@ class _ProductSectionState extends State<ProductSection> {
               onPressed: () {
                 EditProductAndService();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.edit,
                 size: 15,
               ),
@@ -141,13 +141,15 @@ class _ProductSectionState extends State<ProductSection> {
         ));
   }
 
+
+
   Center ProductShimmer() {
     return Center(
         child: Shimmer.fromColors(
-      baseColor: shimmer_base_color,
-      highlightColor: shimmer_highlight_color,
-      child: Products(
-        product: temp_product,
+          baseColor: shimmer_base_color,
+          highlightColor: shimmer_highlight_color,
+          child: Products(
+            product: temp_product,
       ),
     ));
   }

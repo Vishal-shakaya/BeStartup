@@ -70,7 +70,11 @@ class _ProductsState extends State<Products> {
           builder: (context) => AlertDialog(
               content: SizedBox(
                   width: context.width * mem_dialog_width,
-                  child: ProductDetailDialog())));
+                  child: ProductDetailDialog(
+                    heading: widget.product['title'],
+                    detail: widget.product['description'],
+                    image:widget.product['image_url'] ,
+                  ))));
     }
 
     return Container(
@@ -88,14 +92,19 @@ class _ProductsState extends State<Products> {
 
                    // PRODUCT iMAGE :
                     child: ProductImage(
-                        context, image_cont_width, image_cont_height)),
+                        context, 
+                        image_cont_width, 
+                        image_cont_height)),
                   // DESCRIPTION :
-                  ProductDescription(context, desc_cont_width, desc_cont_height)
+                  ProductDescription(
+                    context, 
+                    desc_cont_width, 
+                    desc_cont_height)
               ],
 
 
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             )
           ],
