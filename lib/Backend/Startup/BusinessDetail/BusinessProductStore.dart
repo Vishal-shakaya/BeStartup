@@ -21,8 +21,6 @@ class BusinessProductStore extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
   var uuid = Uuid();
 
-
-
   // Test Product :
   static Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
@@ -90,7 +88,6 @@ class BusinessProductStore extends GetxController {
     }
   }
 
-
   SetProductList({list}) async {
     product_list.clear();
     RemoveCachedData(key: getBusinessProductStoreName);
@@ -100,12 +97,9 @@ class BusinessProductStore extends GetxController {
     });
   }
 
-
   GetProducts() async {
     return product_list;
   }
-
-
 
   // ADD PRODUCT :
   CreateProduct({title, description}) {
@@ -115,7 +109,7 @@ class BusinessProductStore extends GetxController {
       'description': description,
       'type': product_type,
       'image_url': image_url,
-      'timestamp': DateTime.now(),
+      'timestamp': DateTime.now().toString(),
       'youtube_link': youtube_link,
       'content_link': content_link,
       'belong_to': '',
@@ -133,8 +127,6 @@ class BusinessProductStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
-
-
 
   // ADD PRODUCT :
   UpdateProduct({title, description, id, index}) async {
@@ -182,9 +174,6 @@ class BusinessProductStore extends GetxController {
     }
   }
 
-
-
-
 // REMOVE PRODUCT FROM LIST USING ID param:
   RemoveProduct(id) async {
     try {
@@ -193,8 +182,6 @@ class BusinessProductStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
-
-
 
 ///////////////////////////////////////////////////
   /// GETTING PRODUCT LIST :
@@ -228,15 +215,11 @@ class BusinessProductStore extends GetxController {
         return product_list;
       }
 
-
-
       // To Save widget from crash if error occure then send temp product:
     } catch (e) {
       return product_list;
     }
   }
-
-
 
   ///////////////////////////////////////////////////////////////
   // STORE PRODUCT LIST LOCALY : PERSIST DATA FOR FURTHUR USAGE:
@@ -245,9 +228,12 @@ class BusinessProductStore extends GetxController {
   ///////////////////////////////////////////////////////////////
   PersistProduct() async {
     final localStore = await SharedPreferences.getInstance();
+    final startup_id = await startupState.GetStartupId();
+    print('product startup_id $startup_id{}');
+    
     try {
       var resp = await BusinessProductsList(
-        startup_id: await startupState.GetStartupId(),
+        startup_id: startup_id,
         products: product_list,
       );
 

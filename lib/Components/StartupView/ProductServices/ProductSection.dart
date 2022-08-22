@@ -39,14 +39,14 @@ class _ProductSectionState extends State<ProductSection> {
   };
 
   EditProductAndService() {
-    var pageParam = jsonEncode( {
-          'type': 'update',
-          'startup_id': startup_id,
-          'is_admin':is_admin,
-          'founder_id':founder_id });
+    var pageParam = jsonEncode({
+      'type': 'update',
+      'startup_id': startup_id,
+      'is_admin': is_admin,
+      'founder_id': founder_id
+    });
 
-    Get.toNamed(create_business_product_url,
-        parameters:{'data':pageParam});
+    Get.toNamed(create_business_product_url, parameters: {'data': pageParam});
   }
 
   @override
@@ -59,11 +59,13 @@ class _ProductSectionState extends State<ProductSection> {
     ////////////////////////////////////////////
     GetLocalStorageData() async {
       startup_id = await detailViewState.GetStartupId();
-      is_admin =   await detailViewState.GetIsUserAdmin();
+      is_admin = await detailViewState.GetIsUserAdmin();
       founder_id = await detailViewState.GetFounderId();
+
 
       try {
         final data = await startupConnect.FetchProducts(startup_id: startup_id);
+        print('Detail View Fetch Product $data');
         products = data['data'];
         return products;
       } catch (e) {

@@ -96,13 +96,12 @@ class MileStoneStore extends GetxController {
       };
 
       milestones[index] = milestone;
-      
-      return ResponseBack(
-        response_type: true,
-        code: 100,
-        message:'Successfully editmilestone'  );
-    }
 
+      return ResponseBack(
+          response_type: true,
+          code: 100,
+          message: 'Successfully editmilestone');
+    }
 
     // return error respnse :
     catch (e) {
@@ -113,9 +112,7 @@ class MileStoneStore extends GetxController {
       };
 
       return ResponseBack(
-        response_type: false,
-        code: 001,
-        message:'Error to edit milestone'  );
+          response_type: false, code: 001, message: 'Error to edit milestone');
     }
   }
 
@@ -172,9 +169,12 @@ class MileStoneStore extends GetxController {
 
   PersistMileStone() async {
     final localStore = await SharedPreferences.getInstance();
+    final startup_id = await startupState.GetStartupId();
+    print('milestone startup id ${startup_id}');
+    
     try {
-      var resp = await MileStoneModel(
-          startup_id: await startupState.GetStartupId(), milestone: milestones);
+      var resp =
+          await MileStoneModel(startup_id: startup_id, milestone: milestones);
 
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
 

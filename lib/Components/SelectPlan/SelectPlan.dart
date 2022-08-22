@@ -356,10 +356,12 @@ class _SelectPlanState extends State<SelectPlan> {
     return dialog;
   }
 
+
+
 ///////////////////////////////////////////////////////////////
-// CREATE STARTUP :
-  /// It creates a startup model and .
-  /// pdates the user's plan and startup field in the database
+/// CREATE STARTUP :
+/// It creates a startup model and .
+/// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var resp = await startupConnector.CreateStartup();
@@ -476,7 +478,7 @@ class _SelectPlanState extends State<SelectPlan> {
   PayemtnFromExternalWallet(ExternalWalletResponse response) async {
     StartBigLoading();
 
-    final orderd = DateTime.now().toUtc().toString();
+    final orderd = DateTime.now().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
     

@@ -143,7 +143,9 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   SubmitMileStone() async {
     StartLoading();
     var resp = await mileStore.PersistMileStone();
-    print('Submit Milestones $resp');
+    
+    print('Submit MileStone ${resp}');
+
     if (!resp['response']) {
       EndLoading();
     }
@@ -154,12 +156,10 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       Get.closeAllSnackbars();
 
       Get.showSnackbar(MyCustSnackbar(
-        title: 'Complete Requirements First ',
-        message: 'Define at leat 5 milestones ',
-        width: snack_width,
-        type:MySnackbarType.error
-      ));
-      
+          title: 'Complete Requirements First ',
+          message: 'Define at leat 5 milestones ',
+          width: snack_width,
+          type: MySnackbarType.error));
     } else {
       await EndLoading();
       _controllerCenter.play();

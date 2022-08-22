@@ -56,9 +56,6 @@ class BusinessDetailStore extends GetxController {
     return amount;
   }
 
-
-
-
 /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
@@ -87,9 +84,6 @@ class BusinessDetailStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
-
-
-
 
 ////////////////////////////////////////////////////
 // 1. SET BUSINESS NAME :
@@ -125,7 +119,8 @@ class BusinessDetailStore extends GetxController {
           user_id: await userState.GetUserId(),
           email: await userState.GetDefaultMail(),
           startup_name: business_name,
-          timestamp: DateTime.now().toUtc().toString());
+          timestamp: DateTime.now().toString());
+
 
       ///////////////////////////////////////////
       // Success Response :
@@ -137,25 +132,21 @@ class BusinessDetailStore extends GetxController {
         localStore.setString(getStartupStoreName, json.encode(startup_resp));
       }
 
-
       if (startup_resp == false) {
         return ResponseBack(
             response_type: false, message: 'Startup not created try again ');
       }
-
 
       // Create Business Info and Cached :
       final user_mail = await userState.GetDefaultMail();
       final userId = await userState.GetUserId();
       final founder_name = await userState.GetProfileName();
 
-
       final startup_searching_index =
           await CreateSearchIndexParam(businessName);
 
       final founder_searching_index =
           await CreateSearchIndexParam(founder_name);
-
 
       var resp = await BusinessInfoModel(
           logo: image_url,
@@ -166,17 +157,13 @@ class BusinessDetailStore extends GetxController {
           founder_search_index: founder_searching_index,
           startup_id: await startupState.GetStartupId());
 
-
-
       // Set App state amount and startup name :
       await startupState.SetDesireAmount(amount: amount);
       await startupState.SetStartupName(name: businessName);
-    
-    
+
       try {
         localStore.setString(getBusinessDetailStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
-    
       } catch (e) {
         return ResponseBack(response_type: false, message: e);
       }

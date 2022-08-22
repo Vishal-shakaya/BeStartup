@@ -13,33 +13,33 @@ class StartupDetailViewState {
 ///////////////////////////////
   SetStartupId({id}) async {
     startup_id = id;
-    print('Set $startup_id');
+    print('Startup Set $startup_id');
   }
 
   SetFounderId({id}) async {
     founder_id = id;
-    print('Set $founder_id');
+    print('Startup Set $founder_id');
   }
 
   SetIsUserAdmin({admin}) async {
     is_admin = admin;
-    print('Set $is_admin');
+    print('Startup Set $is_admin');
   }
 
 
   SetDesireAmount({amount}) async {
     desire_amount = amount;
-    print('Set $amount');
+    print('Startup Set $amount');
   }
 
   SetStartupName({name}) async {
     startup_name = name;
-    print('Set $startup_name');
+    print('Startup Set $startup_name');
   }
 
   SetFounderMail({mail}) async {
     founder_mail = mail;
-    print('Set $mail');
+    print('Startup Set $mail');
   }
 
 

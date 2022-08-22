@@ -16,20 +16,19 @@ class BusinessVisionStore extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
   static var vision;
 
-
 ////////////////////////////////////////////////////////////
-  /// It takes a string as an argument, and then it 
+  /// It takes a string as an argument, and then it
   /// stores it in a local variable, and then it stores it
   /// in a local storage
-  /// 
+  ///
   /// Args:
   ///   visionText: The text that the user e
   ///   nters in the text field.
-  /// 
+  ///
   /// Returns:
-  ///   ResponseBack is a class that has a 
+  ///   ResponseBack is a class that has a
   ///   response_type and message.
-/////////////////////////////////////////////////////// 
+///////////////////////////////////////////////////////
   SetVision({visionText}) async {
     final localStore = await SharedPreferences.getInstance();
 
@@ -41,9 +40,11 @@ class BusinessVisionStore extends GetxController {
       }
 
       vision = visionText;
+      final startup_id = await startupState.GetStartupId();
+      print('vision Startup id $startup_id');
       try {
         var resp = await VisionModel(
-          startup_id: await startupState.GetStartupId(),
+          startup_id: startup_id,
           vision: vision,
         );
         localStore.setString(getBusinessVisiontStoreName, json.encode(resp));
@@ -57,9 +58,6 @@ class BusinessVisionStore extends GetxController {
       return ResponseBack(response_type: false, message: create_error_title);
     }
   }
-
-
-
 
 //////////////////////////////////////////////////////////
   // Set Vision to Static variable :
@@ -77,20 +75,15 @@ class BusinessVisionStore extends GetxController {
     vision = data;
   }
 
-
-
-
 //////////////////////////////////////////////
   /// It returns a Future of type Vision
-  /// 
+  ///
   /// Returns:
   ///   The vision object.
 //////////////////////////////////////////////
   GetVisionParam() async {
     return vision;
   }
-
-
 
 ///////////////////////////////////////////////
   /// It checks if the key exists in the local storage,
@@ -109,7 +102,7 @@ class BusinessVisionStore extends GetxController {
         vision = json_obj["vision"];
         return vision;
       } else {
-        return vision; 
+        return vision;
       }
     } catch (e) {
       return vision;

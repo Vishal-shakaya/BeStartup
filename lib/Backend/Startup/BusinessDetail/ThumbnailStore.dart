@@ -27,10 +27,10 @@ class ThumbnailStore extends GetxController {
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
       try {
-        var resp = await ThumbnailModel(
-          thumbnail: image_url,
-          startup_id:await startupState.GetStartupId(),
-        );
+        final startup_id = await startupState.GetStartupId();
+        print('Thumbnial Startup id $startup_id');
+        var resp =
+            await ThumbnailModel(thumbnail: image_url, startup_id: startup_id);
 
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
         return ResponseBack(response_type: true, data: image_url);
@@ -82,7 +82,7 @@ class ThumbnailStore extends GetxController {
         var data = localStore.getString(getBusinessThumbnailStoreName);
         var json_obj = jsonDecode(data!);
         image_url = json_obj["thumbnail"];
-        return image_url ;
+        return image_url;
       } else {
         return image_url;
       }

@@ -79,7 +79,10 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
       if (!resp['response']) {
         Get.closeAllSnackbars();
-        Get.showSnackbar(MyCustSnackbar(width: snack_width));
+        Get.showSnackbar(
+          MyCustSnackbar(
+          type: MySnackbarType.error,
+          width: snack_width));
         return;
       }
 

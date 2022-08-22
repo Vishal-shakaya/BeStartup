@@ -10,6 +10,7 @@ import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.d
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -53,14 +54,23 @@ class _ProductBodyState extends State<ProductBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
     var resp = await productStore.PersistProduct();
+
+    print('Submit Products $resp');
+    
+    if (resp['response']) {
+      Get.toNamed(create_business_whyInvest_url);
+    }
+
     // Error Handerl :
     if (!resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
+
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
-          message: fetch_data_error_msg,
-          title: fetch_data_error_title));
+          type: MySnackbarType.error,
+          message: create_error_msg,
+          title: create_error_title));
     }
     CloseCustomPageLoadingSpinner();
   }
@@ -76,7 +86,7 @@ class _ProductBodyState extends State<ProductBody> {
 
     // Update Success Handler    :
     if (update_resp['response']) {
-      var param = jsonEncode( {
+      var param = jsonEncode({
         'founder_id': founder_id,
         'startup_id': startup_id,
         'is_admin': is_admin,
@@ -90,6 +100,7 @@ class _ProductBodyState extends State<ProductBody> {
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width,
+          type: MySnackbarType.error,
           message: fetch_data_error_msg,
           title: fetch_data_error_title));
     }
@@ -144,7 +155,7 @@ class _ProductBodyState extends State<ProductBody> {
 ///////////////////////////////
   @override
   void initState() {
-    if(Get.parameters.isNotEmpty){
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
 
       startup_id = pageParam['startup_id'];
@@ -157,7 +168,6 @@ class _ProductBodyState extends State<ProductBody> {
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {

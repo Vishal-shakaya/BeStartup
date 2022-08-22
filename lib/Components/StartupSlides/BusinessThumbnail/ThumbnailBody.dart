@@ -7,6 +7,7 @@ import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/NoticeSect
 import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/ThumbnailSection.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,7 +73,10 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     // Update Error Handler :
     if (!resp['response']) {
       Get.showSnackbar(
-          MyCustSnackbar(width: snack_width, message: resp['message']));
+          MyCustSnackbar(
+            type: MySnackbarType.error,
+            width: snack_width, 
+            message: resp['message']));
     }
   }
 

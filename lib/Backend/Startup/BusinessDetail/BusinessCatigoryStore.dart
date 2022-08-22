@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class BusinessCatigoryStore extends GetxController {
-
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
 
@@ -58,27 +57,23 @@ class BusinessCatigoryStore extends GetxController {
         var data = localStore.getString(getBusinessCatigoryStoreName);
         var json_obj = jsonDecode(data!);
         return json_obj["catigories"].toList();
-      } 
-      
-      else {
+      } else {
         return catigories;
       }
-
     } catch (e) {
       return catigories;
     }
   }
 
-
-
   // STORE CATIGORY LOCALY :
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     var main_cat = catigories + temp_catigories;
+    final startup_id = await startupState.GetStartupId();
+    print('vision startup id ${startup_id}');
     try {
-      var resp = await CatigoryModel(
-          startup_id: await startupState.GetStartupId(),
-          catigory: catigories);
+      var resp =
+          await CatigoryModel(startup_id: startup_id, catigory: catigories);
 
       localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
       return ResponseBack(response_type: true);

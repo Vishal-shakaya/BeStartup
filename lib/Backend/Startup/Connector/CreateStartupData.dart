@@ -166,15 +166,15 @@ class StartupConnector extends GetxController {
   CreateBusinessProduct() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      final myStore = store.collection('BusinessProducts');
+      final myStore = store.collection(getBusinessProductStoreName);
 
       // fetch catigories for local storage :
       // kye : BusinessProducts
 
-      bool is_data = localStore.containsKey('BusinessProducts');
+      bool is_data = localStore.containsKey(getBusinessProductStoreName);
       // Validate key :
       if (is_data) {
-        String? temp_data = localStore.getString('BusinessProducts');
+        String? temp_data = localStore.getString(getBusinessProductStoreName);
         var data = json.decode(temp_data!);
 
         // Store Data in Firebase :

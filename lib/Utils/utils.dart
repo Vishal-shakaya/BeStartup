@@ -152,7 +152,7 @@ Row MySnackbarContent({message = 'processing... '}) {
 /// 2. Custom message and title :
 /// //////////////////////////////////////////
 
-MyCustSnackbar({context, title, message, type, required width}) {
+MyCustSnackbar({context, title, message, type=MySnackbarType.error, required width}) {
   var snack;
   // var snack_width = MediaQuery.of(context).size.width * 0.50;
   try {
