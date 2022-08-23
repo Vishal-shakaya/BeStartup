@@ -102,7 +102,7 @@ class _StartupViewState extends State<StartupView> {
             ServiceSection(),
 
             
-            const InvestorSection(),
+             InvestorSection(),
           ],
         ),
       ),

@@ -22,7 +22,6 @@ class StartupInvestorStore extends GetxController {
 
   static var investor_image;
 
-
   GetProfileImage() async {
     print('Get investor image $investor_image');
     return investor_image;
@@ -70,11 +69,11 @@ class StartupInvestorStore extends GetxController {
       final myStore = store.collection(getStartupInvestorStoreName);
       Map<String, dynamic> investor = {
         'id': uuid.v4(),
-        'name': inv_obj['name'],
-        'position': inv_obj['position'],
-        'member_mail': inv_obj['email'],
-        'meminfo': inv_obj['info'],
-        'image': investor_image,
+        'name': inv_obj['name']??'',
+        'position': inv_obj['position']??'',
+        'email': inv_obj['email']??'',
+        'info': inv_obj['info']??'',
+        'image': investor_image??temp_logo
       };
 
       final investor_model = await StartupInvestorModel(
@@ -85,6 +84,28 @@ class StartupInvestorStore extends GetxController {
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);
+    }
+  }
+
+  FetchStartupInvestor({required startup_id}) async {
+    var data;
+    var investors = [];
+    try {
+      final my_store = store.collection(getStartupInvestorStoreName);
+      var query = my_store.where('startup_id', isEqualTo: startup_id).get();
+
+      await query.then((value) {
+        value.docs.forEach((el) {
+          investors.add(el.data()['investor']);
+        });
+      });
+
+      return ResponseBack(
+          response_type: true,
+          data: investors,
+          message: 'Fetch Startup Investors Successfully');
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
     }
   }
 }

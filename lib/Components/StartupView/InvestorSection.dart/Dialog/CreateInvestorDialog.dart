@@ -5,7 +5,6 @@ import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/In
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorInfoForm.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorProfile.dart';
 
-
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class InvestorDialog extends StatefulWidget {
 
 class _TeamMemberDialogState extends State<InvestorDialog> {
   var startupInvestorStore = Get.put(StartupInvestorStore());
-  
+
   var startupState = Get.put(
     StartupDetailViewState(),
   );
@@ -96,13 +95,11 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       };
 
       var res;
-      if (widget.form_type == InvestorFormType.edit) {
-        print('Edit Investor');
-      }
+      if (widget.form_type == InvestorFormType.edit) {}
 
       if (widget.form_type == InvestorFormType.create) {
         print('Create Investor');
-        
+
         res = await startupInvestorStore.CreateInvestor(
             inv_obj: temp_investor, startup_id: startup_id);
       }
@@ -123,8 +120,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
             MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
       }
     } else {
+      print('Invalid form');
       Get.closeAllSnackbars();
-
       Get.showSnackbar(MyCustSnackbar(
           type: MySnackbarType.error,
           title: 'Invalid Form ',

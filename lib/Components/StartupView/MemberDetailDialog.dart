@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MemberDetailDialog extends StatefulWidget {
-  MemberDetailDialog({Key? key}) : super(key: key);
+class MemberDetailDialog extends StatelessWidget {
+  var investor; 
+  MemberDetailDialog({
+    this.investor, 
+    Key? key}) : super(key: key);
 
-  @override
-  State<MemberDetailDialog> createState() => _MemberDetailDialogState();
-}
 
-class _MemberDetailDialogState extends State<MemberDetailDialog> {
   double con_button_width = 55;
   double con_button_height = 30;
   double con_btn_top_margin = 10;
@@ -33,162 +32,154 @@ class _MemberDetailDialogState extends State<MemberDetailDialog> {
       widthFactor: 0.9,
       heightFactor: 0.60,
       child: Container(
-        padding:EdgeInsets.all(15),
-        color:Colors.white,
+        padding: EdgeInsets.all(15),
+        color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // SPACING : 
-              SizedBox( height: 10,),
+              // SPACING :
+              const SizedBox(
+                height: 10,
+              ),
 
-              // MODEL HEADING : 
+              // MODEL HEADING :
               HeaderText(context),
 
-             // PROFILE IMAG AND INFO : 
+              // PROFILE IMAG AND INFO :
 
               Container(
-               child: Row(
+                  child: Row(
                 children: [
                   ////////////////////////////
-                   // INVESTOR PROFILE IMAGE :  
+                  // INVESTOR PROFILE IMAGE :
                   ////////////////////////////
-                  Expanded(  
-                    flex: 5,
-                    child:ProfileImage()),
+                  Expanded(flex: 5, 
+                  child: ProfileImage(
+                    image:investor['image']??temp_logo )),
                   ////////////////////////////
-                   // INVESTOR DETAIL SECTION :  
+                  // INVESTOR DETAIL SECTION :
                   ////////////////////////////
                   Expanded(
                       flex: 5,
                       child: Container(
                         width: formfield_width,
                         alignment: Alignment.center,
-                        
                         child: Container(
                           width: contact_formfield_width,
                           child: Column(
                             children: [
-                              MemberInfoBlock('Vishal Shakaya'), 
-                              MemberInfoBlock('Manager'), 
-                              MemberInfoBlock('shakayavishal009@gamil.com'), 
-
+                              MemberInfoBlock(investor['name']??''),
+                              MemberInfoBlock(investor['position']??''),
+                              MemberInfoBlock(investor['email']??''),
                             ],
                           ),
                         ),
-                      )
-                            
-                    ), 
+                      )),
                 ],
               )),
-               
-              MemDescription(), 
+
+              MemDescription(investor['info']??''),
             ],
           ),
-        ), 
+        ),
       ),
     );
   }
 
-  Container ProfileImage() {
+  Container ProfileImage({image}) {
     return Container(
-      width: 150,
-      height: 160,
-      // alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Card(
-              shadowColor: light_color_type3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(85.0),
-              ),
-              child: upload_image_url != ''
-                  ? CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.blueGrey[100],
-                      foregroundImage: NetworkImage(upload_image_url),
-                    )
-                  : CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.blueGrey[100],
-                      child: AutoSizeText(
-                        'profile picture',
-                        style: TextStyle(
-                            color: light_color_type3,
-                            fontWeight: FontWeight.bold),
-                ))),
-
-        ],
-      ));
+        width: 150,
+        height: 160,
+        // alignment: Alignment.center,
+        child: Stack(
+          children: [
+            Card(
+                shadowColor: light_color_type3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(85.0),
+                ),
+                child: image != ''
+                    ? CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.blueGrey[100],
+                        foregroundImage: NetworkImage(image),
+                      )
+                    : CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.blueGrey[100],
+                        child: AutoSizeText(
+                          'profile picture',
+                          style: TextStyle(
+                              color: light_color_type3,
+                              fontWeight: FontWeight.bold),
+                        ))),
+          ],
+        ));
   }
 
-  Container MemDescription() {
+  Container MemDescription(detail) {
     return Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(top:20),
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: border_color )
-              ),
-                child: AutoSizeText.rich(
-        
-                  TextSpan(
-                    text: long_string,
-                    style:GoogleFonts.robotoSlab(
-                      textStyle: TextStyle(),
-                      color: light_color_type1,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ) 
-                  ),
-                  overflow: TextOverflow.ellipsis, 
-                  maxLines: 10,
-                ),
-              );
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.topLeft,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: border_color)),
+      child: AutoSizeText.rich(
+        TextSpan(
+            text: detail,
+            style: GoogleFonts.robotoSlab(
+              textStyle: TextStyle(),
+              color: light_color_type1,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            )),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 10,
+      ),
+    );
   }
 
   Container MemberInfoBlock(title) {
     return Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-              child: AutoSizeText.rich(
-                TextSpan(
-                  text: '$title',
-                  style:GoogleFonts.robotoSlab(
-                    textStyle: TextStyle(),
-                    color: light_color_type1,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ) 
-                
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            );
+      padding: EdgeInsets.all(5),
+      alignment: Alignment.topLeft,
+      child: AutoSizeText.rich(
+        TextSpan(
+            text: '$title',
+            style: GoogleFonts.robotoSlab(
+              textStyle: TextStyle(),
+              color: light_color_type1,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            )),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
   }
 
   Row HeaderText(BuildContext context) {
     return Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    child: AutoSizeText.rich(TextSpan(
-                        style: Get.theme.textTheme.headline2,
-                        children: [TextSpan(text: 'Comlete Info')])),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    CloseDialog(context);
-                  },
-                  icon: Icon(
-                    Icons.cancel_outlined,
-                    color: Colors.blueGrey.shade800,
-                  ))
-              ],
-            );
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: AutoSizeText.rich(TextSpan(
+                style: Get.theme.textTheme.headline2,
+                children: [TextSpan(text: 'Comlete Info')])),
+          ),
+        ),
+        IconButton(
+            onPressed: () {
+              CloseDialog(context);
+            },
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: Colors.blueGrey.shade800,
+            ))
+      ],
+    );
   }
 }
