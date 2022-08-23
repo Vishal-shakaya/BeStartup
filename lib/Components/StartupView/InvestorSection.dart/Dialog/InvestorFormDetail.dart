@@ -1,3 +1,5 @@
+
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
@@ -7,22 +9,26 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class InvestorDetailForm extends StatefulWidget {
+class InvestorDetialForm extends StatefulWidget {
   GlobalKey<FormBuilderState>? formkey;
   Function ResetForm;
-  InvestorFormType? form_type;
+  InvestorFormType? form_type; 
   var member; 
-  InvestorDetailForm({
+ 
+  InvestorDetialForm({
     this.form_type, 
     this.member,
     required this.ResetForm, this.formkey, Key? key})
       : super(key: key);
 
   @override
-  State<InvestorDetailForm> createState() => _InvestorDetailFormState();
+  State<InvestorDetialForm> createState() => _TeamMemberDetailFormState();
 }
 
-class _InvestorDetailFormState extends State<InvestorDetailForm> {
+
+
+
+class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
   bool is_password_visible = true;
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -47,13 +53,13 @@ class _InvestorDetailFormState extends State<InvestorDetailForm> {
             child: Column(
               children: [
                 // TAKE FOUNDER INOF:
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Card(
                   shadowColor: Colors.grey,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Column(
                     children: [
                       Container(
@@ -68,17 +74,19 @@ class _InvestorDetailFormState extends State<InvestorDetailForm> {
                               hind_text: 'enter name',
                               error_text: 'name field required',
                               initial_val: 
-                              widget.form_type == InvestorFormType.edit? widget.member['name'] :''
+                              widget.form_type == MemberFormType.edit? widget.member['name'] :''
                             ),
+
                             SecondaryInputField(
                               context: context,
                               name: 'position',
                               lable_text: 'Position',
                               hind_text: 'type',
-                              error_text: 'member position required',
+                              require: false,
                               initial_val: 
-                              widget.form_type == InvestorFormType.edit? widget.member['position']:''
+                              widget.form_type == MemberFormType.edit? widget.member['position']:''
                             ),
+                            
                             SecondaryInputField(
                               context: context,
                               name: 'email',
@@ -87,7 +95,7 @@ class _InvestorDetailFormState extends State<InvestorDetailForm> {
                               error_text: '',
                               require: false,
                               initial_val:
-                               widget.form_type == InvestorFormType.edit?widget.member['email']:''
+                               widget.form_type == MemberFormType.edit?widget.member['email']:''
                             ),
                           ],
                         ),

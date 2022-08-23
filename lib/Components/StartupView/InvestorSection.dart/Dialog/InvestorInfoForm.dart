@@ -1,3 +1,5 @@
+
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +13,20 @@ class InvestorInfoForm extends StatefulWidget {
   GlobalKey<FormBuilderState> formkey;
   InvestorFormType? form_type;
   var member; 
+
   InvestorInfoForm({
     this.form_type,
     this.member,
     required this.formkey, Key? key}) : super(key: key);
 
   @override
-  State<InvestorInfoForm> createState() => _InvestorInfoFormState();
+  State<InvestorInfoForm> createState() => _MemberInfoFormState();
 }
 
-class _InvestorInfoFormState extends State<InvestorInfoForm> {
+
+
+
+class _MemberInfoFormState extends State<InvestorInfoForm> {
   bool is_password_visible = true;
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -30,8 +36,8 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
   double maxlines = 5;
-  double formfield_width = 600;
-  double contact_formfield_width = 600;
+  double formfield_width = 500;
+  double contact_formfield_width = 500;
   double contact_text_margin_top = 0.05;
 
   @override
@@ -39,8 +45,8 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
     // DEFAULT :
     if (context.width > 1500) {
       maxlines = 5;
-      formfield_width = 600;
-      contact_formfield_width = 600;
+      formfield_width = 500;
+      contact_formfield_width = 500;
       contact_text_margin_top = 0.05;
       print('greator then 1500');
     }
@@ -52,16 +58,16 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
 
     if (context.width < 1200) {
       maxlines = 3;
-      formfield_width = 550;
-      contact_formfield_width = 550;
+      formfield_width = 400;
+      contact_formfield_width = 400;
       contact_text_margin_top = 0.05;
       print('1200');
     }
 
     if (context.width < 1000) {
       maxlines = 3;
-      formfield_width = 450;
-      contact_formfield_width = 450;
+      formfield_width = 350;
+      contact_formfield_width = 350;
       contact_text_margin_top = 0.05;
       print('1000');
     }
@@ -69,8 +75,8 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
     // TABLET :
     if (context.width < 800) {
       maxlines = 3;
-      formfield_width = 400;
-      contact_formfield_width = 400;
+      formfield_width = 325;
+      contact_formfield_width = 325;
       contact_text_margin_top = 0.05;
 
       print('800');
@@ -98,7 +104,6 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
     return Container(
       width: formfield_width,
       margin: EdgeInsets.only(
-        left: context.width * 0.04,
         top: context.width * 0.01 ),
       alignment: Alignment.center,
       child: FormBuilder(
@@ -108,7 +113,7 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
             child: Column(
               children: [
                 // TAKE FOUNDER INOF:
-                SizedBox(
+              const   SizedBox(
                   height: 25,
                 ),
                 SingleChildScrollView(
@@ -118,11 +123,11 @@ class _InvestorInfoFormState extends State<InvestorInfoForm> {
                         width: contact_formfield_width,
                         child: InputField(
                           context: context,
-                          name: 'meminfo',
-                          hind_text: 'Member Detail',
-                          error_text: 'member detail min len 20',
+                          name: 'info',
+                          hind_text: 'investor Detail',
+                          error_text: 'investor detail min len 20',
                           maxlines: maxlines,
-                          inital_val: widget.form_type== InvestorFormType.edit? widget.member['meminfo']:''
+                          inital_val: widget.form_type== MemberFormType.edit? widget.member['info']:''
                         ),
                       ),
                     ],

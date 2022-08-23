@@ -5,7 +5,6 @@ import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
-import 'package:be_startup/Components/Widgets/InvestorDialogAlert/AddInvestorDialogAlert.dart';
 import 'package:be_startup/Utils/Colors.dart';
 
 import 'package:be_startup/Utils/Routes.dart';
@@ -74,32 +73,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   @override
   Widget build(BuildContext context) {
     String? selectedValue;
-    //////////////////////////////////////
-    /// Investor Dialog :
-    //////////////////////////////////////
-
-    ShowDialog(context) {
-      showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => AlertDialog(
-                alignment: Alignment.center,
-                // title:  MileDialogHeading(context),
-                content: SizedBox(
-                  width: mem_dialog_width,
-                  child: AddInvestorDialogAlert(
-                    form_type: InvestorFormType.create,
-                  ),
-                ),
-              ));
-    }
-
-    //////////////////////////////
-    /// ADD INVESTOR :
-    //////////////////////////////
-    AddInvestor(context) {
-      ShowDialog(context);
-    }
 
     //////////////////////////
     // Explore Topics
@@ -179,7 +152,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                             )
                           : FounderDropDownMenu(
                               context: context,
-                              AddInvestor: AddInvestor,
                               CreateStatup: CreateStatup,
                             ),
                     ],
@@ -264,7 +236,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   ///  Founder Dropdown Menu :
 ////////////////////////////////////////
   Container FounderDropDownMenu(
-      {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
+      {BuildContext? context,  CreateStatup, is_investor}) {
     return Container(
       width: context!.width * 0.08,
       child: DropdownButtonHideUnderline(

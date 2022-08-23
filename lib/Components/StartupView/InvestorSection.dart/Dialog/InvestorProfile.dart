@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
+
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -11,27 +14,30 @@ import 'package:file_picker/file_picker.dart';
 
 class InvestorProfileImage extends StatefulWidget {
   String? member_image = '';
-  InvestorFormType? form_type; 
-  InvestorProfileImage({
-    this.form_type, 
-    this.member_image, Key? key}) : super(key: key);
+  InvestorFormType? form_type;
+  InvestorProfileImage({this.form_type, this.member_image, Key? key})
+      : super(key: key);
 
   @override
-  State<InvestorProfileImage> createState() => _InvestorProfileImageState();
+  State<InvestorProfileImage> createState() => _InvestorProfileImage();
 }
 
-class _InvestorProfileImageState extends State<InvestorProfileImage> {
+class _InvestorProfileImage extends State<InvestorProfileImage> {
+  var startupInvestorStore = Get.put(StartupInvestorStore());
+  var my_context = Get.context;
+
   Uint8List? image;
   String filename = '';
+
   String upload_image_url = '';
   bool is_uploading = false;
   late UploadTask? upload_process;
 
-  var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
 //////////////////////////////////////////
-  // UPLOADING IMAGE :
+// UPLOADING IMAGE :
 //////////////////////////////////////////
   Future<void> PickImage() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
@@ -50,7 +56,7 @@ class _InvestorProfileImageState extends State<InvestorProfileImage> {
       setState(() {
         is_uploading = true;
       });
-      var resp = await memeberStore.UploadProductImage(
+      var resp = await startupInvestorStore.UploadInvestorProfile(
           image: image, filename: filename);
 
       if (resp['response']) {
@@ -65,16 +71,9 @@ class _InvestorProfileImageState extends State<InvestorProfileImage> {
 
       if (!resp['response']) {
         // show error snakbar :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          duration: Duration(seconds: 3),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error'),
-          messageText: MySnackbarContent(message: 'Something went wrong'),
-          maxWidth: context.width * 0.50,
-        );
+        Get.closeAllSnackbars();
+        Get.showSnackbar(
+            MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
 
         // Set spinner off :
         setState(() {
@@ -87,8 +86,8 @@ class _InvestorProfileImageState extends State<InvestorProfileImage> {
   @override
   void initState() {
     // TODO: implement initState
-    if(widget.form_type == InvestorFormType.edit){
-    upload_image_url = widget.member_image.toString();
+    if (widget.form_type == MemberFormType.edit) {
+      upload_image_url = widget.member_image.toString();
     }
     super.initState();
   }

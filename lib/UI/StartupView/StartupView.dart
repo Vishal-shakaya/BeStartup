@@ -101,12 +101,7 @@ class _StartupViewState extends State<StartupView> {
             // SERVICE SECTION :
             ServiceSection(),
 
-            // INVESTOR HEADING:
-            StartupHeaderText(
-              title: 'Investors',
-              font_size: 32,
-            ),
-
+            
             const InvestorSection(),
           ],
         ),

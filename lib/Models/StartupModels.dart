@@ -224,3 +224,22 @@ BusinessTeamMembersModel({
   }
 }
 
+
+StartupInvestorModel({required startup_id, required investor})async{
+ try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'startup_id': startup_id,
+      'investor':investor, 
+      'timestamp':await GetFormatedDate() , 
+
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+
+
+  
+}
+

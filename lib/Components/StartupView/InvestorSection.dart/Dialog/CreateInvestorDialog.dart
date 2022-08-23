@@ -1,7 +1,11 @@
-import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorDetailForm.dart';
-import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorInfoForm.dart';
-import 'package:be_startup/Components/Widgets/InvestorDialogAlert/InvestorProfileImage.dart';
+import 'package:be_startup/AppState/StartupState.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/CreateTeamStore.dart';
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorFormDetail.dart';
+
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorInfoForm.dart';
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorProfile.dart';
+
+
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -17,29 +21,36 @@ String filename = '';
 String upload_image_url = '';
 late UploadTask? upload_process;
 
-class AddInvestorDialogAlert extends StatefulWidget {
+class InvestorDialog extends StatefulWidget {
   InvestorFormType? form_type;
   var member;
   int? index;
 
-  AddInvestorDialogAlert({this.index, this.member, this.form_type, Key? key})
+  InvestorDialog({this.index, this.member, this.form_type, Key? key})
       : super(key: key);
 
   @override
-  State<AddInvestorDialogAlert> createState() => _AddInvestorDialogAlertState();
+  State<InvestorDialog> createState() => _TeamMemberDialogState();
 }
 
-class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
+class _TeamMemberDialogState extends State<InvestorDialog> {
+  var startupInvestorStore = Get.put(StartupInvestorStore());
+  
+  var startupState = Get.put(
+    StartupDetailViewState(),
+  );
+
   final formKey = GlobalKey<FormBuilderState>();
   final formKey2 = GlobalKey<FormBuilderState>();
+  var my_context = Get.context;
+
   int maxlines = 7;
   double con_button_width = 55;
   double con_button_height = 30;
   double con_btn_top_margin = 5;
+
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
-
-  var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
 
 //////////////////////////////////
   // SUBMIT  FORM :
@@ -47,7 +58,11 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
   // 1. MEMBER INFO [ DESCRIPTION ]:
   // 2. MEMEBER DETAIL :
 //////////////////////////////////
-  SubmitInvestorForm() async {
+  SubmitMemberDetail() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final startup_id = await startupState.GetStartupId();
+    print('Startrup id $startup_id');
+
     // STARTING LOADING :
     formKey.currentState!.save();
     formKey2.currentState!.save();
@@ -56,83 +71,70 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
       SmartDialog.showLoading(
           background: Colors.white,
           maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: CircularProgressIndicator(
+          widget: const CircularProgressIndicator(
             backgroundColor: Colors.white,
             color: Colors.orangeAccent,
           ));
 
-      String name = formKey.currentState!.value['name'];
-      String position = formKey.currentState!.value['position'];
-      String email = formKey.currentState!.value['email'];
-
+      final name = formKey.currentState!.value['name'];
+      final position = formKey.currentState!.value['position'];
+      final email = formKey.currentState!.value['email'];
       // Info form values;
-      String meminfo = formKey2.currentState!.value['meminfo'];
+      final info = formKey2.currentState!.value['info'];
 
       // Testing
-      // print(name);
-      // print(position);
-      // print(email);
-      // print('second form : ${meminfo}');
-      Map<String, dynamic> member = {
+      print(name);
+      print(position);
+      print(email);
+      print('second form : ${info}');
+
+      Map<String, dynamic> temp_investor = {
         'name': name,
         'position': position,
         'email': email,
-        'meminfo': meminfo,
+        'info': info,
       };
 
       var res;
       if (widget.form_type == InvestorFormType.edit) {
-        // Update Investor  : 
-        // res = await memeberStore.UpdateTeamMember(member, widget.index);
-      } else {
-        // Create New Investor : 
-        res = await memeberStore.CreateTeamMember(member);
+        print('Edit Investor');
+      }
+
+      if (widget.form_type == InvestorFormType.create) {
+        print('Create Investor');
+        
+        res = await startupInvestorStore.CreateInvestor(
+            inv_obj: temp_investor, startup_id: startup_id);
+      }
+
+      print(res);
+      if (res['response']) {
+        formKey.currentState!.reset();
+        formKey2.currentState!.reset();
+
+        SmartDialog.dismiss();
+        Navigator.of(context).pop();
       }
 
       if (!res['response']) {
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
-        // Error Alert :
-        Get.snackbar(
-          '',
-          '',
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(10),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red.shade50,
-          titleText: MySnackbarTitle(title: 'Error  accure'),
-          messageText: MySnackbarContent(message: 'Something went wrong'),
-          maxWidth: context.width * 0.50,
-        );
+        Get.showSnackbar(
+            MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
       }
-
-      formKey.currentState!.reset();
-      formKey2.currentState!.reset();
-
-      SmartDialog.dismiss();
-      Navigator.of(context).pop();
     } else {
-      // CLOSE SNAKBAR :
       Get.closeAllSnackbars();
-      // Error Alert :
-      Get.snackbar(
-        '',
-        '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red.shade50,
-        titleText: MySnackbarTitle(title: 'Form Validation Error'),
-        messageText: MySnackbarContent(message: 'Check required field'),
-        maxWidth: context.width * 0.50,
-      );
+
+      Get.showSnackbar(MyCustSnackbar(
+          type: MySnackbarType.error,
+          title: 'Invalid Form ',
+          width: snack_width));
     }
   }
 
   // RESET FORM :
   ResetForm(field) {
     print(field);
-    // formKey.currentState!.reset();
     formKey.currentState!.fields[field]!.didChange('');
   }
 
@@ -201,37 +203,19 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
     /// 2. MILESTONE FORM : Take Title and Description:
     /////////////////////////////////////////////////////
     return FractionallySizedBox(
-      widthFactor: 0.85,
-      heightFactor: 0.64,
+      widthFactor: 0.9,
+      heightFactor: 0.60,
       child: Container(
         padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
-              ),
-
-              // HEADING :
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        CloseDialog(context);
-                      },
-                      icon: Icon(
-                        Icons.cancel_outlined,
-                        color: Colors.blueGrey.shade800,
-                      ))
-                ],
               ),
 
               // TEAM MEMEBER PROFILE IAMGE SECTION
@@ -249,11 +233,11 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
                   Expanded(
                       flex: 5,
                       child: widget.form_type == InvestorFormType.create
-                          ? InvestorDetailForm(
+                          ? InvestorDetialForm(
                               formkey: formKey,
                               ResetForm: ResetForm,
                             )
-                          : InvestorDetailForm(
+                          : InvestorDetialForm(
                               formkey: formKey,
                               ResetForm: ResetForm,
                               form_type: InvestorFormType.edit,
@@ -284,11 +268,11 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
                         EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
                     child: InkWell(
                       highlightColor: primary_light_hover,
-                      borderRadius: BorderRadius.horizontal(
+                      borderRadius: const BorderRadius.horizontal(
                           left: Radius.circular(20),
                           right: Radius.circular(20)),
                       onTap: () async {
-                        await SubmitInvestorForm();
+                        await SubmitMemberDetail();
                       },
                       child: Card(
                         elevation: 10,
@@ -306,9 +290,11 @@ class _AddInvestorDialogAlertState extends State<AddInvestorDialogAlert> {
                               borderRadius: const BorderRadius.horizontal(
                                   left: Radius.circular(20),
                                   right: Radius.circular(20))),
-                          child: const Text(
-                            'Done',
-                            style: TextStyle(
+                          child: Text(
+                            widget.form_type == InvestorFormType.create
+                                ? 'Done'
+                                : 'Update',
+                            style: const TextStyle(
                                 letterSpacing: 2.5,
                                 color: Colors.white,
                                 fontSize: 16,
