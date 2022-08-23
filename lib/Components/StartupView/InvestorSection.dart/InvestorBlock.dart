@@ -1,17 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/CreateInvestorDialog.dart';
 import 'package:be_startup/Components/StartupView/MemberDetailDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InvestorBlock extends StatefulWidget {
-  var investor; 
-
-  InvestorBlock({
-    required this.investor, 
-    Key? key}) : super(key: key);
+  var investor;
+  var is_admin;
+  InvestorBlock({required this.is_admin, required this.investor, Key? key})
+      : super(key: key);
 
   @override
   State<InvestorBlock> createState() => _InvestorBlockState();
@@ -20,19 +21,36 @@ class InvestorBlock extends StatefulWidget {
 class _InvestorBlockState extends State<InvestorBlock> {
   @override
   Widget build(BuildContext context) {
+    
     double mem_dialog_width = 600;
-
     // MEMBER DETAIL DIALOG BLOK :
     MemberDetailDialogView() {
       showDialog(
           barrierDismissible: false,
           context: context,
           builder: (context) => AlertDialog(
-                  content: SizedBox(
+              title: Container(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Colors.grey, )),
+              ),
+              content: SizedBox(
                 width: mem_dialog_width,
-                child: MemberDetailDialog(investor:widget.investor ),
+                child: widget.is_admin
+                    ? InvestorDialog(
+                        form_type: InvestorFormType.edit,
+                        member: widget.investor,
+                      )
+                    : MemberDetailDialog(investor: widget.investor),
               )));
     }
+
+
 
     return Card(
       elevation: 0,
@@ -178,7 +196,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
           child: CircleAvatar(
         radius: 55,
         backgroundColor: Colors.blueGrey[100],
-        foregroundImage: NetworkImage(widget.investor['image']??temp_logo),
+        foregroundImage: NetworkImage(widget.investor['image'] ?? temp_logo),
       )),
     );
   }
@@ -189,7 +207,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
   Container MemName() {
     return Container(
         child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline5, children:  [
+            TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
           text: widget.investor['name'] ?? '',
           style: TextStyle(
@@ -204,7 +222,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
     return Container(
         // margin: EdgeInsets.only(bottom: 10),
         child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline5, children:  [
+            TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
           text: '@${widget.investor['position']}',
           style: TextStyle(
@@ -233,7 +251,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
         // Tect :
         AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
-              text: widget.investor['email']??'',
+              text: widget.investor['email'] ?? '',
               style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.blueGrey.shade700,

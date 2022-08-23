@@ -1,5 +1,3 @@
-
-import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +125,7 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
                           hind_text: 'investor Detail',
                           error_text: 'investor detail min len 20',
                           maxlines: maxlines,
-                          inital_val: widget.form_type== MemberFormType.edit? widget.member['info']:''
+                          inital_val: widget.form_type== InvestorFormType.edit? widget.member['info']:''
                         ),
                       ),
                     ],

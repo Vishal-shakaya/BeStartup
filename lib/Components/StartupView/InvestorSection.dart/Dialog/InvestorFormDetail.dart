@@ -1,4 +1,3 @@
-
 import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -12,21 +11,20 @@ import 'package:google_fonts/google_fonts.dart';
 class InvestorDetialForm extends StatefulWidget {
   GlobalKey<FormBuilderState>? formkey;
   Function ResetForm;
-  InvestorFormType? form_type; 
-  var member; 
- 
-  InvestorDetialForm({
-    this.form_type, 
-    this.member,
-    required this.ResetForm, this.formkey, Key? key})
+  InvestorFormType? form_type;
+  var member;
+
+  InvestorDetialForm(
+      {this.form_type,
+      this.member,
+      required this.ResetForm,
+      this.formkey,
+      Key? key})
       : super(key: key);
 
   @override
   State<InvestorDetialForm> createState() => _TeamMemberDetailFormState();
 }
-
-
-
 
 class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
   bool is_password_visible = true;
@@ -43,6 +41,7 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('detail member ${widget.member}');
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
@@ -67,36 +66,37 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
                         child: Column(
                           children: [
                             SecondaryInputField(
-                              // initial_value:widget.member['name'],
-                              context: context,
-                              name: 'name',
-                              lable_text: 'Full name',
-                              hind_text: 'enter name',
-                              error_text: 'name field required',
-                              initial_val: 
-                              widget.form_type == MemberFormType.edit? widget.member['name'] :''
-                            ),
-
+                                // initial_value:widget.member['name'],
+                                context: context,
+                                name: 'name',
+                                lable_text: 'Full name',
+                                hind_text: 'enter name',
+                                error_text: 'name field required',
+                                initial_val:
+                                    widget.form_type == InvestorFormType.edit
+                                        ? widget.member['name']
+                                        : ''),
                             SecondaryInputField(
-                              context: context,
-                              name: 'position',
-                              lable_text: 'Position',
-                              hind_text: 'type',
-                              require: false,
-                              initial_val: 
-                              widget.form_type == MemberFormType.edit? widget.member['position']:''
-                            ),
-                            
+                                context: context,
+                                name: 'position',
+                                lable_text: 'Position',
+                                hind_text: 'type',
+                                require: false,
+                                initial_val:
+                                    widget.form_type == InvestorFormType.edit
+                                        ? widget.member['position']
+                                        : ''),
                             SecondaryInputField(
-                              context: context,
-                              name: 'email',
-                              lable_text: 'Email',
-                              hind_text: 'contact email',
-                              error_text: '',
-                              require: false,
-                              initial_val:
-                               widget.form_type == MemberFormType.edit?widget.member['email']:''
-                            ),
+                                context: context,
+                                name: 'email',
+                                lable_text: 'Email',
+                                hind_text: 'contact email',
+                                error_text: '',
+                                require: false,
+                                initial_val:
+                                    widget.form_type == InvestorFormType.edit
+                                        ? widget.member['email']
+                                        : ''),
                           ],
                         ),
                       ),
@@ -111,11 +111,15 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
 
   // Secondary Input field :
   FormBuilderTextField SecondaryInputField(
-      {context, name,   error_text, lable_text, hind_text, require = true,
-        initial_val
-      }) {
+      {context,
+      name,
+      error_text,
+      lable_text,
+      hind_text,
+      require = true,
+      initial_val}) {
     return FormBuilderTextField(
-      initialValue: initial_val!=''?initial_val:'',
+      initialValue: initial_val != '' ? initial_val : '',
       textAlign: TextAlign.center,
       name: name,
       style: GoogleFonts.robotoSlab(

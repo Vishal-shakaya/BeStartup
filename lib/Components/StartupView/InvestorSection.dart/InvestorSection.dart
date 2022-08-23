@@ -1,5 +1,5 @@
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/Backend/Startup/StartupInvestor/CreateTeamStore.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/CreateInvestorDialog.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorBlock.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
@@ -21,6 +21,7 @@ class InvestorSection extends StatelessWidget {
   double mem_dialog_width = 600;
 
   var investors = [];
+  var is_admin;
 
   // MEMBER DETAIL DIALOG BLOK :
   MemberDetailDialogView({form_type, context}) async {
@@ -40,28 +41,23 @@ class InvestorSection extends StatelessWidget {
   /// Get Requirements :
   ////////////////////////////////////////
   GetLocalStorageData() async {
-    
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    
     final startup_id = await startupState.GetStartupId();
-    
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
+    is_admin = await startupState.GetIsUserAdmin();
+
     final resp =
         await startupInvestorStore.FetchStartupInvestor(startup_id: startup_id);
-        print(resp);
-        
+
     if (resp['response']) {
       investors = resp['data'];
     }
 
     if (!resp['response']) {
       Get.showSnackbar(
-        MyCustSnackbar(
-          type: MySnackbarType.error,
-          width: snack_width));
+          MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,66 +82,142 @@ class InvestorSection extends StatelessWidget {
   }
 
   Column MainMethod(BuildContext context) {
+    var mainWidget;
+    var investorSectionWidget;
+
+    if (investors.length <= 0) {
+      mainWidget = Container();
+      investorSectionWidget = Container();
+      
+      if(is_admin==true){
+        investorSectionWidget = Container(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            StartupHeaderText(
+              title: 'Investors',
+              font_size: 32,
+            ),
+
+            //////////////////////////////////////////////////
+            /// show add button on ly if user is admin :
+            //////////////////////////////////////////////////
+            is_admin != true
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(
+                      top: context.height * 0.06,
+                      left: context.width * 0.02,
+                    ),
+                    child: Container(
+                      width: 90,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: border_color)),
+                      child: TextButton.icon(
+                          onPressed: () {
+                            MemberDetailDialogView(
+                                form_type: InvestorFormType.create,
+                                context: context);
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                            size: 16,
+                          ),
+                          label: const Text(
+                            'Add',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          )),
+                    ))
+          ],
+        ),
+      );
+      }
+    
+    } 
+    
+    
+    else {
+      mainWidget = Container(
+        color: Colors.orange.shade300,
+        margin: EdgeInsets.only(top: context.height * 0.06),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                height: context.height * 0.30,
+                width: context.width * 0.60,
+                color: Colors.orange.shade300,
+                child: ListView.builder(
+                    itemCount: investors.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return InvestorBlock(
+                        is_admin: is_admin,
+                        investor: investors[index],
+                      );
+                    })),
+          ],
+        ),
+      );
+
+      investorSectionWidget = Container(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            StartupHeaderText(
+              title: 'Investors',
+              font_size: 32,
+            ),
+
+            //////////////////////////////////////////////////
+            /// show add button on ly if user is admin :
+            //////////////////////////////////////////////////
+            is_admin != true
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(
+                      top: context.height * 0.06,
+                      left: context.width * 0.02,
+                    ),
+                    child: Container(
+                      width: 90,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: border_color)),
+                      child: TextButton.icon(
+                          onPressed: () {
+                            MemberDetailDialogView(
+                                form_type: InvestorFormType.create,
+                                context: context);
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                            size: 16,
+                          ),
+                          label: const Text(
+                            'Add',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          )),
+                    ))
+          ],
+        ),
+      );
+    }
+
     return Column(
       children: [
         // INVESTOR HEADING:
-        Container(
-          child: Wrap(
-            children: [
-              StartupHeaderText(
-                title: 'Investors',
-                font_size: 32,
-              ),
-              Container(
-                  margin: EdgeInsets.only(
-                    top: context.height * 0.06,
-                    left: context.width * 0.02,
-                  ),
-                  child: Container(
-                    width: 90,
-                    height: 30,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: border_color)),
-                    child: TextButton.icon(
-                        onPressed: () {
-                          MemberDetailDialogView(
-                              form_type: InvestorFormType.create,
-                              context: context);
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          size: 16,
-                        ),
-                        label: const Text(
-                          'Add',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        )),
-                  ))
-            ],
-          ),
-        ),
+         investorSectionWidget,
 
-        Container(
-          color: Colors.orange.shade300,
-          margin: EdgeInsets.only(top: context.height * 0.06),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                  height: context.height * 0.30,
-                  width: context.width * 0.60,
-                  color: Colors.orange.shade300,
-                  child: ListView.builder(
-                      itemCount: investors.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return InvestorBlock(investor: investors[index],);
-                      })),
-            ],
-          ),
-        ),
+        ////////////////////////////////
+        /// Main Investor widget :
+        ////////////////////////////////
+        mainWidget
       ],
     );
   }

@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Startup/StartupInvestor/CreateTeamStore.dart';
-import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -85,8 +83,8 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.form_type == MemberFormType.edit) {
+
+    if (widget.form_type == InvestorFormType.edit) {
       upload_image_url = widget.member_image.toString();
     }
     super.initState();

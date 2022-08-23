@@ -1,5 +1,5 @@
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/Backend/Startup/StartupInvestor/CreateTeamStore.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorFormDetail.dart';
 
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorInfoForm.dart';
@@ -142,6 +142,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
   @override
   Widget build(BuildContext context) {
+
     ////////////////////////////////
     /// RESPONSIVE BREAK  POINTS :
     /// DEFAULT 1500 :
