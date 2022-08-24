@@ -420,48 +420,39 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    var create_resp = await CreateStartup();
-    if (create_resp['response']) {
-      var resp = await SetUserPlan(
-          exact_amount: exact_amount,
-          orderd: orderd,
-          expired: expired,
-          buyer_name: userName,
-          phone_no: phoneNo,
-          plan_type: plan_type);
 
-      // Mail if plan and startup creaded succesfully :
-      if (resp['response']) {
-        final is_mail_send = await SendInvoiceMail(
-            paymentId: response.paymentId,
+
+    final is_data_send = await SendDataToFireStore();
+
+    ////////////////////////////////////////////////////////
+    /// The above code is doing the following things:
+    /// 1. It is sending the payment data to the server.
+    /// 2. It is sending the payment data to the firebase.
+    /// 3. It is sending the payment data to the mail.
+    ////////////////////////////////////////////////////////
+      if (is_data_send['response']) {
+        var resp = await SetUserPlan(
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
-            payer_name: userName,
-            phone_no: phoneNo);
-        print('Mail Send resp $is_mail_send');
-      }
-    }
+            buyer_name: userName,
+            phone_no: phoneNo,
+            plan_type: plan_type);
+        print('Data store in firebase  Resp $is_data_send');
 
-    // Error Handler  Start Refund Process : :
-    if (!create_resp['response']) {
-      CloseCustomPageLoadingSpinner();
-      Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.info,
-          title: create_resp['message'],
-          message:
-              'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
-    }
-
-    // Start Uploading startup data fot firebase db :
-    // then show success alert : and redirect to
-    // startup detail page :
-    final is_data_send = await SendDataToFireStore();
-    if (is_data_send['response']) {
-      print('Data store in firebase  Resp $is_data_send');
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
+        if(resp){
+          final is_mail_send = await SendInvoiceMail(
+              paymentId: response.paymentId,
+              exact_amount: exact_amount,
+              orderd: orderd,
+              expired: expired,
+              payer_name: userName,
+              phone_no: phoneNo);
+            print('Mail Send resp $is_mail_send'); 
+        }
+   
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
@@ -470,6 +461,7 @@ class _SelectPlanState extends State<SelectPlan> {
       CloseCustomPageLoadingSpinner();
       Get.toNamed(home_page_url);
     }
+
   }
 
 ////////////////////////////////////////
@@ -485,47 +477,37 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    var create_resp = await CreateStartup();
-    if (create_resp['response']) {
-      var resp = await SetUserPlan(
-          exact_amount: exact_amount,
-          orderd: orderd,
-          expired: expired,
-          buyer_name: userName,
-          phone_no: phoneNo,
-          plan_type: plan_type);
+    final is_data_send = await SendDataToFireStore();
 
-      // Mail if plan and startup creaded succesfully :
-      if (resp['response']) {
-        final is_mail_send = await SendInvoiceMail(
-            paymentId: uuid.v4().toString(),
+    ////////////////////////////////////////////////////////
+    /// The above code is doing the following things:
+    /// 1. It is sending the payment data to the server.
+    /// 2. It is sending the payment data to the firebase.
+    /// 3. It is sending the payment data to the mail.
+    ////////////////////////////////////////////////////////
+      if (is_data_send['response']) {
+        var resp = await SetUserPlan(
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
-            payer_name: userName,
-            phone_no: phoneNo);
-        // print('Mail Send resp $is_mail_send');
-      }
-    }
+            buyer_name: userName,
+            phone_no: phoneNo,
+            plan_type: plan_type);
+        print('Data store in firebase  Resp $is_data_send');
 
-    // Error Handler  Start Refund Process : :
-    if (!create_resp['response']) {
-      CloseCustomPageLoadingSpinner();
-      Get.showSnackbar(MyCustSnackbar(
-          width: snack_width,
-          type: MySnackbarType.info,
-          title: create_resp['message'],
-          message:
-              'If plan amount deducted to your bank account then it will be refunded with in 3 to 5 days'));
-    }
-
-    // Start Uploading startup data fot firebase db :
-    // then show success alert : and redirect to
-    // startup detail page :
-    final is_data_send = await SendDataToFireStore();
-    if (is_data_send['response']) {
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
+        if(resp){
+          final is_mail_send = await SendInvoiceMail(
+              paymentId: uuid.v4().toString(),
+              exact_amount: exact_amount,
+              orderd: orderd,
+              expired: expired,
+              payer_name: userName,
+              phone_no: phoneNo);
+            print('Mail Send resp $is_mail_send'); 
+        }
+   
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
@@ -535,6 +517,7 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.toNamed(home_page_url);
     }
   }
+
 
   /////////////////////////////////////////
   /// ERROR HANDLER :

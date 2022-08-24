@@ -111,7 +111,7 @@ class InvestorSection extends StatelessWidget {
               ),
 
               //////////////////////////////////////////////////
-              /// show add button on ly if user is admin :
+              /// Show Add button only if user is admin :
               //////////////////////////////////////////////////
               is_admin != true
                   ? Container()

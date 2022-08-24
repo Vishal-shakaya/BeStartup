@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Loader/Shimmer/StartupView/StartupViewAvtarShimmer.dart';

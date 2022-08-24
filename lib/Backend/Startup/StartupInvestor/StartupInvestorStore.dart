@@ -119,6 +119,7 @@ class StartupInvestorStore extends GetxController {
         });
       });
 
+      investor_list.clear();
       investor_list.addAll(investors);
 
       return ResponseBack(

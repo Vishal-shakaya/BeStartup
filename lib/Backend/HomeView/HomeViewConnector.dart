@@ -24,14 +24,14 @@ class HomeViewConnector extends GetxController {
     // FETCHING DATA FROM FIREBASE
     try {
       var startup = await FirebaseFirestore.instance
-          .collection(getStartupStoreName)
+          .collection(getBusinessDetailStoreName)
           .get()
           .then((value) {
         startup_len = value.size;
         for (var doc in value.docs) {
-          startup_ids.add(doc.data()['id']);
-          founder_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['startup_name']);
+          startup_ids.add(doc.data()['startup_id']);
+          founder_ids.add(doc.data()['founder_id']);
+          startup_names.add(doc.data()['name']);
         }
       });
       startup_data = {
@@ -57,15 +57,15 @@ class HomeViewConnector extends GetxController {
     // FETCHING DATA FROM FIREBASE
     try {
       var startup = await FirebaseFirestore.instance
-          .collection(getStartupStoreName)
+          .collection(getBusinessDetailStoreName)
           .where('user_id', isEqualTo: user_id)
           .get()
           .then((value) {
         startup_len = value.size;
         for (var doc in value.docs) {
-          startup_ids.add(doc.data()['id']);
-          founder_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['startup_name']);
+          startup_ids.add(doc.data()['startup_id']);
+          founder_ids.add(doc.data()['founder_id']);
+          startup_names.add(doc.data()['name']);
         }
       });
       startup_data = {
@@ -112,13 +112,13 @@ class HomeViewConnector extends GetxController {
       //////////////////////////////////
       /// Fetch Startups Data :
       /// /////////////////////////////////
-      var startup_store = await store.collection(getStartupStoreName);
+      var startup_store = await store.collection(getBusinessDetailStoreName);
       var query2 = startup_store.where('id', whereIn: startup_ids).get();
 
       await query2.then((value) {
         for (var doc in value.docs) {
-          founder_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['startup_name']);
+          founder_ids.add(doc.data()['founder_id']);
+          startup_names.add(doc.data()['name']);
         }
       });
 
@@ -182,13 +182,13 @@ class HomeViewConnector extends GetxController {
       //////////////////////////////////
       /// Fetch Startups Data :
       /// /////////////////////////////////
-      var startup_store = await store.collection(getStartupStoreName);
+      var startup_store = await store.collection(getBusinessDetailStoreName);
       var startup_query = startup_store.where('id', whereIn: startup_ids).get();
 
       await startup_query.then((value) {
         for (var doc in value.docs) {
-          founder_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['startup_name']);
+          founder_ids.add(doc.data()['founder_id']);
+          startup_names.add(doc.data()['name']);
         }
       });
 
@@ -233,13 +233,13 @@ class HomeViewConnector extends GetxController {
       //////////////////////////////////
       /// Fetch Startups Data :
       /// /////////////////////////////////
-      var startup_store = await store.collection(getStartupStoreName);
+      var startup_store = await store.collection(getBusinessDetailStoreName);
       var query2 = startup_store.where('id', whereIn: startup_ids).get();
 
       await query2.then((value) {
         for (var doc in value.docs) {
-          founder_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['startup_name']);
+          founder_ids.add(doc.data()['founder_id']);
+          startup_names.add(doc.data()['name']);
         }
       });
 

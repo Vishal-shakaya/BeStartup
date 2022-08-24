@@ -28,6 +28,8 @@ UserModel({email,
   }
 }
 
+
+
 InvestorModel(
     {email, 
     user_id,
@@ -49,6 +51,8 @@ InvestorModel(
     return false;
   }
 }
+
+
 
 FounderModel(
     {email, 

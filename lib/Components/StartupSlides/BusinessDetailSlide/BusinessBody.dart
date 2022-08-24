@@ -109,6 +109,8 @@ class _BusinessBodyState extends State<BusinessBody> {
       business_name = business_name.trim();
       desire_amount = desire_amount.trim();
 
+        await detailStore.SetBusinessAmountParam(data: desire_amount);
+        await detailStore.SetBusinessNameParam(data: business_name );
         var update_resp =
             await updateStore.UpdateBusinessDetail(startup_id: startup_id);
 
@@ -184,8 +186,8 @@ class _BusinessBodyState extends State<BusinessBody> {
         final name = resp['data']['name'];
 
         await detailStore.SetBusinessAmountParam(data: amount);
-        await detailStore.SetBusinessLogoParam(data: logo);
         await detailStore.SetBusinessNameParam(data: name );
+        await detailStore.SetBusinessLogoParam(data: logo);
       }
     } catch (e) {
       return '';
@@ -255,7 +257,7 @@ class _BusinessBodyState extends State<BusinessBody> {
       
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
        
         onTap: () async {
