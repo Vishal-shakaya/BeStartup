@@ -95,7 +95,14 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       };
 
       var res;
-      if (widget.form_type == InvestorFormType.edit) {}
+      if (widget.form_type == InvestorFormType.edit) {
+        
+        await startupInvestorStore.SetProfileImage(
+            image: widget.member['image']??'');
+
+        res = await startupInvestorStore.UpdateInvestor(
+            inv_obj: temp_investor, inv_id: widget.member['id']);
+      }
 
       if (widget.form_type == InvestorFormType.create) {
         print('Create Investor');
@@ -121,6 +128,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       }
     } else {
       print('Invalid form');
+
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
           type: MySnackbarType.error,
@@ -142,7 +150,6 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     ////////////////////////////////
     /// RESPONSIVE BREAK  POINTS :
     /// DEFAULT 1500 :

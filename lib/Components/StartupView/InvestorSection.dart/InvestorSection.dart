@@ -29,7 +29,18 @@ class InvestorSection extends StatelessWidget {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-                content: SizedBox(
+            title: Container(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.cancel,
+                    color: Colors.grey,
+                  )),
+            ),
+            content: SizedBox(
               width: mem_dialog_width,
               child: InvestorDialog(
                 form_type: form_type,
@@ -88,58 +99,54 @@ class InvestorSection extends StatelessWidget {
     if (investors.length <= 0) {
       mainWidget = Container();
       investorSectionWidget = Container();
-      
-      if(is_admin==true){
-        investorSectionWidget = Container(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            StartupHeaderText(
-              title: 'Investors',
-              font_size: 32,
-            ),
 
-            //////////////////////////////////////////////////
-            /// show add button on ly if user is admin :
-            //////////////////////////////////////////////////
-            is_admin != true
-                ? Container()
-                : Container(
-                    margin: EdgeInsets.only(
-                      top: context.height * 0.06,
-                      left: context.width * 0.02,
-                    ),
-                    child: Container(
-                      width: 90,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: border_color)),
-                      child: TextButton.icon(
-                          onPressed: () {
-                            MemberDetailDialogView(
-                                form_type: InvestorFormType.create,
-                                context: context);
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            size: 16,
-                          ),
-                          label: const Text(
-                            'Add',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          )),
-                    ))
-          ],
-        ),
-      );
+      if (is_admin == true) {
+        investorSectionWidget = Container(
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              StartupHeaderText(
+                title: 'Investors',
+                font_size: 32,
+              ),
+
+              //////////////////////////////////////////////////
+              /// show add button on ly if user is admin :
+              //////////////////////////////////////////////////
+              is_admin != true
+                  ? Container()
+                  : Container(
+                      margin: EdgeInsets.only(
+                        top: context.height * 0.06,
+                        left: context.width * 0.02,
+                      ),
+                      child: Container(
+                        width: 90,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: border_color)),
+                        child: TextButton.icon(
+                            onPressed: () {
+                              MemberDetailDialogView(
+                                  form_type: InvestorFormType.create,
+                                  context: context);
+                            },
+                            icon: const Icon(
+                              Icons.add,
+                              size: 16,
+                            ),
+                            label: const Text(
+                              'Add',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            )),
+                      ))
+            ],
+          ),
+        );
       }
-    
-    } 
-    
-    
-    else {
+    } else {
       mainWidget = Container(
         color: Colors.orange.shade300,
         margin: EdgeInsets.only(top: context.height * 0.06),
@@ -150,15 +157,19 @@ class InvestorSection extends StatelessWidget {
                 height: context.height * 0.30,
                 width: context.width * 0.60,
                 color: Colors.orange.shade300,
-                child: ListView.builder(
-                    itemCount: investors.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InvestorBlock(
-                        is_admin: is_admin,
-                        investor: investors[index],
-                      );
-                    })),
+                child: Obx(
+                  () {
+                    return ListView.builder(
+                        itemCount: investors.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return InvestorBlock(
+                            is_admin: is_admin,
+                            investor: investors[index],
+                          );
+                        }); 
+                  },
+                )),
           ],
         ),
       );
@@ -212,7 +223,7 @@ class InvestorSection extends StatelessWidget {
     return Column(
       children: [
         // INVESTOR HEADING:
-         investorSectionWidget,
+        investorSectionWidget,
 
         ////////////////////////////////
         /// Main Investor widget :

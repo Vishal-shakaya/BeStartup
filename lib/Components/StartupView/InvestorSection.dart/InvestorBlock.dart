@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/CreateInvestorDialog.dart';
 import 'package:be_startup/Components/StartupView/MemberDetailDialog.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/enums.dart';
+import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,10 +21,44 @@ class InvestorBlock extends StatefulWidget {
 }
 
 class _InvestorBlockState extends State<InvestorBlock> {
+  var startupInvestorStore = Get.put(StartupInvestorStore());
+  var my_context = Get.context;
+
+  double mem_dialog_width = 600;
+
+/////////////////////////////////////////////////////////////////
+  /// The function is called when the user clicks on
+  /// the delete button. It calls the DeleteInvestor()
+  /// function in the store. The store then calls the
+  ///  DeleteInvestor() function in the API. The API then
+  /// calls the DeleteInvestor() function in the database.
+  ///  The database then deletes the investor from the
+  /// database
+/////////////////////////////////////////////////////////////////
+  DeleteInvestor() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
+    final resp = await startupInvestorStore.DeleteInvestor(
+        inv_id: widget.investor['id']);
+
+    print('Delete Investor Reponse $resp');
+
+    // Success Hadler :
+    if (resp['response']) {
+      Navigator.of(context).pop();
+    }
+
+    // Error Handler :
+    if (!resp['response']) {
+      Get.showSnackbar(MyCustSnackbar(
+          type: MySnackbarType.error,
+          title: 'Unable to delete',
+          width: snack_width));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-    double mem_dialog_width = 600;
     // MEMBER DETAIL DIALOG BLOK :
     MemberDetailDialogView() {
       showDialog(
@@ -30,14 +66,13 @@ class _InvestorBlockState extends State<InvestorBlock> {
           context: context,
           builder: (context) => AlertDialog(
               title: Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.grey, )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DeleteInvestorButton(),
+                    CloseDialogButton(context),
+                  ],
+                ),
               ),
               content: SizedBox(
                 width: mem_dialog_width,
@@ -49,8 +84,6 @@ class _InvestorBlockState extends State<InvestorBlock> {
                     : MemberDetailDialog(investor: widget.investor),
               )));
     }
-
-
 
     return Card(
       elevation: 0,
@@ -113,6 +146,43 @@ class _InvestorBlockState extends State<InvestorBlock> {
           ],
         ),
       ),
+    );
+  }
+
+  Container DeleteInvestorButton() {
+    return Container(
+      margin: EdgeInsets.only(top: 30),
+      alignment: Alignment.center,
+      width: 100,
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextButton(
+          onPressed: () {
+            DeleteInvestor();
+          },
+          child: Text(
+            'Delete',
+            style: TextStyle(
+                color: Colors.red.shade400,
+                fontSize: 16,
+                fontWeight: FontWeight.w600),
+          )),
+    );
+  }
+
+  Container CloseDialogButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.topRight,
+      child: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.cancel,
+            color: Colors.grey,
+          )),
     );
   }
 

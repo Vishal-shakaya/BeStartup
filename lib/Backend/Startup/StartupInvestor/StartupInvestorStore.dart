@@ -22,9 +22,15 @@ class StartupInvestorStore extends GetxController {
 
   static var investor_image;
 
+  static RxList investor_list = [].obs;
+
   GetProfileImage() async {
     print('Get investor image $investor_image');
     return investor_image;
+  }
+
+  SetProfileImage({required image}) {
+    investor_image = image;
   }
 
 ///////////////////////////////////////////////////////////
@@ -65,21 +71,23 @@ class StartupInvestorStore extends GetxController {
   ///   A ResponseBack object.
 ////////////////////////////////////////////////////////
   CreateInvestor({required inv_obj, required startup_id}) async {
+    final id = uuid.v4();
     try {
       final myStore = store.collection(getStartupInvestorStoreName);
       Map<String, dynamic> investor = {
-        'id': uuid.v4(),
-        'name': inv_obj['name']??'',
-        'position': inv_obj['position']??'',
-        'email': inv_obj['email']??'',
-        'info': inv_obj['info']??'',
-        'image': investor_image??temp_logo
+        'id': id,
+        'name': inv_obj['name'] ?? '',
+        'position': inv_obj['position'] ?? '',
+        'email': inv_obj['email'] ?? '',
+        'info': inv_obj['info'] ?? '',
+        'image': investor_image ?? temp_logo
       };
 
       final investor_model = await StartupInvestorModel(
-          startup_id: startup_id, investor: investor);
-
+          startup_id: startup_id, investor: investor, id: id);
       await myStore.add(investor_model);
+
+      investor_list.add(investor);
 
       return ResponseBack(response_type: true);
     } catch (e) {
@@ -87,6 +95,17 @@ class StartupInvestorStore extends GetxController {
     }
   }
 
+/////////////////////////////////////////////////////
+  /// It fetches all the investors that are
+  /// associated with a startup
+  ///
+  /// Args:
+  ///   startup_id: The id of the startup you want to
+  ///  fetch the investors for.
+  ///
+  /// Returns:
+  ///   A list of investors.
+/////////////////////////////////////////////////////
   FetchStartupInvestor({required startup_id}) async {
     var data;
     var investors = [];
@@ -100,10 +119,87 @@ class StartupInvestorStore extends GetxController {
         });
       });
 
+      investor_list.addAll(investors);
+
       return ResponseBack(
           response_type: true,
-          data: investors,
+          data: investor_list,
           message: 'Fetch Startup Investors Successfully');
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+//////////////////////////////////////////////////////
+  /// It takes an investor id and an investor object, a
+  /// and updates the investor in the database.
+  ///
+  /// Args:
+  ///   inv_id: String
+  ///   inv_obj: {
+  ///
+  /// Returns:
+  ///   The ResponseBack class is being returned.
+//////////////////////////////////////////////////////
+  UpdateInvestor({inv_id, inv_obj}) async {
+    var data;
+    var doc_id;
+    print(' Investor id ${inv_id}');
+    // print(' Investor object ${inv_obj}');
+
+    try {
+      Map<String, dynamic> investor = {
+        'id': inv_id,
+        'name': inv_obj['name'] ?? '',
+        'position': inv_obj['position'] ?? '',
+        'email': inv_obj['email'] ?? '',
+        'info': inv_obj['info'] ?? '',
+        'image': investor_image
+      };
+
+      final myStore = store.collection(getStartupInvestorStoreName);
+      var query = myStore.where('id', isEqualTo: inv_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data();
+        doc_id = value.docs.first.id;
+      });
+
+      data['investor'] = investor;
+      myStore.doc(doc_id).update(data);
+
+      final index = investor_list.indexWhere((el) => el['id'] == inv_id);
+      investor_list[index] = investor;
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      print('error msg ${e}');
+      return ResponseBack(response_type: false);
+    }
+  }
+
+  DeleteInvestor({inv_id}) async {
+    var data;
+    var doc_id;
+    print(' Investor id ${inv_id}');
+    // print(' Investor object ${inv_obj}');
+
+    try {
+      final myStore = store.collection(getStartupInvestorStoreName);
+      var query = myStore.where('id', isEqualTo: inv_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data();
+        doc_id = value.docs.first.id;
+      });
+
+      myStore.doc(doc_id).delete();
+
+      investor_list.removeWhere((el) {
+        return el["id"] == inv_id;
+      });
+
+      return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
     }

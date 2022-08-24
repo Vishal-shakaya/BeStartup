@@ -225,10 +225,11 @@ BusinessTeamMembersModel({
 }
 
 
-StartupInvestorModel({required startup_id, required investor})async{
+// id is required field :
+StartupInvestorModel({required startup_id, required investor,required id})async{
  try {
     Map<String, dynamic> temp_obj = {
-      'id': uuid.v4(),
+      'id': id,
       'startup_id': startup_id,
       'investor':investor, 
       'timestamp':await GetFormatedDate() , 
