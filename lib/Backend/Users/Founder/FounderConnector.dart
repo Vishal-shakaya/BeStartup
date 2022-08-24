@@ -207,7 +207,7 @@ class FounderConnector extends GetxController {
       picture = await founderStore.GetFounderPicture();
 
       name = data['name'];
-      position = data['position'];
+      // position = data['position'];
       phone_no = data['phone_no'];
       primary_mail = data['primary_mail'];
       other_contact = data['other_contact'];
@@ -248,7 +248,7 @@ class FounderConnector extends GetxController {
 
       // Update Detail fields;
       data_userDetail['name'] = name;
-      data_userDetail['position'] = position;
+      // data_userDetail['position'] = position;
       data_userDetail['picture'] = picture;
 
       // Update Contact field:

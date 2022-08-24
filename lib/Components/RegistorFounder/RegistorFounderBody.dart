@@ -8,6 +8,7 @@ import 'package:be_startup/Components/RegistorFounder/RegistorFounderForm.dart';
 
 import 'package:be_startup/Components/StartupSlides/TeamSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -66,35 +67,31 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       };
 
       final res = await founderStore.CreateFounder(founder);
-        
+
       var createFounderResp = await founderConnector.CreateFounderContact();
       print(createFounderResp);
 
-      var createFounderDetialResp = await founderConnector.CreateFounderDetail();
+      var createFounderDetialResp =
+          await founderConnector.CreateFounderDetail();
       print(createFounderDetialResp);
-
 
       if (!res['response']) {
         CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
         Get.closeAllSnackbars();
-      
+
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.error,
             title: res['message'],
             message: create_error_msg));
-      }
-      
-       else {
+      } else {
         CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
         formKey.currentState!.reset();
         Get.toNamed(home_page_url);
       }
     }
-
-
 
     // Form Error :
     else {
@@ -107,8 +104,6 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
-
-
 ///////////////////////////////////////////
 // UPDATE FOUNDER FORM  :
 ///////////////////////////////////////////
@@ -120,22 +115,22 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
-      final String founder_position =
-          formKey.currentState!.value['founder_position'];
+      // final String founder_position =
+      //     formKey.currentState!.value['founder_position'];
       final String phone_no = formKey.currentState!.value['phone_no'];
       final String email = formKey.currentState!.value['email'];
       final String other_contact = formKey.currentState!.value['other_info'];
 
       Map<String, dynamic> founder = {
         'name': founder_name,
-        'position': founder_position,
+        // 'position': founder_position,
         'phone_no': phone_no,
         'primary_mail': email,
         'other_contact': other_contact
       };
 
       final res = await founderStore.SetFounderParam(data: founder);
-      
+
       final update_resp =
           await founderConnector.UpdateFounderDetail(user_id: user_id);
 
@@ -155,7 +150,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.error,
-            title: res['message'],
+            title: update_error_title,
             message: update_error_msg));
       }
     }
@@ -174,42 +169,55 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
   GetLocalStorageData() async {
     if (updateMode == true) {
-      final resp =
-          await founderConnector.FetchFounderDetailandContact(user_id: user_id);
-      final picture = resp['data']['userDetail']['picture'];
-      final startup_name = resp['data']['userDetail']['name'];
-      // final position = resp['data']['userDetail']['position'];
-      final phone_no = resp['data']['userContect']['phone_no'];
-      final primary_mail = resp['data']['userContect']['primary_mail'];
-      final other_contact = resp['data']['userContect']['other_contact'];
+      try {
+        print('Founder id $user_id');
+        final resp = await founderConnector.FetchFounderDetailandContact(
+            user_id: user_id);
 
-      final data = {
-        'picture': picture,
-        'name': startup_name,
-        // 'position': position,
-        'phone_no': phone_no,
-        'primary_mail': primary_mail,
-        'other_contact': other_contact,
-      };
-      await founderStore.SetFounderParam(data: data);
-      await founderStore.SetFounderPicture(data: picture);
+        final picture = resp['data']['userDetail']['picture']??temp_avtar_image;
+        // print('picture ${picture}');
+
+        final name = resp['data']['userDetail']['name']??'';
+        // print('name ${name}');
+        // final position = resp['data']['userDetail']['position'];
+        final phone_no = resp['data']['userContect']['phone_no']??'';
+        // print('phone no ${phone_no}');
+
+        final primary_mail = resp['data']['userContect']['primary_mail']??'';
+        // print('primary mail ${primary_mail}');
+
+        final other_contact = resp['data']['userContect']['other_contact']??'';
+        // print('other contact${other_contact}');
+
+
+        final data = {
+          'picture': picture,
+          'name': name,
+          // 'position': position,
+          'phone_no': phone_no,
+          'primary_mail': primary_mail,
+          'other_contact': other_contact,
+        };
+        await founderStore.SetFounderParam(data: data);
+        await founderStore.SetFounderPicture(data: picture);
+      } catch (e) {
+        print('Fetching erro Founder detail $e');
+      }
     }
   }
 
   /// SET PAGE DEFAULT STATE :
   @override
   void initState() {
-   
-   if(Get.parameters.isNotEmpty){
-
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
-    
+
       user_id = pageParam['user_id'];
-    
+
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
-   }
+    }
     super.initState();
   }
 
@@ -260,8 +268,8 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
               ),
             )),
         updateMode == true
-            ? CreateOrUpdateFounderButton(context,UpdateFounderDetail)
-            : CreateOrUpdateFounderButton(context,SubmitFounderDetail)
+            ? CreateOrUpdateFounderButton(context, UpdateFounderDetail)
+            : CreateOrUpdateFounderButton(context, SubmitFounderDetail)
       ],
     );
   }
@@ -269,7 +277,10 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   ////////////////////////////////////
   /// External Method :
   ////////////////////////////////////
-  Container CreateOrUpdateFounderButton(BuildContext context ,fun,) {
+  Container CreateOrUpdateFounderButton(
+    BuildContext context,
+    fun,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(

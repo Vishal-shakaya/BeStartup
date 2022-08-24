@@ -21,7 +21,7 @@ class BusinessFounderStore extends GetxController {
   static var image_url;
   static var picture = '';
   static var name = '';
-  static var position = '';
+  // static var position = '';
   static var phone_no = '';
   static var primary_mail = '';
   static var other_contact = '';
@@ -29,7 +29,7 @@ class BusinessFounderStore extends GetxController {
   static Map<String, dynamic> founder_obj = {
     'picture': picture,
     'name': name,
-    'position': position,
+    // 'position': position,
     'phone_no': phone_no,
     'primary_mail': primary_mail,
     'other_contact': other_contact,
@@ -42,13 +42,13 @@ class BusinessFounderStore extends GetxController {
 
     // picture = data['picture'];
     name = data['name'];
-    position = data['position'];
+    // position = data['position'];
     phone_no = data['phone_no'];
     primary_mail = data['primary_mail'];
     other_contact = data['other_contact'];
 
     founder_obj['name'] = name;
-    founder_obj['position'] = position;
+    // founder_obj['position'] = position;
     founder_obj['phone_no'] = phone_no;
     founder_obj['primary_mail'] = primary_mail;
     founder_obj['other_contact'] = other_contact;
@@ -152,7 +152,7 @@ class BusinessFounderStore extends GetxController {
         Map<String, dynamic> temp_founder = {
           'picture': detail_obj['picture'],
           'name': detail_obj['name'],
-          'position': detail_obj['position'],
+          // 'position': detail_obj['position'],
           'phone_no': contact_obj['phone_no'],
           'primary_mail': contact_obj['primary_mail'],
           'other_contact': contact_obj['other_contact'],
@@ -174,7 +174,7 @@ class BusinessFounderStore extends GetxController {
       founder_obj = {
         'picture': detail_obj['picture'],
         'name': detail_obj['name'],
-        'position': detail_obj['position'],
+        // 'position': detail_obj['position'],
         'phone_no': contact_obj['phone_no'],
         'primary_mail': contact_obj['primary_mail'],
         'other_contact': contact_obj['other_contact'],

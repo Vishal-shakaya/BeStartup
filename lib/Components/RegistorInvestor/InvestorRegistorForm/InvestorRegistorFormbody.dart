@@ -85,7 +85,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.error,
-            title: res['message'],
+            title: create_error_title,
             message: create_error_msg));
       }
     }
@@ -111,8 +111,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 
     if (formKey.currentState!.validate()) {
       String investor_name = formKey.currentState!.value['investor_name'];
-      String investor_position =
-          formKey.currentState!.value['investor_position'];
+      // String investor_position =
+      //     formKey.currentState!.value['investor_position'];
       String phone_no = formKey.currentState!.value['phone_no'];
       String email = formKey.currentState!.value['email'];
       String other_contact = formKey.currentState!.value['other_info'];
@@ -125,6 +125,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
         'email': email,
         'other_contact': other_contact
       };
+
+
       var res = await investorStore.CreateInvestor(investor);
       var update_resp = await investorConnector.UpdateInvestorDetail();
 
@@ -156,7 +158,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.error,
-            title: res['message'],
+            title: create_error_title,
             message: create_error_msg));
       }
     }

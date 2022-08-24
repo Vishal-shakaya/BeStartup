@@ -178,6 +178,9 @@ class InvestorConnector extends GetxController {
     }
   }
 
+
+
+
   CreateInvestorCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {
