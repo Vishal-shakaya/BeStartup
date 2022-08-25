@@ -1,4 +1,0 @@
-
-ConfirmAlert(context){
-
-}

@@ -24,14 +24,18 @@ class _PHBottomBarState extends State<PHBottomBar> {
     return Container(
         height: context.height * 0.10,
         alignment: Alignment.bottomCenter,
+       
         child: InkWell(
           onTap: () {
             widget.setPageState();
           },
+
           child: RichText(
               text: TextSpan(style: TextStyle(letterSpacing: 2), children: [
             TextSpan(
                 text: '${widget.desc_text}', style: TextStyle(color: light_color_type3)),
+         
+         
             TextSpan(
                 text: '${widget.main_text}',
                 style: TextStyle(

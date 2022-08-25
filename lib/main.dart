@@ -31,20 +31,20 @@ import 'package:be_startup/Handlers/UserRegistration/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:be_startup/Components/WebLoginView/Signup/SignupView.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:be_startup/Components/WebLoginView/Signup/SignupView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_glow/flutter_glow.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_glow/flutter_glow.dart';
 
 
 

@@ -8,6 +8,7 @@ import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryHandler.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfileHandler.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -147,15 +148,16 @@ class _HomeViewState extends State<HomeView> {
       final resp = await userStore.FetchUserDetail();
       user_id = resp['data']['id'];
 
+      print('Home view resp $resp');
       await userState.SetUserId(id: user_id);
 
       // 1 CHECK  :
       // If user user type is investor or founder
       // if both are false then show user type page :
-      // if (resp['data']['is_investor'] == false &&
-      //     resp['data']['is_founder'] == false) {
-      //   Get.toNamed(user_type_slide_url);
-      // }
+      if (resp['data']['is_investor'] == false &&
+          resp['data']['is_founder'] == false) {
+        Get.toNamed(user_type_slide_url);
+      }
 
       // 2 CHECK  :
       // If user user type is investor or founder
@@ -172,7 +174,6 @@ class _HomeViewState extends State<HomeView> {
 
           // Investor Success Handler :
           if (invest_resp['response']) {
-
             print(invest_resp['data']);
             print(' [ SETUP INVESTOR DETAIL ] ');
 
@@ -290,7 +291,7 @@ class _HomeViewState extends State<HomeView> {
 
             // Header Section:
             HomeHeaderSection(
-                profile_image: user_profile,
+                profile_image: user_profile ?? temp_avtar_image,
                 changeView: SetHomeView,
                 usertype: usertype),
 

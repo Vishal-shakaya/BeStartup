@@ -1,28 +1,33 @@
 import 'dart:io';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Utils/Colors.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SignupView extends StatefulWidget {
-  SignupView({Key? key}) : super(key: key);
+class UploadUserProfileWidget extends StatefulWidget {
+  UploadUserProfileWidget({Key? key}) : super(key: key);
 
   @override
-  State<SignupView> createState() => _SignupViewState();
+  State<UploadUserProfileWidget> createState() => _SignupViewState();
 }
 
-class _SignupViewState extends State<SignupView> {
+class _SignupViewState extends State<UploadUserProfileWidget> {
   XFile? profile_image;
   File? circular_profile;
   String profile_image_path = '';
   UploadTask? upload_process;
 
-////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // CROPE IMAGE :
-////////////////////////////
+/// The function takes a file as an argument, crops it, and 
+/// then uploads it to firebase storage
+/// 
+/// Args:
+///   profile_image: The image file that you want to crop.
+//////////////////////////////////////////////////////////////////////
   Future<void> CorpImage(profile_image) async {
     File? cropImage = await ImageCropper().cropImage(
         sourcePath: profile_image!.path,
@@ -32,7 +37,7 @@ class _SignupViewState extends State<SignupView> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original),
         aspectRatioPresets: [CropAspectRatioPreset.square],
-        iosUiSettings: IOSUiSettings(
+        iosUiSettings: const IOSUiSettings(
           title: 'upload profile picture',
         ),
         compressFormat: ImageCompressFormat.png,
@@ -52,6 +57,8 @@ class _SignupViewState extends State<SignupView> {
     print(download_url);
   }
 
+
+
 // CLEAR IMAGE :
   ClearImage() {
     setState(() {
@@ -59,9 +66,16 @@ class _SignupViewState extends State<SignupView> {
     });
   }
 
-  /////////////////////////////////////////
-  // PICKED IMAGE AND STORE IN  FILE :
-  /////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////
+// PICKED IMAGE AND STORE IN  FILE :
+/// It allows the user to pick an image from the gallery or camera.
+/// 
+/// Args:
+///   source (ImageSource): The source of the image.
+/////////////////////////////////////////////////////////
   Future<void> PickImage(ImageSource source) async {
     try {
       XFile? new_image = await ImagePicker().pickImage(source: source);
@@ -72,8 +86,13 @@ class _SignupViewState extends State<SignupView> {
     }
   }
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
+
     // BOTTOM SHEET TO SHOW UPLOAD OPTION:
     BottomSheet() {
       Get.bottomSheet(
@@ -81,21 +100,26 @@ class _SignupViewState extends State<SignupView> {
           heightFactor: 0.30,
           child: ListView(
             children: [
+              
               ListTile(
                 onTap: () async {
                   Navigator.of(context).pop();
                   await PickImage(ImageSource.gallery);
+              
                 },
                 tileColor: Colors.grey.shade200,
                 leading: Icon(Icons.phone_android_outlined,
                     color: light_color_type3),
                 title: Text('Gallery', style: Get.theme.textTheme.headline5),
               ),
+              
+              
               ListTile(
                 onTap: () async {
                   Navigator.of(context).pop();
                   await PickImage(ImageSource.camera);
                 },
+              
                 tileColor: Colors.grey.shade200,
                 leading: Icon(Icons.camera_alt_sharp, color: light_color_type3),
                 title: Text('Camera', style: Get.theme.textTheme.headline5),
@@ -103,12 +127,17 @@ class _SignupViewState extends State<SignupView> {
             ],
           ),
         ),
+       
+       
         backgroundColor: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(50), topRight: Radius.circular(50))),
       );
     }
+
+
+
 
     return Container(
         margin: EdgeInsets.only(top: context.height * 0.02),

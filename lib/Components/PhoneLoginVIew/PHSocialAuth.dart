@@ -14,7 +14,7 @@ class PHSocailAuth extends StatelessWidget {
          heightFactor: 0.45,
          child:Container(
            alignment: Alignment.center,
-           decoration: BoxDecoration(
+           decoration: const BoxDecoration(
              color: Colors.white,
              borderRadius: BorderRadius.all(Radius.circular(20))
            ),
@@ -47,18 +47,24 @@ class PHSocailAuth extends StatelessWidget {
               onPressed: () {
               print('click');
               }),
+          
+          
             SignInButton(
               buttonType:ButtonType.twitter ,
               elevation: 3,
               onPressed: () {
               print('click');
               }),
+          
+          
             SignInButton(
               buttonType: ButtonType.linkedin,
               elevation: 3,
               onPressed: () {
               print('click');
               }),
+          
+          
             SignInButton(
               buttonType:  ButtonType.apple,
               elevation: 3,

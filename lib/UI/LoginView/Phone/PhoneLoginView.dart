@@ -2,6 +2,7 @@ import 'package:be_startup/Components/PhoneLoginVIew/PHBottomBar.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHLoginIcon.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/PHSocialAuth.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/LoginView.dart';
+import 'package:be_startup/Components/PhoneLoginVIew/SIgnupHeaderText.dart';
 import 'package:be_startup/Components/PhoneLoginVIew/SignupView.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,12 +51,20 @@ class _PhoneLoginViewState extends State<PhoneLoginView> {
           child: Column(children: [
             // Show logo in Login Page :
             // Else show upload picture widget:
-            is_login_form ? PHLoginIcon() : SignupView(),
+            is_login_form 
+            ? PHLoginIcon() 
+            : SignupHeaderText() , 
+            // : UploadUserProfileWidget(),
 
+            
             PHLoginForm(
               is_form_login:is_login_form,
               button_text:btn_text),
+            
+            
             PHSocailAuth(),
+
+
             PHBottomBar(
               setPageState: SetPageState,
               main_text: main_text,

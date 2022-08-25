@@ -66,7 +66,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
     var dialog = SmartDialog.showLoading(
         background: Colors.white,
         maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
+        widget: const CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
         ));
@@ -78,12 +78,18 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
     SmartDialog.dismiss();
   }
 
+
+
+
   // SUBMIT SIGNUP FORM :
   SubmitSignupForm(context, width) async {
+
     _formKey.currentState!.save();
-    // START LOADING :
+
     StartLoading();
+
     if (_formKey.currentState!.validate()) {
+
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
 
@@ -91,6 +97,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
       // SIGNUP PROCESS :
       var resp = await myAuth.SignupUser(email: email, password: password);
       _formKey.currentState!.reset();
+    
       print('Signup Response ${resp}');
 
       // SUCCESS RESPONSE :
@@ -117,7 +124,10 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
           maxWidth: width,
         );
       }
-    } else {
+    } 
+    
+    
+    else {
       EndLoading();
       // CLOSE SNAKBAR :
       Get.closeAllSnackbars();
@@ -135,6 +145,8 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
       );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +190,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
                     borderRadius: BorderRadius.circular(18.0),
                     // side: BorderSide(color: Colors.orange)
                   ))),
-                  child: Text('Signup',
+                  child: const Text('Signup',
                       style: TextStyle(
                         letterSpacing: 2,
                         fontWeight: FontWeight.w600,
@@ -223,13 +235,15 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
             print(val);
             return 'password not match';
           }
-        }
+      }, 
+        FormBuilderValidators.minLength(context, 8,
+        errorText: 'min length 8')
       ]),
 
       decoration: InputDecoration(
           hintText: 'confirm password',
           contentPadding: EdgeInsets.symmetric(vertical: 10),
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 15,
           ),
           prefixIcon: Icon(
@@ -275,7 +289,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
       decoration: InputDecoration(
           hintText: 'enter password',
           contentPadding: EdgeInsets.symmetric(vertical: 10),
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 15,
           ),
           prefixIcon: Icon(
@@ -309,7 +323,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
       decoration: InputDecoration(
           hintText: 'enter mail ',
           contentPadding: EdgeInsets.symmetric(vertical: 10),
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 15,
           ),
           prefixIcon: Icon(
