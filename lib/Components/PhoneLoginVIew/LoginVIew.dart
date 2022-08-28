@@ -83,13 +83,13 @@ class _PHLoginFormState extends State<PHLoginForm> {
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
 
-      email = email.trim();
-      password = password.trim();
+      var pureMail= email.trim();
+      var purePassword = password.trim();
 
       print('Singup mail $email');
       print('Singup password $password');
 
-      final resp = await authStore.SignupUser(email: email, password: password);
+      final resp = await authStore.SignupUser(email: pureMail, password: purePassword);
 
       print(resp);
 

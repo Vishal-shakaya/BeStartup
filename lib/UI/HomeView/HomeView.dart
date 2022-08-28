@@ -140,15 +140,17 @@ class _HomeViewState extends State<HomeView> {
     /// GET REQUIRED PARAM :
     ///////////////////////////////////////////
     GetLocalStorageData() async {
+      print('*** Load Home page View *****');
       var phoneno;
       var profile_image;
       var username;
       var position;
 
       final resp = await userStore.FetchUserDetail();
+      print(' Response ${resp}');
+      
       user_id = resp['data']['id'];
 
-      print('Home view resp $resp');
       await userState.SetUserId(id: user_id);
 
       // 1 CHECK  :

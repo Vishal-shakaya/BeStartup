@@ -1,3 +1,12 @@
+import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
@@ -30,18 +39,9 @@ import 'package:get/get.dart';
 import 'package:be_startup/Handlers/UserRegistration/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_framework.dart';
-import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:be_startup/Components/WebLoginView/Signup/SignupView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,6 +50,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // FIREBASE INITILZATION : 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   
   // FACEBOOK SDK INITILIZE :
   if (GetPlatform.isWeb) {
@@ -62,13 +66,12 @@ void main() async {
     );
   }
 
-  // FIREBASE INITILZATION : 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   runApp(const MyApp());
 }
+
+
+
 
 
 class MyApp extends StatefulWidget {
@@ -91,7 +94,7 @@ class _MyAppState extends State<MyApp> {
     width: 60,
     height: 60,
     alignment: Alignment.center,
-    padding: EdgeInsets.all(8),
+    padding: const EdgeInsets.all(8),
     child: CircularProgressIndicator(
       backgroundColor: Colors.transparent,
       color: dartk_color_type3,
