@@ -11,15 +11,18 @@ class NoticeSection extends StatefulWidget {
 }
 
 class _NoticeSectionState extends State<NoticeSection> {
-
   // double image_hint_text_size = 22
   double notice_cont_width = 0.20;
   double notice_block_padding = 20;
   bool is_notice_visible = true;
 
+  double? notice_input_text_size = 14;
+
   @override
   Widget build(BuildContext context) {
-        ////////////////////////////////////
+
+    notice_input_text_size = 14;
+    ////////////////////////////////////
     /// RESPONSIVE BREAK POINTS :
     /// //////////////////////////////
 
@@ -33,18 +36,23 @@ class _NoticeSectionState extends State<NoticeSection> {
       notice_cont_width = 0.24;
     }
 
+
     // TABLET :
     if (context.width < 800) {
-      notice_cont_width = 0.35;
+      notice_input_text_size = 14;
+      notice_cont_width = 0.45;
     }
+    
     // SMALL TABLET:
     if (context.width < 640) {
-      notice_cont_width = 0.45;
+      notice_input_text_size = 13;
+      notice_cont_width = 0.59;
     }
 
     // PHONE:
     if (context.width < 480) {
-      notice_cont_width = 0.45;
+      notice_input_text_size = 12;
+      notice_cont_width = 0.59;
     }
 
     return Container(
@@ -54,15 +62,15 @@ class _NoticeSectionState extends State<NoticeSection> {
           NoticeHeading(),
           //////////////////////////////////
           // NOTICE HEADER SECTION
-          // 1. TOOGLE NOTICE SECTION: 
+          // 1. TOOGLE NOTICE SECTION:
           //////////////////////////////////
-          // SPACER : 
+          // SPACER :
           SizedBox(
             height: context.height * 0.02,
           ),
           ///////////////////////////////////////
-          // NOTICE SECTION : 
-          // SHOW IMPORTANT  NOTICE SECTION : 
+          // NOTICE SECTION :
+          // SHOW IMPORTANT  NOTICE SECTION :
           ///////////////////////////////////////
           NoticeContainer(context),
         ],
@@ -70,54 +78,57 @@ class _NoticeSectionState extends State<NoticeSection> {
     );
   }
 
-
   //////////////////////////////////
   // NOTICE HEADER SECTION
-  // 1. TOOGLE NOTICE SECTION: 
+  // 1. TOOGLE NOTICE SECTION:
   //////////////////////////////////
   Wrap NoticeHeading() {
     return Wrap(
-    children: [
-      InkWell(
-        onTap: () {
-        setState(() {
-          is_notice_visible = !is_notice_visible;
-          is_notice_visible
-              ? notice_block_padding = 20
-              : notice_block_padding = 0;
-        });
-      },
-        child: AutoSizeText('Why thumbnail Important!',
-            style: Get.textTheme.headline2),
-      ),
-      Icon(Icons.arrow_downward_rounded)
-    ],
-  );
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              is_notice_visible = !is_notice_visible;
+              is_notice_visible
+                  ? notice_block_padding = 20
+                  : notice_block_padding = 0;
+            });
+          },
+          child: AutoSizeText('Why thumbnail Important!',
+              style: Get.textTheme.headline2),
+        ),
+        Icon(Icons.arrow_downward_rounded)
+      ],
+    );
   }
 
   ///////////////////////////////////////
-  // NOTICE SECTION : 
-  // SHOW IMPORTANT  NOTICE SECTION : 
+  // NOTICE SECTION :
+  // SHOW IMPORTANT  NOTICE SECTION :
   ///////////////////////////////////////
   Container NoticeContainer(BuildContext context) {
     return Container(
-          padding: EdgeInsets.all(notice_block_padding),
-          decoration: BoxDecoration(
-            color: Colors.yellow.shade50,
-            border: Border.all(color: Colors.grey),
-            borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(10),
-                right: Radius.circular(10))),
-          child: Visibility(
-            visible: is_notice_visible,
-            child: Container(
-                width: context.width * notice_cont_width,
-                child: AutoSizeText.rich(TextSpan(
-                  style: const TextStyle(
-                      wordSpacing: 5, color: Colors.black),
-                  children: [
-                    TextSpan(text: thumbnail_important_text)
-                  ])))),
-        );
+      padding: EdgeInsets.all(notice_block_padding),
+      decoration: BoxDecoration(
+          color: Colors.yellow.shade50,
+          border: Border.all(color: Colors.grey),
+          borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(10), right: Radius.circular(10))),
+      child: Visibility(
+          visible: is_notice_visible,
+          child: Container(
+              width: context.width * notice_cont_width,
+              child: AutoSizeText.rich(
+                    TextSpan(
+                      text: thumbnail_important_text,
+                      style: TextStyle(
+                        fontSize: notice_input_text_size,
+                        wordSpacing: 5, color: Colors.black
+                          
+                        )),
+
+                      textAlign: TextAlign.center, 
+                  ))),
+    );
   }
 }

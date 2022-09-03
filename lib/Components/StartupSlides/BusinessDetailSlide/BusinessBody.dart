@@ -42,6 +42,9 @@ class _BusinessBodyState extends State<BusinessBody> {
   var startup_id;
   var is_admin;
 
+
+
+
 ///////////////////////////////////////////////////
 /// HANDLE SUBMIT FORM :
 /// 1. IF SUCCESS THEN REDIRECT TO ANOTHER SLIDE :
@@ -89,6 +92,8 @@ class _BusinessBodyState extends State<BusinessBody> {
       ));
     }
   }
+
+
 
 
 
@@ -153,6 +158,9 @@ class _BusinessBodyState extends State<BusinessBody> {
     }
   }
 
+
+
+
 /////////////////////////////////
 /// SET PAGE DEFAULT STATE :
 /////////////////////////////////
@@ -174,8 +182,12 @@ class _BusinessBodyState extends State<BusinessBody> {
     super.initState();
   }
 
+
+
+
+
 /////////////////////////////////
-  /// GET REQUIREMENTS :
+/// GET REQUIREMENTS :
 /////////////////////////////////
   GetRequirements() async {
     try {
@@ -194,8 +206,55 @@ class _BusinessBodyState extends State<BusinessBody> {
     }
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('Greator then 1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+      }
+      
+    if (context.width < 360) {
+      print('360');
+      }
+
+
+
+
+
     return FutureBuilder(
         future: GetRequirements(),
         builder: (_, snapshot) {
@@ -218,6 +277,7 @@ class _BusinessBodyState extends State<BusinessBody> {
           return MainMethod(context);
         });
   }
+
 
   Container MainMethod(BuildContext context) {
     return Container(

@@ -47,8 +47,8 @@ class _PHLoginFormState extends State<PHLoginForm> {
       password = _formKey.currentState!.value['password'];
 
       // Remove wite space :
-      email = email.trim();
-      password = password.trim();
+      // email = email.trim();
+      // password = password.trim();
 
       print('Login mail $email');
       print('Login password $password');
@@ -89,7 +89,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
       print('Singup mail $email');
       print('Singup password $password');
 
-      final resp = await authStore.SignupUser(email: pureMail, password: purePassword);
+      final resp = await authStore.SignupUser(email: email, password: password);
 
       print(resp);
 

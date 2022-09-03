@@ -5,6 +5,7 @@ import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:get/get.dart';
@@ -21,9 +22,16 @@ class BusinessForm extends StatefulWidget {
 
 class _BusinessFormState extends State<BusinessForm> {
   var detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
+
   bool is_password_visible = true;
+
   String? value = '';
+
   var initial_val;
+
+  double? input_section_width = 500;
+
+  double? input_field_fontsize = 22;
 
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -51,6 +59,47 @@ class _BusinessFormState extends State<BusinessForm> {
 
   @override
   Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      input_section_width = 450;
+      input_field_fontsize = 20;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      input_section_width = 400;
+      input_field_fontsize = 18;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      input_section_width = 300;
+      input_field_fontsize = 18;
+      print('480');
+    }
+    
+
+
     /////////////////////////////////
     /// SET REQUIREMENTS :
     /////////////////////////////////
@@ -80,6 +129,8 @@ class _BusinessFormState extends State<BusinessForm> {
         });
   }
 
+
+
   //////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////
@@ -89,7 +140,7 @@ class _BusinessFormState extends State<BusinessForm> {
         Container(
           height: context.height * 0.3,
           margin: EdgeInsets.only(top: context.height * 0.05),
-          width: 500,
+          width: input_section_width,
           child: FormBuilder(
               key: widget.formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -130,8 +181,8 @@ class _BusinessFormState extends State<BusinessForm> {
       name: field_name,
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
-        color: light_color_type2,
-        fontSize: 22,
+        color: input_text_color,
+        fontSize: input_field_fontsize,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -149,18 +200,16 @@ class _BusinessFormState extends State<BusinessForm> {
       decoration: InputDecoration(
         hintText: hint_text,
         contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 22, color: Colors.grey.shade300),
+        hintStyle: TextStyle(fontSize: 18, color: input_hind_color),
 
-        suffix: InkWell(
-          onTap: () {
+        suffix: IconButton(
+          onPressed: () {
             ResetBusinessform(field_name);
           },
-          child: Container(
-            child: Icon(
-              Icons.cancel_outlined,
-              color: suffix_icon_color,
-              size: 18,
-            ),
+          icon: FaIcon(
+            my_cancel_icon,
+            color: cancel_btn_color,
+            size: 18,
           ),
         ),
 

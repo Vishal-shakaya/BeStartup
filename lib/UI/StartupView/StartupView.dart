@@ -29,6 +29,8 @@ class _StartupViewState extends State<StartupView> {
   Widget build(BuildContext context) {
     var decode_data = jsonDecode(pageParam!);
 
+
+
     GetLocalStorageData() async {
       await detailViewState.SetStartupId(id: decode_data['startup_id']);
       await detailViewState.SetFounderId(id: decode_data['founder_id']);
@@ -49,6 +51,8 @@ class _StartupViewState extends State<StartupView> {
 
     }
 
+
+
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -64,11 +68,15 @@ class _StartupViewState extends State<StartupView> {
         });
   }
 
+
+
   Container MainMethod(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
       width: context.width * 0.90,
+     
       child: SingleChildScrollView(
+     
         child: Column(
           children: [
             // CONTAIN :

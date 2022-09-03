@@ -36,13 +36,14 @@ class _CatigoryBodyState extends State<CatigoryBody> {
   var is_selected = false;
   var my_context = Get.context;
 
-  double vision_cont_width = 0.60;
-  double vision_cont_height = 0.70;
-  double vision_subheading_text = 20;
+  double catigory_cont_width = 0.60;
+  double catigory_cont_height = 0.28;
+
+  double vision_subheading_text = 21;
 
 // Update   params :
   double con_button_width = 150;
-  double con_button_height = 40;
+  double con_button_height = 20;
   double con_btn_top_margin = 30;
 
   var pageParam;
@@ -57,8 +58,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     var resp = await catigoryStore.PersistCatigory();
     print('Submit Catigory ${resp}'); // Test
 
-
-    if(resp['response']){
+    if (resp['response']) {
       Get.toNamed(create_business_product_url);
     }
 
@@ -105,6 +105,8 @@ class _CatigoryBodyState extends State<CatigoryBody> {
 
   SetDefaultCatigory(List default_catigory) async {
     // Set Default Catigory Chip:
+    catigory_list.clear();
+
     business_catigories.forEach((cat) async {
       if (default_catigory.contains(cat)) {
         is_selected = true;
@@ -125,8 +127,7 @@ class _CatigoryBodyState extends State<CatigoryBody> {
   ///////////////////////////////////
   @override
   void initState() {
-    
-    if(Get.parameters.isNotEmpty){
+    if (Get.parameters.isNotEmpty) {
       pageParam = Get.parameters;
 
       if (pageParam['type'] == 'update') {
@@ -140,42 +141,47 @@ class _CatigoryBodyState extends State<CatigoryBody> {
   Widget build(BuildContext context) {
     // DEFAULT :
     if (context.width > 1500) {
-      vision_cont_height = 0.70;
-      vision_cont_width = 0.60;
-      vision_subheading_text = 20;
+      catigory_cont_height = 0.28;
+      catigory_cont_width = 0.60;
+      vision_subheading_text = 21;
     }
     if (context.width < 1500) {
-      vision_cont_height = 0.70;
-      vision_cont_width = 0.75;
-      vision_subheading_text = 20;
+      catigory_cont_height = 0.28;
+      catigory_cont_width = 0.75;
+      vision_subheading_text = 21;
     }
 
     // PC:
     if (context.width < 1200) {
-      vision_cont_width = 0.80;
-      vision_subheading_text = 20;
+      catigory_cont_width = 0.80;
+      vision_subheading_text = 21;
     }
 
     if (context.width < 1000) {
-      vision_cont_width = 0.85;
-      vision_subheading_text = 20;
+      catigory_cont_height = 0.30;
+      catigory_cont_width = 0.90;
+      vision_subheading_text = 21;
     }
 
     // TABLET :
     if (context.width < 800) {
-      vision_cont_width = 0.80;
-      vision_subheading_text = 20;
+      catigory_cont_width = 0.95;
+      vision_subheading_text = 21;
+      catigory_cont_height = 0.35;
     }
+    
     // SMALL TABLET:
     if (context.width < 640) {
-      vision_cont_width = 0.70;
-      vision_subheading_text = 18;
+      catigory_cont_height = 0.35;
+      catigory_cont_width = 0.98;
+      vision_subheading_text = 19;
     }
 
     // PHONE:
     if (context.width < 480) {
-      vision_cont_width = 0.99;
-      vision_subheading_text = 16;
+      catigory_cont_height = 0.30;
+      catigory_cont_width = 0.98;
+      vision_subheading_text = 17;
     }
 
     /////////////////////////////////////
@@ -185,11 +191,11 @@ class _CatigoryBodyState extends State<CatigoryBody> {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
       var erro_resp;
       try {
-        if(updateMode==true){
+        if (updateMode == true) {
           final resp = await startupConnector.FetchBusinessCatigory();
           print(resp['message']);
         }
-        
+
         default_catigory = await catigoryStore.GetCatigory();
         erro_resp = default_catigory;
         await SetDefaultCatigory(default_catigory);
@@ -232,34 +238,20 @@ class _CatigoryBodyState extends State<CatigoryBody> {
 //////////////////////////////////
   /// MAIN METHOD :
 //////////////////////////////////
-  Column MainMethod(
+  SingleChildScrollView MainMethod(
     BuildContext context,
   ) {
-    return Column(
-      children: [
-        Container(
-            width: context.width * vision_cont_width,
-            height: context.height * vision_cont_height,
-            child: Column(
-              children: [
-                // SUBHEADING TEXT :
-                Container(
-                  margin: EdgeInsets.only(top: context.height * 0.05),
-                  child: AutoSizeText.rich(
-                      TextSpan(style: context.textTheme.headline2, children: [
-                    TextSpan(
-                        text: catigory_subHeading_text,
-                        style: TextStyle(
-                            color: light_color_type3,
-                            fontSize: vision_subheading_text))
-                  ])),
-                ),
-
-                //////////////////////////////////////////
-                // CATIGORY SELECT SECTION :
-                // DISPLAY DEFAULT CATIGORIES CHIPS :
-                //////////////////////////////////////////
-                Container(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // SUBHEADING TEXT :
+          SubheadingText(context),
+    
+          Container(
+              width: context.width * catigory_cont_width,
+              height: context.height * catigory_cont_height,
+              child: SingleChildScrollView(
+                child: Container(
                   margin: EdgeInsets.only(top: context.height * 0.05),
                   child: Wrap(
                     spacing: 2,
@@ -268,27 +260,47 @@ class _CatigoryBodyState extends State<CatigoryBody> {
                     children: catigory_list,
                   ),
                 ),
-
-                ///////////////////////////////////////////////////
-                // INPUT CHIP TO GET CUSTOME BUSINESS CATIGORY :
-                // ADD CUSTOM BUSINESS CATIGORIES :
-                // 1 TAKE INPUT AND CONVERT IN TO CHIP
-                ///////////////////////////////////////////////////
-                CustomInputChip(
-                  key: UniqueKey(),
-                  defualt_custom_chip: default_catigory,
+              )),
+    
+    
+          ///////////////////////////////////////////////////
+          // INPUT CHIP TO GET CUSTOME BUSINESS CATIGORY :
+          // ADD CUSTOM BUSINESS CATIGORIES :
+          // 1 TAKE INPUT AND CONVERT IN TO CHIP
+          ///////////////////////////////////////////////////
+          CustomInputChip(
+            key: UniqueKey(),
+            defualt_custom_chip: default_catigory,
+          ), 
+    
+          
+          updateMode == true
+              ? UpdateButton(context)
+              : BusinessSlideNav(
+                  slide: SlideType.catigory,
+                  submitform: SubmitCatigory,
                 )
-              ],
-            )),
-        updateMode == true
-            ? UpdateButton(context)
-            : BusinessSlideNav(
-                slide: SlideType.catigory,
-                submitform: SubmitCatigory,
-              )
-      ],
+        ],
+      ),
     );
   }
+
+Container SubheadingText(BuildContext context) {
+  return Container(
+                  margin: EdgeInsets.only(
+                    top: context.height * 0.03,
+                    bottom: context.height * 0.01,
+                     ),
+                  child: AutoSizeText.rich(
+                      TextSpan(style: context.textTheme.headline2, children: [
+                    TextSpan(
+                        text: catigory_subHeading_text,
+                        style: TextStyle(
+                            color: light_color_type3,
+                            fontSize: vision_subheading_text))
+                  ])),
+                );
+}
 
   //////////////////////////////////////////
   /// External Methods:

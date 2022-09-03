@@ -23,16 +23,21 @@ class MileStoneTag extends StatefulWidget {
 }
 
 class _MileStoneTagState extends State<MileStoneTag> {
-  var my_context = Get.context; 
+  var my_context = Get.context;
   Color mil_default_text_color = Colors.black;
   Color mil_activate_text_color = Colors.teal.shade300;
   Color mil_deactivate_text_color = Colors.black;
- 
+
   final formKey = GlobalKey<FormBuilderState>();
   final mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
- 
+
   double milestone_width = 900;
   double milestone_height = 900;
+
+  double milestone_tile_width = 0.70;
+  double mile_fontSize = 18;
+
+  double mile_icon_fontSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +50,9 @@ class _MileStoneTagState extends State<MileStoneTag> {
     if (context.width > 1500) {
       print('greator then 1500');
       milestone_width = 900;
+      milestone_tile_width = 0.70;
+      mile_fontSize = 18;
+      mile_icon_fontSize = 20;
     }
 
     // PC:
@@ -53,10 +61,14 @@ class _MileStoneTagState extends State<MileStoneTag> {
     }
 
     if (context.width < 1200) {
+      mile_fontSize = 17;
+      mile_icon_fontSize = 18;
       print('1200');
     }
 
     if (context.width < 1000) {
+      mile_fontSize = 17;
+      mile_icon_fontSize = 17;
       milestone_width = 1100;
       print('1000');
     }
@@ -65,15 +77,22 @@ class _MileStoneTagState extends State<MileStoneTag> {
     if (context.width < 800) {
       print('800');
       milestone_width = 1200;
+      mile_fontSize = 16;
+      mile_icon_fontSize = 16;
     }
     // SMALL TABLET:
     if (context.width < 640) {
       milestone_width = 1400;
+      mile_fontSize = 15;
+      mile_icon_fontSize = 15;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
+      mile_fontSize = 14;
+      mile_icon_fontSize = 15;
+      milestone_width = 1400;
       print('480');
     }
 
@@ -109,6 +128,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
             left: Radius.circular(20),
             right: Radius.circular(20),
           )),
+
           selectedColor: Colors.blue.shade50,
           hoverColor: Colors.blue.shade50,
           focusColor: Colors.teal.shade50,
@@ -120,10 +140,16 @@ class _MileStoneTagState extends State<MileStoneTag> {
           // Heading text:
           title: Container(
               padding: EdgeInsets.all(10),
-              child: AutoSizeText('${widget.milestone!['title']}',
+              child: AutoSizeText(
+                '${widget.milestone!['title']}',
                   style: GoogleFonts.robotoSlab(
                     color: mil_default_text_color,
-                  ))),
+                    fontSize: mile_fontSize,
+                    
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true, 
+                  )),
 
           // Edit and Delte Button :
           trailing: Wrap(
@@ -148,7 +174,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
         child: Icon(
           Icons.cancel,
           color: Colors.red.shade400,
-          size: 20,
+          size: mile_icon_fontSize,
         ),
       ),
     );
@@ -164,7 +190,7 @@ class _MileStoneTagState extends State<MileStoneTag> {
         child: Icon(
           Icons.edit,
           color: Colors.blue.shade400,
-          size: 20,
+          size: mile_icon_fontSize,
         ),
       ),
     );
@@ -180,7 +206,13 @@ class _MileStoneTagState extends State<MileStoneTag> {
         context: context,
         builder: (context) => AlertDialog(
               alignment: Alignment.center,
-              // title:  MileDialogHeading(context),
+              title: Container(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.close))),
               content: SizedBox(
                   width: milestone_width,
                   child: MileStoneDialog(

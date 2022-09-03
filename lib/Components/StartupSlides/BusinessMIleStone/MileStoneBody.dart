@@ -41,17 +41,19 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   double mile_cont_width = 0.70;
   double mile_cont_height = 0.70;
 
-  double list_tile_width = 0.4;
+  double list_tile_width = 0.35;
   double list_tile_height = 0.30;
 
   double addbtn_top_margin = 0.05;
 
   double subhead_sec_width = 400;
-  double subhead_sec_height = 80;
+  double subhead_sec_height = 85;
 
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
+
+  double mile_subhead_fontSize = 20;
 
   var pageParam;
   var startup_id;
@@ -143,7 +145,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   SubmitMileStone() async {
     StartLoading();
     var resp = await mileStore.PersistMileStone();
-    
+
     print('Submit MileStone ${resp}');
 
     if (!resp['response']) {
@@ -235,13 +237,15 @@ class _MileStoneBodyState extends State<MileStoneBody> {
       mile_cont_width = 0.70;
       mile_cont_height = 0.70;
 
-      list_tile_width = 0.4;
+      list_tile_width = 0.35;
       list_tile_height = 0.30;
 
       addbtn_top_margin = 0.05;
 
       subhead_sec_width = 400;
       subhead_sec_height = 80;
+
+      mile_subhead_fontSize = 20;
     }
 
     // PC:
@@ -250,25 +254,34 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     }
 
     if (context.width < 1200) {
+      mile_subhead_fontSize = 20;
+      list_tile_width = 0.40;
       print('1200');
     }
 
     if (context.width < 1000) {
+      mile_subhead_fontSize = 18;
+      list_tile_width = 0.45;
       print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
+      list_tile_width = 0.50;
+      mile_subhead_fontSize = 17;
       print('800');
     }
     // SMALL TABLET:
     if (context.width < 640) {
+      list_tile_width = 0.60;
+      mile_subhead_fontSize = 16;
       print('640');
-      list_tile_width = 0.6;
     }
 
     // PHONE:
     if (context.width < 480) {
+      list_tile_width = 0.70;
+      mile_subhead_fontSize = 15;
       print('480');
     }
 
@@ -435,33 +448,45 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     return Column(
       children: [
         // Important note :
-        AutoSizeText('Why Milestone,s Important!',
-            style: Get.textTheme.headline2),
+        Container(
+          margin: EdgeInsets.only(top: context.height * 0.03),
+          child: AutoSizeText.rich(
+              TextSpan(style: context.textTheme.headline2, children: [
+                TextSpan(
+                    text: 'Why Milesonte is Important',
+                    style: TextStyle(
+                        color: light_color_type3,
+                        fontSize: mile_subhead_fontSize))
+              ]),
+              textAlign: TextAlign.center),
+        ),
 
         SafeArea(
-          child: Container(
-              alignment: Alignment.topCenter,
-              width: subhead_sec_width,
-              height: subhead_sec_height,
-              margin: EdgeInsets.only(top: 20),
-              padding: EdgeInsets.all(20),
-              // Decoration:
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey.shade50,
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10), right: Radius.circular(10))),
-              child: AutoSizeText.rich(
-                TextSpan(children: [
-                  TextSpan(
-                      text: milestone_subHeading_text,
-                      style: TextStyle(
-                          fontSize: 14,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.black))
-                ]),
-                textAlign: TextAlign.center,
-              )),
+          child: SingleChildScrollView(
+            child: Container(
+                alignment: Alignment.topCenter,
+                width: subhead_sec_width,
+                height: subhead_sec_height,
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(20),
+                // Decoration:
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade50,
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: const BorderRadius.horizontal(
+                        left: Radius.circular(10), right: Radius.circular(10))),
+                child: AutoSizeText.rich(
+                  TextSpan(children: [
+                    TextSpan(
+                        text: milestone_subHeading_text,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            // fontWeight: FontWeight.bold,
+                            color: Colors.black))
+                  ]),
+                  textAlign: TextAlign.center,
+                )),
+          ),
         ),
       ],
     );

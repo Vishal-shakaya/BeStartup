@@ -46,6 +46,10 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   double upload_btn_width = 50;
   double upload_btn_height = 50;
 
+  double upload_icon_size = 35;
+
+  double hint_text_font_size = 20;
+
   var pageParam;
   var is_admin;
   var founder_id;
@@ -76,13 +80,10 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
       var resp =
           await thumbStore.SetThumbnail(thumbnail: image, filename: filename);
 
-
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
-          MyCustSnackbar(
-          type: MySnackbarType.error,
-          width: snack_width));
+            MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
         return;
       }
 
@@ -104,9 +105,9 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
             await startupConnector.FetchThumbnail(startup_id: startup_id);
         final temp_thumb = resp['data']['thumbnail'];
 
-        if(upload_image_url == ''){
+        if (upload_image_url == '') {
           await thumbStore.SetThumbnailParam(data: temp_thumb);
-        }  
+        }
       }
 
       final data = await thumbStore.GetThumbnail();
@@ -122,9 +123,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   ////////////////////////////////////////////
   @override
   void initState() {
-    
-    if(Get.parameters.isNotEmpty){
-
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
 
       is_admin = pageParam['is_admin'];
@@ -141,6 +140,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
   @override
   Widget build(BuildContext context) {
+    hint_text_font_size = 20;
     var spinner = MyCustomButtonSpinner(color: Colors.white);
     ////////////////////////////////////
     /// RESPONSIVE BREAK POINTS :
@@ -158,23 +158,47 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
       upload_btn_width = 50;
       upload_btn_height = 50;
+
+      upload_icon_size = 35;
     }
 
     // SMALL PC 1000
     if (context.width < 1200) {
       image_cont_width = 0.8;
+      
       upload_btn_left = 0.6;
+      
+      upload_icon_size = 35;
+      upload_btn_width = 45;
+      upload_btn_height = 45;
     }
 
     // TABLET :
     if (context.width < 800) {
+      hint_text_font_size = 18;
       image_cont_width = 0.9;
+     
+      upload_icon_size = 30;
+      upload_btn_width = 40;
+      upload_btn_height = 40;
     }
     // SMALL TABLET:
-    if (context.width < 640) {}
+    if (context.width < 640) {
+      hint_text_font_size = 16;
+      upload_icon_size = 25;
+      upload_btn_width = 35;
+      upload_btn_height = 35;
+    }
 
     // PHONE:
-    if (context.width < 480) {}
+    if (context.width < 480) {
+      upload_icon_size = 25;
+      hint_text_font_size = 14;
+
+      upload_icon_size = 20;
+      upload_btn_width = 30;
+      upload_btn_height = 30;
+    }
 
     ////////////////////////////////////////////////
     /// SET REQUIREMENTS :
@@ -207,8 +231,8 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 //////////////////////////////////////
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 10),
       width: context.width * image_cont_width,
       height: context.height * image_cont_height,
       child: Stack(
@@ -244,12 +268,13 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
           child: Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             width: upload_btn_width,
             height: upload_btn_height,
             child: is_loading
                 ? spinner
-                : Icon(Icons.cloud_upload, color: Colors.white, size: 40),
+                : Icon(Icons.cloud_upload,
+                    color: Colors.white, size: upload_icon_size),
           ),
         ),
       ),
@@ -258,15 +283,15 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
   Container ThumbnailImageContainer(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(2),
+        padding: const EdgeInsets.all(2),
         height: context.height * imgage_sec_height,
         decoration: BoxDecoration(
             color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20)),
             border: Border.all(width: 2, color: Colors.black54)),
         child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(19),
             right: Radius.circular(19),
           ),
@@ -283,18 +308,23 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20), right: Radius.circular(20)),
           border: Border.all(width: 2, color: Colors.black54)),
       child:
-          AutoSizeText.rich(TextSpan(style: Get.textTheme.headline3, children: [
+          AutoSizeText.rich(
+            TextSpan(
+            style: Get.textTheme.headline3, children: [
         TextSpan(
             text: thumbnail_slide_subheading,
             style: TextStyle(
                 color: Colors.blueGrey.shade200,
                 fontWeight: FontWeight.bold,
-                fontSize: 20))
-      ])),
+                fontSize: hint_text_font_size))
+          ]),
+
+          textAlign: TextAlign.center,
+       ),
     );
   }
 }

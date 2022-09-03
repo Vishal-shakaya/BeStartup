@@ -28,6 +28,12 @@ class _BusinessIconState extends State<BusinessIcon> {
   late UploadTask? upload_process;
   bool is_uploading = false;
 
+  double profile_radius = 85;
+  double upload_icon_radius = 18;
+
+  double upload_icon_top_pos = 126;
+  double upload_icon_left_pos = 126;
+
   // STORAGE :
   final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
   final startupConnector =
@@ -44,7 +50,7 @@ class _BusinessIconState extends State<BusinessIcon> {
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
-    
+
       setState(() {
         is_uploading = true;
       });
@@ -91,7 +97,6 @@ class _BusinessIconState extends State<BusinessIcon> {
       final logo = await detailStore.GetBusinessLogo();
       upload_image_url = logo;
       return upload_image_url;
-
     } catch (e) {
       return upload_image_url;
     }
@@ -99,6 +104,50 @@ class _BusinessIconState extends State<BusinessIcon> {
 
   @override
   Widget build(BuildContext context) {
+    profile_radius = 85;
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      profile_radius = 80;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      profile_radius = 75;
+      upload_icon_left_pos = 110;
+      upload_icon_top_pos = 120;
+      upload_icon_radius = 14;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      profile_radius = 70;
+      upload_icon_left_pos = 110;
+      upload_icon_top_pos = 105;
+      upload_icon_radius = 13;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      profile_radius = 70;
+      print('480');
+    }
+
     var spinner = MyCustomButtonSpinner();
 
     return FutureBuilder(
@@ -125,10 +174,8 @@ class _BusinessIconState extends State<BusinessIcon> {
         });
   }
 
-
-
 /////////////////////////////////////
-/// MAIN METHOD : 
+  /// MAIN METHOD :
 /////////////////////////////////////
   Container MainMethod(BuildContext context, Container spinner, data) {
     return Container(
@@ -137,65 +184,59 @@ class _BusinessIconState extends State<BusinessIcon> {
         child: Stack(
           children: [
             BusinessLogo(),
-
             UploadButton(spinner),
           ],
         ));
   }
 
-
 /////////////////////////////////
-/// EXTERNAL METHODS : 
-/// 1. Logo card : 
-/// 2. Upload button : 
+  /// EXTERNAL METHODS :
+  /// 1. Logo card :
+  /// 2. Upload button :
 /////////////////////////////////
-Card BusinessLogo() {
-return Card(
-    shadowColor: light_color_type3,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(85.0),
-    ),
-    child: upload_image_url != ''
-        ? CircleAvatar(
-            radius: 85,
-            backgroundColor: Colors.blueGrey[100],
-            foregroundImage: NetworkImage(upload_image_url),
-          )
-        : CircleAvatar(
-            radius: 85,
-            backgroundColor: Colors.blueGrey[100],
-            child: AutoSizeText(
-              'Startup Logo',
-              style: TextStyle(
-                  color: light_color_type3,
-                  fontWeight: FontWeight.bold),
-      )));
-}
+  Card BusinessLogo() {
+    return Card(
+        shadowColor: light_color_type3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(85.0),
+        ),
+        child: upload_image_url != ''
+            ? CircleAvatar(
+                radius: profile_radius,
+                backgroundColor: Colors.blueGrey[100],
+                foregroundImage: NetworkImage(upload_image_url),
+              )
+            : CircleAvatar(
+                radius: profile_radius,
+                backgroundColor: Colors.blueGrey[100],
+                child: AutoSizeText(
+                  'Startup Logo',
+                  style: TextStyle(
+                      color: light_color_type3, fontWeight: FontWeight.bold),
+                )));
+  }
 
-
-
-
-Positioned UploadButton(Container spinner) {
-  return Positioned(
-    top: 129,
-    left: 129,
-    child: Card(
-      shadowColor: primary_light,
-      // elevation: 1,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20)),
-      child: CircleAvatar(
-        backgroundColor: Colors.grey.shade200,
-        radius: 18,
-        child: is_uploading
-            ? spinner
-            : IconButton(
-                onPressed: () {
-                  PickImage();
-                },
-                icon: Icon(Icons.camera_alt_rounded,
-                    size: 19, color: primary_light)),
-      ),
-));
-}
+  Positioned UploadButton(Container spinner) {
+    return Positioned(
+        top: upload_icon_top_pos,
+        left: upload_icon_left_pos,
+        child: Card(
+          shadowColor: primary_light,
+          // elevation: 1,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: CircleAvatar(
+            backgroundColor: Colors.grey.shade200,
+            radius: upload_icon_radius,
+            child: is_uploading
+                ? spinner
+                : IconButton(
+                    onPressed: () {
+                      PickImage();
+                    },
+                    icon: Icon(Icons.camera_alt_rounded,
+                        size: upload_icon_radius, color: primary_light)),
+          ),
+        ));
+  }
 }

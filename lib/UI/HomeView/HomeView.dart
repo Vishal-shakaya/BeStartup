@@ -147,8 +147,10 @@ class _HomeViewState extends State<HomeView> {
       var position;
 
       final resp = await userStore.FetchUserDetail();
-      print(' Response ${resp}');
-      
+      if (!resp['response']) {
+        Get.toNamed(login_handler_url);
+      }
+
       user_id = resp['data']['id'];
 
       await userState.SetUserId(id: user_id);

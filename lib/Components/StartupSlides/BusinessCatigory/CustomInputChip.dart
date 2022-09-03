@@ -7,9 +7,11 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomInputChip extends StatefulWidget {
   List defualt_custom_chip = [];
@@ -30,11 +32,18 @@ class _CustomInputChipState extends State<CustomInputChip> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-  double chip_input_top_margin = 0.08;
+  double chip_input_top_margin = 0.05;
   double vision_cont_width = 0.60;
+
   double con_button_width = 100;
   double con_button_height = 35;
   double con_btn_top_margin = 30;
+
+  double input_fontSize = 22;
+
+  double input_section_width = 0.60;
+
+  double? add_btn_fontSize = 16;
 
   List<RemovableChip> custom_business_catigory_list = [];
   var catigoryStore = Get.put(BusinessCatigoryStore(), tag: 'catigory_store');
@@ -54,9 +63,9 @@ class _CustomInputChipState extends State<CustomInputChip> {
       Get.snackbar(
         '',
         '',
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(10),
-        duration: Duration(seconds: 2),
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.red.shade50,
         titleText: MySnackbarTitle(title: 'Error accure'),
         messageText: MySnackbarContent(message: 'Something went wrong'),
@@ -64,8 +73,6 @@ class _CustomInputChipState extends State<CustomInputChip> {
       );
     }
   }
-
-
 
   ///////////////////////////////////////
   // 1. CREATE INPUT CHIP
@@ -103,50 +110,46 @@ class _CustomInputChipState extends State<CustomInputChip> {
         return;
       }
 
-        // CREATIN CUSTOM CHIP WIDGET :
-        final custom_cat = RemovableChip(
-          key: UniqueKey(),
-          catigory: val,
-          removeFun: RemoveChip,
-        );
+      // CREATIN CUSTOM CHIP WIDGET :
+      final custom_cat = RemovableChip(
+        key: UniqueKey(),
+        catigory: val,
+        removeFun: RemoveChip,
+      );
 
-        // Update UI :
-        setState(() {
-          custom_business_catigory_list.add(custom_cat);
-        });
-        ///////////////////////////////////////////
-        // STORE CHIP IN BACKGROUND:
-        // GET RESPONSE SUCCESS OR ERROR:
-        // IF GET ERROR THEN SHOW ERROR ALERT :
-        ///////////////////////////////////////////
-        var res = await catigoryStore.SetCatigory(cat: val);
-        if (!res['response']) {
-          // CLOSE SNAKBAR :
-          Get.closeAllSnackbars();
-          Get.showSnackbar(MyCustSnackbar(width: snack_width));
-        }
-
-        // Reset form :
-        formKey.currentState!.reset();
-      } else {
+      // Update UI :
+      setState(() {
+        custom_business_catigory_list.add(custom_cat);
+      });
+      ///////////////////////////////////////////
+      // STORE CHIP IN BACKGROUND:
+      // GET RESPONSE SUCCESS OR ERROR:
+      // IF GET ERROR THEN SHOW ERROR ALERT :
+      ///////////////////////////////////////////
+      var res = await catigoryStore.SetCatigory(cat: val);
+      if (!res['response']) {
         // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
         Get.showSnackbar(MyCustSnackbar(width: snack_width));
       }
+
+      // Reset form :
+      formKey.currentState!.reset();
+    } else {
+      // CLOSE SNAKBAR :
+      Get.closeAllSnackbars();
+      Get.showSnackbar(MyCustSnackbar(width: snack_width));
+    }
   }
-
-
 
   // Reset Form :
   ResetCatigory() {
     formKey.currentState!.reset();
   }
 
-
-
   @override
   void initState() {
-    // Set Default Custom Chips :   
+    // Set Default Custom Chips :
     widget.defualt_custom_chip.forEach((el) {
       final custom_cat = RemovableChip(
         key: UniqueKey(),
@@ -161,43 +164,97 @@ class _CustomInputChipState extends State<CustomInputChip> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
+
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      con_button_width = 100;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      input_section_width = 0.70;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      con_button_width = 80;
+      con_button_height = 30;
+      add_btn_fontSize = 14;
+
+      input_fontSize = 20;
+      input_section_width = 0.80;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      con_button_width = 75;
+      con_button_height = 28;
+      add_btn_fontSize = 13;
+
+      input_section_width = 0.85;
+      input_fontSize = 18;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      con_button_width = 75;
+      con_button_height = 28;
+      add_btn_fontSize = 13;
+
+      input_section_width = 0.85;
+      input_fontSize = 18;
+      print('480');
+    }
+
     return Container(
-      margin: EdgeInsets.only(top: context.height * chip_input_top_margin),
-      child: Column(
-        children: [
-          // CUSTION CHIPS :
-          PredefineChipSection(context),
+        width: context.width * input_section_width,
+        margin: EdgeInsets.only(top: context.height * chip_input_top_margin),
+        child: Column(
+          children: [
+            // CUSTION CHIPS :
+            PredefineChipSection(context),
 
-          // CUSTOM CATIGORY FORM :
-          FormBuilder(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Column(
-                children: [
-                  ChipInputField(context),
-                ],
-              )),
+            // CUSTOM CATIGORY FORM :
+            FormBuilder(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: Column(
+                  children: [
+                    ChipInputField(context),
+                  ],
+                )),
 
-          // SUBMIT BUTTON :
-          ChipAddButton(context, snack_width)
-        ],
-      ));
+            // SUBMIT BUTTON :
+            ChipAddButton(context, snack_width)
+          ],
+        ));
   }
 
   ////////////////////////////////////
   /// EXTERNAL COMPONENTS :
   ////////////////////////////////////
+
   Container ChipAddButton(BuildContext context, snack_width) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () {
           SubmitCatigory(context, snack_width);
@@ -209,19 +266,19 @@ class _CustomInputChipState extends State<CustomInputChip> {
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             width: con_button_width,
             height: con_button_height,
             decoration: BoxDecoration(
                 color: primary_light,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
-            child: const Text(
+            child: Text(
               'Add',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: add_btn_fontSize,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -234,27 +291,33 @@ class _CustomInputChipState extends State<CustomInputChip> {
     return FormBuilderTextField(
       textAlign: TextAlign.center,
       name: 'custom_catigory',
-      style: Get.textTheme.headline3,
+      style: GoogleFonts.robotoSlab(
+        textStyle: const TextStyle(),
+        color: input_text_color,
+        fontSize: input_fontSize,
+        fontWeight: FontWeight.w600,
+      ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.minLength(context, 3,
             errorText: 'At least 3 char allow')
       ]),
       decoration: InputDecoration(
-        hintText: 'Type your business catigory',
-        contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 27, color: Colors.grey.shade300),
+        hintText: 'Add Catigory',
+        contentPadding: const EdgeInsets.all(16),
+
+        hintStyle: TextStyle(fontSize: input_fontSize, color: input_hind_color),
 
         suffix: InkWell(
           onTap: () {
             ResetCatigory();
           },
           child: Container(
-            child: Icon(
-              Icons.cancel_outlined,
-              color: suffix_icon_color,
-            ),
-          ),
+              child: FaIcon(
+            my_cancel_icon,
+            color: cancel_btn_color,
+            size: 18,
+          )),
         ),
 
         // focusColor:Colors.pink,
@@ -267,7 +330,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
   Container PredefineChipSection(BuildContext context) {
     return Container(
       width: context.width * vision_cont_width,
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Wrap(
         spacing: 5,
         children: custom_business_catigory_list,

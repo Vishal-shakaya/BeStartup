@@ -111,6 +111,9 @@ class MyAuthentication extends GetxController {
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
   SignupUser({email, password}) async {
+    print('Get Signup mail $email');
+    print('Get Signup  password $password');
+
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
@@ -140,6 +143,8 @@ class MyAuthentication extends GetxController {
   // LOGIN USER WITH EMAIL AND PASSWORD :
 ////////////////////////////////////////////
   LoginUser({email, password}) async {
+    print('Get Login mail $email');
+    print('Get Login  password $password');
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -148,8 +153,9 @@ class MyAuthentication extends GetxController {
       final user = auth.currentUser;
       final verify_email = user?.emailVerified;
 
-      if (verify_email == false) {
-        return ResponseBack(response_type: false, data: 'email_not_verify');
+      if (verify_email == true) {
+        print('not');
+        // return ResponseBack(response_type: false, data: 'email_not_verify');
       } else {
         try {
           if (GetPlatform.isWeb) {
@@ -206,9 +212,10 @@ class MyAuthentication extends GetxController {
   Deleteuser() async {
     var removeStore = Get.put(RemoveStartup());
     final user = auth.currentUser;
-    
-    final resp  = await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
-    if(resp['response']){
+
+    final resp =
+        await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
+    if (resp['response']) {
       try {
         await user?.delete();
         return ResponseBack(response_type: true);

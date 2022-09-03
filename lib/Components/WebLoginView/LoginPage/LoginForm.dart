@@ -86,6 +86,7 @@ class _LoginFormState extends State<LoginForm> {
         // SUCCESS RESPONSE :
         if (resp['response']) {
           EndLoading();
+          _formKey.currentState?.reset();
           // Rediret to User Type Page :
           Get.toNamed(user_registration_url);
         }
@@ -120,8 +121,7 @@ class _LoginFormState extends State<LoginForm> {
       }
     }
 
-
-  // Start Forgoting Password : 
+    // Start Forgoting Password :
     ForgotPasswordMethod() async {
       showDialog(
           barrierDismissible: false,
@@ -166,13 +166,11 @@ class _LoginFormState extends State<LoginForm> {
         ));
   }
 
-
-
 /////////////////////////////////////////
-/// EXTERNAL METHODS : 
+  /// EXTERNAL METHODS :
 /////////////////////////////////////////
 
-// Password Reset Button : 
+// Password Reset Button :
   Container ResetPasswordButton(ForgotPasswordMethod) {
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -188,7 +186,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  // Login Button : 
+  // Login Button :
   Container LoginButton(SubmitLofinForm) {
     return Container(
       width: 270,
@@ -214,8 +212,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
-  // Take Password Input : 
+  // Take Password Input :
   FormBuilderTextField PasswodInputField(
       BuildContext context, Color input_text_color, Color input_foucs_color) {
     return FormBuilderTextField(
@@ -253,8 +250,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
-  // Take Email Input : 
+  // Take Email Input :
   FormBuilderTextField EmailInputField(
       Color input_text_color, BuildContext context, Color input_foucs_color) {
     return FormBuilderTextField(
@@ -288,7 +284,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  // Labels of input field : 
+  // Labels of input field :
   Container Label(Color input_label_color, title) {
     return Container(
       padding: EdgeInsets.all(8),

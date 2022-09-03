@@ -35,25 +35,39 @@ Row MileDialogHeading(context, CloseMilestoneDialog) {
 // MILESTONE TAG INPUT SECTION :
 /////////////////////////////////////////
 FormBuilderTextField MilestoneTagInput(
-    {context, ResetMileForm, default_title, info_dialog}) {
+    {context,ResetMileForm, default_title, info_dialog, mile_dialog_titile_fontSize}) {
+  
   return FormBuilderTextField(
     enabled: !info_dialog,
+
     initialValue: default_title,
     textAlign: TextAlign.center,
+
     name: 'mile_tag',
     maxLength: 50,
-    style: Get.theme.textTheme.headline2,
+    
+      style: GoogleFonts.robotoSlab(
+        textStyle: TextStyle(),
+        color: input_text_color,
+        fontSize: mile_dialog_titile_fontSize,
+        fontWeight: FontWeight.w600,
+      ),
+      
     keyboardType: TextInputType.emailAddress,
+    
     validator: FormBuilderValidators.compose([
       FormBuilderValidators.minLength(context, 3,
           errorText: 'At least 3 char allow'),
       FormBuilderValidators.maxLength(context, 50,
           errorText: 'Max 50 char allow')
     ]),
+    
     decoration: InputDecoration(
       hintText: 'Title',
       contentPadding: EdgeInsets.all(16),
-      hintStyle: TextStyle(fontSize: 18, color: Colors.grey.shade300),
+      hintStyle: TextStyle(
+        fontSize:mile_dialog_titile_fontSize, 
+        color: input_hind_color),
 
       suffix: InkWell(
         onTap: () {
@@ -63,7 +77,7 @@ FormBuilderTextField MilestoneTagInput(
           child: Icon(
             Icons.cancel_outlined,
             color: Colors.grey.shade400,
-            size: 18,
+            size: 16,
           ),
         ),
       ),
@@ -79,13 +93,15 @@ FormBuilderTextField MilestoneTagInput(
 // MILE STONE DESCRIPTION SECTION :
 /////////////////////////////////////////
 FormBuilderTextField MilestoneDescInput(
-    {context, maxlines, default_description, info_dialog}) {
+    {context, maxlines, default_description, info_dialog,mile_dialog_desc_fontSize}) {
   return FormBuilderTextField(
     enabled: !info_dialog,
     initialValue: default_description,
     name: 'mile_desc',
     style: GoogleFonts.robotoSlab(
-      fontSize: 16,
+      color: Colors.blueGrey.shade800,
+      fontSize: mile_dialog_desc_fontSize,
+      
     ),
     maxLength: 1000,
     scrollPadding: EdgeInsets.all(10),
@@ -97,12 +113,17 @@ FormBuilderTextField MilestoneDescInput(
     decoration: InputDecoration(
         helperText: 'min allow 50 ',
         hintText: "Milestone detail",
+
         hintStyle: TextStyle(
-          color: Colors.blueGrey.shade200,
+          color: input_hind_color,
+          fontSize: mile_dialog_desc_fontSize
         ),
+        
         fillColor: Colors.grey[100],
         filled: true,
+        
         contentPadding: EdgeInsets.all(20),
+        
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide:
@@ -121,6 +142,7 @@ Container MilestoneDialogSubmitButton(
     {required SubmitMileForm,
     con_btn_top_margin,
     con_button_height,
+    submit_btn_fontSize, 
     con_button_width}) {
   return Container(
     margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 0),
@@ -145,12 +167,12 @@ Container MilestoneDialogSubmitButton(
               color: primary_light,
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(20), right: Radius.circular(20))),
-          child: const Text(
+          child:  Text(
             'submit',
             style: TextStyle(
                 letterSpacing: 2.5,
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: submit_btn_fontSize,
                 fontWeight: FontWeight.bold),
           ),
         ),

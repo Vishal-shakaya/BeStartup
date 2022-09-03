@@ -45,16 +45,17 @@ import 'firebase_options.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sizer/sizer.dart';
 
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FIREBASE INITILZATION : 
+  // FIREBASE INITILZATION :
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   // FACEBOOK SDK INITILIZE :
   if (GetPlatform.isWeb) {
     // initialiaze the facebook javascript SDK
@@ -66,11 +67,8 @@ void main() async {
     );
   }
 
-
   runApp(const MyApp());
 }
-
-
 
 
 
@@ -80,10 +78,8 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-  
-  // Razorpay Channel initilize: 
+  // Razorpay Channel initilize:
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -102,21 +98,22 @@ class _MyAppState extends State<MyApp> {
     ),
   );
 
-
-
   @override
   Widget build(BuildContext context) {
+    
+
     final textTheme = Theme.of(context).textTheme;
 
-    // Wait for a sec to settle things clearly : 
+    // Wait for a sec to settle things clearly :
     SetAppLocalState() async {
       await Future.delayed(Duration(milliseconds: 500));
     }
 
 
-    /////////////////////////////////
-    /// MY APP :
-    /////////////////////////////////
+  /////////////////////////////////
+  /// MY APP :
+  /////////////////////////////////
+  return Sizer(builder: (context, orientation, deviceType) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
@@ -125,89 +122,69 @@ class _MyAppState extends State<MyApp> {
       builder: FlutterSmartDialog.init(),
 
       // CONFIGURE THEME SETTING :
-      themeMode: ThemeMode.light,
-     
-     
+      themeMode: ThemeMode.dark,
+
       // themeMode: ThemeMode.dark,
       theme: ThemeData(
           textTheme: LightFontTheme(textTheme),
           primaryColor: Color(0xFF54BAB9),
           primarySwatch: Colors.blueGrey),
 
-     
-     
       // Dark Theme
       darkTheme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey.shade900,
         textTheme: DarkFontTheme(textTheme),
         brightness: Brightness.dark,
       ),
 
-
-     
-     ////////////////////////////////
-     /// Routes : 
-     ////////////////////////////////
+      ////////////////////////////////
+      /// Routes :
+      ////////////////////////////////
       unknownRoute:
           GetPage(name: '/error-page', page: () => Text('Unknown Route')),
-     
-      // Default Route : 
+
+      // Default Route :
       initialRoute: '/',
-     
+
       getPages: [
         GetPage(
             name: home_route,
             page: () {
               return StreamBuilder(
                   stream: FirebaseAuth.instance.authStateChanges(),
-                  
-                  
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       // SHOW ERROR :
                       ErrorPage();
                     }
 
-
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return spinner;
                     }
-                  
-                  
+
                     if (snapshot.hasData) {
                       // Check Login user complete profile setup or not :
                       // if Complete then redirect to
                       // Configure App local state :
                       SetAppLocalState();
 
-
                       return HomeView();
-
                     }
                     return LoginHandler();
-
-
                   });
             }),
 
+        GetPage(name: user_registration_url, page: () => RegistrationView()),
 
+        GetPage(name: signup_url, page: () => SignupView()),
 
-        GetPage(name: user_registration_url,
-             page: () => RegistrationView()),
+        GetPage(name: login_handler_url, page: () => LoginHandler()),
 
-        GetPage(name: signup_url,
-             page: () => SignupView()),
-
-        GetPage(name: login_handler_url,
-             page: () => LoginHandler()),
-
-        GetPage(name: startup_slides_url,
-             page: () => StartupSlides()),
-
+        GetPage(name: startup_slides_url, page: () => StartupSlides()),
 
         // BUSINESS DETAIL :
         GetPage(
-            name: create_business_detail_url, 
-             page: () => BusinessDetailView()),
+            name: create_business_detail_url, page: () => BusinessDetailView()),
         GetPage(
             name: create_business_thumbnail_url,
             page: () => BusinessThumbnailView()),
@@ -227,46 +204,33 @@ class _MyAppState extends State<MyApp> {
             page: () => BusinessWhyInvestView()),
 
         // FOUNDER REGISTRATION AND TEAM
-        GetPage(name: create_founder, 
-           page: () => RegistorFounderView()),
-        GetPage(name: create_business_team, 
-           page: () => RegistorTeamView()),
-
+        GetPage(name: create_founder, page: () => RegistorFounderView()),
+        GetPage(name: create_business_team, page: () => RegistorTeamView()),
 
         // STARTUP PAGE:
-        GetPage(name: startup_view_url, 
-            page: () => StartupView()),
-
+        GetPage(name: startup_view_url, page: () => StartupView()),
 
         // SUB-ROUTES :
         // 1 Team Page :
-        GetPage(name: team_page_url, 
-            page: () => TeamPage()),
-        GetPage(name: vision_page_url, 
-            page: () => VisionPage()),
-        GetPage(name: invest_page_url, 
-            page: () => InvestPage()),
-
+        GetPage(name: team_page_url, page: () => TeamPage()),
+        GetPage(name: vision_page_url, page: () => VisionPage()),
+        GetPage(name: invest_page_url, page: () => InvestPage()),
 
         // HOME PAGE
-        GetPage(name: home_page_url, 
-            page: () => HomeView()),
-
-
+        GetPage(name: home_page_url, page: () => HomeView()),
 
         // REGISTOR INVESTOR :
-        GetPage(name: select_investor_choise, 
-            page: () => ChooseCatigoryView()),
-      
+        GetPage(name: select_investor_choise, page: () => ChooseCatigoryView()),
+
         GetPage(
             name: investor_registration_form,
             page: () => InvestorRegistorForm()),
 
         // SELECT PLAN
-        GetPage(name: select_plan_url,
-             page: () => SelectPlan()),
-
+        GetPage(name: select_plan_url, page: () => SelectPlan()),
       ],
     );
+    });
+
   }
 }

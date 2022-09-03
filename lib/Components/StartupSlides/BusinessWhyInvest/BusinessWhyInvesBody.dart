@@ -234,8 +234,8 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
 
     // PHONE:
     if (context.width < 480) {
-      maxlines = 15;
-      vision_cont_width = 0.60;
+      maxlines = 10;
+      vision_cont_width = 0.90;
       vision_cont_height = 0.70;
     }
 
@@ -358,7 +358,8 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
             text: business_why_sub_text,
             style: TextStyle(
                 color: light_color_type3, fontSize: vision_subheading_text))
-      ])),
+      ]),
+      textAlign: TextAlign.center, ),
     );
   }
 

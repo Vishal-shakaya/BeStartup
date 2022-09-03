@@ -39,18 +39,31 @@ class _ProductImageSectionState extends State<ProductImageSection> {
     }
   }
 
-  // Upload Button Position Ration
-  // 1 Top and righ :
-  double upload_btn_top_pod = 0.31;
-  double upload_btn_right_pod = 0.15;
-
-  // Upload Button size : width and height:
-  double upload_btn_width = 50;
-  double upload_btn_height = 50;
-
   // Image width and height :
   double image_cont_width = 0.20;
   double image_cont_height = 0.34;
+
+  double img_sec_width = 0.20;
+  double img_sec_height = 0.45;
+
+  double url_top_pos = 0.39;
+  double url_left_pos = 0.01;
+
+  double product_top_pos = 0.35;
+  double product_left_pos = 0.07;
+
+  double upload_btn_top_pod = 0.31;
+  double upload_btn_right_pod = 0.15;
+
+  double link_icon_size = 25;
+  double upload_btn_icon_size = 30;
+
+  double upload_btn_width = 50;
+  double upload_btn_height = 50;
+
+  double take_url_sec_width = 0.30;
+
+  double prod_img_hint_text = 20;
 
   bool prod_url_sec_visible = false;
 
@@ -81,7 +94,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   /// 1. Check if url is null then not update url :
   /// 2. If Success then Update url :
   /// 3. Hide url Input Filed :
-  /// ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////
   SubmitProductUrl() async {
     var url_val = product_url_controller.text;
     // Null Check :
@@ -113,7 +126,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   }
 
 //////////////////////////////////////////
-  // UPLOADING IMAGE :
+// UPLOADING IMAGE :
 //////////////////////////////////////////
   Future<void> PickImage() async {
     // Pick only one file :
@@ -170,10 +183,197 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   @override
   Widget build(BuildContext context) {
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    if (context.width > 1500) {
+      image_cont_width = 0.20;
+      image_cont_height = 0.34;
+
+      img_sec_width = 0.20;
+      img_sec_height = 0.45;
+
+      url_top_pos = 0.39;
+      url_left_pos = 0.01;
+
+      product_top_pos = 0.35;
+      product_left_pos = 0.07;
+
+      upload_btn_top_pod = 0.31;
+      upload_btn_right_pod = 0.15;
+
+      link_icon_size = 25;
+      upload_btn_icon_size = 30;
+
+      upload_btn_width = 50;
+      upload_btn_height = 50;
+
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1450) {
+      image_cont_width = 0.25;
+      image_cont_height = 0.34;
+
+      img_sec_width = 0.25;
+      img_sec_height = 0.45;
+      print('1450');
+    }
+
+    if (context.width < 1300) {
+      image_cont_width = 0.26;
+      image_cont_height = 0.30;
+
+      img_sec_width = 0.26;
+      img_sec_height = 0.45;
+
+      upload_btn_top_pod = 0.27;
+      upload_btn_right_pod = 0.17;
+
+      url_top_pos = 0.35;
+      url_left_pos = 0.02;
+
+      product_top_pos = 0.32;
+      product_left_pos = 0.08;
+
+      prod_img_hint_text = 18;
+      print('1300');
+    }
+
+    if (context.width < 1200) {
+      image_cont_width = 0.25;
+      image_cont_height = 0.27;
+
+      img_sec_width = 0.25;
+      img_sec_height = 0.40;
+
+      upload_btn_top_pod = 0.24;
+      upload_btn_right_pod = 0.17;
+
+      url_top_pos = 0.32;
+      url_left_pos = 0.02;
+
+      product_top_pos = 0.29;
+      product_left_pos = 0.08;
+
+      prod_img_hint_text = 16;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      image_cont_width = 0.34;
+      image_cont_height = 0.27;
+
+      img_sec_width = 0.34;
+      img_sec_height = 0.40;
+
+      upload_btn_top_pod = 0.24;
+      upload_btn_right_pod = 0.24;
+
+      url_top_pos = 0.32;
+      url_left_pos = 0.06;
+
+      product_top_pos = 0.29;
+      product_left_pos = 0.12;
+
+      prod_img_hint_text = 15;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      image_cont_width = 0.44;
+      image_cont_height = 0.27;
+
+      img_sec_width = 0.44;
+      img_sec_height = 0.40;
+
+      upload_btn_top_pod = 0.24;
+      upload_btn_right_pod = 0.30;
+
+      url_top_pos = 0.32;
+      url_left_pos = 0.08;
+
+      product_top_pos = 0.29;
+      product_left_pos = 0.14;
+
+      link_icon_size = 23;
+      upload_btn_icon_size = 25;
+
+      upload_btn_width = 40;
+      upload_btn_height = 40;
+
+      take_url_sec_width = 0.45;
+      prod_img_hint_text = 14;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      image_cont_width = 0.48;
+      image_cont_height = 0.24;
+
+      img_sec_width = 0.48;
+      img_sec_height = 0.35;
+
+      upload_btn_top_pod = 0.21;
+      upload_btn_right_pod = 0.33;
+
+      url_top_pos = 0.28;
+      url_left_pos = 0.09;
+
+      product_top_pos = 0.25;
+      product_left_pos = 0.15;
+
+      link_icon_size = 23;
+      upload_btn_icon_size = 25;
+
+      upload_btn_width = 40;
+      upload_btn_height = 40;
+
+      take_url_sec_width = 0.45;
+       prod_img_hint_text = 14;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      image_cont_width = 0.70;
+      image_cont_height = 0.24;
+
+      img_sec_width = 0.70;
+      img_sec_height = 0.35;
+
+      upload_btn_top_pod = 0.21;
+      upload_btn_right_pod = 0.38;
+
+      url_top_pos = 0.28;
+      url_left_pos = 0.09;
+
+      product_top_pos = 0.25;
+      product_left_pos = 0.15;
+
+      link_icon_size = 18;
+      upload_btn_icon_size = 18;
+
+      upload_btn_width = 30;
+      upload_btn_height = 30;
+
+      take_url_sec_width = 0.60;
+
+      prod_img_hint_text = 12;
+      print('480');
+    }
+
     // IMAGE BLOCK:
     return Container(
-      width: context.width * 0.20,
-      height: context.height * 0.45,
+      width: context.width * img_sec_width,
+      height: context.height * img_sec_height,
       child: Stack(
         children: [
           upload_image_url == ''
@@ -197,10 +397,10 @@ class _ProductImageSectionState extends State<ProductImageSection> {
     return Visibility(
       visible: prod_url_sec_visible,
       child: Positioned(
-        top: context.height * 0.39,
-        left: context.width * 0.01,
+        top: context.height * url_top_pos,
+        left: context.width * url_left_pos,
         child: Container(
-          width: context.width * 0.30,
+          width: context.width * take_url_sec_width,
           child: Row(
             children: [
               Expanded(
@@ -222,6 +422,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
                         icon: Icon(
                           Icons.check,
                           color: Colors.blue.shade300,
+                          size: link_icon_size,
                         ))),
               )
             ],
@@ -234,8 +435,8 @@ class _ProductImageSectionState extends State<ProductImageSection> {
   Container ProductLinks(BuildContext context) {
     return Container(
         child: Positioned(
-      top: context.height * 0.35,
-      left: context.width * 0.07,
+      top: context.height * product_top_pos,
+      left: context.width * product_left_pos,
       child: Row(
         children: [
           InkWell(
@@ -247,12 +448,12 @@ class _ProductImageSectionState extends State<ProductImageSection> {
               child: Icon(
                 Icons.video_library_rounded,
                 color: youtube_icon_color,
-                size: 25,
+                size: link_icon_size,
               ),
             ),
           ),
           // Spacing
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           InkWell(
@@ -264,7 +465,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
               child: Icon(
                 Icons.link_outlined,
                 color: content_icon_color,
-                size: 25,
+                size: link_icon_size,
               ),
             ),
           )
@@ -295,12 +496,13 @@ class _ProductImageSectionState extends State<ProductImageSection> {
             child: is_uploading
                 ? Container(
                     padding: EdgeInsets.all(5),
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       color: Colors.white,
                       strokeWidth: 4,
                     ),
                   )
-                : Icon(Icons.cloud_upload, color: Colors.white, size: 30),
+                : Icon(Icons.cloud_upload,
+                    color: Colors.white, size: upload_btn_icon_size),
           ),
         ),
       ),
@@ -309,14 +511,16 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   Container ImageContainer(BuildContext context, final_image) {
     return Container(
+        width: context.width * image_cont_width,
+        height: context.height * image_cont_height,
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
             color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20)),
             border: Border.all(width: 2, color: Colors.grey)),
         child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(19),
             right: Radius.circular(19),
           ),
@@ -332,7 +536,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
         width: context.width * image_cont_width,
         height: context.height * image_cont_height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20),
               right: Radius.circular(20),
             ),
@@ -346,7 +550,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
                   style: TextStyle(
                       color: Colors.blueGrey.shade200,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20))
+                      fontSize: prod_img_hint_text))
             ]),
           ),
         ));

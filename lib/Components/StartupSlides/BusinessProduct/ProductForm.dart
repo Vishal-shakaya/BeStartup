@@ -4,6 +4,7 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,13 +14,14 @@ class ProductForm extends StatefulWidget {
   String? description = '';
   String? form_type = '';
   String? id;
-  int? product_index; 
-  ProductForm({
-    this.id,
-    this.product_index, 
-    this.form_type, 
-    this.title, 
-    this.description, Key? key})
+  int? product_index;
+  ProductForm(
+      {this.id,
+      this.product_index,
+      this.form_type,
+      this.title,
+      this.description,
+      Key? key})
       : super(key: key);
 
   @override
@@ -32,8 +34,15 @@ class _ProductFormState extends State<ProductForm> {
   double con_button_width = 90;
   double con_button_height = 38;
   double con_btn_top_margin = 10;
+
+  double submit_btn_fontSize = 16;
+
+  double form_left_padding = 40;
   double form_width = 0.32;
   double form_height = 0.60;
+
+  double prod_title_fontSize = 18;
+  double prod_desc_fontSize = 16; 
 
   final productStore = Get.put(BusinessProductStore(), tag: 'productList');
 
@@ -48,7 +57,7 @@ class _ProductFormState extends State<ProductForm> {
     SmartDialog.showLoading(
         background: Colors.white,
         maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
+        widget: const CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
         ));
@@ -62,11 +71,10 @@ class _ProductFormState extends State<ProductForm> {
       if (widget.form_type == 'update') {
         // print('UPDATE PRODUCT START');
         res = await productStore.UpdateProduct(
-          title: product_title,
-          description: product_desc,
-          id: widget.id,
-          index: widget.product_index
-        );
+            title: product_title,
+            description: product_desc,
+            id: widget.id,
+            index: widget.product_index);
       } else {
         res = await productStore.CreateProduct(
           title: product_title,
@@ -103,8 +111,107 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    if (context.width > 1500) {
+      form_width = 0.32;
+      form_height = 0.60;
+      maxlines = 10;
+      prod_title_fontSize = 18;
+      prod_desc_fontSize = 16; 
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1450) {
+      form_width = 0.38;
+      print('1450');
+    }
+
+    if (context.width < 1300) {
+      form_width = 0.40;
+      form_height = 0.60;
+      maxlines = 9;
+      print('1300');
+    }
+
+    if (context.width < 1200) {
+      maxlines = 7;
+      prod_title_fontSize = 17;
+      prod_desc_fontSize = 15;
+      print('1200');
+    }
+
+    if (context.width < 1100) {
+      maxlines = 6;
+      print('1100');
+    }
+
+    if (context.width < 1000) {
+      form_width = 0.55;
+      form_height = 0.60;
+      maxlines = 8;
+      prod_title_fontSize = 15;
+      prod_desc_fontSize = 14;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      form_width = 0.55;
+      form_height = 0.60;
+      maxlines = 7;
+
+      submit_btn_fontSize = 14;
+      con_button_width = 85;
+      con_button_height = 30;
+      con_btn_top_margin = 15;
+      
+      prod_title_fontSize = 15;
+      prod_desc_fontSize = 14;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      form_width = 0.55;
+      form_height = 0.60;
+      maxlines = 6;
+
+      submit_btn_fontSize = 15;
+      con_button_width = 88;
+      con_button_height = 30;
+      con_btn_top_margin = 15;
+
+      prod_title_fontSize = 15;
+      prod_desc_fontSize = 14;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      form_width = 0.99;
+      form_height = 0.60;
+      maxlines = 6;
+      form_left_padding = 0;
+
+      submit_btn_fontSize = 12;
+      con_button_width = 80;
+      con_button_height = 30;
+      con_btn_top_margin = 15;
+
+      prod_title_fontSize = 15;
+      prod_desc_fontSize = 13;
+      print('480');
+    }
+
     return Container(
-      padding: EdgeInsets.only(left: 40),
+      padding: EdgeInsets.only(left: form_left_padding),
       width: context.width * form_width,
       height: context.height * form_height,
       child: FormBuilder(
@@ -132,7 +239,7 @@ class _ProductFormState extends State<ProductForm> {
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 0),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () {
           SubmitProductForm();
@@ -151,12 +258,12 @@ class _ProductFormState extends State<ProductForm> {
                 color: primary_light,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
-            child: const Text(
+            child: Text(
               'submit',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: submit_btn_fontSize,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -170,7 +277,7 @@ class _ProductFormState extends State<ProductForm> {
       initialValue: widget.description,
       name: 'product_desc',
       style: GoogleFonts.robotoSlab(
-        fontSize: 16,
+        fontSize: prod_desc_fontSize,
       ),
       maxLength: 1000,
       scrollPadding: EdgeInsets.all(10),
@@ -184,6 +291,7 @@ class _ProductFormState extends State<ProductForm> {
           hintText: "Product detail",
           hintStyle: TextStyle(
             color: Colors.blueGrey.shade200,
+            fontSize: prod_desc_fontSize
           ),
           fillColor: Colors.grey[100],
           filled: true,
@@ -205,29 +313,41 @@ class _ProductFormState extends State<ProductForm> {
       textAlign: TextAlign.center,
       name: 'product_title',
       maxLength: 100,
-      style: Get.theme.textTheme.headline2,
+     
+      style:GoogleFonts.robotoSlab(
+        textStyle: TextStyle(),
+        color: input_text_color,
+        fontSize: prod_title_fontSize,
+        fontWeight: FontWeight.w600,
+    ),
+
+     
       keyboardType: TextInputType.emailAddress,
+     
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.minLength(context, 3,
             errorText: 'At least 3 char allow'),
+     
         FormBuilderValidators.maxLength(context, 50,
             errorText: 'Max 100 char allow')
       ]),
+     
       decoration: InputDecoration(
         hintText: 'Title',
         contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 18, color: Colors.grey.shade300),
+        hintStyle: TextStyle(
+          fontSize: prod_title_fontSize,
+          color: Colors.grey.shade300),
 
         suffix: InkWell(
           onTap: () {
             ResetForm();
           },
           child: Container(
-            child: Icon(
-              Icons.cancel_outlined,
-              color: Colors.grey.shade400,
-              size: 18,
-            ),
+            child: FaIcon(
+              my_cancel_icon,
+              size: 16,
+              color: cancel_btn_color,)
           ),
         ),
 

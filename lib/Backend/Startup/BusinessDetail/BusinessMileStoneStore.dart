@@ -144,6 +144,7 @@ class MileStoneStore extends GetxController {
   GetMileStonesList() async {
     final localStore = await SharedPreferences.getInstance();
     try {
+      milestones.clear();
       bool is_detail = localStore.containsKey(getBusinessMilestoneStoreName);
       if (is_detail) {
         var data = localStore.getString(getBusinessMilestoneStoreName);
@@ -171,7 +172,7 @@ class MileStoneStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     final startup_id = await startupState.GetStartupId();
     print('milestone startup id ${startup_id}');
-    
+
     try {
       var resp =
           await MileStoneModel(startup_id: startup_id, milestone: milestones);

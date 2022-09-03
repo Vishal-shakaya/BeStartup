@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>66114167783-b2est4ve6hih3f48320vic8khv9glkvd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.66114167783-b2est4ve6hih3f48320vic8khv9glkvd</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>66114167783-nialhmegnjuj3b4f3kt8urjqfnmrbjo0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDudoF2LUYljnwjrGg0yquOxmb7bVXU3e8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>66114167783</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vishalshakayaproject.bestartup</string>
+	<key>PROJECT_ID</key>
+	<string>bestartup-680d0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bestartup-680d0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:66114167783:ios:85fafd8d9dd170b3c8d342</string>
+	<key>DATABASE_URL</key>
+	<string>https://bestartup-680d0-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

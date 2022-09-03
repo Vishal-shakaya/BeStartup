@@ -191,6 +191,7 @@ class BusinessProductStore extends GetxController {
   /// METHOD BZ OF product_list has Observer attach :
 ///////////////////////////////////////////////////
   GetProductList() async {
+    product_list.clear();
     final localStore = await SharedPreferences.getInstance();
     try {
       // Check local store for product :
@@ -230,7 +231,7 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     final startup_id = await startupState.GetStartupId();
     print('product startup_id $startup_id{}');
-    
+
     try {
       var resp = await BusinessProductsList(
         startup_id: startup_id,

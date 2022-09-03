@@ -55,8 +55,8 @@ class _ProductBodyState extends State<ProductBody> {
     MyCustPageLoadingSpinner();
     var resp = await productStore.PersistProduct();
 
-    print('Submit Products $resp');
-    
+    // print('Submit Products $resp');
+
     if (resp['response']) {
       Get.toNamed(create_business_whyInvest_url);
     }
@@ -171,6 +171,61 @@ class _ProductBodyState extends State<ProductBody> {
 
   @override
   Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1500) {
+      prod_cont_width = 0.80;
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      prod_cont_width = 0.80;
+      print('1500');
+    }
+
+    if (context.width < 1450) {
+      print('1450');
+      prod_sec_width = 0.70;
+    }
+
+    if (context.width < 1400) {
+      prod_sec_width = 0.75;
+      print(' 1400');
+    }
+
+    if (context.width < 1300) {
+      prod_sec_width = 0.75;
+      print(' 1400');
+    }
+
+    if (context.width < 1200) {
+      prod_sec_width = 0.85;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      prod_sec_width = 1;
+      print('main 1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      prod_sec_width = 0.99;
+      print('main 800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      prod_sec_width = 1;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      prod_sec_width = 1;
+      print('480');
+    }
+
     ///////////////////////////////////
     /// SET REQUIREMNTS :
     ///////////////////////////////////
@@ -194,10 +249,7 @@ class _ProductBodyState extends State<ProductBody> {
 //////////////////////////////
 // MAIN METHOD SECTION:
 //////////////////////////////
-  Column MainMethod(
-    BuildContext context,
-    product,
-  ) {
+  Column MainMethod(BuildContext context,product,) {
     return Column(
       children: [
         Container(
@@ -224,6 +276,7 @@ class _ProductBodyState extends State<ProductBody> {
                       Container(
                           width: context.width * prod_sec_width,
                           height: context.height * 0.60,
+                          alignment: Alignment.center,
                           child: Obx(() {
                             return ListView.builder(
                                 itemCount: product.length,

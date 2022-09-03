@@ -52,6 +52,8 @@ class _VisionBodyState extends State<VisionBody> {
   double con_button_height = 40;
   double con_btn_top_margin = 30;
 
+  double input_field_height = 24.0;
+
   var pageParam;
   bool? updateMode = false;
   var founder_id;
@@ -109,7 +111,7 @@ class _VisionBodyState extends State<VisionBody> {
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
       await visionStore.SetVisionParam(data: vision);
-      
+
       var resp =
           await startupUpdater.UpdatehBusinessVision(startup_id: startup_id);
 
@@ -177,8 +179,7 @@ class _VisionBodyState extends State<VisionBody> {
   /////////////////////////////////////
   @override
   void initState() {
-    if(Get.parameters.isNotEmpty){
-      
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
 
       founder_id = pageParam['founder_id'];
@@ -188,7 +189,6 @@ class _VisionBodyState extends State<VisionBody> {
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
-
     }
     super.initState();
   }
@@ -200,6 +200,7 @@ class _VisionBodyState extends State<VisionBody> {
       vision_subheading_text = 20;
       vision_cont_width = 0.50;
       vision_cont_height = 0.70;
+      input_field_height = 24.0;
     }
 
     // PC:
@@ -214,6 +215,7 @@ class _VisionBodyState extends State<VisionBody> {
       maxlines = 15;
       vision_cont_width = 0.70;
       vision_cont_height = 0.70;
+      vision_subheading_text = 18;
     }
 
     // TABLET :
@@ -221,19 +223,26 @@ class _VisionBodyState extends State<VisionBody> {
       maxlines = 15;
       vision_cont_width = 0.80;
       vision_cont_height = 0.70;
+      vision_subheading_text = 17;
+      input_field_height = 20.0;
     }
+
+    
     // SMALL TABLET:
     if (context.width < 640) {
       maxlines = 11;
       vision_cont_width = 0.80;
       vision_cont_height = 0.70;
+      vision_subheading_text = 16;
+      input_field_height = 17.0;
     }
 
     // PHONE:
     if (context.width < 480) {
       maxlines = 15;
-      vision_cont_width = 0.60;
+      vision_cont_width = 0.90;
       vision_cont_height = 0.70;
+      vision_subheading_text = 15;
     }
 
     /////////////////////////////
@@ -304,7 +313,7 @@ class _VisionBodyState extends State<VisionBody> {
   Container WhyInputField(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: context.height * 0.04),
-      height: maxlines * 24.0,
+      height: maxlines * input_field_height,
       child: FormBuilder(
         key: formKey,
         autovalidateMode: AutovalidateMode.disabled,
@@ -322,24 +331,31 @@ class _VisionBodyState extends State<VisionBody> {
             FormBuilderValidators.maxLength(context, 2000,
                 errorText: 'Maximum 2000 char allow ')
           ]),
+         
           scrollPadding: EdgeInsets.all(10),
           maxLines: maxlines,
+         
           decoration: InputDecoration(
               helperText: 'min allow 200 ',
               hintText: "your vision",
               hintStyle: TextStyle(
                 color: Colors.blueGrey.shade200,
               ),
+              
               fillColor: Colors.grey[100],
               filled: true,
+              
               contentPadding: EdgeInsets.all(20),
+              
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide:
                       BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
+              
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide(width: 2, color: primary_light)),
+              
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
         ),
@@ -347,25 +363,31 @@ class _VisionBodyState extends State<VisionBody> {
     );
   }
 
+
+
   Container SubHeadingSection(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: context.height * 0.05),
+      margin: EdgeInsets.only(top: context.height * 0.03),
       child: AutoSizeText.rich(
           TextSpan(style: context.textTheme.headline2, children: [
-        TextSpan(
-            text: vision_subHeading_text,
-            style: TextStyle(
-                color: light_color_type3, fontSize: vision_subheading_text))
-      ])),
+            TextSpan(
+                text: vision_subHeading_text,
+                style: TextStyle(
+                    color: light_color_type3, fontSize: vision_subheading_text))
+          ]),
+          textAlign: TextAlign.center),
     );
   }
+
+
+
 
   Container UpdateButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           await UpdatetVisionFrom();

@@ -74,12 +74,12 @@ class _SelectProductTypeState extends State<SelectProductType> {
                 child: is_product
                     ? Container(
                         padding: EdgeInsets.all(2),
-                        child: Icon(
+                        child: const Icon(
                           Icons.check,
                           color: Colors.white,
                           size: 16,
                         ))
-                    : Text(
+                    : const Text(
                         'P',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
@@ -90,7 +90,7 @@ class _SelectProductTypeState extends State<SelectProductType> {
           ////////////////////////////
           // SPACING :
           ////////////////////////////
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           /////////////////////////////
@@ -113,12 +113,12 @@ class _SelectProductTypeState extends State<SelectProductType> {
                 child: is_service
                     ? Container(
                         padding: EdgeInsets.all(2),
-                        child: Icon(
+                        child: const Icon(
                           Icons.check,
                           color: Colors.white,
                           size: 16,
                         ))
-                    : Text(
+                    : const Text(
                         'S',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
