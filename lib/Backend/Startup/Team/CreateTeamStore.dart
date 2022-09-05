@@ -56,8 +56,6 @@ class BusinessTeamMemberStore extends GetxController {
     }
   }
 
-
-
   // SetTeam Membesr
   SetTeamMembers({list}) async {
     member_list.clear();
@@ -67,13 +65,10 @@ class BusinessTeamMemberStore extends GetxController {
     });
   }
 
-
   // Get Team Members :
   GetTeamMembers() async {
     return member_list;
   }
-
-
 
   // CREATE MEMEBER WITH REQUIRED DETAIL :
   CreateTeamMember(member) async {
@@ -126,6 +121,7 @@ class BusinessTeamMemberStore extends GetxController {
   ///////////////////////////////////////////////////
   GetMembers() async {
     final localStore = await SharedPreferences.getInstance();
+    member_list.clear();
     try {
       // Check local store for product :
       bool is_detail = localStore.containsKey(getBusinessTeamMemberStoreName);

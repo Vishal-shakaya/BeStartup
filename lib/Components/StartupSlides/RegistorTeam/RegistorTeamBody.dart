@@ -8,10 +8,8 @@ import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 
-
 import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDialog.dart';
-
 
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -44,8 +42,12 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   double con_button_width = 150;
   double con_button_height = 40;
+
   double con_btn_top_margin = 30;
   double mem_dialog_width = 900;
+
+  double member_section_height=0.60; 
+  double member_section_width=0.50; 
 
   var pageParam;
   var startup_id;
@@ -71,7 +73,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                     },
                     icon: Icon(
                       Icons.cancel_outlined,
-                      color: Colors.blueGrey.shade800,
+                      color: cancel_btn_color,
                     )),
               ),
               content: SizedBox(
@@ -197,6 +199,64 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   @override
   Widget build(BuildContext context) {
+
+     member_section_height=0.60; 
+     member_section_width=0.50; 
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      member_section_height=0.60; 
+      member_section_width=0.55; 
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      member_section_height=0.60; 
+      member_section_width=0.60; 
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      member_section_height=0.60; 
+      member_section_width=0.60; 
+      print('1200');
+    }
+
+    if (context.width < 1300) {
+      member_section_width=0.65; 
+      member_section_height=0.60; 
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      member_section_width=0.90; 
+      member_section_height=0.60; 
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      member_section_width=0.90; 
+      member_section_height=0.60; 
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      member_section_width=0.90; 
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      member_section_width=0.90; 
+      print('480');
+    }
+
     //////////////////////////////////////////
     /// SET REQUIREMENTS DATA :
     //////////////////////////////////////////
@@ -251,8 +311,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 // MEMBER PROFILE LIST VIEW :
                 // Image , name , position , email , then desc :
                 Container(
-                    height: context.height * 0.60,
-                    width: context.width * 0.50,
+                    height: context.height * member_section_height ,
+                    width: context.width *member_section_width ,
                     child: Obx(() {
                       return ListView.builder(
                           itemCount: member_list.length,
@@ -273,10 +333,9 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     );
   }
 
-
 ///////////////////////////////////
-/// EXTERNAL METHODS :
-/// 1. Update buttopn :
+  /// EXTERNAL METHODS :
+  /// 1. Update buttopn :
 ///////////////////////////////////
   Container SubmitAndUpdateButton(BuildContext context, fun) {
     return Container(

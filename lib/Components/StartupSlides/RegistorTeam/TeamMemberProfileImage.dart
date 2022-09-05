@@ -12,10 +12,9 @@ import 'package:file_picker/file_picker.dart';
 
 class TeamMemberProfileImage extends StatefulWidget {
   String? member_image = '';
-  MemberFormType? form_type; 
-  TeamMemberProfileImage({
-    this.form_type, 
-    this.member_image, Key? key}) : super(key: key);
+  MemberFormType? form_type;
+  TeamMemberProfileImage({this.form_type, this.member_image, Key? key})
+      : super(key: key);
 
   @override
   State<TeamMemberProfileImage> createState() => _TeamMemberProfileImageState();
@@ -27,6 +26,15 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
   String upload_image_url = '';
   bool is_uploading = false;
   late UploadTask? upload_process;
+
+  double image_width = 150;
+  double image_height = 150;
+
+  double upload_btn_top_pos = 100;
+  double upload_btn_left_pos = 100;
+  double upload_icon_size = 19;
+
+  double hint_text_size = 18;
 
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
 //////////////////////////////////////////
@@ -88,17 +96,83 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
   @override
   void initState() {
     // TODO: implement initState
-    if(widget.form_type == MemberFormType.edit){
-    upload_image_url = widget.member_image.toString();
+    if (widget.form_type == MemberFormType.edit) {
+      upload_image_url = widget.member_image.toString();
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    image_width = 150;
+    image_height = 150;
+
+    upload_btn_top_pos = 100;
+    upload_btn_left_pos = 100;
+    upload_icon_size = 19;
+
+    hint_text_size = 18;
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      image_width = 150;
+      image_height = 150;
+
+      upload_btn_top_pos = 100;
+      upload_btn_left_pos = 100;
+      upload_icon_size = 19;
+
+      hint_text_size = 18;
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      hint_text_size = 16;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      upload_btn_top_pos = 100;
+      upload_btn_left_pos = 100;
+      upload_icon_size = 19;
+
+      hint_text_size = 15;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      upload_icon_size = 19;
+
+      image_width = 140;
+      image_height = 140;
+
+      hint_text_size = 14;
+      print('480');
+    }
+
     return Container(
-        width: 150,
-        height: 160,
+        width: image_width,
+        height: image_width,
         // alignment: Alignment.center,
         child: Stack(
           children: [
@@ -119,6 +193,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
                         child: AutoSizeText(
                           'profile picture',
                           style: TextStyle(
+                              fontSize: hint_text_size,
                               color: light_color_type3,
                               fontWeight: FontWeight.bold),
                         ))),

@@ -33,10 +33,15 @@ class TeamMemberDialog extends StatefulWidget {
 class _TeamMemberDialogState extends State<TeamMemberDialog> {
   final formKey = GlobalKey<FormBuilderState>();
   final formKey2 = GlobalKey<FormBuilderState>();
+
   int maxlines = 7;
-  double con_button_width = 55;
+  double con_button_width = 90;
+
   double con_button_height = 30;
   double con_btn_top_margin = 5;
+
+  double dialog_width = 0.85;
+  double dialog_height = 0.64;
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
 
@@ -143,6 +148,17 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Widget verticalAddMemberDialog = VerticalAddMemberDialog();
+    Widget horizontalAddMemberDialog = horizontalAddMemberDialogWidget();
+
+    dialog_height = 0.64;
+    dialog_width = 0.85;
+
+    con_button_width = 90;
+    con_button_height = 38;
+    con_btn_top_margin = 10;
+
+    maxlines = 7;
     ////////////////////////////////
     /// RESPONSIVE BREAK  POINTS :
     /// DEFAULT 1500 :
@@ -150,12 +166,13 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
 
     // DEFAULT :
     if (context.width > 1500) {
-      con_button_width = 90;
+      dialog_width = 0.85;
+      con_button_width = 100;
       con_button_height = 38;
       con_btn_top_margin = 10;
+      maxlines = 7;
       // formsection_width = 0.35;
       // formsection_height = 0.41;
-      maxlines = 7;
       print('greator then 1500');
     }
 
@@ -171,7 +188,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
       // formsection_width = 0.35;
       // formsection_height = 0.50;
       maxlines = 5;
-      con_button_width = 90;
+      con_button_width = 100;
       con_button_height = 34;
       con_btn_top_margin = 5;
       print('1200');
@@ -189,123 +206,237 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
     }
     // SMALL TABLET:
     if (context.width < 640) {
+      dialog_width = 1;
       maxlines = 3;
     }
 
     // PHONE:
     if (context.width < 480) {
+      dialog_width = 0.99;
+      horizontalAddMemberDialog = verticalAddMemberDialog;
       print('480');
     }
+
+
+
     ///////////////////////////////////////////////////////
     /// 1. MILESTONE DIALOG :
     /// 2. MILESTONE FORM : Take Title and Description:
     /////////////////////////////////////////////////////
     return FractionallySizedBox(
-      widthFactor: 0.85,
-      heightFactor: 0.64,
+      widthFactor: dialog_width,
+      heightFactor: dialog_height,
       child: Container(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
-            child: Column(children: [
-              const SizedBox(
-                height: 10,
-              ),
-
-              // TEAM MEMEBER PROFILE IAMGE SECTION
-              Container(
-                  child: Row(
-                children: [
-                  Expanded(
-                      flex: 5,
-                      child: widget.form_type == MemberFormType.create
-                          ? TeamMemberProfileImage()
-                          : TeamMemberProfileImage(
-                              member_image: widget.member['image'],
-                              form_type: MemberFormType.edit,
-                            )),
-                  Expanded(
-                      flex: 5,
-                      child: widget.form_type == MemberFormType.create
-                          ? TeamMemberDetailForm(
-                              formkey: formKey,
-                              ResetForm: ResetForm,
-                            )
-                          : TeamMemberDetailForm(
-                              formkey: formKey,
-                              ResetForm: ResetForm,
-                              form_type: MemberFormType.edit,
-                              member: widget.member,
-                            ))
-                ],
-              )),
-
-              // MEMBER DETAIL SECTION :
-              Container(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
-                      widget.form_type == MemberFormType.create
-                          ? MemberInfoForm(
-                              formkey: formKey2,
-                            )
-                          : MemberInfoForm(
-                              formkey: formKey2,
-                              form_type: MemberFormType.edit,
-                              member: widget.member,
-                            ),
-                    ],
-                  ),
-                  Container(
-                    margin:
-                        EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
-                    child: InkWell(
-                      highlightColor: primary_light_hover,
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(20),
-                          right: Radius.circular(20)),
-                      onTap: () async {
-                        await SubmitMemberDetail();
-                      },
-                      child: Card(
-                        elevation: 10,
-                        shadowColor: light_color_type3,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(5),
-                          width: con_button_width,
-                          height: con_button_height,
-                          decoration: BoxDecoration(
-                              color: primary_light,
-                              borderRadius: const BorderRadius.horizontal(
-                                  left: Radius.circular(20),
-                                  right: Radius.circular(20))),
-                          child:  Text(
-                            widget.form_type == MemberFormType.create? 'Done':'Update',
-                            style: TextStyle(
-                                letterSpacing: 2.5,
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ))
-            ]),
+            child: horizontalAddMemberDialog,
           ),
         ),
       ),
     );
+  }
+
+
+
+
+
+
+/////////////////////////////////////////////
+/// External Methods :
+/////////////////////////////////////////////
+  Container VerticalAddMemberDialog() {
+    return Container(
+      child: Column(children: [
+        // Profile Image
+        Container(
+          child: widget.form_type == MemberFormType.create
+              ? TeamMemberProfileImage()
+              : TeamMemberProfileImage(
+                  member_image: widget.member['image'],
+                  form_type: MemberFormType.edit,
+                ),
+        ),
+
+        //  MemberDetailForm :
+        Container(
+          child: widget.form_type == MemberFormType.create
+              ? TeamMemberDetailForm(
+                  formkey: formKey,
+                  ResetForm: ResetForm,
+                )
+              : TeamMemberDetailForm(
+                  formkey: formKey,
+                  ResetForm: ResetForm,
+                  form_type: MemberFormType.edit,
+                  member: widget.member,
+                ),
+        ),
+
+        // MEMBER DETAIL SECTION :
+        Container(
+            child: Column(
+          children: [
+            Row(
+              children: [
+                widget.form_type == MemberFormType.create
+                    ? MemberInfoForm(
+                        formkey: formKey2,
+                      )
+                    : MemberInfoForm(
+                        formkey: formKey2,
+                        form_type: MemberFormType.edit,
+                        member: widget.member,
+                      ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
+              child: InkWell(
+                highlightColor: primary_light_hover,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20)),
+                onTap: () {
+                  SubmitMemberDetail();
+                },
+                child: Card(
+                  elevation: 10,
+                  shadowColor: light_color_type3,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    width: con_button_width,
+                    height: con_button_height,
+                    decoration: BoxDecoration(
+                        color: primary_light,
+                        borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(20),
+                            right: Radius.circular(20))),
+                    child: Text(
+                      widget.form_type == MemberFormType.create
+                          ? 'Done'
+                          : 'Update',
+                      style: const TextStyle(
+                          letterSpacing: 2.5,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ))
+      ]),
+    );
+  }
+
+
+
+
+  Column horizontalAddMemberDialogWidget() {
+    return Column(children: [
+      const SizedBox(
+        height: 10,
+      ),
+
+      // TEAM MEMEBER PROFILE
+      Container(
+          child: Row(
+        children: [MemberProfileImageWidget(), MemberDetailForm()],
+      )),
+
+      // MEMBER DETAIL SECTION :
+      Container(
+          child: Column(
+        children: [
+          Row(
+            children: [
+              widget.form_type == MemberFormType.create
+                  ? MemberInfoForm(
+                      formkey: formKey2,
+                    )
+                  : MemberInfoForm(
+                      formkey: formKey2,
+                      form_type: MemberFormType.edit,
+                      member: widget.member,
+                    ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
+            child: InkWell(
+              highlightColor: primary_light_hover,
+              borderRadius: const BorderRadius.horizontal(
+                  left: Radius.circular(20), right: Radius.circular(20)),
+              onTap: () async {
+                await SubmitMemberDetail();
+              },
+              child: Card(
+                elevation: 10,
+                shadowColor: light_color_type3,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(5),
+                  width: con_button_width,
+                  height: con_button_height,
+                  decoration: BoxDecoration(
+                      color: primary_light,
+                      borderRadius: const BorderRadius.horizontal(
+                          left: Radius.circular(20),
+                          right: Radius.circular(20))),
+                  child: Text(
+                    widget.form_type == MemberFormType.create
+                        ? 'Done'
+                        : 'Update',
+                    style: const TextStyle(
+                        letterSpacing: 2.5,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ))
+    ]);
+  }
+
+  Expanded MemberDetailForm() {
+    return Expanded(
+        flex: 5,
+        child: widget.form_type == MemberFormType.create
+            ? TeamMemberDetailForm(
+                formkey: formKey,
+                ResetForm: ResetForm,
+              )
+            : TeamMemberDetailForm(
+                formkey: formKey,
+                ResetForm: ResetForm,
+                form_type: MemberFormType.edit,
+                member: widget.member,
+              ));
+  }
+
+  Expanded MemberProfileImageWidget() {
+    return Expanded(
+        flex: 5,
+        child: widget.form_type == MemberFormType.create
+            ? TeamMemberProfileImage()
+            : TeamMemberProfileImage(
+                member_image: widget.member['image'],
+                form_type: MemberFormType.edit,
+              ));
   }
 }

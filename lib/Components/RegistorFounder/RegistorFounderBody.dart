@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/RegistorFounder/FounderImage.dart';
 import 'package:be_startup/Components/RegistorFounder/RegistorFounderForm.dart';
 
-import 'package:be_startup/Components/StartupSlides/TeamSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -36,6 +36,11 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   double con_button_width = 150;
   double con_button_height = 40;
   double con_btn_top_margin = 30;
+
+  double page_height = 0.65;
+  double? fontSize = 40;
+
+  double heading_height = 0.15;
 
   var pageParam;
   var user_id;
@@ -174,21 +179,22 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         final resp = await founderConnector.FetchFounderDetailandContact(
             user_id: user_id);
 
-        final picture = resp['data']['userDetail']['picture']??temp_avtar_image;
+        final picture =
+            resp['data']['userDetail']['picture'] ?? temp_avtar_image;
         // print('picture ${picture}');
 
-        final name = resp['data']['userDetail']['name']??'';
+        final name = resp['data']['userDetail']['name'] ?? '';
         // print('name ${name}');
         // final position = resp['data']['userDetail']['position'];
-        final phone_no = resp['data']['userContect']['phone_no']??'';
+        final phone_no = resp['data']['userContect']['phone_no'] ?? '';
         // print('phone no ${phone_no}');
 
-        final primary_mail = resp['data']['userContect']['primary_mail']??'';
+        final primary_mail = resp['data']['userContect']['primary_mail'] ?? '';
         // print('primary mail ${primary_mail}');
 
-        final other_contact = resp['data']['userContect']['other_contact']??'';
+        final other_contact =
+            resp['data']['userContect']['other_contact'] ?? '';
         // print('other contact${other_contact}');
-
 
         final data = {
           'picture': picture,
@@ -223,6 +229,53 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
   @override
   Widget build(BuildContext context) {
+      fontSize = 40;
+      page_height = 0.65;
+      heading_height = 0.15;
+      
+    // DEFAULT :
+    if (context.width > 1500) {
+      fontSize = 40;
+      page_height = 0.65;
+      heading_height = 0.15;
+      print('greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      heading_height = 0.12;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      fontSize = 35;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      fontSize = 30;
+      heading_height = 0.10;
+      print('800');
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {
+      fontSize = 25;
+      page_height = 0.68;
+      heading_height = 0.06;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      page_height = 0.70;
+      print('480');
+    }
+
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -250,7 +303,21 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     return Column(
       children: [
         Container(
-            height: context.height * 0.65,
+          height: context.height * heading_height,
+          margin: EdgeInsets.only(top: context.height * 0.02),
+          child: AutoSizeText.rich(
+            TextSpan(style: Get.textTheme.headline1, children: [
+              TextSpan(
+                  text: 'Founder',
+                  style: TextStyle(fontSize: fontSize, color: slide_header_color
+                      //  fontSize: 35
+                      ))
+            ]),
+          ),
+        ),
+        Container(
+            alignment: Alignment.topCenter,
+            height: context.height * page_height,
             child: SingleChildScrollView(
               reverse: true,
               child: Column(

@@ -12,7 +12,7 @@ enum MemberFormType { edit, create }
 class MemberListView extends StatefulWidget {
   Map<String, dynamic>? member;
   int? index;
-  
+
   MemberListView({this.index, this.member, Key? key}) : super(key: key);
 
   @override
@@ -22,23 +22,33 @@ class MemberListView extends StatefulWidget {
 class _MemberListViewState extends State<MemberListView> {
   double mem_desc_block_width = 0.32;
   double mem_desc_block_height = 0.17;
+ 
+  double mem_desc_text = 14; 
+
+  double ver_mem_desc_block_width = 0.60;
+  double ver_mem_desc_block_height = 0.20;
+
+  double ver_mem_desc_text = 13; 
+
   double mem_dialog_width = 900;
+
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
+
   // REMOVE MEMBER FROM LIST :
   RemoveMember(id) async {
     await memeberStore.RemoveMember(widget.member!['id']);
   }
 
-//  EDIT MEMBER DETAIL :
+  //  EDIT MEMBER DETAIL :
   EditMember() async {
-    // SET DEFAULT IMAGE; 
+    // SET DEFAULT IMAGE;
     memeberStore.SetProfileImage(widget.member!['image']);
 
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-            title: Container(
+              title: Container(
                 alignment: Alignment.topRight,
                 child: IconButton(
                     onPressed: () {
@@ -57,7 +67,6 @@ class _MemberListViewState extends State<MemberListView> {
                   form_type: MemberFormType.edit,
                   member: widget.member,
                   index: widget.index,
-                  
                 ),
               ),
             ));
@@ -65,118 +74,263 @@ class _MemberListViewState extends State<MemberListView> {
 
   @override
   Widget build(BuildContext context) {
+    /////////////////////////////////
+    /// Vertical View :
+    /////////////////////////////////
+    Widget verticalViewWidget = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Profile Image and Member Detail :
+        ProfileSection(),
+
+        // Edit And Delete Button :
+        EditAndDeleteButtonRow(context),
+
+        // Description:
+        VerticalMemDescription(context),
+      ],
+    );
+
+    //////////////////////////////////
+    /// Horizontal view :
+    //////////////////////////////////
+    Widget horizontalViewWidget = Row(
+      children: [
+        // Profile Image and Member Detail :
+        ProfileSection(),
+
+        // SPACING:
+        SizedBox(width: context.width * 0.04),
+
+        // Sescription:
+        MemDescription(context),
+
+        // Edit And Delete Button :
+        EditAndDeleteButton(context)
+      ],
+    );
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      ver_mem_desc_block_width = 0.32;
+      ver_mem_desc_block_height = 0.17;
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      mem_desc_block_width = 0.35;
+      mem_desc_block_height = 0.18;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      mem_desc_block_width = 0.32;
+      mem_desc_block_height = 0.19;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      mem_desc_block_width = 0.50;
+      mem_desc_block_height = 0.19;
+      horizontalViewWidget = verticalViewWidget;
+
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+    }
+
     return Container(
       child: SingleChildScrollView(
-        child: Row(
-          children: [
-            // Profile Image and Member Detail :
-            Container(
-              padding: EdgeInsets.all(12),
-      
-              // MEMBER DETAIL SECTION :
-              child: Column(
-                children: [
-                  // Profile Image
-                  ProfileImage(),
-      
-                  // SPACING:
-                  const SizedBox(
-                    height: 15,
-                  ),
-      
-                  // POSITION:
-                  SizedBox(
-                    width:200, 
-                    child: Column(
-                      children: [
-                        MemPosition(),
-                        // MEMBER NAME :
-                        MemName(),
-                        // CONTACT EMAIL ADDRESS :
-                        MemContact(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+        child: Container(child: horizontalViewWidget),
+      ),
+    );
+  }
+
+  Container EditAndDeleteButton(BuildContext context) {
+    return Container(
+      height: context.height * 0.20,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          /////////////////////////////
+          // DELETE MEMBER BUTTON :
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-      
-            // SPACING:
-            SizedBox(
-              width: context.width * 0.04,
+            child: InkWell(
+              onTap: () {
+                RemoveMember(widget.member!['id']);
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.red.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 15,
+                      ))),
             ),
-      
-            // MEMBER DESCRIPTION SECTION :
-            MemDescription(context),
-      
-            Container(
-              height: context.height * 0.20,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  /////////////////////////////
-                  // DELETE MEMBER BUTTON :
-                  /////////////////////////////
-                  Card(
-                    shadowColor: Colors.grey,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        await RemoveMember(widget.member!['id']);
-                      },
-                      radius: 15,
-                      child: CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.red.shade300,
-                          child: Container(
-                              padding: EdgeInsets.all(2),
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                                size: 15,
-                              ))),
-                    ),
-                  ),
-      
-                  // SPACING :
-                 const  SizedBox(
-                    height: 5,
-                  ),
-      
-                  /////////////////////////////
-                  // EDIT PRODUCT BUTTON:
-                  /////////////////////////////
-                  Card(
-                    shadowColor: Colors.grey,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        EditMember();
-                      },
-                      radius: 15,
-                      child: CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.blue.shade300,
-                          child: Container(
-                              padding: EdgeInsets.all(2),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 15,
-                              ))),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+          ),
+
+          // SPACING :
+          const SizedBox(
+            height: 5,
+          ),
+
+          /////////////////////////////
+          // EDIT PRODUCT BUTTON:
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () {
+                EditMember();
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.blue.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 15,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container EditAndDeleteButtonRow(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+          top: context.height * 0.01, bottom: context.height * 0.01),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          /////////////////////////////
+          // DELETE MEMBER BUTTON :
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () {
+                RemoveMember(widget.member!['id']);
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.red.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 14,
+                      ))),
+            ),
+          ),
+
+          // SPACING :
+          const SizedBox(
+            width: 5,
+          ),
+
+          /////////////////////////////
+          // EDIT PRODUCT BUTTON:
+          /////////////////////////////
+          Card(
+            shadowColor: Colors.grey,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () {
+                EditMember();
+              },
+              radius: 15,
+              child: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.blue.shade300,
+                  child: Container(
+                      padding: EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 14,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container ProfileSection() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+
+      // MEMBER DETAIL SECTION :
+      child: Column(
+        children: [
+          // Profile Image
+          ProfileImage(),
+
+          // SPACING:
+          const SizedBox(
+            height: 15,
+          ),
+
+          // POSITION:
+          SizedBox(
+            width: 200,
+            child: Column(
+              children: [
+                MemPosition(),
+                // MEMBER NAME :
+                MemName(),
+                // CONTACT EMAIL ADDRESS :
+                MemContact(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -185,37 +339,81 @@ class _MemberListViewState extends State<MemberListView> {
     return Card(
       shadowColor: Colors.teal,
       elevation: 2,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(15),
-            right: Radius.circular(15),
-          ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(
+          left: Radius.circular(15),
+          right: Radius.circular(15),
+        ),
       ),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         width: context.width * mem_desc_block_width,
         height: context.height * mem_desc_block_height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(15),
               right: Radius.circular(15),
             ),
             border: Border.all(width: 0, color: Colors.grey.shade200)),
         child: Container(
-          padding: EdgeInsets.only(bottom: 2,left: 8 ,right: 8),
+          padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8),
           child: RichText(
-              text: TextSpan(
-                  text: widget.member!['meminfo'],
-                  style: GoogleFonts.robotoSlab(
-                    textStyle: TextStyle(),
-                    color: light_color_type3,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    height: 1.70,
-                  ),),
-                 maxLines: 5,
-                 overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              text: widget.member!['meminfo'],
+              style: GoogleFonts.robotoSlab(
+                textStyle: TextStyle(),
+                color: input_text_color,
+                fontSize: mem_desc_text,
+                fontWeight: FontWeight.w600,
+                height: 1.70,
               ),
+            ),
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
+  }
+
+  SingleChildScrollView VerticalMemDescription(BuildContext context) {
+    return SingleChildScrollView(
+      child: Card(
+        shadowColor: Colors.teal,
+        elevation: 2,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(15),
+            right: Radius.circular(15),
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          width: context.width * ver_mem_desc_block_width,
+          height: context.height * ver_mem_desc_block_height,
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.horizontal(
+                left: Radius.circular(15),
+                right: Radius.circular(15),
+              ),
+              border: Border.all(width: 0, color: Colors.grey.shade200)),
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8),
+            child: RichText(
+              text: TextSpan(
+                text: widget.member!['meminfo'],
+                style: GoogleFonts.robotoSlab(
+                  textStyle: TextStyle(),
+                  color: input_text_color,
+                  fontSize: ver_mem_desc_text,
+                  fontWeight: FontWeight.w600,
+                  height: 1.70,
+                ),
+              ),
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
       ),
     );
@@ -224,7 +422,7 @@ class _MemberListViewState extends State<MemberListView> {
   Container MemContact() {
     return Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -234,15 +432,13 @@ class _MemberListViewState extends State<MemberListView> {
             size: 16,
           ),
         ),
-        AutoSizeText.rich(
-          TextSpan(
-            style: Get.textTheme.headline5, 
-            children: [
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
               text: widget.member!['member_mail'],
-              style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: Colors.blue, fontSize: 11))
+              style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.blue,
+                  fontSize: 11))
         ])),
       ],
     ));
@@ -254,7 +450,9 @@ class _MemberListViewState extends State<MemberListView> {
             TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
           text: widget.member!['name'],
-          style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 13))
+          style: TextStyle(
+            color: input_text_color,
+            fontSize: 13))
     ])));
   }
 
@@ -265,7 +463,7 @@ class _MemberListViewState extends State<MemberListView> {
             TextSpan(style: Get.textTheme.headline2, children: [
           TextSpan(
               text: widget.member!['position'],
-              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
+              style: TextStyle(color: input_text_color, fontSize: 15))
         ])));
   }
 

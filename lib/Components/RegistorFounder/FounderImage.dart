@@ -105,14 +105,14 @@ class _FounderImageState extends State<FounderImage> {
     if (context.width < 1200) {
       upload_icon_position_top = 105;
       upload_icon_position_left = 118;
-      image_radius = 75;
+      image_radius = 80;
       print('1200');
     }
 
     if (context.width < 1000) {
       upload_icon_position_top = 105;
       upload_icon_position_left = 118;
-      image_radius = 75;
+      image_radius = 80;
       print('1000');
     }
 

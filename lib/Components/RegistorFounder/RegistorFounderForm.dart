@@ -39,6 +39,9 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   double contact_formfield_width = 350;
   double contact_text_margin_top = 0.05;
 
+  double form_fontSize = 15;
+  double form_hint_fontSize = 14;
+
   var pageParam;
   var user_id;
   var startup_id;
@@ -69,27 +72,31 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
 /////////////////////////////////////
   @override
   void initState() {
-    if(Get.parameters.isNotEmpty){
-    
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
-    
+
       user_id = pageParam['user_id'];
 
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
-    
     }
 
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+      
+      formfield_width = 500;
+      form_fontSize = 15;
+      form_hint_fontSize = 14;
+    
     // DEFAULT :
     if (context.width > 1500) {
+      formfield_width = 500;
+      form_fontSize = 15;
+      form_hint_fontSize = 14;
       print('greator then 1500');
     }
 
@@ -103,20 +110,32 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     }
 
     if (context.width < 1000) {
+      formfield_width = 490;
+      form_fontSize = 15;
+      form_hint_fontSize = 14;
       print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
+      formfield_width = 480;
+      form_fontSize = 15;
+      form_hint_fontSize = 14;
       print('800');
     }
     // SMALL TABLET:
     if (context.width < 640) {
+      formfield_width = 480;
+      form_fontSize = 14;
+      form_hint_fontSize = 13;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
+      form_fontSize = 13;
+      form_hint_fontSize = 12;
+      formfield_width = 470;
       print('480');
     }
 
@@ -155,6 +174,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
               children: [
                 // FOUNDER FIELD :
                 Container(
+                  margin: EdgeInsets.only(top: context.width * 0.01),
                   width: contact_formfield_width,
                   child: SingleChildScrollView(
                     child: Column(
@@ -163,8 +183,8 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                           context: context,
                           name: 'founder_name',
                           error_text: 'Founder name required',
-                          lable_text: 'founder',
-                          hind_text: 'founder name',
+                          lable_text: 'Founder',
+                          hind_text: 'Founder name',
                           initial_val: data['name'],
                         ),
 
@@ -186,13 +206,13 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                 Container(
                     margin: EdgeInsets.only(
                         top: context.height * contact_text_margin_top),
-                    child: AutoSizeText.rich(
-                        TextSpan(style: Get.textTheme.headline2, children: const [
-                      TextSpan(
-                        text: 'Primary Contact',
-                      )
-                    ]))),
-
+                    child: AutoSizeText.rich(TextSpan(
+                        style: Get.textTheme.headline2,
+                        children: const [
+                          TextSpan(
+                            text: 'Primary Contact',
+                          )
+                        ]))),
 
                 // TAKE FOUNDER INOF:
                 const SizedBox(
@@ -202,7 +222,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                 Card(
                   elevation: 4,
                   shadowColor: Colors.grey,
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: Container(
                       width: formfield_width,
@@ -273,8 +293,8 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       name: name,
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
-        color: light_color_type1,
-        fontSize: 15,
+        color: input_text_color,
+        fontSize: form_fontSize,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -286,12 +306,14 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
         labelStyle: GoogleFonts.robotoSlab(
             textStyle: TextStyle(),
             color: input_label_color,
-            fontSize: 14,
+            fontSize: form_hint_fontSize,
             fontWeight: FontWeight.w400),
 
         hintText: hind_text,
         contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 15, color: Colors.grey.shade300),
+
+        hintStyle:
+            TextStyle(fontSize: form_hint_fontSize, color: input_hind_color),
 
         suffix: InkWell(
           onTap: () {
@@ -299,7 +321,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
           },
           child: Container(
             child: Icon(
-              Icons.cancel_outlined,
+              Icons.close,
               color: input_reset_color,
               size: 15,
             ),
@@ -312,8 +334,6 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       ),
     );
   }
-
-
 
   // Secondary Input field :
   FormBuilderTextField SecondaryInputField({
@@ -331,8 +351,8 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       name: name,
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
-        color: light_color_type1,
-        fontSize: 15,
+        color: input_text_color,
+        fontSize: form_fontSize,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -346,12 +366,13 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
         labelStyle: GoogleFonts.robotoSlab(
             textStyle: TextStyle(),
             color: input_label_color,
-            fontSize: 14,
+            fontSize: form_hint_fontSize,
             fontWeight: FontWeight.w400),
 
         hintText: hind_text,
         contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 15, color: Colors.grey.shade300),
+        hintStyle: TextStyle(
+            fontSize: form_hint_fontSize, color: Colors.grey.shade300),
 
         suffix: InkWell(
           onTap: () {
@@ -359,7 +380,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
           },
           child: Container(
             child: Icon(
-              Icons.cancel_outlined,
+              Icons.close,
               color: input_reset_color,
               size: 15,
             ),

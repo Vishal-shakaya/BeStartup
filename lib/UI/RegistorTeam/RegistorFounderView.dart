@@ -12,7 +12,6 @@ class RegistorFounderView extends StatelessWidget {
       body: Container(
         child:Column(
           children: [
-              SlideHeading(heading: registor_founder_head_text,),
               RegistorFounderBody()
           ]
         )
