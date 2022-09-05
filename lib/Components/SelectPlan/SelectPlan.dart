@@ -29,7 +29,8 @@ import 'package:uuid/uuid.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-var uuid = Uuid();
+var uuid = const Uuid();
+
 enum PlanOption { basicPlan, bestPlan, businessPlan }
 
 class SelectPlan extends StatefulWidget {
@@ -51,7 +52,8 @@ class _SelectPlanState extends State<SelectPlan> {
 
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
   var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var investorConnector = Get.put(InvestorConnector(), tag: 'investor_connector');
+  var investorConnector =
+      Get.put(InvestorConnector(), tag: 'investor_connector');
 
   var my_context = Get.context;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -74,13 +76,24 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.isDarkMode ? tealAccent.withOpacity(0.3) : Colors.blueGrey.shade50;
 
   String? select_plan_type = null;
+
   var _razorpay = Razorpay();
   var options;
   int? planAmount;
   var mainData = '';
+
+  // Plan Amount :
   var basic_plan_amount = 1000;
   var best_plan_amount = 1950;
   var business_plan_amount = 6000;
+
+  double plan_desc_fontSize = 14;
+
+  double plan_title_fontSize = 16;
+
+  double plan_timePeriod_fontSize = 25;
+
+  double plan_price_fontSize = 30;
 
   ///////////////////////////////////////
   // CARD AND BUTTON  :
@@ -88,21 +101,22 @@ class _SelectPlanState extends State<SelectPlan> {
   ///////////////////////////////////////
 
   double card_width = 300;
-  double card_height = 430;
+  double card_height = 440;
   double card_padding = 20;
 
-  double body_cont_height = 570;
+  double body_cont_height = 580;
   double body_cont_width = 10;
 
   double con_button_width = 130;
   double con_button_height = 45;
   double con_btn_top_margin = 30;
+  double con_btn_fontSize = 20;
 
   double heading_col_height = 0.15;
   double heading_font_size = 35;
+
   double heading_text_top_mar = 0;
 
-  double plan_text_font_size = 17;
   var selectedPlan;
   var userName;
   var phoneNo;
@@ -351,29 +365,25 @@ class _SelectPlanState extends State<SelectPlan> {
   StartBigLoading() {
     var dialog = SmartDialog.showLoading(
         background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
+        maskColorTemp: const Color.fromARGB(146, 252, 250, 250),
         widget: BigLoadingSpinner());
     return dialog;
   }
 
-
-
 ///////////////////////////////////////////////////////////////
-/// CREATE STARTUP :
-/// It creates a startup model and .
-/// pdates the user's plan and startup field in the database
+  /// CREATE STARTUP :
+  /// It creates a startup model and .
+  /// pdates the user's plan and startup field in the database
 ///////////////////////////////////////////////////////////////
   CreateStartup() async {
     var resp = await startupConnector.CreateStartup();
     return resp;
   }
 
-
   /////////////////////////////////////////////////////
   // START STORING ALL FOUNDER DETIAL TO FIREBASE :
   /////////////////////////////////////////////////////
   SendDataToFireStore() async {
-
     var resp = await startupConnector.CreateBusinessCatigory();
     print(resp);
 
@@ -398,8 +408,6 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp11 = await startupConnector.CreateBusinessMileStone();
     print(resp11);
 
-
-
     return ResponseBack(response_type: true);
   }
 
@@ -416,11 +424,9 @@ class _SelectPlanState extends State<SelectPlan> {
     final orderd = DateTime.now().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
-    
+
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
-
 
     final is_data_send = await SendDataToFireStore();
 
@@ -430,29 +436,29 @@ class _SelectPlanState extends State<SelectPlan> {
     /// 2. It is sending the payment data to the firebase.
     /// 3. It is sending the payment data to the mail.
     ////////////////////////////////////////////////////////
-      if (is_data_send['response']) {
-        var resp = await SetUserPlan(
+    if (is_data_send['response']) {
+      var resp = await SetUserPlan(
+          exact_amount: exact_amount,
+          orderd: orderd,
+          expired: expired,
+          buyer_name: userName,
+          phone_no: phoneNo,
+          plan_type: plan_type);
+      print('Data store in firebase  Resp $is_data_send');
+
+      if (resp) {
+        final is_mail_send = await SendInvoiceMail(
+            paymentId: response.paymentId,
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
-            buyer_name: userName,
-            phone_no: phoneNo,
-            plan_type: plan_type);
-        print('Data store in firebase  Resp $is_data_send');
+            payer_name: userName,
+            phone_no: phoneNo);
+        print('Mail Send resp $is_mail_send');
+      }
 
-        if(resp){
-          final is_mail_send = await SendInvoiceMail(
-              paymentId: response.paymentId,
-              exact_amount: exact_amount,
-              orderd: orderd,
-              expired: expired,
-              payer_name: userName,
-              phone_no: phoneNo);
-            print('Mail Send resp $is_mail_send'); 
-        }
-   
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(home_page_url);
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
@@ -461,7 +467,6 @@ class _SelectPlanState extends State<SelectPlan> {
       CloseCustomPageLoadingSpinner();
       Get.toNamed(home_page_url);
     }
-
   }
 
 ////////////////////////////////////////
@@ -473,7 +478,7 @@ class _SelectPlanState extends State<SelectPlan> {
     final orderd = DateTime.now().toString();
     final plan_type = selectedPlan['plan'].toString().toLowerCase();
     final expired = await GetExpiredDate(plan_type);
-    
+
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
@@ -485,29 +490,29 @@ class _SelectPlanState extends State<SelectPlan> {
     /// 2. It is sending the payment data to the firebase.
     /// 3. It is sending the payment data to the mail.
     ////////////////////////////////////////////////////////
-      if (is_data_send['response']) {
-        var resp = await SetUserPlan(
+    if (is_data_send['response']) {
+      var resp = await SetUserPlan(
+          exact_amount: exact_amount,
+          orderd: orderd,
+          expired: expired,
+          buyer_name: userName,
+          phone_no: phoneNo,
+          plan_type: plan_type);
+      print('Data store in firebase  Resp $is_data_send');
+
+      if (resp) {
+        final is_mail_send = await SendInvoiceMail(
+            paymentId: uuid.v4().toString(),
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
-            buyer_name: userName,
-            phone_no: phoneNo,
-            plan_type: plan_type);
-        print('Data store in firebase  Resp $is_data_send');
+            payer_name: userName,
+            phone_no: phoneNo);
+        print('Mail Send resp $is_mail_send');
+      }
 
-        if(resp){
-          final is_mail_send = await SendInvoiceMail(
-              paymentId: uuid.v4().toString(),
-              exact_amount: exact_amount,
-              orderd: orderd,
-              expired: expired,
-              payer_name: userName,
-              phone_no: phoneNo);
-            print('Mail Send resp $is_mail_send'); 
-        }
-   
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(home_page_url);
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(home_page_url);
     }
 
     // If data not uploaded completely then
@@ -517,7 +522,6 @@ class _SelectPlanState extends State<SelectPlan> {
       Get.toNamed(home_page_url);
     }
   }
-
 
   /////////////////////////////////////////
   /// ERROR HANDLER :
@@ -617,139 +621,272 @@ class _SelectPlanState extends State<SelectPlan> {
 
   @override
   Widget build(BuildContext context) {
-    ///////////////////////////////////////
-    // BREAKPOINTS :
-    // 1. TAB SIZE :
-    // WIDTH : 800 ,650 , 600
-    // HEIGHT: 850,700
-    ///////////////////////////////////////
-    if (context.width < 800) {
-      card_width = 250;
-      card_height = 300;
-      body_cont_height = 500;
-    }
-    if (context.width > 800) {
+    Widget planRowView = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        PlanType(
+            amount: '₹ 1000/-',
+            period: '3 Month',
+            type: 'Basic Plan',
+            selected_plan: PlanOption.basicPlan,
+            active_color: basicPlan,
+            color_pallet: Colors.blue),
+        PlanType(
+            amount: '₹ 1950/-',
+            period: '1 Year',
+            type: 'Best Plan',
+            selected_plan: PlanOption.bestPlan,
+            active_color: bestPlan,
+            color_pallet: Colors.orange),
+        PlanType(
+            amount: '₹ 6000/-',
+            period: 'Lifetime',
+            type: 'Business Plan',
+            selected_plan: PlanOption.businessPlan,
+            active_color: businessPlan,
+            color_pallet: primary_light2),
+      ],
+    );
+
+    Widget planColumnView = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        PlanType(
+            amount: '₹ 1000/-',
+            period: '3 Month',
+            type: 'Basic Plan',
+            selected_plan: PlanOption.basicPlan,
+            active_color: basicPlan,
+            color_pallet: Colors.blue),
+        PlanType(
+            amount: '₹ 1950/-',
+            period: '1 Year',
+            type: 'Best Plan',
+            selected_plan: PlanOption.bestPlan,
+            active_color: bestPlan,
+            color_pallet: Colors.orange),
+        PlanType(
+            amount: '₹ 6000/-',
+            period: 'Lifetime',
+            type: 'Business Plan',
+            selected_plan: PlanOption.businessPlan,
+            active_color: businessPlan,
+            color_pallet: primary_light2),
+      ],
+    );
+
+    plan_desc_fontSize = 14;
+    plan_title_fontSize = 16;
+    plan_timePeriod_fontSize = 25;
+    plan_price_fontSize = 30;
+
+    card_width = 300;
+    card_height = 440;
+    card_padding = 20;
+
+    body_cont_height = 580;
+    body_cont_width = 10;
+
+    con_button_width = 130;
+    con_button_height = 45;
+    con_btn_top_margin = 30;
+
+    heading_col_height = 0.15;
+    heading_font_size = 35;
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      plan_desc_fontSize = 14;
+      plan_title_fontSize = 16;
+      plan_timePeriod_fontSize = 25;
+      plan_price_fontSize = 30;
+
       card_width = 300;
+      card_height = 440;
+      card_padding = 20;
+
+      body_cont_height = 580;
+      body_cont_width = 10;
+
+      con_button_width = 130;
+      con_button_height = 45;
+      con_btn_top_margin = 30;
+
+      heading_col_height = 0.15;
+      heading_font_size = 35;
+
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      plan_title_fontSize = 14;
+      plan_timePeriod_fontSize = 22;
+      plan_desc_fontSize = 13;
+      plan_price_fontSize = 25;
+
+      card_width = 280;
       card_height = 430;
+      card_padding = 20;
+
       body_cont_height = 570;
+      body_cont_width = 10;
+
+      con_button_width = 130;
+      con_button_height = 45;
+      con_btn_top_margin = 30;
+
+      heading_col_height = 0.15;
+      heading_font_size = 35;
+      print('1000');
     }
 
-    if (context.width < 650) {
-      card_width = 220;
-      card_height = 250;
-      body_cont_height = 450;
+    if (context.width < 1100) {
+      plan_title_fontSize = 14;
+      plan_timePeriod_fontSize = 22;
+      plan_desc_fontSize = 13;
+      plan_price_fontSize = 25;
+
+      card_width = 260;
+      card_height = 430;
+      card_padding = 20;
+
+      body_cont_height = 560;
+      body_cont_width = 10;
+
+      con_button_width = 130;
+      con_button_height = 45;
+      con_btn_top_margin = 30;
+
+      heading_col_height = 0.15;
+      heading_font_size = 35;
+      print('1100');
     }
 
-    if (context.height < 850) {
-      card_width = 220;
-      card_height = 300;
-      body_cont_height = 450;
-    }
-    if (context.height < 700) {
-      card_width = 220;
-      card_height = 250;
-      body_cont_height = 400;
+    // TABLET :
+    if (context.width < 800) {
+      plan_title_fontSize = 15;
+      plan_timePeriod_fontSize = 23;
+      plan_desc_fontSize = 14;
+      plan_price_fontSize = 28;
+
+      card_width = 290;
+      card_height = 430;
+      card_padding = 20;
+
+      body_cont_height = 460;
+      body_cont_width = 10;
+
+      con_button_width = 100;
+      con_button_height = 38;
+      con_btn_top_margin = 30;
+      con_btn_fontSize = 15;
+
+      heading_col_height = 0.15;
+      heading_font_size = 35;
+      planRowView = planColumnView;
+      print('800');
     }
 
-    if (context.width < 600) {
-      card_width = 210;
-      card_height = 250;
-      body_cont_height = 400;
-      card_padding = 10;
-    }
-    if (context.height < 700 && context.width < 600) {
-      card_width = 170;
-      card_height = 200;
-      body_cont_height = 300;
-      card_padding = 10;
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
     }
 
-    if (context.height < 550 && context.width < 600) {
-      card_width = 150;
-      card_height = 150;
-      body_cont_height = 250;
-      card_padding = 5;
-    }
+    // PHONE:
+    if (context.width < 480) {
+      plan_title_fontSize = 14;
+      plan_timePeriod_fontSize = 22;
+      plan_desc_fontSize = 13;
+      plan_price_fontSize = 24;
 
-    // PHONE :
-    if (context.width < 450) {
-      heading_col_height = 0.3;
-      heading_font_size = 30;
-      plan_text_font_size = 20;
-      con_btn_top_margin = 40;
-      card_width = 150;
-      card_height = 220;
-      body_cont_height = 300;
-      card_padding = 9;
-      heading_text_top_mar = 30;
+      card_width = 290;
+      card_height = 430;
+      card_padding = 20;
+
+      body_cont_height = 410;
+      body_cont_width = 10;
+
+      con_button_width = 100;
+      con_button_height = 38;
+      con_btn_top_margin = 30;
+      con_btn_fontSize = 15;
+
+      heading_col_height = 0.15;
+      heading_font_size = 35;
+      print('480');
     }
 
     return Container(
+        color: my_theme_background_color,
         child: SingleChildScrollView(
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        ///////////////////////////////
-        // Heading Section :
-        ///////////////////////////////
-        Container(
-          height: context.height * heading_col_height,
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Container(
-              margin: EdgeInsets.only(top: heading_text_top_mar),
-              child: RichText(
-                  text: TextSpan(style: Get.textTheme.headline3, children: [
-                TextSpan(
-                    text: select_plan_heading,
-                    style: TextStyle(fontSize: heading_font_size))
-              ])),
-            )
+          child: Column(
+            mainAxisSize: MainAxisSize.min, 
+            
+            children: [
+          
+            // Heading Section :
+            PageHeading(context),
+
+
+            /// PLANS SECTION :
+            planRowView,
+
+            // CONTINUE  BUTTON :
+            ContinueButton(context)
           ]),
-        ),
-
-        ////////////////////////////////
-        /// PLANS SECTION :
-        ////////////////////////////////
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PlanType(
-                amount: '₹ 1000/-',
-                period: '3 Month',
-                type: 'Basic Plan',
-                selected_plan: PlanOption.basicPlan,
-                active_color: basicPlan,
-                color_pallet: Colors.blue),
-            PlanType(
-                amount: '₹ 1950/-',
-                period: '1 Year',
-                type: 'Best Plan',
-                selected_plan: PlanOption.bestPlan,
-                active_color: bestPlan,
-                color_pallet: Colors.orange),
-            PlanType(
-                amount: '₹ 6000/-',
-                period: 'Lifetime',
-                type: 'Business Plan',
-                selected_plan: PlanOption.businessPlan,
-                active_color: businessPlan,
-                color_pallet: primary_light2),
-          ],
-        ),
-
-        // CONTINUE  BUTTON :
-        ContinueButton(context)
-      ]),
-    ));
+        ));
   }
 
+
+
+
+
+
 //////////////////////////////////////
-  /// COMPONENT SECTION :
+/// COMPONENT SECTION :
 ////////////////////////////////////
+
+  Container PageHeading(BuildContext context) {
+    return Container(
+            height: context.height * heading_col_height,
+            child:
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                margin: EdgeInsets.only(top: heading_text_top_mar),
+                child: RichText(
+                    text: TextSpan(style: Get.textTheme.headline3, children: [
+                  TextSpan(
+                      text: select_plan_heading,
+                      style: TextStyle(fontSize: heading_font_size))
+                ])),
+              )
+            ]),
+          );
+  }
+
+
+
+  //////////////////////////////////////////
+  /// Continue Button: 
+  //////////////////////////////////////////
   Container ContinueButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           OnpressContinue(context);
@@ -761,19 +898,19 @@ class _SelectPlanState extends State<SelectPlan> {
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             width: con_button_width,
             height: con_button_height,
             decoration: BoxDecoration(
                 color: primary_light,
-                borderRadius: BorderRadius.horizontal(
+                borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: Text(
               'continue',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: con_btn_fontSize,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -782,6 +919,11 @@ class _SelectPlanState extends State<SelectPlan> {
     );
   }
 
+
+
+  //////////////////////////////////
+  /// Plan Detail Widget : 
+  //////////////////////////////////
   Container PlanType(
       {type, amount, period, color_pallet, active_color, selected_plan}) {
     return Container(
@@ -797,7 +939,7 @@ class _SelectPlanState extends State<SelectPlan> {
               height: card_height,
               padding: EdgeInsets.all(card_padding),
               child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(22)),
+                borderRadius: const BorderRadius.all(Radius.circular(22)),
                 onTap: () {
                   SelectedPlan(selected_plan);
                 },
@@ -820,8 +962,9 @@ class _SelectPlanState extends State<SelectPlan> {
                           children: [
                             // BOTTOM TEXT :
                             Container(
-                                margin: EdgeInsets.only(bottom: 5, top: 10),
-                                padding: EdgeInsets.all(5),
+                                margin:
+                                    const EdgeInsets.only(bottom: 5, top: 10),
+                                padding: const EdgeInsets.all(5),
                                 child: RichText(
                                     text: TextSpan(
                                         style: Get.textTheme.headline4,
@@ -830,15 +973,15 @@ class _SelectPlanState extends State<SelectPlan> {
                                           text: type,
                                           style: TextStyle(
                                               color: active_color,
-                                              fontSize: 15))
+                                              fontSize: plan_title_fontSize))
                                     ]))),
 
-                            // Prize Container:
+                            // Time Period Container:
                             Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   bottom: 10,
                                 ),
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: RichText(
                                     text: TextSpan(
                                         style: Get.textTheme.headline4,
@@ -847,14 +990,15 @@ class _SelectPlanState extends State<SelectPlan> {
                                           text: period,
                                           style: TextStyle(
                                               color: color_pallet,
-                                              fontSize: 24))
+                                              fontSize:
+                                                  plan_timePeriod_fontSize))
                                     ]))),
 
                             Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   bottom: 5,
                                 ),
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -869,9 +1013,12 @@ class _SelectPlanState extends State<SelectPlan> {
                                             '. Available Android / Ios / Web'),
                                   ],
                                 )),
+
+                            // Bottm Prize :
                             Container(
-                                margin: EdgeInsets.only(bottom: 10, top: 10),
-                                padding: EdgeInsets.all(8),
+                                margin:
+                                    const EdgeInsets.only(bottom: 10, top: 10),
+                                padding: const EdgeInsets.all(8),
                                 child: RichText(
                                     text: TextSpan(
                                         style: Get.textTheme.headline4,
@@ -880,7 +1027,7 @@ class _SelectPlanState extends State<SelectPlan> {
                                           text: amount,
                                           style: TextStyle(
                                               color: color_pallet,
-                                              fontSize: 30))
+                                              fontSize: plan_price_fontSize))
                                     ]))),
                           ],
                         ),
@@ -894,11 +1041,13 @@ class _SelectPlanState extends State<SelectPlan> {
 
   Container DetailLabel({title}) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: RichText(
           text: TextSpan(style: Get.textTheme.headline5, children: [
         TextSpan(
-            text: title, style: TextStyle(color: Colors.blueGrey, fontSize: 14))
+            text: title,
+            style: TextStyle(
+                color: input_text_color, fontSize: plan_desc_fontSize))
       ])),
     );
   }

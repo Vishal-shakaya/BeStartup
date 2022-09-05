@@ -77,6 +77,9 @@ Gradient g3 = const LinearGradient(colors: [
 // cancel icon size : 16
 ///////////////////////////////////////////
 
+// Theme Color :
+Color my_theme_background_color = Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
+
 // Input Field Hint text color :
 Color input_hind_color =
     Get.isDarkMode ? Colors.grey.shade500 : Colors.grey.shade300;
@@ -84,16 +87,13 @@ Color input_hind_color =
 Color input_text_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade900;
 
-
 // Startup Slide Header text color :
 Color slide_header_color =
     Get.isDarkMode ? Colors.grey.shade200 : Colors.blueGrey.shade800;
 
-
 // Startup Slide Sub Header text color :
 Color slide_subheader_color =
     Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey;
-
 
 // cross icon color close dialog and clear input filed icon color :
 Color cancel_btn_color = Colors.blueGrey.shade200;
@@ -101,20 +101,15 @@ Color cancel_btn_color = Colors.blueGrey.shade200;
 Color next_back_btn_color =
     Get.isDarkMode ? Color(0xFF54BAB9) : Colors.grey.shade800;
 
-
 // Product Title color little dart and des ligheter then product :
 Color product_title_color =
     Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey.shade800;
 
-
 Color product_description_color =
     Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade800;
 
-
-
 Color form_shadow_color = Get.isDarkMode ? Colors.white : Colors.grey;
-Color form_border_color = Get.isDarkMode ? Colors.white : Colors.transparent; 
-
+Color form_border_color = Get.isDarkMode ? Colors.white : Colors.transparent;
 
 // Dialog Color Light and dark :
 Color my_dialog_color = Colors.grey;

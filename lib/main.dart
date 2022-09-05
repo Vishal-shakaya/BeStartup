@@ -174,13 +174,18 @@ class _MyAppState extends State<MyApp> {
                   });
             }),
 
-        GetPage(name: user_registration_url, page: () => RegistrationView()),
 
-        GetPage(name: signup_url, page: () => SignupView()),
+        GetPage(
+          name: user_registration_url, page: () => RegistrationView()),
 
-        GetPage(name: login_handler_url, page: () => LoginHandler()),
+        GetPage(
+          name: signup_url, page: () => SignupView()),
 
-        GetPage(name: startup_slides_url, page: () => StartupSlides()),
+        GetPage(
+          name: login_handler_url, page: () => LoginHandler()),
+
+        GetPage(
+          name: startup_slides_url, page: () => StartupSlides()),
 
         // BUSINESS DETAIL :
         GetPage(
