@@ -9,7 +9,6 @@ import 'package:flip_card/flip_card.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-
 class StoryCeoProfile extends StatefulWidget {
   var startup_id;
   var founder_id;
@@ -20,11 +19,9 @@ class StoryCeoProfile extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   State<StoryCeoProfile> createState() => _StoryCeoProfileState();
 }
-
 
 class _StoryCeoProfileState extends State<StoryCeoProfile> {
   var startupConnector = Get.put(StartupViewConnector());
@@ -37,9 +34,9 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
 
   double profile_top_pos = 0.14;
   double profile_left_pos = 0.01;
+  double profile_logo_radius = 45;
 
-
-
+  double founder_fontSize = 13; 
 
   ////////////////////////////////////
   /// GET REQUIRED PARAMATERS :
@@ -97,6 +94,72 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
 
   @override
   Widget build(BuildContext context) {
+    profile_top_pos = 0.14;
+    profile_left_pos = 0.01;
+    profile_logo_radius = 45;
+    founder_fontSize = 13; 
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      profile_top_pos = 0.14;
+      profile_left_pos = 0.01;
+      profile_logo_radius = 45;
+      founder_fontSize = 13; 
+      print('1500');
+    }
+
+    if (context.width < 1400) {
+      profile_top_pos = 0.14;
+      profile_left_pos = 0.01;
+      profile_logo_radius = 42;
+      founder_fontSize = 13; 
+
+      print('1400');
+    }
+
+    if (context.width < 1200) {
+      profile_top_pos = 0.14;
+      profile_left_pos = 0.01;
+      profile_logo_radius = 40;
+      founder_fontSize = 13; 
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      profile_top_pos = 0.14;
+      profile_left_pos = 0.01;
+      profile_logo_radius = 38;
+      founder_fontSize = 12; 
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      profile_top_pos = 0.14;
+      profile_left_pos = 0.01;
+      profile_logo_radius = 35;
+      founder_fontSize = 12; 
+      print('480');
+    }
+
     /////////////////////////////////////
     /// SET REQUIREMENTS :
     /////////////////////////////////////
@@ -146,17 +209,18 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
     return Column(
       children: [
         InkWell(
+          radius: 100,
           onTap: () {
             _controller?.toggleCard();
           },
           child: Card(
-            elevation: 5,
-            shadowColor: light_color_type3,
+            elevation: 4,
+            shadowColor: Colors.blueGrey.shade300,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
             child: Container(
                 child: CircleAvatar(
-              radius: 45,
+              radius: profile_logo_radius,
               backgroundColor: Colors.blueGrey[100],
               foregroundImage: NetworkImage(founder_profile, scale: 1),
             )),
@@ -187,13 +251,13 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
             _controller?.toggleCard();
           },
           child: Card(
-            elevation: 5,
-            shadowColor: light_color_type3,
+            elevation: 4,
+            shadowColor: Colors.blueGrey.shade300,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
             child: Container(
                 child: CircleAvatar(
-              radius: 45,
+              radius: profile_logo_radius,
               backgroundColor: Colors.blueGrey[100],
               foregroundImage: NetworkImage(startup_logo, scale: 1),
             )),
@@ -207,7 +271,9 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
                 TextSpan(style: Get.textTheme.headline5, children: [
               TextSpan(
                   text: ''.capitalizeFirst,
-                  style: TextStyle(color: Colors.black, fontSize: 13))
+                  style: TextStyle(
+                    color: Colors.black, 
+                    fontSize: founder_fontSize))
             ])))
       ],
     );

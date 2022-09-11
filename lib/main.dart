@@ -117,12 +117,13 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
+  
       // INITILIZE TOAST DIALOG  :
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
 
       // CONFIGURE THEME SETTING :
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
 
       // themeMode: ThemeMode.dark,
       theme: ThemeData(

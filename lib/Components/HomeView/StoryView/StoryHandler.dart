@@ -20,36 +20,42 @@ class StoryListView extends StatelessWidget {
 
   var homeViewConnector = Get.put(HomeViewConnector());
   var exploreStore = Get.put(ExploreCatigoryStore());
-  
+  CarouselController buttonCarouselController = CarouselController();
+  User? user;
+
   var startups_length;
   var startup_names;
   var startup_ids;
   var founder_ids;
-  
+
   var catigory;
   var date_range;
+  var user_id;
 
-  var user_id; 
-  User? user;
-  CarouselController buttonCarouselController = CarouselController();
+  double storyWidth = 0.45;
+  double storyHeight = 0.67;
 
+  double forword_btn_top = 0.32;
+  double forword_btn_left = 0.42;
+
+  double backword_btn_left = 0.01;
+  double backword_btn_top = 0.32; 
 
   @override
   Widget build(BuildContext context) {
-//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
     /// GET SECTION :
-//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
     GetLocalStorageData() async {
       user = FirebaseAuth.instance.currentUser;
       user_id = user?.uid;
       var resp;
 
       try {
-
         //////////////////////////////////////////
-        /// Filter Startup If Explore is true: 
-        /// 1 filtering using datetime : 
-        /// 2 Catigory : 
+        /// Filter Startup If Explore is true:
+        /// 1 filtering using datetime :
+        /// 2 Catigory :
         //////////////////////////////////////////
         if (is_explore == true) {
           catigory = await exploreStore.GetCatigories();
@@ -61,25 +67,25 @@ class StoryListView extends StatelessWidget {
               catigories: catigory);
         }
 
-
         ///////////////////////////////////////////////
-        /// Fetch Startup if Save is true : 
+        /// Fetch Startup if Save is true :
         ///  1 fetch user save startups:
         ///////////////////////////////////////////////
         if (is_save_page == true) {
+          print('Fetching Save Styory ');
           resp = await homeViewConnector.FetchSaveStartups(user_id: user_id);
-        } 
-        
+          print('Save Story Response $resp');
+        }
+
         /////////////////////////////////////////////////
         /// Fetch all Startups here :
-        /// if explore and is_save is false : 
+        /// if explore and is_save is false :
         /////////////////////////////////////////////////
         else {
           resp = await homeViewConnector.FetchStartups();
         }
 
-
-      // General Response Hnadler : 
+        // General Response Hnadler :
         if (resp['response']) {
           startups_length = resp['data']['startup_len'];
           startup_ids = resp['data']['startup_ids'];
@@ -87,23 +93,19 @@ class StoryListView extends StatelessWidget {
           startup_names = resp['data']['startup_name'];
         }
 
-
-      // Error handler :  
+        // Error handler :
         if (!resp['response']) {
           startups_length = 0;
         }
-        
       } catch (e) {
         startups_length = 0;
         return '';
       }
     }
 
-
-
-  //////////////////////////////////////////////////////
-  /// SET REQUIREMENTS SECTION :
-  //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    /// SET REQUIREMENTS SECTION :
+    //////////////////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -127,13 +129,124 @@ class StoryListView extends StatelessWidget {
         });
   }
 
-
-
   //////////////////////////////////////////////////////
   /// MAIN SECTION :
   //////////////////////////////////////////////////////
   Container MainMethod(BuildContext context) {
     var mainWidget;
+
+     storyWidth = 0.45;
+     storyHeight = 0.67;
+
+     forword_btn_top = 0.32;
+     forword_btn_left = 0.42;
+
+     backword_btn_left = 0.01;
+     backword_btn_top = 0.32; 
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+        storyWidth = 0.45;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.42;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+        storyWidth = 0.55;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.52;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('1500');
+    } 
+
+    if (context.width < 1400) {
+        storyWidth = 0.60;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.56;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('1400');
+    } 
+
+    if (context.width < 1200) {
+        storyWidth = 0.65;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.61;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+       print('1200');
+    }
+
+    if (context.width < 1000) {
+        storyWidth = 0.74;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.69;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+        storyWidth = 0.90;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.84;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+        storyWidth = 0.95;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.88;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+        print('640');
+    }
+
+
+    if (context.width < 480) {
+        storyWidth = 0.95;
+        storyHeight = 0.67;
+
+        forword_btn_top = 0.32;
+        forword_btn_left = 0.85;
+
+        backword_btn_left = 0.01;
+        backword_btn_top = 0.32; 
+      print('480');
+    }
 
     // when there is no startups then show this container :
     if (startups_length <= 0) {
@@ -143,14 +256,13 @@ class StoryListView extends StatelessWidget {
     // Container with Startups :
     else {
       mainWidget = Container(
-          width: context.width * 0.45,
-          height: context.height * 0.67,
+          width: context.width * storyWidth,
+          height: context.height * storyHeight,
           child: Stack(
             children: [
-
-            //////////////////////////////////
-            // CAURSEL SLIDER :
-            //////////////////////////////////
+              //////////////////////////////////
+              // CAURSEL SLIDER :
+              //////////////////////////////////
               CarouselSlider.builder(
                   carouselController: buttonCarouselController,
                   itemCount: startups_length,
@@ -168,8 +280,6 @@ class StoryListView extends StatelessWidget {
                   options: CarouselOptions(
                       height: context.height * 0.67, viewportFraction: 1)),
 
-
-
               // Back Button :
               BackButton(context),
               ForwordButton(context)
@@ -185,8 +295,8 @@ class StoryListView extends StatelessWidget {
 //////////////////////////////////////////////////
   Positioned ForwordButton(BuildContext context) {
     return Positioned(
-        top: context.height * 0.32,
-        left: context.width * 0.42,
+        top: context.height * forword_btn_top,
+        left: context.width * forword_btn_left,
         child: Container(
           child: IconButton(
               onPressed: () {
@@ -203,8 +313,8 @@ class StoryListView extends StatelessWidget {
 
   Positioned BackButton(BuildContext context) {
     return Positioned(
-        top: context.height * 0.32,
-        left: context.width * 0.01,
+        top: context.height * backword_btn_top,
+        left: context.width * backword_btn_left,
         child: Container(
           child: IconButton(
               onPressed: () {

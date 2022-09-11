@@ -10,10 +10,10 @@ import 'package:get/get.dart';
             padding: EdgeInsets.all(2),
             decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.horizontal(
+          borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20), right: Radius.circular(20)),
             ),
-            child: ClipRRect(
+            child: const ClipRRect(
           borderRadius: BorderRadius.horizontal(
             left: Radius.circular(19),
             right: Radius.circular(19),

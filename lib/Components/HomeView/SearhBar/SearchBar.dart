@@ -1,5 +1,6 @@
 import 'package:be_startup/Components/HomeView/SearhBar/StartupResultTIle.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,10 +20,30 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
   var searchInputController = TextEditingController();
 
   var searchQuery;
+
   String queryKeywords = '';
   bool? is_searching = false;
   bool? is_searching_process = false;
+
   double searchResultContainerHeight = 0.35;
+
+  double search_bar_left_pos = 0.33;
+
+  double search_cont_top_margin = 0.02;
+
+  double search_box_width = 0.20;
+
+  double search_bar_height = 50;
+
+  double search_box_top_margin = 5;
+
+  double search_text_fontSize = 16;
+
+  double search_iconSize = 22;
+
+  double search_bar_content_padding = 10;
+
+  double search_bar_top_margin = 0;
 
   ////////////////////////////////////////////////////////////////////
   /// It takes a string as input and returns
@@ -33,6 +54,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
   /// Returns:
   ///   A stream of QuerySnapshot<Map<String, dynamic>>
   ////////////////////////////////////////////////////////////////////
+
   SearchingAlgo() {
     Stream<QuerySnapshot<Map<String, dynamic>>>? mainStream;
     // Stream<QuerySnapshot<Map<String, dynamic>>> startupStream;
@@ -53,7 +75,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
           .snapshots();
     }
 
-    // Trying to merge two string results : Not wroking: 
+    // Trying to merge two string results : Not wroking:
     // var merge = MergeStream([startupStream, founderStream]);
     // merge.forEach((element) {
     //   dataList.addAll(element.docs);
@@ -76,18 +98,204 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
     //   }
     // }
 
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+
+    search_bar_left_pos = 0.33;
+
+    search_cont_top_margin = 0.02;
+
+    search_box_width = 0.20;
+
+    search_bar_height = 50;
+
+    search_box_top_margin = 5;
+
+    search_text_fontSize = 16;
+
+    search_iconSize = 22;
+
+    search_bar_content_padding = 10;
+
+    // DEFAULT :
+    if (context.width > 1600) {
+      search_bar_left_pos = 0.33;
+
+      search_cont_top_margin = 0.02;
+
+      search_bar_height = 50;
+
+      search_box_width = 0.20;
+
+      search_box_top_margin = 5;
+
+      search_text_fontSize = 16;
+
+      search_iconSize = 22;
+
+      search_bar_content_padding = 10;
+      print('Greator then 1600');
+    }
+
+    // DEFAULT :
+    if (context.width < 1600) {
+      search_bar_left_pos = 0.33;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.23;
+
+      search_box_top_margin = 5;
+
+      search_bar_height = 50;
+
+      search_text_fontSize = 14;
+
+      search_iconSize = 22;
+
+      search_bar_content_padding = 10;
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      search_bar_left_pos = 0.33;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.21;
+
+      search_bar_height = 50;
+
+      search_box_top_margin = 5;
+
+      search_text_fontSize = 14;
+
+      search_iconSize = 22;
+
+      search_bar_content_padding = 10;
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      search_bar_left_pos = 0.30;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.25;
+
+      search_box_top_margin = 5;
+
+      search_bar_height = 50;
+
+      search_text_fontSize = 14;
+
+      search_iconSize = 22;
+
+      search_bar_content_padding = 10;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      search_bar_left_pos = 0.27;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.35;
+
+      search_box_top_margin = 5;
+
+      search_bar_height = 45;
+
+      search_text_fontSize = 14;
+
+      search_iconSize = 20;
+
+      search_bar_content_padding = 17;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      search_bar_left_pos = 0.25;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.35;
+
+      search_box_top_margin = 5;
+
+      search_bar_height = 42;
+
+      search_text_fontSize = 14;
+
+      search_iconSize = 20;
+
+      search_bar_content_padding = 17;
+
+      search_bar_top_margin = 2;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      search_bar_left_pos = 0.25;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.35;
+
+      search_box_top_margin = 5;
+
+      search_bar_height = 40;
+
+
+      search_text_fontSize = 13;
+
+      search_iconSize = 18;
+
+      search_bar_content_padding = 17;
+
+      search_bar_top_margin = 2;
+      
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      search_bar_left_pos = 0.05;
+
+      search_cont_top_margin = 0.02;
+
+      search_box_width = 0.40;
+      
+      search_bar_height = 35;
+
+      search_box_top_margin = 5;
+
+      search_text_fontSize = 12;
+
+      search_iconSize = 15;
+
+      search_bar_content_padding = 15;
+      print('480');
+    }
+
     return Positioned(
-      left: context.width * 0.34,
+      left: context.width * search_bar_left_pos,
+      top: search_bar_top_margin,
       child: Container(
-          margin: EdgeInsets.only(top: context.height * 0.02),
+          margin: EdgeInsets.only(top: context.height * search_cont_top_margin),
           child: SizedBox(
-              width: context.width * 0.20,
+              width: context.width * search_box_width,
               child: Container(
-                margin: EdgeInsets.only(top: 5),
+                margin: EdgeInsets.only(top: search_box_top_margin),
                 child: Column(
                   children: [
                     /// Search Input Field
-                    SearchInputField(),
+                    SizedBox(
+                        height: search_bar_height, child: SearchInputField()),
 
                     /// Show Search Results in list view
                     is_searching != true
@@ -99,16 +307,12 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
     );
   }
 
-
-
-
-
 /////////////////////////////////////////////
-/// External Methods:
-/// 1. Search input field :
-/// 2. Result Startup Contaienr :
-/// 3. Error Text widget :
-/// 4. Spinnser widget :
+  /// External Methods:
+  /// 1. Search input field :
+  /// 2. Result Startup Contaienr :
+  /// 3. Error Text widget :
+  /// 4. Spinnser widget :
 /////////////////////////////////////////////
 
 ////////////////////////////////////////////
@@ -125,19 +329,26 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
         style: GoogleFonts.openSans(
           textStyle: TextStyle(),
           color: Colors.black,
-          fontSize: 16,
+          fontSize: search_text_fontSize,
         ),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           icon: Padding(
             padding: EdgeInsets.all(8.0),
             child: Icon(
               Icons.search,
               color: Colors.grey,
+              size: search_iconSize,
             ),
           ),
           hintText: 'Search',
+          hintStyle: GoogleFonts.openSans(
+            textStyle: TextStyle(),
+            color: input_hind_color,
+            fontSize: search_text_fontSize,
+          ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.all(5),
+          contentPadding:
+              EdgeInsets.symmetric(vertical: search_bar_content_padding),
         ),
         onChanged: (val) {
           setState(() {
@@ -160,7 +371,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       height: context.height * searchResultContainerHeight,
-      width: context.height * 0.40,
+      width: context.width * 0.40,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Card(

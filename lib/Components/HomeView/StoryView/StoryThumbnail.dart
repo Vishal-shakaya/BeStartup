@@ -27,8 +27,90 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
   double image_thumb_height = 0.15;
 
   var final_data = '';
+  
+  
   @override
   Widget build(BuildContext context) {
+   image_cont_width = 0.46;
+   image_cont_height = 0.18;
+
+   image_thumb_width = 0.46;
+   image_thumb_height = 0.15;
+    
+		////////////////////////////////////
+    /// RESPONSIVENESS : 
+    ////////////////////////////////////
+		// DEFAULT :
+    if (context.width > 1500) {
+        image_cont_width = 0.46;
+        image_cont_height = 0.18;
+
+        image_thumb_width = 0.46;
+        image_thumb_height = 0.15;
+        print('Greator then 1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+        image_cont_width = 0.55;
+        image_cont_height = 0.18;
+
+        image_thumb_width = 0.55;
+        image_thumb_height = 0.15;
+      print('1500');
+      }
+
+    if (context.width < 1400) {
+        image_cont_width = 0.60;
+        image_cont_height = 0.18;
+
+        image_thumb_width = 0.60;
+        image_thumb_height = 0.15;
+         print('1400');
+      }
+
+    if (context.width < 1200) {
+      image_cont_width = 0.65;
+      image_cont_height = 0.18;
+
+      image_thumb_width = 0.65;
+      image_thumb_height = 0.15;
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+      image_cont_width = 0.75;
+      image_cont_height = 0.18;
+
+      image_thumb_width = 0.75;
+      image_thumb_height = 0.15;
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      image_cont_width = 0.90;
+      image_cont_height = 0.18;
+
+      image_thumb_width = 0.90;
+      image_thumb_height = 0.15;
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      image_cont_width = 0.95;
+      image_cont_height = 0.18;
+
+      image_thumb_width = 0.95;
+      image_thumb_height = 0.15;
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+      }
 
   ///////////////////////////////////////////////
   /// GET REQUIREMENTS ;
@@ -81,9 +163,9 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
 
   Card MainMethod(BuildContext context) {
     return Card(
-      elevation: 5,
-      shadowColor: Colors.grey,
-      shape: RoundedRectangleBorder(
+      elevation: 2,
+      shadowColor: my_theme_shadow_color,
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.horizontal(
         left: Radius.circular(19),
         right: Radius.circular(19),
@@ -91,16 +173,16 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
       child: Container(
           height: context.height * image_cont_height,
           width: context.width * image_cont_width,
-          padding: EdgeInsets.all(2),
+          padding: const EdgeInsets.all(2),
 
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20)),
           ),
           
           child: ClipRRect(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(19),
               right: Radius.circular(19),
             ),

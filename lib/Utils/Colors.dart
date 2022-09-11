@@ -78,7 +78,26 @@ Gradient g3 = const LinearGradient(colors: [
 ///////////////////////////////////////////
 
 // Theme Color :
-Color my_theme_background_color = Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
+Color my_theme_background_color =
+    Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
+
+Color my_theme_icon_color =
+    Get.isDarkMode ? Colors.tealAccent : Colors.orangeAccent;
+
+Color my_theme_shadow_color =
+    Get.isDarkMode ? Colors.tealAccent : Colors.orangeAccent;
+
+Color serach_bar_text_color = Colors.black;
+
+Color view_btn_text_color =
+    Get.isDarkMode ? Colors.teal.shade400 : Colors.teal.shade500;
+
+Color mile_text_color =
+    Get.isDarkMode ? Colors.blueGrey.shade900 : Colors.blueGrey.shade900;
+
+
+Color mile_cont_bg_color =
+    Get.isDarkMode ? Colors.orange.shade400 : Colors.orange.shade200;
 
 // Input Field Hint text color :
 Color input_hind_color =

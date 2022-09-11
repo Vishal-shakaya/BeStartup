@@ -2,6 +2,7 @@ import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
 import 'package:be_startup/Components/HomeView/SearhBar/SearchBar.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/UserSettings.dart';
@@ -82,6 +83,21 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+
+
+  // Explore Dialog :
+  ExploreFunction(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: ExploreCatigoryAlert(
+            changeView: SetHomeView,
+          ));
+        });
+    }
+
+
   // LOADING SPINNER :
   var spinner = Container(
     width: 60,
@@ -95,8 +111,11 @@ class _HomeViewState extends State<HomeView> {
     ),
   );
 
+
+
   @override
   Widget build(BuildContext context) {
+    
     ///////////////////////////////////////////
     /// ASSIGNING VIEW  :
     /// DEFAULT VIEW IS STORYVIEW :
@@ -284,9 +303,17 @@ class _HomeViewState extends State<HomeView> {
   /// MAIN METHOD :
   ///////////////////////////////////////////
   Container MainMethod(BuildContext context) {
+
+    // Show Floating Explore Button :
+    Widget exploreButton = Container();
+    if (context.width < 480) {
+      exploreButton = ExploreButton(context,ExploreFunction);
+    }
+
     return Container(
         width: page_width,
         height: page_height,
+        color: my_theme_background_color,
         margin: EdgeInsets.only(top: context.height * 0.02),
         child: Stack(
           children: [
@@ -300,8 +327,39 @@ class _HomeViewState extends State<HomeView> {
                 usertype: usertype),
 
             // SEARCH BAR :
-            BusinessSearchBar()
+            BusinessSearchBar(),
+
+            exploreButton
           ],
         ));
+  }
+
+/////////////////////////////////////////////
+  /// External Method :
+/////////////////////////////////////////////
+  Positioned ExploreButton(BuildContext context,ExploreFunction) {
+    return Positioned(
+      top: context.height * 0.83,
+      left: context.height * 0.40,
+      child: Card(
+        elevation: 5,
+        shadowColor: my_theme_shadow_color,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 20,
+          child: IconButton(
+            onPressed: () {
+              ExploreFunction(context);
+            },
+            icon: Icon(
+              Icons.wb_incandescent_sharp,
+              size: 18,
+              color: my_theme_icon_color,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

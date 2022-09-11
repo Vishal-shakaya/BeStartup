@@ -23,6 +23,9 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
   bool is_saved = false;
   var user_id;
 
+
+  double save_iconSize = 26; 
+
   @override
   Widget build(BuildContext context) {
     /////////////////////////////////////////
@@ -57,7 +60,7 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
               child: Container(
                   child: Icon(
                 Icons.bookmark_border_rounded,
-                size: 26,
+                size: save_iconSize,
                 color: Colors.grey,
               )),
             ));
@@ -71,6 +74,8 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
         });
   }
 
+
+
   //////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////
@@ -79,6 +84,8 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
         is_saved: is_saved, user_id: user_id, startup_id: widget.startup_id);
   }
 }
+
+
 
 ////////////////////////////
 /// EXTERNAL WIDGET:
@@ -101,6 +108,8 @@ class SaveUnsaveIcon extends StatefulWidget {
 class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   var homeviewConnector = Get.put(HomeViewConnector());
   bool is_saved = false;
+  double save_iconSize = 26; 
+
 
   ///////////////////////////////////////////////////////////
   /// It checks if the startup is already saved, if it is,
@@ -112,18 +121,14 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
       user_id: widget.user_id,
     );
 
-    /////////////////////////////////////////////
     /// Updaet UI to Saved
-    /////////////////////////////////////////////
     if (resp['response']) {
       setState(() {
         is_saved = true;
       });
     }
 
-    ///////////////////////////////////////////
     // If startup already save then Unsave :
-    ///////////////////////////////////////////
     if (resp['code'] == 101) {
       final unsave_resp = await homeviewConnector.UnsaveStartup(
         startup_id: widget.startup_id,
@@ -139,6 +144,10 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     }
   }
 
+
+
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -146,8 +155,52 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
+
+    save_iconSize = 26; 
+    
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      save_iconSize = 26; 
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      save_iconSize = 23; 
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      save_iconSize = 23; 
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+    }
+
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -161,7 +214,7 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
                     },
                     icon: Icon(
                       Icons.bookmark,
-                      size: 26,
+                      size: save_iconSize,
                       color: Colors.grey,
                     ),
                   )
@@ -171,7 +224,7 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
                     },
                     icon: Icon(
                       Icons.bookmark_border_rounded,
-                      size: 26,
+                      size: save_iconSize,
                       color: Colors.grey,
                     ),
                   ))

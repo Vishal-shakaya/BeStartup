@@ -110,7 +110,7 @@ class HomeViewConnector extends GetxController {
       /// Fetch Startups Data :
       /// /////////////////////////////////
       var startup_store = await store.collection(getBusinessDetailStoreName);
-      var query2 = startup_store.where('id', whereIn: startup_ids).get();
+      var query2 = startup_store.where('startup_id', whereIn: startup_ids).get();
 
       await query2.then((value) {
         for (var doc in value.docs) {
