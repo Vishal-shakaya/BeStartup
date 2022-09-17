@@ -55,7 +55,7 @@ class HomeViewConnector extends GetxController {
     try {
       var startup = await FirebaseFirestore.instance
           .collection(getBusinessDetailStoreName)
-          .where('user_id', isEqualTo: user_id)
+          .where('founder_id', isEqualTo: user_id)
           .get()
           .then((value) {
         startup_len = value.size;

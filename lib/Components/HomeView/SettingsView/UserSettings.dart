@@ -52,20 +52,64 @@ class _UserSettingsState extends State<UserSettings> {
   var is_admin;
   var usertype;
 
+  double page_width = 0.45;
+  double page_height = 0.45;
+
+  double page_elevation = 10;
+
+  double con_width = 0.20;
+  double con_height = 0.30;
+
+  double con_left_margin = 0.03;
+  double con_top_margin = 0.05;
+
+  double dialog_width = 200;
+
+  double dialog_heading_fonSize = 14;
+
+  double auth_dialog_width = 0.20;
+  double auth_dialog_height = 0.50;
+
+  double item_iconSize = 20;
+  double item_fontSize = 15;
+
+  double title_cont_width = 0.06;
+  double title_font_size = 15;
+  double info_iconSize = 18;
+
+  double trail_width = 200;
+  double trail_height = 30;
+
+  double trail_row_width = 90;
+  double trail_row_height = 30;
+
+  double trail_icon_fontSize = 15;
+
+  double phone_no_cont_width = 110;
+  double phone_no_height = 30;
+
+  double take_email_iconSize = 22;
+
+  double update_btn_text = 16;
+
+  double rounded_btn_fontSize = 15;
+  double rounded_btn_width = 28;
+  double rounded_btn_height = 28; 
+
   //////////////////////////////////////////////////////
   // Password Reset Links Send Succfull Dialog :
   //////////////////////////////////////////////////////
   ResultDialog(context) async {
     CoolAlert.show(
         context: context,
-        width: 200,
+        width: dialog_width,
         title: 'Successful',
         type: CoolAlertType.success,
         widget: Text(
           'Rest password link send to registor email',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 14,
+              fontSize: dialog_heading_fonSize,
               color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade500),
         ));
   }
@@ -77,7 +121,7 @@ class _UserSettingsState extends State<UserSettings> {
   AskForPasswordRestDialot(context) async {
     CoolAlert.show(
         context: context,
-        width: 200,
+        width: dialog_width,
         title: 'Confirm Reset',
         type: CoolAlertType.confirm,
         onCancelBtnTap: () {
@@ -94,7 +138,7 @@ class _UserSettingsState extends State<UserSettings> {
           'The password reset link send you your registor mail address ',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 14,
+              fontSize: dialog_heading_fonSize,
               color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade500),
         ));
   }
@@ -106,7 +150,7 @@ class _UserSettingsState extends State<UserSettings> {
   AskBeforeRemoveUserProfile(context) async {
     CoolAlert.show(
         context: context,
-        width: 200,
+        width: dialog_width,
         title: 'Confirm',
         type: CoolAlertType.confirm,
         onCancelBtnTap: () {
@@ -125,7 +169,7 @@ class _UserSettingsState extends State<UserSettings> {
           'After confirm your Profile and Statups will remove completely',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 14,
+              fontSize: dialog_heading_fonSize,
               color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade500),
         ));
   }
@@ -141,8 +185,8 @@ class _UserSettingsState extends State<UserSettings> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                width: context.width * 0.20,
-                height: context.height * 0.50,
+                width: context.width * auth_dialog_width,
+                height: context.height * auth_dialog_height,
                 child: ReauthenticateWidget(
                   task: task,
                   updateMail: updateMail,
@@ -163,8 +207,8 @@ class _UserSettingsState extends State<UserSettings> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                  width: context.width * 0.20,
-                  height: context.height * 0.30,
+                  width: context.width * auth_dialog_width,
+                  height: context.height * auth_dialog_height,
                   child: PhoneNoVerifyDialogAlert(
                       noOperation: NumberOperation.update, key: UniqueKey())));
         });
@@ -180,19 +224,18 @@ class _UserSettingsState extends State<UserSettings> {
         builder: (context) {
           return AlertDialog(
               title: Container(
-                alignment: Alignment.topRight,
+                  alignment: Alignment.topRight,
                   child: IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                       icon: Icon(Icons.cancel_outlined,
                           color: Colors.blueGrey.shade300, size: 20))),
-
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                width: context.width * 0.20,
-                height: context.height * 0.30,
+                width: context.width * auth_dialog_width,
+                height: context.height * auth_dialog_height,
                 child: DeleteStartupDialogCont(),
               ));
         });
@@ -277,9 +320,371 @@ class _UserSettingsState extends State<UserSettings> {
 
   @override
   Widget build(BuildContext context) {
-////////////////////////////////////////////
+    page_width = 0.45;
+    page_height = 0.45;
+
+    page_elevation = 10;
+
+    con_width = 0.20;
+    con_height = 0.30;
+
+    con_left_margin = 0.03;
+    con_top_margin = 0.05;
+
+    dialog_width = 200;
+
+    dialog_heading_fonSize = 14;
+
+    auth_dialog_width = 0.20;
+    auth_dialog_height = 0.50;
+
+    item_iconSize = 20;
+    item_fontSize = 15;
+
+    title_cont_width = 0.06;
+    title_font_size = 15;
+    info_iconSize = 18;
+
+    trail_width = 200;
+    trail_height = 30;
+
+    trail_row_width = 90;
+    trail_row_height = 30;
+
+    trail_icon_fontSize = 15;
+
+    phone_no_cont_width = 110;
+    phone_no_height = 30;
+
+    take_email_iconSize = 22;
+
+    update_btn_text = 16;
+
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1500) {
+      page_width = 0.45;
+      page_height = 0.45;
+
+      page_elevation = 10;
+
+      con_width = 0.20;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 20;
+      item_fontSize = 15;
+
+      title_cont_width = 0.06;
+      title_font_size = 15;
+      info_iconSize = 18;
+
+      trail_width = 200;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 22;
+
+      update_btn_text = 16;
+
+      rounded_btn_fontSize = 15;
+      rounded_btn_width = 28;
+      rounded_btn_height = 28; 
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      page_width = 0.60;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.20;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 20;
+      item_fontSize = 15;
+
+      title_cont_width = 0.06;
+      title_font_size = 15;
+      info_iconSize = 18;
+
+      trail_width = 200;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 22;
+
+      update_btn_text = 16;
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      page_width = 0.65;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.20;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 20;
+      item_fontSize = 15;
+
+      title_cont_width = 0.06;
+      title_font_size = 15;
+      info_iconSize = 18;
+
+      trail_width = 200;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 22;
+
+      update_btn_text = 16;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      page_width = 0.75;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.20;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 20;
+      item_fontSize = 15;
+
+      title_cont_width = 0.06;
+      title_font_size = 15;
+      info_iconSize = 18;
+
+      trail_width = 200;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 22;
+
+      update_btn_text = 16;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      page_width = 0.90;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.40;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 17;
+      item_fontSize = 14;
+
+      title_cont_width = 0.06;
+      title_font_size = 14;
+      info_iconSize = 16;
+
+      trail_width = 120;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 20;
+
+      update_btn_text = 16;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      page_width = 0.90;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.40;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 17;
+      item_fontSize = 14;
+
+      title_cont_width = 0.06;
+      title_font_size = 14;
+      info_iconSize = 16;
+
+      trail_width = 110;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 20;
+
+      update_btn_text = 16;
+
+      rounded_btn_fontSize = 15;
+      rounded_btn_width = 28;
+      rounded_btn_height = 28; 
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      page_width = 0.95;
+      page_height = 0.60;
+
+      page_elevation = 10;
+
+      con_width = 0.40;
+      con_height = 0.30;
+
+      con_left_margin = 0.03;
+      con_top_margin = 0.05;
+
+      dialog_width = 200;
+
+      dialog_heading_fonSize = 14;
+
+      auth_dialog_width = 0.20;
+      auth_dialog_height = 0.50;
+
+      item_iconSize = 17;
+      item_fontSize = 12;
+
+      title_cont_width = 0.06;
+      title_font_size = 12;
+      
+      info_iconSize = 14;
+
+      trail_width = 110;
+      trail_height = 30;
+
+      trail_row_width = 90;
+      trail_row_height = 30;
+
+      trail_icon_fontSize = 15;
+
+      phone_no_cont_width = 110;
+      phone_no_height = 30;
+
+      take_email_iconSize = 16;
+
+      update_btn_text = 12;
+
+      rounded_btn_fontSize = 12;
+      rounded_btn_width = 22;
+      rounded_btn_height = 22; 
+      print('480');
+    }
+
+    ////////////////////////////////////////////
     /// GET REQUIREMENTS :
-////////////////////////////////////////////
+    ////////////////////////////////////////////
     GetLocalStorageData() async {
       user_id = await homeViewState.GetUserId();
       usertype = await homeViewState.GetUserType();
@@ -291,9 +696,9 @@ class _UserSettingsState extends State<UserSettings> {
       }
     }
 
-////////////////////////////////////
+    ////////////////////////////////////
     /// SET REQUIREMENTS :
-////////////////////////////////////
+    ////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {
@@ -323,18 +728,20 @@ class _UserSettingsState extends State<UserSettings> {
 
   Container MainMethod(BuildContext context) {
     return Container(
-        width: context.width * 0.45,
-        height: context.height * 0.45,
+        width: context.width * page_width,
+        height: context.height * page_height,
         child: Card(
-            elevation: 10,
+            elevation: page_elevation,
             shadowColor: Colors.blueGrey,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
             child: Container(
-                width: context.width * 0.20,
-                height: context.height * 0.30,
-                margin: EdgeInsets.only(left: context.width * 0.03),
+                width: context.width * con_width,
+                height: context.height * con_height,
+                margin: EdgeInsets.only(
+                    left: context.width * con_left_margin,
+                    top: context.height * con_top_margin),
                 child: ListView(
                   children: [
                     // Edit Profile :
@@ -425,76 +832,107 @@ class _UserSettingsState extends State<UserSettings> {
           fun();
         },
         autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
         title: AutoSizeText.rich(
           TextSpan(text: title),
-          style: TextStyle(fontSize: 15, color: light_color_type1),
+          style: TextStyle(fontSize: item_fontSize, color: light_color_type1),
         ),
       ),
     );
   }
 
-  Container EditEmailItem({title, icon, fun}) {
+
+
+
+  Container EditEmailItem({title, icon, fun, simpleEditButton}) {
     return Container(
       padding: EdgeInsets.all(4),
       child: ListTile(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
-        selected: true,
-        mouseCursor: MouseCursor.defer,
-        onTap: () {},
-        autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
-        title: Container(
-          width: context.width * 0.06,
-          child: Row(
-            children: [
-              AutoSizeText.rich(
-                TextSpan(text: title),
-                style: TextStyle(fontSize: 15, color: light_color_type1),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Icon(
-                  Icons.verified_outlined,
-                  size: 18,
-                  color: primary_light,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          style: ListTileStyle.drawer,
+          hoverColor: Colors.grey.shade200,
+          selected: true,
+          mouseCursor: MouseCursor.defer,
+          onTap: () {},
+          autofocus: true,
+          leading: Icon(icon, size: item_iconSize, color: light_color_type2),
+          title: Container(
+            width: context.width * title_cont_width,
+            child: Row(
+              children: [
+                AutoSizeText.rich(
+                  TextSpan(text: title),
+                  style: TextStyle(
+                      fontSize: title_font_size, color: light_color_type1),
                 ),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Icon(
+                    Icons.verified_outlined,
+                    size: info_iconSize,
+                    color: primary_light,
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        trailing: Container(
-          width: 200,
-          height: 30,
-          child: Row(
-            children: [
+          trailing: context.width < 640
+              ?
+
+              // Rounded Edit Button :
+              Tooltip(
+                  message: 'edit',
+                  
+                  child: Container(
+                    width: rounded_btn_width,
+                    height: rounded_btn_height,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueGrey.shade300),
+                        borderRadius: BorderRadius.circular(50)),
+                  
+                    child: IconButton(
+                        padding: EdgeInsets.all(4),
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.edit,
+                          size: rounded_btn_fontSize,
+                        )),
+                  ),
+                )
+              :
+
+
+              // Simple Edit Button :
               Container(
-                width: 90,
-                height: 30,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.blueGrey.shade300)),
-                child: TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        is_update_mail
-                            ? is_update_mail = false
-                            : is_update_mail = true;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.edit,
-                      size: 15,
-                    ),
-                    label: Text('update')),
-              ),
-            ],
-          ),
-        ),
-      ),
+                  width: trail_width,
+                  height: trail_height,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: trail_row_width,
+                        height: trail_row_height,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border:
+                                Border.all(color: Colors.blueGrey.shade300)),
+                        child: TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                is_update_mail
+                                    ? is_update_mail = false
+                                    : is_update_mail = true;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              size: trail_icon_fontSize,
+                            ),
+                            label: Text('update')),
+                      ),
+                    ],
+                  ),
+                )),
     );
   }
 
@@ -510,31 +948,33 @@ class _UserSettingsState extends State<UserSettings> {
         mouseCursor: MouseCursor.defer,
         onTap: () {},
         autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
         title: Container(
-          width: context.width * 0.06,
+          width: context.width * title_cont_width,
           child: Row(
             children: [
               AutoSizeText.rich(
                 TextSpan(text: title, children: [
                   TextSpan(
                     text: amount,
-                    style: TextStyle(fontSize: 17, color: light_color_type1),
+                    style: TextStyle(
+                        fontSize: title_font_size, color: light_color_type1),
                   )
                 ]),
-                style: TextStyle(fontSize: 15, color: light_color_type1),
+                style: TextStyle(
+                    fontSize: title_font_size, color: light_color_type1),
               ),
             ],
           ),
         ),
         trailing: Container(
-          width: 200,
-          height: 30,
+          width: trail_width,
+          height: trail_height,
           child: Row(
             children: [
               Container(
-                width: 90,
-                height: 30,
+                width: trail_row_width,
+                height: trail_row_height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.blueGrey.shade300)),
@@ -546,9 +986,9 @@ class _UserSettingsState extends State<UserSettings> {
                             : is_update_achive_amount = true;
                       });
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.edit,
-                      size: 15,
+                      size: trail_icon_fontSize,
                     ),
                     label: Text('update')),
               ),
@@ -571,21 +1011,22 @@ class _UserSettingsState extends State<UserSettings> {
         mouseCursor: MouseCursor.defer,
         onTap: () {},
         autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
         title: Container(
-          width: context.width * 0.06,
+          width: context.width * title_cont_width,
           child: Row(
             children: [
               AutoSizeText.rich(
                 TextSpan(text: title),
-                style: TextStyle(fontSize: 15, color: light_color_type1),
+                style: TextStyle(
+                    fontSize: title_font_size, color: light_color_type1),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: fireInstance.currentUser?.phoneNumber != null
                     ? Icon(
                         Icons.verified_outlined,
-                        size: 18,
+                        size: info_iconSize,
                         color: primary_light,
                       )
                     : Container(),
@@ -594,45 +1035,100 @@ class _UserSettingsState extends State<UserSettings> {
           ),
         ),
         trailing: Container(
-          width: 200,
+          width: trail_width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               fireInstance.currentUser?.phoneNumber != null
-                  ? Container(
-                      width: 90,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.blueGrey.shade300)),
-                      child: TextButton.icon(
-                          icon: const Icon(
-                            Icons.edit,
-                            size: 15,
+                  ? context.width < 640
+                      ?
+
+                      // Rounded Button :
+                      Tooltip(
+                          message: 'edit',
+                          child: Container(
+                            width: rounded_btn_width,
+                            height: rounded_btn_height,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.blueGrey.shade300),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: IconButton(
+                                padding: EdgeInsets.all(4),
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: rounded_btn_fontSize,
+                                )),
                           ),
-                          onPressed: () async {
-                            await fun();
-                          },
-                          label: Text('update')),
-                    )
-                  : fireInstance.currentUser?.phoneNumber == null
-                      ? Container(
-                          width: 110,
-                          height: 30,
+                        )
+                      :
+                      // Simple Phone no Update Button  :
+                      Container(
+                          width: trail_row_width,
+                          height: trail_row_height,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               border:
                                   Border.all(color: Colors.blueGrey.shade300)),
                           child: TextButton.icon(
-                              icon: const Icon(
-                                Icons.check,
-                                size: 15,
+                              icon: Icon(
+                                Icons.edit,
+                                size: trail_icon_fontSize,
                               ),
                               onPressed: () async {
                                 await fun();
                               },
-                              label: Text('verify now')),
+                              label: const Text(
+                                'update',
+                              )),
                         )
+                  : fireInstance.currentUser?.phoneNumber == null
+                      ? context.width < 640
+                          ?
+                          // Rounded Button :
+                          Container(
+                              margin:
+                                  EdgeInsets.only(left: context.width * 0.14),
+                              child: Tooltip(
+                                message: 'verify',
+                                child: Container(
+                                  width: rounded_btn_width,
+                                  height: rounded_btn_height,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.blueGrey.shade300),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: IconButton(
+                                      padding: EdgeInsets.all(4),
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.check,
+                                        size: rounded_btn_fontSize,
+                                      )),
+                                ),
+                              ),
+                            )
+                          :
+
+                          // Simple Phone no Verify Button :
+                          Container(
+                              width: phone_no_cont_width,
+                              height: phone_no_height,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                      color: Colors.blueGrey.shade300)),
+                              child: TextButton.icon(
+                                  icon: Icon(
+                                    Icons.check,
+                                    size: trail_icon_fontSize,
+                                  ),
+                                  onPressed: () async {
+                                    await fun();
+                                  },
+                                  label: Text('verify now')),
+                            )
                       : Container()
             ],
           ),
@@ -640,6 +1136,8 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
+
+
 
   Container TakeEmailAddress({title, icon, fun}) {
     return Container(
@@ -656,7 +1154,7 @@ class _UserSettingsState extends State<UserSettings> {
           // fun();
         },
         autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
         title: Container(
           child: TextField(
               controller: updateEmailFeild,
@@ -669,15 +1167,15 @@ class _UserSettingsState extends State<UserSettings> {
                   ))),
         ),
         trailing: Container(
-          width: 200,
-          height: 30,
+          width: trail_width,
+          height: trail_height,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: 90,
-                height: 30,
+                width: trail_row_width,
+                height: trail_row_height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.blueGrey)),
@@ -698,9 +1196,9 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_mail = false;
                       });
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.cancel_outlined,
-                      size: 22,
+                      size: take_email_iconSize,
                     )),
               )
             ],
@@ -709,6 +1207,10 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
+
+
+
+
 
   Container TakeAchiveAmount({title, icon, fun}) {
     return Container(
@@ -725,7 +1227,7 @@ class _UserSettingsState extends State<UserSettings> {
           // fun();
         },
         autofocus: true,
-        leading: Icon(icon, size: 20, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
         title: Container(
           child: TextField(
               controller: updateAchiveAmount,
@@ -738,15 +1240,15 @@ class _UserSettingsState extends State<UserSettings> {
                   ))),
         ),
         trailing: Container(
-          width: 200,
-          height: 30,
+          width: trail_width,
+          height: trail_height,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: 90,
-                height: 30,
+                width: trail_row_width,
+                height: trail_row_height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.blueGrey)),
@@ -767,9 +1269,9 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_achive_amount = false;
                       });
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.cancel_outlined,
-                      size: 22,
+                      size: take_email_iconSize,
                     )),
               )
             ],
@@ -778,6 +1280,10 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
+
+
+
+
 
   Container WarningItem({context, title, icon, fun}) {
     return Container(
@@ -793,10 +1299,10 @@ class _UserSettingsState extends State<UserSettings> {
           await fun(context);
         },
         autofocus: true,
-        leading: Icon(icon, size: 20, color: Colors.red.shade300),
+        leading: Icon(icon, size: item_iconSize, color: Colors.red.shade300),
         title: AutoSizeText.rich(TextSpan(text: title),
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: title_font_size,
               color: Colors.red,
             )),
       ),

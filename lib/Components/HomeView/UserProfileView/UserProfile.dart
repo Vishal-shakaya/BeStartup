@@ -26,6 +26,16 @@ class HomeViewUserProfile extends StatelessWidget {
   var usertype;
   var user_id;
 
+  double member_Section_fonsize = 200;
+  double profile_image_radius = 55;
+  double spacer = 5; 
+
+  double name_fonSize = 16;
+  double position_fontSize = 11;
+  double contact_icon_fonSize = 16;
+
+  double contact_fontSiz = 11;
+
   ////////////////////////////////////
   /// Open Mail Box: to send mail:
   ////////////////////////////////////
@@ -103,6 +113,72 @@ class HomeViewUserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     member_Section_fonsize = 200;
+     profile_image_radius = 55;
+     spacer = 5; 
+
+     name_fonSize = 16;
+     position_fontSize = 11;
+     contact_icon_fonSize = 16;
+
+     contact_fontSiz = 11;
+   
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+
+    // DEFAULT :
+    if (context.width > 1500) {
+        member_Section_fonsize = 200;
+        profile_image_radius = 55;
+        spacer = 5; 
+
+        name_fonSize = 16;
+        position_fontSize = 11;
+        contact_icon_fonSize = 16;
+
+        contact_fontSiz = 11;
+      print('Greator then 1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+        member_Section_fonsize = 200;
+        profile_image_radius = 40;
+        spacer = 5; 
+
+        name_fonSize = 14;
+        position_fontSize = 11;
+        contact_icon_fonSize = 14;
+
+        contact_fontSiz = 11;
+      print('480');
+    }
+
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -135,13 +211,13 @@ class HomeViewUserProfile extends StatelessWidget {
         ProfileImage(),
         // POSITION:
         SizedBox(
-          width: 200,
+          width: member_Section_fonsize,
           child: Column(
             children: [
-              const SizedBox(height: 5),
+              SizedBox(height: spacer),
               MemName(),
 
-              const SizedBox(height: 5),
+              SizedBox(height: spacer),
 
               // CONTACT EMAIL ADDRESS :
 
@@ -174,9 +250,11 @@ class HomeViewUserProfile extends StatelessWidget {
           right: Radius.circular(80),
         ),
       ),
+      
       child: Container(
           child: CircleAvatar(
-        radius: 55,
+        radius: profile_image_radius,
+
         backgroundColor: Colors.blueGrey[100],
         foregroundImage: NetworkImage(user_image),
       )),
@@ -191,10 +269,10 @@ class HomeViewUserProfile extends StatelessWidget {
               TextSpan(style: Get.textTheme.headline5, children: [
         TextSpan(
             text: username,
-            style: const TextStyle(
+            style: TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.black87,
-                fontSize: 16))
+                fontSize: name_fonSize))
       ]))),
     );
   }
@@ -207,11 +285,11 @@ class HomeViewUserProfile extends StatelessWidget {
       TextSpan(
           text: user_position,
           style: TextStyle(
-              fontWeight: FontWeight.w600, color: Colors.black87, fontSize: 11))
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+              fontSize: position_fontSize))
     ])));
   }
-
-
 
   InkWell MemContact({text, icon, func}) {
     return InkWell(
@@ -228,17 +306,16 @@ class HomeViewUserProfile extends StatelessWidget {
             child: Icon(
               icon,
               color: Colors.orange.shade800,
-              size: 16,
+              size: contact_icon_fonSize,
             ),
           ),
-          
           AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
             TextSpan(
                 text: text,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     color: Colors.blueGrey.shade700,
-                    fontSize: 11))
+                    fontSize: contact_fontSiz))
           ])),
         ],
       )),

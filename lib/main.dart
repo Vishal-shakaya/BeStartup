@@ -177,25 +177,31 @@ class _MyAppState extends State<MyApp> {
 
 
         GetPage(
-          name: user_registration_url, page: () => RegistrationView()),
+          name: user_registration_url, 
+          page: () => RegistrationView()),
 
         GetPage(
-          name: signup_url, page: () => SignupView()),
+          name: signup_url, 
+          page: () => SignupView()),
 
         GetPage(
-          name: login_handler_url, page: () => LoginHandler()),
+          name: login_handler_url, 
+          page: () => LoginHandler()),
 
         GetPage(
-          name: startup_slides_url, page: () => StartupSlides()),
+          name: startup_slides_url, 
+          page: () => StartupSlides()),
 
         // BUSINESS DETAIL :
         GetPage(
-            name: create_business_detail_url, page: () => BusinessDetailView()),
+            name: create_business_detail_url, 
+            page: () => BusinessDetailView()),
         GetPage(
             name: create_business_thumbnail_url,
             page: () => BusinessThumbnailView()),
         GetPage(
-            name: create_business_vision_url, page: () => BusinessVisionView()),
+            name: create_business_vision_url, 
+            page: () => BusinessVisionView()),
         GetPage(
             name: create_business_milestone_url,
             page: () => BusinessMileStone()),
@@ -210,30 +216,48 @@ class _MyAppState extends State<MyApp> {
             page: () => BusinessWhyInvestView()),
 
         // FOUNDER REGISTRATION AND TEAM
-        GetPage(name: create_founder, page: () => RegistorFounderView()),
-        GetPage(name: create_business_team, page: () => RegistorTeamView()),
+        GetPage(
+          name: create_founder, 
+          page: () => RegistorFounderView()),
+        GetPage(
+          name: create_business_team, 
+          page: () => RegistorTeamView()),
 
         // STARTUP PAGE:
-        GetPage(name: startup_view_url, page: () => StartupView()),
+        GetPage(
+          name: startup_view_url, 
+          page: () => StartupView()),
 
         // SUB-ROUTES :
         // 1 Team Page :
-        GetPage(name: team_page_url, page: () => TeamPage()),
-        GetPage(name: vision_page_url, page: () => VisionPage()),
-        GetPage(name: invest_page_url, page: () => InvestPage()),
+        GetPage(
+          name: team_page_url, 
+          page: () => TeamPage()),
+        GetPage(
+          name: vision_page_url, 
+          page: () => VisionPage()),
+        GetPage(
+          name: invest_page_url, 
+          page: () => InvestPage()),
 
         // HOME PAGE
-        GetPage(name: home_page_url, page: () => HomeView()),
+        GetPage(
+          name: home_page_url, 
+          page: () => HomeView()),
 
         // REGISTOR INVESTOR :
-        GetPage(name: select_investor_choise, page: () => ChooseCatigoryView()),
+        GetPage(
+          name: select_investor_choise, 
+          page: () => ChooseCatigoryView()),
 
         GetPage(
             name: investor_registration_form,
             page: () => InvestorRegistorForm()),
 
         // SELECT PLAN
-        GetPage(name: select_plan_url, page: () => SelectPlan()),
+        GetPage(
+          name: select_plan_url, 
+          page: () => SelectPlan()),
       ],
     );
     });

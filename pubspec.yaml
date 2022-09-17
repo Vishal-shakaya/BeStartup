@@ -97,6 +97,7 @@ dependencies:
   hive: ^2.2.3
   rxdart: ^0.27.5
   sizer: ^2.0.15
+  animated_toggle_switch: ^0.5.2
 
 dev_dependencies:
   flutter_test:

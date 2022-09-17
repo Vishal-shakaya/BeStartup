@@ -56,30 +56,108 @@ class ProfileStoryThumbnail extends StatelessWidget {
   /// Main Method
 ///////////////////////////////
   Container MainMethod(BuildContext context) {
+     image_cont_width = 0.30;
+     image_cont_height = 0.15;
+
+     image_thumb_width = 0.30;
+     image_thumb_height = 0.14;
+
+		////////////////////////////////////
+    /// RESPONSIVENESS : 
+    ////////////////////////////////////
+		// DEFAULT :
+    if (context.width > 1500) {
+      image_cont_width = 0.30;
+      image_cont_height = 0.15;
+
+      image_thumb_width = 0.30;
+      image_thumb_height = 0.14;
+      print('Greator then 1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      image_cont_width = 0.40;
+      image_cont_height = 0.15;
+
+      image_thumb_width = 0.40;
+      image_thumb_height = 0.14;
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+        image_cont_width = 0.65;
+        image_cont_height = 0.15;
+
+        image_thumb_width = 0.65;
+        image_thumb_height = 0.14;
+        print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+        image_cont_width = 0.80;
+        image_cont_height = 0.15;
+
+        image_thumb_width = 0.80;
+        image_thumb_height = 0.14;
+        print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+        image_cont_width = 0.85;
+        image_cont_height = 0.15;
+
+        image_thumb_width = 0.85;
+        image_thumb_height = 0.14;
+        print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+        image_cont_width = 0.95;
+        image_cont_height = 0.15;
+
+        image_thumb_width = 0.85;
+        image_thumb_height = 0.14;
+      print('480');
+      }
+
+
     return Container(
-      margin: EdgeInsets.only(top: context.height * 0.03),
+      margin: EdgeInsets.only(top: context.height * 0.02),
+      
       child: Card(
         elevation: 5,
         shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(
           left: Radius.circular(19),
           right: Radius.circular(19),
         )),
+       
         child: Container(
             height: context.height * image_cont_height,
             width: context.width * image_cont_width,
-            padding: EdgeInsets.all(2),
+            padding: const EdgeInsets.all(2),
+          
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
-              borderRadius: BorderRadius.horizontal(
+              borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(20), right: Radius.circular(20)),
             ),
+          
             child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
+              borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(19),
                 right: Radius.circular(19),
               ),
+          
               child: Image.network(thumbnail,
                   width: context.width * image_thumb_width,
                   height: context.height * image_thumb_height,
@@ -88,6 +166,7 @@ class ProfileStoryThumbnail extends StatelessWidget {
       ),
     );
   }
+
 
   Center ShimmerModel(BuildContext context) {
     return Center(
