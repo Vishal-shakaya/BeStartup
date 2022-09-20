@@ -26,9 +26,35 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   double invest_btn_height = 37;
 
+  double invest_btn_fontSize = 16;
+
+  double invest_btn_letter_spacing = 2.5;
+
   double static_sec_width = 210;
 
   double static_sec_height = 205;
+
+  double dialog_width = 0.20;
+
+  double dialog_height = 0.30;
+
+  double static_row_width = 200;
+
+  double static_row_title_fontSize = 15;
+
+  double static_row_desc_fontSize = 14;
+
+  double static_row_desc_cont_width = 80;
+
+  double static_row_padding = 7;
+
+  double card_top_padding = 10;
+
+  double card_left_padding = 10;
+
+  double card_right_padding = 10;
+
+  double card_bottom_padding = 10;
 
   var my_context = Get.context;
 
@@ -42,7 +68,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   var startup_id;
   var user_id;
-  bool? is_liked=false;
+  bool? is_liked = false;
 
 /////////////////////////////////////////
   /// GET REQUIRED PARAM :
@@ -80,8 +106,8 @@ class _InvestmentChartState extends State<InvestmentChart> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                  width: context.width * 0.20,
-                  height: context.height * 0.30,
+                  width: context.width * dialog_width,
+                  height: context.height * dialog_height,
                   child: UpdateInvestmentDialog(
                     updateInvestmentFun: UpdateInvestmentAmount,
                   )));
@@ -94,10 +120,10 @@ class _InvestmentChartState extends State<InvestmentChart> {
   GetLocalStorageData() async {
     var startupDetialView = Get.put(StartupDetailViewState());
     var userStateView = Get.put(UserState());
- 
-    startup_id =  await startupDetialView.GetStartupId();
+
+    startup_id = await startupDetialView.GetStartupId();
     user_id = await startupDetialView.GetFounderId();
-    is_admin =await startupDetialView.GetIsUserAdmin();
+    is_admin = await startupDetialView.GetIsUserAdmin();
 
     final resp =
         await startupConnector.FetchBusinessDetail(startup_id: startup_id);
@@ -121,6 +147,325 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   @override
   Widget build(BuildContext context) {
+    invest_btn_width = 150;
+
+    invest_btn_height = 37;
+
+    invest_btn_fontSize = 16;
+
+    invest_btn_letter_spacing = 2.5;
+
+    static_sec_width = 210;
+
+    static_sec_height = 205;
+
+    dialog_width = 0.20;
+
+    dialog_height = 0.30;
+
+    static_row_width = 200;
+
+    static_row_title_fontSize = 15;
+
+    static_row_desc_fontSize = 14;
+
+    static_row_padding = 7;
+
+    static_row_desc_cont_width = 80;
+
+    card_top_padding = 10;
+
+    card_left_padding = 10;
+
+    card_right_padding = 10;
+
+    card_bottom_padding = 10;
+
+    if (context.width > 1600) {
+      invest_btn_width = 150;
+
+      invest_btn_height = 37;
+
+      invest_btn_fontSize = 16;
+
+      invest_btn_letter_spacing = 2.5;
+
+      static_sec_width = 210;
+
+      static_sec_height = 205;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_width = 200;
+
+      static_row_title_fontSize = 15;
+
+      static_row_desc_fontSize = 14;
+
+      static_row_desc_cont_width = 80;
+
+      card_top_padding = 10;
+
+      card_left_padding = 10;
+
+      card_right_padding = 10;
+
+      card_bottom_padding = 10;
+
+      print('Greator 1600');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      invest_btn_width = 150;
+
+      invest_btn_height = 37;
+
+      invest_btn_fontSize = 16;
+
+      invest_btn_letter_spacing = 2.5;
+
+      static_sec_width = 210;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 60;
+
+      static_sec_height = 205;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 15;
+
+      static_row_desc_fontSize = 14;
+
+      print('1500');
+    }
+
+    if (context.width < 1400) {
+      print('1400');
+    }
+
+    if (context.width < 1300) {
+      invest_btn_width = 140;
+
+      invest_btn_height = 37;
+
+      invest_btn_fontSize = 16;
+
+      invest_btn_letter_spacing = 2.5;
+
+      static_sec_width = 200;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 60;
+
+      static_sec_height = 205;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 15;
+
+      static_row_desc_fontSize = 14;
+      print('1300');
+    }
+
+    if (context.width < 1200) {
+      invest_btn_width = 130;
+
+      invest_btn_height = 36;
+
+      invest_btn_fontSize = 15;
+
+      invest_btn_letter_spacing = 2;
+
+      static_sec_width = 200;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 60;
+
+      static_sec_height = 200;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 14;
+
+      static_row_desc_fontSize = 13;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      invest_btn_width = 100;
+
+      invest_btn_height = 30;
+
+      invest_btn_fontSize = 13;
+
+      invest_btn_letter_spacing = 2;
+
+      static_sec_width = 170;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 40;
+
+      static_sec_height = 180;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 13;
+
+      static_row_desc_fontSize = 12;
+
+      card_top_padding = 5;
+
+      card_left_padding = 10;
+
+      card_right_padding = 10;
+
+      card_bottom_padding = 10;
+
+      static_row_padding = 6;
+
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      invest_btn_width = 85;
+
+      invest_btn_height = 25;
+
+      invest_btn_fontSize = 12;
+
+      invest_btn_letter_spacing = 1.5;
+
+      static_sec_width = 160;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 35;
+
+      static_row_padding = 5;
+
+      static_sec_height = 170;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 13;
+
+      static_row_desc_fontSize = 12;
+
+      card_top_padding = 5;
+
+      card_left_padding = 10;
+
+      card_right_padding = 10;
+
+      card_bottom_padding = 10;
+
+      print('640');
+    }
+    // SMALL TABLET:
+    if (context.width < 550) {
+      invest_btn_width = 85;
+
+      invest_btn_height = 25;
+
+      invest_btn_fontSize = 12;
+
+      invest_btn_letter_spacing = 1.5;
+
+      static_sec_width = 150;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 35;
+
+      static_row_padding = 4;
+
+      static_sec_height = 161;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 12;
+
+      static_row_desc_fontSize = 11;
+
+      card_top_padding = 6;
+
+      card_left_padding = 10;
+
+      card_right_padding = 10;
+
+      card_bottom_padding = 10;
+
+      print('550');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      invest_btn_width = 85;
+
+      invest_btn_height = 25;
+
+      invest_btn_fontSize = 12;
+
+      invest_btn_letter_spacing = 1.5;
+
+      static_sec_width = 150;
+
+      static_row_width = 200;
+
+      static_row_desc_cont_width = 35;
+
+      static_row_padding = 4;
+
+      static_sec_height = 161;
+
+      dialog_width = 0.20;
+
+      dialog_height = 0.30;
+
+      static_row_title_fontSize = 12;
+
+      static_row_desc_fontSize = 11;
+
+      card_top_padding = 6;
+
+      card_left_padding = 10;
+
+      card_right_padding = 10;
+
+      card_bottom_padding = 10;
+      print('480');
+    }
+
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -147,7 +492,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   /// MAIN METHOD :
   //////////////////////////////////////////
   Container MainMethod(context) {
-    return Container(
+    Container mainChart = Container(
       width: static_sec_width,
       height: static_sec_height,
       padding: EdgeInsets.all(10),
@@ -157,7 +502,12 @@ class _InvestmentChartState extends State<InvestmentChart> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(
+            top: card_top_padding,
+            left: card_left_padding,
+            right: card_right_padding,
+            bottom: card_bottom_padding,
+          ),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               border: Border.all(
@@ -168,9 +518,12 @@ class _InvestmentChartState extends State<InvestmentChart> {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              StaticRow(title: 'Team', value: "$team_members"),
-              StaticRow(title: 'Desire', value: "₹ $desire_amount"),
-              StaticRow(title: 'Invest', value: "₹ $invested_amount"),
+              // StaticRow(title: 'Team', value: "$team_members"),
+              // StaticRow(title: 'Desire', value: "₹ $desire_amount"),
+              // StaticRow(title: 'Invest', value: "₹ $invested_amount"),
+              StaticRow(title: 'Team', value: "10"),
+              StaticRow(title: 'Desire', value: "₹ 50L"),
+              StaticRow(title: 'Invest', value: "₹ 80K"),
 
               // Submit Button :
               is_admin == true
@@ -185,6 +538,36 @@ class _InvestmentChartState extends State<InvestmentChart> {
         ),
       ),
     );
+
+    //////////////////////////////
+    /// Phone Static Chart :
+    //////////////////////////////
+     Container phoneChart = Container(
+        width: MediaQuery.of(context).size.width * 0.70,
+        height: MediaQuery.of(context).size.height * 0.10,
+        padding: EdgeInsets.all(2),
+        child: Card(
+          elevation: 2,
+          shadowColor: my_theme_shadow_color,
+          surfaceTintColor: my_theme_shadow_color,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              PhoneStaticRow(title: 'Team', value: "10"),
+              PhoneStaticRow(title: 'Desire', value: "₹ 50L"),
+              PhoneStaticRow(title: 'Invest', value: "₹ 80K",fun:UpdateInvetAlert),
+            ],
+          ),
+        ));
+
+
+
+    // Return Chart base on screen size : 
+    Container chart ;    
+    MediaQuery.of(context).size.width<480? chart= phoneChart: chart= mainChart ;
+    return chart; 
   }
 
 /////////////////////////////////////////////
@@ -195,7 +578,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
       margin: EdgeInsets.only(top: 5),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () {
           is_admin ? UpdateInvetAlert() : () {};
@@ -217,9 +600,9 @@ class _InvestmentChartState extends State<InvestmentChart> {
             child: Text(
               is_admin == true ? 'Update' : 'Invest now',
               style: TextStyle(
-                  letterSpacing: 2.5,
+                  letterSpacing: invest_btn_letter_spacing,
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: invest_btn_fontSize,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -230,37 +613,90 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   Container StaticRow({title, value}) {
     return Container(
-      width: 200,
-      padding: EdgeInsets.all(7),
+      width: static_row_width,
+      padding: EdgeInsets.all(static_row_padding),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
+      
           AutoSizeText.rich(
               TextSpan(
                   text: title,
                   style: GoogleFonts.openSans(
                     textStyle: TextStyle(),
                     color: light_color_type2,
-                    fontSize: 15,
+                    fontSize: static_row_title_fontSize,
                     fontWeight: FontWeight.w600,
                   )),
               style: Get.textTheme.headline5,
               overflow: TextOverflow.ellipsis),
+        
           Tooltip(
             message: value,
+          
             child: Container(
-              width: 80,
+              width: static_row_desc_cont_width,
               child: AutoSizeText.rich(
                   TextSpan(
                       text: value,
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
                         color: light_color_type2,
-                        fontSize: 14,
+                        fontSize: static_row_desc_fontSize,
                         fontWeight: FontWeight.w600,
                       )),
                   style: Get.textTheme.headline5,
                   overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container PhoneStaticRow({title, value,fun}) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+       
+          AutoSizeText.rich(
+              TextSpan(
+                  text: title,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(),
+                    color: light_color_type2,
+                    fontSize: static_row_title_fontSize,
+                    fontWeight: FontWeight.w600,
+                  )),
+              style: Get.textTheme.headline5,
+              overflow: TextOverflow.ellipsis),
+       
+       
+          Tooltip(
+            message: value,
+            child: InkWell(
+              onTap: () {
+                fun();
+              },
+
+              child: Container(
+                width: static_row_desc_cont_width,
+               
+                child: AutoSizeText.rich(
+                    TextSpan(
+                        text: value,
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(),
+                          color: light_color_type2,
+                          fontSize: static_row_desc_fontSize,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    style: Get.textTheme.headline5,
+                    overflow: TextOverflow.ellipsis),
+              ),
             ),
           ),
         ],

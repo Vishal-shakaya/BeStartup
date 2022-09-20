@@ -25,11 +25,12 @@ class _StartupViewState extends State<StartupView> {
   var founderConnector = Get.put(FounderConnector());
   var detailViewState = Get.put(StartupDetailViewState());
 
+  double page_width = 0.90;
+  double heading_fontSize = 23; 
+
   @override
   Widget build(BuildContext context) {
     var decode_data = jsonDecode(pageParam!);
-
-
 
     GetLocalStorageData() async {
       await detailViewState.SetStartupId(id: decode_data['startup_id']);
@@ -42,16 +43,13 @@ class _StartupViewState extends State<StartupView> {
       if (found_resp['response']) {
         final registor_mail = found_resp['data']['userDetail']['email'];
         final primary_mail = found_resp['data']['userContect']['primary_mail'];
-       
+
         var mail = await CheckAndGetPrimaryMail(
             primary_mail: primary_mail, default_mail: registor_mail);
 
         await detailViewState.SetFounderMail(mail: mail);
       }
-
     }
-
-
 
     return FutureBuilder(
         future: GetLocalStorageData(),
@@ -68,15 +66,62 @@ class _StartupViewState extends State<StartupView> {
         });
   }
 
-
-
   Container MainMethod(BuildContext context) {
+     page_width = 0.90;
+     heading_fontSize = 23; 
+    // DEFAULT :
+    if (context.width > 1700) {
+        page_width = 0.90;
+        heading_fontSize = 23; 
+      print('1700');
+    }
+    // DEFAULT :
+    if (context.width < 1700) {
+      print('1700');
+    }
+
+    // DEFAULT :
+    if (context.width < 1600) {
+        page_width = 0.90;
+        heading_fontSize = 23; 
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+        page_width = 1;
+        heading_fontSize = 23; 
+      print('480');
+    }
+
     return Container(
-      padding: EdgeInsets.all(5),
-      width: context.width * 0.90,
-     
+      padding: const EdgeInsets.all(5),
+      width: context.width * page_width,
+      
       child: SingleChildScrollView(
-     
         child: Column(
           children: [
             // CONTAIN :
@@ -94,7 +139,7 @@ class _StartupViewState extends State<StartupView> {
             // PRODUCT HEADING :
             StartupHeaderText(
               title: 'Product',
-              font_size: 32,
+              font_size: heading_fontSize,
             ),
 
             // PRODUCT AND SERVIVES :
@@ -103,14 +148,13 @@ class _StartupViewState extends State<StartupView> {
             // SERVICE HEADING :
             StartupHeaderText(
               title: 'Services',
-              font_size: 32,
+              font_size: heading_fontSize,
             ),
 
             // SERVICE SECTION :
             ServiceSection(),
 
-            
-             InvestorSection(),
+            InvestorSection(),
           ],
         ),
       ),

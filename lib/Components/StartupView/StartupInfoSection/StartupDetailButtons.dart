@@ -1,4 +1,3 @@
-
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
 import 'package:be_startup/AppState/StartupState.dart';
@@ -13,11 +12,11 @@ import 'package:ionicons/ionicons.dart';
 class StartupDetailButtons extends StatefulWidget {
   var user_id;
   var startup_id;
-  var is_saved; 
+  var is_saved;
   StartupDetailButtons({
     required this.user_id,
     required this.startup_id,
-    required this.is_saved, 
+    required this.is_saved,
     Key? key,
   }) : super(key: key);
 
@@ -30,6 +29,13 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   var startupViewConnector = Get.put(StartupViewConnector());
   var startupState = Get.put(StartupDetailViewState());
   var userState = Get.put(UserState());
+
+  double elevation = 4;
+
+  double icon_fontSize = 23; 
+
+  double btn_width = 45; 
+  double btn_height = 45 ; 
 
   /// It checks if the startup is already saved by the user,
   /// if yes then it unsaves it, if no then it
@@ -64,12 +70,13 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   }
 
 
+
 ///////////////////////////////////////
-  /// Send Mail to founder
-  /// Add Default field :
-  /// 1 founder mail
-  /// 2 Title : Subject
-  /// 3 body : message
+/// Send Mail to founder
+/// Add Default field :
+/// 1 founder mail
+/// 2 Title : Subject
+/// 3 body : message
 ///////////////////////////////////////
   Future<void> SendMail() async {
     final founder_mail = await startupState.GetFounderMail() ?? '';
@@ -97,17 +104,80 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   }
 
 
-  // SET DEFAULT STATE : 
+
+  // SET DEFAULT STATE :
   @override
   void initState() {
-    // TODO: implement initState
     is_saved = widget.is_saved;
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    
+     elevation = 4;
+
+     icon_fontSize = 23; 
+
+     btn_width = 45; 
+
+     btn_height = 45 ; 
+
+
+		// DEFAULT :
+    if (context.width > 1600) {
+        elevation = 4;
+
+        icon_fontSize = 23; 
+
+        btn_width = 45; 
+
+        btn_height = 45 ; 
+      print('Greator then 1600');
+      }
+
+    if (context.width < 1600) {
+      print('1600');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+         elevation = 2;
+        
+         icon_fontSize = 15; 
+
+         btn_width = 30; 
+
+         btn_height = 30 ; 
+
+         print('480');
+      }
+
+
+
     return Container(
         margin: EdgeInsets.only(top: 3),
         child: SingleChildScrollView(
@@ -117,51 +187,59 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
               //////////////////////////////////////////////
               // Like Button save SUP to investor profile :
               //////////////////////////////////////////////
-              Card(
-                elevation: 4,
-                shadowColor: Colors.redAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
+              Container(
+                width: btn_width,
+                height: btn_height,
+                child: Card(
+                  elevation: elevation,
+                  shadowColor: Colors.redAccent,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                  ),
+                  child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      tooltip: 'Save for Later Review',
+                      onPressed: () async {
+                        await LikeUnlikeStartupProcess();
+                      },
+                      icon: is_saved == true
+                          ?  Icon(
+                              CupertinoIcons.heart_fill,
+                              color: Colors.redAccent,
+                              size: icon_fontSize,
+                            )
+                          :  Icon(
+                              CupertinoIcons.heart,
+                              color: Colors.redAccent,
+                              size: icon_fontSize,
+                            )),
                 ),
-                child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    tooltip: 'Save for Later Review',
-                    onPressed: () async {
-                      await LikeUnlikeStartupProcess();
-                    },
-                    icon: is_saved == true
-                        ? const Icon(
-                            CupertinoIcons.heart_fill,
-                            color: Colors.redAccent,
-                            size: 23,
-                          )
-                        : const Icon(
-                            CupertinoIcons.heart,
-                            color: Colors.redAccent,
-                            size: 23,
-                          )),
               ),
 
               /////////////////////////////////////////
               // Mail Button  Send to to Founder :
               /////////////////////////////////////////
-              Card(
-                elevation: 4,
-                shadowColor: Colors.blueAccent,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
+              Container(
+                width: btn_width,
+                height: btn_height,
+                child: Card(
+                  elevation: 4,
+                  shadowColor: Colors.blueAccent,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                  ),
+                  child: IconButton(
+                      tooltip: 'Send Mail Now ',
+                      padding: EdgeInsets.all(0),
+                      onPressed: () async {
+                        await SendMail();
+                      },
+                      icon:  Icon(
+                        Icons.mail_outline_rounded,
+                        color: Colors.blueAccent,
+                        size: icon_fontSize,
+                      )),
                 ),
-                child: IconButton(
-                    tooltip: 'Send Mail Now ',
-                    padding: EdgeInsets.all(0),
-                    onPressed: () async {
-                      await SendMail();
-                    },
-                    icon: const Icon(
-                      Icons.mail_outline_rounded,
-                      color: Colors.blueAccent,
-                      size: 23,
-                    )),
               ),
             ],
           ),

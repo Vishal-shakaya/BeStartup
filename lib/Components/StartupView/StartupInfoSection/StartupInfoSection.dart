@@ -5,6 +5,7 @@ import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
+import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupNavigation.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
@@ -24,16 +25,13 @@ enum StartupPageRoute {
 class StartupInfoSection extends StatelessWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
-  var startupConnect =
-      Get.put(StartupViewConnector());
+  var startupConnect = Get.put(StartupViewConnector());
   var founderConnector = Get.put(FounderConnector());
-
-  double image_cont_width = 0.6;
-  double image_cont_height = 0.20;
 
   var startup_logo;
 
   bool? is_admin;
+  bool? is_liked = false;
   var startup_id;
   var founder_id;
 
@@ -42,6 +40,53 @@ class StartupInfoSection extends StatelessWidget {
   var primary_mail;
   var registor_mail;
   var default_mail;
+
+  double image_cont_width = 0.6;
+  double image_cont_height = 0.20;
+
+  double image_sec_height = 0.23; 
+
+  double page_height = 0.45;
+
+  double invest_chart_left_margin = 0.50;
+  double invest_chart_top_margin = 0.25;
+
+  double tab_top_margin = 0.25;
+  double tab_left_margin = 0.10;
+
+  double tab_cont_width = 0.39;
+  double tab_cont_height = 65;
+
+  double edit_btn_left_margin = 0.53;
+  double edit_btn_top_margin = 0.02;
+
+  double edit_btn_width = 80;
+  double edit_btn_height = 30;
+
+  double edit_iconSize = 15;
+
+  double detail_btn_top_margin= 0.25;
+
+  double detail_btn_left_margin = 0.20; 
+
+  double edit_btn_fontSize = 14; 
+/////////////////////////////////////////
+/// GET REQUIRED PARAM :
+/////////////////////////////////////////
+  IsStartupLiked() async {
+    final resp = await startupConnect.IsStartupLiked(
+      startup_id: startup_id,
+      user_id: founder_id,
+    );
+
+    if (resp['code'] == 101) {
+      is_liked = true;
+    }
+    if (resp['code'] == 111) {
+      is_liked = false;
+    }
+  }
+
 
   // Edit Thumbnail :
   EditThumbnail() {
@@ -68,10 +113,13 @@ class StartupInfoSection extends StatelessWidget {
       var startupDetialView = Get.put(StartupDetailViewState());
       var userStateView = Get.put(UserState());
 
-      is_admin =   await startupDetialView.GetIsUserAdmin();
+      is_admin = await startupDetialView.GetIsUserAdmin();
       startup_id = await startupDetialView.GetStartupId();
       founder_id = await startupDetialView.GetFounderId();
-
+   
+      // Set Liked Default State : 
+      await IsStartupLiked();
+      
       try {
         final business_name_resp =
             await startupConnect.FetchBusinessDetail(startup_id: startup_id);
@@ -91,7 +139,7 @@ class StartupInfoSection extends StatelessWidget {
           registor_mail = found_resp['data']['userDetail']['email'];
           primary_mail = found_resp['data']['userContect']['primary_mail'];
 
-          primary_mail =  await CheckAndGetPrimaryMail(
+          primary_mail = await CheckAndGetPrimaryMail(
               primary_mail: primary_mail, default_mail: registor_mail);
         }
 
@@ -145,16 +193,422 @@ class StartupInfoSection extends StatelessWidget {
         });
   }
 
-///////////////////////////////////////
-  /// MAIN METHOD :
-///////////////////////////////////////
   Container MainMethod(BuildContext context, data) {
+    image_cont_width = 0.6;
+    image_cont_height = 0.20;
+
+    image_sec_height = 0.23; 
+
+    page_height = 0.45;
+
+    invest_chart_left_margin = 0.50;
+    invest_chart_top_margin = 0.25;
+
+    tab_top_margin = 0.25;
+    tab_left_margin = 0.10;
+
+    tab_cont_width = 0.39;
+    tab_cont_height = 65;
+
+    edit_btn_left_margin = 0.53;
+    edit_btn_top_margin = 0.02;
+
+    edit_btn_width = 80;
+    edit_btn_height = 30;
+
+    edit_iconSize = 15;
+
+    detail_btn_top_margin= 0.25;
+
+    detail_btn_left_margin = 0.20; 
+    
+    edit_btn_fontSize = 14; 
+
+
+    // DEFAULT :
+    if (context.width > 1700) {
+      image_cont_width = 0.6;
+      image_cont_height = 0.20;
+
+      image_sec_height = 0.23; 
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.50;
+      invest_chart_top_margin = 0.25;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.10;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.53;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+
+      detail_btn_top_margin= 0.25;
+
+      detail_btn_left_margin = 0.20; 
+      print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      image_cont_width = 0.6;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.49;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.10;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.53;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+      print(' 1700');
+    }
+
+    if (context.width < 1600) {
+      image_cont_width = 0.64;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.52;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.10;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.58;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+      print(' 1600');
+    }
+
+    if (context.width < 1500) {
+      image_cont_width = 0.66;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.51;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.10;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.58;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      print('1500');
+    }
+
+    if (context.width < 1400) {
+      image_cont_width = 0.66;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.51;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.12;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.58;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+      print('1400');
+    }
+
+    if (context.width < 1300) {
+      image_cont_width = 0.70;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.54;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.13;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.60;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+      print('1300');
+    }
+
+    if (context.width < 1200) {
+      image_cont_width = 0.75;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.58;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.16;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.65;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      print('1200');
+    }
+
+    if (context.width < 1100) {
+      image_cont_width = 0.75;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.57;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.16;
+
+      tab_cont_width = 0.39;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.61;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+      print('1100');
+    }
+
+    if (context.width < 1000) {
+      image_cont_width = 0.85;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.65;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.17;
+
+      tab_cont_width = 0.44;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.74;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      edit_btn_fontSize = 12; 
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 900) {
+      image_cont_width = 0.85;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.63;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.16;
+
+      tab_cont_width = 0.44;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.74;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      print('900');
+    }
+
+    if (context.width < 800) {
+      image_cont_width = 0.90;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.69;
+      invest_chart_top_margin = 0.24;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.18;
+
+      tab_cont_width = 0.49;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.74;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 660) {
+      image_cont_width = 0.99;
+      image_cont_height = 0.20;
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.72;
+      invest_chart_top_margin = 0.23;
+
+      tab_top_margin = 0.25;
+      tab_left_margin = 0.18;
+
+      tab_cont_width = 0.53;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.80;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 70;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+
+      edit_btn_fontSize = 12; 
+      
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 550) {
+      image_cont_width = 0.99;
+      image_cont_height = 0.05;
+
+      image_sec_height = 0.20; 
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.70;
+      invest_chart_top_margin = 0.20;
+
+      tab_top_margin = 0.22;
+      tab_left_margin = 0.20;
+
+      tab_cont_width = 0.49;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.76;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 70;
+      edit_btn_height = 30;
+
+      edit_iconSize = 14;
+      edit_btn_fontSize = 12; 
+    }
+
+    if (context.width < 480) {
+      image_cont_width = 0.99;
+      image_cont_height = 0.05;
+
+      image_sec_height = 0.19; 
+
+      page_height = 0.45;
+
+      invest_chart_left_margin = 0.14;
+      invest_chart_top_margin = 0.33;
+
+      tab_top_margin = 0.22;
+      tab_left_margin = 0.24;
+
+      tab_cont_width = 0.51;
+      tab_cont_height = 65;
+
+      edit_btn_left_margin = 0.74;
+      edit_btn_top_margin = 0.02;
+
+      edit_btn_width = 80;
+      edit_btn_height = 30;
+
+      edit_iconSize = 15;
+
+      detail_btn_top_margin= 0.22;
+
+      detail_btn_left_margin = 0.80; 
+      
+      edit_btn_fontSize = 12; 
+
+      print('480');
+    }
+
     return Container(
-        height: context.height * 0.45,
+        height: context.height * page_height,
+
         child: Stack(
           children: [
+
             // THUMBNAIL SECTION:
             Thumbnail(context, data['thumbnail']),
+
 
             // PROFILE PICTURE :
             Picture(
@@ -163,20 +617,27 @@ class StartupInfoSection extends StatelessWidget {
               founder_profile: founder_profile,
             ),
 
+
+            // INVESTMENT CHART :
             Positioned(
-                left: context.width * 0.50,
-                top: context.height * 0.25,
-                child: InvestmentChart()),
+              left: context.width * invest_chart_left_margin,
+              top: context.height * invest_chart_top_margin,
+              child: InvestmentChart()),
+
+
 
             // TABS
             Positioned(
-              top: context.height * 0.25,
-              left: context.width * 0.10,
+              top: context.height * tab_top_margin,
+              left: context.width * tab_left_margin,
+             
               child: Container(
-                  width: context.width * 0.39,
-                  height: 65,
+                  width: context.width * tab_cont_width,
+                  height: tab_cont_height,
+             
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
+                    
                     children: [
                       StartupNavigation(
                           title: 'Team', route: StartupPageRoute.team),
@@ -186,7 +647,33 @@ class StartupInfoSection extends StatelessWidget {
                           title: 'Invest', route: StartupPageRoute.invest),
                     ],
                   )),
-            )
+            ), 
+
+
+
+            // Like And Mail : 
+            context.width<480?
+            Positioned(
+              top: context.height * detail_btn_top_margin,
+              left: context.width * detail_btn_left_margin,
+              
+              child:StartupDetailButtons(
+                  startup_id: startup_id,
+                  user_id: founder_id,
+                  is_saved: is_liked,
+                )
+              )
+              
+            :Positioned(                
+              top: context.height * detail_btn_top_margin,
+              left: context.width * detail_btn_left_margin,
+              child: Container()), 
+
+
+          // Phone Small Chart : 
+          // Positioned(
+          //   child: 
+          //   )
           ],
         ));
   }
@@ -197,26 +684,30 @@ class StartupInfoSection extends StatelessWidget {
         Card(
           elevation: 5,
           shadowColor: Colors.grey,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.horizontal(
             left: Radius.circular(19),
             right: Radius.circular(19),
           )),
+        
           child: InkWell(
             onHover: (flag) {},
+        
             child: Container(
-                height: context.height * 0.23,
-                padding: EdgeInsets.all(2),
+                height: context.height * image_sec_height,
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.horizontal(
+                  borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(20), right: Radius.circular(20)),
                 ),
+             
                 child: ClipRRect(
-                  borderRadius: BorderRadius.horizontal(
+                  borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(19),
                     right: Radius.circular(19),
                   ),
+               
                   child: CachedNetworkImage(
                     imageUrl: thumbnail_image,
                     width: context.width * image_cont_width,
@@ -226,32 +717,38 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
+      
         is_admin == true
             ? Positioned(
-                left: context.width * 0.53,
-                top: context.height * 0.02,
+                left: context.width * edit_btn_left_margin,
+                top: context.height * edit_btn_top_margin,
+               
                 child: Container(
-                  width: 80,
-                  height: 30,
+                  width: edit_btn_width,
+                  height: edit_btn_height,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: border_color)),
+               
                   child: TextButton.icon(
                       onPressed: () {
                         EditThumbnail();
                       },
                       icon: Icon(
                         Icons.edit,
-                        size: 15,
+                        size: edit_iconSize,
                       ),
-                      label: Text('Edit')),
+                      label: Text('Edit', 
+                      style:TextStyle(
+                        fontSize: edit_btn_fontSize),)),
                 ))
+          
             : Positioned(
-                left: context.width * 0.53,
-                top: context.height * 0.02,
+                left: context.width * edit_btn_left_margin,
+                top: context.height * edit_btn_top_margin,
                 child: Container(
-                  width: 80,
-                  height: 30,
+                  width: edit_btn_width,
+                  height: edit_btn_height,
                 ))
       ],
     );

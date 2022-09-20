@@ -24,29 +24,100 @@ class TeamPage extends StatefulWidget {
 class _TeamPageState extends State<TeamPage> {
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+
   var startupviewConnector =
       Get.put(StartupViewConnector(), tag: 'startup_view_connector');
+
   var founderConnector =
       Get.put(FounderConnector(), tag: 'startup_view_first_connector');
 
   var detailViewState = Get.put(StartupDetailViewState());
 
-  var team_member = [];
   double page_width = 0.80;
+
+  double spacer = 0.02;
+
+  double heading_fontSize = 32;
+
+  double founder_sec_elevation = 1;
+
+  double founder_border_radius = 10;
+
+  double founder_cont_width = 0.20;
+
+  double founder_cont_height = 0.34;
+
+  double founder_cont_hori_padd = 10;
+
+  double founder_cont_ver_padd = 20;
+
+  double founder_cont_top_margin = 10;
+
+  double founder_sec_padding = 12;
+
+  double founder_spacing = 15;
+
+  double founder_box_width = 200;
+
+  double founder_pod_bottom_margin = 10;
+
+  double founder_pod_fontSize = 15;
+
+  double profile_radius = 70;
+
+  double member_header_top_height = 0.10; 
+
+  double member_header_bottom_height = 0.05; 
+
+  double member_cont_width = 0.50;
+
+  double member_cont_height = 0.70;
+
+  double member__cont_hor_padd = 10;
+
+  double member_cont_ver_padd = 20;
+
+  double memnber_cont_top_margin = 10;
+
+  double member_fonSize = 13;
+
+  double member_contact_iconSize = 16;
+
+  double member_email_fontSize = 11;
+
+  double member_contact_padd = 5.0;
+
+  double edit_btn_width = 0.48;
+
+  double edit_btn_top_margin = 0.04;
+
+  double edit_btn_cont_width = 80;
+
+  double edit_btn_height = 30;
+
+  double edit_btn_IconSize = 15;
+
+  double edit_btn_fontSize = 15;
+
+
+
+
+
+  var team_member = [];
   var startup_id;
   var founder_id;
-  var is_admin; 
+  var is_admin;
+
   // REDIRECT TO CREATE MEMEBER PAGE :
   EditMember() {
     var param = jsonEncode({
-    'type': 'update',
-    'founder_id': founder_id,
-    'startup_id': startup_id,
-    'is_admin': is_admin,
-   });
+      'type': 'update',
+      'founder_id': founder_id,
+      'startup_id': startup_id,
+      'is_admin': is_admin,
+    });
 
-    Get.toNamed(create_business_team,
-        parameters: {'data': param});
+    Get.toNamed(create_business_team, parameters: {'data': param});
   }
 
   //////////////////////////////////////////
@@ -54,9 +125,9 @@ class _TeamPageState extends State<TeamPage> {
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-       startup_id = await detailViewState.GetStartupId();
-       is_admin =   await detailViewState.GetIsUserAdmin();
-       founder_id = await detailViewState.GetFounderId();
+      startup_id = await detailViewState.GetStartupId();
+      is_admin = await detailViewState.GetIsUserAdmin();
+      founder_id = await detailViewState.GetFounderId();
 
       final data = await startupviewConnector.FetchBusinessTeamMember(
           startup_id: startup_id);
@@ -69,6 +140,655 @@ class _TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
+     page_width = 0.80;
+
+     spacer = 0.02;
+
+     heading_fontSize = 32;
+
+     founder_sec_elevation = 1;
+
+     founder_border_radius = 10;
+
+     founder_cont_width = 0.20;
+
+     founder_cont_height = 0.34;
+
+     founder_cont_hori_padd = 10;
+
+     founder_cont_ver_padd = 20;
+
+     founder_cont_top_margin = 10;
+
+     founder_sec_padding = 12;
+
+     founder_spacing = 15;
+
+     founder_box_width = 200;
+
+     founder_pod_bottom_margin = 10;
+
+     founder_pod_fontSize = 15;
+
+     profile_radius = 70;
+
+     member_header_top_height = 0.10; 
+
+     member_header_bottom_height = 0.05; 
+
+     member_cont_width = 0.55;
+
+     member_cont_height = 0.70;
+
+     member__cont_hor_padd = 10;
+
+     member_cont_ver_padd = 20;
+
+     memnber_cont_top_margin = 10;
+
+     member_fonSize = 13;
+
+     member_contact_iconSize = 16;
+
+     member_email_fontSize = 11;
+
+     member_contact_padd = 5.0;
+
+     edit_btn_width = 0.48;
+
+     edit_btn_top_margin = 0.04;
+
+     edit_btn_cont_width = 80;
+
+     edit_btn_height = 30;
+
+     edit_btn_IconSize = 15;
+
+     edit_btn_fontSize = 15;
+
+     
+
+	////////////////////////////////////
+  /// RESPONSIVENESS : 
+  ////////////////////////////////////
+		// DEFAULT :
+    if (context.width > 1700) {
+      print('Greator then 1700');
+      }
+   
+    if (context.width < 1700) {
+      print(' 1700');
+      }
+
+    if (context.width < 1600) {
+      print('1600');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      page_width = 0.80;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.25;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 70;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 0.60;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.48;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 80;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 15;
+
+      edit_btn_fontSize = 15;
+
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      page_width = 0.80;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.30;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 70;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 0.68;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.65;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 80;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 15;
+
+      edit_btn_fontSize = 15;
+      print('1200');
+      }
+
+
+    if (context.width < 1100) {
+      page_width = 0.80;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.35;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 70;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 0.80;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.70;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 80;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 15;
+
+      edit_btn_fontSize = 15;
+      print('1100');
+      }
+
+    if (context.width < 900) {
+      page_width = 0.80;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.45;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 70;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 0.90;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.70;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 80;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 15;
+
+      edit_btn_fontSize = 15;
+      print('900');
+      }
+    
+    if (context.width < 1000) {
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      page_width = 0.80;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.50;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 65;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 0.99;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.88;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 70;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 13;
+
+      edit_btn_fontSize = 13;
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      page_width = 0.90;
+
+      spacer = 0.02;
+
+      heading_fontSize = 32;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.55;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 15;
+
+      profile_radius = 65;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 1;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.88;
+
+      edit_btn_top_margin = 0.04;
+
+      edit_btn_cont_width = 70;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 13;
+
+      edit_btn_fontSize = 13;
+      print('640');
+      }
+
+
+    if (context.width < 600) {
+      page_width = 0.90;
+
+      spacer = 0.02;
+
+      heading_fontSize = 28;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.65;
+
+      founder_cont_height = 0.34;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 14;
+
+      profile_radius = 60;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 1;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.88;
+
+      edit_btn_top_margin = 0;
+
+      edit_btn_cont_width = 70;
+
+      edit_btn_height = 30;
+
+      edit_btn_IconSize = 13;
+
+      edit_btn_fontSize = 13;
+      print('600');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      page_width = 0.90;
+
+      spacer = 0.02;
+
+      heading_fontSize = 25;
+
+      founder_sec_elevation = 1;
+
+      founder_border_radius = 10;
+
+      founder_cont_width = 0.68;
+
+      founder_cont_height = 0.37;
+
+      founder_cont_hori_padd = 10;
+
+      founder_cont_ver_padd = 20;
+
+      founder_cont_top_margin = 10;
+
+      founder_sec_padding = 12;
+
+      founder_spacing = 15;
+
+      founder_box_width = 200;
+
+      founder_pod_bottom_margin = 10;
+
+      founder_pod_fontSize = 14;
+
+      profile_radius = 60;
+
+      member_header_top_height = 0.10; 
+
+      member_header_bottom_height = 0.05; 
+
+      member_cont_width = 1;
+
+      member_cont_height = 0.70;
+
+      member__cont_hor_padd = 10;
+
+      member_cont_ver_padd = 20;
+
+      memnber_cont_top_margin = 10;
+
+      member_fonSize = 13;
+
+      member_contact_iconSize = 16;
+
+      member_email_fontSize = 11;
+
+      member_contact_padd = 5.0;
+
+      edit_btn_width = 0.88;
+
+      edit_btn_top_margin = 0;
+
+      edit_btn_cont_width = 65;
+
+      edit_btn_height = 25;
+
+      edit_btn_IconSize = 12;
+
+      edit_btn_fontSize = 12;
+      print('480');
+      }
+
+
+
     //////////////////////////////////////////
     // SET REQUIREMTNS :
     //////////////////////////////////////////
@@ -92,73 +812,77 @@ class _TeamPageState extends State<TeamPage> {
           }
           return MainMethod(context: context, data: snapshot.data);
         });
-
-    // TEAM MEMBER   SECTION :
   }
 
   Container MainMethod({context, data}) {
+
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(
             child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              // Spacer :
+              SizedBox(height: MediaQuery.of(context).size.height * spacer),
+
               // Heading :
               StartupHeaderText(
                 title: 'Founder',
-                font_size: 32,
+                font_size: heading_fontSize,
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              // Spacer :
+              SizedBox(height: MediaQuery.of(context).size.height * spacer),
 
-              // Member List Section :
               Column(
                 children: [
-                  // FOUNDER SECTION :
+                  ////////////////////////////////////////////
+                  /// FOUNDER AND TEAM DTEAIL SECTION :
+                  ////////////////////////////////////////////
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Card(
-                        elevation: 1,
+                        elevation: founder_sec_elevation,
                         shadowColor: Colors.blueGrey,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius:
+                              BorderRadius.circular(founder_border_radius),
                         ),
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.20,
-                          height: MediaQuery.of(context).size.height * 0.34,
+                          width: MediaQuery.of(context).size.width *
+                              founder_cont_width,
+                          height: MediaQuery.of(context).size.height *
+                              founder_cont_height,
                           padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
+                              horizontal: founder_cont_hori_padd,
+                              vertical: founder_cont_ver_padd),
                           decoration: BoxDecoration(
                             // border: Border.all(color: border_color),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.topCenter,
-                          margin: EdgeInsets.only(top: 10),
+                          margin: EdgeInsets.only(top: founder_cont_top_margin),
                           child: Container(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(founder_sec_padding),
 
-                            // MEMBER DETAIL SECTION :
+                            //////////////////////////////////
+                            /// FOUNDER SECTION:
+                            //////////////////////////////////
                             child: Column(
                               children: [
-                                // Profile Image
                                 ProfileImage(),
 
                                 // SPACING:
-                                SizedBox(
-                                  height: 15,
-                                ),
+                                SizedBox(height: founder_spacing),
 
                                 // POSITION:
                                 SizedBox(
-                                  width: 200,
+                                  width: founder_box_width,
                                   child: Column(
                                     children: [
                                       MemPosition(),
-                                      // MEMBER NAME :
                                       MemName(),
-                                      // CONTACT EMAIL ADDRESS :
                                       MemContact(),
                                     ],
                                   ),
@@ -171,15 +895,18 @@ class _TeamPageState extends State<TeamPage> {
                     ],
                   ),
 
+                  /////////////////////////////////////////
+                  /// TEAM MEMBER SECTION :
+                  /////////////////////////////////////////
                   // SPACING :
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.10),
+                  SizedBox(height: MediaQuery.of(context).size.height * member_header_top_height),
 
                   StartupHeaderText(
                     title: 'Members',
-                    font_size: 32,
+                    font_size: heading_fontSize,
                   ),
 
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  SizedBox(height: MediaQuery.of(context).size.height * member_header_bottom_height),
 
                   // EDIT TEAM MEMBER :
                   // REDIRECT TO CREATE TEAME PAGE :
@@ -192,16 +919,22 @@ class _TeamPageState extends State<TeamPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.50,
-                      height: MediaQuery.of(context).size.height * 0.70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 20),
+                      width:
+                          MediaQuery.of(context).size.width * member_cont_width,
+                    
+                      height: MediaQuery.of(context).size.height *
+                          member_cont_height,
+                    
+                    
+                      padding: EdgeInsets.symmetric(
+                          horizontal: member__cont_hor_padd,
+                          vertical: member_cont_ver_padd),
                       decoration: BoxDecoration(
                         // border: Border.all(color: border_color),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       alignment: Alignment.topCenter,
-                      margin: EdgeInsets.only(top: 10),
+                      margin: EdgeInsets.only(top: memnber_cont_top_margin),
                       child: team_member.length <= 0
                           ? Container()
                           : ListView.builder(
@@ -213,18 +946,6 @@ class _TeamPageState extends State<TeamPage> {
                             ),
                     ),
                   ),
-
-                  // Spacing :
-
-                  // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  // Headign :
-
-                  // StartupHeaderText(
-                  //   title: 'Members',
-                  //   font_size: 32,
-                  // ),
-                  // // ALL MEMBER LIST
-                  // AllMembers()
                 ],
               )
             ],
@@ -234,12 +955,13 @@ class _TeamPageState extends State<TeamPage> {
 
   Container EditButton(BuildContext context, Function fun) {
     return Container(
-        width: context.width * 0.48,
+        width: context.width * edit_btn_width,
         alignment: Alignment.topRight,
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+        margin: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * edit_btn_top_margin),
         child: Container(
-          width: 80,
-          height: 30,
+          width: edit_btn_cont_width,
+          height: edit_btn_height,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: border_color)),
@@ -249,9 +971,12 @@ class _TeamPageState extends State<TeamPage> {
               },
               icon: Icon(
                 Icons.edit,
-                size: 15,
+                size: edit_btn_IconSize,
               ),
-              label: Text('Edit')),
+              label: Text(
+                'Edit',
+                style: TextStyle(fontSize: edit_btn_fontSize),
+              )),
         ));
   }
 
@@ -261,11 +986,11 @@ class _TeamPageState extends State<TeamPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(member_contact_padd),
           child: Icon(
             Icons.mail_outline_outlined,
             color: Colors.orange.shade300,
-            size: 16,
+            size: member_contact_iconSize,
           ),
         ),
         AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
@@ -275,7 +1000,7 @@ class _TeamPageState extends State<TeamPage> {
               style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.blue,
-                  fontSize: 11))
+                  fontSize: member_email_fontSize))
         ])),
       ],
     ));
@@ -288,26 +1013,29 @@ class _TeamPageState extends State<TeamPage> {
             TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
               text: 'vishal shakaya',
-              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 13))
+              style: TextStyle(
+                  color: Colors.blueGrey.shade700, fontSize: member_fonSize))
         ])));
   }
 
   Container MemPosition() {
     return Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: EdgeInsets.only(bottom: founder_pod_bottom_margin),
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline2, children: [
           TextSpan(
               // text: widget.member!['position'],
               text: 'CEO',
-              style: TextStyle(color: Colors.blueGrey.shade700, fontSize: 15))
+              style: TextStyle(
+                  color: Colors.blueGrey.shade700,
+                  fontSize: founder_pod_fontSize))
         ])));
   }
 
   Container ProfileImage() {
     return Container(
         child: CircleAvatar(
-      radius: 70,
+      radius: profile_radius,
       backgroundColor: Colors.blueGrey[100],
       // foregroundImage: NetworkImage(widget.member!['image']),
       foregroundImage: NetworkImage(temp_image),

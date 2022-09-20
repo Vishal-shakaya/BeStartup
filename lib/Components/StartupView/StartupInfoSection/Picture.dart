@@ -30,17 +30,28 @@ class Picture extends StatelessWidget {
   double profile_top_pos = 0.19;
   double profile_left_pos = 0.01;
 
+  double edit_icon_top_margin = 0.09;
+  double edit_icon_left_margin = 0.05;
+
+  double edit_iconSize = 19;
+
+  double startup_logo_radius = 60;
+  double ceo_profile_radius = 45;
+
+  double ceo_name_top_margin = 10;
+  double ceo_name_fontSize = 13;
+
+
+
   EditBusinessLogo() {
     var param = jsonEncode({
       'type': 'update',
-      'founder_id':founder_id,
-      'startup_id':startup_id,
-      'is_admin':is_admin  
+      'founder_id': founder_id,
+      'startup_id': startup_id,
+      'is_admin': is_admin
     });
 
-    Get.toNamed(
-     create_business_detail_url,
-     parameters: {'data': param});
+    Get.toNamed(create_business_detail_url, parameters: {'data': param});
   }
 
   ///////////////////////////
@@ -50,12 +61,185 @@ class Picture extends StatelessWidget {
     is_admin = await detailViewState.GetIsUserAdmin();
     founder_id = await detailViewState.GetFounderId();
     startup_id = await detailViewState.GetStartupId();
-
     return '';
   }
 
   @override
   Widget build(BuildContext context) {
+    profile_top_pos = 0.19;
+    profile_left_pos = 0.01;
+
+    edit_icon_top_margin = 0.09;
+    edit_icon_left_margin = 0.05;
+
+    edit_iconSize = 19;
+
+    startup_logo_radius = 60;
+    ceo_profile_radius = 45;
+
+    ceo_name_top_margin = 10;
+    ceo_name_fontSize = 13;
+
+    // DEFAULT :
+    if (context.width > 1600) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.09;
+      edit_icon_left_margin = 0.05;
+
+      edit_iconSize = 19;
+
+      startup_logo_radius = 60;
+      ceo_profile_radius = 45;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('Greator then 1600');
+    }
+
+    if (context.width < 1600) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.09;
+      edit_icon_left_margin = 0.06;
+
+      edit_iconSize = 19;
+
+      startup_logo_radius = 60;
+      ceo_profile_radius = 45;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('1600');
+    }
+
+    if (context.width < 1500) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.08;
+      edit_icon_left_margin = 0.06;
+
+      edit_iconSize = 19;
+
+      startup_logo_radius = 55;
+      ceo_profile_radius = 45;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('1500');
+    }
+
+    if (context.width < 1300) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.09;
+      edit_icon_left_margin = 0.07;
+
+      edit_iconSize = 17;
+
+      startup_logo_radius = 55;
+      ceo_profile_radius = 45;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('1300');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.09;
+      edit_icon_left_margin = 0.07;
+
+      edit_iconSize = 17;
+
+      startup_logo_radius = 52;
+      ceo_profile_radius = 42;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.08;
+      edit_icon_left_margin = 0.09;
+
+      edit_iconSize = 16;
+
+      startup_logo_radius = 48;
+      ceo_profile_radius = 40;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      profile_top_pos = 0.19;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.07;
+      edit_icon_left_margin = 0.08;
+
+      edit_iconSize = 15;
+
+      startup_logo_radius = 36;
+      ceo_profile_radius = 35;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+      print('640');
+    }
+
+    if (context.width < 550) {
+      profile_top_pos = 0.16;
+      profile_left_pos = 0.01;
+
+      edit_icon_top_margin = 0.07;
+      edit_icon_left_margin = 0.12;
+
+      edit_iconSize = 15;
+
+      startup_logo_radius = 43;
+      ceo_profile_radius = 40;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 13;
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      profile_top_pos = 0.15;
+      profile_left_pos = 0.0;
+
+      edit_icon_top_margin = 0.09;
+      edit_icon_left_margin = 0.05;
+
+      edit_iconSize = 19;
+
+      startup_logo_radius = 36;
+      ceo_profile_radius = 35;
+
+      ceo_name_top_margin = 10;
+      ceo_name_fontSize = 11;
+      print('480');
+    }
+
     //////////////////////////////////
     /// SET REQUIREMENTS :
     //////////////////////////////////
@@ -93,16 +277,16 @@ class Picture extends StatelessWidget {
             ////////////////////////////////////////////
             is_admin == true
                 ? Positioned(
-                    top: context.height * 0.09,
-                    left: context.width * 0.05,
+                    top: context.height * edit_icon_top_margin,
+                    left: context.width * edit_icon_left_margin,
                     child: Container(
                       padding: EdgeInsets.all(5),
                       child: IconButton(
                           onPressed: () {
                             EditBusinessLogo();
                           },
-                          icon: const Icon(Icons.edit,
-                              size: 19, color: Colors.black)),
+                          icon: Icon(Icons.edit,
+                              size: edit_iconSize, color: Colors.black)),
                     ))
                 : Container()
           ],
@@ -116,7 +300,7 @@ class Picture extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
       child: Container(
         child: CircleAvatar(
-            radius: 60,
+            radius: startup_logo_radius,
             backgroundColor: Colors.blueGrey[100],
             foregroundImage: NetworkImage(logo ?? temp_image)),
       ),
@@ -133,7 +317,7 @@ class Picture extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(62)),
           child: Container(
               child: CircleAvatar(
-            radius: 45,
+            radius: ceo_profile_radius,
             backgroundColor: Colors.blueGrey[100],
             foregroundImage:
                 NetworkImage(founder_profile ?? temp_image, scale: 1),
@@ -142,12 +326,13 @@ class Picture extends StatelessWidget {
 
         // Container Name :
         Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: EdgeInsets.only(top: ceo_name_top_margin),
             child: AutoSizeText.rich(
                 TextSpan(style: Get.textTheme.headline5, children: [
               TextSpan(
                   text: founder_name.toString().capitalizeFirst,
-                  style: TextStyle(color: Colors.black, fontSize: 13))
+                  style: TextStyle(
+                      color: Colors.black, fontSize: ceo_name_fontSize))
             ])))
       ],
     );

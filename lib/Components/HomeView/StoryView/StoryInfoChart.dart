@@ -54,7 +54,7 @@ class _StoryInfoChartState extends State<StoryInfoChart> {
                     margin: EdgeInsets.only(top: 5),
                     child: InkWell(
                       highlightColor: primary_light_hover,
-                      borderRadius: BorderRadius.horizontal(
+                      borderRadius: const BorderRadius.horizontal(
                           left: Radius.circular(20),
                           right: Radius.circular(20)),
                       onTap: () {},
