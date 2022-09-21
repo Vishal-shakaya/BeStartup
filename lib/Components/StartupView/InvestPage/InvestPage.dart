@@ -74,6 +74,52 @@ class _InvestPageState extends State<InvestPage> {
 
   @override
   Widget build(BuildContext context) {
+    
+
+		////////////////////////////////////
+    /// RESPONSIVENESS : 
+    ////////////////////////////////////
+		// DEFAULT :
+    if (context.width > 1700) {
+      print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+      print('1700');
+      }
+  
+    if (context.width < 1600) {
+      print('1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+      }
+
     ////////////////////////////////
     /// SET REQUIREMENTS :
     ////////////////////////////////
@@ -94,9 +140,8 @@ class _InvestPageState extends State<InvestPage> {
         });
   }
 
-  Container MainMethod(
-    BuildContext context,
-  ) {
+  Container MainMethod(BuildContext context) {
+    
     return Container(
       child: Container(
         width: context.width * 0.50,
