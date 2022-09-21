@@ -34,7 +34,7 @@ class _MemberBlockState extends State<MemberBlock> {
   double phone_mem_left_radius = 10;
 
   double phone_mem_right_radius = 10;
- 
+
   double mem_left_radius = 20;
 
   double mem_right_radius = 20;
@@ -58,7 +58,7 @@ class _MemberBlockState extends State<MemberBlock> {
   double phone_contact_iconSize = 14;
 
   double contact_mail_fontSize = 11;
-  
+
   double phone_contact_mail_fontSize = 10;
 
   double mem_name_bottom_padding = 12;
@@ -89,108 +89,6 @@ class _MemberBlockState extends State<MemberBlock> {
 
   @override
   Widget build(BuildContext context) {
-    Widget mainMemberSection = Row(
-      children: [
-        // Profile Image and Member Detail :
-        Container(
-          padding: EdgeInsets.all(12),
-
-          // MEMBER DETAIL SECTION :
-          child: Column(
-            children: [
-              // Profile Image
-              ProfileImage(),
-
-              // SPACING:
-              SizedBox(
-                height: img_spacing,
-              ),
-
-              // POSITION:
-              SizedBox(
-                width: mem_box_width,
-                child: InkWell(
-                  child: Column(
-                    children: [
-                      // MEMBER NAME :
-                      MemName(),
-
-                      // POSITION:
-                      MemPosition(),
-                      // CONTACT EMAIL ADDRESS :
-                      MemContact(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // SPACING:
-        SizedBox(
-          width: context.width * desc_spacing,
-        ),
-
-        // MEMBER DESCRIPTION SECTION :
-        MemDescription(context),
-
-        // EidtDeleteLButtons(context)
-      ],
-    );
-
-    Widget phoneMemberSection = Column(
-      children: [
-        // Profile Image and Member Detail :
-        Container(
-          padding: EdgeInsets.all(12),
-
-          // MEMBER DETAIL SECTION :
-          child: Column(
-            children: [
-              // Profile Image
-              ProfileImage(),
-
-              // SPACING:
-              SizedBox(
-                height: img_spacing,
-              ),
-
-              // POSITION:
-              SizedBox(
-                width: mem_box_width,
-                child: InkWell(
-                  child: Column(
-                    children: [
-                      // MEMBER NAME :
-                      PhoneMemName(),
-
-                      // POSITION:
-                      PhoneMemPosition(),
-                      // CONTACT EMAIL ADDRESS :
-                      MemContact(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // SPACING:
-        SizedBox(
-          width: context.width * desc_spacing,
-        ),
-
-        // MEMBER DESCRIPTION SECTION :
-        PhoneMemDescription(context),
-
-        // EidtDeleteLButtons(context)
-      ],
-    );
-
-    Widget memberSection = mainMemberSection;
-
     mem_desc_block_width = 0.33;
 
     mem_desc_block_height = 0.20;
@@ -607,7 +505,8 @@ class _MemberBlockState extends State<MemberBlock> {
 
       edit_btn_radius = 12;
 
-      edit_btn_iconSize = 15;
+      edit_btn_iconSize = 14;
+
       print('600');
     }
 
@@ -661,14 +560,122 @@ class _MemberBlockState extends State<MemberBlock> {
 
       edit_btn_iconSize = 15;
 
-      memberSection = phoneMemberSection;
       print('480');
     }
 
+    Widget mainMemberSection = Row(
+      children: [
+        // Profile Image and Member Detail :
+        Container(
+          padding: EdgeInsets.all(12),
+
+          // MEMBER DETAIL SECTION :
+          child: Column(
+            children: [
+              // Profile Image
+              ProfileImage(),
+
+              // SPACING:
+              SizedBox(
+                height: img_spacing,
+              ),
+
+              // POSITION:
+              SizedBox(
+                width: mem_box_width,
+                child: InkWell(
+                  child: Column(
+                    children: [
+                      // MEMBER NAME :
+                      MemName(),
+
+                      // POSITION:
+                      MemPosition(),
+                      // CONTACT EMAIL ADDRESS :
+                      MemContact(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // SPACING:
+        SizedBox(
+          width: context.width * desc_spacing,
+        ),
+
+        // MEMBER DESCRIPTION SECTION :
+        MemDescription(context),
+
+        // EidtDeleteLButtons(context)
+      ],
+    );
+
+    Widget phoneMemberSection = Column(
+      children: [
+        // Profile Image and Member Detail :
+        Container(
+          padding: EdgeInsets.all(12),
+
+          // MEMBER DETAIL SECTION :
+          child: Column(
+            children: [
+              // Profile Image
+              ProfileImage(),
+
+              // SPACING:
+              SizedBox(
+                height: img_spacing,
+              ),
+
+              // POSITION:
+              SizedBox(
+                width: mem_box_width,
+                child: InkWell(
+                  child: Column(
+                    children: [
+                      // MEMBER NAME :
+                      PhoneMemName(),
+
+                      // POSITION:
+                      PhoneMemPosition(),
+                      // CONTACT EMAIL ADDRESS :
+                      MemContact(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // SPACING:
+        SizedBox(
+          width: context.width * desc_spacing,
+        ),
+
+        // MEMBER DESCRIPTION SECTION :
+        PhoneMemDescription(context),
+
+        // EidtDeleteLButtons(context)
+      ],
+    );
+
+    if (context.width < 480) {
+      mainMemberSection = phoneMemberSection;
+    }
+
+
+
     return Container(
-      child: SingleChildScrollView(child: memberSection),
+      child: SingleChildScrollView(child: mainMemberSection),
     );
   }
+
+
+
 
   Card MemDescription(BuildContext context) {
     return Card(
@@ -713,6 +720,8 @@ class _MemberBlockState extends State<MemberBlock> {
       ),
     );
   }
+
+
 
   Card PhoneMemDescription(BuildContext context) {
     return Card(
@@ -783,7 +792,6 @@ class _MemberBlockState extends State<MemberBlock> {
     ));
   }
 
-
   Container PhoneMemContact() {
     return Container(
         child: Row(
@@ -797,10 +805,7 @@ class _MemberBlockState extends State<MemberBlock> {
             size: phone_contact_iconSize,
           ),
         ),
-
-        AutoSizeText.rich(TextSpan(
-          style: Get.textTheme.headline5, 
-          children: [
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
               text: widget.member['member_mail'],
               style: TextStyle(
@@ -844,17 +849,16 @@ class _MemberBlockState extends State<MemberBlock> {
     ));
   }
 
-
   Container PhoneMemName() {
     return Container(
         margin: EdgeInsets.only(bottom: phone_mem_name_bottom_padding),
-        
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline2, children: [
           TextSpan(
               text: widget.member['name'],
               style: TextStyle(
-                  color: Colors.blueGrey.shade700, fontSize: phone_mem_name_fontSize))
+                  color: Colors.blueGrey.shade700,
+                  fontSize: phone_mem_name_fontSize))
         ])));
   }
 
@@ -864,8 +868,8 @@ class _MemberBlockState extends State<MemberBlock> {
             TextSpan(style: Get.textTheme.headline5, children: [
       TextSpan(
           text: '@${widget.member['position']}',
-          style:
-              TextStyle(color: light_color_type2, fontSize: phone_mem_pod_fontSize))
+          style: TextStyle(
+              color: light_color_type2, fontSize: phone_mem_pod_fontSize))
     ])));
   }
 

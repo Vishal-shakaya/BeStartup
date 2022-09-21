@@ -493,13 +493,13 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_top_margin = 0.04;
 
-      edit_btn_cont_width = 80;
+      edit_btn_cont_width = 75;
 
-      edit_btn_height = 30;
+      edit_btn_height = 28;
 
-      edit_btn_IconSize = 15;
+      edit_btn_IconSize = 14;
 
-      edit_btn_fontSize = 15;
+      edit_btn_fontSize = 14;
       print('900');
       }
     
