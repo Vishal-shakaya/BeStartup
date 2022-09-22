@@ -14,6 +14,15 @@ class ServiceSection extends StatelessWidget {
   var detailViewState = Get.put(StartupDetailViewState());
   var services = [];
 
+  double service_cont_width = 0.75;
+
+  double service_cont_height = 0.60;
+
+  double service_top_margin = 0.06;
+
+  double service_bottom_margin = 0.06;
+
+
   Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
     'title': 'word famous watter battle  cleane',
@@ -43,6 +52,114 @@ class ServiceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      service_cont_width = 0.75;
+
+     service_cont_height = 0.60;
+
+     service_top_margin = 0.02;
+
+     service_bottom_margin = 0.06;
+
+
+
+		// DEFAULT :
+    if (context.width > 1700) {
+        service_cont_width = 0.75;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+
+
+        print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+        service_cont_width = 0.75;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+        print('1700');
+      }
+  
+    if (context.width < 1600) {
+        print('1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+        service_cont_width = 0.80;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+        print('1500');
+      }
+
+    if (context.width < 1300) {
+        service_cont_width = 0.80;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+        print('1300');
+      }
+
+    if (context.width < 1200) {
+        service_cont_width = 0.85;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+
+        print('1200');
+      }
+    
+    if (context.width < 1000) {
+        service_cont_width = 0.95;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+
+        print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+        service_cont_width = 1;
+
+        service_cont_height = 0.60;
+
+        service_top_margin = 0.02;
+
+        service_bottom_margin = 0.06;
+
+        print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+      }
     //////////////////////////////////////
     /// Set Required param :
     //////////////////////////////////////
@@ -66,10 +183,10 @@ class ServiceSection extends StatelessWidget {
 ///////////////////////////////////////
   Container MainMethod(BuildContext context) {
     return Container(
-      width: context.width * 0.75,
-      height: context.height * 0.60,
+      width: context.width * service_cont_width,
+      height: context.height * service_cont_height,
       margin: EdgeInsets.only(
-          bottom: context.height * 0.06, top: context.height * 0.06),
+          bottom: context.height * service_bottom_margin, top: context.height *service_top_margin),
    
       child: ListView.builder(
           scrollDirection: Axis.vertical,
