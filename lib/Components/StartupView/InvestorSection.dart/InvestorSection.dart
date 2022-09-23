@@ -16,12 +16,33 @@ class InvestorSection extends StatelessWidget {
   var startupInvestorStore = Get.put(StartupInvestorStore());
   var my_context = Get.context;
 
+  var investors = [];
+  var is_admin;
+
   double mem_desc_block_width = 0.15;
   double mem_desc_block_height = 0.10;
   double mem_dialog_width = 600;
 
-  var investors = [];
-  var is_admin;
+  double heading_fonSize = 32;
+
+  double add_btn_top_margin = 0.06;
+  double add_btn_left_margin = 0.02;
+
+  double add_btn_cont_width = 90;
+  double add_btn_cont_height = 30;
+
+  double add_btn_radius = 15;
+
+  double add_iconSize = 16;
+
+  double add_iconfonSize = 14;
+
+  double invest_cont_top_marg = 0.06;
+
+  double invest_cont_height = 0.30;
+
+  double invest_cont_width = 0.60; 
+
 
   // MEMBER DETAIL DIALOG BLOK :
   MemberDetailDialogView({form_type, context}) async {
@@ -72,6 +93,211 @@ class InvestorSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1700) {
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 32;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.02;
+
+        add_btn_cont_width = 90;
+        add_btn_cont_height = 30;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 16;
+
+        add_iconfonSize = 14;
+
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_height = 0.30;
+
+        invest_cont_width = 0.60; 
+        print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.60; 
+
+        invest_cont_height = 0.30;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 32;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.02;
+
+        add_btn_cont_width = 90;
+        add_btn_cont_height = 30;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 16;
+
+        add_iconfonSize = 14;
+
+      print('1700');
+    }
+
+    if (context.width < 1600) {
+      
+      print('1500');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.60; 
+
+        invest_cont_height = 0.30;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 30;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.02;
+
+        add_btn_cont_width = 80;
+        add_btn_cont_height = 25;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 15;
+
+        add_iconfonSize = 13;
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.60; 
+
+        invest_cont_height = 0.25;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 30;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.02;
+
+        add_btn_cont_width = 80;
+        add_btn_cont_height = 25;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 14;
+
+        add_iconfonSize = 13;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.80; 
+
+        invest_cont_height = 0.28;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 28;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.05;
+
+        add_btn_cont_width = 70;
+        add_btn_cont_height = 25;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 14;
+
+        add_iconfonSize = 13;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.80; 
+
+        invest_cont_height = 0.28;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 25;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.05;
+
+        add_btn_cont_width = 65;
+        add_btn_cont_height = 25;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 14;
+
+        add_iconfonSize = 13;
+
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+        invest_cont_top_marg = 0.06;
+
+        invest_cont_width = 0.80; 
+
+        invest_cont_height = 0.22;
+
+        mem_desc_block_width = 0.15;
+        mem_desc_block_height = 0.10;
+        mem_dialog_width = 600;
+
+        heading_fonSize = 25;
+
+        add_btn_top_margin = 0.06;
+        add_btn_left_margin = 0.05;
+
+        add_btn_cont_width = 63;
+        add_btn_cont_height = 25;
+
+        add_btn_radius = 15;
+
+        add_iconSize = 14;
+
+        add_iconfonSize = 12;
+      print('480');
+    }
+
     ////////////////////////////////////////
     /// Set Requirements:
     ////////////////////////////////////////
@@ -107,7 +333,7 @@ class InvestorSection extends StatelessWidget {
             children: [
               StartupHeaderText(
                 title: 'Investors',
-                font_size: 32,
+                font_size: heading_fonSize,
               ),
 
               //////////////////////////////////////////////////
@@ -117,14 +343,14 @@ class InvestorSection extends StatelessWidget {
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(
-                        top: context.height * 0.06,
-                        left: context.width * 0.02,
+                        top: context.height * add_btn_top_margin,
+                        left: context.width * add_btn_left_margin,
                       ),
                       child: Container(
-                        width: 90,
-                        height: 30,
+                        width: add_btn_cont_width,
+                        height: add_btn_cont_height,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(add_btn_radius),
                             border: Border.all(color: border_color)),
                         child: TextButton.icon(
                             onPressed: () {
@@ -132,14 +358,15 @@ class InvestorSection extends StatelessWidget {
                                   form_type: InvestorFormType.create,
                                   context: context);
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.add,
-                              size: 16,
+                              size: add_iconSize,
                             ),
-                            label: const Text(
+                            label: Text(
                               'Add',
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
+                                  fontSize: add_iconfonSize,
+                                  fontWeight: FontWeight.bold),
                             )),
                       ))
             ],
@@ -154,9 +381,10 @@ class InvestorSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                height: context.height * 0.30,
-                width: context.width * 0.60,
+                height: context.height * invest_cont_height,
+                width: context.width * invest_cont_width,
                 color: Colors.orange.shade300,
+               
                 child: Obx(
                   () {
                     return ListView.builder(
@@ -167,7 +395,7 @@ class InvestorSection extends StatelessWidget {
                             is_admin: is_admin,
                             investor: investors[index],
                           );
-                        }); 
+                        });
                   },
                 )),
           ],
@@ -180,7 +408,7 @@ class InvestorSection extends StatelessWidget {
           children: [
             StartupHeaderText(
               title: 'Investors',
-              font_size: 32,
+              font_size: heading_fonSize,
             ),
 
             //////////////////////////////////////////////////
@@ -190,14 +418,14 @@ class InvestorSection extends StatelessWidget {
                 ? Container()
                 : Container(
                     margin: EdgeInsets.only(
-                      top: context.height * 0.06,
-                      left: context.width * 0.02,
+                      top: context.height * add_btn_top_margin,
+                      left: context.width * add_btn_left_margin,
                     ),
                     child: Container(
-                      width: 90,
-                      height: 30,
+                      width: add_btn_cont_width,
+                      height: add_btn_cont_height,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(add_btn_radius),
                           border: Border.all(color: border_color)),
                       child: TextButton.icon(
                           onPressed: () {
@@ -205,14 +433,15 @@ class InvestorSection extends StatelessWidget {
                                 form_type: InvestorFormType.create,
                                 context: context);
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.add,
-                            size: 16,
+                            size: add_iconSize,
                           ),
-                          label: const Text(
+                          label: Text(
                             'Add',
                             style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: add_iconfonSize,
+                                fontWeight: FontWeight.bold),
                           )),
                     ))
           ],

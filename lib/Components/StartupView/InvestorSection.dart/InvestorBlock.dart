@@ -24,7 +24,48 @@ class _InvestorBlockState extends State<InvestorBlock> {
   var startupInvestorStore = Get.put(StartupInvestorStore());
   var my_context = Get.context;
 
-  double mem_dialog_width = 600;
+  double member_dialog_width = 0.33;
+
+  double member_card_radius = 20;
+
+  double invest_block_width = 0.12;
+
+  double invest_block_height = 0.21;
+
+  double invest_box_width = 0.10;
+
+  double invest_spacer = 5; 
+
+  double invest_block_padding = 10;
+
+  double invest_block_radius = 10;
+
+  double profile_border_radius = 80;
+
+  double profile_elevation = 3;
+
+  double profile_radius = 55;
+
+
+  double invest_name_fontSize = 14;
+
+  double invest_pod_fontSize = 12;
+
+  double invest_contact_padd = 5.0;
+
+  double invest_contact_iconSize = 16;
+
+  double invest_mail_fontSize = 11;
+
+
+
+  double delete_margin_top = 0.02;
+
+  double delete_cont_width = 100;
+
+  double delete_fontSize = 16;
+
+  double close_icon_fontSize = 20;
 
 /////////////////////////////////////////////////////////////////
   /// The function is called when the user clicks on
@@ -59,6 +100,337 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   @override
   Widget build(BuildContext context) {
+		// DEFAULT :
+    if (context.width > 1700) {
+      member_dialog_width = 0.33;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5; 
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 55;
+
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 5.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 16;
+
+      close_icon_fontSize = 20;
+      print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.12;
+
+        invest_block_height = 0.21;
+
+        invest_box_width = 0.10;
+
+        invest_spacer = 5; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_border_radius = 80;
+
+        profile_elevation = 3;
+
+        profile_radius = 55;
+
+
+        invest_name_fontSize = 14;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+      print('1700');
+      }
+  
+    if (context.width < 1600) {
+      print('1500');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+
+    if (context.width < 1300) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.12;
+
+        invest_block_height = 0.21;
+
+        invest_box_width = 0.10;
+
+        invest_spacer = 5; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_border_radius = 80;
+
+        profile_elevation = 3;
+
+        profile_radius = 45;
+
+
+        invest_name_fontSize = 14;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+
+    }
+
+
+    if (context.width < 1200) {
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.12;
+
+        invest_block_height = 0.21;
+
+        invest_box_width = 0.10;
+
+        invest_spacer = 5; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_elevation = 0;
+
+        profile_radius = 48;
+        
+        profile_border_radius = 80;
+
+
+        invest_name_fontSize = 14;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.15;
+
+        invest_block_height = 0.23;
+
+        invest_box_width = 0.20;
+
+        invest_spacer = 4; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_elevation = 0;
+
+        profile_border_radius = 4;
+
+        profile_radius = 40;
+        
+
+
+        invest_name_fontSize = 13;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.20;
+
+        invest_block_height = 0.25;
+
+        invest_box_width = 0.20;
+
+        invest_spacer = 4; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_elevation = 0;
+
+        profile_border_radius = 4;
+
+        profile_radius = 40;
+        
+
+
+        invest_name_fontSize = 13;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+        member_dialog_width = 0.33;
+
+        member_card_radius = 20;
+
+        invest_block_width = 0.25;
+
+        invest_block_height = 0.26;
+
+        invest_box_width = 0.20;
+
+        invest_spacer = 2; 
+
+        invest_block_padding = 10;
+
+        invest_block_radius = 10;
+
+        profile_elevation = 0;
+
+        profile_border_radius = 4;
+
+        profile_radius = 30;
+        
+
+
+        invest_name_fontSize = 13;
+
+        invest_pod_fontSize = 12;
+
+        invest_contact_padd = 3.0;
+
+        invest_contact_iconSize = 16;
+
+        invest_mail_fontSize = 11;
+
+        delete_margin_top = 0.02;
+
+        delete_cont_width = 100;
+
+        delete_fontSize = 16;
+
+        close_icon_fontSize = 20;
+      print('480');
+      }
+
+
     // MEMBER DETAIL DIALOG BLOK :
     MemberDetailDialogView() {
       showDialog(
@@ -75,7 +447,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
                 ),
               ),
               content: SizedBox(
-                width: mem_dialog_width,
+                width: context.width * member_dialog_width,
                 child: widget.is_admin
                     ? InvestorDialog(
                         form_type: InvestorFormType.edit,
@@ -88,16 +460,16 @@ class _InvestorBlockState extends State<InvestorBlock> {
     return Card(
       elevation: 0,
       color: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(member_card_radius)),
       ),
       child: Container(
-        width: context.width * 0.12,
-        height: context.height * 0.21,
+        width: context.width * invest_block_width,
+        height: context.height * invest_block_height,
         alignment: Alignment.center,
-        padding: EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+        padding: EdgeInsets.all(invest_block_padding),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(invest_block_radius)),
         ),
         child: Wrap(
           alignment: WrapAlignment.spaceEvenly,
@@ -113,29 +485,31 @@ class _InvestorBlockState extends State<InvestorBlock> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     // Profile Image :
                     ProfileImage(),
 
                     // Postition:
                     SizedBox(
-                      width: 200,
+                      width: context.width * invest_box_width,
+                    
                       child: Column(
                         children: [
                           // Spacer
-                          const SizedBox(
-                            height: 5,
+                           SizedBox(
+                            height: invest_spacer,
                           ),
 
-                          // Member Name Block :
-                          MemName(),
+                            // Member Name Block :
+                            MemName(),
 
-                          // Spacer :
-                          const SizedBox(
-                            height: 5,
-                          ),
+                            // Spacer :
+                            SizedBox(
+                              height: invest_spacer,
+                            ),
 
                           // Contact and email adderss :
-                          MemContact()
+                          // MemContact()
                         ],
                       ),
                     ),
@@ -151,9 +525,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   Container DeleteInvestorButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: EdgeInsets.only(top: context.height * delete_margin_top),
       alignment: Alignment.center,
-      width: 100,
+      width: delete_cont_width,
       decoration: BoxDecoration(
         color: Colors.red.shade50,
         borderRadius: BorderRadius.circular(15),
@@ -166,7 +540,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
             'Delete',
             style: TextStyle(
                 color: Colors.red.shade400,
-                fontSize: 16,
+                fontSize: delete_fontSize,
                 fontWeight: FontWeight.w600),
           )),
     );
@@ -179,9 +553,10 @@ class _InvestorBlockState extends State<InvestorBlock> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.cancel,
             color: Colors.grey,
+            size: close_icon_fontSize,
           )),
     );
   }
@@ -253,18 +628,16 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   Card ProfileImage() {
     return Card(
-      elevation: 3,
+      elevation: profile_elevation,
       shadowColor: Colors.red,
       color: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.horizontal(
-          left: Radius.circular(80),
-          right: Radius.circular(80),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(profile_border_radius)
         ),
-      ),
+      
       child: Container(
-          child: CircleAvatar(
-        radius: 55,
+        child: CircleAvatar(
+        radius: profile_radius,
         backgroundColor: Colors.blueGrey[100],
         foregroundImage: NetworkImage(widget.investor['image'] ?? temp_logo),
       )),
@@ -281,7 +654,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
       TextSpan(
           text: widget.investor['name'] ?? '',
           style: TextStyle(
-              fontWeight: FontWeight.w900, color: Colors.black87, fontSize: 16))
+              fontWeight: FontWeight.w900,
+              color: Colors.black87,
+              fontSize: invest_name_fontSize))
     ])));
   }
 
@@ -296,7 +671,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
       TextSpan(
           text: '@${widget.investor['position']}',
           style: TextStyle(
-              fontWeight: FontWeight.w600, color: Colors.black87, fontSize: 12))
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+              fontSize: invest_pod_fontSize))
     ])));
   }
 
@@ -305,29 +682,32 @@ class _InvestorBlockState extends State<InvestorBlock> {
 /////////////////////////////////////////
   Container MemContact() {
     return Container(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Icon :
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Icon(
-            Icons.mail_outline_outlined,
-            color: Colors.orange.shade800,
-            size: 16,
+        child: Wrap(
+          children: [
+          // Icon :
+          Padding(
+            padding: EdgeInsets.only(right:invest_contact_padd),
+            child: Icon(
+              Icons.mail_outline_outlined,
+              color: Colors.orange.shade800,
+              size: invest_contact_iconSize,
+            ),
           ),
-        ),
 
-        // Tect :
-        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
-          TextSpan(
-              text: widget.investor['email'] ?? '',
-              style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  color: Colors.blueGrey.shade700,
-                  fontSize: 11))
-        ])),
-      ],
-    ));
+          // Text :
+          AutoSizeText.rich(
+            TextSpan(
+              style: Get.textTheme.headline5, 
+              children: [
+              TextSpan(
+                  text: widget.investor['email'] ?? '',
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.blueGrey.shade700,
+                    fontSize: invest_mail_fontSize
+                      ))
+            ])),
+        ],
+      ));
   }
 }

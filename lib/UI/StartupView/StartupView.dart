@@ -26,7 +26,7 @@ class _StartupViewState extends State<StartupView> {
   var detailViewState = Get.put(StartupDetailViewState());
 
   double page_width = 0.90;
-  double heading_fontSize = 23; 
+  double heading_fontSize = 32; 
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +68,11 @@ class _StartupViewState extends State<StartupView> {
 
   Container MainMethod(BuildContext context) {
      page_width = 0.90;
-     heading_fontSize = 23; 
+     heading_fontSize = 32; 
     // DEFAULT :
     if (context.width > 1700) {
         page_width = 0.90;
-        heading_fontSize = 23; 
+        heading_fontSize = 32; 
       print('1700');
     }
     // DEFAULT :
@@ -83,7 +83,7 @@ class _StartupViewState extends State<StartupView> {
     // DEFAULT :
     if (context.width < 1600) {
         page_width = 0.90;
-        heading_fontSize = 23; 
+        heading_fontSize = 32; 
       print('1600');
     }
 
@@ -93,6 +93,8 @@ class _StartupViewState extends State<StartupView> {
     }
 
     if (context.width < 1200) {
+        page_width = 0.90;
+        heading_fontSize = 30; 
       print('1200');
     }
 
@@ -102,18 +104,20 @@ class _StartupViewState extends State<StartupView> {
 
     // TABLET :
     if (context.width < 800) {
+      heading_fontSize = 28; 
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
+      heading_fontSize = 28; 
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
+        heading_fontSize = 25; 
         page_width = 1;
-        heading_fontSize = 23; 
       print('480');
     }
 

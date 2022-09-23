@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
 
+
   //////////////////////////////////
   // LOADING SPINNER :
   //////////////////////////////////
@@ -98,10 +99,11 @@ class _MyAppState extends State<MyApp> {
     ),
   );
 
+
+
   @override
   Widget build(BuildContext context) {
-    
-
+  
     final textTheme = Theme.of(context).textTheme;
 
     // Wait for a sec to settle things clearly :
