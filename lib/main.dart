@@ -58,6 +58,7 @@ void main() async {
 
   // FACEBOOK SDK INITILIZE :
   if (GetPlatform.isWeb) {
+
     // initialiaze the facebook javascript SDK
     await FacebookAuth.i.webInitialize(
       appId: "554392976209038",
@@ -153,28 +154,28 @@ class _MyAppState extends State<MyApp> {
         GetPage(
             name: home_route,
             page: () {
-              return StreamBuilder(
-                  stream: FirebaseAuth.instance.authStateChanges(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      // SHOW ERROR :
-                      ErrorPage();
-                    }
+            return StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    // SHOW ERROR :
+                    ErrorPage();
+                  }
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return spinner;
-                    }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return spinner;
+                  }
 
-                    if (snapshot.hasData) {
-                      // Check Login user complete profile setup or not :
-                      // if Complete then redirect to
-                      // Configure App local state :
-                      SetAppLocalState();
+                  if (snapshot.hasData) {
+                    // Check Login user complete profile setup or not :
+                    // if Complete then redirect to
+                    // Configure App local state :
+                    SetAppLocalState();
 
-                      return HomeView();
-                    }
-                    return LoginHandler();
-                  });
+                    return HomeView();
+                  }
+                  return LoginHandler();
+                });
             }),
 
 

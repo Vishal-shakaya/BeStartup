@@ -279,7 +279,7 @@ class _ProductsState extends State<Products> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.70;
 
       bottom_spacer = 50;
 
@@ -326,7 +326,7 @@ class _ProductsState extends State<Products> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.70;
 
       bottom_spacer = 50;
 
@@ -373,7 +373,7 @@ class _ProductsState extends State<Products> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.80;
 
       bottom_spacer = 50;
 
@@ -420,7 +420,7 @@ class _ProductsState extends State<Products> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.80;
 
       bottom_spacer = 50;
 
@@ -470,7 +470,7 @@ class _ProductsState extends State<Products> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.95;
 
       bottom_spacer = 40;
 
@@ -529,7 +529,7 @@ class _ProductsState extends State<Products> {
       image_radius_width = 2;
       phone_image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.98;
       phone_mem_dialog_width = 0.60;
 
       bottom_spacer = 50;
@@ -608,8 +608,8 @@ class _ProductsState extends State<Products> {
       image_radius_width = 2;
       phone_image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
-      phone_mem_dialog_width = 0.60;
+      mem_dialog_width = 1;
+      phone_mem_dialog_width = 1;
 
       bottom_spacer = 50;
       phone_bottom_spacer = 50;
@@ -672,10 +672,23 @@ class _ProductsState extends State<Products> {
           barrierDismissible: false,
           context: context,
           builder: (context) => AlertDialog(
+            // contentPadding: EdgeInsets.all(0),
+            insetPadding: EdgeInsets.all(12),
+              title: Container(
+                alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.blueGrey.shade800,
+                        size: 18,
+                      ))),
               content: SizedBox(
                   width: context.width * mem_dialog_width,
                   child: ProductDetailDialog(
-                    heading: widget.product['title'],
+                    heading: widget.product['title'].toString().capitalizeFirst,
                     detail: widget.product['description'],
                     image: widget.product['image_url'],
                   ))));
@@ -683,22 +696,20 @@ class _ProductsState extends State<Products> {
 
     Widget mainProductWrap = Wrap(
       children: [
-
         // Produt Dialog :
         InkWell(
-             borderRadius: BorderRadius.horizontal(
+            borderRadius: BorderRadius.horizontal(
               left: Radius.circular(image_radius),
               right: Radius.circular(image_radius),
-            ), 
-
+            ),
             onTap: () {
               ProductDetailView();
             },
 
             // PRODUCT iMAGE :
             child: ProductImage(context, image_cont_width, image_cont_height)),
-            // DESCRIPTION :
-            ProductDescription(context, desc_cont_width, desc_cont_height)
+        // DESCRIPTION :
+        ProductDescription(context, desc_cont_width, desc_cont_height)
       ],
     );
 
@@ -709,18 +720,18 @@ class _ProductsState extends State<Products> {
             borderRadius: BorderRadius.horizontal(
               left: Radius.circular(image_radius),
               right: Radius.circular(image_radius),
-            ), 
+            ),
             onTap: () {
               ProductDetailView();
             },
-            
+
             // PRODUCT iMAGE :
             child: PhoneProductImage(
                 context, phone_image_cont_width, phone_image_cont_height)),
 
-            // DESCRIPTION :
-            PhoneProductDescription(
-                context, phone_desc_cont_width, phone_desc_cont_height)
+        // DESCRIPTION :
+        PhoneProductDescription(
+            context, phone_desc_cont_width, phone_desc_cont_height)
       ],
     );
 

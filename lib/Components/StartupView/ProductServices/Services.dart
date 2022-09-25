@@ -121,7 +121,7 @@ class _ServicesState extends State<Services> {
 
   @override
   Widget build(BuildContext context) {
-    image_cont_width = 0.20;
+      image_cont_width = 0.20;
     image_cont_height = 0.27;
 
     image_radius = 15;
@@ -279,7 +279,7 @@ class _ServicesState extends State<Services> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.70;
 
       bottom_spacer = 50;
 
@@ -326,7 +326,7 @@ class _ServicesState extends State<Services> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.70;
 
       bottom_spacer = 50;
 
@@ -373,7 +373,7 @@ class _ServicesState extends State<Services> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.80;
 
       bottom_spacer = 50;
 
@@ -420,7 +420,7 @@ class _ServicesState extends State<Services> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.80;
 
       bottom_spacer = 50;
 
@@ -470,7 +470,7 @@ class _ServicesState extends State<Services> {
 
       image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.95;
 
       bottom_spacer = 40;
 
@@ -529,7 +529,7 @@ class _ServicesState extends State<Services> {
       image_radius_width = 2;
       phone_image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
+      mem_dialog_width = 0.98;
       phone_mem_dialog_width = 0.60;
 
       bottom_spacer = 50;
@@ -608,8 +608,8 @@ class _ServicesState extends State<Services> {
       image_radius_width = 2;
       phone_image_radius_width = 2;
 
-      mem_dialog_width = 0.60;
-      phone_mem_dialog_width = 0.60;
+      mem_dialog_width = 1;
+      phone_mem_dialog_width = 1;
 
       bottom_spacer = 50;
       phone_bottom_spacer = 50;
@@ -672,14 +672,28 @@ class _ServicesState extends State<Services> {
           barrierDismissible: false,
           context: context,
           builder: (context) => AlertDialog(
+            // contentPadding: EdgeInsets.all(0),
+            insetPadding: EdgeInsets.all(12),
+              title: Container(
+                alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.blueGrey.shade800,
+                        size: 18,
+                      ))),
               content: SizedBox(
                   width: context.width * mem_dialog_width,
                   child: ProductDetailDialog(
-                    heading: widget.service['title'],
+                    heading: widget.service['title'].toString().capitalizeFirst,
                     detail: widget.service['description'],
                     image: widget.service['image_url'],
                   ))));
     }
+
 
     Widget mainProductWrap = Wrap(
       children: [
