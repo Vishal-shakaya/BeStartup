@@ -213,7 +213,7 @@ class Picture extends StatelessWidget {
       edit_icon_top_margin = 0.07;
       edit_icon_left_margin = 0.12;
 
-      edit_iconSize = 15;
+      edit_iconSize = 14;
 
       startup_logo_radius = 43;
       ceo_profile_radius = 40;
@@ -227,10 +227,10 @@ class Picture extends StatelessWidget {
       profile_top_pos = 0.15;
       profile_left_pos = 0.0;
 
-      edit_icon_top_margin = 0.09;
-      edit_icon_left_margin = 0.05;
+      edit_icon_top_margin = 0.07;
+      edit_icon_left_margin = 0.13;
 
-      edit_iconSize = 19;
+      edit_iconSize = 13;
 
       startup_logo_radius = 36;
       ceo_profile_radius = 35;

@@ -368,7 +368,7 @@ class _ProductSectionState extends State<ProductSection> {
     return Container(
         width: context.width * edit_btn_width,
         alignment: Alignment.topRight,
-        margin: EdgeInsets.only(top: context.height * edit_btn_top_margin),
+        // margin: EdgeInsets.only(top: context.hei),
         child: Container(
           width: edit_btn_cont_width,
           height: edit_btn_cont_height,

@@ -44,7 +44,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   var my_context = Get.context;
 
   int maxlines = 7;
-  double con_button_width = 55;
+  double con_button_width = 100;
   double con_button_height = 30;
 
   double con_btn_top_margin = 5;
@@ -167,8 +167,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   Widget build(BuildContext context) {
 
      maxlines = 7;
-     con_button_width = 55;
-     con_button_height = 30;
+     con_button_width = 100;
+     con_button_height = 33;
 
      con_btn_top_margin = 5;
      con_btn_btttom_margin = 10;
@@ -191,8 +191,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 		// DEFAULT :
     if (context.width > 1700) {
         maxlines = 7;
-        con_button_width = 55;
-        con_button_height = 30;
+        con_button_width = 100;
+        con_button_height = 33;
 
         con_btn_top_margin = 5;
         con_btn_btttom_margin = 10;
@@ -215,7 +215,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   
     if (context.width < 1700) {
         maxlines = 7;
-        con_button_width = 55;
+        con_button_width = 100;
         con_button_height = 33;
 
         con_btn_top_margin = 5;

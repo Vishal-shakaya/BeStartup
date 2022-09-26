@@ -492,6 +492,10 @@ class _InvestmentChartState extends State<InvestmentChart> {
   /// MAIN METHOD :
   //////////////////////////////////////////
   Container MainMethod(context) {
+
+    //////////////////////////////////////
+    /// Main Chart : 
+    //////////////////////////////////////
     Container mainChart = Container(
       width: static_sec_width,
       height: static_sec_height,
@@ -546,18 +550,26 @@ class _InvestmentChartState extends State<InvestmentChart> {
         width: MediaQuery.of(context).size.width * 0.70,
         height: MediaQuery.of(context).size.height * 0.10,
         padding: EdgeInsets.all(2),
+        
+        
         child: Card(
           elevation: 2,
           shadowColor: my_theme_shadow_color,
           surfaceTintColor: my_theme_shadow_color,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
+         
+         
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              
               PhoneStaticRow(title: 'Team', value: "10"),
               PhoneStaticRow(title: 'Desire', value: "₹ 50L"),
-              PhoneStaticRow(title: 'Invest', value: "₹ 80K",fun:UpdateInvetAlert),
+              
+              // if User is admin then show update dialog else pass Null Function : 
+              PhoneStaticRow(title: 'Invest', value: "₹ 80K",
+              fun: is_admin==true? UpdateInvetAlert :(){}),
             ],
           ),
         ));
@@ -566,7 +578,9 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
     // Return Chart base on screen size : 
     Container chart ;    
-    MediaQuery.of(context).size.width<480? chart= phoneChart: chart= mainChart ;
+    MediaQuery.of(context).size.width<550
+    ? chart= phoneChart
+    : chart= mainChart ;
     return chart; 
   }
 

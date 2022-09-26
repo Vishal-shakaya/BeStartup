@@ -160,7 +160,24 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
 
     // SMALL TABLET:
     if (context.width < 640) {
+          elevation = 2;
+        
+         icon_fontSize = 15; 
+
+         btn_width = 30; 
+
+         btn_height = 30 ; 
       print('640');
+      }
+    if (context.width < 550) {
+          elevation = 2;
+        
+         icon_fontSize = 15; 
+
+         btn_width = 35; 
+
+         btn_height = 35 ; 
+      print('550');
       }
 
     // PHONE:

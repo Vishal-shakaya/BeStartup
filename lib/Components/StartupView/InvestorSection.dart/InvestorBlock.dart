@@ -64,9 +64,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   double close_icon_fontSize = 20;
 
-  double inset_padding_hor = 40.0; 
+  double inset_padding_hor = 40.0;
 
-  double inset_padding_ver = 25.0; 
+  double inset_padding_ver = 25.0;
 
 /////////////////////////////////////////////////////////////////
   /// The function is called when the user clicks on
@@ -101,6 +101,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   @override
   Widget build(BuildContext context) {
+
     // DEFAULT :
     if (context.width > 1700) {
       member_dialog_width = 0.37;
@@ -143,9 +144,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
       close_icon_fontSize = 20;
 
-      inset_padding_hor = 40.0; 
+      inset_padding_hor = 40.0;
 
-      inset_padding_ver = 25.0; 
+      inset_padding_ver = 25.0;
       print('Greator then 1700');
     }
 
@@ -190,7 +191,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
       close_icon_fontSize = 20;
 
-      inset_padding_hor = 40.0; 
+      inset_padding_hor = 40.0;
 
       inset_padding_ver = 25.0;
       print('1700');
@@ -584,7 +585,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
       close_icon_fontSize = 20;
 
-      inset_padding_hor = 15.0; 
+      inset_padding_hor = 15.0;
 
       inset_padding_ver = 10.0;
       print('480');
@@ -597,15 +598,13 @@ class _InvestorBlockState extends State<InvestorBlock> {
           context: context,
           builder: (context) => AlertDialog(
               contentPadding: EdgeInsets.all(2),
-              insetPadding:
-                  EdgeInsets.symmetric(
-                    horizontal:inset_padding_hor,
-                    vertical: inset_padding_ver),
+              insetPadding: EdgeInsets.symmetric(
+                  horizontal: inset_padding_hor, vertical: inset_padding_ver),
               title: Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    DeleteInvestorButton(),
+                    widget.is_admin==false?Container(): DeleteInvestorButton(),
                     CloseDialogButton(context),
                   ],
                 ),

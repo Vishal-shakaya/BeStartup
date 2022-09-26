@@ -26,7 +26,15 @@ class _StartupViewState extends State<StartupView> {
   var detailViewState = Get.put(StartupDetailViewState());
 
   double page_width = 0.90;
-  double heading_fontSize = 32; 
+  double heading_fontSize = 32;
+
+  double product_bottom_space = 0.04;
+
+  double product_top_space = 0.12;
+
+  double prouduct_bottom_space = 0.03;
+
+  double service_bottom_height = 0.04; 
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +75,29 @@ class _StartupViewState extends State<StartupView> {
   }
 
   Container MainMethod(BuildContext context) {
-     page_width = 0.90;
-     heading_fontSize = 32; 
+    page_width = 0.90;
+    heading_fontSize = 32;
+
+    product_bottom_space = 0.04;
+
+    product_top_space = 0.12;
+
+    prouduct_bottom_space = 0.03;
+
+    service_bottom_height = 0.04; 
+
     // DEFAULT :
     if (context.width > 1700) {
-        page_width = 0.90;
-        heading_fontSize = 32; 
+      page_width = 0.90;
+      heading_fontSize = 32;
+
+      product_bottom_space = 0.04;
+
+      product_top_space = 0.12;
+
+      prouduct_bottom_space = 0.03;
+
+      service_bottom_height = 0.04; 
       print('1700');
     }
     // DEFAULT :
@@ -82,20 +107,41 @@ class _StartupViewState extends State<StartupView> {
 
     // DEFAULT :
     if (context.width < 1600) {
-        page_width = 0.90;
-        heading_fontSize = 32; 
+      page_width = 0.90;
+      heading_fontSize = 32;
       print('1600');
     }
 
     // PC:
     if (context.width < 1500) {
+        product_top_space = 0.10;
+
+        product_bottom_space = 0.04;
+
+        prouduct_bottom_space = 0.03;
+
+        service_bottom_height = 0.03; 
       print('1500');
     }
 
     if (context.width < 1200) {
-        page_width = 0.90;
-        heading_fontSize = 30; 
+      page_width = 0.90;
+      heading_fontSize = 30;
       print('1200');
+    }
+    
+    if (context.width < 1300) {
+      page_width = 0.90;
+      heading_fontSize = 30;
+
+      product_top_space = 0.09;
+
+      product_bottom_space = 0.03;
+
+      prouduct_bottom_space = 0.03;
+
+      service_bottom_height = 0.03; 
+      print('1300');
     }
 
     if (context.width < 1000) {
@@ -104,27 +150,26 @@ class _StartupViewState extends State<StartupView> {
 
     // TABLET :
     if (context.width < 800) {
-      heading_fontSize = 28; 
+      heading_fontSize = 28;
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
-      heading_fontSize = 28; 
+      heading_fontSize = 28;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-        heading_fontSize = 25; 
-        page_width = 1;
+      heading_fontSize = 25;
+      page_width = 1;
       print('480');
     }
 
     return Container(
       padding: const EdgeInsets.all(5),
       width: context.width * page_width,
-      
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -140,14 +185,20 @@ class _StartupViewState extends State<StartupView> {
             // 2 STARTUP VISION DESCRIPTION:
             const StartupVisionSection(),
 
+            SizedBox(height: context.height * product_top_space),
+
             // PRODUCT HEADING :
             StartupHeaderText(
               title: 'Product',
               font_size: heading_fontSize,
             ),
 
+            SizedBox(height: context.height * product_bottom_space),
+
             // PRODUCT AND SERVIVES :
             const ProductSection(),
+
+            SizedBox(height: context.height * prouduct_bottom_space),
 
             // SERVICE HEADING :
             StartupHeaderText(
@@ -155,6 +206,7 @@ class _StartupViewState extends State<StartupView> {
               font_size: heading_fontSize,
             ),
 
+            SizedBox(height: context.height * service_bottom_height),
             // SERVICE SECTION :
             ServiceSection(),
 

@@ -44,7 +44,7 @@ class StartupInfoSection extends StatelessWidget {
   double image_cont_width = 0.6;
   double image_cont_height = 0.20;
 
-  double image_sec_height = 0.23; 
+  double image_sec_height = 0.23;
 
   double page_height = 0.45;
 
@@ -65,13 +65,13 @@ class StartupInfoSection extends StatelessWidget {
 
   double edit_iconSize = 15;
 
-  double detail_btn_top_margin= 0.25;
+  double detail_btn_top_margin = 0.25;
 
-  double detail_btn_left_margin = 0.20; 
+  double detail_btn_left_margin = 0.20;
 
-  double edit_btn_fontSize = 14; 
+  double edit_btn_fontSize = 14;
 /////////////////////////////////////////
-/// GET REQUIRED PARAM :
+  /// GET REQUIRED PARAM :
 /////////////////////////////////////////
   IsStartupLiked() async {
     final resp = await startupConnect.IsStartupLiked(
@@ -86,7 +86,6 @@ class StartupInfoSection extends StatelessWidget {
       is_liked = false;
     }
   }
-
 
   // Edit Thumbnail :
   EditThumbnail() {
@@ -116,10 +115,10 @@ class StartupInfoSection extends StatelessWidget {
       is_admin = await startupDetialView.GetIsUserAdmin();
       startup_id = await startupDetialView.GetStartupId();
       founder_id = await startupDetialView.GetFounderId();
-   
-      // Set Liked Default State : 
+
+      // Set Liked Default State :
       await IsStartupLiked();
-      
+
       try {
         final business_name_resp =
             await startupConnect.FetchBusinessDetail(startup_id: startup_id);
@@ -197,7 +196,7 @@ class StartupInfoSection extends StatelessWidget {
     image_cont_width = 0.6;
     image_cont_height = 0.20;
 
-    image_sec_height = 0.23; 
+    image_sec_height = 0.23;
 
     page_height = 0.45;
 
@@ -218,19 +217,18 @@ class StartupInfoSection extends StatelessWidget {
 
     edit_iconSize = 15;
 
-    detail_btn_top_margin= 0.25;
+    detail_btn_top_margin = 0.25;
 
-    detail_btn_left_margin = 0.20; 
-    
-    edit_btn_fontSize = 14; 
+    detail_btn_left_margin = 0.20;
 
+    edit_btn_fontSize = 14;
 
     // DEFAULT :
     if (context.width > 1700) {
       image_cont_width = 0.6;
       image_cont_height = 0.20;
 
-      image_sec_height = 0.23; 
+      image_sec_height = 0.23;
 
       page_height = 0.45;
 
@@ -251,9 +249,9 @@ class StartupInfoSection extends StatelessWidget {
 
       edit_iconSize = 15;
 
-      detail_btn_top_margin= 0.25;
+      detail_btn_top_margin = 0.25;
 
-      detail_btn_left_margin = 0.20; 
+      detail_btn_left_margin = 0.20;
       print('Greator then 1700');
     }
 
@@ -454,7 +452,7 @@ class StartupInfoSection extends StatelessWidget {
       edit_btn_height = 30;
 
       edit_iconSize = 14;
-      edit_btn_fontSize = 12; 
+      edit_btn_fontSize = 12;
       print('1000');
     }
 
@@ -533,8 +531,8 @@ class StartupInfoSection extends StatelessWidget {
 
       edit_iconSize = 14;
 
-      edit_btn_fontSize = 12; 
-      
+      edit_btn_fontSize = 12;
+
       print('640');
     }
 
@@ -543,34 +541,39 @@ class StartupInfoSection extends StatelessWidget {
       image_cont_width = 0.99;
       image_cont_height = 0.05;
 
-      image_sec_height = 0.20; 
+      image_sec_height = 0.19;
 
       page_height = 0.45;
 
-      invest_chart_left_margin = 0.70;
-      invest_chart_top_margin = 0.20;
+      invest_chart_left_margin = 0.14;
+      invest_chart_top_margin = 0.33;
 
-      tab_top_margin = 0.22;
-      tab_left_margin = 0.20;
+      tab_top_margin = 0.21;
+      tab_left_margin = 0.22;
 
-      tab_cont_width = 0.49;
+      tab_cont_width = 0.52;
       tab_cont_height = 65;
 
       edit_btn_left_margin = 0.76;
       edit_btn_top_margin = 0.02;
 
       edit_btn_width = 70;
-      edit_btn_height = 30;
+      edit_btn_height = 25;
 
       edit_iconSize = 14;
-      edit_btn_fontSize = 12; 
+
+      detail_btn_top_margin = 0.21;
+
+      detail_btn_left_margin = 0.80;
+
+      edit_btn_fontSize = 12;
     }
 
     if (context.width < 480) {
       image_cont_width = 0.99;
       image_cont_height = 0.05;
 
-      image_sec_height = 0.19; 
+      image_sec_height = 0.19;
 
       page_height = 0.45;
 
@@ -578,37 +581,34 @@ class StartupInfoSection extends StatelessWidget {
       invest_chart_top_margin = 0.33;
 
       tab_top_margin = 0.22;
-      tab_left_margin = 0.24;
+      tab_left_margin = 0.25;
 
-      tab_cont_width = 0.51;
+      tab_cont_width = 0.52;
       tab_cont_height = 65;
 
-      edit_btn_left_margin = 0.74;
+      edit_btn_left_margin = 0.76;
       edit_btn_top_margin = 0.02;
 
-      edit_btn_width = 80;
-      edit_btn_height = 30;
+      edit_btn_width = 62;
+      edit_btn_height = 23;
 
-      edit_iconSize = 15;
+      edit_btn_fontSize = 12;
+      edit_iconSize = 12;
 
-      detail_btn_top_margin= 0.22;
+      detail_btn_top_margin = 0.21;
 
-      detail_btn_left_margin = 0.80; 
-      
-      edit_btn_fontSize = 12; 
+      detail_btn_left_margin = 0.80;
+
 
       print('480');
     }
 
     return Container(
         height: context.height * page_height,
-
         child: Stack(
           children: [
-
             // THUMBNAIL SECTION:
             Thumbnail(context, data['thumbnail']),
-
 
             // PROFILE PICTURE :
             Picture(
@@ -617,27 +617,21 @@ class StartupInfoSection extends StatelessWidget {
               founder_profile: founder_profile,
             ),
 
-
             // INVESTMENT CHART :
             Positioned(
-              left: context.width * invest_chart_left_margin,
-              top: context.height * invest_chart_top_margin,
-              child: InvestmentChart()),
-
-
+                left: context.width * invest_chart_left_margin,
+                top: context.height * invest_chart_top_margin,
+                child: InvestmentChart()),
 
             // TABS
             Positioned(
               top: context.height * tab_top_margin,
               left: context.width * tab_left_margin,
-             
               child: Container(
                   width: context.width * tab_cont_width,
                   height: tab_cont_height,
-             
                   child: Wrap(
                     alignment: WrapAlignment.spaceAround,
-                    
                     children: [
                       StartupNavigation(
                           title: 'Team', route: StartupPageRoute.team),
@@ -647,33 +641,35 @@ class StartupInfoSection extends StatelessWidget {
                           title: 'Invest', route: StartupPageRoute.invest),
                     ],
                   )),
-            ), 
+            ),
 
 
+            // Show like and mail button phone size :
+            // if user is not admin and screen size < then 550; 
+            is_admin == true
+                ? Positioned(
+                        top: context.height * detail_btn_top_margin,
+                        left: context.width * detail_btn_left_margin,
+                        child: Container())
+                 : context.width < 550
+                    ? Positioned(
+                        top: context.height * detail_btn_top_margin,
+                        left: context.width * detail_btn_left_margin,
+                        child: StartupDetailButtons(
+                          startup_id: startup_id,
+                          user_id: founder_id,
+                          is_saved: is_liked,
+                        ))
+                    
+                    : Positioned(
+                        top: context.height * detail_btn_top_margin,
+                        left: context.width * detail_btn_left_margin,
+                        child: Container()),
 
-            // Like And Mail : 
-            context.width<480?
-            Positioned(
-              top: context.height * detail_btn_top_margin,
-              left: context.width * detail_btn_left_margin,
-              
-              child:StartupDetailButtons(
-                  startup_id: startup_id,
-                  user_id: founder_id,
-                  is_saved: is_liked,
-                )
-              )
-              
-            :Positioned(                
-              top: context.height * detail_btn_top_margin,
-              left: context.width * detail_btn_left_margin,
-              child: Container()), 
-
-
-          // Phone Small Chart : 
-          // Positioned(
-          //   child: 
-          //   )
+            // Phone Small Chart :
+            // Positioned(
+            //   child:
+            //   )
           ],
         ));
   }
@@ -689,10 +685,8 @@ class StartupInfoSection extends StatelessWidget {
             left: Radius.circular(19),
             right: Radius.circular(19),
           )),
-        
           child: InkWell(
             onHover: (flag) {},
-        
             child: Container(
                 height: context.height * image_sec_height,
                 padding: const EdgeInsets.all(2),
@@ -701,13 +695,11 @@ class StartupInfoSection extends StatelessWidget {
                   borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(20), right: Radius.circular(20)),
                 ),
-             
                 child: ClipRRect(
                   borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(19),
                     right: Radius.circular(19),
                   ),
-               
                   child: CachedNetworkImage(
                     imageUrl: thumbnail_image,
                     width: context.width * image_cont_width,
@@ -717,19 +709,16 @@ class StartupInfoSection extends StatelessWidget {
                 )),
           ),
         ),
-      
         is_admin == true
             ? Positioned(
                 left: context.width * edit_btn_left_margin,
                 top: context.height * edit_btn_top_margin,
-               
                 child: Container(
                   width: edit_btn_width,
                   height: edit_btn_height,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: border_color)),
-               
                   child: TextButton.icon(
                       onPressed: () {
                         EditThumbnail();
@@ -738,11 +727,11 @@ class StartupInfoSection extends StatelessWidget {
                         Icons.edit,
                         size: edit_iconSize,
                       ),
-                      label: Text('Edit', 
-                      style:TextStyle(
-                        fontSize: edit_btn_fontSize),)),
+                      label: Text(
+                        'Edit',
+                        style: TextStyle(fontSize: edit_btn_fontSize),
+                      )),
                 ))
-          
             : Positioned(
                 left: context.width * edit_btn_left_margin,
                 top: context.height * edit_btn_top_margin,

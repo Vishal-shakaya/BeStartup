@@ -25,11 +25,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
 
   double vision_section_width = 0.50;
 
-  double vision_section_height = 0.42;
+  double vision_section_height = 0.43;
 
   double header_fontSize = 32;
 
-  double vision_text_top_space = 15;
+  double vision_text_top_space = 0.04;
 
   double vision_sec_elevation = 1;
 
@@ -88,11 +88,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
   Container MainMethod(BuildContext context) {
     vision_section_width = 0.50;
 
-    vision_section_height = 0.42;
+    vision_section_height = 0.43;
 
     header_fontSize = 32;
 
-    vision_text_top_space = 15;
+    vision_text_top_space = 0.04;
 
     vision_sec_elevation = 1;
 
@@ -118,11 +118,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width > 1700) {
       vision_section_width = 0.50;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 32;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -147,13 +147,13 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1700) {
        vision_section_width = 0.50;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       vision_cont_height = 0.28; 
 
       header_fontSize = 32;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -176,11 +176,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1600) {
       vision_section_width = 0.50;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 32;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -204,11 +204,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1500) {
       vision_section_width = 0.60;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 32;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -231,11 +231,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1300) {
       vision_section_width = 0.65;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 30;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -258,11 +258,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1200) {
       vision_section_width = 0.65;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 30;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.04;
 
       vision_sec_elevation = 1;
 
@@ -287,11 +287,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
 
       vision_cont_height = 0.25; 
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 30;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.03;
 
       vision_sec_elevation = 1;
 
@@ -318,11 +318,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
 
       vision_cont_height = 0.25; 
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
 
       header_fontSize = 28;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.03;
 
       vision_sec_elevation = 1;
 
@@ -346,14 +346,14 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 640) {
       vision_section_width = 0.90;
 
-      vision_section_height = 0.42;
+      vision_section_height = 0.43;
       
       vision_cont_height = 0.27; 
 
 
       header_fontSize = 28;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.03;
 
       vision_sec_elevation = 1;
 
@@ -384,7 +384,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
 
       header_fontSize = 25;
 
-      vision_text_top_space = 15;
+      vision_text_top_space = 0.03;
 
       vision_sec_elevation = 0;
 
@@ -407,6 +407,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     return Container(
       width: context.width * vision_section_width,
       height: context.height * vision_section_height,
+    
       child: Column(
         children: [
           // HEADING :
@@ -416,7 +417,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
           ),
 
           SizedBox(
-            height: vision_text_top_space,
+            height: context.height*vision_text_top_space,
           ),
 
           // VISION TEXT:
@@ -429,6 +430,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
                 left: Radius.circular(vision_sec_radius),
                 right: Radius.circular(vision_sec_radius),
               )),
+             
               child: Container(
                   width: context.width * vision_cont_width,
                   height: context.height * vision_cont_height,
