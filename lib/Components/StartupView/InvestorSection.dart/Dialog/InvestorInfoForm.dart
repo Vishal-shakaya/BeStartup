@@ -10,19 +10,15 @@ import 'package:google_fonts/google_fonts.dart';
 class InvestorInfoForm extends StatefulWidget {
   GlobalKey<FormBuilderState> formkey;
   InvestorFormType? form_type;
-  var member; 
+  var member;
 
-  InvestorInfoForm({
-    this.form_type,
-    this.member,
-    required this.formkey, Key? key}) : super(key: key);
+  InvestorInfoForm(
+      {this.form_type, this.member, required this.formkey, Key? key})
+      : super(key: key);
 
   @override
   State<InvestorInfoForm> createState() => _MemberInfoFormState();
 }
-
-
-
 
 class _MemberInfoFormState extends State<InvestorInfoForm> {
   bool is_password_visible = true;
@@ -34,75 +30,205 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
   double maxlines = 5;
-  double formfield_width = 500;
-  double contact_formfield_width = 500;
+  double formfield_width =0.30;
+  double contact_formfield_width =0.30;
   double contact_text_margin_top = 0.05;
+
+  double info_cont_top_margin = 0.01;
+  double top_spacer = 25;
+  double form_textSize = 14;
+  int max_length = 500;
+  double scroll_padd = 10;
+  double content_padding = 20;
+  double input_radius = 15; 
 
   @override
   Widget build(BuildContext context) {
+     maxlines = 5;
+     formfield_width =0.30;
+     contact_formfield_width =0.30;
+     contact_text_margin_top = 0.05;
+
+     info_cont_top_margin = 0.01;
+     top_spacer = 25;
+     form_textSize = 14;
+     max_length = 500;
+     scroll_padd = 10;
+     content_padding = 20;
+     input_radius = 15; 
+
     // DEFAULT :
-    if (context.width > 1500) {
-      maxlines = 5;
-      formfield_width = 500;
-      contact_formfield_width = 500;
-      contact_text_margin_top = 0.05;
-      print('greator then 1500');
+    if (context.width > 1700) {
+        maxlines = 5;
+        formfield_width =0.30;
+        contact_formfield_width =0.30;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 14;
+        max_length = 500;
+        
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
+        print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+        maxlines = 5;
+        formfield_width =0.30;
+        contact_formfield_width =0.30;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 14;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
+        print('1700');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
     }
 
     // PC:
     if (context.width < 1500) {
+        maxlines = 5;
+        formfield_width =0.32;
+        contact_formfield_width =0.32;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 14;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
       print('1500');
+    }
+    if (context.width < 1400) {
+        maxlines = 5;
+        formfield_width =0.33;
+        contact_formfield_width =0.33;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 14;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
+      print('1400');
+    }
+
+    if (context.width < 1300) {
+        maxlines = 5;
+        formfield_width =0.39;
+        contact_formfield_width =0.39;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 14;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
+        print('1300');
     }
 
     if (context.width < 1200) {
-      maxlines = 3;
-      formfield_width = 400;
-      contact_formfield_width = 400;
-      contact_text_margin_top = 0.05;
+        maxlines = 5;
+        formfield_width =0.42;
+        contact_formfield_width =0.42;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 13;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 20;
+        input_radius = 15; 
       print('1200');
     }
 
     if (context.width < 1000) {
-      maxlines = 3;
-      formfield_width = 350;
-      contact_formfield_width = 350;
-      contact_text_margin_top = 0.05;
+        maxlines = 5;
+        formfield_width =0.48;
+        contact_formfield_width =0.48;
+        contact_text_margin_top = 0.05;
+
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 13;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 18;
+        input_radius = 15; 
       print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
-      maxlines = 3;
-      formfield_width = 325;
-      contact_formfield_width = 325;
-      contact_text_margin_top = 0.05;
+        maxlines = 5;
+        formfield_width =0.54;
+        contact_formfield_width =0.54;
+        contact_text_margin_top = 0.05;
 
+        info_cont_top_margin = 0.01;
+        top_spacer = 25;
+        form_textSize = 12;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 18;
+        input_radius = 15; 
       print('800');
     }
+
     // SMALL TABLET:
     if (context.width < 640) {
-      maxlines = 3;
-      formfield_width = 300;
-      contact_formfield_width = 300;
-      contact_text_margin_top = 0.05;
+        maxlines = 5;
+        formfield_width =0.66;
+        contact_formfield_width =0.66;
+        contact_text_margin_top = 0.05;
 
+        info_cont_top_margin = 0.03;
+        top_spacer = 25;
+        form_textSize = 12;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 18;
+        input_radius = 15; 
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-      maxlines = 3;
-      formfield_width = 300;
-      contact_formfield_width = 300;
-      contact_text_margin_top = 0.05;
+        maxlines = 7;
+        formfield_width =0.80;
+        contact_formfield_width =0.80;
+        contact_text_margin_top = 0.05;
 
+        info_cont_top_margin = 0.03;
+        top_spacer = 25;
+        form_textSize = 12;
+        max_length = 500;
+        scroll_padd = 10;
+        content_padding = 5;
+        input_radius = 10; 
       print('480');
     }
 
     return Container(
-      width: formfield_width,
-      margin: EdgeInsets.only(
-        top: context.width * 0.01 ),
+      width: context.width*formfield_width,
+      margin: EdgeInsets.only(top: context.width * info_cont_top_margin),
       alignment: Alignment.center,
       child: FormBuilder(
           key: widget.formkey,
@@ -111,22 +237,27 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
             child: Column(
               children: [
                 // TAKE FOUNDER INOF:
-              const   SizedBox(
-                  height: 25,
+                SizedBox(
+                  height: top_spacer,
                 ),
+
                 SingleChildScrollView(
                   child: Column(
                     children: [
+                    
                       Container(
-                        width: contact_formfield_width,
+                        alignment: Alignment.topCenter,
+                        width: context.width*contact_formfield_width,
                         child: InputField(
-                          context: context,
-                          name: 'info',
-                          hind_text: 'investor Detail',
-                          error_text: 'investor detail min len 20',
-                          maxlines: maxlines,
-                          inital_val: widget.form_type== InvestorFormType.edit? widget.member['info']:''
-                        ),
+                            context: context,
+                            name: 'info',
+                            hind_text: 'investor Detail',
+                            error_text: 'investor detail min len 20',
+                            maxlines: maxlines,
+                            inital_val:
+                                widget.form_type == InvestorFormType.edit
+                                    ? widget.member['info']
+                                    : ''),
                       ),
                     ],
                   ),
@@ -146,38 +277,48 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
       lable_text,
       hind_text,
       require = true,
-      inital_val }) {
+      inital_val}) {
+   
     return FormBuilderTextField(
       // enabled: !info_dialog,
-      initialValue: inital_val!=''?inital_val:'',
+      initialValue: inital_val != '' ? inital_val : '',
       name: name,
       style: GoogleFonts.robotoSlab(
-        fontSize: 16,
+        fontSize: form_textSize,
       ),
-      maxLength: 500,
-      scrollPadding: EdgeInsets.all(10),
+
+      maxLength: max_length,
+      scrollPadding: EdgeInsets.all(scroll_padd),
       maxLines: maxlines,
+
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.minLength(context, 50,
             errorText: 'At least 50 char allow')
       ]),
+
       decoration: InputDecoration(
           helperText: 'min allow 50 ',
           hintText: hind_text,
           hintStyle: TextStyle(
             color: Colors.blueGrey.shade200,
           ),
+
           fillColor: Colors.grey[100],
           filled: true,
-          contentPadding: EdgeInsets.all(20),
+          
+          contentPadding: EdgeInsets.all(content_padding),
+          
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(input_radius),
               borderSide:
                   BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
+          
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(input_radius),
               borderSide: BorderSide(width: 2, color: primary_light)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+         
+          border:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(input_radius))),
     );
   }
 }

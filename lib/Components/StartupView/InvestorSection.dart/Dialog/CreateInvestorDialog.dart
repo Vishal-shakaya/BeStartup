@@ -46,17 +46,33 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   int maxlines = 7;
   double con_button_width = 55;
   double con_button_height = 30;
+
   double con_btn_top_margin = 5;
+  double con_btn_btttom_margin = 10;
+  double cont_btn_radius = 20;
+  double cont_btn_elevation = 10;
+  double cont_btn_fontSize = 16; 
+  double cont_btn_letterSpace= 2.5; 
+
+  double width_factor = 0.9;
+  double height_factor = 0.65;
+
+  double dialog_padd = 15;
+
+  double top_spacer = 10;
+
+  int image_flex = 5;
+  int desc_flex = 5;
 
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
 
-//////////////////////////////////
+/////////////////////////////////////////////////////
   // SUBMIT  FORM :
   // HANDLE TWO FORMS :
   // 1. MEMBER INFO [ DESCRIPTION ]:
   // 2. MEMEBER DETAIL :
-//////////////////////////////////
+/////////////////////////////////////////////////////
   SubmitMemberDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final startup_id = await startupState.GetStartupId();
@@ -96,9 +112,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
       var res;
       if (widget.form_type == InvestorFormType.edit) {
-        
         await startupInvestorStore.SetProfileImage(
-            image: widget.member['image']??'');
+            image: widget.member['image'] ?? '');
 
         res = await startupInvestorStore.UpdateInvestor(
             inv_obj: temp_investor, inv_id: widget.member['id']);
@@ -150,93 +165,205 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    ////////////////////////////////
-    /// RESPONSIVE BREAK  POINTS :
-    /// DEFAULT 1500 :
-    /// ///////////////////////////
 
-    // DEFAULT :
-    if (context.width > 1500) {
-      con_button_width = 90;
-      con_button_height = 38;
-      con_btn_top_margin = 10;
-      // formsection_width = 0.35;
-      // formsection_height = 0.41;
-      maxlines = 7;
-      print('greator then 1500');
-    }
+     maxlines = 7;
+     con_button_width = 55;
+     con_button_height = 30;
+
+     con_btn_top_margin = 5;
+     con_btn_btttom_margin = 10;
+     cont_btn_radius = 20;
+     cont_btn_elevation = 10;
+     cont_btn_fontSize = 16; 
+     cont_btn_letterSpace= 2.5; 
+
+     width_factor = 0.9;
+     height_factor = 0.65;
+
+     dialog_padd = 15;
+
+     top_spacer = 10;
+
+     image_flex = 5;
+     desc_flex = 5;
+
+
+		// DEFAULT :
+    if (context.width > 1700) {
+        maxlines = 7;
+        con_button_width = 55;
+        con_button_height = 30;
+
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 16; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 0.9;
+        height_factor = 0.65;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 5;
+        desc_flex = 5;
+        print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+        maxlines = 7;
+        con_button_width = 55;
+        con_button_height = 33;
+
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 16; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 0.9;
+        height_factor = 0.65;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 5;
+        desc_flex = 5;
+      print('1700');
+      }
+  
+    if (context.width < 1600) {
+      print('1600');
+      }
 
     // PC:
     if (context.width < 1500) {
-      maxlines = 6;
-      con_btn_top_margin = 7;
-      // formsection_height = 0.55;
+        maxlines = 7;
+        con_button_width = 100;
+        con_button_height = 33;
+
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 16; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 0.9;
+        height_factor = 0.65;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 5;
+        desc_flex = 5;
       print('1500');
-    }
+      }
 
     if (context.width < 1200) {
-      // formsection_width = 0.35;
-      // formsection_height = 0.50;
-      maxlines = 5;
-      con_button_width = 90;
-      con_button_height = 34;
-      con_btn_top_margin = 5;
       print('1200');
-    }
-
+      }
+    
     if (context.width < 1000) {
-      // formsection_height = 0.70;
+        maxlines = 7;
+        con_button_width = 100;
+        con_button_height = 33;
+
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 16; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 0.9;
+        height_factor = 0.65;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 4;
+        desc_flex = 5;
       print('1000');
-    }
+      }
 
     // TABLET :
     if (context.width < 800) {
-      maxlines = 4;
       print('800');
-    }
+      }
+
     // SMALL TABLET:
     if (context.width < 640) {
-      maxlines = 3;
-    }
+        maxlines = 7;
+        con_button_width = 90;
+        con_button_height = 30;
+
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 14; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 0.9;
+        height_factor = 0.57;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 4;
+        desc_flex = 5;
+      print('640');
+      }
 
     // PHONE:
     if (context.width < 480) {
-      print('480');
-    }
-    ///////////////////////////////////////////////////////
-    /// 1. MILESTONE DIALOG :
-    /// 2. MILESTONE FORM : Take Title and Description:
-    /////////////////////////////////////////////////////
-    return FractionallySizedBox(
-      widthFactor: 0.9,
-      heightFactor: 0.60,
-      child: Container(
-        padding: EdgeInsets.all(15),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(children: [
-              const SizedBox(
-                height: 10,
-              ),
+        maxlines = 7;
+        con_button_width = 90;
+        con_button_height = 30;
 
-              // TEAM MEMEBER PROFILE IAMGE SECTION
-              Container(
-                  child: Row(
+        con_btn_top_margin = 5;
+        con_btn_btttom_margin = 10;
+        cont_btn_radius = 20;
+        cont_btn_elevation = 10;
+        cont_btn_fontSize = 14; 
+        cont_btn_letterSpace= 2.5; 
+
+        width_factor = 1;
+        height_factor = 0.80;
+
+        dialog_padd = 15;
+
+        top_spacer = 10;
+
+        image_flex = 4;
+        desc_flex = 5;
+      print('480');
+      }
+
+  Widget mainHeaderForm =  Row(
                 children: [
+                  // IMAGE SECTION :
                   Expanded(
-                      flex: 5,
+                      flex: image_flex,
                       child: widget.form_type == InvestorFormType.create
                           ? InvestorProfileImage()
                           : InvestorProfileImage(
                               member_image: widget.member['image'],
                               form_type: InvestorFormType.edit,
                             )),
+
+                  // DETAIL SECTION :
                   Expanded(
-                      flex: 5,
+                      flex: desc_flex,
                       child: widget.form_type == InvestorFormType.create
                           ? InvestorDetialForm(
                               formkey: formKey,
@@ -249,7 +376,64 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
                               member: widget.member,
                             ))
                 ],
-              )),
+              ); 
+  Widget phoneHeaderForm =  Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // IMAGE SECTION :
+                  widget.form_type == InvestorFormType.create
+                      ? InvestorProfileImage()
+                      : InvestorProfileImage(
+                          member_image: widget.member['image'],
+                          form_type: InvestorFormType.edit,
+                        ),
+
+                  // DETAIL SECTION :
+                  widget.form_type == InvestorFormType.create
+                      ? InvestorDetialForm(
+                          formkey: formKey,
+                          ResetForm: ResetForm,
+                        )
+                      : InvestorDetialForm(
+                          formkey: formKey,
+                          ResetForm: ResetForm,
+                          form_type: InvestorFormType.edit,
+                          member: widget.member,
+                        )
+                ],
+              ); 
+
+
+
+  if (context.width < 480) {
+      mainHeaderForm = phoneHeaderForm; 
+      print('480');
+      }
+    ///////////////////////////////////////////////////////
+    /// 1. MILESTONE DIALOG :
+    /// 2. MILESTONE FORM : Take Title and Description:
+    /////////////////////////////////////////////////////
+    return FractionallySizedBox(
+      widthFactor: width_factor,
+      heightFactor: height_factor,
+      child: Container(
+        padding: EdgeInsets.all(dialog_padd),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(
+                height: top_spacer,
+              ),
+
+              // TEAM MEMEBER PROFILE IAMGE SECTION
+              Container(
+                  child:mainHeaderForm
+              ),
 
               // MEMBER DETAIL SECTION :
               Container(
@@ -268,23 +452,25 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
                             ),
                     ],
                   ),
+
+                  // CONTINUE BUTTON :
                   Container(
-                    margin:
-                        EdgeInsets.only(top: con_btn_top_margin, bottom: 10),
+                    margin: EdgeInsets.only(
+                        top: con_btn_top_margin, bottom: con_btn_btttom_margin),
                     child: InkWell(
                       highlightColor: primary_light_hover,
-                      borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(20),
-                          right: Radius.circular(20)),
+                      borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(cont_btn_radius),
+                          right: Radius.circular(cont_btn_radius)),
                       onTap: () async {
                         await SubmitMemberDetail();
                       },
                       child: Card(
-                        elevation: 10,
+                        elevation: cont_btn_elevation,
                         shadowColor: light_color_type3,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(cont_btn_radius))),
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(5),
@@ -292,17 +478,18 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
                           height: con_button_height,
                           decoration: BoxDecoration(
                               color: primary_light,
-                              borderRadius: const BorderRadius.horizontal(
-                                  left: Radius.circular(20),
-                                  right: Radius.circular(20))),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(cont_btn_radius),
+                                  right: Radius.circular(cont_btn_radius))),
                           child: Text(
                             widget.form_type == InvestorFormType.create
                                 ? 'Done'
                                 : 'Update',
-                            style: const TextStyle(
-                                letterSpacing: 2.5,
+                          
+                            style:  TextStyle(
+                                letterSpacing: cont_btn_letterSpace,
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: cont_btn_fontSize,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

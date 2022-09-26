@@ -34,7 +34,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   double invest_box_width = 0.10;
 
-  double invest_spacer = 5; 
+  double invest_spacer = 5;
 
   double invest_block_padding = 10;
 
@@ -46,7 +46,6 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   double profile_radius = 55;
 
-
   double invest_name_fontSize = 14;
 
   double invest_pod_fontSize = 12;
@@ -57,15 +56,17 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   double invest_mail_fontSize = 11;
 
-
-
   double delete_margin_top = 0.02;
 
   double delete_cont_width = 100;
 
-  double delete_fontSize = 16;
+  double delete_fontSize = 14;
 
   double close_icon_fontSize = 20;
+
+  double inset_padding_hor = 40.0; 
+
+  double inset_padding_ver = 25.0; 
 
 /////////////////////////////////////////////////////////////////
   /// The function is called when the user clicks on
@@ -100,9 +101,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
   @override
   Widget build(BuildContext context) {
-		// DEFAULT :
+    // DEFAULT :
     if (context.width > 1700) {
-      member_dialog_width = 0.33;
+      member_dialog_width = 0.37;
 
       member_card_radius = 20;
 
@@ -112,7 +113,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
       invest_box_width = 0.10;
 
-      invest_spacer = 5; 
+      invest_spacer = 5;
 
       invest_block_padding = 10;
 
@@ -123,7 +124,6 @@ class _InvestorBlockState extends State<InvestorBlock> {
       profile_elevation = 3;
 
       profile_radius = 55;
-
 
       invest_name_fontSize = 14;
 
@@ -139,297 +139,456 @@ class _InvestorBlockState extends State<InvestorBlock> {
 
       delete_cont_width = 100;
 
-      delete_fontSize = 16;
+      delete_fontSize = 14;
 
       close_icon_fontSize = 20;
+
+      inset_padding_hor = 40.0; 
+
+      inset_padding_ver = 25.0; 
       print('Greator then 1700');
-      }
-  
+    }
+
     if (context.width < 1700) {
-        member_dialog_width = 0.33;
+      member_dialog_width = 0.37;
 
-        member_card_radius = 20;
+      member_card_radius = 20;
 
-        invest_block_width = 0.12;
+      invest_block_width = 0.12;
 
-        invest_block_height = 0.21;
+      invest_block_height = 0.21;
 
-        invest_box_width = 0.10;
+      invest_box_width = 0.10;
 
-        invest_spacer = 5; 
+      invest_spacer = 5;
 
-        invest_block_padding = 10;
+      invest_block_padding = 10;
 
-        invest_block_radius = 10;
+      invest_block_radius = 10;
 
-        profile_border_radius = 80;
+      profile_border_radius = 80;
 
-        profile_elevation = 3;
+      profile_elevation = 3;
 
-        profile_radius = 55;
+      profile_radius = 55;
 
+      invest_name_fontSize = 14;
 
-        invest_name_fontSize = 14;
+      invest_pod_fontSize = 12;
 
-        invest_pod_fontSize = 12;
+      invest_contact_padd = 3.0;
 
-        invest_contact_padd = 3.0;
+      invest_contact_iconSize = 16;
 
-        invest_contact_iconSize = 16;
+      invest_mail_fontSize = 11;
 
-        invest_mail_fontSize = 11;
+      delete_margin_top = 0.02;
 
-        delete_margin_top = 0.02;
+      delete_cont_width = 100;
 
-        delete_cont_width = 100;
+      delete_fontSize = 14;
 
-        delete_fontSize = 16;
+      close_icon_fontSize = 20;
 
-        close_icon_fontSize = 20;
+      inset_padding_hor = 40.0; 
+
+      inset_padding_ver = 25.0;
       print('1700');
-      }
-  
+    }
+
     if (context.width < 1600) {
-      print('1500');
-      }
+      member_dialog_width = 0.38;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5;
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 55;
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 3.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 14;
+
+      close_icon_fontSize = 20;
+      print('1600');
+    }
 
     // PC:
     if (context.width < 1500) {
+      member_dialog_width = 0.40;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5;
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 55;
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 3.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 14;
+
+      close_icon_fontSize = 20;
       print('1500');
-      }
-
-
-    if (context.width < 1300) {
-        member_dialog_width = 0.33;
-
-        member_card_radius = 20;
-
-        invest_block_width = 0.12;
-
-        invest_block_height = 0.21;
-
-        invest_box_width = 0.10;
-
-        invest_spacer = 5; 
-
-        invest_block_padding = 10;
-
-        invest_block_radius = 10;
-
-        profile_border_radius = 80;
-
-        profile_elevation = 3;
-
-        profile_radius = 45;
-
-
-        invest_name_fontSize = 14;
-
-        invest_pod_fontSize = 12;
-
-        invest_contact_padd = 3.0;
-
-        invest_contact_iconSize = 16;
-
-        invest_mail_fontSize = 11;
-
-        delete_margin_top = 0.02;
-
-        delete_cont_width = 100;
-
-        delete_fontSize = 16;
-
-        close_icon_fontSize = 20;
-
     }
 
+    if (context.width < 1400) {
+      member_dialog_width = 0.42;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5;
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 45;
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 3.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 14;
+
+      close_icon_fontSize = 20;
+      print('1400');
+    }
+    if (context.width < 1300) {
+      member_dialog_width = 0.48;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5;
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 45;
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 3.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 14;
+
+      close_icon_fontSize = 20;
+      print('1300');
+    }
 
     if (context.width < 1200) {
+      member_dialog_width = 0.50;
+
+      member_card_radius = 20;
+
+      invest_block_width = 0.12;
+
+      invest_block_height = 0.21;
+
+      invest_box_width = 0.10;
+
+      invest_spacer = 5;
+
+      invest_block_padding = 10;
+
+      invest_block_radius = 10;
+
+      profile_border_radius = 80;
+
+      profile_elevation = 3;
+
+      profile_radius = 45;
+
+      invest_name_fontSize = 14;
+
+      invest_pod_fontSize = 12;
+
+      invest_contact_padd = 3.0;
+
+      invest_contact_iconSize = 16;
+
+      invest_mail_fontSize = 11;
+
+      delete_margin_top = 0.02;
+
+      delete_cont_width = 100;
+
+      delete_fontSize = 14;
+
+      close_icon_fontSize = 20;
       print('1200');
-      }
-    
+    }
+
     if (context.width < 1000) {
-        member_dialog_width = 0.33;
+      member_dialog_width = 0.60;
 
-        member_card_radius = 20;
+      member_card_radius = 20;
 
-        invest_block_width = 0.12;
+      invest_block_width = 0.12;
 
-        invest_block_height = 0.21;
+      invest_block_height = 0.21;
 
-        invest_box_width = 0.10;
+      invest_box_width = 0.10;
 
-        invest_spacer = 5; 
+      invest_spacer = 5;
 
-        invest_block_padding = 10;
+      invest_block_padding = 10;
 
-        invest_block_radius = 10;
+      invest_block_radius = 10;
 
-        profile_elevation = 0;
+      profile_elevation = 0;
 
-        profile_radius = 48;
-        
-        profile_border_radius = 80;
+      profile_radius = 48;
 
+      profile_border_radius = 80;
 
-        invest_name_fontSize = 14;
+      invest_name_fontSize = 14;
 
-        invest_pod_fontSize = 12;
+      invest_pod_fontSize = 12;
 
-        invest_contact_padd = 3.0;
+      invest_contact_padd = 3.0;
 
-        invest_contact_iconSize = 16;
+      invest_contact_iconSize = 16;
 
-        invest_mail_fontSize = 11;
+      invest_mail_fontSize = 11;
 
-        delete_margin_top = 0.02;
+      delete_margin_top = 0.02;
 
-        delete_cont_width = 100;
+      delete_cont_width = 100;
 
-        delete_fontSize = 16;
+      delete_fontSize = 14;
 
-        close_icon_fontSize = 20;
+      close_icon_fontSize = 20;
       print('1000');
-      }
+    }
 
     // TABLET :
     if (context.width < 800) {
-        member_dialog_width = 0.33;
+      member_dialog_width = 0.65;
 
-        member_card_radius = 20;
+      member_card_radius = 20;
 
-        invest_block_width = 0.15;
+      invest_block_width = 0.15;
 
-        invest_block_height = 0.23;
+      invest_block_height = 0.23;
 
-        invest_box_width = 0.20;
+      invest_box_width = 0.20;
 
-        invest_spacer = 4; 
+      invest_spacer = 4;
 
-        invest_block_padding = 10;
+      invest_block_padding = 10;
 
-        invest_block_radius = 10;
+      invest_block_radius = 10;
 
-        profile_elevation = 0;
+      profile_elevation = 0;
 
-        profile_border_radius = 4;
+      profile_border_radius = 4;
 
-        profile_radius = 40;
-        
+      profile_radius = 40;
 
+      invest_name_fontSize = 13;
 
-        invest_name_fontSize = 13;
+      invest_pod_fontSize = 12;
 
-        invest_pod_fontSize = 12;
+      invest_contact_padd = 3.0;
 
-        invest_contact_padd = 3.0;
+      invest_contact_iconSize = 16;
 
-        invest_contact_iconSize = 16;
+      invest_mail_fontSize = 11;
 
-        invest_mail_fontSize = 11;
+      delete_margin_top = 0.02;
 
-        delete_margin_top = 0.02;
+      delete_cont_width = 100;
 
-        delete_cont_width = 100;
+      delete_fontSize = 14;
 
-        delete_fontSize = 16;
-
-        close_icon_fontSize = 20;
+      close_icon_fontSize = 20;
       print('800');
-      }
+    }
 
     // SMALL TABLET:
     if (context.width < 640) {
-        member_dialog_width = 0.33;
+      member_dialog_width = 0.80;
 
-        member_card_radius = 20;
+      member_card_radius = 20;
 
-        invest_block_width = 0.20;
+      invest_block_width = 0.20;
 
-        invest_block_height = 0.25;
+      invest_block_height = 0.25;
 
-        invest_box_width = 0.20;
+      invest_box_width = 0.20;
 
-        invest_spacer = 4; 
+      invest_spacer = 4;
 
-        invest_block_padding = 10;
+      invest_block_padding = 10;
 
-        invest_block_radius = 10;
+      invest_block_radius = 10;
 
-        profile_elevation = 0;
+      profile_elevation = 0;
 
-        profile_border_radius = 4;
+      profile_border_radius = 4;
 
-        profile_radius = 40;
-        
+      profile_radius = 40;
 
+      invest_name_fontSize = 13;
 
-        invest_name_fontSize = 13;
+      invest_pod_fontSize = 12;
 
-        invest_pod_fontSize = 12;
+      invest_contact_padd = 3.0;
 
-        invest_contact_padd = 3.0;
+      invest_contact_iconSize = 16;
 
-        invest_contact_iconSize = 16;
+      invest_mail_fontSize = 11;
 
-        invest_mail_fontSize = 11;
+      delete_margin_top = 0.02;
 
-        delete_margin_top = 0.02;
+      delete_cont_width = 80;
 
-        delete_cont_width = 100;
+      delete_fontSize = 13;
 
-        delete_fontSize = 16;
-
-        close_icon_fontSize = 20;
+      close_icon_fontSize = 20;
       print('640');
-      }
+    }
 
     // PHONE:
     if (context.width < 480) {
-        member_dialog_width = 0.33;
+      member_dialog_width = 0.98;
 
-        member_card_radius = 20;
+      member_card_radius = 20;
 
-        invest_block_width = 0.25;
+      invest_block_width = 0.25;
 
-        invest_block_height = 0.26;
+      invest_block_height = 0.26;
 
-        invest_box_width = 0.20;
+      invest_box_width = 0.20;
 
-        invest_spacer = 2; 
+      invest_spacer = 2;
 
-        invest_block_padding = 10;
+      invest_block_padding = 10;
 
-        invest_block_radius = 10;
+      invest_block_radius = 10;
 
-        profile_elevation = 0;
+      profile_elevation = 0;
 
-        profile_border_radius = 4;
+      profile_border_radius = 4;
 
-        profile_radius = 30;
-        
+      profile_radius = 30;
 
+      invest_name_fontSize = 13;
 
-        invest_name_fontSize = 13;
+      invest_pod_fontSize = 12;
 
-        invest_pod_fontSize = 12;
+      invest_contact_padd = 3.0;
 
-        invest_contact_padd = 3.0;
+      invest_contact_iconSize = 16;
 
-        invest_contact_iconSize = 16;
+      invest_mail_fontSize = 11;
 
-        invest_mail_fontSize = 11;
+      delete_margin_top = 0.01;
 
-        delete_margin_top = 0.02;
+      delete_cont_width = 70;
 
-        delete_cont_width = 100;
+      delete_fontSize = 12;
 
-        delete_fontSize = 16;
+      close_icon_fontSize = 20;
 
-        close_icon_fontSize = 20;
+      inset_padding_hor = 15.0; 
+
+      inset_padding_ver = 10.0;
       print('480');
-      }
-
+    }
 
     // MEMBER DETAIL DIALOG BLOK :
     MemberDetailDialogView() {
@@ -437,6 +596,11 @@ class _InvestorBlockState extends State<InvestorBlock> {
           barrierDismissible: false,
           context: context,
           builder: (context) => AlertDialog(
+              contentPadding: EdgeInsets.all(2),
+              insetPadding:
+                  EdgeInsets.symmetric(
+                    horizontal:inset_padding_hor,
+                    vertical: inset_padding_ver),
               title: Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -485,28 +649,26 @@ class _InvestorBlockState extends State<InvestorBlock> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     // Profile Image :
                     ProfileImage(),
 
                     // Postition:
                     SizedBox(
                       width: context.width * invest_box_width,
-                    
                       child: Column(
                         children: [
                           // Spacer
-                           SizedBox(
+                          SizedBox(
                             height: invest_spacer,
                           ),
 
-                            // Member Name Block :
-                            MemName(),
+                          // Member Name Block :
+                          MemName(),
 
-                            // Spacer :
-                            SizedBox(
-                              height: invest_spacer,
-                            ),
+                          // Spacer :
+                          SizedBox(
+                            height: invest_spacer,
+                          ),
 
                           // Contact and email adderss :
                           // MemContact()
@@ -632,11 +794,9 @@ class _InvestorBlockState extends State<InvestorBlock> {
       shadowColor: Colors.red,
       color: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(profile_border_radius)
-        ),
-      
+          borderRadius: BorderRadius.circular(profile_border_radius)),
       child: Container(
-        child: CircleAvatar(
+          child: CircleAvatar(
         radius: profile_radius,
         backgroundColor: Colors.blueGrey[100],
         foregroundImage: NetworkImage(widget.investor['image'] ?? temp_logo),
@@ -683,31 +843,27 @@ class _InvestorBlockState extends State<InvestorBlock> {
   Container MemContact() {
     return Container(
         child: Wrap(
-          children: [
-          // Icon :
-          Padding(
-            padding: EdgeInsets.only(right:invest_contact_padd),
-            child: Icon(
-              Icons.mail_outline_outlined,
-              color: Colors.orange.shade800,
-              size: invest_contact_iconSize,
-            ),
+      children: [
+        // Icon :
+        Padding(
+          padding: EdgeInsets.only(right: invest_contact_padd),
+          child: Icon(
+            Icons.mail_outline_outlined,
+            color: Colors.orange.shade800,
+            size: invest_contact_iconSize,
           ),
+        ),
 
-          // Text :
-          AutoSizeText.rich(
-            TextSpan(
-              style: Get.textTheme.headline5, 
-              children: [
-              TextSpan(
-                  text: widget.investor['email'] ?? '',
-                  style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: Colors.blueGrey.shade700,
-                    fontSize: invest_mail_fontSize
-                      ))
-            ])),
-        ],
-      ));
+        // Text :
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+          TextSpan(
+              text: widget.investor['email'] ?? '',
+              style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.blueGrey.shade700,
+                  fontSize: invest_mail_fontSize))
+        ])),
+      ],
+    ));
   }
 }

@@ -136,6 +136,7 @@ Color my_dialog_color = Colors.grey;
 Color darkGrey = Colors.grey.shade800;
 
 ////////////////////////////////////////////
-///  Icon :
+/// Cancel Icon : Icons.close : 
+/// CLose Dialog button : Icons.cancel,
 ////////////////////////////////////////////
 var my_cancel_icon = FontAwesomeIcons.xmark;

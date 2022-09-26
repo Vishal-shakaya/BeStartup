@@ -35,15 +35,185 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-  double formfield_width = 400;
-  double contact_formfield_width = 400;
+  double formfield_width = 0.15;
+  double contact_formfield_width = 0.15;
   double contact_text_margin_top = 0.05;
+
+  double top_spacer = 20;
+  double card_radius = 5;
+
+  double inv_fontSize = 14;
+  double content_padding = 16;
+
+  double cancel_iconSize = 15; 
+
 
   @override
   Widget build(BuildContext context) {
-    print('detail member ${widget.member}');
+
+     formfield_width = 0.15;
+     contact_formfield_width = 0.15;
+     contact_text_margin_top = 0.05;
+
+     top_spacer = 20;
+     card_radius = 5;
+
+     inv_fontSize = 14;
+     content_padding = 16;
+
+     cancel_iconSize = 15; 
+
+
+		// DEFAULT :
+    if (context.width > 1700) {
+        formfield_width = 0.15;
+        contact_formfield_width = 0.15;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 14;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+        print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+        formfield_width = 0.15;
+        contact_formfield_width = 0.15;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 14;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+      print('1700');
+      }
+  
+    if (context.width < 1600) {
+      print('1600');
+      }
+
+    // PC:
+    if (context.width < 1400) {
+        formfield_width = 0.15;
+        contact_formfield_width = 0.15;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 14;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+      print('1400');
+      }
+
+    if (context.width < 1300) {
+        formfield_width = 0.19;
+        contact_formfield_width = 0.19;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 14;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+      print('1300');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+        formfield_width = 0.20;
+        contact_formfield_width = 0.20;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 13;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+        formfield_width = 0.22;
+        contact_formfield_width = 0.22;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 13;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+        print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+        formfield_width = 0.24;
+        contact_formfield_width = 0.24;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 12;
+        content_padding = 16;
+
+        cancel_iconSize = 15; 
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+        formfield_width = 0.35;
+        contact_formfield_width = 0.35;
+        contact_text_margin_top = 0.05;
+
+        top_spacer = 20;
+        card_radius = 5;
+
+        inv_fontSize = 12;
+        content_padding = 15;
+
+        cancel_iconSize = 15; 
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+        formfield_width = 0.70;
+        contact_formfield_width = 0.70;
+        contact_text_margin_top = 0.02;
+
+        top_spacer = 1;
+        card_radius = 5;
+
+        inv_fontSize = 12;
+        content_padding = 5;
+
+        cancel_iconSize = 14; 
+        print('480');
+      }
     return Container(
-      width: formfield_width,
+      width: context.width*formfield_width,
       alignment: Alignment.center,
       child: FormBuilder(
           key: widget.formkey,
@@ -52,19 +222,26 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
             child: Column(
               children: [
                 // TAKE FOUNDER INOF:
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: top_spacer,
                 ),
                 Card(
                   shadowColor: Colors.grey,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(card_radius))),
+                 
                   child: Column(
+                 
                     children: [
+                 
                       Container(
-                        width: contact_formfield_width,
+                        width: context.width*contact_formfield_width,
+                     
                         child: Column(
                           children: [
+                           
+                           
                             SecondaryInputField(
                                 // initial_value:widget.member['name'],
                                 context: context,
@@ -76,6 +253,8 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
                                     widget.form_type == InvestorFormType.edit
                                         ? widget.member['name']
                                         : ''),
+                           
+                           
                             SecondaryInputField(
                                 context: context,
                                 name: 'position',
@@ -86,6 +265,8 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
                                     widget.form_type == InvestorFormType.edit
                                         ? widget.member['position']
                                         : ''),
+                           
+                           
                             SecondaryInputField(
                                 context: context,
                                 name: 'email',
@@ -125,7 +306,7 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
         color: light_color_type1,
-        fontSize: 14,
+        fontSize: inv_fontSize,
         fontWeight: FontWeight.w600,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -136,22 +317,24 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
         labelStyle: GoogleFonts.robotoSlab(
             textStyle: TextStyle(),
             color: input_label_color,
-            fontSize: 14,
+            fontSize: inv_fontSize,
             fontWeight: FontWeight.w400),
 
         hintText: hind_text,
-        contentPadding: EdgeInsets.all(16),
-        hintStyle: TextStyle(fontSize: 15, color: Colors.grey.shade300),
+        contentPadding: EdgeInsets.all(content_padding),
+        hintStyle:
+            TextStyle(fontSize: inv_fontSize, color: Colors.grey.shade300),
 
         suffix: InkWell(
           onTap: () {
             widget.ResetForm(name);
           },
+
           child: Container(
             child: Icon(
-              Icons.cancel_outlined,
+              Icons.close,
               color: input_reset_color,
-              size: 15,
+              size: cancel_iconSize,
             ),
           ),
         ),

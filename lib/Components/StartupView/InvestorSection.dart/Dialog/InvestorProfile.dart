@@ -24,6 +24,25 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
   var startupInvestorStore = Get.put(StartupInvestorStore());
   var my_context = Get.context;
 
+  double image_cont_width = 150;
+  double image_cont_height = 150;
+
+  double card_radius = 85.0;
+  double profile_radius = 70;
+
+  double pod_btn_top_space = 100;
+  double pod_btn_left_space = 100;
+
+  double pos_btn_radius = 20;
+  double btn_radius = 18;
+  double pod_btn_fontSize = 19;
+
+  double pod_btn_padd = 8;
+
+  double image_elevation = 5; 
+
+  var image_podition = AlignmentDirectional.topStart;
+
   Uint8List? image;
   String filename = '';
 
@@ -83,7 +102,6 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
 
   @override
   void initState() {
-
     if (widget.form_type == InvestorFormType.edit) {
       upload_image_url = widget.member_image.toString();
     }
@@ -92,25 +110,177 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
 
   @override
   Widget build(BuildContext context) {
+    image_cont_width = 150;
+    image_cont_height = 150;
+
+    card_radius = 85.0;
+    profile_radius = 70;
+
+    pod_btn_top_space = 100;
+    pod_btn_left_space = 100;
+
+    pos_btn_radius = 20;
+    btn_radius = 18;
+    pod_btn_fontSize = 19;
+    pod_btn_padd = 8;
+    
+    image_elevation = 5; 
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
+    if (context.width > 1700) {
+      image_cont_width = 150;
+      image_cont_height = 150;
+
+      card_radius = 85.0;
+      profile_radius = 70;
+
+      pod_btn_top_space = 100;
+      pod_btn_left_space = 100;
+
+      pos_btn_radius = 20;
+      btn_radius = 18;
+      pod_btn_fontSize = 19;
+
+      pod_btn_padd = 8;
+      image_elevation = 5; 
+      print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      print('1700');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1400) {
+      image_cont_width = 150;
+      image_cont_height = 150;
+
+      card_radius = 85.0;
+      profile_radius = 60;
+
+      pod_btn_top_space = 85;
+      pod_btn_left_space = 85;
+
+      pos_btn_radius = 16;
+      btn_radius = 16;
+      pod_btn_fontSize = 18;
+      pod_btn_padd = 8;
+      print('1400');
+    }
+
+    if (context.width < 1300) {
+      image_cont_width = 150;
+      image_cont_height = 150;
+
+      card_radius = 85.0;
+      profile_radius = 58;
+
+      pod_btn_top_space = 83;
+      pod_btn_left_space = 83;
+
+      pos_btn_radius = 16;
+      btn_radius = 16;
+      pod_btn_fontSize = 16;
+      pod_btn_padd = 8;
+      print('1300');
+    }
+
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      image_cont_width = 150;
+      image_cont_height = 150;
+
+      card_radius = 85.0;
+      profile_radius = 55;
+
+      pod_btn_top_space = 75;
+      pod_btn_left_space = 80;
+
+      pos_btn_radius = 16;
+      btn_radius = 16;
+      pod_btn_fontSize = 16;
+      pod_btn_padd = 8;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      image_cont_width = 150;
+      image_cont_height = 150;
+
+      card_radius = 85.0;
+      profile_radius = 48;
+
+      pod_btn_top_space = 70;
+      pod_btn_left_space = 70;
+
+      pos_btn_radius = 16;
+      btn_radius = 14;
+      pod_btn_fontSize = 14;
+      pod_btn_padd = 8;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      image_cont_width = 150;
+      image_cont_height = 100;
+
+      card_radius = 500.0;
+      profile_radius = 60;
+
+      pod_btn_top_space = 65;
+      pod_btn_left_space = 90;
+
+      pos_btn_radius = 16;
+      btn_radius = 14;
+      pod_btn_fontSize = 14;
+      pod_btn_padd = 8;
+      image_elevation = 0; 
+      
+      image_podition = AlignmentDirectional.topCenter;
+      print('480');
+    }
+
     return Container(
-        width: 150,
-        height: 160,
+        width: image_cont_width,
+        height: image_cont_height,
         // alignment: Alignment.center,
         child: Stack(
+          alignment: image_podition,
           children: [
             Card(
+              elevation: image_elevation,
                 shadowColor: light_color_type3,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(85.0),
+                  borderRadius: BorderRadius.circular(card_radius),
                 ),
                 child: upload_image_url != ''
                     ? CircleAvatar(
-                        radius: 70,
+                        radius: profile_radius,
                         backgroundColor: Colors.blueGrey[100],
                         foregroundImage: NetworkImage(upload_image_url),
                       )
                     : CircleAvatar(
-                        radius: 70,
+                        radius: profile_radius,
                         backgroundColor: Colors.blueGrey[100],
                         child: AutoSizeText(
                           'profile picture',
@@ -123,20 +293,20 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
             // UPLOAD CAMERA ICON:
             ////////////////////////////////
             Positioned(
-                top: 100,
-                left: 100,
+                top: pod_btn_top_space,
+                left: pod_btn_left_space,
                 child: Card(
                   shadowColor: primary_light,
                   // elevation: 1,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(pos_btn_radius)),
                   child: CircleAvatar(
                     backgroundColor: Colors.grey.shade200,
-                    radius: 18,
+                    radius: btn_radius,
                     child: is_uploading
                         // UPLOADING PROCESSS :
                         ? Container(
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(pod_btn_padd),
                             child: CircularProgressIndicator(
                               color: primary_light,
                               strokeWidth: 4,
@@ -149,7 +319,7 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
                               PickImage();
                             },
                             icon: Icon(Icons.camera_alt_rounded,
-                                size: 19, color: primary_light)),
+                                size: pod_btn_fontSize, color: primary_light)),
                   ),
                 )),
           ],
