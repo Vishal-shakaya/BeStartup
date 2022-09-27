@@ -214,7 +214,9 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
       }
     return Container(
       width: context.width*formfield_width,
+     
       alignment: Alignment.center,
+     
       child: FormBuilder(
           key: widget.formkey,
           autovalidateMode: AutovalidateMode.disabled,
@@ -226,7 +228,7 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
                   height: top_spacer,
                 ),
                 Card(
-                  shadowColor: Colors.grey,
+                  shadowColor: my_theme_shadow_color,
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.all(Radius.circular(card_radius))),
@@ -303,20 +305,23 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
       initialValue: initial_val != '' ? initial_val : '',
       textAlign: TextAlign.center,
       name: name,
+    
       style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
-        color: light_color_type1,
+        color: input_text_color,
         fontSize: inv_fontSize,
         fontWeight: FontWeight.w600,
       ),
+    
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
           [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+    
       decoration: InputDecoration(
         labelText: lable_text,
         labelStyle: GoogleFonts.robotoSlab(
             textStyle: TextStyle(),
-            color: input_label_color,
+            color: input_hind_color,
             fontSize: inv_fontSize,
             fontWeight: FontWeight.w400),
 
@@ -333,7 +338,7 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
           child: Container(
             child: Icon(
               Icons.close,
-              color: input_reset_color,
+              color: close_model_color,
               size: cancel_iconSize,
             ),
           ),

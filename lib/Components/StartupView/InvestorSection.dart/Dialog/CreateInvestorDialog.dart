@@ -417,24 +417,30 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
     return FractionallySizedBox(
       widthFactor: width_factor,
       heightFactor: height_factor,
+      
       child: Container(
         padding: EdgeInsets.all(dialog_padd),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration:  BoxDecoration(
+          color: my_theme_container_color,
         ),
+      
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: my_theme_container_color,
           body: SingleChildScrollView(
+            
             child: Column(children: [
+           
               SizedBox(
                 height: top_spacer,
               ),
 
+           
               // TEAM MEMEBER PROFILE IAMGE SECTION
               Container(
                   child:mainHeaderForm
               ),
 
+           
               // MEMBER DETAIL SECTION :
               Container(
                   child: Column(

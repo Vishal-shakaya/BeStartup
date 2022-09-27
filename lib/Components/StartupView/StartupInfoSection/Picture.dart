@@ -333,7 +333,7 @@ class Picture extends StatelessWidget {
               TextSpan(
                   text: founder_name.toString().capitalizeFirst,
                   style: TextStyle(
-                      color: Colors.black, fontSize: ceo_name_fontSize))
+                      color: startup_profile_color, fontSize: ceo_name_fontSize))
             ])))
       ],
     );

@@ -436,11 +436,13 @@ class InvestorSection extends StatelessWidget {
                           icon: Icon(
                             Icons.add,
                             size: add_iconSize,
+                            color: edit_btn_color,
                           ),
                           label: Text(
                             'Add',
                             style: TextStyle(
                                 fontSize: add_iconfonSize,
+                                color: edit_btn_color,
                                 fontWeight: FontWeight.bold),
                           )),
                     ))

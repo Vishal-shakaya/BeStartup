@@ -81,6 +81,10 @@ Gradient g3 = const LinearGradient(colors: [
 Color my_theme_background_color =
     Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
 
+Color my_theme_container_color =
+    Get.isDarkMode ? Colors.grey.shade800 : Colors.white;
+
+
 Color my_theme_icon_color =
     Get.isDarkMode ? Colors.tealAccent : Colors.orangeAccent;
 
@@ -100,6 +104,15 @@ Color mile_cont_bg_color =
 
 Color edit_btn_color =
     Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade800;
+
+
+
+
+Color delete_background_btn_color =
+    Get.isDarkMode ? Colors.transparent : Colors.red.shade50;
+
+
+
 
 Color tab_color =
     Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey.shade700;
@@ -128,6 +141,16 @@ Color startup_text_color =
 Color startup_heding_color =
     Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade700;
 
+Color startup_profile_color =
+    Get.isDarkMode ? Colors.grey.shade300 : Colors.black;
+
+
+
+
+
+
+
+
 // Input Field Hint text color :
 Color input_hind_color =
     Get.isDarkMode ? Colors.grey.shade500 : Colors.grey.shade300;
@@ -138,6 +161,8 @@ Color input_text_color =
 // Startup Slide Header text color :
 Color slide_header_color =
     Get.isDarkMode ? Colors.grey.shade200 : Colors.blueGrey.shade800;
+
+
 
 // Startup Slide Sub Header text color :
 Color slide_subheader_color =

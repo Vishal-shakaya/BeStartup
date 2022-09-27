@@ -689,10 +689,12 @@ class _InvestorBlockState extends State<InvestorBlock> {
       margin: EdgeInsets.only(top: context.height * delete_margin_top),
       alignment: Alignment.center,
       width: delete_cont_width,
+      
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
+        color:delete_background_btn_color,
         borderRadius: BorderRadius.circular(15),
       ),
+      
       child: TextButton(
           onPressed: () {
             DeleteInvestor();
