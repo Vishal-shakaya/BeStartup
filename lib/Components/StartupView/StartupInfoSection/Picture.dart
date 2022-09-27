@@ -286,7 +286,8 @@ class Picture extends StatelessWidget {
                             EditBusinessLogo();
                           },
                           icon: Icon(Icons.edit,
-                              size: edit_iconSize, color: Colors.black)),
+                              size: edit_iconSize, 
+                              color: edit_btn_color)),
                     ))
                 : Container()
           ],

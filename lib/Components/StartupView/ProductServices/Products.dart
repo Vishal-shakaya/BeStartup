@@ -681,8 +681,8 @@ class _ProductsState extends State<Products> {
                         Navigator.of(context).pop();
                       },
                       icon: Icon(
-                        Icons.cancel_outlined,
-                        color: Colors.blueGrey.shade800,
+                        Icons.cancel_rounded,
+                        color: close_model_color,
                         size: 18,
                       ))),
               content: SizedBox(
@@ -761,12 +761,13 @@ class _ProductsState extends State<Products> {
         margin: EdgeInsets.only(left: context.width * product_desc_left_marg),
         width: context.width * desc_cont_width,
         height: context.height * desc_cont_height,
+        
         decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(
               left: Radius.circular(product_left_radius),
               right: Radius.circular(product_right_radius),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+            border: Border.all(width: 1, color: startup_container_border_color)),
         child: Column(
           children: [
             Container(
@@ -777,7 +778,7 @@ class _ProductsState extends State<Products> {
                   TextSpan(
                     text: widget.product['title'],
                     style: GoogleFonts.robotoSlab(
-                      color: light_color_type2,
+                      color: startup_title_text_color,
                       fontSize: product_title_fontSize,
                       fontWeight: FontWeight.w600,
                     ),
@@ -794,7 +795,7 @@ class _ProductsState extends State<Products> {
                   text: widget.product['description'],
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
-                      color: light_color_type3,
+                      color: startup_text_color,
                       fontSize: product_desc_fontSize,
                       fontWeight: FontWeight.w600,
                       wordSpacing: product_desc_word_spacing,
@@ -905,7 +906,7 @@ class _ProductsState extends State<Products> {
               left: Radius.circular(phone_product_left_radius),
               right: Radius.circular(phone_product_right_radius),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+            border: Border.all(width: 1, color: startup_container_border_color)),
         child: Column(
           children: [
             Container(
@@ -917,7 +918,7 @@ class _ProductsState extends State<Products> {
                   TextSpan(
                     text: widget.product['title'],
                     style: GoogleFonts.robotoSlab(
-                      color: light_color_type2,
+                      color: startup_title_text_color,
                       fontSize: phone_product_title_fontSize,
                       fontWeight: FontWeight.w600,
                     ),
@@ -934,7 +935,7 @@ class _ProductsState extends State<Products> {
                   text: widget.product['description'],
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
-                      color: light_color_type3,
+                      color: startup_text_color,
                       fontSize: phone_product_desc_fontSize,
                       fontWeight: FontWeight.w600,
                       wordSpacing: phone_product_desc_word_spacing,

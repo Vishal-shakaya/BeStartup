@@ -159,7 +159,7 @@ class _StartupNavigationState extends State<StartupNavigation> {
             horizontal: tab_padding_hor, 
             vertical: tab_padding_ver),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: tab_border_color),
             borderRadius:  BorderRadius.horizontal(
               left: Radius.circular(tab_left_radius),
               right: Radius.circular(tab_right_radius),
@@ -169,7 +169,7 @@ class _StartupNavigationState extends State<StartupNavigation> {
               text: widget.title,
               style: GoogleFonts.robotoSlab(
                 textStyle: TextStyle(),
-                color: light_color_type4,
+                color: tab_color,
                 fontSize: tab_fontSize,
                 fontWeight: FontWeight.bold,
               )))),

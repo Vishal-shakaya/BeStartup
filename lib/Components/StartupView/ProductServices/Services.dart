@@ -759,7 +759,7 @@ class _ServicesState extends State<Services> {
               left: Radius.circular(product_left_radius),
               right: Radius.circular(product_right_radius),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+            border: Border.all(width: 1, color: startup_container_border_color)),
         child: Column(
           children: [
             Container(
@@ -770,7 +770,7 @@ class _ServicesState extends State<Services> {
                   TextSpan(
                     text: widget.service['title'],
                     style: GoogleFonts.robotoSlab(
-                      color: light_color_type2,
+                      color: startup_title_text_color,
                       fontSize: product_title_fontSize,
                       fontWeight: FontWeight.w600,
                     ),
@@ -787,7 +787,7 @@ class _ServicesState extends State<Services> {
                   text: widget.service['description'],
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
-                      color: light_color_type3,
+                      color: startup_text_color,
                       fontSize: product_desc_fontSize,
                       fontWeight: FontWeight.w600,
                       wordSpacing: product_desc_word_spacing,
@@ -900,7 +900,7 @@ class _ServicesState extends State<Services> {
               left: Radius.circular(phone_product_left_radius),
               right: Radius.circular(phone_product_right_radius),
             ),
-            border: Border.all(width: 1, color: Colors.grey.shade300)),
+            border: Border.all(width: 1, color:startup_container_border_color)),
         child: Column(
           children: [
             Container(
@@ -912,7 +912,7 @@ class _ServicesState extends State<Services> {
                   TextSpan(
                     text: widget.service['title'],
                     style: GoogleFonts.robotoSlab(
-                      color: light_color_type2,
+                      color: startup_title_text_color,
                       fontSize: phone_product_title_fontSize,
                       fontWeight: FontWeight.w600,
                     ),
@@ -929,7 +929,7 @@ class _ServicesState extends State<Services> {
                   text: widget.service['description'],
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(),
-                      color: light_color_type3,
+                      color: startup_text_color,
                       fontSize: phone_product_desc_fontSize,
                       fontWeight: FontWeight.w600,
                       wordSpacing: phone_product_desc_word_spacing,

@@ -20,7 +20,7 @@ class StartupHeaderText extends StatelessWidget {
           children: [
             TextSpan(
                 text: title,
-                style: TextStyle(color: light_color_type4, fontSize: font_size))
+                style: TextStyle(color: startup_heding_color, fontSize: font_size))
           ])),
     );
   }

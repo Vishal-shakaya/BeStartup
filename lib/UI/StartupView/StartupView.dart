@@ -8,6 +8,7 @@ import 'package:be_startup/Components/StartupView/ProductServices/ServiceSection
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupInfoSection.dart';
 import 'package:be_startup/Components/StartupView/StartupVisionSection/StartupVisionSection.dart';
+import 'package:be_startup/Utils/Colors.dart';
 
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -150,18 +151,39 @@ class _StartupViewState extends State<StartupView> {
 
     // TABLET :
     if (context.width < 800) {
+      product_top_space = 0.03;
+
+      product_bottom_space = 0.03;
+
+      prouduct_bottom_space = 0.03;
+
+      service_bottom_height = 0.03; 
       heading_fontSize = 28;
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
+      product_top_space = 0.03;
+
+      product_bottom_space = 0.03;
+
+      prouduct_bottom_space = 0.03;
+
+      service_bottom_height = 0.02; 
       heading_fontSize = 28;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
+      product_top_space = 0.03;
+
+      product_bottom_space = 0.03;
+
+      prouduct_bottom_space = 0.03;
+
+      service_bottom_height = 0.03; 
       heading_fontSize = 25;
       page_width = 1;
       print('480');
@@ -169,7 +191,9 @@ class _StartupViewState extends State<StartupView> {
 
     return Container(
       padding: const EdgeInsets.all(5),
+      color: my_theme_background_color,
       width: context.width * page_width,
+
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -191,6 +215,7 @@ class _StartupViewState extends State<StartupView> {
             StartupHeaderText(
               title: 'Product',
               font_size: heading_fontSize,
+              
             ),
 
             SizedBox(height: context.height * product_bottom_space),

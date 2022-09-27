@@ -513,9 +513,10 @@ class _InvestmentChartState extends State<InvestmentChart> {
             bottom: card_bottom_padding,
           ),
           decoration: BoxDecoration(
+            color: mini_map_background_color,
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               border: Border.all(
-                color: Colors.grey.shade200,
+                color: minimap_border_color,
                 width: 2,
               )),
           child: SingleChildScrollView(
@@ -557,6 +558,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
           shadowColor: my_theme_shadow_color,
           surfaceTintColor: my_theme_shadow_color,
           shape: const RoundedRectangleBorder(
+              
               borderRadius: BorderRadius.all(Radius.circular(10))),
          
          
@@ -638,7 +640,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   text: title,
                   style: GoogleFonts.openSans(
                     textStyle: TextStyle(),
-                    color: light_color_type2,
+                    color: map_text_color,
                     fontSize: static_row_title_fontSize,
                     fontWeight: FontWeight.w600,
                   )),
@@ -655,7 +657,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                       text: value,
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
-                        color: light_color_type2,
+                        color: map_text_color,
                         fontSize: static_row_desc_fontSize,
                         fontWeight: FontWeight.w600,
                       )),
@@ -681,7 +683,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   text: title,
                   style: GoogleFonts.openSans(
                     textStyle: TextStyle(),
-                    color: light_color_type2,
+                    color: map_text_color,
                     fontSize: static_row_title_fontSize,
                     fontWeight: FontWeight.w600,
                   )),
@@ -704,7 +706,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                         text: value,
                         style: GoogleFonts.openSans(
                           textStyle: TextStyle(),
-                          color: light_color_type2,
+                          color: map_text_color,
                           fontSize: static_row_desc_fontSize,
                           fontWeight: FontWeight.w600,
                         )),

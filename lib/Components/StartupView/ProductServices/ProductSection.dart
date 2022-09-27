@@ -384,10 +384,12 @@ class _ProductSectionState extends State<ProductSection> {
               icon:  Icon(
                 Icons.edit,
                 size: edit_btn_iconSize,
+                color: edit_btn_color,
               ),
               label: Text(
                 'Edit',
                 style: TextStyle(
+                  color: edit_btn_color,
                   fontSize: edit_btn_fontSize), )),
         ));
   }

@@ -574,7 +574,7 @@ class _ProductDetailDialogState extends State<ProductDetailDialog> {
           TextSpan(
               text: widget.heading ?? '',
               style: TextStyle(
-                  fontSize: heading_fontSize, color: light_color_type2)),
+                  fontSize: heading_fontSize, color: map_text_color)),
           style: Get.theme.textTheme.headline2),
     );
   }

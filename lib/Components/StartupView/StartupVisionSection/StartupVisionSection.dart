@@ -423,8 +423,9 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
           // VISION TEXT:
           ClipPath(
             child: Card(
+              color: my_theme_background_color,
               elevation: 1,
-              shadowColor: shadow_color1,
+              shadowColor: startup_container_border_color,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(vision_sec_radius),
@@ -437,8 +438,9 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
 
                   padding: EdgeInsets.all(vision_cont_padding),
                   decoration: BoxDecoration(
-                      border: Border.all(color: border_color),
+                      border: Border.all(color: startup_container_border_color),
                       borderRadius: BorderRadius.horizontal(
+                        
                           left: Radius.circular(vision_cont_radius),
                           right: Radius.circular(vision_cont_radius))),
                   child: SingleChildScrollView(
@@ -447,7 +449,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
                           text: vision_text,
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(),
-                              color: light_color_type3,
+                              color: startup_text_color,
                               fontSize: vision_text_fontSize,
                               height: vision_text_height,
                               fontWeight: FontWeight.w600)),

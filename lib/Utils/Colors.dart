@@ -95,9 +95,38 @@ Color view_btn_text_color =
 Color mile_text_color =
     Get.isDarkMode ? Colors.blueGrey.shade900 : Colors.blueGrey.shade900;
 
-
 Color mile_cont_bg_color =
     Get.isDarkMode ? Colors.orange.shade400 : Colors.orange.shade200;
+
+Color edit_btn_color =
+    Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade800;
+
+Color tab_color =
+    Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey.shade700;
+
+Color tab_border_color =
+    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade200;
+
+Color minimap_border_color =
+    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade200;
+
+Color mini_map_background_color =
+    Get.isDarkMode ? Colors.grey.shade800 : Colors.white;
+
+Color startup_container_border_color =
+    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade300;
+
+Color map_text_color =
+    Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade800;
+
+Color startup_title_text_color =
+    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade300;
+
+Color startup_text_color =
+    Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey;
+
+Color startup_heding_color =
+    Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade700;
 
 // Input Field Hint text color :
 Color input_hind_color =
@@ -116,6 +145,8 @@ Color slide_subheader_color =
 
 // cross icon color close dialog and clear input filed icon color :
 Color cancel_btn_color = Colors.blueGrey.shade200;
+Color close_model_color =
+    Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade800;
 
 Color next_back_btn_color =
     Get.isDarkMode ? Color(0xFF54BAB9) : Colors.grey.shade800;
@@ -136,7 +167,7 @@ Color my_dialog_color = Colors.grey;
 Color darkGrey = Colors.grey.shade800;
 
 ////////////////////////////////////////////
-/// Cancel Icon : Icons.close : 
-/// CLose Dialog button : Icons.cancel,
+/// Cancel Icon : Icons.close :
+/// CLose Dialog button : cancel_rounded,
 ////////////////////////////////////////////
 var my_cancel_icon = FontAwesomeIcons.xmark;

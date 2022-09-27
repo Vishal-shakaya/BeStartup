@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
       builder: FlutterSmartDialog.init(),
 
       // CONFIGURE THEME SETTING :
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
 
       // themeMode: ThemeMode.dark,
       theme: ThemeData(

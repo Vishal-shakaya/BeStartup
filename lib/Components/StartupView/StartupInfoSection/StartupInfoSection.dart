@@ -726,10 +726,13 @@ class StartupInfoSection extends StatelessWidget {
                       icon: Icon(
                         Icons.edit,
                         size: edit_iconSize,
+                        color: edit_btn_color,
                       ),
                       label: Text(
                         'Edit',
-                        style: TextStyle(fontSize: edit_btn_fontSize),
+                        style: TextStyle(
+                          fontSize: edit_btn_fontSize,
+                          color: edit_btn_color),
                       )),
                 ))
             : Positioned(
