@@ -1,5 +1,6 @@
 import 'package:be_startup/Components/HomeView/UserProfileView/UserProfile.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/UserStartups.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -60,9 +61,12 @@ class UserProfileView extends StatelessWidget {
     return Container(
       width: context.width * profile_width,
       height: context.height * profile_height,
+      color: home_profile_cont_color,
+      
       child: Card(
           elevation: 10,
           shadowColor: Colors.blueGrey,
+          color: home_profile_cont_color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),

@@ -234,7 +234,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
                 TextSpan(style: Get.textTheme.headline5, children: [
               TextSpan(
                   text: founder_name.toString().capitalizeFirst,
-                  style: TextStyle(color: Colors.black, fontSize: 13))
+                  style: TextStyle(color: startup_profile_color, fontSize: 13))
             ])))
       ],
     );

@@ -84,7 +84,6 @@ Color my_theme_background_color =
 Color my_theme_container_color =
     Get.isDarkMode ? Colors.grey.shade800 : Colors.white;
 
-
 Color my_theme_icon_color =
     Get.isDarkMode ? Colors.tealAccent : Colors.orangeAccent;
 
@@ -102,17 +101,15 @@ Color mile_text_color =
 Color mile_cont_bg_color =
     Get.isDarkMode ? Colors.orange.shade400 : Colors.orange.shade200;
 
+
+
 Color edit_btn_color =
     Get.isDarkMode ? Colors.blueGrey.shade300 : Colors.blueGrey.shade800;
 
 
 
-
 Color delete_background_btn_color =
     Get.isDarkMode ? Colors.transparent : Colors.red.shade50;
-
-
-
 
 Color tab_color =
     Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey.shade700;
@@ -145,7 +142,20 @@ Color startup_profile_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.black;
 
 
+Color home_profile_text_color =
+    Get.isDarkMode ? Colors.blueGrey.shade100: Colors.black87;
 
+Color home_profile_contact_color =
+    Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade700;
+
+Color home_profile_map_color =
+    Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade300;
+
+Color home_profile_cont_color =
+    Get.isDarkMode ? Colors.grey.shade900 : Colors.blueGrey.shade300;
+
+Color home_setting_tile_hover_color =
+    Get.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
 
 
 
@@ -161,8 +171,6 @@ Color input_text_color =
 // Startup Slide Header text color :
 Color slide_header_color =
     Get.isDarkMode ? Colors.grey.shade200 : Colors.blueGrey.shade800;
-
-
 
 // Startup Slide Sub Header text color :
 Color slide_subheader_color =

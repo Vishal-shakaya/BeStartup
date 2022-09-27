@@ -247,6 +247,41 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             InternationalPhoneNumberInput(
+              textStyle: TextStyle(
+                color: input_text_color
+              ),
+
+            
+              searchBoxDecoration: InputDecoration(
+                helperStyle: TextStyle(
+                  color: input_text_color
+                ),
+                hintText: 'seclect country code',
+                hintStyle: TextStyle(
+                  color: input_text_color
+                ),
+             
+              // focusedBorder: OutlineInputBorder(
+                // borderRadius: BorderRadius.circular(10),
+              //   borderSide: BorderSide(width: 1, color: darkTeal))
+                ),
+
+
+              
+              // inputDecoration: InputDecoration(
+              //   focusedBorder: OutlineInputBorder(
+                  // borderRadius: BorderRadius.circular(10),
+              //     borderSide: BorderSide(width: 1, color: darkTeal)), 
+
+              //    enabledBorder : OutlineInputBorder(
+                  // borderRadius: BorderRadius.circular(10),
+              //     borderSide: BorderSide(width: 1, color: darkTeal))
+                
+              // ),
+
+
+
+
               onInputChanged: (PhoneNumber number) {
                 // print(number.phoneNumber);
               },
@@ -258,13 +293,24 @@ class _PhoneNoVerifyDialogAlertState extends State<PhoneNoVerifyDialogAlert> {
               ),
               ignoreBlank: false,
               autoValidateMode: AutovalidateMode.disabled,
-              selectorTextStyle: TextStyle(color: Colors.black),
+              
+              selectorTextStyle: TextStyle(
+                color:Get.isDarkMode
+                ?Colors.white
+                :Colors.black),
+              
               initialValue: number,
               textFieldController: controller,
               formatInput: false,
               keyboardType:
                   TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputBorder: OutlineInputBorder(),
+              
+              
+              inputBorder: OutlineInputBorder(
+                // borderSide: BorderSide(color: Colors.white)
+              ),
+              
+              
               onSaved: (PhoneNumber number) {
                 valid_number = number;
               },

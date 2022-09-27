@@ -232,7 +232,7 @@ class ProfileInfoChart extends StatelessWidget {
                 text: title,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(),
-                  color: light_color_type2,
+                  color: home_profile_map_color,
                   fontSize: static_val_fontSize,
                   fontWeight: FontWeight.w600,
                 )),

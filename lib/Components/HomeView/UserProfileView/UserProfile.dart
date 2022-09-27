@@ -271,7 +271,7 @@ class HomeViewUserProfile extends StatelessWidget {
             text: username,
             style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color: Colors.black87,
+                color:home_profile_text_color,
                 fontSize: name_fonSize))
       ]))),
     );
@@ -286,7 +286,7 @@ class HomeViewUserProfile extends StatelessWidget {
           text: user_position,
           style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: home_profile_text_color,
               fontSize: position_fontSize))
     ])));
   }
@@ -314,7 +314,7 @@ class HomeViewUserProfile extends StatelessWidget {
                 text: text,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
-                    color: Colors.blueGrey.shade700,
+                    color: home_profile_contact_color,
                     fontSize: contact_fontSiz))
           ])),
         ],

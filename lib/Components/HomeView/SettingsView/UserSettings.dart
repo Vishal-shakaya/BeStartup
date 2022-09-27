@@ -68,7 +68,7 @@ class _UserSettingsState extends State<UserSettings> {
   double dialog_heading_fonSize = 14;
 
   double auth_dialog_width = 0.20;
-  double auth_dialog_height = 0.50;
+  double auth_dialog_height = 0.30;
 
   double item_iconSize = 20;
   double item_fontSize = 15;
@@ -336,7 +336,7 @@ class _UserSettingsState extends State<UserSettings> {
     dialog_heading_fonSize = 14;
 
     auth_dialog_width = 0.20;
-    auth_dialog_height = 0.50;
+    auth_dialog_height = 0.30;
 
     item_iconSize = 20;
     item_fontSize = 15;
@@ -381,7 +381,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 20;
       item_fontSize = 15;
@@ -429,7 +429,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 20;
       item_fontSize = 15;
@@ -472,7 +472,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 20;
       item_fontSize = 15;
@@ -515,7 +515,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 20;
       item_fontSize = 15;
@@ -559,7 +559,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 17;
       item_fontSize = 14;
@@ -603,7 +603,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 17;
       item_fontSize = 14;
@@ -651,7 +651,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.50;
+      auth_dialog_height = 0.30;
 
       item_iconSize = 17;
       item_fontSize = 12;
@@ -730,9 +730,12 @@ class _UserSettingsState extends State<UserSettings> {
     return Container(
         width: context.width * page_width,
         height: context.height * page_height,
+        color: home_profile_cont_color,
         child: Card(
             elevation: page_elevation,
             shadowColor: Colors.blueGrey,
+            color: home_profile_cont_color,
+
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -825,17 +828,17 @@ class _UserSettingsState extends State<UserSettings> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () {
           fun();
         },
         autofocus: true,
-        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
         title: AutoSizeText.rich(
           TextSpan(text: title),
-          style: TextStyle(fontSize: item_fontSize, color: light_color_type1),
+          style: TextStyle(fontSize: item_fontSize, color: input_text_color),
         ),
       ),
     );
@@ -851,12 +854,12 @@ class _UserSettingsState extends State<UserSettings> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           style: ListTileStyle.drawer,
-          hoverColor: Colors.grey.shade200,
+          hoverColor: home_setting_tile_hover_color,
           selected: true,
           mouseCursor: MouseCursor.defer,
           onTap: () {},
           autofocus: true,
-          leading: Icon(icon, size: item_iconSize, color: light_color_type2),
+          leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
           title: Container(
             width: context.width * title_cont_width,
             child: Row(
@@ -864,7 +867,7 @@ class _UserSettingsState extends State<UserSettings> {
                 AutoSizeText.rich(
                   TextSpan(text: title),
                   style: TextStyle(
-                      fontSize: title_font_size, color: light_color_type1),
+                      fontSize: title_font_size, color: input_text_color),
                 ),
                 Padding(
                   padding: EdgeInsets.all(5.0),
@@ -894,9 +897,11 @@ class _UserSettingsState extends State<UserSettings> {
                     child: IconButton(
                         padding: EdgeInsets.all(4),
                         onPressed: () {},
+
                         icon: Icon(
                           Icons.edit,
                           size: rounded_btn_fontSize,
+                          color: edit_btn_color,
                         )),
                   ),
                 )
@@ -927,8 +932,13 @@ class _UserSettingsState extends State<UserSettings> {
                             icon: Icon(
                               Icons.edit,
                               size: trail_icon_fontSize,
+                              color: edit_btn_color,
                             ),
-                            label: Text('update')),
+
+                            label: Text('update',
+                            style: TextStyle(
+                              color: edit_btn_color
+                            ),)),
                       ),
                     ],
                   ),
@@ -943,7 +953,7 @@ class _UserSettingsState extends State<UserSettings> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () {},
@@ -958,11 +968,11 @@ class _UserSettingsState extends State<UserSettings> {
                   TextSpan(
                     text: amount,
                     style: TextStyle(
-                        fontSize: title_font_size, color: light_color_type1),
+                        fontSize: title_font_size, color: input_text_color),
                   )
                 ]),
                 style: TextStyle(
-                    fontSize: title_font_size, color: light_color_type1),
+                    fontSize: title_font_size, color: input_text_color),
               ),
             ],
           ),
@@ -989,8 +999,9 @@ class _UserSettingsState extends State<UserSettings> {
                     icon: Icon(
                       Icons.edit,
                       size: trail_icon_fontSize,
+                      color: edit_btn_color,
                     ),
-                    label: Text('update')),
+                    label: Text('update',style: TextStyle(color: edit_btn_color),)),
               ),
             ],
           ),
@@ -1006,12 +1017,12 @@ class _UserSettingsState extends State<UserSettings> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () {},
         autofocus: true,
-        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
+        leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
         title: Container(
           width: context.width * title_cont_width,
           child: Row(
@@ -1019,7 +1030,7 @@ class _UserSettingsState extends State<UserSettings> {
               AutoSizeText.rich(
                 TextSpan(text: title),
                 style: TextStyle(
-                    fontSize: title_font_size, color: light_color_type1),
+                    fontSize: title_font_size, color: input_text_color),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -1059,6 +1070,7 @@ class _UserSettingsState extends State<UserSettings> {
                                 icon: Icon(
                                   Icons.edit,
                                   size: rounded_btn_fontSize,
+                                  color: edit_btn_color,
                                 )),
                           ),
                         )
@@ -1075,12 +1087,14 @@ class _UserSettingsState extends State<UserSettings> {
                               icon: Icon(
                                 Icons.edit,
                                 size: trail_icon_fontSize,
+                                color: edit_btn_color,
                               ),
                               onPressed: () async {
                                 await fun();
                               },
-                              label: const Text(
+                              label:  Text(
                                 'update',
+                                style: TextStyle(color: edit_btn_color),
                               )),
                         )
                   : fireInstance.currentUser?.phoneNumber == null
@@ -1105,6 +1119,7 @@ class _UserSettingsState extends State<UserSettings> {
                                       icon: Icon(
                                         Icons.check,
                                         size: rounded_btn_fontSize,
+                                        color: edit_btn_color,
                                       )),
                                 ),
                               ),
@@ -1123,11 +1138,13 @@ class _UserSettingsState extends State<UserSettings> {
                                   icon: Icon(
                                     Icons.check,
                                     size: trail_icon_fontSize,
+                                    color: edit_btn_color,
                                   ),
                                   onPressed: () async {
                                     await fun();
                                   },
-                                  label: Text('verify now')),
+                                  label: Text('verify now',
+                                  style: TextStyle(color:edit_btn_color ),)),
                             )
                       : Container()
             ],
@@ -1143,29 +1160,42 @@ class _UserSettingsState extends State<UserSettings> {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(4),
+      
       child: ListTile(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () {
           // fun();
         },
         autofocus: true,
-        leading: Icon(icon, size: item_iconSize, color: light_color_type2),
+
+        // Icon : 
+        leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
+       
+      // Input Mail Section : 
         title: Container(
           child: TextField(
               controller: updateEmailFeild,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                   hintText: 'Enter mail',
+                
+                  hintStyle: TextStyle(color: Colors.blueGrey.shade300),
+                
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              
                   border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey.shade800),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ))),
         ),
+
+
+        // Done Button : 
         trailing: Container(
           width: trail_width,
           height: trail_height,
@@ -1186,7 +1216,7 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_mail = false;
                       });
                     },
-                    child: Text('Done')),
+                    child: Text('Done',style: TextStyle(color: edit_btn_color),)),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -1199,6 +1229,7 @@ class _UserSettingsState extends State<UserSettings> {
                     child: Icon(
                       Icons.cancel_outlined,
                       size: take_email_iconSize,
+                      color: edit_btn_color,
                     )),
               )
             ],
@@ -1220,7 +1251,7 @@ class _UserSettingsState extends State<UserSettings> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () {
@@ -1259,7 +1290,7 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_achive_amount = false;
                       });
                     },
-                    child: Text('Done')),
+                    child: Text('Done',style: TextStyle(color: edit_btn_color),)),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -1272,6 +1303,7 @@ class _UserSettingsState extends State<UserSettings> {
                     child: Icon(
                       Icons.cancel_outlined,
                       size: take_email_iconSize,
+                      color: edit_btn_color,
                     )),
               )
             ],
@@ -1292,7 +1324,7 @@ class _UserSettingsState extends State<UserSettings> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         style: ListTileStyle.drawer,
-        hoverColor: Colors.grey.shade200,
+        hoverColor: home_setting_tile_hover_color,
         selected: true,
         mouseCursor: MouseCursor.defer,
         onTap: () async {
