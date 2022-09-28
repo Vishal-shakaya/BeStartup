@@ -72,7 +72,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                       Navigator.of(context).pop();
                     },
                     icon: Icon(
-                      Icons.cancel_outlined,
+                      Icons.cancel_rounded,
                       color: cancel_btn_color,
                     )),
               ),

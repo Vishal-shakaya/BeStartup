@@ -104,7 +104,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
                 ),
                 Card(
                   shadowColor: form_shadow_color,
-                  elevation: 3,
+                  elevation: 0,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Column(

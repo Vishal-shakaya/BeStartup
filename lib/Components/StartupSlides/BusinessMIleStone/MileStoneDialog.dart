@@ -59,10 +59,10 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
     // DEFAULT :
     if (context.width > 1500) {
       mile_dialog_titile_fontSize = 18; 
-      mile_dialog_desc_fontSize = 16; 
+      mile_dialog_desc_fontSize = 13; 
 
-      mile_width_fraction = 0.55;
-      mile_height_fraction = 0.60;
+      mile_width_fraction = 0.65;
+      mile_height_fraction = 0.65;
 
       con_button_width = 90;
       con_button_height = 38;
@@ -70,29 +70,30 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
 
       formsection_width = 0.40;
       formsection_height = 0.41;
-      maxlines = 7;
+      maxlines = 8;
       print('greator then 1500');
     }
 
     // PC:
     if (context.width < 1500) {
       mile_dialog_titile_fontSize = 16; 
-      mile_dialog_desc_fontSize = 14; 
+      mile_dialog_desc_fontSize = 13; 
 
-      maxlines = 6;
       con_btn_top_margin = 7;
+      formsection_width = 0.40;
       formsection_height = 0.55;
 
       mile_width_fraction = 0.99;
       mile_height_fraction = 0.65;
+      maxlines = 8;
       print('1500');
     }
 
     if (context.width < 1200) {
       mile_dialog_titile_fontSize = 16; 
-      mile_dialog_desc_fontSize = 14;
-      formsection_width = 0.45;
-      formsection_height = 0.41;
+      mile_dialog_desc_fontSize = 13;
+      formsection_width = 0.70;
+      formsection_height = 0.45;
       maxlines = 7;
 
       con_button_width = 90;
@@ -108,10 +109,12 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
       formsection_width = 0.49;
       formsection_height = 0.45;
       mile_dialog_titile_fontSize = 16; 
-      mile_dialog_desc_fontSize = 14;
+      mile_dialog_desc_fontSize = 13;
 
       mile_width_fraction = 0.99;
       mile_height_fraction = 0.65;
+      formsection_width = 0.70;
+      formsection_height = 0.45;
       maxlines = 7;
       print('1000');
     }
@@ -123,6 +126,8 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
       
       mile_width_fraction = 0.99;
       mile_height_fraction = 0.65;
+      formsection_width = 0.70;
+      formsection_height = 0.45;
       maxlines = 8;
       print('800');
     }
@@ -134,9 +139,9 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
       mile_width_fraction = 0.99;
       mile_height_fraction = 0.65;
 
-      formsection_width = 0.55;
+      formsection_width = 0.80;
       formsection_height = 0.45;
-      maxlines = 6;
+      maxlines = 8;
     }
 
     // PHONE:
@@ -144,18 +149,18 @@ class _MileStoneDialogState extends State<MileStoneDialog> {
       mile_dialog_titile_fontSize = 15; 
       mile_dialog_desc_fontSize = 12;
 
-      formsection_width = 0.55;
-      formsection_height = 0.45;
+      formsection_width = 0.90;
+      formsection_height = 0.60;
 
       mile_width_fraction = 0.99;
       mile_height_fraction = 0.65;
-      maxlines = 6;
 
       con_button_width = 80;
       con_button_height = 38;
       con_btn_top_margin = 15;
 
       submit_btn_fontSize = 14;
+      maxlines = 8;
       print('480');
     }
     ///////////////////////////////////////////////////////

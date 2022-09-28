@@ -75,7 +75,7 @@ FormBuilderTextField MilestoneTagInput(
         },
         child: Container(
           child: Icon(
-            Icons.cancel_outlined,
+            Icons.close,
             color: Colors.grey.shade400,
             size: 16,
           ),

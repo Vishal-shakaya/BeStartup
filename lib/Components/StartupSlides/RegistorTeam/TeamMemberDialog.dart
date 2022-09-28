@@ -41,7 +41,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
   double con_btn_top_margin = 5;
 
   double dialog_width = 0.85;
-  double dialog_height = 0.64;
+  double dialog_height = 0.67;
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
 
@@ -151,7 +151,7 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
     Widget verticalAddMemberDialog = VerticalAddMemberDialog();
     Widget horizontalAddMemberDialog = horizontalAddMemberDialogWidget();
 
-    dialog_height = 0.64;
+    dialog_height = 0.67;
     dialog_width = 0.85;
 
     con_button_width = 90;

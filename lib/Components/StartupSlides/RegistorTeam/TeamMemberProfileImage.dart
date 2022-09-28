@@ -34,7 +34,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
   double upload_btn_left_pos = 100;
   double upload_icon_size = 19;
 
-  double hint_text_size = 18;
+  double hint_text_size = 13;
 
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
 //////////////////////////////////////////
@@ -111,7 +111,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
     upload_btn_left_pos = 100;
     upload_icon_size = 19;
 
-    hint_text_size = 18;
+    hint_text_size = 13;
 
     ////////////////////////////////////
     /// RESPONSIVENESS :
@@ -125,7 +125,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
       upload_btn_left_pos = 100;
       upload_icon_size = 19;
 
-      hint_text_size = 18;
+      hint_text_size = 13;
       print('Greator then 1500');
     }
 
@@ -145,7 +145,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
 
     // TABLET :
     if (context.width < 800) {
-      hint_text_size = 16;
+      hint_text_size = 13;
       print('800');
     }
 
@@ -155,7 +155,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
       upload_btn_left_pos = 100;
       upload_icon_size = 19;
 
-      hint_text_size = 15;
+      hint_text_size = 13;
       print('640');
     }
 
@@ -166,7 +166,7 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
       image_width = 140;
       image_height = 140;
 
-      hint_text_size = 14;
+      hint_text_size = 11;
       print('480');
     }
 

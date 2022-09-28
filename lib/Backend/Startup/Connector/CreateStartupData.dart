@@ -223,6 +223,36 @@ class StartupConnector extends GetxController {
 
 
 /////////////////////////////////////////////////
+/// Upload Pitch : 
+/////////////////////////////////////////////////
+  CreateBusinessPitch() async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+      final myStore = store.collection(getBusinessPitchtStoreName);
+
+      // fetch catigories for local storage :
+      // kye : BusinessVision
+      bool is_data = localStore.containsKey(getBusinessPitchtStoreName);
+      // Validate key :
+      if (is_data) {
+        String? temp_data = localStore.getString(getBusinessPitchtStoreName);
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(
+            response_type: true, message: 'Create BusinesssPitch Successfully');
+      } else {
+        return ResponseBack(
+            response_type: false, message: 'BusinessPitch ${cached_error} ');
+      }
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+
+/////////////////////////////////////////////////
 /// Upload Why Text : 
 /////////////////////////////////////////////////
   CreateBusinessWhyInvest() async {

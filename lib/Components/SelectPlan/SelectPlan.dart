@@ -117,6 +117,9 @@ class _SelectPlanState extends State<SelectPlan> {
 
   double heading_text_top_mar = 0;
 
+  double payment_dialog_width = 0.37;
+  double payment_dialog_height = 0.65;
+
   var selectedPlan;
   var userName;
   var phoneNo;
@@ -192,8 +195,8 @@ class _SelectPlanState extends State<SelectPlan> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                width: context.width * 0.37,
-                height: context.height * 0.65,
+                width: context.width * payment_dialog_width,
+                height: context.height * payment_dialog_height,
                 child: CheckoutPaymentDialogWidget(
                     plan: planVal, checkout: checkoutVal, key: UniqueKey()),
               ));
@@ -342,13 +345,17 @@ class _SelectPlanState extends State<SelectPlan> {
 
       final is_planCreate = await localStore.setString(
           getStartupPlansStoreName, json.encode(plan));
+
       if (is_planCreate) {
         var resp = await startupConnector.CreateBusinessPlans();
+        print('Business Plan Created ${resp}');
+
         // Success Handler Creating plan :
         if (resp['response']) {
           return ResponseBack(
               response_type: true, message: "plan Created ${resp['message']}");
         }
+
         // Error Handler Createing plan :
         if (!resp['response']) {
           return ResponseBack(
@@ -408,6 +415,12 @@ class _SelectPlanState extends State<SelectPlan> {
     var resp11 = await startupConnector.CreateBusinessMileStone();
     print(resp11);
 
+    var resp12 = await startupConnector.CreateBusinessPitch();
+    print(resp12);
+
+    // var resp11 = await startupConnector.CreateBusinessMileStone();
+    // print(resp11);
+
     return ResponseBack(response_type: true);
   }
 
@@ -428,45 +441,60 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    final is_data_send = await SendDataToFireStore();
+    try {
+      final is_data_send = await SendDataToFireStore();
 
-    ////////////////////////////////////////////////////////
-    /// The above code is doing the following things:
-    /// 1. It is sending the payment data to the server.
-    /// 2. It is sending the payment data to the firebase.
-    /// 3. It is sending the payment data to the mail.
-    ////////////////////////////////////////////////////////
-    if (is_data_send['response']) {
-      print('Data store in firebase  Resp $is_data_send');
-      var resp = await SetUserPlan(
-          exact_amount: exact_amount,
-          orderd: orderd,
-          expired: expired,
-          buyer_name: userName,
-          phone_no: phoneNo,
-          plan_type: plan_type);
-
-      if (resp) {
-        final is_mail_send = await SendInvoiceMail(
-            paymentId: response.paymentId,
+      ////////////////////////////////////////////////////////
+      /// The above code is doing the following things:
+      /// 1. It is sending the payment data to the server.
+      /// 2. It is sending the payment data to the firebase.
+      /// 3. It is sending the payment data to the mail.
+      ////////////////////////////////////////////////////////
+      if (is_data_send['response']) {
+        print('Data store in firebase  Resp $is_data_send');
+        var resp = await SetUserPlan(
             exact_amount: exact_amount,
             orderd: orderd,
             expired: expired,
-            payer_name: userName,
-            phone_no: phoneNo);
-        print('Mail Send resp $is_mail_send');
+            buyer_name: userName,
+            phone_no: phoneNo,
+            plan_type: plan_type);
+
+        print('Create User Response $resp');
+
+
+        if (resp['response']) {
+          final is_mail_send = await SendInvoiceMail(
+              paymentId: response.paymentId,
+              exact_amount: exact_amount,
+              orderd: orderd,
+              expired: expired,
+              payer_name: userName,
+              phone_no: phoneNo);
+
+          print('Mail Send Response $is_mail_send');
+        }
+
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(home_page_url);
       }
 
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
+      // If data not uploaded completely then
+      // redirect user to home view :
+      if (!is_data_send['response']) {
+        CloseCustomPageLoadingSpinner();
+        Get.toNamed(home_page_url);
+      }
+      
+    }
+    
+    // If Error accure then Reset all action of creating 
+    // startup and Payment Return Operation Start : 
+     catch (e) {
+      print('Error accure while Creating Startup $e');
     }
 
-    // If data not uploaded completely then
-    // redirect user to home view :
-    if (!is_data_send['response']) {
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
-    }
+
   }
 
 ////////////////////////////////////////
@@ -621,6 +649,60 @@ class _SelectPlanState extends State<SelectPlan> {
 
   @override
   Widget build(BuildContext context) {
+    payment_dialog_width = 0.37;
+    payment_dialog_height = 0.65;
+    // DEFAULT :
+    if (context.width > 1700) {
+      print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      print('1700');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      payment_dialog_width = 0.40;
+      payment_dialog_height = 0.65;
+
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      payment_dialog_width = 0.43;
+      payment_dialog_height = 0.65;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      payment_dialog_width = 0.55;
+      payment_dialog_height = 0.65;
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      payment_dialog_width = 0.64;
+      payment_dialog_height = 0.65;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      payment_dialog_width = 0.90;
+      payment_dialog_height = 0.80;
+      print('480');
+    }
+
     Widget planRowView = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -831,14 +913,9 @@ class _SelectPlanState extends State<SelectPlan> {
     return Container(
         color: my_theme_background_color,
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min, 
-            
-            children: [
-          
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
             // Heading Section :
             PageHeading(context),
-
 
             /// PLANS SECTION :
             planRowView,
@@ -849,37 +926,29 @@ class _SelectPlanState extends State<SelectPlan> {
         ));
   }
 
-
-
-
-
-
 //////////////////////////////////////
-/// COMPONENT SECTION :
+  /// COMPONENT SECTION :
 ////////////////////////////////////
 
   Container PageHeading(BuildContext context) {
     return Container(
-            height: context.height * heading_col_height,
-            child:
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                margin: EdgeInsets.only(top: heading_text_top_mar),
-                child: RichText(
-                    text: TextSpan(style: Get.textTheme.headline3, children: [
-                  TextSpan(
-                      text: select_plan_heading,
-                      style: TextStyle(fontSize: heading_font_size))
-                ])),
-              )
-            ]),
-          );
+      height: context.height * heading_col_height,
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          margin: EdgeInsets.only(top: heading_text_top_mar),
+          child: RichText(
+              text: TextSpan(style: Get.textTheme.headline3, children: [
+            TextSpan(
+                text: select_plan_heading,
+                style: TextStyle(fontSize: heading_font_size))
+          ])),
+        )
+      ]),
+    );
   }
 
-
-
   //////////////////////////////////////////
-  /// Continue Button: 
+  /// Continue Button:
   //////////////////////////////////////////
   Container ContinueButton(BuildContext context) {
     return Container(
@@ -919,10 +988,8 @@ class _SelectPlanState extends State<SelectPlan> {
     );
   }
 
-
-
   //////////////////////////////////
-  /// Plan Detail Widget : 
+  /// Plan Detail Widget :
   //////////////////////////////////
   Container PlanType(
       {type, amount, period, color_pallet, active_color, selected_plan}) {

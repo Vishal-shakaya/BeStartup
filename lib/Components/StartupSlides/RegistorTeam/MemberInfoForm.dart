@@ -27,7 +27,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
       Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
-  double maxlines = 5;
+  double maxlines = 7;
 
   double formfield_width = 600;
   double contact_formfield_width = 600;
@@ -39,12 +39,12 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
 
   double form_bottom_margin = 0.00;
 
-  double form_fontSize = 16; 
+  double form_fontSize = 13; 
 
   @override
   Widget build(BuildContext context) {
-      form_fontSize = 16; 
-      maxlines = 5;
+      form_fontSize = 13; 
+      maxlines = 7;
       formfield_width = 600;
       contact_formfield_width = 600;
       contact_text_margin_top = 0.05;
@@ -55,7 +55,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
     // DEFAULT :
     if (context.width > 1500) {
       print('greator then 1500');
-      maxlines = 5;
+      maxlines = 7;
       formfield_width = 600;
       contact_formfield_width = 600;
       contact_text_margin_top = 0.05;
@@ -70,8 +70,8 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
     }
 
     if (context.width < 1200) {
-      form_fontSize = 15; 
-      maxlines = 5;
+      form_fontSize = 13; 
+      maxlines = 6;
       formfield_width = 550;
       contact_formfield_width = 550;
       contact_text_margin_top = 0.05;
@@ -89,7 +89,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
 
     // TABLET :
     if (context.width < 800) {
-      form_fontSize = 14; 
+      form_fontSize = 12; 
       maxlines = 4;
       formfield_width = 400;
       contact_formfield_width = 400;
@@ -109,7 +109,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-      form_fontSize = 13; 
+      form_fontSize = 12; 
       maxlines = 4;
       formfield_width = 340;
       contact_formfield_width = 340;
@@ -138,7 +138,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
       form_top_margin = 0.01;
       form_bottom_margin = 0.01;
 
-      form_fontSize = 13; 
+      form_fontSize = 12; 
       print('480');
     }
 

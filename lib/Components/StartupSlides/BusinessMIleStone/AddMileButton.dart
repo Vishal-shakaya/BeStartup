@@ -51,7 +51,9 @@ class _AddMileButtonState extends State<AddMileButton> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(Icons.close))),
+                      icon: Icon(
+                        Icons.cancel_rounded,
+                        color:my_dialog_color, ))),
               // title:  MileDialogHeading(context),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
