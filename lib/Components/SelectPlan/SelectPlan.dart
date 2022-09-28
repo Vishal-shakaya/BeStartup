@@ -437,6 +437,7 @@ class _SelectPlanState extends State<SelectPlan> {
     /// 3. It is sending the payment data to the mail.
     ////////////////////////////////////////////////////////
     if (is_data_send['response']) {
+      print('Data store in firebase  Resp $is_data_send');
       var resp = await SetUserPlan(
           exact_amount: exact_amount,
           orderd: orderd,
@@ -444,7 +445,6 @@ class _SelectPlanState extends State<SelectPlan> {
           buyer_name: userName,
           phone_no: phoneNo,
           plan_type: plan_type);
-      print('Data store in firebase  Resp $is_data_send');
 
       if (resp) {
         final is_mail_send = await SendInvoiceMail(

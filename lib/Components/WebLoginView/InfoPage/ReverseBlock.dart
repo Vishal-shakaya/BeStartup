@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:be_startup/Components/WebLoginView/InfoPage/PhoneResponsiveRow.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,6 +56,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
                                   TextSpan(
                                     text:widget.heading_text,
                                     style:TextStyle(
+                                      color:login_page_detail_sec_title_color ,
                                       fontSize:context.width<890 ? 23 :heading_font_size, 
                                     ),
                                   ),
@@ -85,6 +87,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
                         children: [
                            TextSpan(
                              style: TextStyle(
+                              color: login_page_detail_sec_desc_color,
                                letterSpacing: 1,                               
                              ),
                              text:widget.body_text

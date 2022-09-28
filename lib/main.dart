@@ -1,3 +1,4 @@
+import 'package:be_startup/UI/StartupSlides/BusinessPitchView.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
@@ -126,7 +127,7 @@ class _MyAppState extends State<MyApp> {
       builder: FlutterSmartDialog.init(),
 
       // CONFIGURE THEME SETTING :
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
 
       // themeMode: ThemeMode.dark,
       theme: ThemeData(
@@ -217,6 +218,9 @@ class _MyAppState extends State<MyApp> {
         GetPage(
             name: create_business_whyInvest_url,
             page: () => BusinessWhyInvestView()),
+        GetPage(
+            name: create_business_pitcht_url,
+            page: () => BusinessPitchView()),
 
         // FOUNDER REGISTRATION AND TEAM
         GetPage(

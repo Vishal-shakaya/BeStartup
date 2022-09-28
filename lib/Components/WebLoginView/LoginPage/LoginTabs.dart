@@ -1,9 +1,11 @@
 import 'package:be_startup/Components/WebLoginView/LoginPage/LoginForm.dart';
 import 'package:be_startup/Components/WebLoginView/Signup/SignupBox.dart';
 import 'package:be_startup/Components/WebLoginView/SocialAuth/SocialAuthRow.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:container_tab_indicator/container_tab_indicator.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:get/get.dart';
 
 class LoginTabs extends StatelessWidget {
@@ -32,7 +34,12 @@ class LoginTabs extends StatelessWidget {
                         iconMargin: EdgeInsets.all(4),
                         child:Text('Login',
                         overflow: TextOverflow.ellipsis,
-                          style:Get.theme.textTheme.headline4
+                          style:GoogleFonts.robotoSlab(
+                            textStyle: TextStyle(),
+                            color: login_page_singin_text,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                          ) 
                        ),
                     ),
@@ -43,7 +50,12 @@ class LoginTabs extends StatelessWidget {
                         iconMargin: EdgeInsets.all(4),
                         child:Text('Signup',
                         overflow: TextOverflow.ellipsis,
-                            style:Get.theme.textTheme.headline4,
+                            style:GoogleFonts.robotoSlab(
+                            textStyle: TextStyle(),
+                            color: login_page_singin_text,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                                 ),
                       ),
                     ),

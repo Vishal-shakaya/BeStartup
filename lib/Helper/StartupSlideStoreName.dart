@@ -8,6 +8,7 @@ String getBusinessCatigoryStoreName = 'BusinessCatigory';
 String getBusinessMilestoneStoreName = 'BusinessMilestones';
 String getBusinessProductStoreName = 'BusinessProducts';
 String getBusinessVisiontStoreName = 'BusinessVision';
+String getBusinessPitchtStoreName = 'BusinessPitch';
 String getBusinessWhyInvesttStoreName = 'BusinessWhyInvest';
 String getBusinessThumbnailStoreName = 'BusinessThumbnail';
 String getBusinessTeamMemberStoreName = 'BusinessTeamMember';

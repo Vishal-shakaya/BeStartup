@@ -129,8 +129,10 @@ Color startup_container_border_color =
 Color map_text_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade800;
 
+
 Color startup_title_text_color =
     Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade300;
+
 
 Color startup_text_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey;
@@ -140,6 +142,23 @@ Color startup_heding_color =
 
 Color startup_profile_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.black;
+
+
+
+Color login_page_heading_color =
+    Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
+
+Color login_page_detail_sec_title_color =
+    Get.isDarkMode ? Colors.grey.shade200 : Colors.blueGrey.shade800;
+
+Color login_page_detail_sec_desc_color =
+    Get.isDarkMode ? Colors.blueGrey.shade200 : Colors.blueGrey;
+
+
+Color login_page_singin_text =
+    Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade900;
+
+
 
 
 Color home_profile_text_color =

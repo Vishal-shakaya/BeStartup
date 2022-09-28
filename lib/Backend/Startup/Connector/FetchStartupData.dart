@@ -127,6 +127,40 @@ class StartupViewConnector extends GetxController {
     }
   }
 
+
+  ///////////////////////////////////
+  /// FETCH STARTUP Pitch :
+  ///////////////////////////////////
+  FetchBusinessPitch({startup_id = false}) async {
+    var data;
+    var final_startup_id;
+
+    // Filter Startup Id :
+    if (startup_id != '' || startup_id != false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = '';
+    }
+
+    try {
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessPitchtStoreName);
+
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+      });
+
+      return ResponseBack(
+          response_type: true,
+          data: data,
+          message: 'Pitch Fetch from Firestore DB');
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :
 ////////////////////////////////////////////

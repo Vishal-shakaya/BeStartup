@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessVisionStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessWhyInvestStore.dart';
+import 'package:be_startup/Backend/Startup/BusinessDetail/BusinesssPitchStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
@@ -168,6 +169,55 @@ class StartupUpdater extends GetxController {
       await StoreCacheData(fromModel: getBusinessVisiontStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
+      return ResponseBack(response_type: false, message: update_error_title);
+    }
+  }
+
+
+/// It takes a startup_id as a parameter, and if it's not empty, it will use that startup_id to query
+/// the database. If it is empty, it will use an empty string
+/// 
+/// Args:
+///   startup_id: The id of the startup. Defaults to false
+/// 
+/// Returns:
+///   A Future<ResponseBack>
+  UpdatehBusinessPitch({startup_id = false}) async {
+    var pitchStore = Get.put(BusinessPitchStore(),);
+    var data;
+    var pitch;
+    var doc_id;
+
+    var final_startup_id;
+
+    // Filter Startup Id :
+    if (startup_id != '' || startup_id != false) {
+      final_startup_id = startup_id;
+    } else {
+      final_startup_id = '';
+    }
+
+    try {
+      pitch = await pitchStore.GetPitchParam();
+
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessPitchtStoreName);
+      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      data['pitch'] = pitch;
+      store.doc(doc_id).update(data);
+
+      // CACHE BUSINESS DETAIL :
+      await StoreCacheData(fromModel: getBusinessPitchtStoreName, data: data);
+      return ResponseBack(response_type: true);
+   
+    }
+     catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }

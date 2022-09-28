@@ -98,6 +98,10 @@ String milestone_heading_test = 'MileStone';
 String milestone_subHeading_text =
     'Each MileStone define How, you gonna achive your milestone and start you startup at the end';
 
+String pitch_heading_test = 'Startup Pitch';
+String pitch_subHeading_text =
+      'Create Youtube video and paste pitch video url here , the pitch vidoe play as intro of your startup when investor see you startup . Must create quality and detailed video  ';
+
 // CREATE TEAM SLIDES :
 //1. REGISTORFOUNDER SLIDE :
 String registor_founder_head_text = 'Founder';

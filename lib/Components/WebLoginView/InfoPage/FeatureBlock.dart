@@ -1,4 +1,5 @@
 import 'package:be_startup/Components/WebLoginView/InfoPage/PhoneResponsiveRow.dart';
+import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,6 +58,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                        
                           // HEADER TEXT :
                           Container(
                             child: RichText(
@@ -66,6 +68,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                   TextSpan(
                                     text:widget.heading_text,
                                     style:TextStyle(
+                                      color:login_page_detail_sec_title_color ,
                                       fontSize:context.width<890 ? 23 :heading_font_size, 
                                     ),
                                   ),
@@ -94,10 +97,11 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                   style: Get.theme.textTheme.headline5,
                                   children: [
                                   TextSpan(
-                                    style: TextStyle(
-                                        letterSpacing: 1,
-                                    ),
-                                    text: widget.body_text
+                                    text: widget.body_text, 
+                                      style: TextStyle(
+                                        color: login_page_detail_sec_desc_color,
+                                          letterSpacing: 1,
+                                      ),
                                     )
                                 ])),
                           )

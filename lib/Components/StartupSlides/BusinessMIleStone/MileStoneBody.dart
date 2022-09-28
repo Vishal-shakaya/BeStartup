@@ -140,7 +140,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   }
 
 //////////////////////////////////
-  /// SUBMIT MILESTONE FORM :
+// SUBMIT MILESTONE FORM :
 //////////////////////////////////
   SubmitMileStone() async {
     StartLoading();

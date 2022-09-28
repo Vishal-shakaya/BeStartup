@@ -70,7 +70,7 @@ class BusinessCatigoryStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     var main_cat = catigories + temp_catigories;
     final startup_id = await startupState.GetStartupId();
-    print('vision startup id ${startup_id}');
+    // print('vision startup id ${startup_id}');
     try {
       var resp =
           await CatigoryModel(startup_id: startup_id, catigory: catigories);

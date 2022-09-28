@@ -78,7 +78,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       if (res['response']) {
         CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
-        Get.toNamed(create_business_milestone_url);
+        Get.toNamed(create_business_pitcht_url);
       }
 
       // Error Handler :

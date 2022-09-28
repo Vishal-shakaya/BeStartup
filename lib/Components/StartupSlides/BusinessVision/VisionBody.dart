@@ -24,10 +24,11 @@ class VisionBody extends StatefulWidget {
 }
 
 class _VisionBodyState extends State<VisionBody> {
-  var startupUpdater = Get.put(StartupUpdater(), tag: 'update_startup');
-  var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
+  var startupUpdater = Get.put(StartupUpdater(),);
+  var visionStore = Get.put(BusinessVisionStore(),);
   var startupConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_connector');
+      Get.put(StartupViewConnector(),);
+      
   var my_context = Get.context;
 
   final formKey = GlobalKey<FormBuilderState>();

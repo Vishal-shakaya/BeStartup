@@ -11,7 +11,8 @@ enum SlideType {
   milestone,
   catigory,
   product,
-  whyInvest
+  whyInvest,
+  pitch 
 }
 
 class BusinessSlideNav extends StatefulWidget {
@@ -53,11 +54,17 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
       Get.toNamed(create_business_product_url);
     }
 
+    if (slide == SlideType.pitch) {
+      Get.toNamed(create_business_whyInvest_url);
+    }
+
     // 6. Business Product view <- Product view :
     if (slide == SlideType.milestone) {
       Get.toNamed(create_business_whyInvest_url);
     }
   }
+
+
 
   ForwordButton(slide) {
     // 1. Detail view -> Thumbnail  view : :
@@ -84,6 +91,10 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     }
 
     if (slide == SlideType.whyInvest) {
+      widget.submitform!();
+    }
+
+    if (slide == SlideType.pitch) {
       widget.submitform!();
     }
 
