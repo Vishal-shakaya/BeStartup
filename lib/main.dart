@@ -47,7 +47,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:wiredash/wiredash.dart';
 
 
 void main() async {
@@ -118,154 +118,159 @@ class _MyAppState extends State<MyApp> {
   /// MY APP :
   /////////////////////////////////
   return Sizer(builder: (context, orientation, deviceType) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      scrollBehavior: MyCustomScrollBehavior(),
-  
-      // INITILIZE TOAST DIALOG  :
-      navigatorObservers: [FlutterSmartDialog.observer],
-      builder: FlutterSmartDialog.init(),
-
-      // CONFIGURE THEME SETTING :
-      themeMode: ThemeMode.light,
-
-      // themeMode: ThemeMode.dark,
-      theme: ThemeData(
-          textTheme: LightFontTheme(textTheme),
-          primaryColor: Color(0xFF54BAB9),
-          primarySwatch: Colors.blueGrey),
-
-      // Dark Theme
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: Colors.grey.shade900,
-        textTheme: DarkFontTheme(textTheme),
-        brightness: Brightness.dark,
+    return Wiredash(
+      projectId:'be-startup-vk323v6', 
+      secret:'1B67ty6CPwkZHPnDa3q8Dl41SOQynt42', 
+      
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        scrollBehavior: MyCustomScrollBehavior(),
+      
+        // INITILIZE TOAST DIALOG  :
+        navigatorObservers: [FlutterSmartDialog.observer],
+        builder: FlutterSmartDialog.init(),
+    
+        // CONFIGURE THEME SETTING :
+        themeMode: ThemeMode.light,
+    
+        // themeMode: ThemeMode.dark,
+        theme: ThemeData(
+            textTheme: LightFontTheme(textTheme),
+            primaryColor: Color(0xFF54BAB9),
+            primarySwatch: Colors.blueGrey),
+    
+        // Dark Theme
+        darkTheme: ThemeData(
+          scaffoldBackgroundColor: Colors.grey.shade900,
+          textTheme: DarkFontTheme(textTheme),
+          brightness: Brightness.dark,
+        ),
+    
+        ////////////////////////////////
+        /// Routes :
+        ////////////////////////////////
+        unknownRoute:
+            GetPage(name: '/error-page', page: () => Text('Unknown Route')),
+    
+        // Default Route :
+        initialRoute: '/',
+    
+        getPages: [
+          GetPage(
+              name: home_route,
+              page: () {
+              return StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      // SHOW ERROR :
+                      ErrorPage();
+                    }
+    
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return spinner;
+                    }
+    
+                    if (snapshot.hasData) {
+                      // Check Login user complete profile setup or not :
+                      // if Complete then redirect to
+                      // Configure App local state :
+                      SetAppLocalState();
+    
+                      return HomeView();
+                    }
+                    return LoginHandler();
+                  });
+              }),
+    
+    
+          GetPage(
+            name: user_registration_url, 
+            page: () => RegistrationView()),
+    
+          GetPage(
+            name: signup_url, 
+            page: () => SignupView()),
+    
+          GetPage(
+            name: login_handler_url, 
+            page: () => LoginHandler()),
+    
+          GetPage(
+            name: startup_slides_url, 
+            page: () => StartupSlides()),
+    
+          // BUSINESS DETAIL :
+          GetPage(
+              name: create_business_detail_url, 
+              page: () => BusinessDetailView()),
+          GetPage(
+              name: create_business_thumbnail_url,
+              page: () => BusinessThumbnailView()),
+          GetPage(
+              name: create_business_vision_url, 
+              page: () => BusinessVisionView()),
+          GetPage(
+              name: create_business_milestone_url,
+              page: () => BusinessMileStone()),
+          GetPage(
+              name: create_business_catigory_url,
+              page: () => BusinessCatigoryView()),
+          GetPage(
+              name: create_business_product_url,
+              page: () => BusinessProductView()),
+          GetPage(
+              name: create_business_whyInvest_url,
+              page: () => BusinessWhyInvestView()),
+          GetPage(
+              name: create_business_pitcht_url,
+              page: () => BusinessPitchView()),
+    
+          // FOUNDER REGISTRATION AND TEAM
+          GetPage(
+            name: create_founder, 
+            page: () => RegistorFounderView()),
+          GetPage(
+            name: create_business_team, 
+            page: () => RegistorTeamView()),
+    
+          // STARTUP PAGE:
+          GetPage(
+            name: startup_view_url, 
+            page: () => StartupView()),
+    
+          // SUB-ROUTES :
+          // 1 Team Page :
+          GetPage(
+            name: team_page_url, 
+            page: () => TeamPage()),
+          GetPage(
+            name: vision_page_url, 
+            page: () => VisionPage()),
+          GetPage(
+            name: invest_page_url, 
+            page: () => InvestPage()),
+    
+          // HOME PAGE
+          GetPage(
+            name: home_page_url, 
+            page: () => HomeView()),
+    
+          // REGISTOR INVESTOR :
+          GetPage(
+            name: select_investor_choise, 
+            page: () => ChooseCatigoryView()),
+    
+          GetPage(
+              name: investor_registration_form,
+              page: () => InvestorRegistorForm()),
+    
+          // SELECT PLAN
+          GetPage(
+            name: select_plan_url, 
+            page: () => SelectPlan()),
+        ],
       ),
-
-      ////////////////////////////////
-      /// Routes :
-      ////////////////////////////////
-      unknownRoute:
-          GetPage(name: '/error-page', page: () => Text('Unknown Route')),
-
-      // Default Route :
-      initialRoute: '/',
-
-      getPages: [
-        GetPage(
-            name: home_route,
-            page: () {
-            return StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    // SHOW ERROR :
-                    ErrorPage();
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return spinner;
-                  }
-
-                  if (snapshot.hasData) {
-                    // Check Login user complete profile setup or not :
-                    // if Complete then redirect to
-                    // Configure App local state :
-                    SetAppLocalState();
-
-                    return HomeView();
-                  }
-                  return LoginHandler();
-                });
-            }),
-
-
-        GetPage(
-          name: user_registration_url, 
-          page: () => RegistrationView()),
-
-        GetPage(
-          name: signup_url, 
-          page: () => SignupView()),
-
-        GetPage(
-          name: login_handler_url, 
-          page: () => LoginHandler()),
-
-        GetPage(
-          name: startup_slides_url, 
-          page: () => StartupSlides()),
-
-        // BUSINESS DETAIL :
-        GetPage(
-            name: create_business_detail_url, 
-            page: () => BusinessDetailView()),
-        GetPage(
-            name: create_business_thumbnail_url,
-            page: () => BusinessThumbnailView()),
-        GetPage(
-            name: create_business_vision_url, 
-            page: () => BusinessVisionView()),
-        GetPage(
-            name: create_business_milestone_url,
-            page: () => BusinessMileStone()),
-        GetPage(
-            name: create_business_catigory_url,
-            page: () => BusinessCatigoryView()),
-        GetPage(
-            name: create_business_product_url,
-            page: () => BusinessProductView()),
-        GetPage(
-            name: create_business_whyInvest_url,
-            page: () => BusinessWhyInvestView()),
-        GetPage(
-            name: create_business_pitcht_url,
-            page: () => BusinessPitchView()),
-
-        // FOUNDER REGISTRATION AND TEAM
-        GetPage(
-          name: create_founder, 
-          page: () => RegistorFounderView()),
-        GetPage(
-          name: create_business_team, 
-          page: () => RegistorTeamView()),
-
-        // STARTUP PAGE:
-        GetPage(
-          name: startup_view_url, 
-          page: () => StartupView()),
-
-        // SUB-ROUTES :
-        // 1 Team Page :
-        GetPage(
-          name: team_page_url, 
-          page: () => TeamPage()),
-        GetPage(
-          name: vision_page_url, 
-          page: () => VisionPage()),
-        GetPage(
-          name: invest_page_url, 
-          page: () => InvestPage()),
-
-        // HOME PAGE
-        GetPage(
-          name: home_page_url, 
-          page: () => HomeView()),
-
-        // REGISTOR INVESTOR :
-        GetPage(
-          name: select_investor_choise, 
-          page: () => ChooseCatigoryView()),
-
-        GetPage(
-            name: investor_registration_form,
-            page: () => InvestorRegistorForm()),
-
-        // SELECT PLAN
-        GetPage(
-          name: select_plan_url, 
-          page: () => SelectPlan()),
-      ],
     );
     });
 

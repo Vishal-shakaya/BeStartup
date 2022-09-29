@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:wiredash/wiredash.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
@@ -77,6 +77,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double profile_menu_top_margin = 12;
 
   double dropdown_menu_font_and_iconSize = 22;
+  double icon_and_text_space = 10;
 
   double search_and_menu_spacer = 0.20;
 
@@ -85,6 +86,14 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double home_and_save_icon_fontSize = 28;
 
   double home_and_save_icon_top_margin = 05;
+
+  double drop_menu_cont_width = 0.05;
+  double drop_menu_icon_fontSize = 22;
+  double drop_menu_fontSize = 16;
+  double menu_spacer = 10;
+
+  double menu_devider_width = 100;
+  double menu_divider_height = 2;
 
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
@@ -659,6 +668,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       print('480');
     }
 
+
     return Container(
       width: context.width * header_sec_width,
       height: context.height * header_sec_height,
@@ -682,7 +692,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Show Explore Button only
-              // if screen size greator then 450; 
+              // if screen size greator then 450;
               exploreButton,
 
               // Space :
@@ -787,7 +797,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         elevation: 3,
         shadowColor: my_theme_shadow_color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        
         child: Container(
           width: explore_btn_width,
           height: 30,
@@ -848,6 +857,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       width: context!.width * 0.08,
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7)
+            ),
         items: [
           ...FounderMenuItems.firstItems.map((item) {
             return DropdownMenuItem<MenuItem>(
@@ -856,9 +868,17 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             );
           }),
 
-
           // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
           ...FounderMenuItems.secondItems.map(
+            (item) => DropdownMenuItem<MenuItem>(
+              value: item,
+              child: FounderMenuItems.buildItem(item),
+            ),
+          ),
+
+
+          //  DropdownMenuItem<Container>(child:Container(height: 1,)),
+          ...FounderMenuItems.thirdItems.map(
             (item) => DropdownMenuItem<MenuItem>(
               value: item,
               child: FounderMenuItems.buildItem(item),
@@ -896,6 +916,12 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
             case FounderMenuItems.logout:
               await socialAuth.Logout();
               break;
+
+            case FounderMenuItems.feedback:
+           Wiredash.of(context).show(inheritMaterialTheme: true);
+              // await socialAuth.Logout();
+
+              break;
           }
         },
         openWithLongPress: true,
@@ -928,6 +954,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         width: context!.width * 0.08,
         child: DropdownButtonHideUnderline(
           child: DropdownButton2(
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7)
+            ),
               items: [
                 ...InvestorMenuItems.firstItems.map((item) {
                   return DropdownMenuItem<MenuItem>(
@@ -935,7 +964,15 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                     child: InvestorMenuItems.buildItem(item),
                   );
                 }),
+
                 ...InvestorMenuItems.secondItems.map(
+                  (item) => DropdownMenuItem<MenuItem>(
+                    value: item,
+                    child: InvestorMenuItems.buildItem(item),
+                  ),
+                ),
+
+                ...InvestorMenuItems.thirdItem.map(
                   (item) => DropdownMenuItem<MenuItem>(
                     value: item,
                     child: InvestorMenuItems.buildItem(item),
@@ -967,8 +1004,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               },
               openWithLongPress: true,
               customItemsHeight: 8,
-              
-
               customButton: Container(
                 margin: EdgeInsets.only(top: context.height * 0.01),
                 child: CircleAvatar(
@@ -989,23 +1024,30 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   }
 }
 
+
+
 //////////////////////////
 /// Menu Item Class :
 //////////////////////////
 class MenuItem {
   final String text;
-  final IconData icon;
+  final IconData? icon;
 
   const MenuItem({
     required this.text,
-    required this.icon,
+    this.icon,
   });
 }
+
 
 ////////////////////////////////////
 /// Founder Menu Items
 ////////////////////////////////////
 class FounderMenuItems {
+  // First Item List :
+  static const List<MenuItem> secondItems = [logout];
+
+  // Second Item List :
   static const List<MenuItem> firstItems = [
     profile,
     // investor,
@@ -1013,7 +1055,8 @@ class FounderMenuItems {
     settings,
   ];
 
-  static const List<MenuItem> secondItems = [logout];
+  // THIRD ITEM LIST :
+  static const List<MenuItem> thirdItems = [feedback];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
@@ -1023,6 +1066,8 @@ class FounderMenuItems {
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 
   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+
+  static const feedback = MenuItem(text: 'feedback', icon: Icons.feedback_outlined);
 
   static Widget buildItem(MenuItem item) {
     return Row(
@@ -1050,7 +1095,7 @@ class FounderMenuItems {
 /// Investor Menu Items
 ////////////////////////////////////
 class InvestorMenuItems {
-  static double width=100; 
+  static double width = 100;
   static const List<MenuItem> firstItems = [
     profile,
     // investor,
@@ -1058,12 +1103,15 @@ class InvestorMenuItems {
   ];
 
   static const List<MenuItem> secondItems = [logout];
+  static const List<MenuItem> thirdItem = [feedback];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 
   static const logout = MenuItem(text: 'logout', icon: Icons.logout);
+
+  static const feedback = MenuItem(text: 'feedback', icon: Icons.feedback_outlined);
 
   static Widget buildItem(MenuItem item) {
     return Row(
