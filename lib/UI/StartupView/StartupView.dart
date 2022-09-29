@@ -13,7 +13,6 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -97,26 +96,23 @@ class _StartupViewState extends State<StartupView> {
         });
   }
 
-
-
   @override
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
       params: const YoutubePlayerParams(
-        showControls: true,
-        mute: false,
-        showFullscreenButton: true,
-        loop: false,
-        strictRelatedVideos: true,
-        enableJavaScript: true, 
-        color: 'red'
-      ),
+          showControls: true,
+          mute: false,
+          showFullscreenButton: true,
+          loop: false,
+          strictRelatedVideos: true,
+          enableJavaScript: true,
+          color: 'red'),
     )..onInit = () {
-        print('my Pitch ${pitch}');
         _controller.loadVideo(pitch);
 
-        _controller.setSize(context.width * video_player_width,
+        _controller.setSize(
+          context.width * video_player_width,
             context.height * video_player_height);
       };
   }
@@ -127,7 +123,6 @@ class _StartupViewState extends State<StartupView> {
     _controller.close();
     super.dispose();
   }
-
 
 
 
@@ -153,11 +148,18 @@ class _StartupViewState extends State<StartupView> {
 
         await detailViewState.SetFounderMail(mail: mail);
 
+
+        // GET STARTUP PICH VIDEO : 
         var resp = await startupConnector.FetchBusinessPitch(
             startup_id: decode_data['startup_id']);
 
         if (resp['response']) {
-          pitch = resp['data']['pitch'];
+          if (resp['data']['pitch'] == null || resp['data']['pitch'] == '') {
+            pitch = default_pitch;
+          }
+          else{
+            pitch = resp['data']['pitch'];
+          }
         }
         if (!resp['response']) {
           pitch = default_pitch;

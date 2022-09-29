@@ -131,7 +131,7 @@ Color map_text_color =
 
 
 Color startup_title_text_color =
-    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.grey.shade300;
+    Get.isDarkMode ? Colors.blueGrey.shade400 : Colors.blueGrey.shade800;
 
 
 Color startup_text_color =
