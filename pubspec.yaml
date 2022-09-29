@@ -98,6 +98,10 @@ dependencies:
   rxdart: ^0.27.5
   sizer: ^2.0.15
   animated_toggle_switch: ^0.5.2
+  # youtube_player_flutter: ^8.1.0
+  youtube_player_iframe: ^3.1.0
+  # pod_player: ^0.1.0
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test:

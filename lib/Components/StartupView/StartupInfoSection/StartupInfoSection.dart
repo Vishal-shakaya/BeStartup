@@ -99,6 +99,7 @@ class StartupInfoSection extends StatelessWidget {
     Get.toNamed(create_business_thumbnail_url, parameters: {'data': param});
   }
 
+
   @override
   Widget build(BuildContext context) {
     //////////////////////////////////////////
@@ -193,6 +194,8 @@ class StartupInfoSection extends StatelessWidget {
   }
 
   Container MainMethod(BuildContext context, data) {
+    
+
     image_cont_width = 0.6;
     image_cont_height = 0.20;
 
@@ -599,7 +602,6 @@ class StartupInfoSection extends StatelessWidget {
 
       detail_btn_left_margin = 0.80;
 
-
       print('480');
     }
 
@@ -643,15 +645,14 @@ class StartupInfoSection extends StatelessWidget {
                   )),
             ),
 
-
             // Show like and mail button phone size :
-            // if user is not admin and screen size < then 550; 
+            // if user is not admin and screen size < then 550;
             is_admin == true
                 ? Positioned(
-                        top: context.height * detail_btn_top_margin,
-                        left: context.width * detail_btn_left_margin,
-                        child: Container())
-                 : context.width < 550
+                    top: context.height * detail_btn_top_margin,
+                    left: context.width * detail_btn_left_margin,
+                    child: Container())
+                : context.width < 550
                     ? Positioned(
                         top: context.height * detail_btn_top_margin,
                         left: context.width * detail_btn_left_margin,
@@ -660,7 +661,6 @@ class StartupInfoSection extends StatelessWidget {
                           user_id: founder_id,
                           is_saved: is_liked,
                         ))
-                    
                     : Positioned(
                         top: context.height * detail_btn_top_margin,
                         left: context.width * detail_btn_left_margin,
@@ -731,8 +731,7 @@ class StartupInfoSection extends StatelessWidget {
                       label: Text(
                         'Edit',
                         style: TextStyle(
-                          fontSize: edit_btn_fontSize,
-                          color: edit_btn_color),
+                            fontSize: edit_btn_fontSize, color: edit_btn_color),
                       )),
                 ))
             : Positioned(

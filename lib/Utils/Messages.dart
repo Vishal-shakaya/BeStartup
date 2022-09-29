@@ -12,6 +12,7 @@ String shimmer_image =
 String temp_logo =
     'https://i.pinimg.com/originals/1e/c3/17/1ec317142711af99cce906ef35a2f44f.jpg';
 
+String default_pitch = 'https://www.youtube.com/watch?v=UVpn0f2_90g';
 /////////////////////////////
 /// ERROR MESSAGES
 /////////////////////////////
@@ -100,7 +101,7 @@ String milestone_subHeading_text =
 
 String pitch_heading_test = 'Startup Pitch';
 String pitch_subHeading_text =
-      'Create Youtube video and paste pitch video url here , the pitch vidoe play as intro of your startup when investor see you startup . Must create quality and detailed video  ';
+    'Create Youtube video and paste pitch video url here , the pitch vidoe play as intro of your startup when investor see you startup . Must create quality and detailed video  ';
 
 // CREATE TEAM SLIDES :
 //1. REGISTORFOUNDER SLIDE :
@@ -120,7 +121,6 @@ String business_why_sub_text =
 // SELECT PLAN :
 String select_plan_heading = 'Our Best Plans';
 
-
 // Mail Request messages :
-String startupInterestSubject= 'Like your startup';
-String startupInterestBody= '';
+String startupInterestSubject = 'Like your startup';
+String startupInterestBody = '';
