@@ -4,6 +4,7 @@ import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Products.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
+import 'package:be_startup/Components/Widgets/EditButton.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -38,20 +39,6 @@ class _ProductSectionState extends State<ProductSection> {
   double product_top_margin = 0.02;
 
   double product_bottom_margin = 0.06;
-
-  double edit_btn_width = 0.63;
-
-  double edit_btn_cont_width = 90;
-
-  double edit_btn_cont_height = 30;
-
-  double edit_btn_top_margin = 0.2;
-
-  double edit_btn_radius = 15;
-
-  double edit_btn_iconSize = 15;
-
-  double edit_btn_fontSize = 15;
 
   double heading_fontSize = 32;
 
@@ -95,20 +82,6 @@ class _ProductSectionState extends State<ProductSection> {
 
     product_bottom_margin = 0.06;
 
-    edit_btn_width = 0.63;
-
-    edit_btn_cont_width = 90;
-
-    edit_btn_cont_height = 30;
-
-    edit_btn_top_margin = 0.2;
-
-    edit_btn_radius = 15;
-
-    edit_btn_iconSize = 15;
-
-    edit_btn_fontSize = 15;
-
     heading_fontSize = 32;
 
     product_bottom_space = 0.04;
@@ -125,19 +98,6 @@ class _ProductSectionState extends State<ProductSection> {
 
       product_bottom_margin = 0.06;
 
-      edit_btn_width = 0.63;
-
-      edit_btn_cont_width = 90;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 15;
-
-      edit_btn_fontSize = 15;
 
       heading_fontSize = 32;
 
@@ -156,19 +116,6 @@ class _ProductSectionState extends State<ProductSection> {
 
       product_bottom_margin = 0.06;
 
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
       print('1700');
     }
 
@@ -186,20 +133,6 @@ class _ProductSectionState extends State<ProductSection> {
 
       product_bottom_margin = 0.06;
 
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
-
       product_top_space = 0.10;
 
       product_bottom_space = 0.04;
@@ -214,20 +147,6 @@ class _ProductSectionState extends State<ProductSection> {
       product_top_margin = 0.02;
 
       product_bottom_margin = 0.06;
-
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
 
       heading_fontSize = 30;
 
@@ -245,20 +164,6 @@ class _ProductSectionState extends State<ProductSection> {
       product_top_margin = 0.02;
 
       product_bottom_margin = 0.06;
-
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
       heading_fontSize = 30;
       print('1200');
     }
@@ -271,20 +176,6 @@ class _ProductSectionState extends State<ProductSection> {
       product_top_margin = 0.02;
 
       product_bottom_margin = 0.06;
-
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
       print('1000');
     }
 
@@ -297,20 +188,6 @@ class _ProductSectionState extends State<ProductSection> {
       product_top_margin = 0.02;
 
       product_bottom_margin = 0.06;
-
-      edit_btn_width = 0.90;
-
-      edit_btn_cont_width = 70;
-
-      edit_btn_cont_height = 25;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 12;
-
-      edit_btn_fontSize = 12;
 
       product_top_space = 0.03;
 
@@ -380,13 +257,11 @@ class _ProductSectionState extends State<ProductSection> {
   /// Main Method :
 ////////////////////////////////////////
    MainMethodSection(BuildContext contex) {
-    var no_product = is_admin == true
-        ? EditButton(context, EditProductAndService)
-        : Container();
+    
+    var no_product = Container();
 
     var product_list = Column(
       children: [
-        
         SizedBox(height: context.height * product_top_space),
 
         // PRODUCT HEADING :
@@ -398,7 +273,7 @@ class _ProductSectionState extends State<ProductSection> {
         SizedBox(height: context.height * product_bottom_space),
 
         is_admin == true
-            ? EditButton(context, EditProductAndService)
+            ? MyEditButton(func: EditProductAndService, text: 'Edit')
             : Container(),
         Container(
             width: context.width * product_cont_width,
@@ -425,33 +300,6 @@ class _ProductSectionState extends State<ProductSection> {
     }
   }
 
-  Container EditButton(BuildContext context, EditProductAndService) {
-    return Container(
-        width: context.width * edit_btn_width,
-        alignment: Alignment.topRight,
-        // margin: EdgeInsets.only(top: context.hei),
-        child: Container(
-          width: edit_btn_cont_width,
-          height: edit_btn_cont_height,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(edit_btn_radius),
-              border: Border.all(color: border_color)),
-          child: TextButton.icon(
-              onPressed: () {
-                EditProductAndService();
-              },
-              icon: Icon(
-                Icons.edit,
-                size: edit_btn_iconSize,
-                color: edit_btn_color,
-              ),
-              label: Text(
-                'Edit',
-                style: TextStyle(
-                    color: edit_btn_color, fontSize: edit_btn_fontSize),
-              )),
-        ));
-  }
 
   Center ProductShimmer() {
     return Center(

@@ -4,6 +4,7 @@ import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/Services.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
+import 'package:be_startup/Components/Widgets/EditButton.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -439,7 +440,7 @@ class ServiceSection extends StatelessWidget {
         ),
 
       is_admin == true
-        ? EditButton(context, EditProductAndService)
+        ? MyEditButton(func: EditProductAndService, text: 'Edit')
         : Container(),
 
         SizedBox(height: context.height * service_bottom_height),
@@ -468,33 +469,6 @@ class ServiceSection extends StatelessWidget {
   }
 
 
-  Container EditButton(BuildContext context, EditProductAndService) {
-    return Container(
-        width: context.width * edit_btn_width,
-        alignment: Alignment.topRight,
-        // margin: EdgeInsets.only(top: context.hei),
-        child: Container(
-          width: edit_btn_cont_width,
-          height: edit_btn_cont_height,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(edit_btn_radius),
-              border: Border.all(color: border_color)),
-          child: TextButton.icon(
-              onPressed: () {
-                EditProductAndService();
-              },
-              icon: Icon(
-                Icons.edit,
-                size: edit_btn_iconSize,
-                color: edit_btn_color,
-              ),
-              label: Text(
-                'Edit',
-                style: TextStyle(
-                    color: edit_btn_color, fontSize: edit_btn_fontSize),
-              )),
-        ));
-  }
   Center ServiceShimmer() {
     return Center(
         child: Shimmer.fromColors(

@@ -503,8 +503,8 @@ class StartupInfoSection extends StatelessWidget {
       edit_btn_left_margin = 0.74;
       edit_btn_top_margin = 0.02;
 
-      edit_btn_width = 80;
-      edit_btn_height = 30;
+      edit_btn_width = 70;
+      edit_btn_height = 25;
 
       edit_iconSize = 14;
       print('800');
@@ -530,9 +530,9 @@ class StartupInfoSection extends StatelessWidget {
       edit_btn_top_margin = 0.02;
 
       edit_btn_width = 70;
-      edit_btn_height = 30;
+      edit_btn_height = 25;
 
-      edit_iconSize = 14;
+      edit_iconSize = 12;
 
       edit_btn_fontSize = 12;
 

@@ -66,8 +66,8 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   @override
   Widget build(BuildContext context) {
-    video_model_player_width = 0.70;
-    video_model_player_height = 0.70;
+      video_model_player_width = 0.70;
+      video_model_player_height = 0.70;
 
     // DEFAULT :
     if (context.width > 1700) {
