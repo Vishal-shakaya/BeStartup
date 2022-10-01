@@ -93,7 +93,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
     if (formKey.currentState!.validate()) {
       var pitch = formKey.currentState!.value['pitch'];
-      print('pitch ${pitch}');
+      
       var res = await pitchStore.SetPitch(pitchText: pitch);
 
       // Success Handler :

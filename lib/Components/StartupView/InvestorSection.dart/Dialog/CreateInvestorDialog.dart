@@ -166,26 +166,26 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   @override
   Widget build(BuildContext context) {
 
-     maxlines = 7;
-     con_button_width = 100;
-     con_button_height = 33;
+      maxlines = 7;
+      con_button_width = 100;
+      con_button_height = 33;
 
-     con_btn_top_margin = 5;
-     con_btn_btttom_margin = 10;
-     cont_btn_radius = 20;
-     cont_btn_elevation = 10;
-     cont_btn_fontSize = 16; 
-     cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 16; 
+      cont_btn_letterSpace= 2.5; 
 
-     width_factor = 0.9;
-     height_factor = 0.65;
+      width_factor = 0.9;
+      height_factor = 0.65;
 
-     dialog_padd = 15;
+      dialog_padd = 15;
 
-     top_spacer = 10;
+      top_spacer = 10;
 
-     image_flex = 5;
-     desc_flex = 5;
+      image_flex = 5;
+      desc_flex = 5;
 
 
 		// DEFAULT :

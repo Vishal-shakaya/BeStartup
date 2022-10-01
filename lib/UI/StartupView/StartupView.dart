@@ -3,6 +3,7 @@ import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Components/StartupView/IntroPitch/IntroPitch.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ProductSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ServiceSection.dart';
@@ -41,15 +42,6 @@ class _StartupViewState extends State<StartupView> {
   var autoPlay = true;
 
   double page_width = 0.90;
-  double heading_fontSize = 32;
-
-  double product_bottom_space = 0.04;
-
-  double product_top_space = 0.12;
-
-  double prouduct_bottom_space = 0.03;
-
-  double service_bottom_height = 0.04;
 
   double video_player_width = 0.70;
 
@@ -189,15 +181,6 @@ class _StartupViewState extends State<StartupView> {
     Future.delayed(Duration.zero, () => PlayPitchVideo(context));
 
     page_width = 0.90;
-    heading_fontSize = 32;
-
-    product_bottom_space = 0.04;
-
-    product_top_space = 0.12;
-
-    prouduct_bottom_space = 0.03;
-
-    service_bottom_height = 0.04;
 
     video_player_width = 0.70;
 
@@ -210,15 +193,6 @@ class _StartupViewState extends State<StartupView> {
     // DEFAULT :
     if (context.width > 1700) {
       page_width = 0.90;
-      heading_fontSize = 32;
-
-      product_bottom_space = 0.04;
-
-      product_top_space = 0.12;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.04;
 
       video_player_width = 0.70;
 
@@ -238,7 +212,7 @@ class _StartupViewState extends State<StartupView> {
     // DEFAULT :
     if (context.width < 1600) {
       page_width = 0.90;
-      heading_fontSize = 32;
+
       video_player_width = 0.70;
 
       video_player_height = 0.70;
@@ -251,20 +225,14 @@ class _StartupViewState extends State<StartupView> {
 
     // PC:
     if (context.width < 1500) {
-      product_top_space = 0.10;
 
-      product_bottom_space = 0.04;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.03;
 
       video_player_width = 0.65;
 
       video_player_height = 0.65;
 
       video_model_player_width = 0.65;
-      ;
+
 
       video_model_player_height = 0.65;
       print('1500');
@@ -272,7 +240,7 @@ class _StartupViewState extends State<StartupView> {
 
     if (context.width < 1200) {
       page_width = 0.90;
-      heading_fontSize = 30;
+      
       video_player_width = 0.70;
 
       video_player_height = 0.70;
@@ -281,15 +249,6 @@ class _StartupViewState extends State<StartupView> {
 
     if (context.width < 1300) {
       page_width = 0.90;
-      heading_fontSize = 30;
-
-      product_top_space = 0.09;
-
-      product_bottom_space = 0.03;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.03;
       print('1300');
     }
 
@@ -298,7 +257,6 @@ class _StartupViewState extends State<StartupView> {
 
       video_player_height = 0.85;
       video_model_player_width = 0.85;
-      ;
 
       video_model_player_height = 0.85;
       print('1000');
@@ -316,14 +274,6 @@ class _StartupViewState extends State<StartupView> {
 
     // TABLET :
     if (context.width < 800) {
-      product_top_space = 0.03;
-
-      product_bottom_space = 0.03;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.03;
-      heading_fontSize = 28;
 
       video_player_width = 0.90;
 
@@ -338,15 +288,6 @@ class _StartupViewState extends State<StartupView> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-      product_top_space = 0.03;
-
-      product_bottom_space = 0.03;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.02;
-      heading_fontSize = 28;
-
       video_player_width = 0.90;
 
       video_player_height = 0.80;
@@ -359,14 +300,6 @@ class _StartupViewState extends State<StartupView> {
 
     // PHONE:
     if (context.width < 480) {
-      product_top_space = 0.03;
-
-      product_bottom_space = 0.03;
-
-      prouduct_bottom_space = 0.03;
-
-      service_bottom_height = 0.03;
-      heading_fontSize = 25;
       page_width = 1;
 
       video_player_width = 0.97;
@@ -378,6 +311,8 @@ class _StartupViewState extends State<StartupView> {
       video_model_player_height = 0.99;
       print('480');
     }
+
+
     return Container(
       padding: const EdgeInsets.all(5),
       color: my_theme_background_color,
@@ -385,6 +320,7 @@ class _StartupViewState extends State<StartupView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+
             // CONTAIN :
             // 1 THUMBNAIL :
             // 2 PROFILE PICTURE :
@@ -392,37 +328,26 @@ class _StartupViewState extends State<StartupView> {
             // 4 INVESTMENT CHART :
             StartupInfoSection(),
 
+
             // VISION SECTION :
             // 1 HEADING :
             // 2 STARTUP VISION DESCRIPTION:
-            const StartupVisionSection(),
+             StartupVisionSection(),
 
-            SizedBox(height: context.height * product_top_space),
-
-            // PRODUCT HEADING :
-            StartupHeaderText(
-              title: 'Product',
-              font_size: heading_fontSize,
-            ),
-
-            SizedBox(height: context.height * product_bottom_space),
 
             // PRODUCT AND SERVIVES :
-            const ProductSection(),
+             ProductSection(),
 
-            SizedBox(height: context.height * prouduct_bottom_space),
 
-            // SERVICE HEADING :
-            StartupHeaderText(
-              title: 'Services',
-              font_size: heading_fontSize,
-            ),
-
-            SizedBox(height: context.height * service_bottom_height),
             // SERVICE SECTION :
             ServiceSection(),
 
+
+            IntroPitchSection(pitch: pitch,), 
+
+
             InvestorSection(),
+   
           ],
         ),
       ),

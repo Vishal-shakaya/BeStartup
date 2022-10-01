@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vishalshakayaproject.be_startup">
 
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.INTERNET" /> 
+
 
 <queries>
   <!-- If your app checks for SMS support -->
@@ -23,9 +26,6 @@
     <data android:scheme="https" />
   </intent>
 </queries>
-
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.INTERNET" /> 
 
    <application
         android:label="be_startup"

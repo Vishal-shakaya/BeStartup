@@ -594,7 +594,7 @@ class _InvestorBlockState extends State<InvestorBlock> {
     // MEMBER DETAIL DIALOG BLOK :
     MemberDetailDialogView() {
       showDialog(
-          barrierDismissible: false,
+          barrierDismissible: true,
           context: context,
           builder: (context) => AlertDialog(
               contentPadding: EdgeInsets.all(2),

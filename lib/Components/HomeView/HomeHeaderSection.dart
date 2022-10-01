@@ -32,19 +32,26 @@ class HomeHeaderSection extends StatefulWidget {
 }
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
+  
   var exploreStore = Get.put(ExploreCatigoryStore());
-  var socialAuth = Get.put(
-    MySocialAuth(),
-  );
+  
+  var socialAuth = Get.put(MySocialAuth(),);
+
+
   var userStore = Get.put(UserStore());
+  
   var my_context = Get.context;
 
   double header_sec_width = 1;
+
   double header_sec_height = 0.10;
 
   double con_button_width = 80;
+
   double con_button_height = 40;
+
   double con_btn_top_margin = 40;
+
 
   // Explore Section
   double explore_btn_width = 90;
@@ -95,6 +102,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double menu_devider_width = 100;
   double menu_divider_height = 2;
 
+
+
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
 
@@ -108,6 +117,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     Navigator.of(context).pop();
   }
 
+
+
+
   LogoutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -116,6 +128,9 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       print('Logout Error');
     }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
