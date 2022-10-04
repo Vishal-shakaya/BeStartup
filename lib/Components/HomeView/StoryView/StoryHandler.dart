@@ -14,7 +14,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 class StoryListView extends StatelessWidget {
   bool? is_save_page = false;
   bool? is_explore = false;
-
+    
   StoryListView({this.is_explore = false, this.is_save_page, Key? key})
       : super(key: key);
 

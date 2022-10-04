@@ -183,3 +183,51 @@
     //   {'text': 'logout', 'icon': Icons.logout},
     //   {'text': 'feedback', 'icon': Icons.feedback_outlined},
     // ];
+
+    // AdvancedDrawer(
+    //     backdropColor: Colors.blueGrey,
+    //     controller: _advancedDrawerController,
+    //     animationCurve: Curves.easeInOut,
+    //     animationDuration: const Duration(milliseconds: 300),
+    //     animateChildDecoration: true,
+    //     rtlOpening: false,
+    //     // openScale: 1.0,
+    //     disabledGestures: false,
+    //     childDecoration: const BoxDecoration(
+    //       borderRadius: const BorderRadius.all(Radius.circular(16)),
+    //     ),
+    //     drawer: Container(
+    //         child: Column(
+    //       children: [
+    //         ListTile(
+    //           leading: Text('Hello world'),
+    //         ),
+    //         ListTile(
+    //           leading: Text('Hello world'),
+    //         ),
+    //         ListTile(
+    //           leading: Text('Hello world'),
+    //         ),
+    //         ListTile(
+    //           leading: Text('Hello world'),
+    //         ),
+    //         ListTile(
+    //           leading: Text('Hello world'),
+    //         ),
+    //       ],
+    //     )),
+    //     child: Scaffold(
+    //       body: IconButton(
+    //         onPressed: _handleMenuButtonPressed,
+    //         icon: ValueListenableBuilder<AdvancedDrawerValue>(
+    //             valueListenable: _advancedDrawerController,
+    //             builder: (_, value, __) {
+    //               return AnimatedSwitcher(
+    //                   duration: Duration(milliseconds: 250),
+    //                   child: Icon(
+    //                     value.visible ? Icons.clear : Icons.menu,
+    //                     key: ValueKey<bool>(value.visible),
+    //                   ));
+    //             }),
+    //       ),
+    //     ));

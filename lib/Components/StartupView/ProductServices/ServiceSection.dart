@@ -39,23 +39,6 @@ class ServiceSection extends StatelessWidget {
   double service_bottom_height = 0.04;
 
 
-  double edit_btn_width = 0.63;
-
-  double edit_btn_cont_width = 90;
-
-  double edit_btn_cont_height = 30;
-
-  double edit_btn_top_margin = 0.2;
-
-  double edit_btn_radius = 15;
-
-  double edit_btn_iconSize = 15;
-
-  double edit_btn_fontSize = 15;
-
-
-
-
   Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
     'title': 'word famous watter battle  cleane',
@@ -119,19 +102,6 @@ class ServiceSection extends StatelessWidget {
 
     service_bottom_height = 0.04;
 
-    edit_btn_width = 0.63;
-
-    edit_btn_cont_width = 90;
-
-    edit_btn_cont_height = 30;
-
-    edit_btn_top_margin = 0.2;
-
-    edit_btn_radius = 15;
-
-    edit_btn_iconSize = 15;
-
-    edit_btn_fontSize = 15;
 
     // DEFAULT :
     if (context.width > 1700) {
@@ -147,19 +117,6 @@ class ServiceSection extends StatelessWidget {
 
       service_bottom_margin = 0.06;
       
-      edit_btn_width = 0.63;
-
-      edit_btn_cont_width = 90;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 15;
-
-      edit_btn_fontSize = 15;
       print('Greator then 1700');
     }
 
@@ -172,19 +129,6 @@ class ServiceSection extends StatelessWidget {
 
       service_bottom_margin = 0.06;
 
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
       print('1700');
     }
 
@@ -205,20 +149,6 @@ class ServiceSection extends StatelessWidget {
       service_top_margin = 0.02;
 
       service_bottom_margin = 0.06;
-
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
       print('1500');
     }
 
@@ -235,20 +165,7 @@ class ServiceSection extends StatelessWidget {
 
       service_bottom_margin = 0.06;
 
-      
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
+    
       print('1300');
     }
 
@@ -260,18 +177,6 @@ class ServiceSection extends StatelessWidget {
       service_top_margin = 0.02;
 
       service_bottom_margin = 0.06;
-
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
 
       print('1200');
     }
@@ -285,19 +190,6 @@ class ServiceSection extends StatelessWidget {
 
       service_bottom_margin = 0.06;
 
-      edit_btn_width = 0.70;
-
-      edit_btn_cont_width = 80;
-
-      edit_btn_cont_height = 30;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 14;
-
-      edit_btn_fontSize = 14;
 
       print('1000');
     }
@@ -315,20 +207,6 @@ class ServiceSection extends StatelessWidget {
       service_top_margin = 0.02;
 
       service_bottom_margin = 0.06;
-
-      edit_btn_width = 0.90;
-
-      edit_btn_cont_width = 70;
-
-      edit_btn_cont_height = 25;
-
-      edit_btn_top_margin = 0.2;
-
-      edit_btn_radius = 15;
-
-      edit_btn_iconSize = 12;
-
-      edit_btn_fontSize = 12;
 
       print('800');
     }

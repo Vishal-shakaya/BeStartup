@@ -240,13 +240,13 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-      search_bar_left_pos = 0.25;
+      search_bar_left_pos = 0.05;
 
       search_cont_top_margin = 0.02;
 
-      search_box_width = 0.35;
+      search_box_width = 0.50;
 
-      search_box_top_margin = 5;
+      search_box_top_margin = 7;
 
       search_bar_height = 40;
 
@@ -272,7 +272,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
       
       search_bar_height = 35;
 
-      search_box_top_margin = 5;
+      search_box_top_margin = 7;
 
       search_text_fontSize = 12;
 

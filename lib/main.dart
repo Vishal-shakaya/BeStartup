@@ -120,7 +120,7 @@ class _MyAppState extends State<MyApp> {
   return Sizer(builder: (context, orientation, deviceType) {
     return Wiredash(
       projectId:'be-startup-vk323v6', 
-      secret:'1B67ty6CPwkZHPnDa3q8Dl41SOQynt42', 
+      secret:'OG9_Vc15GmDaTKskckJ_vnPK6hD4icDt', 
       
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

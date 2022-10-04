@@ -171,7 +171,7 @@ Color home_profile_map_color =
     Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade300;
 
 Color home_profile_cont_color =
-    Get.isDarkMode ? Colors.grey.shade900 : Colors.blueGrey.shade300;
+    Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
 
 Color home_setting_tile_hover_color =
     Get.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;

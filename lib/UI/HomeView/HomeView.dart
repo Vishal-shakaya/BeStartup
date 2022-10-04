@@ -43,9 +43,17 @@ class _HomeViewState extends State<HomeView> {
   var phoneNo;
   var otherContact;
 
+  var home_icon=Icons.home;
+  var save_icon=Icons.bookmark_outline;
+
   var usertype;
   double page_width = 0.80;
   double page_height = 0.90;
+
+  double explore_top_margin = 0.83;
+  double explore_left_margin = 0.40;
+  double explore_icon_size = 18;
+  double explore_btn_radius = 20;
 
   SetHomeView(changeView) async {
     if (changeView == HomePageViews.profileView) {
@@ -83,20 +91,17 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-
-
   // Explore Dialog :
   ExploreFunction(context) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: ExploreCatigoryAlert(
+              content: ExploreCatigoryAlert(
             changeView: SetHomeView,
           ));
         });
-    }
-
+  }
 
   // LOADING SPINNER :
   var spinner = Container(
@@ -111,45 +116,99 @@ class _HomeViewState extends State<HomeView> {
     ),
   );
 
-
-
   @override
   Widget build(BuildContext context) {
-    
+    // DEFAULT :
+    if (context.width > 1700) {
+      explore_top_margin = 0.83;
+      explore_left_margin = 0.40;
+      explore_icon_size = 18;
+      explore_btn_radius = 20;
+      print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      print('1700');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      explore_top_margin = 0.83;
+      explore_left_margin = 0.45;
+      explore_icon_size = 18;
+      explore_btn_radius = 20;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      explore_top_margin = 0.83;
+      explore_left_margin = 0.40;
+      explore_icon_size = 18;
+      explore_btn_radius = 20;
+      print('480');
+    }
+
     ///////////////////////////////////////////
     /// ASSIGNING VIEW  :
     /// DEFAULT VIEW IS STORYVIEW :
     ///////////////////////////////////////////
 
     if (view == HomePageViews.profileView) {
+      home_icon = Icons.home_outlined;
+      save_icon = Icons.bookmark_border_outlined;
       mainViewWidget = UserProfileView();
     }
 
     if (view == HomePageViews.safeStory) {
-      mainViewWidget = StoryListView(
-        is_save_page: true,
-      );
-    }
-
-    if (view == HomePageViews.safeStory) {
+      home_icon = Icons.home_outlined;
+      save_icon = Icons.bookmark;
       mainViewWidget = StoryListView(
         is_save_page: true,
       );
     }
 
     if (view == HomePageViews.exploreView) {
+      home_icon = Icons.home;
+      save_icon = Icons.bookmark_border_outlined;
       mainViewWidget = StoryListView(
         is_explore: true,
       );
     }
 
     if (view == HomePageViews.storyView) {
+      home_icon = Icons.home;
+      save_icon = Icons.bookmark_border_outlined;
       mainViewWidget = StoryListView(
         is_save_page: false,
       );
     }
 
     if (view == HomePageViews.settingView) {
+      home_icon = Icons.home_outlined;
+      save_icon = Icons.bookmark_border_outlined;
       mainViewWidget = UserSettings(
         usertype: usertype,
       );
@@ -303,11 +362,10 @@ class _HomeViewState extends State<HomeView> {
   /// MAIN METHOD :
   ///////////////////////////////////////////
   Container MainMethod(BuildContext context) {
-
     // Show Floating Explore Button :
     Widget exploreButton = Container();
-    if (context.width < 480) {
-      exploreButton = ExploreButton(context,ExploreFunction);
+    if (context.width < 640) {
+      exploreButton = ExploreButton(context, ExploreFunction);
     }
 
     return Container(
@@ -324,7 +382,9 @@ class _HomeViewState extends State<HomeView> {
             HomeHeaderSection(
                 profile_image: user_profile ?? temp_avtar_image,
                 changeView: SetHomeView,
-                usertype: usertype),
+                usertype: usertype,
+                home_icon: home_icon,
+                save_icon: save_icon, ),
 
             // SEARCH BAR :
             BusinessSearchBar(),
@@ -337,24 +397,26 @@ class _HomeViewState extends State<HomeView> {
 /////////////////////////////////////////////
   /// External Method :
 /////////////////////////////////////////////
-  Positioned ExploreButton(BuildContext context,ExploreFunction) {
+  Positioned ExploreButton(BuildContext context, ExploreFunction) {
     return Positioned(
-      top: context.height * 0.83,
-      left: context.height * 0.40,
+      top: context.height * explore_top_margin,
+      left: context.height * explore_left_margin,
       child: Card(
         elevation: 5,
         shadowColor: my_theme_shadow_color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          radius: 20,
+          radius: explore_btn_radius,
           child: IconButton(
+            tooltip: 'explore',
+            splashRadius: 50,
             onPressed: () {
               ExploreFunction(context);
             },
             icon: Icon(
               Icons.wb_incandescent_sharp,
-              size: 18,
+              size: explore_icon_size,
               color: my_theme_icon_color,
             ),
           ),

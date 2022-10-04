@@ -1,10 +1,8 @@
-import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class IntroPitchSection extends StatefulWidget {
   var pitch;
@@ -30,7 +28,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   double service_top_height = 0.02;
 
-  double pitch_cont_bottom_margin = 0.10; 
+  double pitch_cont_bottom_margin = 0.10;
 
   late YoutubePlayerController _controller;
 
@@ -49,7 +47,9 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           enableJavaScript: true,
           color: 'red'),
     )..onInit = () {
-        _controller.loadVideo(widget.pitch);
+        _controller
+            .loadVideo(widget.pitch);
+
         _controller.stopVideo();
 
         _controller.setSize(context.width * video_player_width,
@@ -66,8 +66,8 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   @override
   Widget build(BuildContext context) {
-      video_model_player_width = 0.70;
-      video_model_player_height = 0.70;
+    video_model_player_width = 0.70;
+    video_model_player_height = 0.70;
 
     // DEFAULT :
     if (context.width > 1700) {
@@ -210,16 +210,16 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           ),
           SizedBox(height: context.height * service_bottom_height),
           Container(
-            margin: EdgeInsets.only(bottom: context.height * pitch_cont_bottom_margin ),
+            margin: EdgeInsets.only(
+                bottom: context.height * pitch_cont_bottom_margin),
             width: context.width * video_model_player_width,
             height: context.height * video_model_player_height,
-             
-              child: YoutubePlayerControllerProvider(
+            child: YoutubePlayerControllerProvider(
+              controller: _controller,
+              child: YoutubePlayer(
                 controller: _controller,
-                child: YoutubePlayer(
-                  controller: _controller,
-                ),
               ),
+            ),
           ),
         ],
       ),

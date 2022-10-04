@@ -1,5 +1,5 @@
-import 'dart:convert';
-import 'package:wiredash/wiredash.dart';
+import 'package:be_startup/Components/HomeView/ResponsiveDropdown/FounderDropdown.dart';
+import 'package:be_startup/Components/HomeView/ResponsiveDropdown/InvestorDropdown.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/HomeView/HomeStore.dart';
@@ -9,22 +9,25 @@ import 'package:be_startup/Utils/Colors.dart';
 
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HomeHeaderSection extends StatefulWidget {
   Function changeView;
   var usertype;
   var profile_image;
-
+  var home_icon;
+  var save_icon; 
   HomeHeaderSection(
       {required this.profile_image,
       required this.changeView,
       required this.usertype,
+      required this.home_icon, 
+      required this.save_icon, 
+
       Key? key})
       : super(key: key);
   @override
@@ -32,15 +35,15 @@ class HomeHeaderSection extends StatefulWidget {
 }
 
 class _HomeHeaderSectionState extends State<HomeHeaderSection> {
-  
   var exploreStore = Get.put(ExploreCatigoryStore());
-  
-  var socialAuth = Get.put(MySocialAuth(),);
 
+  var socialAuth = Get.put(MySocialAuth());
 
   var userStore = Get.put(UserStore());
-  
+
   var my_context = Get.context;
+
+  final _advancedDrawerController = AdvancedDrawerController();
 
   double header_sec_width = 1;
 
@@ -51,7 +54,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double con_button_height = 40;
 
   double con_btn_top_margin = 40;
-
 
   // Explore Section
   double explore_btn_width = 90;
@@ -73,7 +75,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
   double menu_section_height = 0.04;
 
-  double menu_section_width = 0.14;
+  double menu_section_width = 0.06;
 
   double profile_menu_width = 51;
 
@@ -102,7 +104,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
   double menu_devider_width = 100;
   double menu_divider_height = 2;
 
-
+  double dropdown_width = 0.08;
 
   SfRangeValues values =
       SfRangeValues(DateTime(2000, 01, 01), DateTime(2022, 01, 01));
@@ -117,9 +119,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     Navigator.of(context).pop();
   }
 
-
-
-
   LogoutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -129,8 +128,42 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
     }
   }
 
+  SwitchToProfile() async {
+    await widget.changeView(HomePageViews.profileView);
+    setState(() {
+      is_home_view = false;
+      is_save_view = false;
+    });
+  }
 
+  SwitchSettingView() async {
+    await widget.changeView(HomePageViews.settingView);
+    setState(() {
+      is_home_view = false;
+      is_save_view = false;
+    });
+  }
 
+  SwitchToHomeView() async {
+    widget.changeView(HomePageViews.storyView);
+    setState(() {
+      is_home_view = true;
+      is_save_view = false;
+    });
+  }
+
+  SwitchToSaveView() async {
+    widget.changeView(HomePageViews.safeStory);
+    setState(() {
+      is_home_view = false;
+      is_save_view = true;
+    });
+  }
+
+  CreateStatup() async {
+    await ClearCachedData();
+    Get.toNamed(create_business_detail_url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,26 +183,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           });
     }
 
-    //////////////////////////////////////////////////////////
-    /// Create Startup Url  :
-    //////////////////////////////////////////////////////////
-    CreateStatup() async {
-      await ClearCachedData();
-      Get.toNamed(create_business_detail_url);
-    }
-
     Widget exploreButton = ExploreButton(context, ExploreFunction);
 
-    //////////////////////////////////////
-    /// INVESTOR ITEMS :
-    //////////////////////////////////////
     // SwitchInvestorToFounder() async {
     //   print('Switch to founder ');
     // }
-
-    ////////////////////////////////////
-    /// RESPONSIVENESS :
-    ////////////////////////////////////
 
     header_sec_width = 1;
     header_sec_height = 0.10;
@@ -198,7 +216,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
     menu_section_height = 0.04;
 
-    menu_section_width = 0.14;
+    menu_section_width = 0.06;
 
     profile_menu_width = 51;
 
@@ -249,7 +267,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       menu_section_height = 0.04;
 
-      menu_section_width = 0.14;
+      menu_section_width = 0.06;
 
       menu_section_padding = 5;
 
@@ -300,7 +318,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       menu_section_height = 0.05;
 
-      menu_section_width = 0.17;
+      menu_section_width = 0.08;
 
       menu_section_padding = 5;
 
@@ -323,6 +341,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
     // PC:
     if (context.width < 1500) {
+      dropdown_width = 0.11;
       print('1500');
     }
 
@@ -356,7 +375,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       menu_section_height = 0.06;
 
-      menu_section_width = 0.19;
+      menu_section_width = 0.10;
 
       menu_section_padding = 5;
 
@@ -373,6 +392,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       home_and_save_icon_fontSize = 27;
 
       home_and_save_icon_top_margin = 10;
+      dropdown_width = 0.13;
       print('1200');
     }
 
@@ -406,7 +426,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       menu_section_height = 0.06;
 
-      menu_section_width = 0.20;
+      menu_section_width = 0.12;
 
       menu_section_padding = 5;
 
@@ -423,6 +443,8 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       home_and_save_icon_fontSize = 27;
 
       home_and_save_icon_top_margin = 10;
+
+      dropdown_width = 0.14;
       print('1100');
     }
 
@@ -448,19 +470,19 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       explore_cont_right_margin = 0.08;
 
       // Menu Bar :
-      search_and_menu_spacer = 0.33;
+      search_and_menu_spacer = 0.35;
 
       mem_dialog_width = 900;
 
-      menu_section_left_margin = 0.06;
+      menu_section_left_margin = 0.07;
 
       menu_section_height = 0.07;
 
-      menu_section_width = 0.22;
+      menu_section_width = 0.12;
 
       menu_section_padding = 5;
 
-      profile_menu_radiud = 35;
+      profile_menu_radiud = 25;
 
       profile_menu_width = 45;
 
@@ -473,6 +495,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       profile_menu_top_margin = 5;
 
       home_and_save_icon_top_margin = 4;
+      dropdown_width = 0.15;
       print('1000');
     }
 
@@ -503,19 +526,19 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       mem_dialog_width = 900;
 
-      menu_section_left_margin = 0.06;
+      menu_section_left_margin = 0.05;
 
       menu_section_height = 0.08;
 
-      menu_section_width = 0.24;
+      menu_section_width = 0.14;
 
       menu_section_padding = 5;
 
-      profile_menu_radiud = 30;
+      profile_menu_radiud = 25;
 
-      profile_menu_width = 40;
+      profile_menu_width = 45;
 
-      profile_menu_height = 40;
+      profile_menu_height = 45;
 
       profile_menu_top_margin = 0;
 
@@ -524,6 +547,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       home_and_save_icon_fontSize = 25;
 
       home_and_save_icon_top_margin = 0;
+      dropdown_width = 0.20;
 
       print('800');
     }
@@ -555,19 +579,19 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       mem_dialog_width = 900;
 
-      menu_section_left_margin = 0.06;
+      menu_section_left_margin = 0.05;
 
       menu_section_height = 0.08;
 
-      menu_section_width = 0.28;
+      menu_section_width = 0.14;
 
       menu_section_padding = 5;
 
-      profile_menu_radiud = 30;
+      profile_menu_radiud = 25;
 
-      profile_menu_width = 40;
+      profile_menu_width = 45;
 
-      profile_menu_height = 40;
+      profile_menu_height = 45;
 
       profile_menu_top_margin = 5;
 
@@ -576,6 +600,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       home_and_save_icon_fontSize = 27;
 
       home_and_save_icon_top_margin = 0;
+      dropdown_width = 0.20;
       print('700');
     }
 
@@ -602,19 +627,19 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       explore_cont_right_margin = 0.08;
 
       // Menu Bar :
-      search_and_menu_spacer = 0.35;
+      search_and_menu_spacer = 0.50;
 
       mem_dialog_width = 900;
 
-      menu_section_left_margin = 0.06;
+      menu_section_left_margin = 0.05;
 
       menu_section_height = 0.10;
 
-      menu_section_width = 0.29;
+      menu_section_width = 0.18;
 
       menu_section_padding = 5;
 
-      profile_menu_radiud = 30;
+      profile_menu_radiud = 21;
 
       profile_menu_width = 40;
 
@@ -627,6 +652,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       home_and_save_icon_fontSize = 25;
 
       home_and_save_icon_top_margin = 0;
+      exploreButton = Container();
       print('640');
     }
 
@@ -661,17 +687,11 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       menu_section_height = 1;
 
-      menu_section_width = 0.35;
+      menu_section_width = 0.22;
 
       menu_section_padding = 1;
 
-      profile_menu_radiud = 30;
-
-      profile_menu_width = 35;
-
-      profile_menu_height = 30;
-
-      profile_menu_top_margin = 2;
+      profile_menu_top_margin = 0.05;
 
       dropdown_menu_font_and_iconSize = 20;
 
@@ -679,11 +699,13 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
       home_and_save_icon_top_margin = 2;
 
-      exploreButton = Container();
       print('480');
     }
 
+    return MainDrower(context, exploreButton);
+  }
 
+  Container MainDrower(BuildContext context, Widget exploreButton) {
     return Container(
       width: context.width * header_sec_width,
       height: context.height * header_sec_height,
@@ -695,6 +717,7 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
         child: Container(
           height: context.height * header_sec_height,
           color: my_theme_background_color,
+
           alignment: Alignment.topCenter,
           // decoration: BoxDecoration(
           //   border: Border.all(color: Colors.grey.shade300)
@@ -733,17 +756,22 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 
                       // Save Startup Button:
                       SaveStartupLink(),
-
-                      widget.usertype == UserType.investor
-                          ? InvestorDropDownMenu(
-                              context: context,
-                            )
-                          : FounderDropDownMenu(
-                              context: context,
-                              CreateStatup: CreateStatup,
-                            ),
                     ],
-                  ))
+                  )),
+
+              widget.usertype == UserType.investor
+                  ? InvestorCustomDropdown(
+                      CreateStatup: CreateStatup,
+                      SwitchToFounder: SwitchToProfile,
+                      SwitchSettingView: SwitchSettingView,
+                      profile_image: widget.profile_image,
+                    )
+                  : FounderCustomFullScreenDropDown(
+                      CreateStatup: CreateStatup,
+                      SwitchToFounder: SwitchToProfile,
+                      SwitchSettingView: SwitchSettingView,
+                      profile_image: widget.profile_image,
+                    ),
             ],
           ),
         ),
@@ -754,28 +782,17 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
 ////////////////////////////////////////
   /// External Methods  :
 ////////////////////////////////////////
-
   Container SaveStartupLink() {
     return Container(
       margin: EdgeInsets.only(top: 0),
       child: IconButton(
           onPressed: () {
-            setState(() {
-              is_home_view = false;
-              is_save_view = true;
-            });
-            widget.changeView(HomePageViews.safeStory);
+            SwitchToSaveView();
           },
-          icon: is_save_view
-              ? Icon(
-                  Icons.bookmark,
-                  size: home_and_save_icon_fontSize,
-                )
-              : Icon(
-                  Icons.bookmark_border_outlined,
-                  size: home_and_save_icon_fontSize,
-                )),
-    );
+          icon: Icon(
+          widget.save_icon,
+          size: home_and_save_icon_fontSize,)
+    ));
   }
 
   Container StartupViewLink() {
@@ -783,26 +800,16 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
       margin: EdgeInsets.only(top: 0),
       child: IconButton(
           onPressed: () {
-            setState(() {
-              is_home_view = true;
-              is_save_view = false;
-            });
-            widget.changeView(HomePageViews.storyView);
+            SwitchToHomeView();
           },
-          icon: is_home_view
-              ? Icon(
-                  Icons.home,
-                  size: home_and_save_icon_fontSize,
-                )
-              : Icon(
-                  Icons.home_outlined,
-                  size: home_and_save_icon_fontSize,
-                )),
+          icon:  Icon(
+          widget.home_icon,
+          size: home_and_save_icon_fontSize,)),
     );
   }
 
 //////////////////////////////////////////
-  // Explore Button :
+// Explore Button :
 //////////////////////////////////////////
   Container ExploreButton(BuildContext context, Null ExploreFunction()) {
     return Container(
@@ -835,317 +842,6 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
               )),
         ),
       ),
-    );
-  }
-
-  // Container RoundedExploreButton(BuildContext context, Null ExploreFunction()) {
-  //   return Container(
-  //     margin: EdgeInsets.only(top: 24, right: context.width * 0.02),
-
-  //     child: Card(
-  //       elevation: 4,
-  //       shadowColor: my_theme_shadow_color,
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-  //       child: CircleAvatar(
-  //         radius: 15,
-  //         child: IconButton(
-  //             onPressed: () {
-  //               ExploreFunction();
-  //             },
-  //             color: Colors.transparent,
-  //             icon: Icon(
-  //               Icons.wb_incandescent_sharp,
-  //               size: 14,
-  //               color: my_theme_icon_color,
-  //             )),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-////////////////////////////////////////
-  ///  Founder Dropdown Menu :
-////////////////////////////////////////
-  Container FounderDropDownMenu(
-      {BuildContext? context, CreateStatup, is_investor}) {
-    return Container(
-      width: context!.width * 0.08,
-      child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7)
-            ),
-        items: [
-          ...FounderMenuItems.firstItems.map((item) {
-            return DropdownMenuItem<MenuItem>(
-              value: item,
-              child: FounderMenuItems.buildItem(item),
-            );
-          }),
-
-          // const DropdownMenuItem<Divider>(enabled: true, child:Divider(height: 0.1,)),
-          ...FounderMenuItems.secondItems.map(
-            (item) => DropdownMenuItem<MenuItem>(
-              value: item,
-              child: FounderMenuItems.buildItem(item),
-            ),
-          ),
-
-
-          //  DropdownMenuItem<Container>(child:Container(height: 1,)),
-          ...FounderMenuItems.thirdItems.map(
-            (item) => DropdownMenuItem<MenuItem>(
-              value: item,
-              child: FounderMenuItems.buildItem(item),
-            ),
-          ),
-        ],
-        onChanged: (value) async {
-          // FounderMenuItems.onChanged(context, value as MenuItem);
-          switch (value) {
-            case FounderMenuItems.profile:
-              await widget.changeView(HomePageViews.profileView);
-              setState(() {
-                is_home_view = false;
-                is_save_view = false;
-              });
-              break;
-
-            // case FounderMenuItems.investor:
-            //    await AddInvestor(context);
-            //   break;
-
-            case FounderMenuItems.startup:
-              await CreateStatup();
-              break;
-
-            case FounderMenuItems.settings:
-              await widget.changeView(HomePageViews.settingView);
-
-              setState(() {
-                is_home_view = false;
-                is_save_view = false;
-              });
-              break;
-
-            case FounderMenuItems.logout:
-              await socialAuth.Logout();
-              break;
-
-            case FounderMenuItems.feedback:
-           Wiredash.of(context).show(inheritMaterialTheme: true);
-              // await socialAuth.Logout();
-
-              break;
-          }
-        },
-        openWithLongPress: true,
-        customItemsHeight: 8,
-        customButton: Container(
-          margin: EdgeInsets.only(top: 0),
-          child: CircleAvatar(
-            // backgroundColor: Colors.orange.shade100,
-            radius: profile_menu_radiud,
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl: widget.profile_image,
-                fit: BoxFit.cover,
-                width: profile_menu_width,
-                height: profile_menu_height,
-              ),
-            ),
-          ),
-        ),
-      )),
-    );
-  }
-
-////////////////////////////////////////
-  ///  Founder Dropdown Menu :
-////////////////////////////////////////
-  Container InvestorDropDownMenu(
-      {BuildContext? context, AddInvestor, CreateStatup, is_investor}) {
-    return Container(
-        width: context!.width * 0.08,
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7)
-            ),
-              items: [
-                ...InvestorMenuItems.firstItems.map((item) {
-                  return DropdownMenuItem<MenuItem>(
-                    value: item,
-                    child: InvestorMenuItems.buildItem(item),
-                  );
-                }),
-
-                ...InvestorMenuItems.secondItems.map(
-                  (item) => DropdownMenuItem<MenuItem>(
-                    value: item,
-                    child: InvestorMenuItems.buildItem(item),
-                  ),
-                ),
-
-                ...InvestorMenuItems.thirdItem.map(
-                  (item) => DropdownMenuItem<MenuItem>(
-                    value: item,
-                    child: InvestorMenuItems.buildItem(item),
-                  ),
-                ),
-              ],
-              onChanged: (value) async {
-                switch (value) {
-                  case FounderMenuItems.profile:
-                    await widget.changeView(HomePageViews.profileView);
-                    setState(() {
-                      is_home_view = false;
-                      is_save_view = false;
-                    });
-                    break;
-
-                  case FounderMenuItems.settings:
-                    await widget.changeView(HomePageViews.settingView);
-                    setState(() {
-                      is_home_view = false;
-                      is_save_view = false;
-                    });
-                    break;
-
-                  case FounderMenuItems.logout:
-                    await LogoutUser();
-                    break;
-                }
-              },
-              openWithLongPress: true,
-              customItemsHeight: 8,
-              customButton: Container(
-                margin: EdgeInsets.only(top: context.height * 0.01),
-                child: CircleAvatar(
-                  // backgroundColor: Colors.orange.shade100,
-                  radius: profile_menu_radiud,
-
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: widget.profile_image,
-                      fit: BoxFit.cover,
-                      width: profile_menu_width,
-                      height: profile_menu_height,
-                    ),
-                  ),
-                ),
-              )),
-        ));
-  }
-}
-
-
-
-//////////////////////////
-/// Menu Item Class :
-//////////////////////////
-class MenuItem {
-  final String text;
-  final IconData? icon;
-
-  const MenuItem({
-    required this.text,
-    this.icon,
-  });
-}
-
-
-////////////////////////////////////
-/// Founder Menu Items
-////////////////////////////////////
-class FounderMenuItems {
-  // First Item List :
-  static const List<MenuItem> secondItems = [logout];
-
-  // Second Item List :
-  static const List<MenuItem> firstItems = [
-    profile,
-    // investor,
-    startup,
-    settings,
-  ];
-
-  // THIRD ITEM LIST :
-  static const List<MenuItem> thirdItems = [feedback];
-
-  static const profile = MenuItem(text: 'profile', icon: Icons.person);
-
-  static const startup =
-      MenuItem(text: 'startup', icon: Icons.add_box_outlined);
-
-  static const settings = MenuItem(text: 'settings', icon: Icons.settings);
-
-  static const logout = MenuItem(text: 'logout', icon: Icons.logout);
-
-  static const feedback = MenuItem(text: 'feedback', icon: Icons.feedback_outlined);
-
-  static Widget buildItem(MenuItem item) {
-    return Row(
-      children: [
-        Icon(
-          item.icon,
-          color: input_text_color,
-          size: 22,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          item.text,
-          style: TextStyle(
-            color: input_text_color,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-////////////////////////////////////
-/// Investor Menu Items
-////////////////////////////////////
-class InvestorMenuItems {
-  static double width = 100;
-  static const List<MenuItem> firstItems = [
-    profile,
-    // investor,
-    settings,
-  ];
-
-  static const List<MenuItem> secondItems = [logout];
-  static const List<MenuItem> thirdItem = [feedback];
-
-  static const profile = MenuItem(text: 'profile', icon: Icons.person);
-
-  static const settings = MenuItem(text: 'settings', icon: Icons.settings);
-
-  static const logout = MenuItem(text: 'logout', icon: Icons.logout);
-
-  static const feedback = MenuItem(text: 'feedback', icon: Icons.feedback_outlined);
-
-  static Widget buildItem(MenuItem item) {
-    return Row(
-      children: [
-        Icon(
-          item.icon,
-          color: input_text_color,
-          size: 22,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          item.text,
-          style: TextStyle(
-            color: input_text_color,
-          ),
-        ),
-      ],
     );
   }
 }
