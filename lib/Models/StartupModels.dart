@@ -144,7 +144,7 @@ CatigoryModel(
       'id': uuid.v4(),
       'startup_id': startup_id,
       'catigories': catigory,
-      'timestamp':await GetFormatedDate()
+      'timestamp':DateTime.now().toUtc()
     };
     return temp_obj;
   } catch (e) {

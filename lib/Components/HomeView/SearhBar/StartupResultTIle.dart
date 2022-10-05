@@ -46,8 +46,12 @@ class StartupReslutTile extends StatelessWidget {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             // Data Conversion :
+            
             var result_data =
                 snapshot.data!.docs[index].data() as Map<String, dynamic>;
+
+            print('Result Data ${result_data}');
+
             // print(result_data);
             final startup_name = result_data['name'];
             final founder_name = result_data['founder_name'];

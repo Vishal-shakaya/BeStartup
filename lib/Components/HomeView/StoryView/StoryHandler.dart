@@ -14,7 +14,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 class StoryListView extends StatelessWidget {
   bool? is_save_page = false;
   bool? is_explore = false;
-    
+
   StoryListView({this.is_explore = false, this.is_save_page, Key? key})
       : super(key: key);
 
@@ -39,7 +39,7 @@ class StoryListView extends StatelessWidget {
   double forword_btn_left = 0.42;
 
   double backword_btn_left = 0.01;
-  double backword_btn_top = 0.32; 
+  double backword_btn_top = 0.32;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +65,8 @@ class StoryListView extends StatelessWidget {
               start_date: date_range['start'],
               end_date: date_range['end'],
               catigories: catigory);
+
+          print('Response Explore $resp');
         }
 
         ///////////////////////////////////////////////
@@ -135,116 +137,115 @@ class StoryListView extends StatelessWidget {
   Container MainMethod(BuildContext context) {
     var mainWidget;
 
-     storyWidth = 0.45;
-     storyHeight = 0.67;
+    storyWidth = 0.45;
+    storyHeight = 0.67;
 
-     forword_btn_top = 0.32;
-     forword_btn_left = 0.42;
+    forword_btn_top = 0.32;
+    forword_btn_left = 0.42;
 
-     backword_btn_left = 0.01;
-     backword_btn_top = 0.32; 
+    backword_btn_left = 0.01;
+    backword_btn_top = 0.32;
 
     ////////////////////////////////////
     /// RESPONSIVENESS :
     ////////////////////////////////////
     // DEFAULT :
     if (context.width > 1500) {
-        storyWidth = 0.45;
-        storyHeight = 0.67;
+      storyWidth = 0.45;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.42;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.42;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('Greator then 1500');
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('Greator then 1500');
     }
 
     // PC:
     if (context.width < 1500) {
-        storyWidth = 0.55;
-        storyHeight = 0.67;
+      storyWidth = 0.55;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.52;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.52;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('1500');
-    } 
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('1500');
+    }
 
     if (context.width < 1400) {
-        storyWidth = 0.60;
-        storyHeight = 0.67;
+      storyWidth = 0.60;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.56;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.56;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('1400');
-    } 
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('1400');
+    }
 
     if (context.width < 1200) {
-        storyWidth = 0.65;
-        storyHeight = 0.67;
+      storyWidth = 0.65;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.61;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.61;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-       print('1200');
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('1200');
     }
 
     if (context.width < 1000) {
-        storyWidth = 0.74;
-        storyHeight = 0.67;
+      storyWidth = 0.74;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.69;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.69;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('1000');
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
-        storyWidth = 0.90;
-        storyHeight = 0.67;
+      storyWidth = 0.90;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.84;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.84;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('800');
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
-        storyWidth = 0.95;
-        storyHeight = 0.67;
+      storyWidth = 0.95;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.88;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.88;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
-        print('640');
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
+      print('640');
     }
 
-
     if (context.width < 480) {
-        storyWidth = 0.95;
-        storyHeight = 0.67;
+      storyWidth = 0.95;
+      storyHeight = 0.67;
 
-        forword_btn_top = 0.32;
-        forword_btn_left = 0.85;
+      forword_btn_top = 0.32;
+      forword_btn_left = 0.85;
 
-        backword_btn_left = 0.01;
-        backword_btn_top = 0.32; 
+      backword_btn_left = 0.01;
+      backword_btn_top = 0.32;
       print('480');
     }
 

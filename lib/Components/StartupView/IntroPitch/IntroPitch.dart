@@ -26,7 +26,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   double service_bottom_height = 0.04;
 
-  double service_top_height = 0.02;
+  double service_top_height = 0.10;
 
   double pitch_cont_bottom_margin = 0.10;
 
@@ -68,11 +68,14 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   Widget build(BuildContext context) {
     video_model_player_width = 0.70;
     video_model_player_height = 0.70;
+    service_top_height = 0.10;
 
     // DEFAULT :
     if (context.width > 1700) {
       video_model_player_width = 0.70;
       video_model_player_height = 0.70;
+      
+      service_top_height = 0.10;
       print('1700');
     }
     // DEFAULT :
@@ -95,6 +98,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
     }
 
     if (context.width < 1200) {
+      service_top_height = 0.06;
       video_model_player_width = 0.90;
       video_model_player_height = 0.50;
       print('1200');
@@ -107,6 +111,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
     }
 
     if (context.width < 1000) {
+      service_top_height = 0.05;
       video_model_player_width = 0.90;
       video_model_player_height = 0.40;
       print('1000');
@@ -124,6 +129,8 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
     // TABLET :
     if (context.width < 800) {
+      service_top_height = 0.05;
+      
       video_model_player_width = 0.90;
 
       video_model_player_height = 0.35;
@@ -132,6 +139,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
     // SMALL TABLET:
     if (context.width < 640) {
+      service_top_height = 0.02;
       video_model_player_width = 0.90;
 
       video_model_player_height = 0.35;

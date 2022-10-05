@@ -46,6 +46,8 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var user_id;
   bool? updateMode = false;
 
+
+
   /////////////////////////////////////////
   // CREATE FOUNDER  FORM :
   /////////////////////////////////////////
@@ -53,6 +55,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     MyCustPageLoadingSpinner();
 
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    
     formKey.currentState!.save();
 
     if (formKey.currentState!.validate()) {
@@ -108,6 +111,9 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       ));
     }
   }
+
+
+
 
 ///////////////////////////////////////////
 // UPDATE FOUNDER FORM  :
@@ -352,8 +358,9 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(20), right: Radius.circular(20)),
+        borderRadius: const BorderRadius.horizontal(
+            left: Radius.circular(20), 
+            right: Radius.circular(20)),
         onTap: () async {
           await fun();
         },

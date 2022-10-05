@@ -110,7 +110,8 @@ class HomeViewConnector extends GetxController {
       /// Fetch Startups Data :
       /// /////////////////////////////////
       var startup_store = await store.collection(getBusinessDetailStoreName);
-      var query2 = startup_store.where('startup_id', whereIn: startup_ids).get();
+      var query2 =
+          startup_store.where('startup_id', whereIn: startup_ids).get();
 
       await query2.then((value) {
         for (var doc in value.docs) {
@@ -133,14 +134,11 @@ class HomeViewConnector extends GetxController {
     }
   }
 
-
-
-
   FetchExploreStartups(
       {DateTime? start_date, DateTime? end_date, catigories}) async {
-    print('start at $start_date');
-    print('end at $end_date');
-    print('catigory $catigories');
+    // print('start at $start_date');
+    // print('end at $end_date');
+    // print('catigory $catigories');
 
     var startup_data;
     var startup_id;
@@ -153,19 +151,34 @@ class HomeViewConnector extends GetxController {
       ////////////////////////////////////
       // Fetch user Sava Startups :
       ////////////////////////////////////
-      var save_startups = await store.collection(getBusinessCatigoryStoreName);
-      var lessThan =
-          save_startups.where('timestamp', isLessThanOrEqualTo: end_date).get();
 
-      var greaterThan = save_startups
-          .where('timestamp', isGreaterThanOrEqualTo: start_date)
-          .get();
+      print('Step 1 Start');
+
+      var save_startups = await store.collection(getBusinessCatigoryStoreName);
+
+      var lessThan = save_startups.where('timestamp', isLessThanOrEqualTo: end_date).get();
+
+      var greaterThan = save_startups.where('timestamp', isGreaterThanOrEqualTo: start_date).get();
+      
+      var catigory = save_startups.where('catigories', arrayContainsAny: catigories).get();
+
+      await catigory.then((value) {
+        for (var data in value.docs) {
+          startup_id = data.data()['startup_id'];
+          startup_ids.add(startup_id);
+        }
+      }).onError((error, stackTrace) {
+        print('Less than Error ${error}');
+      });
+
 
       await lessThan.then((value) {
         for (var data in value.docs) {
           startup_id = data.data()['startup_id'];
           startup_ids.add(startup_id);
         }
+      }).onError((error, stackTrace) {
+        print('Less than Error ${error}');
       });
 
 
@@ -174,13 +187,15 @@ class HomeViewConnector extends GetxController {
           startup_id = data.data()['startup_id'];
           startup_ids.add(startup_id);
         }
+      }).onError((error, stackTrace) {
+        print('Greator than Error ${error}');
       });
 
       //////////////////////////////////
       /// Fetch Startups Data :
       /// /////////////////////////////////
       var startup_store = await store.collection(getBusinessDetailStoreName);
-      var startup_query = startup_store.where('id', whereIn: startup_ids).get();
+      var startup_query = startup_store.where('startup_id', whereIn: startup_ids).get();
 
       await startup_query.then((value) {
         for (var doc in value.docs) {
@@ -202,6 +217,7 @@ class HomeViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
+
 
 
 

@@ -71,6 +71,14 @@ Gradient g3 = const LinearGradient(colors: [
   Color(0xffffffff),
 ]);
 
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////
 /// Theme Color:
 // #596668
@@ -168,7 +176,7 @@ Color home_profile_contact_color =
     Get.isDarkMode ? Colors.blueGrey.shade100 : Colors.blueGrey.shade700;
 
 Color home_profile_map_color =
-    Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade300;
+    Get.isDarkMode ? Colors.grey.shade300 : Colors.blueGrey.shade900;
 
 Color home_profile_cont_color =
     Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
@@ -214,7 +222,7 @@ Color form_shadow_color = Get.isDarkMode ? Colors.white : Colors.grey;
 Color form_border_color = Get.isDarkMode ? Colors.white : Colors.transparent;
 
 // Dialog Color Light and dark :
-Color my_dialog_color = Colors.grey;
+Color my_dialog_color = Colors.blueGrey.shade200;
 
 Color darkGrey = Colors.grey.shade800;
 

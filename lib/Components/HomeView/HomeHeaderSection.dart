@@ -177,8 +177,20 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
           context: context,
           builder: (context) {
             return AlertDialog(
+                title: Container(
+                  alignment: Alignment.topRight,
+                    child: IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                     },      
+                    
+                    icon: Icon(
+                    Icons.cancel_rounded,
+                    color: my_dialog_color,
+                    size: 18,)) 
+                ),
+
                 content: ExploreCatigoryAlert(
-              changeView: widget.changeView,
+                changeView: widget.changeView,
             ));
           });
     }

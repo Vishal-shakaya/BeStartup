@@ -43,8 +43,8 @@ class _HomeViewState extends State<HomeView> {
   var phoneNo;
   var otherContact;
 
-  var home_icon=Icons.home;
-  var save_icon=Icons.bookmark_outline;
+  var home_icon = Icons.home;
+  var save_icon = Icons.bookmark_outline;
 
   var usertype;
   double page_width = 0.80;
@@ -97,9 +97,21 @@ class _HomeViewState extends State<HomeView> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              content: ExploreCatigoryAlert(
-            changeView: SetHomeView,
-          ));
+                title: Container(
+                  alignment: Alignment.topRight,
+                    child: IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                     },      
+                    
+                    icon: Icon(
+                    Icons.cancel_rounded,
+                    color: my_dialog_color,
+                    size: 18,)) 
+                ),
+
+                content: ExploreCatigoryAlert(
+                changeView: SetHomeView,
+            ));
         });
   }
 
@@ -380,11 +392,12 @@ class _HomeViewState extends State<HomeView> {
 
             // Header Section:
             HomeHeaderSection(
-                profile_image: user_profile ?? temp_avtar_image,
-                changeView: SetHomeView,
-                usertype: usertype,
-                home_icon: home_icon,
-                save_icon: save_icon, ),
+              profile_image: user_profile ?? temp_avtar_image,
+              changeView: SetHomeView,
+              usertype: usertype,
+              home_icon: home_icon,
+              save_icon: save_icon,
+            ),
 
             // SEARCH BAR :
             BusinessSearchBar(),
