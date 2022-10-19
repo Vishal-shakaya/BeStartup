@@ -79,15 +79,17 @@ class BottomBar extends StatelessWidget {
                                   icon:FaIcon(
                                     FontAwesomeIcons.youtube,
                                     size: 16,
-                                    color: Colors.blueGrey.shade100, )), 
+                                    color: Colors.blueGrey.shade100,)), 
                               ],
                             ),
-                          )
+                          ), 
+
+
                         ],
                       ),
                     )),
 
-
+                  //  
                   Expanded(flex:3, child: Column()), 
                   Expanded(flex:3, child: Column()), 
                 ],
