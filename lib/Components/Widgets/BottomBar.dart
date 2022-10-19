@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class BottomBar extends StatelessWidget {
         child:Column(
           children: [
             Container(
-              height: context.height*0.20,
+              height: context.height*0.22,
               child: Row(
                 children: [
                
@@ -90,15 +91,39 @@ class BottomBar extends StatelessWidget {
                     )),
 
                   //  
-                  Expanded(flex:3, child: Column()), 
-                  Expanded(flex:3, child: Column()), 
+                  Expanded(
+                  flex:3, 
+                  child: Column(
+                    children: [
+                      
+                     HeaderText(context,'Company'), 
+                      InfoText(height:context.height*0.02,text:'feedback',size: 15 ,color: Colors.blueGrey.shade200), 
+                      InfoText(height:context.height*0.02,text:'about Us',size: 15 ,color: Colors.blueGrey.shade200), 
+                      InfoText(height:context.height*0.02,text:'feature',size: 15 ,color: Colors.blueGrey.shade200), 
+
+
+                    ],
+                  )), 
+                  
+
+
+
+                  Expanded(flex:3, child: Column(
+                    children: [
+                      HeaderText(context,'Contact'), 
+                      InfoText(height:context.height*0.02,text:'Indaia , New Delhi, 110059',size: 15 ,color: Colors.blueGrey.shade200), 
+                      InfoText(height:context.height*0.02,text:'bestartup@info.com',size: 17 ,color: Colors.orangeAccent), 
+                      InfoText(height:context.height*0.02,text:'+91 7065121120',size: 17 ,color: Colors.orangeAccent), 
+  
+                    ],
+                  )), 
                 ],
               ),
             ), 
             
             // Copyright and licence:  
             Container(
-              height:context.height *0.10,
+              height:context.height *0.07,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -112,8 +137,7 @@ class BottomBar extends StatelessWidget {
                               text:copyright_text,
                               style:GoogleFonts.robotoSlab(
                                 color: Colors.blueGrey.shade100,
-                                fontSize: 16,  
-                                letterSpacing: 2
+                                fontSize: 15,  
                               )
                             )
                           ]
@@ -125,5 +149,34 @@ class BottomBar extends StatelessWidget {
           ],
         ) 
     );
+  }
+
+
+
+  Container InfoText({height, text ,color , size }) {
+    return Container(
+          margin: EdgeInsets.only(top:height),
+          child: AutoSizeText(
+            '$text', 
+            style:  GoogleFonts.robotoSlab(
+              textStyle: TextStyle(),
+              color: color,
+              fontSize: size,
+              fontWeight: FontWeight.w400,
+            ),),);
+  }
+
+  Container HeaderText(BuildContext context ,text) {
+    return Container(
+        margin: EdgeInsets.only(top:context.height*0.04),
+        child: AutoSizeText(
+          '$text', 
+          style:  GoogleFonts.merriweather(
+            textStyle: TextStyle(),
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1,
+          ),),);
   }
 }
