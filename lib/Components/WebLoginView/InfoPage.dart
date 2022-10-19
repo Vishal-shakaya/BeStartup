@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:be_startup/Components/WebLoginView/InfoPage/FeatureBlock.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage/FeatureBlock1.dart';
 import 'package:be_startup/Components/WebLoginView/InfoPage/InfoHeading.dart';
+import 'package:be_startup/Components/WebLoginView/InfoPage/ReverseBlock1.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:flutter/material.dart';
 import 'InfoPage/ReverseBlock.dart';
@@ -25,6 +28,7 @@ class InfoPage extends StatelessWidget {
         heading_text: feature1_header,
         body_text:feature1_body,
         gradient1: g1, 
+        image: homeProfessionalImage,
       ),
 
       //Right Imgage left text:
@@ -32,19 +36,22 @@ class InfoPage extends StatelessWidget {
         heading_text: feature2_header,
         body_text:feature2_body,
         gradient1: g1, 
+        image: homeInvestorImage,
       ),
       
-      FeatureBlock(
+      FeatureBlock1(
         heading_text: feature3_header,
         body_text:feature3_body,
         gradient1: g1, 
+        image: homeAttractiveProfileImage,
       ),
 
       //Right Imgage left text:
-      ReverseBlock(
+      ReverseBlock1(
         heading_text: feature4_header,
         body_text:feature4_body,
         gradient1: g1, 
+        image: homePlatformSupportImage,
       ),
       
     ]));

@@ -8,7 +8,7 @@ class LogoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:EdgeInsets.only(top:50),
+      margin:EdgeInsets.only(top:20),
       child: Image.asset(logo_image,
           height: 150,
           width: 250,

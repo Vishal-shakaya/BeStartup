@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class HeaderText extends StatelessWidget {
   HeaderText({Key? key}) : super(key: key);
 
-  double top_margin = 0.05;
+  double top_margin = 0.02;
   double bottom_margin = 0.02;
   double padd = 10;
   double  font_size = 40; 

@@ -378,9 +378,10 @@ class _ExploreCatigoryAlertState extends State<ExploreCatigoryAlert> {
 
               // ALL TOPICS :
               MultiSelectContainer(
-                alignments:MultiSelectAlignments(
+                alignments:const MultiSelectAlignments(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center),
+                  
                   wrapSettings: WrapSettings(spacing: top_selector_spacing),
                   itemsDecoration: MultiSelectDecorations(
                       decoration: BoxDecoration(

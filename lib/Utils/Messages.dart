@@ -65,7 +65,7 @@ String signup_heading_msg = 'Just Follwo Us';
 String signup_detail_message =
     'We are our choices. Build yourself a great story';
 
-String copyright_text = 'feelsafe @Copyright';
+String copyright_text = 'Copyright ©2022 by feelsafe | All Right Reserved';
 
 /////////////////////////////////////
 /// REGISTRATION SLIDES
@@ -124,3 +124,86 @@ String select_plan_heading = 'Our Best Plans';
 // Mail Request messages :
 String startupInterestSubject = 'Like your startup';
 String startupInterestBody = '';
+
+/////////////////////////////////////////
+/// messages :
+/////////////////////////////////////////
+String tata1 =
+    'None can destroy iron, but its rust can. Likewise, none can destroy a person, but his own mindset can. ( by  Ratan Tata )';
+
+String tata2 =
+    'If you want to walk fast, walk alone. But if you want to walk far, walk together. ( by Ratan Tata)';
+
+String adani1 =
+    'I was in college for two years but I didn´t attend too much. Then I decided to drop out. I was having too many nightmares about failing in the exams. ( by Gautam Adanin )';
+
+String mukesh_ambani =
+    'In the journey of an entrepreneur, the most important thing is self-belief and the ability to convert that belief into reality. ( by Mukesh Ambani )';
+
+String ajim_premji =
+    'If people are not laughing at your goals, your goals are too small. ( by Azim Premji )';
+
+String ajim_premji2 =
+    'Success is achieved twice. Once in the mind and the second time in the real world. ( by Azim Premji )';
+
+String ajim_premji3 =
+    'Leadership is the self-confidence of working with people smarter than you. ( by Azim Premji )';
+
+String ajim_premji4 =
+    'I strongly believe that those of us, who are privileged to have wealth, should contribute significantly to try and create a better world for the millions who are far less privileged ( by Azim Premji )';
+
+String ajim_premji5 =
+    'When the rate of change outside is more than what is inside, be sure that the end is near. ( by Azim Premji )';
+
+String ajim_premji6 =
+    'As you get bigger, you have to learn to delegate. ( by Azim Premji )';
+
+String ajim_premji7 =
+    'There are millions of children today who don,t attend school. However, education is the only way to get ahead in this country. ( by Azim Premji )';
+
+String murti1 =
+    'Growth is painful. Change is painful. But, nothing is as painful as staying stuck where you do not belong. ( by N. R. Narayana Murthy )';
+
+String murti2 =
+    'Love your Job, but never fall in love with your Company. ( by N. R. Narayana Murthy )';
+
+String murti3 =
+    'Progress is often equal to the difference between mind and mindset. ( by N. R. Narayana Murthy )';
+
+String elon1 =
+    'Some people don,t like change, but you need to embrace change if the alternative is disaster.( by Elon Musk )';
+
+String elon2 =
+    'I think it is possible for ordinary people to choose to be extraordinary.( by Elon Musk )';
+
+String elon3 =
+    'When Henry Ford made cheap, reliable cars people said, Nah, what,s wrong with a horse? That was a huge bet he made, and it worked.( by Elon Musk )';
+
+
+String elon4 =
+    'I think thats the single best piece of advice: Constantly think about how you could be doing things better and questioning yourself.( by Elon Musk )';
+
+
+
+
+var qual_list = {
+  'Ratan Tata':tata2, 
+  'Ratan Tata':tata1, 
+  'Elon Musk':elon1, 
+  'Gautam Adanin':adani1, 
+  'Elon Musk':elon4, 
+  'Azim Premji':ajim_premji3, 
+  'Mukesh Ambani':mukesh_ambani, 
+  'Azim Premji':ajim_premji, 
+  'Azim Premji':ajim_premji4, 
+  'Elon Musk':elon3, 
+  'Azim Premji':ajim_premji5, 
+  'Azim Premji':ajim_premji6, 
+  'N. R. Narayana Murthy':murti1, 
+  'Azim Premji':ajim_premji7, 
+  'N. R. Narayana Murthy':murti2, 
+  'N. R. Narayana Murthy':murti3, 
+  'Azim Premji':ajim_premji2, 
+  'Elon Musk':elon2, 
+
+  };

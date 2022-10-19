@@ -231,3 +231,27 @@
     //             }),
     //       ),
     //     ));
+
+//     import 'package:faded_image_list/faded_image_list.dart';
+// // import 'package:faker/faker.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+
+
+// List<String> images = [
+// ];
+
+// class LoginSideImage extends StatelessWidget {
+//   LoginSideImage({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     images.add(
+//         'https://images.unsplash.com/photo-1659993890273-e56bdc2b720f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=480&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY2MjYzMTU4Mw&ixlib=rb-1.2.1&q=80&w=640');
+//     images.add(
+//         'https://images.unsplash.com/photo-1660335767235-9a4988cc7451?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=480&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY2MjYzMTU2MQ&ixlib=rb-1.2.1&q=80&w=640');
+//     // images.add(image);
+//     return Container(
+//         child: ImageSlider(images: images));
+//   }
+// }

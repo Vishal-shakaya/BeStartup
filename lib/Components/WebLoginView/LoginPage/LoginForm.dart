@@ -150,7 +150,9 @@ class _LoginFormState extends State<LoginForm> {
                   // 1. EMAIL FIELD
                   Label(input_label_color, 'Email addresss'),
                   EmailInputField(input_text_color, context, input_foucs_color),
-
+                  
+                  SizedBox(height: 2,), 
+                  
                   // 2. PASSWORD
                   Label(input_label_color, 'Password'),
                   PasswodInputField(
@@ -175,6 +177,7 @@ class _LoginFormState extends State<LoginForm> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: InkWell(
+        radius: 20,
         onTap: () {
           ForgotPasswordMethod();
         },
@@ -229,20 +232,22 @@ class _LoginFormState extends State<LoginForm> {
         color: input_text_color,
       ),
       decoration: InputDecoration(
-          hintText: 'enter password',
-          hintStyle: const TextStyle(
+          hintText: 'Password',
+          hintStyle:  TextStyle(
             fontSize: 15,
+            fontWeight: FontWeight.normal
           ),
           prefixIcon: Icon(
-            Icons.lock_rounded,
+            Icons.key_rounded,
             color: Colors.orange.shade300,
+            size: 16,
           ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 1.5, color: Colors.teal.shade300)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: input_foucs_color)),
+          // enabledBorder: OutlineInputBorder(
+          //     borderRadius: BorderRadius.circular(10),
+          //     borderSide: BorderSide(width: 1.5, color: Colors.teal.shade300)),
+          // focusedBorder: OutlineInputBorder(
+          //     borderRadius: BorderRadius.circular(10),
+          //     borderSide: BorderSide(width: 2, color: input_foucs_color)),
           // errorText: 'invalid email address',
           // constraints: BoxConstraints(),
 
@@ -264,20 +269,22 @@ class _LoginFormState extends State<LoginForm> {
         FormBuilderValidators.email(context, errorText: 'enter valid email')
       ]),
       decoration: InputDecoration(
-          hintText: 'enter mail ',
+          hintText: 'Mail ',
           hintStyle: TextStyle(
             fontSize: 15,
+            fontWeight: FontWeight.normal
           ),
           prefixIcon: Icon(
-            Icons.email_rounded,
+            Icons.email_outlined,
             color: Colors.orange.shade300,
+            size: 16,
           ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 1.5, color: Colors.teal.shade300)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: input_foucs_color)),
+          // enabledBorder: OutlineInputBorder(
+          //     borderRadius: BorderRadius.circular(10),
+          //     borderSide: BorderSide(width: 1.5, color: Colors.teal.shade300)),
+          // focusedBorder: OutlineInputBorder(
+          //     borderRadius: BorderRadius.circular(10),
+          //     borderSide: BorderSide(width: 2, color: input_foucs_color)),
           // errorText: 'invalid email address',
           // constraints: BoxConstraints(),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
@@ -290,9 +297,9 @@ class _LoginFormState extends State<LoginForm> {
       padding: EdgeInsets.all(8),
       alignment: Alignment.centerLeft,
       child: Text(title,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
+          style: GoogleFonts.roboto(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
               color: input_label_color)),
     );
   }
