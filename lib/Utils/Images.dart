@@ -6,8 +6,8 @@ String dark_social_auth_image = 'assets/images/dark_social_auth.png';
 ////////////////////////////////////////
 /// HOMEVIEW:
 ////////////////////////////////////////
-String homeProfessionalImage = 'assets/images/Info/Feature1.jpg';
-String homeInvestorImage = 'assets/images/Info/Feature2.webp';
+String homeProfessionalImage = 'assets/images/Info/Feature1.png';
+String homeInvestorImage = 'assets/images/Info/Feature2.png';
 String homePlatformSupportImage= 'assets/images/Info/Feature4.png';
 String homeAttractiveProfileImage = 'assets/images/Info/Feature3.png';
 String businessTycoonVideo = 'assets/images/Info/businessTycoon.mp4';
