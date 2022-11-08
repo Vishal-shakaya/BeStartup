@@ -33,15 +33,18 @@ class _BusinessTycoonSectionState extends State<BusinessTycoonSection> {
   var playIcon = Icon(
     Icons.pause,
     size: 28,
+    color: Colors.blueGrey.shade400,
   );
   var defaultPlayPauseIcon = Icon(
     Icons.pause,
     size: 28,
+    color: Colors.blueGrey.shade400,
   );
 
   var pauseIcon = Icon(
     Icons.play_arrow_sharp,
     size: 28,
+    color: Colors.blueGrey.shade400,
   );
 
   var volumneMuteIcon = Icon(Icons.volume_mute_rounded);
@@ -219,22 +222,26 @@ class _BusinessTycoonSectionState extends State<BusinessTycoonSection> {
       child: Column(
         children: [
           Container(
-            width: context.width * 0.97,
-            height: context.height * 0.99,
+            width: context.width * 1,
+            height: context.height * 0.80,
             alignment: Alignment.center,
-            color: Colors.grey.shade100,
+            color: Colors.black,
+            
             margin: EdgeInsets.only(
-              top: context.height * 0.01,
-              bottom: context.height * 0.15,
+              top: context.height * 0.05,
+              bottom: context.height * 0.20,
             ),
+            
             child: Container(
-              margin: EdgeInsets.only(
-                bottom: context.height * 0.01,
-                top: context.height * 0.01,
-              ),
+              // margin: EdgeInsets.only(
+              //   bottom: context.height * 0.01,
+              //   top: context.height * 0.01,
+              // ),
+            
               width: context.width * 0.80,
-              height: context.height * 1,
+              height: context.height * 0.80,
               child: _controller.value.isInitialized
+                  
                   ? Column(
                       children: [
                         Container(
@@ -282,8 +289,8 @@ class _BusinessTycoonSectionState extends State<BusinessTycoonSection> {
                           ),
                         ),
                         Container(
-                            width: context.width * 0.90,
-                            height: context.height * 0.85,
+                            width: context.width * 0.80,
+                            height: context.height * 0.75,
                             child: VideoPlayer(_controller)),
                       ],
                     )
