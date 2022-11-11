@@ -87,7 +87,7 @@ class _WebLoginViewState extends State<WebLoginView> {
             // Header Heading:
             HeaderText(),
 
-            QuatSection(context),
+            // QuatSection(context),
 
             // BE STARTUP LOGO:
             LogoContainer(),

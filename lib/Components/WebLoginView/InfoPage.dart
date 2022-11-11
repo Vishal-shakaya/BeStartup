@@ -29,39 +29,39 @@ class _InfoPageState extends State<InfoPage> {
           child: Column(children: [
               // HEADER TEXT:
               InfoHeading(
-          heading_text: login_page_info_heading,
-          ),
+              heading_text: login_page_info_heading,
+              ),
         
               // FEATURE SECTION :
               // Left image right text:
               FeatureBlock(
-          heading_text: feature1_header,
-          body_text:feature1_body,
-          gradient1: g1, 
-          image: homeProfessionalImage,
+              heading_text: feature1_header,
+              body_text:feature1_body,
+              gradient1: g1, 
+              image: homeProfessionalImage,
               ),
         
               //Right Imgage left text:
               ReverseBlock(
-          heading_text: feature2_header,
-          body_text:feature2_body,
-          gradient1: g1, 
-          image: homeInvestorImage,
+              heading_text: feature2_header,
+              body_text:feature2_body,
+              gradient1: g1, 
+              image: homeInvestorImage,
               ),
               
               FeatureBlock1(
-          heading_text: feature3_header,
-          body_text:feature3_body,
-          gradient1: g1, 
-          image: homeAttractiveProfileImage,
+              heading_text: feature3_header,
+              body_text:feature3_body,
+              gradient1: g1, 
+              image: homeAttractiveProfileImage,
               ),
         
               //Right Imgage left text:
               ReverseBlock1(
-          heading_text: feature4_header,
-          body_text:feature4_body,
-          gradient1: g1, 
-          image: homePlatformSupportImage,
+              heading_text: feature4_header,
+              body_text:feature4_body,
+              gradient1: g1, 
+              image: homePlatformSupportImage,
               ),
               
             ]),

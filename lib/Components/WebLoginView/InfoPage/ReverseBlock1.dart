@@ -29,7 +29,7 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
     return Container(
         margin: EdgeInsets.only(
           bottom: context.height * 0.10, 
-          top: context.height * 0.09),
+          top: context.height * 0.10),
 
         child: context.width < 800
             ? ResponsiveRow(
@@ -43,84 +43,93 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                 ////////////////////////
                 Expanded(
                     flex: 1,
-                    child: Container(
-                        width: context.width*0.40, 
-                        height: context.height*0.40,
-                        alignment: Alignment.center,
-                        color: Colors.grey.shade100,
+                    child: Card(
+                      elevation: 2,
+                      color: Colors.grey.shade100,
+                      shadowColor: Colors.blueGrey,
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)
+                      ), 
 
-                        margin: EdgeInsets.only(
-                          left: context.width*0.02, 
-                          right: context.width*0.01
-                          ),
-                        
-                        padding: EdgeInsets.all(10),
-                       
-                        // color: Colors.pink,
-                        child: SingleChildScrollView(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: RichText(
-                                      text: TextSpan(
-                                          style: Get.theme.textTheme.headline3,
-                                          children: [
-                                        TextSpan(
-                                          text: widget.heading_text,
-                                          style: TextStyle(
-                                            color:
-                                                login_page_detail_sec_title_color,
-                                            fontSize: context.width < 890
-                                                ? 23
-                                                : heading_font_size,
-                                          ),
-                                        ),
-                                      ])),
-                                ),
-
-                                // GRADIENT HEADER :
-                                Container(
-                                  margin: EdgeInsets.only(right: 20, top: 2),
-                                  width: context.width * 0.05,
-                                  height: 12,
-                                  child: a.GradientCard(
-                                      gradient: widget.gradient1!),
-                                ),
-
-                                // BODY TEXT BLOCK :
-                                Container(
-                                  width: 400,
-                                  margin: EdgeInsets.only(top: 15),
-                                  alignment: Alignment.center,
-                                  child: RichText(
-                                      text: TextSpan(
-                                          style: Get.theme.textTheme.headline5,
-                                          children: [
-                                        TextSpan(
+                      child: Container(
+                          width: context.width*0.40, 
+                          height: context.height*0.35,
+                          alignment: Alignment.center,
+                          color: Colors.grey.shade100,
+                    
+                          margin: EdgeInsets.only(
+                            left: context.width*0.02, 
+                            right: context.width*0.01
+                            ),
+                          
+                          padding: EdgeInsets.all(10),
+                         
+                          // color: Colors.pink,
+                          child: SingleChildScrollView(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style: Get.theme.textTheme.headline3,
+                                            children: [
+                                          TextSpan(
+                                            text: widget.heading_text,
                                             style: TextStyle(
                                               color:
-                                                  login_page_detail_sec_desc_color,
-                                              letterSpacing: 1,
+                                                  login_page_detail_sec_title_color,
+                                              fontSize: context.width < 890
+                                                  ? 23
+                                                  : heading_font_size,
                                             ),
-                                            text: widget.body_text)
-                                      ])),
-                                )
-                              ]),
-                        ))),
+                                          ),
+                                        ])),
+                                  ),
+                    
+                                  // GRADIENT HEADER :
+                                  Container(
+                                    margin: EdgeInsets.only(right: 20, top: 2),
+                                    width: context.width * 0.05,
+                                    height: 12,
+                                    child: a.GradientCard(
+                                        gradient: widget.gradient1!),
+                                  ),
+                    
+                                  // BODY TEXT BLOCK :
+                                  Container(
+                                    width: 400,
+                                    margin: EdgeInsets.only(top: 15),
+                                    alignment: Alignment.center,
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style: Get.theme.textTheme.headline5,
+                                            children: [
+                                          TextSpan(
+                                              style: TextStyle(
+                                                color:
+                                                    login_page_detail_sec_desc_color,
+                                                letterSpacing: 1,
+                                              ),
+                                              text: widget.body_text)
+                                        ])),
+                                  )
+                                ]),
+                          )),
+                    )),
 
                 // Image BLock:
                 Expanded(
                     flex: 1,
                     child: Container(
                         margin: EdgeInsets.only(right: 10),
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(5),
                         // color: Colors.green,
                         child: Image.asset(widget.image,
                             scale: 1,
-                              width: context.width*0.50, 
-                              height: context.height*0.50, 
+                              width: context.width*0.35, 
+                              height: context.height*0.45, 
                               fit: BoxFit.contain))),
               ]));
   }
