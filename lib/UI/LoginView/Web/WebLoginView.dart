@@ -7,6 +7,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage/HeaderText.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage/LogoContainer.dart';
 import 'package:be_startup/Components/WebLoginView/LoginPage.dart';
+import 'package:be_startup/Components/WebLoginView/StaticDetailSection/StaticDetailBody.dart';
+import 'package:be_startup/Components/WebLoginView/StaticDetailSection/StaticDetailHeaderText.dart';
 import 'package:be_startup/Components/Widgets/BottomBar.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:blobs/blobs.dart';
@@ -23,7 +25,6 @@ class WebLoginView extends StatefulWidget {
 
 class _WebLoginViewState extends State<WebLoginView> {
   BlobController blobCtrl = BlobController();
-
   List<TyperAnimatedText> temp_quat = [];
 
   GetQuatList() async {
@@ -33,12 +34,10 @@ class _WebLoginViewState extends State<WebLoginView> {
       TyperAnimatedText quat = TyperAnimatedText(
         '$val',
         textStyle: GoogleFonts.robotoSlab(
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 86, 106, 116),
-          height:2
-        ),
-
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 86, 106, 116),
+            height: 2),
         textAlign: TextAlign.center,
         speed: const Duration(milliseconds: 100),
       );
@@ -49,7 +48,20 @@ class _WebLoginViewState extends State<WebLoginView> {
     return temp_quat;
   }
 
+  late ScrollController _controller;
+  double pixels = 0.0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController();
+    _controller.addListener(() {
+      setState(() {
+        pixels = _controller.position.pixels;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +73,8 @@ class _WebLoginViewState extends State<WebLoginView> {
     // 3 890 Info Page  :
     // 4.800 Info Page Andd Responsive Row:
     return SingleChildScrollView(
+      controller: _controller,
+
       // Login Page :
       child: Stack(
         children: [
@@ -69,8 +83,7 @@ class _WebLoginViewState extends State<WebLoginView> {
           Blob2(context),
 
           // Web View :
-          Column(
-            children: [
+          Column(children: [
             // Header Heading:
             HeaderText(),
 
@@ -86,9 +99,16 @@ class _WebLoginViewState extends State<WebLoginView> {
             InfoPage(),
 
 
-            ExplainHeaderSection(), 
+            // OUR BUSINESS TYCOON : 
+            ExplainHeaderSection(),
 
-            BusinessTycoonSection(), 
+            BusinessTycoonSection(),
+
+
+            // STARTUP STATICS DETIAL:
+            StaticDetailHeaderText(),  
+
+            StaticDetailSectionBody(),
 
             // BOTTAM BAR :
             BottomBar(),
@@ -98,70 +118,59 @@ class _WebLoginViewState extends State<WebLoginView> {
     );
   }
 
-
-
-
-
-
-
-
-
-
   Container QuatSection(BuildContext context) {
     return Container(
-            alignment: Alignment.topCenter,
-            width: context.width*0.35,
-            height: context.height*0.10,
-            margin: EdgeInsets.only(top:context.height*0.02),
-
-            child: AnimatedTextKit(
-              animatedTexts: temp_quat,
-
-              totalRepeatCount: 4,
-              pause:  Duration(milliseconds: 100),
-              displayFullTextOnTap: true,
-              stopPauseOnTap: true,
-            ));
+        alignment: Alignment.topCenter,
+        width: context.width * 0.35,
+        height: context.height * 0.10,
+        margin: EdgeInsets.only(top: context.height * 0.02),
+        child: AnimatedTextKit(
+          animatedTexts: temp_quat,
+          totalRepeatCount: 4,
+          pause: Duration(milliseconds: 100),
+          displayFullTextOnTap: true,
+          stopPauseOnTap: true,
+        ));
   }
 
   Positioned Blob2(BuildContext context) {
     return Positioned(
-          left: context.width * 0.52,
-          top: context.height * 0.01,
-          child: Blob.animatedFromID(
-            id: [
-              '7-5-359',
-              '7-4-339',
-            ],
-            styles: BlobStyles(
-                fillType: BlobFillType.stroke,
-                gradient: LinearGradient(
-                        colors: [Color(0xFF4ca1af), Color(0xFFc4e0e5)])
+      left: context.width * 0.52,
+      top: context.height * 0.01,
+      child: Blob.animatedFromID(
+        id: [
+          '7-5-359',
+          '7-4-339',
+        ],
+        styles: BlobStyles(
+            fillType: BlobFillType.stroke,
+            gradient:
+                LinearGradient(colors: [Color(0xFF4ca1af), Color(0xFFc4e0e5)])
                     .createShader(Rect.fromLTRB(0, 0, 300, 300))),
-            size: 1150,
-            duration: Duration(milliseconds: 3000),
-            loop: true,
-          ),
-        );
+        size: 1150,
+        duration: Duration(milliseconds: 3000),
+        loop: true,
+      ),
+    );
   }
 
   Positioned Blob1(BuildContext context) {
     return Positioned(
-          left: context.width * 0.52,
-          top: context.height * 0.00,
-          child: Blob.animatedFromID(
-            id: [
-              '7-5-359',
-              '7-4-359',
-            ],
-            styles: BlobStyles(
-                gradient: LinearGradient(
-                        colors: [Color(0xFF4ca1af), Color(0xFFc4e0e5)])
+      left: context.width * 0.52,
+      top: context.height * 0.00,
+      child: Blob.animatedFromID(
+        id: [
+          '7-5-359',
+          '7-4-359',
+        ],
+        styles: BlobStyles(
+            gradient:
+                LinearGradient(colors: [Color(0xFF4ca1af), Color(0xFFc4e0e5)])
                     .createShader(Rect.fromLTRB(0, 0, 300, 300))),
-            size: 1150,
-            duration: Duration(milliseconds: 2000),
-            loop: true,
-          ),
-        );
+        size: 1150,
+        duration: Duration(milliseconds: 2000),
+        loop: true,
+      ),
+    );
   }
 }

@@ -1,21 +1,16 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileInfoChart.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileStoryHeading.dart';
-import 'package:be_startup/Components/HomeView/UserProfileView/StartupSwitcherButton.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/Thumbnail.dart';
 import 'package:be_startup/Loader/Shimmer/HomeView/MainUserStartupsShimmer.dart';
-import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class FounderStartups extends StatefulWidget {
   var startupType;

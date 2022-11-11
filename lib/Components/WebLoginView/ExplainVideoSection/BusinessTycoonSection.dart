@@ -229,7 +229,7 @@ class _BusinessTycoonSectionState extends State<BusinessTycoonSection> {
             
             margin: EdgeInsets.only(
               top: context.height * 0.05,
-              bottom: context.height * 0.20,
+              bottom: context.height * 0.10,
             ),
             
             child: Container(

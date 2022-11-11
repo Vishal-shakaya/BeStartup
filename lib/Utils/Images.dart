@@ -11,7 +11,7 @@ String homeInvestorImage = 'assets/images/Info/Feature2.png';
 String homePlatformSupportImage= 'assets/images/Info/Feature4.png';
 String homeAttractiveProfileImage = 'assets/images/Info/Feature3.png';
 String businessTycoonVideo = 'assets/images/Info/businessTycoon.mp4';
-
+String indian_startup_logo = 'assets/images/Info/indian_startup.png';
 
 /////////////////////////////////////
 /// REGISTRATION VIEW : [ SLIEDS ]
