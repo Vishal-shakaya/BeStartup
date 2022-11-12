@@ -54,18 +54,19 @@ class _WebLoginViewState extends State<WebLoginView> {
   @override
   void initState() {
     super.initState();
-
     _controller = ScrollController();
     _controller.addListener(() {
       setState(() {
         pixels = _controller.position.pixels;
       });
     });
+
+    // GetQuatList();
   }
 
   @override
   Widget build(BuildContext context) {
-    GetQuatList();
+    print('pixles ${pixels}');
 
     // RESPONSIVE POINTS :
     // 1 800 Login Tabs:
@@ -96,19 +97,17 @@ class _WebLoginViewState extends State<WebLoginView> {
             LoginPage(),
 
             // INFO PAGE:
-            InfoPage(),
+            InfoPage(pixels: pixels,),
 
-
-            // OUR BUSINESS TYCOON : 
+            // OUR BUSINESS TYCOON :
             ExplainHeaderSection(),
 
             BusinessTycoonSection(),
 
-
             // STARTUP STATICS DETIAL:
-            StaticDetailHeaderText(),  
+            StaticDetailHeaderText(),
 
-            StaticDetailSectionBody(),
+            StaticDetailSectionBody(pixels:pixels,),
 
             // BOTTAM BAR :
             BottomBar(),

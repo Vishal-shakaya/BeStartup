@@ -134,7 +134,7 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
             text: username,
             style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color: home_profile_text_color,
+                color: home_profile_contact_color,
                 fontSize: name_fonSize))
       ]))),
     );
