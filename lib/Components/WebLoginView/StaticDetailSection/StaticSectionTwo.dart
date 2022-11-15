@@ -19,63 +19,140 @@ class StatiSectionTwo extends StatefulWidget {
 }
 
 class _StatiSectionTwoState extends State<StatiSectionTwo> {
+
   CarouselController buttonCarouselController = CarouselController();
+
   double member_Section_fonsize = 200;
+
   double profile_image_radius = 70;
+
   double spacer = 5;
 
   double name_fonSize = 16;
-  double position_fontSize = 11;
   double contact_icon_fonSize = 16;
 
   double contact_fontSiz = 11;
 
+  double ford_back_iconSize = 24;
+
+  double community_section_top_margin = 0.03;
+  double community_text_top_margin = 0.02;
+  double community_text_fontSize = 28;
+
+  double community_cont_height = 0.30;
+  double community_cont_width = 1;
+  double community_cont_top_margin = 0.06; 
+
+  double profile_bottom_margin = 0.02; 
+  double member_name_bottom_margin = 0.01; 
+
+
   @override
   Widget build(BuildContext context) {
+		// DEFAULT :
+    if (context.width > 1700) {
+      print('Greator then 1700');
+      }
+  
+    if (context.width < 1700) {
+      print('1700');
+      }
+  
+    if (context.width < 1600) {
+      print('1600');
+      }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+      }
+
+    if (context.width < 1200) {
+      print('1200');
+      }
+    
+    if (context.width < 1000) {
+      print('1000');
+      }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+      }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+      }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+      }
+
+
     return Container(
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: context.height * 0.03),
+            margin: EdgeInsets.only(
+                top: context.height * community_section_top_margin),
             child: Row(
               children: [
+                // BACKWORD  BUTTON :
                 Expanded(
                     flex: 2,
                     child: IconButton(
                         onPressed: () {
                           buttonCarouselController.previousPage();
                         },
-                        icon: Icon(CupertinoIcons.left_chevron))),
+                        icon: Icon(
+                          CupertinoIcons.left_chevron,
+                          size: ford_back_iconSize,
+                        ))),
+
+                // COMMUNITY SECTION :
                 Expanded(
                   flex: 6,
                   child: Container(
                     alignment: Alignment.topCenter,
-                    margin: EdgeInsets.only(top: context.height * 0.02),
+                    margin: EdgeInsets.only(
+                        top: context.height * community_text_top_margin),
                     child: RichText(
                         text: TextSpan(
                             style: GoogleFonts.robotoSlab(
                               color: light_color_type3,
-                              fontSize: 28,
+                              fontSize: community_text_fontSize,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 1,
                             ),
                             text: 'COMMUNITY')),
                   ),
                 ),
+
+                // FORWORD BUTTON:
                 Expanded(
                     flex: 2,
                     child: IconButton(
                         onPressed: () {
                           buttonCarouselController.nextPage();
                         },
-                        icon: Icon(CupertinoIcons.right_chevron))),
+                        icon: Icon(
+                          CupertinoIcons.right_chevron,
+                          size: ford_back_iconSize,
+                        ))),
               ],
             ),
           ),
+
+
+
+          //  COMMUNITY SECTION :
           Container(
-            height: context.height * 0.30,
-            width: context.width * 30,
-            margin: EdgeInsets.only(top: context.height * 0.06),
+            height: context.height * community_cont_height,
+            width: context.width * community_cont_width,
+            margin: EdgeInsets.only(top: context.height * community_cont_top_margin),
+            
             child: CarouselSlider.builder(
                 carouselController: buttonCarouselController,
                 itemCount: 5,
@@ -83,19 +160,26 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
                   return Container(
                       child: Column(
                     children: [
+                      
                       ProfileImage(),
+                      
                       SizedBox(
-                        height: context.height * 0.02,
+                        height: context.height * profile_bottom_margin,
                       ),
+                      
                       MemName(
                           user_position: 'Founder', username: 'Vishal shakaya'),
+                      
                       SizedBox(
-                        height: context.height * 0.01,
+                        height: context.height * member_name_bottom_margin,
                       ),
+
                       MemContact(text: 'Founder', icon: Icons.person)
                     ],
+                    
                   ));
                 }),
+
                 options: CarouselOptions(
                     height: context.height * 0.67, viewportFraction: 1)),
           ),
@@ -103,6 +187,8 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
       ),
     );
   }
+
+
 
   Card ProfileImage() {
     return Card(
@@ -124,6 +210,8 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
     );
   }
 
+
+
   Tooltip MemName({required username, required user_position}) {
     return Tooltip(
       message: user_position,
@@ -139,6 +227,8 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
       ]))),
     );
   }
+
+
 
   InkWell MemContact({required text, required icon, func}) {
     return InkWell(

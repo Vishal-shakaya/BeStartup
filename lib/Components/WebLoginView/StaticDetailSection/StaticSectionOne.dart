@@ -14,7 +14,7 @@ class StaticSectionOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('GETTING PIXESL  ${pixels}');
+    // print('GETTING PIXESL  ${pixels}');
 
     ////////////////////////////////
     // STARTUP DETAIL SECTION :

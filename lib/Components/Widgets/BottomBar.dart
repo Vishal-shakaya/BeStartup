@@ -42,6 +42,30 @@ class _BottomBarState extends State<BottomBar> {
 
   Color secondaryLinkActiveColor = Colors.orangeAccent.shade700;
 
+  double header_text_fontSize = 25;
+  double hearder_text_top_margin = 0.04;
+
+  double bottomBar_top_margin = 0.05;
+  double bottomBar_height = 0.30;
+
+  double bottomBar_cont_height = 0.22;
+
+  double logo_top_margin = 0.02;
+  double logo_height = 100;
+  double logo_width = 250;
+
+  double social_cont_width = 0.20;
+  double social_cont_top_margin = 0.02;
+  double social_fontSize = 16;
+
+  double comp_text_height = 0.02;
+  double comp_text_fontSize = 15;
+
+  double address_fontSize = 17;
+
+  double license_height = 0.07;
+  double license_fontSize = 15;
+
   //////////////////////////////////////////////
   /// SOCIAL URLS :
   //////////////////////////////////////////////
@@ -76,16 +100,198 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    header_text_fontSize = 25;
+    hearder_text_top_margin = 0.04;
+
+    bottomBar_top_margin = 0.05;
+    bottomBar_height = 0.30;
+
+    bottomBar_cont_height = 0.22;
+
+    logo_top_margin = 0.02;
+    logo_height = 100;
+    logo_width = 250;
+
+    social_cont_width = 0.20;
+    social_cont_top_margin = 0.02;
+    social_fontSize = 16;
+
+    comp_text_height = 0.02;
+    comp_text_fontSize = 15;
+
+    address_fontSize = 17;
+
+    license_height = 0.07;
+    license_fontSize = 15;
+
+    // DEFAULT :
+    if (context.width > 1700) {
+      header_text_fontSize = 25;
+      hearder_text_top_margin = 0.04;
+
+      bottomBar_top_margin = 0.05;
+      bottomBar_height = 0.30;
+
+      bottomBar_cont_height = 0.22;
+
+      logo_top_margin = 0.02;
+      logo_height = 100;
+      logo_width = 250;
+
+      social_cont_width = 0.20;
+      social_cont_top_margin = 0.02;
+
+      comp_text_height = 0.02;
+      comp_text_fontSize = 15;
+
+      address_fontSize = 17;
+
+      license_height = 0.07;
+      license_fontSize = 15;
+
+      social_fontSize = 16; 
+      print('Greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      print('1700');
+    }
+
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1200) {
+      header_text_fontSize = 22;
+      hearder_text_top_margin = 0.04;
+
+      bottomBar_top_margin = 0.05;
+      bottomBar_height = 0.30;
+
+      bottomBar_cont_height = 0.22;
+
+      logo_top_margin = 0.02;
+      logo_height = 80;
+      logo_width = 220;
+
+      social_cont_width = 0.25;
+      social_cont_top_margin = 0.02;
+      social_fontSize = 15; 
+
+      comp_text_height = 0.02;
+      comp_text_fontSize = 13;
+
+      address_fontSize = 15;
+
+      license_height = 0.07;
+      license_fontSize = 13;
+
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      header_text_fontSize = 20;
+      hearder_text_top_margin = 0.04;
+
+      bottomBar_top_margin = 0.05;
+      bottomBar_height = 0.30;
+
+      bottomBar_cont_height = 0.22;
+
+      logo_top_margin = 0.02;
+      logo_height = 80;
+      logo_width = 200;
+
+      social_cont_width = 0.35;
+      social_cont_top_margin = 0.02;
+      social_fontSize = 14; 
+
+      comp_text_height = 0.02;
+      comp_text_fontSize = 13;
+
+      address_fontSize = 14;
+
+      license_height = 0.07;
+      license_fontSize = 13;
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+
+    // SMALL TABLET:
+    if (context.width < 640) {
+      header_text_fontSize = 17;
+      hearder_text_top_margin = 0.04;
+
+      bottomBar_top_margin = 0.05;
+      bottomBar_height = 0.30;
+
+      bottomBar_cont_height = 0.22;
+
+      logo_top_margin = 0.02;
+      logo_height = 70;
+      logo_width = 180;
+
+      social_cont_width = 0.60;
+      social_cont_top_margin = 0.02;
+      social_fontSize = 13; 
+
+      comp_text_height = 0.02;
+      comp_text_fontSize = 13;
+
+      address_fontSize = 14;
+
+      license_height = 0.07;
+      license_fontSize = 13;
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      header_text_fontSize = 16;
+      hearder_text_top_margin = 0.04;
+
+      bottomBar_top_margin = 0.05;
+      bottomBar_height = 0.30;
+
+      bottomBar_cont_height = 0.22;
+
+      logo_top_margin = 0.02;
+      logo_height = 70;
+      logo_width = 160;
+
+      social_cont_width = 0.60;
+      social_cont_top_margin = 0.02;
+      social_fontSize = 12; 
+
+      comp_text_height = 0.02;
+      comp_text_fontSize = 12;
+
+      address_fontSize = 12;
+
+      license_height = 0.05;
+      license_fontSize = 12;
+      print('480');
+    }
+
     return Container(
-        margin: EdgeInsets.only(top: 50),
-        height: context.height * 0.30,
+        margin: EdgeInsets.only(top: context.height * bottomBar_top_margin),
+        height: context.height * bottomBar_height,
         color: Get.isDarkMode
             ? Colors.blueGrey.shade700
             : Colors.blueGrey.shade900,
         child: Column(
           children: [
             Container(
-              height: context.height * 0.22,
+              height: context.height * bottomBar_cont_height,
               child: Row(
                 children: [
                   // Logo and Social Button :
@@ -99,20 +305,22 @@ class _BottomBarState extends State<BottomBar> {
                           children: [
                             // Startup Icon Block :
                             Container(
-                              margin:
-                                  EdgeInsets.only(top: context.height * 0.02),
+                              margin: EdgeInsets.only(
+                                  top: context.height * logo_top_margin),
                               child: Image.asset(logo_image,
-                                  height: 100, width: 250, fit: BoxFit.contain),
+                                  height: logo_height,
+                                  width: logo_width,
+                                  fit: BoxFit.contain),
                             ),
 
                             // Startup Socail Button :
                             Container(
-                              width: context.width * 0.11,
-                              alignment: Alignment.centerRight,
-                              margin:
-                                  EdgeInsets.only(top: context.height * 0.02),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              width: context.width * social_cont_width,
+                              // alignment: Alignment.centerRight,
+                              margin: EdgeInsets.only(
+                                  top: context.height * social_cont_top_margin),
+                              child: Wrap(
+                                alignment : WrapAlignment.center,
                                 children: [
                                   // FACEBOOK LINK:
                                   MouseRegion(
@@ -127,12 +335,13 @@ class _BottomBarState extends State<BottomBar> {
                                       });
                                     },
                                     child: IconButton(
+                                      padding: EdgeInsets.all(2),
                                         onPressed: () {
                                           DocumentLink(url: facebook_url);
                                         },
                                         icon: FaIcon(
                                           FontAwesomeIcons.facebookF,
-                                          size: 16,
+                                          size: social_fontSize,
                                           color: facebookColor,
                                         )),
                                   ),
@@ -150,12 +359,13 @@ class _BottomBarState extends State<BottomBar> {
                                       });
                                     },
                                     child: IconButton(
+                                       padding: EdgeInsets.all(2),
                                         onPressed: () {
                                           DocumentLink(url: twitter_url);
                                         },
                                         icon: FaIcon(
                                           FontAwesomeIcons.twitter,
-                                          size: 16,
+                                          size: social_fontSize,
                                           color: twitterColor,
                                         )),
                                   ),
@@ -173,12 +383,13 @@ class _BottomBarState extends State<BottomBar> {
                                       });
                                     },
                                     child: IconButton(
+                                       padding: EdgeInsets.all(2),
                                         onPressed: () {
                                           DocumentLink(url: instagram_url);
                                         },
                                         icon: FaIcon(
                                           FontAwesomeIcons.instagram,
-                                          size: 16,
+                                          size: social_fontSize,
                                           color: instagramColor,
                                         )),
                                   ),
@@ -196,12 +407,13 @@ class _BottomBarState extends State<BottomBar> {
                                       });
                                     },
                                     child: IconButton(
+                                       padding: EdgeInsets.all(2),
                                         onPressed: () {
                                           DocumentLink(url: linkdiln_url);
                                         },
                                         icon: FaIcon(
                                           FontAwesomeIcons.linkedinIn,
-                                          size: 16,
+                                          size: social_fontSize,
                                           color: linkdilnColor,
                                         )),
                                   ),
@@ -219,12 +431,13 @@ class _BottomBarState extends State<BottomBar> {
                                       });
                                     },
                                     child: IconButton(
+                                       padding: EdgeInsets.all(2),
                                         onPressed: () {
                                           DocumentLink(url: youtube_url);
                                         },
                                         icon: FaIcon(
                                           FontAwesomeIcons.youtube,
-                                          size: 16,
+                                          size: social_fontSize,
                                           color: youtubeColor,
                                         )),
                                   ),
@@ -258,9 +471,9 @@ class _BottomBarState extends State<BottomBar> {
                                 });
                               },
                               child: InfoText(
-                                  height: context.height * 0.02,
+                                  height: context.height * comp_text_height,
                                   text: 'feedback',
-                                  size: 15,
+                                  size: comp_text_fontSize,
                                   color: feedbackColor)),
 
                           // About Text Link :
@@ -280,9 +493,9 @@ class _BottomBarState extends State<BottomBar> {
                                   DocumentLink(url: team_url);
                                 },
                                 child: InfoText(
-                                    height: context.height * 0.02,
+                                    height: context.height * comp_text_height,
                                     text: 'about us',
-                                    size: 15,
+                                    size: comp_text_fontSize,
                                     color: aboutColor),
                               )),
 
@@ -299,9 +512,9 @@ class _BottomBarState extends State<BottomBar> {
                               });
                             },
                             child: InfoText(
-                                height: context.height * 0.02,
+                                height: context.height * comp_text_height,
                                 text: 'feature',
-                                size: 15,
+                                size: comp_text_fontSize,
                                 color: featureColor),
                           ),
                         ],
@@ -330,9 +543,9 @@ class _BottomBarState extends State<BottomBar> {
                                 });
                               },
                               child: InfoText(
-                                  height: context.height * 0.02,
+                                  height: context.height * comp_text_height,
                                   text: 'Indaia , New Delhi, 110059',
-                                  size: 15,
+                                  size: comp_text_fontSize,
                                   color: contactColor)),
 
                           // Official Mail Address :
@@ -348,9 +561,9 @@ class _BottomBarState extends State<BottomBar> {
                                 });
                               },
                               child: InfoText(
-                                  height: context.height * 0.02,
+                                  height: context.height * comp_text_height,
                                   text: 'official@bestartup.site',
-                                  size: 17,
+                                  size: address_fontSize,
                                   color: officialMailColor)),
 
                           // Officail Contact No :
@@ -366,9 +579,9 @@ class _BottomBarState extends State<BottomBar> {
                                 });
                               },
                               child: InfoText(
-                                  height: context.height * 0.02,
+                                  height: context.height * comp_text_height,
                                   text: '+91 7065121120',
-                                  size: 17,
+                                  size: address_fontSize,
                                   color: phonenoColor)),
                         ],
                       )),
@@ -380,7 +593,7 @@ class _BottomBarState extends State<BottomBar> {
             // Copyright and licence:
             /////////////////////////////////////
             Container(
-              height: context.height * 0.07,
+              height: context.height * license_height,
               child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -393,7 +606,7 @@ class _BottomBarState extends State<BottomBar> {
                           text: copyright_text,
                           style: GoogleFonts.robotoSlab(
                             color: Colors.blueGrey.shade100,
-                            fontSize: 15,
+                            fontSize: license_fontSize,
                           ))
                     ])))
                   ]),
@@ -412,20 +625,22 @@ class _BottomBarState extends State<BottomBar> {
           color: color,
           fontSize: size,
           fontWeight: FontWeight.w400,
+        
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
   Container HeaderText(BuildContext context, text) {
     return Container(
-      margin: EdgeInsets.only(top: context.height * 0.04),
+      margin: EdgeInsets.only(top: context.height * hearder_text_top_margin),
       child: AutoSizeText(
         '$text',
         style: GoogleFonts.merriweather(
           textStyle: TextStyle(),
           color: Colors.white,
-          fontSize: 25,
+          fontSize: header_text_fontSize,
           fontWeight: FontWeight.w600,
           letterSpacing: 1,
         ),

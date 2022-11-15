@@ -66,7 +66,7 @@ class _WebLoginViewState extends State<WebLoginView> {
 
   @override
   Widget build(BuildContext context) {
-    print('pixles ${pixels}');
+    // print('pixles ${pixels}');
 
     // RESPONSIVE POINTS :
     // 1 800 Login Tabs:
