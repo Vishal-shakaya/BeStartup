@@ -50,7 +50,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                 Expanded(
                     flex: 1,
                     child: AnimatedOpacity(
-                      duration: Duration(milliseconds: 1100),
+                      duration: Duration(milliseconds: 1200),
                       opacity: widget.pixels >=500 ? 1.0 : 0.0,
 
                       child: Container(

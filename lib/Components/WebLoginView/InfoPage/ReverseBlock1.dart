@@ -138,7 +138,7 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                 Expanded(
                     flex: 1,
                     child: AnimatedOpacity(
-                      duration: Duration(milliseconds: 1100),
+                      duration: Duration(milliseconds: 1200),
                       opacity: widget.pixels >=2100 ? 1.0 : 0.0,
                      
                       child: Container(
