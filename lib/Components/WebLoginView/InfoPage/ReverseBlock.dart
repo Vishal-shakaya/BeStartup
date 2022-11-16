@@ -40,6 +40,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
                 heading_text: widget.heading_text,
                 body_text: widget.body_text,
                 gradient1: widget.gradient1,
+                image:widget.image, 
               )
            
            

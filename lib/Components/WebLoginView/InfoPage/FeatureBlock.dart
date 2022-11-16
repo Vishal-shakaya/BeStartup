@@ -1,3 +1,4 @@
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDialog.dart';
 import 'package:be_startup/Components/WebLoginView/InfoPage/PhoneResponsiveRow.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                 heading_text: widget.heading_text,
                 body_text: widget.body_text,
                 gradient1: widget.gradient1,
+                image:widget.image,
               )
             : Row(children: [
                 /////////////////////////////////////////////

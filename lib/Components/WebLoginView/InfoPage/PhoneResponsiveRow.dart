@@ -8,7 +8,13 @@ class ResponsiveRow extends StatefulWidget {
   String? heading_text = '';
   String? body_text = '';
   Gradient? gradient1; 
-  ResponsiveRow({this.heading_text, this.body_text, this.gradient1});
+  String image ; 
+  
+  ResponsiveRow({
+    required this.image, 
+    this.heading_text, 
+    this.body_text, 
+    this.gradient1});
 
   @override
   State<ResponsiveRow> createState() => _ResponsiveRowState();
@@ -28,7 +34,7 @@ class _ResponsiveRowState extends State<ResponsiveRow> {
                     // margin:EdgeInsets.all(40),
                     padding: EdgeInsets.all(10),
                     // color: Colors.green,
-                    child: Image.asset('assets/images/Info/Feature1.png',
+                    child: Image.asset(widget.image,
                         width: 200, height: 250, fit: BoxFit.contain))
             ),
           ],

@@ -37,6 +37,7 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                 heading_text: widget.heading_text,
                 body_text: widget.body_text,
                 gradient1: widget.gradient1,
+                image: widget.image,
               )
             : Row(children: [
                 ////////////////////////
