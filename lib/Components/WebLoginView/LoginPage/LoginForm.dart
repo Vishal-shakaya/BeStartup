@@ -71,15 +71,18 @@ class _LoginFormState extends State<LoginForm> {
     Color input_label_color =
         Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
 
+
     // SUBMIT LOGIN FORM :
     SubmitLofinForm() async {
       _formKey.currentState!.save();
+      
       // START LOADING :
       StartLoading();
 
       if (_formKey.currentState!.validate()) {
         String email = _formKey.currentState!.value['email'];
         String password = _formKey.currentState!.value['password'];
+        
         // _formKey.currentState!.reset();
         // LOGIN USER :
         var resp = await myAuth.LoginUser(email: email, password: password);
@@ -87,8 +90,9 @@ class _LoginFormState extends State<LoginForm> {
         if (resp['response']) {
           EndLoading();
           _formKey.currentState?.reset();
+
           // Rediret to User Type Page :
-          Get.toNamed(user_registration_url);
+          Get.toNamed(home_page_url);
         }
 
         // EMAIL NOT VERIFY THEN FIRT ASK FOR VERIFY EMAIL :

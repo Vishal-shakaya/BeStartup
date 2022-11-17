@@ -17,17 +17,24 @@ class LoginTabs extends StatelessWidget {
    
     return DefaultTabController(
       length: 2,
+     
       child: Container(
+     
         margin:EdgeInsets.only(left:50),
+     
         child: SingleChildScrollView(
+         
           child: Column(
             children: [
+             
               Container(
                 width: 400,
                 height: 50,
                 margin:EdgeInsets.only(top:10),
+               
                 child: TabBar(
                   tabs:  [
+                  
                     Container(
                       padding: EdgeInsets.only(right:15),
                       child: Tab(
@@ -64,7 +71,7 @@ class LoginTabs extends StatelessWidget {
                   labelColor: Colors.orange[800],
                   indicator: ContainerTabIndicator(
                     color: indicator_color,
-                    widthFraction: 0.39,
+                    widthFraction: 0.45,
                     height: 5,
                     padding: const EdgeInsets.only(top: 30),
                     radius: const BorderRadius.horizontal(

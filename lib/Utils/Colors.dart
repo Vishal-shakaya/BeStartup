@@ -86,6 +86,16 @@ Gradient g3 = const LinearGradient(colors: [
 ///////////////////////////////////////////
 
 // Theme Color :
+Color main_input_text_field_color =
+    Get.isDarkMode ? Colors.blueGrey.shade800 : Colors.black87;
+
+Color main_input_border__color =
+    Get.isDarkMode ? Colors.tealAccent : Color(0xFF54BAB9);
+
+Color main_input_label__color =
+    Get.isDarkMode ? Colors.blueGrey.shade700 : Colors.blueGrey.shade900;
+
+
 Color my_theme_background_color =
     Get.isDarkMode ? Colors.grey.shade900 : Colors.white;
 

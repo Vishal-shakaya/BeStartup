@@ -97,21 +97,20 @@ class _HomeViewState extends State<HomeView> {
         context: context,
         builder: (context) {
           return AlertDialog(
-                title: Container(
+              title: Container(
                   alignment: Alignment.topRight,
-                    child: IconButton(onPressed: (){
-                    Navigator.of(context).pop();
-                     },      
-                    
-                    icon: Icon(
-                    Icons.cancel_rounded,
-                    color: my_dialog_color,
-                    size: 18,)) 
-                ),
-
-                content: ExploreCatigoryAlert(
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.cancel_rounded,
+                        color: my_dialog_color,
+                        size: 18,
+                      ))),
+              content: ExploreCatigoryAlert(
                 changeView: SetHomeView,
-            ));
+              ));
         });
   }
 
@@ -237,6 +236,8 @@ class _HomeViewState extends State<HomeView> {
       var position;
 
       final resp = await userStore.FetchUserDetail();
+      print('Home page response $resp');
+
       if (!resp['response']) {
         Get.toNamed(login_handler_url);
       }

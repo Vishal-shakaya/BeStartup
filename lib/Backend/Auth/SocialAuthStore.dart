@@ -237,10 +237,8 @@ class MySocialAuth extends GetxController {
   Logout() async {
     try {
       final mail = await FirebaseAuth.instance.currentUser?.uid;
+      print('Logout user mail $mail');
       await FirebaseAuth.instance.signOut();
-
-      print(mail);
-
       try {
         await FacebookAuth.instance.logOut();
       } catch (e) {

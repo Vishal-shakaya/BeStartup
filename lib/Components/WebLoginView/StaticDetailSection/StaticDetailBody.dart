@@ -34,6 +34,7 @@ class StaticDetailSectionBody extends StatelessWidget {
       ]),
     );
 
+
     var verticalCard = Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 15,
@@ -43,10 +44,14 @@ class StaticDetailSectionBody extends StatelessWidget {
         // INVESTOR :
         Expanded(
             child: Container(
-          child: StatiSectionTwo(),
+              child: StatiSectionTwo(),
         )),
+
+
         // DIVIDER :
         Divider(),
+        
+        
         // SECTION ONE :
         StaticSectionOne(
           pixels: pixels,

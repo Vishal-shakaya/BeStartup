@@ -178,9 +178,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
   @override
   void initState() {
    if(Get.parameters.isNotEmpty){
-    
-      pageParam = Get.parameters;
-      
+      pageParam = Get.parameters;      
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
@@ -188,6 +186,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
    }
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

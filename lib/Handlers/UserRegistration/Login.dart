@@ -8,7 +8,7 @@ class LoginHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool is_mobile = GetPlatform.isMobile;
+    bool is_mobile = GetPlatform.isAndroid;
 
     return Scaffold(
       body: is_mobile 

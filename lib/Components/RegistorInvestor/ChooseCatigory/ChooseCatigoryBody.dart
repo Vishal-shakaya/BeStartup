@@ -62,10 +62,14 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
       var resp = await catigoryStore.PersistCatigory();
       
       if (resp['response'] == false) {
+        
         EndLoading();
         var snack_width = MediaQuery.of(context).size.width * 0.50;
+       
         Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+          MyCustSnackbar(
+            width: snack_width, 
+            type: MySnackbarType.error));
           return;
       } 
       

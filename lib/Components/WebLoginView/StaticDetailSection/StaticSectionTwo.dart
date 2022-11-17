@@ -471,34 +471,28 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
 
 
 
-  InkWell MemContact({required text, required icon, func}) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(15),
-      onTap: () async {
-        await func();
-      },
-      child: Container(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Icon(
-              icon,
-              color: Colors.orange.shade800,
-              size: name_fonSize,
-            ),
+  Container MemContact({required text, required icon, func}) {
+    return Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Icon(
+            icon,
+            color: Colors.orange.shade800,
+            size: name_fonSize,
           ),
-          AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
-            TextSpan(
-                text: text,
-                style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: home_profile_contact_color,
-                    fontSize: name_fonSize))
-          ])),
-        ],
-      )),
-    );
+        ),
+        AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
+          TextSpan(
+              text: text,
+              style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: home_profile_contact_color,
+                  fontSize: name_fonSize))
+        ])),
+      ],
+    ));
   }
 }

@@ -107,6 +107,8 @@ class MyAuthentication extends GetxController {
     );
   }
 
+
+
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -121,6 +123,7 @@ class MyAuthentication extends GetxController {
       );
 
       final user = auth.currentUser;
+
       // Verify user email :
       await user?.sendEmailVerification();
 
@@ -139,6 +142,7 @@ class MyAuthentication extends GetxController {
     }
   }
 
+
 ////////////////////////////////////////////
   // LOGIN USER WITH EMAIL AND PASSWORD :
 ////////////////////////////////////////////
@@ -156,13 +160,17 @@ class MyAuthentication extends GetxController {
       if (verify_email == true) {
         print('not');
         // return ResponseBack(response_type: false, data: 'email_not_verify');
-      } else {
+      } 
+      
+      else {
         try {
           if (GetPlatform.isWeb) {
             await auth.setPersistence(Persistence.SESSION);
           }
           return ResponseBack(response_type: true);
-        } catch (e) {
+        } 
+        
+        catch (e) {
           return ResponseBack(response_type: false);
         }
       }

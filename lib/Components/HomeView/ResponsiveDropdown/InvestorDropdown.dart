@@ -17,7 +17,7 @@ class InvestorCustomDropdown extends StatefulWidget {
       {required this.CreateStatup,
       required this.SwitchToFounder,
       required this.profile_image,
-      required this.SwitchSettingView, 
+      required this.SwitchSettingView,
       Key? key})
       : super(key: key);
 
@@ -35,6 +35,15 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
   double profile_menu_height = 51;
 
   double profile_menu_radiud = 30;
+
+  LogoutUser() async {
+    print('Logout user ');
+    try {
+      await socialAuth.Logout();
+    } catch (e) {
+      print('logut user error $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,19 +193,19 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
               ],
               onChanged: (value) async {
                 switch (value) {
-                  case FounderMenuItems.profile:
+                  case InvestorMenuItems.profile:
                     await widget.SwitchToFounder();
                     break;
 
-                  case FounderMenuItems.settings:
-                   await widget.SwitchSettingView();
+                  case InvestorMenuItems.settings:
+                    await widget.SwitchSettingView();
                     break;
 
-                  case FounderMenuItems.logout:
-                  await   socialAuth.Logout();
+                  case InvestorMenuItems.logout:
+                    await LogoutUser();
                     break;
 
-                  case FounderMenuItems.feedback:
+                  case InvestorMenuItems.feedback:
                     Wiredash.of(context).show(inheritMaterialTheme: true);
                     break;
                 }

@@ -12,7 +12,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screen_width = context.width;
+
     return Row(children: [
+    
       // Login Form
       Expanded(
         flex: 1,

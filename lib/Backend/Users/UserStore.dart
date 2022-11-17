@@ -20,15 +20,22 @@ class UserStore extends GetxController {
   /// Returns:
   ///   Nothing.
   //////////////////////////////////////////////////////
-  CreateUser() async {
+  CreateUser({usertype}) async {
     final userState = Get.put(UserState());
+    
     final id = auth.currentUser?.uid;
+    
     final email = auth.currentUser?.email;
+    
     final temp_user = await UserModel(
-        email: email, id: id, is_founder: false, is_investor: false);
+        email:email, 
+        id: id, 
+        is_founder: false, 
+        is_investor: false);
 
     final user = store.collection('users');
     var is_user_found;
+    
     try {
       // Check if user already exist :
       // if not then create use in DB :
@@ -46,7 +53,7 @@ class UserStore extends GetxController {
         await userState.SetUserId(id: id);
 
         print('Redirecting User to Select Usertye page');
-        Get.toNamed(user_type_slide_url);
+        Get.toNamed(login_handler_url);
       }
 
 
