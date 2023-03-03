@@ -64,7 +64,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
       if (widget.updateMail != '' || widget.updateMail != null) {
         var resp = await auth.UpdateUserMail(widget.updateMail);
         if (!resp['response']) {
-        ErrorSnakbar();
+          ErrorSnakbar();
         }
       }
     }
@@ -75,13 +75,12 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
 
   // LOADING SPINNER :
   StartLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ));
+    var dialog = SmartDialog.show(builder: (c) {
+      return CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.orangeAccent,
+      );
+    });
     return dialog;
   }
 
@@ -309,7 +308,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
       obscureText: true,
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 8,
+        FormBuilderValidators.minLength(8,
             errorText: 'invalid password')
       ]),
       style: TextStyle(
@@ -350,7 +349,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
           color: input_text_color),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.email(context, errorText: 'enter valid email')
+        FormBuilderValidators.email(errorText: 'enter valid email')
       ]),
       decoration: InputDecoration(
           hintText: 'enter mail ',

@@ -91,12 +91,13 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 // SHOW LOADING SPINNER :
   StartLoading() {
     var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: const CircularProgressIndicator(
+      builder: (context) {
+        return CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
-        ));
+        ); 
+      },
+    );
     return dialog;
   }
 

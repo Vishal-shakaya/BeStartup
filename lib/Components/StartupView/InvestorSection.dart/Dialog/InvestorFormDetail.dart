@@ -315,7 +315,7 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
     
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+          [FormBuilderValidators.minLength( 1, errorText: error_text)]),
     
       decoration: InputDecoration(
         labelText: lable_text,

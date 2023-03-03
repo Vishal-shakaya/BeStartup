@@ -12,6 +12,7 @@ import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -35,19 +36,20 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
   var investorConct = Get.put(InvestorConnector(), tag: 'investor_connector');
   var userStore = Get.put(UserStore());
   var userState = Get.put(UserState());
+  var authUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
     // SHOW LOADING SPINNER :
     StartLoading() {
-      var dialog = SmartDialog.showLoading(
-          background: Colors.white,
-          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: const CircularProgressIndicator(
+      var dialog = SmartDialog.show(
+        builder: (context) {
+          return CircularProgressIndicator(
             backgroundColor: Colors.white,
             color: Colors.orangeAccent,
-          ));
-      return dialog;
+          );
+        },
+      );
     }
 
     // End Loading
@@ -57,41 +59,35 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
 
     // SUBMIT CATIGORY :
     SubmitCatigory() async {
-      
       StartLoading();
       var resp = await catigoryStore.PersistCatigory();
-      
+
       if (resp['response'] == false) {
-        
         EndLoading();
         var snack_width = MediaQuery.of(context).size.width * 0.50;
-       
+
         Get.showSnackbar(
-          MyCustSnackbar(
-            width: snack_width, 
-            type: MySnackbarType.error));
-          return;
-      } 
-      
-      
-      else {
-        var resp = await investorConct.CreateInvestorCatigory();
-        print(resp);
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+        return;
+      } else {
+        final id = authUser?.uid;
+        if (id == null || id == '') {
+          print('id not found $id');
+        } 
+        else {
+          var resp = await catigoryStore.GetCatigories(id: id);
+          var resp_data = resp['data'];
 
-        var resp1 = await investorConct.CreateInvestorContact();
-        print(resp);
+          final resp1 = await userStore.UpdateUserDatabaseField(
+              field: 'is_investor', val: true);
 
-        var resp2 = await investorConct.CreateInvestorDetail();
-        print(resp);
+          final resp2 = await userStore.UpdateInvestorDatabaseField(
+              field: 'catigories', val: resp_data);
+        }
 
-        final resp4 = await userStore.UpdateUserDatabaseField(
-            field: 'is_investor', val: true);
-
-        await ClearCachedData();
         EndLoading();
         Get.toNamed(home_page_url);
       }
-      
     }
 
     // DEFAULT :

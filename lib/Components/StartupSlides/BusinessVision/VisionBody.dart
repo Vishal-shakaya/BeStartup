@@ -261,14 +261,11 @@ class _VisionBodyState extends State<VisionBody> {
           }
 
           if (snapshot.hasData) {
-            return MainMethod(
-                context,
-                snapshot
-                    .data); // snapshot.data  :- get your object which is pass from your downloadData() function
+            return MainMethod(context); // snapshot.data  :- get your object which is pass from your downloadData() function
           }
 
           inital_val = snapshot.data.toString();
-          return MainMethod(context, snapshot.data);
+          return MainMethod(context);
         });
   }
 
@@ -276,7 +273,7 @@ class _VisionBodyState extends State<VisionBody> {
   // MAIN METHOD SECTION :
   //////////////////////////////////////////
   Column MainMethod(
-    BuildContext context,
+    BuildContext  
     data,
   ) {
     return Column(
@@ -326,10 +323,10 @@ class _VisionBodyState extends State<VisionBody> {
               fontSize: 15, wordSpacing: 1.5, height: 1.5),
           validator: FormBuilderValidators.compose([
             // Remove Comment in  Production mode:
-            FormBuilderValidators.minLength(context, 500,
+            FormBuilderValidators.minLength(  500,
                 errorText: 'At least 500 required'),
 
-            FormBuilderValidators.maxLength(context, 2000,
+            FormBuilderValidators.maxLength(  2000,
                 errorText: 'Maximum 2000 char allow ')
           ]),
          

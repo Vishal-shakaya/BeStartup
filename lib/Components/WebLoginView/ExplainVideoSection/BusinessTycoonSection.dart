@@ -242,58 +242,60 @@ class _BusinessTycoonSectionState extends State<BusinessTycoonSection> {
               height: context.height * 0.80,
               child: _controller.value.isInitialized
                   
-                  ? Column(
-                      children: [
-                        Container(
-                          width: context.width * 0.75,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_controller.value.isPlaying) {
-                                          _controller.pause();
-                                          defaultPlayPauseIcon = pauseIcon;
-                                        } else {
-                                          _controller.play();
-                                          defaultPlayPauseIcon = playIcon;
-                                        }
-                                      });
-                                    },
-                                    icon: defaultPlayPauseIcon),
-                              ),
-                              // Container(
-                              //   child: IconButton(
-                              //       onPressed: () {
-                              //         print(
-                              //             'volument ${_controller.value.volume}');
-                              //         setState(() {
-                              //           if (_controller.value.volume == 1) {
-                              //             playserVolume = false;
-                              //             _controller.setVolume(0.0);
-                              //             defaultvolumneMuteIcon =
-                              //                 volumneMuteIcon;
-                              //           }
-                              //           if (_controller.value.volume == 0) {
-                              //             playserVolume = true;
-                              //             _controller.setVolume(1.0);
-                              //             defaultvolumneMuteIcon = volumeUpIcon;
-                              //           }
-                              //         });
-                              //       },
-                              //       icon: defaultvolumneMuteIcon),
-                              // ),
-                            ],
+                  ? SingleChildScrollView(
+                    child: Column(
+                        children: [
+                          Container(
+                            width: context.width * 0.75,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          if (_controller.value.isPlaying) {
+                                            _controller.pause();
+                                            defaultPlayPauseIcon = pauseIcon;
+                                          } else {
+                                            _controller.play();
+                                            defaultPlayPauseIcon = playIcon;
+                                          }
+                                        });
+                                      },
+                                      icon: defaultPlayPauseIcon),
+                                ),
+                                // Container(
+                                //   child: IconButton(
+                                //       onPressed: () {
+                                //         print(
+                                //             'volument ${_controller.value.volume}');
+                                //         setState(() {
+                                //           if (_controller.value.volume == 1) {
+                                //             playserVolume = false;
+                                //             _controller.setVolume(0.0);
+                                //             defaultvolumneMuteIcon =
+                                //                 volumneMuteIcon;
+                                //           }
+                                //           if (_controller.value.volume == 0) {
+                                //             playserVolume = true;
+                                //             _controller.setVolume(1.0);
+                                //             defaultvolumneMuteIcon = volumeUpIcon;
+                                //           }
+                                //         });
+                                //       },
+                                //       icon: defaultvolumneMuteIcon),
+                                // ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                            width: context.width * 0.80,
-                            height: context.height * 0.75,
-                            child: VideoPlayer(_controller)),
-                      ],
-                    )
+                          Container(
+                              width: context.width * 0.80,
+                              height: context.height * 0.75,
+                              child: VideoPlayer(_controller)),
+                        ],
+                      ),
+                  )
                   : Container(),
             ),
           ),

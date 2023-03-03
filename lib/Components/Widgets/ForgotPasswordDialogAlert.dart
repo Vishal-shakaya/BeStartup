@@ -18,7 +18,6 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
   var emailController = TextEditingController();
   var fireAuth = Get.put(MyAuthentication(), tag: 'my_auth');
 
-
   ShowAlert(context) {
     CoolAlert.show(
         context: context,
@@ -34,8 +33,6 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
         ));
   }
 
-
-  
   ErrorSnakbar(message) async {
     Get.closeAllSnackbars();
     Get.snackbar(
@@ -50,15 +47,14 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
     );
   }
 
-
   //////////////////////////////////////////////
-  // Send Email to forgot password : 
-  // Only send mailif user already resgitered 
-  // With using password method : 
+  // Send Email to forgot password :
+  // Only send mailif user already resgitered
+  // With using password method :
   //////////////////////////////////////////////
   SendpasswordResetLink(context) async {
     final email = emailController.text;
-    var resp = await fireAuth.ForgotPassword(email);
+    var resp = await fireAuth.ForgotPassword(email.trim());
 
     if (resp['response']) {
       Navigator.of(context).pop();
@@ -84,7 +80,7 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
 
           TextField(
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   icon: Icon(Icons.key),
                   hintText: 'Enter mail',
                   contentPadding:
@@ -99,7 +95,6 @@ class _ForgotPasswordAlertState extends State<ForgotPasswordAlert> {
       ),
     );
   }
-
 
   Container SubmitFormButton(context) {
     return Container(

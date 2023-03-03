@@ -370,11 +370,11 @@ class _SelectPlanState extends State<SelectPlan> {
 
   // SHOW  BIG LOADING SPINNER :
   StartBigLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: const Color.fromARGB(146, 252, 250, 250),
-        widget: BigLoadingSpinner());
-    return dialog;
+    // var dialog = SmartDialog.showLoading(
+    //     background: Colors.white,
+    //     maskColorTemp: const Color.fromARGB(146, 252, 250, 250),
+    //     widget: BigLoadingSpinner());
+    // return dialog;
   }
 
 ///////////////////////////////////////////////////////////////

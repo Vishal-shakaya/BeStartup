@@ -1,10 +1,7 @@
 
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
-import 'package:get/get.dart';
-
 var uuid = Uuid();
 
 StartupModel({
@@ -135,40 +132,24 @@ WhyInvestModel({
 }
 
 
-CatigoryModel(
-  {
-  startup_id,   
-  catigory}) async {
-  try {
-    Map<String, dynamic> temp_obj = {
-      'id': uuid.v4(),
-      'startup_id': startup_id,
-      'catigories': catigory,
-      'timestamp':DateTime.now().toUtc()
-    };
-    return temp_obj;
-  } catch (e) {
-    return false;
-  }
-}
 
 
-InvestorCatigoryModel(
-  {
-  user_id,   
-  catigory}) async {
-  try {
-    Map<String, dynamic> temp_obj = {
-      'id': uuid.v4(),
-      'user_id': user_id,
-      'catigories': catigory,
-      'timestamp':await GetFormatedDate()
-    };
-    return temp_obj;
-  } catch (e) {
-    return false;
-  }
-}
+// InvestorCatigoryModel(
+//   {
+//   user_id,   
+//   catigory}) async {
+//   try {
+//     Map<String, dynamic> temp_obj = {
+//       'id': uuid.v4(),
+//       'user_id': user_id,
+//       'catigories': catigory,
+//       'timestamp':await GetFormatedDate()
+//     };
+//     return temp_obj;
+//   } catch (e) {
+//     return false;
+//   }
+// }
 
 
 BusinessProductsList({
@@ -255,8 +236,5 @@ StartupInvestorModel({required startup_id, required investor,required id})async{
   } catch (e) {
     return false;
   }
-
-
-  
 }
 

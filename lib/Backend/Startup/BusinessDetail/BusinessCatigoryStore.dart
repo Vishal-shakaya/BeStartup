@@ -72,10 +72,10 @@ class BusinessCatigoryStore extends GetxController {
     final startup_id = await startupState.GetStartupId();
     // print('vision startup id ${startup_id}');
     try {
-      var resp =
-          await CatigoryModel(startup_id: startup_id, catigory: catigories);
+      // var resp =
+      //     await CatigoryModel(startup_id: startup_id, catigory: catigories);
 
-      localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
+      // localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);

@@ -83,13 +83,14 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
     formKey2.currentState!.save();
 
     if (formKey.currentState!.validate() && formKey2.currentState!.validate()) {
-      SmartDialog.showLoading(
-          background: Colors.white,
-          maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-          widget: const CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.orangeAccent,
-          ));
+   SmartDialog.showLoading(
+      builder: (context) {
+        return CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent,
+        ); 
+      },
+    );
 
       final name = formKey.currentState!.value['name'];
       final position = formKey.currentState!.value['position'];

@@ -181,7 +181,7 @@ class _TeamMemberDetailFormState extends State<TeamMemberDetailForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+          [FormBuilderValidators.minLength( 1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
         labelStyle: GoogleFonts.robotoSlab(

@@ -36,6 +36,8 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
 
   double profile_menu_radiud = 30;
 
+
+
   LogoutUser() async {
     print('Logout user ');
     try {
@@ -44,6 +46,8 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
       print('logut user error $e');
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +215,7 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
                 }
               },
               openWithLongPress: true,
-              customItemsHeight: 8,
+              customItemsHeights: [8],
               customButton: Container(
                 margin: EdgeInsets.only(top: context.height * 0.01),
                 child: CircleAvatar(

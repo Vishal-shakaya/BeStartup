@@ -29,17 +29,17 @@ class _SignupViewState extends State<UploadUserProfileWidget> {
 ///   profile_image: The image file that you want to crop.
 //////////////////////////////////////////////////////////////////////
   Future<void> CorpImage(profile_image) async {
-    File? cropImage = await ImageCropper().cropImage(
+    CroppedFile? cropImage = await ImageCropper().cropImage(
         sourcePath: profile_image!.path,
-        androidUiSettings: AndroidUiSettings(
+        uiSettings:[
+           AndroidUiSettings(
             toolbarColor: primary_light,
             toolbarTitle: 'upload profile picture',
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original),
+        ],
         aspectRatioPresets: [CropAspectRatioPreset.square],
-        iosUiSettings: const IOSUiSettings(
-          title: 'upload profile picture',
-        ),
+
         compressFormat: ImageCompressFormat.png,
         cropStyle: CropStyle.circle);
 
@@ -48,10 +48,11 @@ class _SignupViewState extends State<UploadUserProfileWidget> {
       circular_profile = File(cropImage!.path);
     });
 
+  var file = await  File(cropImage!.path);
     // STORE FILE IN FIREBASE STORAGE :
     String filename = DateTime.now().toString();
     String destination = 'user_profile/profile_image/$filename';
-    upload_process = FileStorage.UploadFile(destination, cropImage!);
+    upload_process = FileStorage.UploadFile(destination,file) ;
     final snapshot = await upload_process!.whenComplete(() => {});
     final download_url = await snapshot.ref.getData();
     print(download_url);

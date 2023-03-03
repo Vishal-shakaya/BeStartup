@@ -299,14 +299,14 @@ class _MileStoneTagState extends State<MileStoneTag> {
       dialog = StylishDialog(
           context: context,
           alertType: StylishDialogType.SUCCESS,
-          titleText: 'successfull',
+          title: Text('successfull'),
           controller: DialogController());
     }
     if (alert_type == AlertType.error) {
       dialog = StylishDialog(
           context: context,
           alertType: StylishDialogType.ERROR,
-          titleText: 'Error',
+          title: Text('Error'),
           controller: DialogController());
     }
 

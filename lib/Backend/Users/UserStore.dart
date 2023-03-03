@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -22,10 +23,9 @@ class UserStore extends GetxController {
   //////////////////////////////////////////////////////
   CreateUser({usertype}) async {
     final userState = Get.put(UserState());
-    
     final id = auth.currentUser?.uid;
-    
     final email = auth.currentUser?.email;
+    var is_user_found;
     
     final temp_user = await UserModel(
         email:email, 
@@ -33,12 +33,11 @@ class UserStore extends GetxController {
         is_founder: false, 
         is_investor: false);
 
-    final user = store.collection('users');
-    var is_user_found;
     
     try {
       // Check if user already exist :
-      // if not then create use in DB :
+      // if not then create  in DB :
+      final user = store.collection('users');
       final query = user.where('email', isEqualTo: email).get();
       await query.then((value) {
         is_user_found = value.docs.length;
@@ -49,8 +48,8 @@ class UserStore extends GetxController {
         Future<DocumentReference<Map<String, dynamic>>> ref =
             user.add(temp_user);
             
-        print('After Create User Set User Id');
-        await userState.SetUserId(id: id);
+        // print('After Create User Set User Id');
+        // await userState.SetUserId(id: id);
 
         print('Redirecting User to Select Usertye page');
         Get.toNamed(login_handler_url);
@@ -214,6 +213,34 @@ class UserStore extends GetxController {
     final id = auth.currentUser?.uid;
     final email = auth.currentUser?.email;
     final user = store.collection('users');
+    var userData;
+    var obj_id;
+
+    try {
+      await user.where('email', isEqualTo: email).get().then((value) {
+        userData = value.docs.first.data();
+        obj_id = value.docs.first.id;
+      });
+
+      userData[field] = val;
+      user.doc(obj_id).update(userData);
+
+      return ResponseBack(
+        response_type: true,
+      );
+    } catch (e) {
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+  ////////////////////////////////////////////////
+  /// Update user Perticular field in database :
+  /// Param required val and field :
+  ////////////////////////////////////////////////
+  UpdateInvestorDatabaseField({required val, required field}) async {
+    // Get User from firebase update ints field :
+    final id = auth.currentUser?.uid;
+    final email = auth.currentUser?.email;
+    final user = store.collection(getInvestorUserDetail);
     var userData;
     var obj_id;
 

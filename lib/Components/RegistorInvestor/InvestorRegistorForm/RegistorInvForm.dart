@@ -116,59 +116,19 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
+      margin: EdgeInsets.only(top:context.height*0.02),
       child: FormBuilder(
           key: widget.formKey,
           autovalidateMode: AutovalidateMode.disabled,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // FOUNDER FIELD :
-                Container(
-                  width: contact_formfield_width,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        InputField(
-                            context: context,
-                            name: 'investor_name',
-                            error_text: 'Founder name required',
-                            lable_text: 'Full name',
-                            hind_text: 'full name',
-                            initial_val: data['name']),
-
-                        // POSITION:
-                        // InputField(
-                        //     context: context,
-                        //     name: 'investor_position',
-                        //     lable_text: 'Position',
-                        //     hind_text: 'position in company',
-                        //     error_text: 'position in company required',
-                        //     initial_val: data['position']),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // CONTACT HEADING SECTION:
-                Container(
-                    margin: EdgeInsets.only(
-                        top: context.height * contact_text_margin_top),
-                    child: AutoSizeText.rich(
-                        TextSpan(style: Get.textTheme.headline2, children: [
-                      TextSpan(
-                        text: 'Primary Contact',
-                      )
-                    ]))),
-
-                // TAKE FOUNDER INOF:
-                SizedBox(
-                  height: 20,
-                ),
                 Card(
                   elevation: 4,
                   shadowColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
+                
                   child: Container(
                       width: formfield_width,
                       padding: EdgeInsets.all(20),
@@ -183,6 +143,14 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                             width: contact_formfield_width,
                             child: Column(
                               children: [
+                              InputField(
+                                context: context,
+                                name: 'investor_name',
+                                error_text: 'Founder name required',
+                                lable_text: 'Full name',
+                                hind_text: 'full name',
+                                initial_val: data['name']),
+
                                 SecondaryInputField(
                                   context: context,
                                   name: 'phone_no',
@@ -240,7 +208,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+          [FormBuilderValidators.minLength( 1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
 
@@ -260,9 +228,9 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
           },
           child: Container(
             child: Icon(
-              Icons.cancel_outlined,
+              Icons.close,
               color: input_reset_color,
-              size: 20,
+              size: 17,
             ),
           ),
         ),
@@ -295,7 +263,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 1,
+        FormBuilderValidators.minLength( 1,
             allowEmpty: name == 'other_info' ? true : false,
             errorText: error_text)
       ]),
@@ -317,9 +285,9 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
           },
           child: Container(
             child: Icon(
-              Icons.cancel_outlined,
+              Icons.close,
               color: input_reset_color,
-              size: 20,
+              size: 17,
             ),
           ),
         ),

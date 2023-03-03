@@ -292,7 +292,7 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
       maxLines: maxlines,
 
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 50,
+        FormBuilderValidators.minLength( 50,
             errorText: 'At least 50 char allow')
       ]),
 

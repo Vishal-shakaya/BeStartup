@@ -143,14 +143,14 @@ class _AddMileButtonState extends State<AddMileButton> {
       dialog = StylishDialog(
           context: my_context!,
           alertType: StylishDialogType.SUCCESS,
-          titleText: 'successfull',
+          title: Text('successfull'),
           controller: DialogController());
     }
     if (alert_type == AlertType.error) {
       dialog = StylishDialog(
           context: my_context!,
           alertType: StylishDialogType.ERROR,
-          titleText: 'Error',
+          title: Text('Error'),
           controller: DialogController());
     }
     dialog.show();

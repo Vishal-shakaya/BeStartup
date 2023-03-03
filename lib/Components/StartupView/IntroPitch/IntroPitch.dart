@@ -46,15 +46,13 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           strictRelatedVideos: true,
           enableJavaScript: true,
           color: 'red'),
-    )..onInit = () {
-        _controller
-            .loadVideo(widget.pitch);
+    );
+    _controller.loadVideo(widget.pitch);
 
-        _controller.stopVideo();
+    _controller.stopVideo();
 
-        _controller.setSize(context.width * video_player_width,
-            context.height * video_player_height);
-      };
+    _controller.setSize(context.width * video_player_width,
+        context.height * video_player_height);
   }
 
   @override
@@ -74,7 +72,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
     if (context.width > 1700) {
       video_model_player_width = 0.70;
       video_model_player_height = 0.70;
-      
+
       service_top_height = 0.10;
       print('1700');
     }
@@ -130,7 +128,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
     // TABLET :
     if (context.width < 800) {
       service_top_height = 0.05;
-      
+
       video_model_player_width = 0.90;
 
       video_model_player_height = 0.35;

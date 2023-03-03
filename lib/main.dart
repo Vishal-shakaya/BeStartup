@@ -48,11 +48,12 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wiredash/wiredash.dart';
-
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // FIREBASE INITILZATION :
+  await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -61,7 +62,7 @@ void main() async {
   if (GetPlatform.isWeb) {
 
     // initialiaze the facebook javascript SDK
-    await FacebookAuth.i.webInitialize(
+    await FacebookAuth.instance.webAndDesktopInitialize(
       appId: "554392976209038",
       cookie: true,
       xfbml: true,
@@ -105,13 +106,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-  
     final textTheme = Theme.of(context).textTheme;
-
-    // Wait for a sec to settle things clearly :
-    SetAppLocalState() async {
-      await Future.delayed(Duration(milliseconds: 500));
-    }
 
 
   /////////////////////////////////
@@ -174,12 +169,7 @@ class _MyAppState extends State<MyApp> {
                     }
     
                     if (snapshot.hasData) {
-                      // Check Login user complete profile setup or not :
-                      // if Complete then redirect to
-                      // Configure App local state :
-                      SetAppLocalState();
-    
-                      return HomeView();
+                      return LoginHandler();
                     }
                     return LoginHandler();
                   });

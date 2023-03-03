@@ -100,13 +100,13 @@ class _StartupViewState extends State<StartupView> {
           strictRelatedVideos: true,
           enableJavaScript: true,
           color: 'red'),
-    )..onInit = () {
+    );
         _controller.loadVideo(pitch);
 
         _controller.setSize(
           context.width * video_player_width,
             context.height * video_player_height);
-      };
+      
   }
 
   @override

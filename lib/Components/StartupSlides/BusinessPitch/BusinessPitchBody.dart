@@ -559,7 +559,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
               fontSize: input_field_fontSize, wordSpacing: 1.5, height: 1.5),
           validator: FormBuilderValidators.compose([
             // Remove Comment in  Production mode:
-            FormBuilderValidators.minLength(context, 10,
+            FormBuilderValidators.minLength( 10,
                 errorText: 'Enter valid url '),
           ]),
           scrollPadding: EdgeInsets.all(10),

@@ -64,7 +64,7 @@ class _BottomBarState extends State<BottomBar> {
   double address_fontSize = 17;
 
   double license_height = 0.07;
-  double license_fontSize = 15;
+  double license_fontSize = 12;
 
   //////////////////////////////////////////////
   /// SOCIAL URLS :
@@ -122,7 +122,7 @@ class _BottomBarState extends State<BottomBar> {
     address_fontSize = 17;
 
     license_height = 0.07;
-    license_fontSize = 15;
+    license_fontSize = 12;
 
     // DEFAULT :
     if (context.width > 1700) {
@@ -147,7 +147,7 @@ class _BottomBarState extends State<BottomBar> {
       address_fontSize = 17;
 
       license_height = 0.07;
-      license_fontSize = 15;
+      license_fontSize = 12;
 
       social_fontSize = 16; 
       print('Greator then 1700');
@@ -189,7 +189,7 @@ class _BottomBarState extends State<BottomBar> {
       address_fontSize = 15;
 
       license_height = 0.07;
-      license_fontSize = 13;
+      license_fontSize = 12;
 
       print('1200');
     }
@@ -217,7 +217,7 @@ class _BottomBarState extends State<BottomBar> {
       address_fontSize = 14;
 
       license_height = 0.07;
-      license_fontSize = 13;
+      license_fontSize = 11;
       print('1000');
     }
 
@@ -250,7 +250,7 @@ class _BottomBarState extends State<BottomBar> {
       address_fontSize = 14;
 
       license_height = 0.07;
-      license_fontSize = 13;
+      license_fontSize = 12;
       print('640');
     }
 
@@ -278,7 +278,7 @@ class _BottomBarState extends State<BottomBar> {
       address_fontSize = 12;
 
       license_height = 0.05;
-      license_fontSize = 12;
+      license_fontSize = 11;
       print('480');
     }
 
@@ -299,152 +299,154 @@ class _BottomBarState extends State<BottomBar> {
                       flex: 3,
                       child: Container(
                         alignment: Alignment.bottomRight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Startup Icon Block :
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: context.height * logo_top_margin),
-                              child: Image.asset(logo_image,
-                                  height: logo_height,
-                                  width: logo_width,
-                                  fit: BoxFit.contain),
-                            ),
-
-                            // Startup Socail Button :
-                            Container(
-                              width: context.width * social_cont_width,
-                              // alignment: Alignment.centerRight,
-                              margin: EdgeInsets.only(
-                                  top: context.height * social_cont_top_margin),
-                              child: Wrap(
-                                alignment : WrapAlignment.center,
-                                children: [
-                                  // FACEBOOK LINK:
-                                  MouseRegion(
-                                    onHover: (_) {
-                                      setState(() {
-                                        facebookColor = facebooHoverkColor;
-                                      });
-                                    },
-                                    onExit: (_) {
-                                      setState(() {
-                                        facebookColor = defaultColor;
-                                      });
-                                    },
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(2),
-                                        onPressed: () {
-                                          DocumentLink(url: facebook_url);
-                                        },
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.facebookF,
-                                          size: social_fontSize,
-                                          color: facebookColor,
-                                        )),
-                                  ),
-
-                                  // TWITTER LINK :
-                                  MouseRegion(
-                                    onHover: (_) {
-                                      setState(() {
-                                        twitterColor = twitterHoverColor;
-                                      });
-                                    },
-                                    onExit: (_) {
-                                      setState(() {
-                                        twitterColor = defaultColor;
-                                      });
-                                    },
-                                    child: IconButton(
-                                       padding: EdgeInsets.all(2),
-                                        onPressed: () {
-                                          DocumentLink(url: twitter_url);
-                                        },
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.twitter,
-                                          size: social_fontSize,
-                                          color: twitterColor,
-                                        )),
-                                  ),
-
-                                  // INSTAGRAM  LINK :
-                                  MouseRegion(
-                                    onHover: (_) {
-                                      setState(() {
-                                        instagramColor = instagramHoverColor;
-                                      });
-                                    },
-                                    onExit: (_) {
-                                      setState(() {
-                                        instagramColor = defaultColor;
-                                      });
-                                    },
-                                    child: IconButton(
-                                       padding: EdgeInsets.all(2),
-                                        onPressed: () {
-                                          DocumentLink(url: instagram_url);
-                                        },
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.instagram,
-                                          size: social_fontSize,
-                                          color: instagramColor,
-                                        )),
-                                  ),
-
-                                  // LINKEDIN LINK :
-                                  MouseRegion(
-                                    onHover: (_) {
-                                      setState(() {
-                                        linkdilnColor = linkdilnHoverColor;
-                                      });
-                                    },
-                                    onExit: (_) {
-                                      setState(() {
-                                        linkdilnColor = defaultColor;
-                                      });
-                                    },
-                                    child: IconButton(
-                                       padding: EdgeInsets.all(2),
-                                        onPressed: () {
-                                          DocumentLink(url: linkdiln_url);
-                                        },
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.linkedinIn,
-                                          size: social_fontSize,
-                                          color: linkdilnColor,
-                                        )),
-                                  ),
-
-                                  // YOUTUBE LINK :
-                                  MouseRegion(
-                                    onHover: (_) {
-                                      setState(() {
-                                        youtubeColor = youtubeHoverColor;
-                                      });
-                                    },
-                                    onExit: (_) {
-                                      setState(() {
-                                        youtubeColor = defaultColor;
-                                      });
-                                    },
-                                    child: IconButton(
-                                       padding: EdgeInsets.all(2),
-                                        onPressed: () {
-                                          DocumentLink(url: youtube_url);
-                                        },
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.youtube,
-                                          size: social_fontSize,
-                                          color: youtubeColor,
-                                        )),
-                                  ),
-                                ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Startup Icon Block :
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: context.height * logo_top_margin),
+                                child: Image.asset(logo_image,
+                                    height: logo_height,
+                                    width: logo_width,
+                                    fit: BoxFit.contain),
                               ),
-                            ),
-                          ],
+                        
+                              // Startup Socail Button :
+                              Container(
+                                width: context.width * social_cont_width,
+                                // alignment: Alignment.centerRight,
+                                margin: EdgeInsets.only(
+                                    top: context.height * social_cont_top_margin),
+                                child: Wrap(
+                                  alignment : WrapAlignment.center,
+                                  children: [
+                                    // FACEBOOK LINK:
+                                    MouseRegion(
+                                      onHover: (_) {
+                                        setState(() {
+                                          facebookColor = facebooHoverkColor;
+                                        });
+                                      },
+                                      onExit: (_) {
+                                        setState(() {
+                                          facebookColor = defaultColor;
+                                        });
+                                      },
+                                      child: IconButton(
+                                        padding: EdgeInsets.all(2),
+                                          onPressed: () {
+                                            DocumentLink(url: facebook_url);
+                                          },
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.facebookF,
+                                            size: social_fontSize,
+                                            color: facebookColor,
+                                          )),
+                                    ),
+                        
+                                    // TWITTER LINK :
+                                    MouseRegion(
+                                      onHover: (_) {
+                                        setState(() {
+                                          twitterColor = twitterHoverColor;
+                                        });
+                                      },
+                                      onExit: (_) {
+                                        setState(() {
+                                          twitterColor = defaultColor;
+                                        });
+                                      },
+                                      child: IconButton(
+                                         padding: EdgeInsets.all(2),
+                                          onPressed: () {
+                                            DocumentLink(url: twitter_url);
+                                          },
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.twitter,
+                                            size: social_fontSize,
+                                            color: twitterColor,
+                                          )),
+                                    ),
+                        
+                                    // INSTAGRAM  LINK :
+                                    MouseRegion(
+                                      onHover: (_) {
+                                        setState(() {
+                                          instagramColor = instagramHoverColor;
+                                        });
+                                      },
+                                      onExit: (_) {
+                                        setState(() {
+                                          instagramColor = defaultColor;
+                                        });
+                                      },
+                                      child: IconButton(
+                                         padding: EdgeInsets.all(2),
+                                          onPressed: () {
+                                            DocumentLink(url: instagram_url);
+                                          },
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.instagram,
+                                            size: social_fontSize,
+                                            color: instagramColor,
+                                          )),
+                                    ),
+                        
+                                    // LINKEDIN LINK :
+                                    MouseRegion(
+                                      onHover: (_) {
+                                        setState(() {
+                                          linkdilnColor = linkdilnHoverColor;
+                                        });
+                                      },
+                                      onExit: (_) {
+                                        setState(() {
+                                          linkdilnColor = defaultColor;
+                                        });
+                                      },
+                                      child: IconButton(
+                                         padding: EdgeInsets.all(2),
+                                          onPressed: () {
+                                            DocumentLink(url: linkdiln_url);
+                                          },
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.linkedinIn,
+                                            size: social_fontSize,
+                                            color: linkdilnColor,
+                                          )),
+                                    ),
+                        
+                                    // YOUTUBE LINK :
+                                    MouseRegion(
+                                      onHover: (_) {
+                                        setState(() {
+                                          youtubeColor = youtubeHoverColor;
+                                        });
+                                      },
+                                      onExit: (_) {
+                                        setState(() {
+                                          youtubeColor = defaultColor;
+                                        });
+                                      },
+                                      child: IconButton(
+                                         padding: EdgeInsets.all(2),
+                                          onPressed: () {
+                                            DocumentLink(url: youtube_url);
+                                          },
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.youtube,
+                                            size: social_fontSize,
+                                            color: youtubeColor,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       )),
 
@@ -453,71 +455,73 @@ class _BottomBarState extends State<BottomBar> {
                   /////////////////////////////////
                   Expanded(
                       flex: 3,
-                      child: Column(
-                        children: [
-                          // HEADER TEXT :
-                          HeaderText(context, 'Company'),
-
-                          // Feedback Text Link :
-                          MouseRegion(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            // HEADER TEXT :
+                            HeaderText(context, 'Company'),
+                      
+                            // Feedback Text Link :
+                            MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    feedbackColor = defaultColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    feedbackColor = linkDefaultColor;
+                                  });
+                                },
+                                child: InfoText(
+                                    height: context.height * comp_text_height,
+                                    text: 'feedback',
+                                    size: comp_text_fontSize,
+                                    color: feedbackColor)),
+                      
+                            // About Text Link :
+                            MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    aboutColor = defaultColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    aboutColor = linkDefaultColor;
+                                  });
+                                },
+                                child: InkWell(
+                                  onTap: () {
+                                    DocumentLink(url: team_url);
+                                  },
+                                  child: InfoText(
+                                      height: context.height * comp_text_height,
+                                      text: 'about us',
+                                      size: comp_text_fontSize,
+                                      color: aboutColor),
+                                )),
+                      
+                            // Feature Text Link :
+                            MouseRegion(
                               onHover: (_) {
                                 setState(() {
-                                  feedbackColor = defaultColor;
+                                  featureColor = defaultColor;
                                 });
                               },
                               onExit: (_) {
                                 setState(() {
-                                  feedbackColor = linkDefaultColor;
+                                  featureColor = linkDefaultColor;
                                 });
                               },
                               child: InfoText(
                                   height: context.height * comp_text_height,
-                                  text: 'feedback',
+                                  text: 'feature',
                                   size: comp_text_fontSize,
-                                  color: feedbackColor)),
-
-                          // About Text Link :
-                          MouseRegion(
-                              onHover: (_) {
-                                setState(() {
-                                  aboutColor = defaultColor;
-                                });
-                              },
-                              onExit: (_) {
-                                setState(() {
-                                  aboutColor = linkDefaultColor;
-                                });
-                              },
-                              child: InkWell(
-                                onTap: () {
-                                  DocumentLink(url: team_url);
-                                },
-                                child: InfoText(
-                                    height: context.height * comp_text_height,
-                                    text: 'about us',
-                                    size: comp_text_fontSize,
-                                    color: aboutColor),
-                              )),
-
-                          // Feature Text Link :
-                          MouseRegion(
-                            onHover: (_) {
-                              setState(() {
-                                featureColor = defaultColor;
-                              });
-                            },
-                            onExit: (_) {
-                              setState(() {
-                                featureColor = linkDefaultColor;
-                              });
-                            },
-                            child: InfoText(
-                                height: context.height * comp_text_height,
-                                text: 'feature',
-                                size: comp_text_fontSize,
-                                color: featureColor),
-                          ),
-                        ],
+                                  color: featureColor),
+                            ),
+                          ],
+                        ),
                       )),
 
                   //////////////////////////////////////
@@ -525,65 +529,67 @@ class _BottomBarState extends State<BottomBar> {
                   //////////////////////////////////////
                   Expanded(
                       flex: 3,
-                      child: Column(
-                        children: [
-                          // Header Text :
-                          HeaderText(context, 'Contact'),
-
-                          // Address Text :
-                          MouseRegion(
-                              onHover: (_) {
-                                setState(() {
-                                  contactColor = defaultColor;
-                                });
-                              },
-                              onExit: (_) {
-                                setState(() {
-                                  contactColor = linkDefaultColor;
-                                });
-                              },
-                              child: InfoText(
-                                  height: context.height * comp_text_height,
-                                  text: 'Indaia , New Delhi, 110059',
-                                  size: comp_text_fontSize,
-                                  color: contactColor)),
-
-                          // Official Mail Address :
-                          MouseRegion(
-                              onHover: (_) {
-                                setState(() {
-                                  officialMailColor = secondaryLinkActiveColor;
-                                });
-                              },
-                              onExit: (_) {
-                                setState(() {
-                                  officialMailColor = secondaryLinkDefaultColor;
-                                });
-                              },
-                              child: InfoText(
-                                  height: context.height * comp_text_height,
-                                  text: 'official@bestartup.site',
-                                  size: address_fontSize,
-                                  color: officialMailColor)),
-
-                          // Officail Contact No :
-                          MouseRegion(
-                              onHover: (_) {
-                                setState(() {
-                                  phonenoColor = secondaryLinkActiveColor;
-                                });
-                              },
-                              onExit: (_) {
-                                setState(() {
-                                  phonenoColor = secondaryLinkDefaultColor;
-                                });
-                              },
-                              child: InfoText(
-                                  height: context.height * comp_text_height,
-                                  text: '+91 7065121120',
-                                  size: address_fontSize,
-                                  color: phonenoColor)),
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            // Header Text :
+                            HeaderText(context, 'Contact'),
+                      
+                            // Address Text :
+                            MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    contactColor = defaultColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    contactColor = linkDefaultColor;
+                                  });
+                                },
+                                child: InfoText(
+                                    height: context.height * comp_text_height,
+                                    text: 'Indaia , New Delhi, 110059',
+                                    size: comp_text_fontSize,
+                                    color: contactColor)),
+                      
+                            // Official Mail Address :
+                            MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    officialMailColor = secondaryLinkActiveColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    officialMailColor = secondaryLinkDefaultColor;
+                                  });
+                                },
+                                child: InfoText(
+                                    height: context.height * comp_text_height,
+                                    text: 'official@bestartup.site',
+                                    size: address_fontSize,
+                                    color: officialMailColor)),
+                      
+                            // Officail Contact No :
+                            MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    phonenoColor = secondaryLinkActiveColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    phonenoColor = secondaryLinkDefaultColor;
+                                  });
+                                },
+                                child: InfoText(
+                                    height: context.height * comp_text_height,
+                                    text: '+91 7065121120',
+                                    size: address_fontSize,
+                                    color: phonenoColor)),
+                          ],
+                        ),
                       )),
                 ],
               ),
@@ -607,6 +613,7 @@ class _BottomBarState extends State<BottomBar> {
                           style: GoogleFonts.robotoSlab(
                             color: Colors.blueGrey.shade100,
                             fontSize: license_fontSize,
+                            fontWeight: FontWeight.normal
                           ))
                     ])))
                   ]),

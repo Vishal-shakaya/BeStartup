@@ -113,21 +113,17 @@ class MyAuthentication extends GetxController {
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
   SignupUser({email, password}) async {
-    print('Get Signup mail $email');
-    print('Get Signup  password $password');
+    // print('Get Signup mail $email');
+    // print('Get Signup  password $password');
 
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-
-      final user = auth.currentUser;
-
+      
       // Verify user email :
-      await user?.sendEmailVerification();
-
-      await userStore.CreateUser();
+      await auth.currentUser?.sendEmailVerification();
       return ResponseBack(response_type: true);
 
       // Error Exception :
@@ -147,8 +143,8 @@ class MyAuthentication extends GetxController {
   // LOGIN USER WITH EMAIL AND PASSWORD :
 ////////////////////////////////////////////
   LoginUser({email, password}) async {
-    print('Get Login mail $email');
-    print('Get Login  password $password');
+    // print('Get Login mail $email');
+    // print('Get Login  password $password');
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -157,9 +153,8 @@ class MyAuthentication extends GetxController {
       final user = auth.currentUser;
       final verify_email = user?.emailVerified;
 
-      if (verify_email == true) {
-        print('not');
-        // return ResponseBack(response_type: false, data: 'email_not_verify');
+      if (verify_email == false) {
+        return ResponseBack(response_type: false, data: 'email_not_verify');
       } 
       
       else {

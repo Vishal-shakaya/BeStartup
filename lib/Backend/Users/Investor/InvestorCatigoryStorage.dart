@@ -34,9 +34,10 @@ class InvestorCatigoryStore extends GetxController {
   }
 
   // GET LIST TO CATIGORY:
-  GetCatigories() {
+  GetCatigories({id}) async {
     try {
-      return catigories;
+      
+      return ResponseBack(response_type: true, data: catigories);
     } catch (e) {
       return ResponseBack(response_type: false);
     }
@@ -46,10 +47,10 @@ class InvestorCatigoryStore extends GetxController {
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      var resp = await InvestorCatigoryModel(
-          user_id: await userState.GetUserId(), catigory: catigories);
+      // var resp = await InvestorCatigoryModel(
+      //     user_id: await userState.GetUserId(), catigory: catigories);
 
-      localStore.setString('InvestorChooseCatigory', json.encode(resp));
+      // localStore.setString('InvestorChooseCatigory', json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
       print('Error While Submiting Catigory $e');

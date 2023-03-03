@@ -1,4 +1,5 @@
 import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
@@ -28,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
   var investorConnector = Get.put(InvestorConnector());
 
   final userState = Get.put(UserState());
-  var userStore = Get.put(UserStore());
+  final userStore = Get.put(UserStore());
   var view = HomePageViews.storyView;
   var user_id;
 
@@ -229,131 +230,87 @@ class _HomeViewState extends State<HomeView> {
     /// GET REQUIRED PARAM :
     ///////////////////////////////////////////
     GetLocalStorageData() async {
-      print('*** Load Home page View *****');
       var phoneno;
       var profile_image;
       var username;
       var position;
+      final userType = userState.GetUserType();
+      print(userType);
+      // Investor Handler :
+      if (userType == UserStoreName.investor) {
+        final invest_resp =
+            await investorConnector.FetchInvestorDetailandContact(
+                user_id: user_id);
+        // Investor Success Handler :
+        if (invest_resp['response']) {
+          print(invest_resp['data']);
+          print(' [ SETUP INVESTOR DETAIL ] ');
 
-      final resp = await userStore.FetchUserDetail();
-      print('Home page response $resp');
+          user_profile = invest_resp['data']['userDetail']['picture'];
+          user_name = invest_resp['data']['userDetail']['name'];
+          registor_mail = invest_resp['data']['userDetail']['email'];
 
-      if (!resp['response']) {
-        Get.toNamed(login_handler_url);
-      }
+          primary_mail = invest_resp['data']['userContect']['primary_mail'];
+          phoneNo = invest_resp['data']['userContect']['phone_no'];
+          otherContact = invest_resp['data']['userContect']['other_contact'];
 
-      user_id = resp['data']['id'];
+          primary_mail = await CheckAndGetPrimaryMail(
+              primary_mail: primary_mail, default_mail: registor_mail);
 
-      await userState.SetUserId(id: user_id);
-
-      // 1 CHECK  :
-      // If user user type is investor or founder
-      // if both are false then show user type page :
-      if (resp['data']['is_investor'] == false &&
-          resp['data']['is_founder'] == false) {
-        Get.toNamed(user_type_slide_url);
-      }
-
-      // 2 CHECK  :
-      // If user user type is investor or founder
-      // if any one is true then send Home View
-      if (resp['data']['is_investor'] == true ||
-          resp['data']['is_founder'] == true) {
-        ////////////////////////////////////////
-        // INVESTOR HANDLER :
-        ////////////////////////////////////////
-        if (resp['data']['is_investor'] == true) {
-          final invest_resp =
-              await investorConnector.FetchInvestorDetailandContact(
-                  user_id: user_id);
-
-          // Investor Success Handler :
-          if (invest_resp['response']) {
-            print(invest_resp['data']);
-            print(' [ SETUP INVESTOR DETAIL ] ');
-
-            user_profile = invest_resp['data']['userDetail']['picture'];
-            user_name = invest_resp['data']['userDetail']['name'];
-            registor_mail = invest_resp['data']['userDetail']['email'];
-
-            primary_mail = invest_resp['data']['userContect']['primary_mail'];
-            phoneNo = invest_resp['data']['userContect']['phone_no'];
-            otherContact = invest_resp['data']['userContect']['other_contact'];
-
-            primary_mail = await CheckAndGetPrimaryMail(
-                primary_mail: primary_mail, default_mail: registor_mail);
-
-            await userState.SetProfileImage(image: user_profile);
-            await userState.SetProfileName(name: user_name);
-            await userState.SetDefaultUserMail(mail: registor_mail);
-            await userState.SetPrimaryMail(mail: primary_mail);
-            await userState.SetPhoneNo(number: phoneNo);
-            await userState.SetOtherContact(contact: otherContact);
-            await userState.SetPrimaryMail(mail: primary_mail);
-          }
-          usertype = UserType.founder;
-          await userState.SetUserType(type: UserType.founder);
-
-          // Founder Error Handler :
-          if (!invest_resp['response']) {
-            print(
-                ' ****** Fetch Investor Profile Error  [ HomeView ]******** ');
-            print(invest_resp);
-          }
-
-          usertype = UserType.investor;
-          await userState.SetUserType(type: UserType.investor);
+          await userState.SetProfileImage(image: user_profile);
+          await userState.SetProfileName(name: user_name);
+          await userState.SetDefaultUserMail(mail: registor_mail);
+          await userState.SetPrimaryMail(mail: primary_mail);
+          await userState.SetPhoneNo(number: phoneNo);
+          await userState.SetOtherContact(contact: otherContact);
+          await userState.SetPrimaryMail(mail: primary_mail);
         }
-
-        ////////////////////////////////////////////
-        /// FOUNDER HANDLER :
-        ////////////////////////////////////////////
-        if (resp['data']['is_founder'] == true) {
-          final found_resp =
-              await founderConnector.FetchFounderDetailandContact(
-                  user_id: user_id);
-
-          // Founder Success Handler :
-          if (found_resp['response']) {
-            print('[ SETUP FOUNDER DETAIL ] ');
-
-            user_profile = found_resp['data']['userDetail']['picture'];
-            user_name = found_resp['data']['userDetail']['name'];
-            registor_mail = found_resp['data']['userDetail']['email'];
-
-            primary_mail = found_resp['data']['userContect']['primary_mail'];
-            phoneNo = found_resp['data']['userContect']['phone_no'];
-            otherContact = found_resp['data']['userContect']['other_contact'];
-
-            primary_mail = await CheckAndGetPrimaryMail(
-                primary_mail: primary_mail, default_mail: registor_mail);
-
-            await userState.SetProfileImage(image: user_profile);
-            await userState.SetProfileName(name: user_name);
-            await userState.SetDefaultUserMail(mail: registor_mail);
-            await userState.SetPrimaryMail(mail: primary_mail);
-            await userState.SetPhoneNo(number: phoneNo);
-            await userState.SetOtherContact(contact: otherContact);
-            await userState.SetPrimaryMail(mail: primary_mail);
-          }
-
-          usertype = UserType.founder;
-          await userState.SetUserType(type: UserType.founder);
-
-          // Founder Error Handler :
-          if (!found_resp['response']) {
-            print('****** Fetch Founder Profile Error  [ HomeView ]******** ');
-            print(found_resp);
-          }
+        usertype = UserType.investor;
+        // Founder Error Handler :
+        if (!invest_resp['response']) {
+          print(' ****** Fetch Investor Profile Error [ HomeView ]******** ');
+          print(invest_resp);
         }
       }
 
-      await Future.delayed(Duration(seconds: 2));
+      // Founder Handler :
+      if (userType == UserStoreName.founder) {
+        final found_resp = await founderConnector.FetchFounderDetailandContact(
+            user_id: user_id);
+
+        if (found_resp['response']) {
+          user_profile = found_resp['data']['userDetail']['picture'];
+          user_name = found_resp['data']['userDetail']['name'];
+          registor_mail = found_resp['data']['userDetail']['email'];
+
+          primary_mail = found_resp['data']['userContect']['primary_mail'];
+          phoneNo = found_resp['data']['userContect']['phone_no'];
+          otherContact = found_resp['data']['userContect']['other_contact'];
+
+          primary_mail = await CheckAndGetPrimaryMail(
+              primary_mail: primary_mail, default_mail: registor_mail);
+
+          await userState.SetProfileImage(image: user_profile);
+          await userState.SetProfileName(name: user_name);
+          await userState.SetDefaultUserMail(mail: registor_mail);
+          await userState.SetPrimaryMail(mail: primary_mail);
+          await userState.SetPhoneNo(number: phoneNo);
+          await userState.SetOtherContact(contact: otherContact);
+          await userState.SetPrimaryMail(mail: primary_mail);
+        }
+
+        usertype = UserType.founder;
+        // Founder Error Handler :
+        if (!found_resp['response']) {
+          print('****** Fetch Founder Profile Error  [ HomeView ]******** ');
+          print(found_resp);
+        }
+      }
     }
 
-    ///////////////////////////////////////////
+///////////////////////////////////////////
     /// SET REQUIRED PARAM :
-    ///////////////////////////////////////////
+///////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
         builder: (_, snapshot) {

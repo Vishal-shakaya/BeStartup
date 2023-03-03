@@ -299,7 +299,7 @@ class _CustomInputChipState extends State<CustomInputChip> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 3,
+        FormBuilderValidators.minLength( 3,
             errorText: 'At least 3 char allow')
       ]),
       decoration: InputDecoration(

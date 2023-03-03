@@ -225,7 +225,7 @@ class _FounderCustomFullScreenDropDownState
           }
         },
         openWithLongPress: true,
-        customItemsHeight: 8,
+        customItemsHeights: [8],
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
           child: CircleAvatar(
@@ -301,7 +301,7 @@ class _FounderCustomFullScreenDropDownState
           }
         },
         openWithLongPress: true,
-        customItemsHeight: 8,
+        customItemsHeights: [8],
         dropdownMaxHeight: context.height * dropdonw_heightpx800,
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
@@ -377,7 +377,7 @@ class _FounderCustomFullScreenDropDownState
           }
         },
         openWithLongPress: true,
-        customItemsHeight: 8,
+        customItemsHeights: [8],
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
           child: CircleAvatar(

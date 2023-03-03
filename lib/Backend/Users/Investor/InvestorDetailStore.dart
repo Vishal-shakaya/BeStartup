@@ -1,3 +1,4 @@
+import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
@@ -9,11 +10,12 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InvestorDetailStore extends GetxController {
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
-
+  FirebaseFirestore store = FirebaseFirestore.instance;
   static Map<String, dynamic>? investor;
 
   static String? image_url;
@@ -44,33 +46,27 @@ class InvestorDetailStore extends GetxController {
   }
 
   // CRATE investor :
-  CreateInvestor(investor) async {
-    var localStore = await SharedPreferences.getInstance();
+  CreateInvestor({
+    required id,
+    required mail,
+    required primaryMail,
+    required name,
+    required phoneNo,
+    required otherContact,
+  }) async {
     try {
-      try {
-        var investor_detail = await InvestorModel(
-            user_id: await userState.GetUserId(),
-            email: await userState.GetDefaultMail(),
-            name: investor['name'],
-            picture: image_url);
-
-        var investor_contact = await UserContact(
-            user_id: await userState.GetUserId(),
-            email: await userState.GetDefaultMail(),
-            primary_mail: investor['email'],
-            phone_no: investor['phone_no'],
-            other_contact: investor['other_contact']);
-
-        localStore.setString('InvestorUserDetail', json.encode(investor_detail));
-        localStore.setString('InvestorUserContact', json.encode(investor_contact));
-
-        print('Investor Detail $investor_detail');
-        print('Investor Contact $investor_contact');
-
-        return ResponseBack(response_type: true);
-      } catch (e) {
-        return ResponseBack(response_type: false, message: create_error_title);
-      }
+      final myStore = store.collection(getInvestorUserDetail);
+      var investor_detail = await InvestorModel(
+          user_id: id,
+          email: mail,
+          name: name,
+          phone_no: phoneNo,
+          primary_mail: primaryMail,
+          other_contact: otherContact,
+          picture: image_url);
+      
+      await myStore.add(investor_detail);
+      return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: create_error_title);
     }

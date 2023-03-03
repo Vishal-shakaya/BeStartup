@@ -210,7 +210,7 @@ class _MemberInfoFormState extends State<MemberInfoForm> {
       scrollPadding: EdgeInsets.all(10),
       maxLines: maxlines,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 50,
+        FormBuilderValidators.minLength( 50,
             errorText: 'At least 50 char allow')
       ]),
       decoration: InputDecoration(

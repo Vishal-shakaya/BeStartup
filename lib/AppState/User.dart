@@ -1,5 +1,6 @@
-
 import 'package:be_startup/Utils/Images.dart';
+import 'package:be_startup/Utils/enums.dart';
+import 'package:get_storage/get_storage.dart';
 
 class UserState {
   static var primary_mail;
@@ -12,56 +13,56 @@ class UserState {
   static var phoneNo;
   static var otherContact;
 
+  final box = GetStorage();
+
   ////////////////////////////////////////
   /// Setters :
   ////////////////////////////////////////
   SetPrimaryMail({required mail}) async {
-    primary_mail = mail??'';
-    print('Set  $mail');
+    primary_mail = mail ?? '';
+    print('Set  $primary_mail');
   }
 
-  SetDefaultUserMail({ required mail}) async {
-    default_mail = mail??'';
-    print('Set  $mail');
+  SetDefaultUserMail({required mail}) async {
+    default_mail = mail ?? '';
+    print('Set  $default_mail');
   }
 
   SetUserId({required id}) async {
-    user_id = id??'';
-    print('Set  $id');
+    user_id = id ?? '';
+    print('Set  $user_id');
   }
 
-
   SetUserType({required type}) async {
-    user_type = type??'';
-    print('Set  $type');
+    user_type = type ?? '';
+    await box.write('user_type', user_type);
+    print('Set  $user_type');
   }
 
   IsAdmin({required admin}) async {
-    is_admin = admin??'';
+    is_admin = admin ?? '';
     print('Set  $admin');
   }
 
   SetProfileImage({required image}) async {
-    profile_image = image??temp_avtar_image;
+    profile_image = image ?? temp_avtar_image;
     print('Set  $image');
   }
 
   SetProfileName({required name}) async {
-    profile_name = name??'';
+    profile_name = name ?? '';
     print('Set  $name');
   }
 
   SetPhoneNo({required number}) async {
-    phoneNo = number??'';
+    phoneNo = number ?? '';
     print('Set  $number');
   }
 
   SetOtherContact({required contact}) async {
-    otherContact = contact??'';
+    otherContact = contact ?? '';
     print('Set  $contact');
   }
-
-
 
   /////////////////////////////////////////
   /// Getter :
@@ -70,17 +71,18 @@ class UserState {
   GetPrimaryMail() async {
     return primary_mail;
   }
-  
+
   GetDefaultMail() async {
     return default_mail;
   }
-  
+
   GetUserId() async {
     return user_id;
   }
-  
+
   GetUserType() async {
-    return user_type;
+    final user = box.read('user_type');
+    return user;
   }
 
   GetIsUserAdmin() async {
@@ -102,7 +104,4 @@ class UserState {
   GetOtherContact() async {
     return otherContact;
   }
-
-
-  
 }

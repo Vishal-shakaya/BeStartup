@@ -201,7 +201,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
           color: input_text_color),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.email(context, errorText: 'enter valid email')
+        FormBuilderValidators.email( errorText: 'enter valid email')
       ]),
       decoration: InputDecoration(
           hintText: 'Enter mail ',
@@ -245,7 +245,7 @@ class _PHLoginFormState extends State<PHLoginForm> {
 
       // Validate password
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 8,
+        FormBuilderValidators.minLength(8,
             errorText: 'invalid password')
       ]),
 

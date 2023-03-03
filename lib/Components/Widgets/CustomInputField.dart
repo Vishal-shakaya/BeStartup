@@ -51,7 +51,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
               color: input_text_color),
           keyboardType: TextInputType.emailAddress,
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.email(context, errorText: 'enter valid email')
+            FormBuilderValidators.email( errorText: 'enter valid email')
           ]),
           decoration: InputDecoration(
               hintText: 'enter mail ',

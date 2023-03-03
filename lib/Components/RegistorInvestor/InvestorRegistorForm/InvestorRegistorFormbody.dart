@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class InvestorRegistorFormBody extends StatefulWidget {
   InvestorRegistorFormBody({Key? key}) : super(key: key);
@@ -20,14 +21,13 @@ class InvestorRegistorFormBody extends StatefulWidget {
 }
 
 class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
-  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
-
-  var investorConnector =
+  final investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
+  final investorConnector =
       Get.put(InvestorConnector(), tag: 'investor_connector');
-
   final formKey = GlobalKey<FormBuilderState>();
-
   var my_context = Get.context;
+
+  final authUser = FirebaseAuth.instance.currentUser;
 
   double done_btn_width = 150;
 
@@ -38,6 +38,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
   double con_button_height = 40;
 
   double con_btn_top_margin = 30;
+
+  var pageHeight = 0.6;
 
   var pageParam;
 
@@ -54,22 +56,20 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
     MyCustPageLoadingSpinner();
 
     if (formKey.currentState!.validate()) {
-      String investor_name = formKey.currentState!.value['investor_name'];
-      // String investor_position =
-      //     formKey.currentState!.value['investor_position'];
-      String phone_no = formKey.currentState!.value['phone_no'];
+      String name = formKey.currentState!.value['investor_name'];
+      String phoneNo = formKey.currentState!.value['phone_no'];
       String email = formKey.currentState!.value['email'];
       String other_contact = formKey.currentState!.value['other_info'];
 
-      Map<String, dynamic> investor = {
-        'id': UniqueKey(),
-        'user': '',
-        'name': investor_name,
-        'phone_no': phone_no,
-        'email': email,
-        'other_contact': other_contact
-      };
-      var res = await investorStore.CreateInvestor(investor);
+      final id = authUser?.uid;
+      final mail = authUser?.email;
+      var res = await investorStore.CreateInvestor(
+          id: id,
+          mail: mail,
+          primaryMail: email,
+          name: name,
+          phoneNo: phoneNo,
+          otherContact: other_contact);
 
       // Success Handler :
       if (res['response']) {
@@ -99,7 +99,6 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
     }
   }
 
-
   //////////////////////////////////
   // UPDATE INVESTOR FORM :
   //////////////////////////////////
@@ -110,33 +109,32 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
     MyCustPageLoadingSpinner();
 
     if (formKey.currentState!.validate()) {
-      String investor_name = formKey.currentState!.value['investor_name'];
-      // String investor_position =
-      //     formKey.currentState!.value['investor_position'];
-      String phone_no = formKey.currentState!.value['phone_no'];
+      String name = formKey.currentState!.value['investor_name'];
+      String phoneNo = formKey.currentState!.value['phone_no'];
       String email = formKey.currentState!.value['email'];
       String other_contact = formKey.currentState!.value['other_info'];
 
-      Map<String, dynamic> investor = {
-        'id': UniqueKey(),
-        'user': '',
-        'name': investor_name,
-        'phone_no': phone_no,
-        'email': email,
-        'other_contact': other_contact
-      };
+      final id = authUser?.uid;
+      final mail = authUser?.email;
 
-
-      var res = await investorStore.CreateInvestor(investor);
+      var res = await investorStore.CreateInvestor(
+          id: id,
+          mail: mail,
+          primaryMail: email,
+          name: name,
+          phoneNo: phoneNo,
+          otherContact: other_contact);
       var update_resp = await investorConnector.UpdateInvestorDetail();
 
       // Success Handler :
       if (res['response']) {
+        
         // Update Success Hndler :
         if (update_resp['response']) {
           formKey.currentState!.reset();
           CloseCustomPageLoadingSpinner();
-          Get.toNamed(startup_view_url);
+          print('Investor Created');
+          // Get.toNamed(startup_view_url);
         }
 
         // Update Error handler :
@@ -148,6 +146,8 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
               type: MySnackbarType.error,
               title: update_resp['message'],
               message: update_error_msg));
+          
+          print('Error Investor Created');
         }
       }
 
@@ -177,24 +177,66 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 /////////////////////////////////////
   @override
   void initState() {
-   if(Get.parameters.isNotEmpty){
-      pageParam = Get.parameters;      
+    if (Get.parameters.isNotEmpty) {
+      pageParam = Get.parameters;
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
-
-   }
+    }
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    // DEFAULT :
+    if (context.width > 1700) {
+      pageHeight = 0.6;
+      print('greator then 1700');
+    }
+
+    if (context.width < 1700) {
+      pageHeight = 0.7;
+      print('1700');
+    }
+    if (context.width < 1600) {
+      print('1600');
+    }
+
+    // PC:
+    if (context.width < 1500) {
+      print('1500');
+    }
+
+    if (context.width < 1400) {
+      print('1400');
+    }
+
+    if (context.width < 1200) {
+      print('1200');
+    }
+
+    if (context.width < 1000) {
+      print('1000');
+    }
+
+    // TABLET :
+    if (context.width < 800) {
+      print('800');
+    }
+    // SMALL TABLET:
+    if (context.width < 640) {
+      print('640');
+    }
+
+    // PHONE:
+    if (context.width < 480) {
+      print('480');
+    }
+
     return Column(
       children: [
         Container(
-            height: context.height * 0.7,
+            height: context.height * pageHeight,
             /////////////////////////////////////////
             ///  BUSINESS SLIDE :
             ///  1. BUSINESS ICON :
@@ -203,6 +245,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
             child: SingleChildScrollView(
               reverse: true,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // UPLOAD FOUNDER IMAGE :
                   InvestorImage(),

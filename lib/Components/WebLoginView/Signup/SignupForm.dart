@@ -23,10 +23,8 @@ class SignupDetailForm extends StatefulWidget {
 }
 
 class _SignupDetailFormState extends State<SignupDetailForm> {
-  var myAuth = Get.put(MyAuthentication(), tag: 'current_user');
-
-  // Change Theme :
   final _formKey = GlobalKey<FormBuilderState>();
+  var myAuth = Get.put(MyAuthentication(), tag: 'current_user');
   var pass_controller;
 
   bool is_password_visible = true;
@@ -42,9 +40,9 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
   ////////////////////////////////////////
   SuccessDialog(context) async {
     CoolAlert.show(
-        // onConfirmBtnTap: () {
-        //   Get.toNamed(home_route);
-        // },
+        onConfirmBtnTap: () {
+          Get.toNamed(home_route);
+        },
         widget: Container(
           alignment: Alignment.center,
           child: Column(
@@ -73,14 +71,14 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
 /// Meantime of login process : 
 ///////////////////////////////////
   StartLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: const CircularProgressIndicator(
+    SmartDialog.showLoading(
+      builder: (context) {
+        return CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
-        ));
-    return dialog;
+        ); 
+      },
+    );
   }
 
   // END LOAIDNG  :
@@ -98,12 +96,10 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
 /// Then if successful login then show congress 
 /// message else show error message : 
 ///////////////////////////////////////////////
-  
   SubmitSignupForm(context, width) async {
-
     _formKey.currentState!.save();
     StartLoading();
-
+   
     if (_formKey.currentState!.validate()) {
       String email = _formKey.currentState!.value['email'];
       String password = _formKey.currentState!.value['password'];
@@ -151,8 +147,8 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
           message: common_error_title,
           title:common_error_msg   ));
     }
-
-     _formKey.currentState!.reset();
+    
+     _formKey.currentState!.validate();
   }
 
 
@@ -173,6 +169,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
             children: [
               FormBuilder(
                   key: _formKey,
+                  autoFocusOnValidationFailure : true, 
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Column(children: [
                     // EMAIL INPUT FILED :
@@ -251,7 +248,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
             return 'password not match';
           }
         },
-        FormBuilderValidators.minLength(context, 8, errorText: 'min length 8')
+        FormBuilderValidators.minLength( 8, errorText: 'min length 8')
       ]),
 
        decoration: InputDecoration(
@@ -298,9 +295,9 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
 
       // Validate password
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 8,
+        FormBuilderValidators.minLength( 8,
             errorText: 'invalid password'),
-        FormBuilderValidators.match(context, password_regex,
+        FormBuilderValidators.match( password_regex,
             errorText: 'create strong passwod ex:Password@13')
       ]),
 
@@ -342,7 +339,7 @@ class _SignupDetailFormState extends State<SignupDetailForm> {
           color: main_input_text_field_color),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.email(context, errorText: 'enter valid email')
+        FormBuilderValidators.email( errorText: 'enter valid email')
       ]),
       decoration: InputDecoration(
           hintText: 'Mail ',

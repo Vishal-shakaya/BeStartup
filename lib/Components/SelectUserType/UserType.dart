@@ -1,3 +1,4 @@
+import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Utils/enums.dart'as en;
 import 'package:be_startup/Backend/Users/UserStore.dart';
@@ -68,7 +69,7 @@ class _UserTypeState extends State<UserType> {
     if (selected_user_type == null) {
       CoolAlert.show(
           context: context,
-          width: 200,
+          width: MediaQuery.of(context).size.width*0.20,
           title: 'Select option!',
           type: CoolAlertType.info,
           widget: Text(
@@ -81,26 +82,8 @@ class _UserTypeState extends State<UserType> {
 
     // REDIRECT TO CREATE STARTUP PAGE :
     if (selected_user_type == 'founder') {
-        final resp = await userStore.UpdateUserDatabaseField(
-            field: 'is_founder', val: true);
-
-
-        // Success Response Handler :
-        if (resp['response']) {
-          await ClearCachedData();
-          await userState.SetUserType(type:en.UserType.founder);
-          Get.toNamed(create_founder);
-        }
-
-
-        // Error Response Handler :
-        if (!resp['response']) {
-          var snack_width = MediaQuery.of(context).size.width * 0.50;
-          Get.showSnackbar(
-              MyCustSnackbar(width: snack_width, type: en.MySnackbarType.error));
-        }
+        Get.toNamed(create_business_detail_url);
     }
-
 
     // REDIERCT TO STARTUPS HOMEVIEW:
     if (selected_user_type == 'investor') {

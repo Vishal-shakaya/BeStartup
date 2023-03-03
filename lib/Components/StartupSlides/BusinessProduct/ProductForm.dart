@@ -42,7 +42,7 @@ class _ProductFormState extends State<ProductForm> {
   double form_height = 0.60;
 
   double prod_title_fontSize = 18;
-  double prod_desc_fontSize = 16; 
+  double prod_desc_fontSize = 16;
 
   final productStore = Get.put(BusinessProductStore(), tag: 'productList');
 
@@ -55,12 +55,13 @@ class _ProductFormState extends State<ProductForm> {
   SubmitProductForm({type = ProductType.product}) async {
     formKey.currentState!.save();
     SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: const CircularProgressIndicator(
+      builder: (context) {
+        return CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
-        ));
+        ); 
+      },
+    );
 
     if (formKey.currentState!.validate()) {
       var product_title = formKey.currentState!.value['product_title'];
@@ -119,7 +120,7 @@ class _ProductFormState extends State<ProductForm> {
       form_height = 0.60;
       maxlines = 10;
       prod_title_fontSize = 18;
-      prod_desc_fontSize = 16; 
+      prod_desc_fontSize = 16;
       print('Greator then 1500');
     }
 
@@ -171,7 +172,7 @@ class _ProductFormState extends State<ProductForm> {
       con_button_width = 85;
       con_button_height = 30;
       con_btn_top_margin = 15;
-      
+
       prod_title_fontSize = 15;
       prod_desc_fontSize = 14;
       print('800');
@@ -283,16 +284,14 @@ class _ProductFormState extends State<ProductForm> {
       scrollPadding: EdgeInsets.all(10),
       maxLines: maxlines,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 40,
+        FormBuilderValidators.minLength(40,
             errorText: 'At least 50 char allow')
       ]),
       decoration: InputDecoration(
           helperText: 'min allow 50 ',
           hintText: "Product detail",
           hintStyle: TextStyle(
-            color: Colors.blueGrey.shade200,
-            fontSize: prod_desc_fontSize
-          ),
+              color: Colors.blueGrey.shade200, fontSize: prod_desc_fontSize),
           fillColor: Colors.grey[100],
           filled: true,
           contentPadding: EdgeInsets.all(20),
@@ -313,42 +312,35 @@ class _ProductFormState extends State<ProductForm> {
       textAlign: TextAlign.center,
       name: 'product_title',
       maxLength: 100,
-     
-      style:GoogleFonts.robotoSlab(
+      style: GoogleFonts.robotoSlab(
         textStyle: TextStyle(),
         color: input_text_color,
         fontSize: prod_title_fontSize,
         fontWeight: FontWeight.w600,
-    ),
-
-     
+      ),
       keyboardType: TextInputType.emailAddress,
-     
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 3,
+        FormBuilderValidators.minLength(  3,
             errorText: 'At least 3 char allow'),
-     
-        FormBuilderValidators.maxLength(context, 50,
+        FormBuilderValidators.maxLength(  50,
             errorText: 'Max 100 char allow')
       ]),
-     
       decoration: InputDecoration(
         hintText: 'Title',
         contentPadding: EdgeInsets.all(16),
         hintStyle: TextStyle(
-          fontSize: prod_title_fontSize,
-          color: Colors.grey.shade300),
+            fontSize: prod_title_fontSize, color: Colors.grey.shade300),
 
         suffix: InkWell(
           onTap: () {
             ResetForm();
           },
           child: Container(
-            child: FaIcon(
-              my_cancel_icon,
-              size: 16,
-              color: cancel_btn_color,)
-          ),
+              child: FaIcon(
+            my_cancel_icon,
+            size: 16,
+            color: cancel_btn_color,
+          )),
         ),
 
         // focusColor:Colors.pink,

@@ -221,14 +221,14 @@ MyCustomButtonSpinner({color, width}) {
 }
 
 MyCustPageLoadingSpinner() {
-  var dialog = SmartDialog.showLoading(
-      background: Colors.white,
-      maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-      widget: const CircularProgressIndicator(
-        backgroundColor: Colors.white,
-        color: Colors.orangeAccent,
-      ));
-  return dialog;
+    SmartDialog.showLoading(
+      builder: (context) {
+        return CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent,
+        ); 
+      },
+    );
 }
 
 CloseCustomPageLoadingSpinner() {

@@ -1,7 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/ForgotPasswordDialogAlert.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -19,11 +23,14 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final userStore = Get.put(UserStore());
+  final myAuth = Get.put(MyAuthentication());
   final _formKey = GlobalKey<FormBuilderState>();
-  String login_text = 'Login';
-  var myAuth = Get.put(MyAuthentication(), tag: 'current_user');
+  final userState = Get.put(UserState());
 
-  // SUCCESS DIALOG :
+  String login_text = 'Login';
+
+  //  Show ALert if Email Not Verify :
   InfoDialog(context) async {
     CoolAlert.show(
         widget: Container(
@@ -48,14 +55,14 @@ class _LoginFormState extends State<LoginForm> {
 
   // LOADING SPINNER :
   StartLoading() {
-    var dialog = SmartDialog.showLoading(
-        background: Colors.white,
-        maskColorTemp: Color.fromARGB(146, 252, 250, 250),
-        widget: CircularProgressIndicator(
+    SmartDialog.showLoading(
+      builder: (context) {
+        return CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
-        ));
-    return dialog;
+        );
+      },
+    );
   }
 
   // END LOAIDNG  :
@@ -71,57 +78,95 @@ class _LoginFormState extends State<LoginForm> {
     Color input_label_color =
         Get.isDarkMode ? dartk_color_type4 : light_color_type1!;
 
-
-    // SUBMIT LOGIN FORM :
+////////////////////////////////////////////////////////////
+    /// 1. Login User if email and password verify :
+    /// 2. Check if user email not verify then show alert to verify
+    /// first then login user in :
+    /// 3. Show Error Snackbar if unable to login :
+////////////////////////////////////////////////////////////
     SubmitLofinForm() async {
       _formKey.currentState!.save();
-      
-      // START LOADING :
       StartLoading();
+      try {
+        if (_formKey.currentState!.validate()) {
+          String email = _formKey.currentState!.value['email'];
+          String password = _formKey.currentState!.value['password'];
 
-      if (_formKey.currentState!.validate()) {
-        String email = _formKey.currentState!.value['email'];
-        String password = _formKey.currentState!.value['password'];
-        
-        // _formKey.currentState!.reset();
-        // LOGIN USER :
-        var resp = await myAuth.LoginUser(email: email, password: password);
-        // SUCCESS RESPONSE :
-        if (resp['response']) {
+          var resp = await myAuth.LoginUser(email: email, password: password);
+          print(resp);
+
+          // SUCCESS RESPONSE :
+          if (resp['response']) {
+            EndLoading();
+            _formKey.currentState?.reset();
+            final resp = await userStore.FetchUserDetail();
+            if (resp['response'] == true) {
+              final resp_data = resp['data'];
+              
+              // Incomplete Profile handler :
+              // redirect user to select user type page :
+              if (resp_data['is_profile_complete'] == null ||
+                  resp_data['is_profile_complete'] == false) {
+                // print('Profile not Complete ');
+
+                EndLoading();
+                Get.toNamed(user_type_slide_url);
+              }
+
+              // Complete Profile hander :
+              else {
+                if (resp_data['is_founder'] == false &&
+                    resp_data['is_investor'] == true) {
+                  EndLoading();
+                  await userState.SetUserType(type: UserStoreName.investor);
+                  Get.toNamed(home_page_url);
+                }
+                if (resp_data['is_founder'] == true &&
+                    resp_data['is_investor'] == false) {
+                  EndLoading();
+                  await userState.SetUserType(type: UserStoreName.founder);
+                  Get.toNamed(home_page_url);
+                }
+              }
+            } 
+            
+
+            // Registor Founder or Investor if its not already registerd : 
+            else {
+              Get.toNamed(user_type_slide_url);
+              }
+          }
+
+
+          // EMAIL NOT VERIFY THEN FIRT ASK FOR VERIFY EMAIL :
+          if (resp['data'] == 'email_not_verify') {
+            EndLoading();
+            InfoDialog(context);
+            return;
+          }
+
+          // ERROR RESPONSE :
+          if (!resp['response']) {
+            EndLoading();
+            Get.closeAllSnackbars();
+            Get.snackbar(
+              '',
+              '',
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.all(10),
+              duration: Duration(seconds: 8),
+              backgroundColor: Colors.red.shade50,
+              titleText: MySnackbarTitle(title: 'Error accure'),
+              messageText: MySnackbarContent(message: "${resp['data']}"),
+              maxWidth: context.width * 0.50,
+            );
+          }
+        } else {
           EndLoading();
-          _formKey.currentState?.reset();
-
-          // Rediret to User Type Page :
-          Get.toNamed(home_page_url);
+          print('error found');
         }
-
-        // EMAIL NOT VERIFY THEN FIRT ASK FOR VERIFY EMAIL :
-        if (resp['data'] == 'email_not_verify') {
-          EndLoading();
-          InfoDialog(context);
-          return;
-        }
-
-        // ERROR RESPONSE :
-        if (!resp['response']) {
-          EndLoading();
-          // CLOSE SNAKBAR :
-          Get.closeAllSnackbars();
-          // Error Alert :
-          Get.snackbar(
-            '',
-            '',
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.all(10),
-            duration: Duration(seconds: 8),
-            backgroundColor: Colors.red.shade50,
-            titleText: MySnackbarTitle(title: 'Error accure'),
-            messageText: MySnackbarContent(message: "${resp['data']}"),
-            maxWidth: context.width * 0.50,
-          );
-        }
-      } else {
-        print('error found');
+      } catch (e) {
+        print('Error white login user $e');
       }
     }
 
@@ -132,6 +177,17 @@ class _LoginFormState extends State<LoginForm> {
           context: context,
           builder: (context) {
             return AlertDialog(
+                title: Container(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.cancel_rounded,
+                          size: 16,
+                          color: close_model_color,
+                        ))),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 content: SizedBox(
@@ -154,9 +210,11 @@ class _LoginFormState extends State<LoginForm> {
                   // 1. EMAIL FIELD
                   Label(input_label_color, 'Email addresss'),
                   EmailInputField(input_text_color, context, input_foucs_color),
-                  
-                  SizedBox(height: 2,), 
-                  
+
+                  SizedBox(
+                    height: 2,
+                  ),
+
                   // 2. PASSWORD
                   Label(input_label_color, 'Password'),
                   PasswodInputField(
@@ -226,10 +284,8 @@ class _LoginFormState extends State<LoginForm> {
       name: 'password',
       obscureText: true,
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 8,
-            errorText: 'invalid password')
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.minLength(8, errorText: 'invalid password')]),
       style: TextStyle(
         fontSize: 15,
         fontWeight: Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
@@ -237,10 +293,7 @@ class _LoginFormState extends State<LoginForm> {
       ),
       decoration: InputDecoration(
           hintText: 'Password',
-          hintStyle:  TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.normal
-          ),
+          hintStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
           prefixIcon: Icon(
             Icons.key_rounded,
             color: Colors.orange.shade300,
@@ -269,15 +322,11 @@ class _LoginFormState extends State<LoginForm> {
           fontWeight: Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
           color: input_text_color),
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.email(context, errorText: 'enter valid email')
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.email(errorText: 'enter valid email')]),
       decoration: InputDecoration(
           hintText: 'Mail ',
-          hintStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.normal
-          ),
+          hintStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
           prefixIcon: Icon(
             Icons.email_outlined,
             color: Colors.orange.shade300,

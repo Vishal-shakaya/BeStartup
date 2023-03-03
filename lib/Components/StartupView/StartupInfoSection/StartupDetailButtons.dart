@@ -1,5 +1,5 @@
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Backend/StartupView/StartupViewConnector.dart';
+
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Messages.dart';

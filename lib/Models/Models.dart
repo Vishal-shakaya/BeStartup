@@ -16,8 +16,6 @@ UserModel({email,
       'id': id,
       'email': email,
       'is_profile_complete':is_profile_complete,
-      'plan':plan,  // list
-      'startups':startups, // list
       'is_investor':is_investor, 
       'is_founder':is_founder,
       'timestamp':await GetFormatedDate() 
@@ -30,13 +28,14 @@ UserModel({email,
 
 
 
-InvestorModel(
-    {email, 
-    user_id,
-    name,
-    picture,
-    phone_no,
-    position,
+InvestorModel({
+    required email, 
+    required user_id,
+    required name,
+    required picture,
+    required phone_no,
+    required primary_mail,
+    required other_contact,  
     }) async {
   try {
     Map<String, dynamic> temp_obj = {
@@ -45,6 +44,9 @@ InvestorModel(
       'email':email, 
       'name': name,
       'picture': picture,
+      'primary_mail': primary_mail,
+      'other_contact': other_contact,
+      'phone_no': phone_no, 
     };
     return temp_obj;
   } catch (e) {

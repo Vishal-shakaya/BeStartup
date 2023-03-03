@@ -188,13 +188,13 @@ class _BusinessFormState extends State<BusinessForm> {
       keyboardType: TextInputType.emailAddress,
       validator: field_name == 'desire_amount'
           ? FormBuilderValidators.compose([
-              FormBuilderValidators.minLength(context, 1,
+              FormBuilderValidators.minLength( 1,
                   errorText: error_text),
-              FormBuilderValidators.integer(context,
+              FormBuilderValidators.integer(
                   errorText: 'enter valid amount')
             ])
           : FormBuilderValidators.compose([
-              FormBuilderValidators.minLength(context, 1,
+              FormBuilderValidators.minLength( 1,
                   errorText: error_text),
             ]),
       decoration: InputDecoration(

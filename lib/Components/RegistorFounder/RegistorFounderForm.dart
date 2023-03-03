@@ -299,7 +299,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength(context, 1, errorText: error_text)]),
+          [FormBuilderValidators.minLength(1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
 
@@ -357,7 +357,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(context, 1,
+        FormBuilderValidators.minLength( 1,
             allowEmpty: name == 'other_info' ? true : false,
             errorText: error_text)
       ]),
