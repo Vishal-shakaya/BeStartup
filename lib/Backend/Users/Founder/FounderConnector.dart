@@ -54,7 +54,7 @@ class FounderConnector extends GetxController {
   }
 
 ////////////////////////////////////
-  // Create Founder Detail :
+// Create Founder Detail :
 ////////////////////////////////////
   CreateFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();

@@ -9,6 +9,7 @@ import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,9 +159,10 @@ class BusinessTeamMemberStore extends GetxController {
   /////////////////////////////////////////
   PersistMembers() async {
     final localStore = await SharedPreferences.getInstance();
+    final authUser = FirebaseAuth.instance.currentUser; 
     try {
       var resp = await BusinessTeamMembersModel(
-        startup_id: await startupState.GetStartupId(),
+        user_id: authUser?.uid, 
         members: member_list,
       );
 

@@ -6,6 +6,7 @@ import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
@@ -68,14 +69,12 @@ class BusinessCatigoryStore extends GetxController {
   // STORE CATIGORY LOCALY :
   PersistCatigory() async {
     final localStore = await SharedPreferences.getInstance();
+    final authUser = FirebaseAuth.instance.currentUser;
     var main_cat = catigories + temp_catigories;
-    final startup_id = await startupState.GetStartupId();
-    // print('vision startup id ${startup_id}');
     try {
-      // var resp =
-      //     await CatigoryModel(startup_id: startup_id, catigory: catigories);
+      var resp = await CatigoryModel(catigory: catigories, user_id: authUser?.uid);
 
-      // localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
+      localStore.setString(getBusinessCatigoryStoreName, json.encode(resp));
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false);

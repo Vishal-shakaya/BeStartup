@@ -4,6 +4,7 @@ import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -170,12 +171,10 @@ class MileStoneStore extends GetxController {
 
   PersistMileStone() async {
     final localStore = await SharedPreferences.getInstance();
-    final startup_id = await startupState.GetStartupId();
-    print('milestone startup id ${startup_id}');
-
+    final authUser = FirebaseAuth.instance.currentUser;
     try {
       var resp =
-          await MileStoneModel(startup_id: startup_id, milestone: milestones);
+          await MileStoneModel(user_id: authUser?.uid, milestone: milestones);
 
       localStore.setString(getBusinessMilestoneStoreName, json.encode(resp));
 

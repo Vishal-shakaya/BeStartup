@@ -49,8 +49,8 @@ class _BusinessFormState extends State<BusinessForm> {
 /////////////////////////////////
   GetRequiredData() async {
     try {
-      var data = await detailStore.GetBusinessDetail();
-      initial_val = data;
+      var data = await detailStore.GetCachedBusinessDetail();
+      initial_val = data['data'];
       return initial_val;
     } catch (e) {
       return initial_val;
@@ -97,8 +97,6 @@ class _BusinessFormState extends State<BusinessForm> {
       input_field_fontsize = 18;
       print('480');
     }
-    
-
 
     /////////////////////////////////
     /// SET REQUIREMENTS :
@@ -129,8 +127,6 @@ class _BusinessFormState extends State<BusinessForm> {
         });
   }
 
-
-
   //////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////
@@ -144,29 +140,31 @@ class _BusinessFormState extends State<BusinessForm> {
           child: FormBuilder(
               key: widget.formKey,
               autovalidateMode: AutovalidateMode.disabled,
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: context.height * 0.01),
-                    child: DetailViewInputField(
-                      initial_val: data['name'],
-                      context: context,
-                      field_name: 'startup_name',
-                      error_text: 'Startup name required',
-                      hint_text: 'Enter Startup Name',
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: context.height * 0.01),
+                      child: DetailViewInputField(
+                        initial_val: data['name'],
+                        context: context,
+                        field_name: 'startup_name',
+                        error_text: 'Startup name required',
+                        hint_text: 'Enter Startup Name',
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: context.height * 0.06),
-                    child: DetailViewInputField(
-                      initial_val: '${data['desire_amount']}',
-                      context: context,
-                      field_name: 'desire_amount',
-                      error_text: 'Desire amount required',
-                      hint_text: '₹ Desire Amount ',
+                    Container(
+                      margin: EdgeInsets.only(top: context.height * 0.06),
+                      child: DetailViewInputField(
+                        initial_val: '${data['desire_amount']}',
+                        context: context,
+                        field_name: 'desire_amount',
+                        error_text: 'Desire amount required',
+                        hint_text: '₹ Desire Amount ',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )),
         ),
       ],
@@ -188,14 +186,11 @@ class _BusinessFormState extends State<BusinessForm> {
       keyboardType: TextInputType.emailAddress,
       validator: field_name == 'desire_amount'
           ? FormBuilderValidators.compose([
-              FormBuilderValidators.minLength( 1,
-                  errorText: error_text),
-              FormBuilderValidators.integer(
-                  errorText: 'enter valid amount')
+              FormBuilderValidators.minLength(1, errorText: error_text),
+              FormBuilderValidators.integer(errorText: 'enter valid amount')
             ])
           : FormBuilderValidators.compose([
-              FormBuilderValidators.minLength( 1,
-                  errorText: error_text),
+              FormBuilderValidators.minLength(1, errorText: error_text),
             ]),
       decoration: InputDecoration(
         hintText: hint_text,

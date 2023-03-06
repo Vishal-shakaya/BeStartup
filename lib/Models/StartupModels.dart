@@ -4,60 +4,31 @@ import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 var uuid = Uuid();
 
-StartupModel({
-  required user_id,
-  required email,
-  required startup_name,
-   timestamp,  
-})async{
- try {
-    Map<String, dynamic> temp_obj = {
-      'id': uuid.v4(),
-      'user_id': user_id,
-      'email': email,
-      'startup_name':startup_name,
-      'timestamp':await GetFormatedDate()
-    };
-    return temp_obj;
-  } catch (e) {
-    return false;
-  }
-}
 
-
-BusinessInfoModel({
-  startup_id, 
-  logo, 
-  name, 
-  investor_no, 
-  timestamp,  
-  desire_amount, 
-  achived_amount=0,
+BusinessDetailMode({
+  required logo, 
+  required name, 
+  required desire_amount, 
+  required user_id, 
   invested,
-  team_members=0,
-  founder_name,
-  founder_id,  
   activate, 
   startup_search_index, 
   founder_search_index, 
-  }) async {
-  try {
+  achived_amount ="0", 
+}) async {
+    try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'team_members':team_members, 
-      'startup_id':startup_id,
-      'logo': logo,
+      'uiser_id': user_id,
+      'logo':logo, 
       'name': name,
-      'founder_name':founder_name, 
-      'founder_id':founder_id, 
-      'investor_no':investor_no,
-      'desire_amount':desire_amount, 
+      'desire_amount': desire_amount,
       'achived_amount':achived_amount, 
-      'invested':invested, // bool : true if achived desired amount : 
-      'registor_date':await GetFormatedDate(), 
       'activate':activate, // check if startup plan expired or not :  
       'startup_searching_index':startup_search_index, 
       'founder_searching_index':founder_search_index, 
+      'invested':invested,
+      'timestamp': await GetFormatedDate() 
     };
     return temp_obj;
   } catch (e) {
@@ -67,15 +38,14 @@ BusinessInfoModel({
 
 
 ThumbnailModel({
-  thumbnail,
-  required startup_id, 
-  startup_name,
+  required thumbnail,
+  required user_id , 
 }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id':startup_id, 
       'thumbnail': thumbnail,
+      'user_id':user_id
     };
     return temp_obj;
   } catch (e) {
@@ -86,12 +56,13 @@ ThumbnailModel({
 
 
 VisionModel({
-vision, 
-required startup_id}) async {
+required vision,
+required user_id,  
+}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id': startup_id, 
+      'user_id': user_id, 
       'vision': vision,
     };
     return temp_obj;
@@ -118,11 +89,11 @@ required startup_id}) async {
 
 WhyInvestModel({
   why_text,
-  required startup_id}) async {
+  required user_id}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id': startup_id,
+      'user_id': user_id,
       'why_text': why_text,
     };
     return temp_obj;
@@ -134,6 +105,21 @@ WhyInvestModel({
 
 
 
+CatigoryModel(
+  {
+  required user_id,   
+  catigory}) async {
+  try {
+    Map<String, dynamic> temp_obj = {
+      'id': uuid.v4(),
+      'user_id': user_id,
+      'catigories': catigory,
+    };
+    return temp_obj;
+  } catch (e) {
+    return false;
+  }
+}
 // InvestorCatigoryModel(
 //   {
 //   user_id,   
@@ -153,16 +139,15 @@ WhyInvestModel({
 
 
 BusinessProductsList({
-required startup_id, 
+required user_id, 
 products}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id':startup_id, 
       'products': products,
-      'timestamp': await GetFormatedDate() ,
-
+      'user_id':user_id
     };
+
     return temp_obj;    
   } catch (e) {
     return false; 
@@ -186,12 +171,12 @@ BusinessServiceList({user_id, required startup_id,  services,})async {
 
 MileStoneModel(
     {
-    required startup_id,   
+    required user_id,   
     milestone}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id':startup_id, 
+      'user_id':user_id, 
       'milestone':milestone
     };
     return temp_obj;
@@ -202,7 +187,7 @@ MileStoneModel(
 
 
 BusinessTeamMembersModel({
-  required startup_id, 
+  required user_id, 
   members,
   timestamp,  
 
@@ -210,7 +195,7 @@ BusinessTeamMembersModel({
  try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id': startup_id,
+      'user_id': user_id,
       'members':members, 
       'timestamp':await GetFormatedDate() , 
 

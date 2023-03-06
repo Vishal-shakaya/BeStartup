@@ -41,7 +41,7 @@ class StartupUpdater extends GetxController {
 
     try {
       // FETCHING DOCUMENT FROM FIREBASE:
-      temp_data = await thumbStore.GetThumbnailParam();
+      // temp_data = await thumbStore.GetThumbnailParam();
 
       var data;
       var thumbnail =
@@ -96,13 +96,11 @@ class StartupUpdater extends GetxController {
     }
 
     try {
-      name = await detailStore.GetBusinessNameParam();
-      logo = await detailStore.GetBusinessLogoParam();
-      desire_amount = await detailStore.GetBusinessAmountParam();
 
-      print('update startup name $name');
-      print('update startup logo $logo');
-      print('update startup desire_amount $desire_amount');
+
+      // print('update startup name $name');
+      // print('update startup logo $logo');
+      // print('update startup desire_amount $desire_amount');
       
       // FETCHING DATA FROM FIREBASE
       var store =

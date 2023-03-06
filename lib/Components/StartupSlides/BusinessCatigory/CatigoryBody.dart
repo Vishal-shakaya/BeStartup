@@ -56,7 +56,6 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var resp = await catigoryStore.PersistCatigory();
-    print('Submit Catigory ${resp}'); // Test
 
     if (resp['response']) {
       Get.toNamed(create_business_product_url);

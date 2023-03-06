@@ -7,6 +7,7 @@ import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -21,7 +22,6 @@ class BusinessFounderStore extends GetxController {
   static var image_url;
   static var picture = '';
   static var name = '';
-  // static var position = '';
   static var phone_no = '';
   static var primary_mail = '';
   static var other_contact = '';
@@ -38,7 +38,6 @@ class BusinessFounderStore extends GetxController {
   SetFounderParam({data}) async {
     founder_obj.clear();
     await RemoveCachedData(key: getBusinessFounderDetailStoreName);
-    await RemoveCachedData(key: getBusinessFounderContactStoreName);
 
     // picture = data['picture'];
     name = data['name'];
@@ -100,30 +99,31 @@ class BusinessFounderStore extends GetxController {
   }
 
   // CRATE FOUNDER :
-  CreateFounder(founder) async {
+  CachedCreateFounder({
+    required user_id, 
+    required name, 
+    required email,
+    required phone_no , 
+    required primary_mail, 
+    required other_contact, 
+
+  }) async {
     var localStore = await SharedPreferences.getInstance();
+    
 
     try {
       try {
         var resp = await FounderModel(
-            user_id: await userState.GetUserId(),
-            email: await userState.GetDefaultMail(),
-            startup_name: await startupState.GetStartupName(),
-            name: founder['name'],
-            // position: founder['position'],
+            user_id: user_id, 
+            name: name, 
+            email: email, 
+            primary_mail: primary_mail, 
+            phone_no: phone_no, 
+            other_contact: other_contact, 
             picture: image_url);
 
-        var resp2 = await UserContact(
-            user_id: await userState.GetUserId(),
-            email: await userState.GetDefaultMail(),
-            primary_mail: founder['email'],
-            phone_no: founder['phone_no'],
-            other_contact: founder['other_contact']);
-
         localStore.setString(
-            getBusinessFounderDetailStoreName, json.encode(resp));
-        localStore.setString(
-            getBusinessFounderContactStoreName, json.encode(resp2));
+            getBusinessFounderDetailStoreName, json.encode(resp));;
 
 
         return ResponseBack(response_type: true, message: create_error_title);
@@ -135,31 +135,34 @@ class BusinessFounderStore extends GetxController {
     }
   }
 
+
+
+/// It checks if the key exists in the shared preferences, if it does, it returns the value of the key,
+/// if it doesn't, it returns the default value
+/// 
+/// Returns:
+///   A Future<ResponseBack>
   GetFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       bool is_detail =
           localStore.containsKey(getBusinessFounderDetailStoreName);
-      bool is_contanct =
-          localStore.containsKey(getBusinessFounderContactStoreName);
-      if (is_detail && is_contanct) {
+      if (is_detail ) {
         var detail = localStore.getString(getBusinessFounderDetailStoreName);
-        var contact = localStore.getString(getBusinessFounderContactStoreName);
 
         var detail_obj = jsonDecode(detail!);
-        var contact_obj = jsonDecode(contact!);
 
         Map<String, dynamic> temp_founder = {
           'picture': detail_obj['picture'],
           'name': detail_obj['name'],
           // 'position': detail_obj['position'],
-          'phone_no': contact_obj['phone_no'],
-          'primary_mail': contact_obj['primary_mail'],
-          'other_contact': contact_obj['other_contact'],
+          'phone_no': detail_obj['phone_no'],
+          'primary_mail': detail_obj['primary_mail'],
+          'other_contact': detail_obj['other_contact'],
         };
-        return temp_founder;
+        return ResponseBack(response_type: true,data: temp_founder);
       } else {
-        return founder_obj;
+        return  ResponseBack(response_type: true,data: founder_obj);
       }
     } catch (e) {
       return founder_obj;

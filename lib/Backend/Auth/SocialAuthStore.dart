@@ -82,7 +82,6 @@ class MySocialAuth extends GetxController {
       // Once signed in, return the UserCredential
       try {
         await FirebaseAuth.instance.signInWithCredential(credintail);
-        await userStore.CreateUser();
         await auth.setPersistence(Persistence.SESSION);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
@@ -106,9 +105,6 @@ class MySocialAuth extends GetxController {
       try {
         // Once signed in, return the UserCredential
         await FirebaseAuth.instance.signInWithPopup(googleProvider);
-        // Create user in DB:
-        await userStore.CreateUser();
-        // Set Persistance:
         await auth.setPersistence(Persistence.SESSION);
 
         return ResponseBack(response_type: true);
@@ -137,7 +133,6 @@ class MySocialAuth extends GetxController {
       try {
         final resp =
             FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-        await userStore.CreateUser();
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
@@ -162,7 +157,6 @@ class MySocialAuth extends GetxController {
       // Once signed in, return the UserCredential
       try {
         await FirebaseAuth.instance.signInWithPopup(facebookProvider);
-        await userStore.CreateUser();
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
@@ -198,7 +192,6 @@ class MySocialAuth extends GetxController {
       try {
         final resp = await FirebaseAuth.instance
             .signInWithCredential(twitterAuthCredential);
-        await userStore.CreateUser();
 
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {
@@ -219,7 +212,6 @@ class MySocialAuth extends GetxController {
       try {
         final resp =
             await FirebaseAuth.instance.signInWithPopup(twitterProvider);
-        await userStore.CreateUser();
 
         return ResponseBack(response_type: true);
       } on FirebaseAuthException catch (e) {

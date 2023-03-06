@@ -12,6 +12,7 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,8 +53,9 @@ class _ProductBodyState extends State<ProductBody> {
   /////////////////////////////////////////
   SubmitProduct() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final authUser = FirebaseAuth.instance.currentUser; 
     MyCustPageLoadingSpinner();
-    var resp = await productStore.PersistProduct();
+    var resp = await productStore.PersistProduct(user_id: authUser?.uid);
 
     // print('Submit Products $resp');
 
@@ -138,7 +140,6 @@ class _ProductBodyState extends State<ProductBody> {
           //   width: snack_width,
           //   message: fetch_data_error_msg,
           //   title: fetch_data_error_title));
-
         }
       }
 
@@ -249,7 +250,10 @@ class _ProductBodyState extends State<ProductBody> {
 //////////////////////////////
 // MAIN METHOD SECTION:
 //////////////////////////////
-  Column MainMethod(BuildContext context,product,) {
+  Column MainMethod(
+    BuildContext context,
+    product,
+  ) {
     return Column(
       children: [
         Container(

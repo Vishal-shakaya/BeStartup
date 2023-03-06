@@ -227,14 +227,11 @@ class BusinessProductStore extends GetxController {
   // USE LOCAL STORAGE :
   // CREATE PRODUCT MODEL WITH LIST OF PRODUCT IN JSON FORMAT :
   ///////////////////////////////////////////////////////////////
-  PersistProduct() async {
+  PersistProduct({user_id}) async {
     final localStore = await SharedPreferences.getInstance();
-    final startup_id = await startupState.GetStartupId();
-    print('product startup_id $startup_id{}');
-
     try {
       var resp = await BusinessProductsList(
-        startup_id: startup_id,
+        user_id :user_id, 
         products: product_list,
       );
 

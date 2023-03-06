@@ -106,7 +106,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
         final temp_thumb = resp['data']['thumbnail'];
 
         if (upload_image_url == '') {
-          await thumbStore.SetThumbnailParam(data: temp_thumb);
+          // await thumbStore.SetThumbnailParam(data: temp_thumb);
         }
       }
 

@@ -88,9 +88,9 @@ class _FounderImageState extends State<FounderImage> {
 
     // DEFAULT :
     if (context.width > 1500) {
-      image_radius = 85;
-      upload_icon_position_top = 129;
-      upload_icon_position_left = 129;
+      image_radius = 70;
+      upload_icon_position_top = 100;
+      upload_icon_position_left = 100;
       print('greator then 1500');
     }
 
@@ -98,7 +98,7 @@ class _FounderImageState extends State<FounderImage> {
     if (context.width < 1500) {
       upload_icon_position_top = 129;
       upload_icon_position_left = 129;
-      image_radius = 85;
+      image_radius = 70;
       print('1500');
     }
 

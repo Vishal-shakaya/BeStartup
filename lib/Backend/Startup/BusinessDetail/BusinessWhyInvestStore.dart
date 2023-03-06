@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
 
@@ -8,6 +7,7 @@ import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,7 @@ class BusinessWhyInvestStore extends GetxController {
   // Set Vision
   SetWhyInvest({visionText}) async {
     final localStore = await SharedPreferences.getInstance();
-
+    final authUser = FirebaseAuth.instance.currentUser;
     try {
       // NULL CHECK :
       if (visionText == null) {
@@ -30,8 +30,8 @@ class BusinessWhyInvestStore extends GetxController {
       why_text = visionText;
       try {
         var resp = await WhyInvestModel(
-          startup_id: await startupState.GetStartupId(),
           why_text: why_text,
+          user_id: authUser?.uid,
         );
         localStore.setString(getBusinessWhyInvesttStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
@@ -46,10 +46,9 @@ class BusinessWhyInvestStore extends GetxController {
   }
 
 ///////////////////////////////////////////////////////
-  /// It's a function that sets a variable to a value
-  ///
-  /// Args:
-  ///   data: The data that is to be stored in the cache.
+/// It's a function that sets a variable to a value
+/// Args:
+///   data: The data that is to be stored in the cache.
 ///////////////////////////////////////////////////////
   SetWhytextParam({data}) async {
     why_text = '';
@@ -57,29 +56,25 @@ class BusinessWhyInvestStore extends GetxController {
     why_text = data;
   }
 
-
 /////////////////////////////////////////////
-/// It returns a string that is the value of 
-/// the variable why_text
-/// 
-/// Returns:
-///   The value of the variable why_text.
+  /// It returns a string that is the value of
+  /// the variable why_text
+  ///
+  /// Returns:
+  ///   The value of the variable why_text.
 /////////////////////////////////////////////
   GetWhytextParam() async {
     return why_text;
   }
 
-
-
-
 ////////////////////////////////////////////////////
-/// It checks if the key exists in the local store, 
-/// if it does, it returns the value of the key, if it
-/// doesn't, it returns the default value
-/// 
-/// Returns:
-///   A Future.
-//////////////////////////////////////////////////////  
+  /// It checks if the key exists in the local store,
+  /// if it does, it returns the value of the key, if it
+  /// doesn't, it returns the default value
+  ///
+  /// Returns:
+  ///   A Future.
+//////////////////////////////////////////////////////
   GetWhyInvest() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -95,6 +90,4 @@ class BusinessWhyInvestStore extends GetxController {
       return why_text;
     }
   }
-
-  
 }

@@ -42,9 +42,10 @@ Future SendMailToUser(
             'receiver_mail_address': receiver_mail_address,
           }
         }));
-
+    print('Mail Send');
     return ResponseBack(response_type: true, message: response.body);
   } catch (error) {
-    return ResponseBack(response_type: false,message: '[SEND FEEDBACK MAIL ERROR]$error');
+    return ResponseBack(
+        response_type: false, message: '[SEND FEEDBACK MAIL ERROR]$error');
   }
 }

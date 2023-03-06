@@ -8,6 +8,7 @@ import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
@@ -31,6 +32,7 @@ class BusinessVisionStore extends GetxController {
 ///////////////////////////////////////////////////////
   SetVision({visionText}) async {
     final localStore = await SharedPreferences.getInstance();
+    final authUser = FirebaseAuth.instance.currentUser; 
 
     try {
       // NULL CHECK :
@@ -40,11 +42,10 @@ class BusinessVisionStore extends GetxController {
       }
 
       vision = visionText;
-      final startup_id = await startupState.GetStartupId();
-      print('vision Startup id $startup_id');
+
       try {
         var resp = await VisionModel(
-          startup_id: startup_id,
+          user_id: authUser?.uid,
           vision: vision,
         );
         localStore.setString(getBusinessVisiontStoreName, json.encode(resp));

@@ -10,12 +10,14 @@ import 'package:be_startup/Models/StartupModels.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThumbnailStore extends GetxController {
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
+  final authUser = FirebaseAuth.instance.currentUser; 
   static String? image_url;
 
   SetThumbnail({thumbnail, filename}) async {
@@ -28,9 +30,8 @@ class ThumbnailStore extends GetxController {
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
       try {
         final startup_id = await startupState.GetStartupId();
-        print('Thumbnial Startup id $startup_id');
         var resp =
-            await ThumbnailModel(thumbnail: image_url, startup_id: startup_id);
+            await ThumbnailModel(thumbnail: image_url,user_id: authUser?.uid);
 
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
         return ResponseBack(response_type: true, data: image_url);
@@ -42,29 +43,7 @@ class ThumbnailStore extends GetxController {
     }
   }
 
-  ///////////////////////////////////////////
-  /// It sets the image_url to an empty string,
-  /// then removes the cached data, then sets the image_url to
-  /// the data passed in
-  ///
-  /// Args:
-  ///   data: The image url
-  /////////////////////////////////////////////
-  SetThumbnailParam({data}) async {
-    image_url = '';
-    await RemoveCachedData(key: getBusinessThumbnailStoreName);
-    image_url = data;
-  }
 
-  //////////////////////////////////////////////////
-  /// It returns the image_url variable
-  ///
-  /// Returns:
-  ///   The image_url variable is being returned.
-  //////////////////////////////////////////////////
-  GetThumbnailParam() async {
-    return image_url;
-  }
 
   //////////////////////////////////////////////////////////
   /// It checks if the key exists in the shared preferences,

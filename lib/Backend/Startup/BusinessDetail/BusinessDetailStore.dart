@@ -20,47 +20,11 @@ class BusinessDetailStore extends GetxController {
   static String? business_name;
   static String? amount;
 
-  ////////////////////////////////////////////
-  /// Param Setter :
-  ////////////////////////////////////////////
-  SetBusinessLogoParam({data}) async {
-    image_url = '';
-    await RemoveCachedData(key: getBusinessDetailStoreName);
-    image_url = data;
-  }
-
-  SetBusinessNameParam({data}) async {
-    business_name = '';
-    await RemoveCachedData(key: getBusinessDetailStoreName);
-    business_name = data;
-  }
-
-  SetBusinessAmountParam({data}) async {
-    amount = '';
-    await RemoveCachedData(key: getBusinessDetailStoreName);
-    amount = data;
-  }
-
-  //////////////////////////////////////////
-  /// Param Getter :
-  //////////////////////////////////////////
-  GetBusinessNameParam() async {
-    return business_name;
-  }
-
-  GetBusinessLogoParam() async {
-    return image_url;
-  }
-
-  GetBusinessAmountParam() async {
-    return amount;
-  }
-
-/////////////////////////////////////
+  /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :
   /// SET BUSINESS LOGO:
-////////////////////////////////////////
+  ////////////////////////////////////////
   SetBusinessLogo({logo, filename}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -90,7 +54,11 @@ class BusinessDetailStore extends GetxController {
 // 2. ERROR CHECK :
 // 3. RETURON REPONSE TRUE OF FALSE ACCORDINGLY :
 //////////////////////////////////////////////////////
-  SetBusinessDetail({businessName, amount}) async {
+  CachedBusinessDetail({
+    required businessName,
+    required amount,
+    required userId,
+  }) async {
     final localStore = await SharedPreferences.getInstance();
     try {
       if (businessName == null) {
@@ -112,55 +80,12 @@ class BusinessDetailStore extends GetxController {
       business_name = businessName;
       amount = amount;
 
-      ///////////////////////////////////////////////
-      // Create Startup
-      ///////////////////////////////////////////////
-      final startup_resp = await StartupModel(
-          user_id: await userState.GetUserId(),
-          email: await userState.GetDefaultMail(),
-          startup_name: business_name,
-          timestamp: DateTime.now().toString());
-
-
-      ///////////////////////////////////////////
-      // Success Response :
-      // Set Set Startup Id :
-      // Store localy startup :
-      ///////////////////////////////////////////
-      if (startup_resp != false) {
-        await startupState.SetStartupId(id: startup_resp['id']);
-        localStore.setString(getStartupStoreName, json.encode(startup_resp));
-      }
-
-      if (startup_resp == false) {
-        return ResponseBack(
-            response_type: false, message: 'Startup not created try again ');
-      }
-
-      // Create Business Info and Cached :
-      final user_mail = await userState.GetDefaultMail();
-      final userId = await userState.GetUserId();
-      final founder_name = await userState.GetProfileName();
-
-      final startup_searching_index =
-          await CreateSearchIndexParam(businessName);
-
-      final founder_searching_index =
-          await CreateSearchIndexParam(founder_name);
-
-      var resp = await BusinessInfoModel(
-          logo: image_url,
-          founder_name: founder_name,
-          name: businessName,
-          founder_id: userId,
-          desire_amount: amount,
-          startup_search_index: startup_searching_index,
-          founder_search_index: founder_searching_index,
-          startup_id: await startupState.GetStartupId());
-
-      // Set App state amount and startup name :
-      await startupState.SetDesireAmount(amount: amount);
-      await startupState.SetStartupName(name: businessName);
+      var resp = await BusinessDetailMode(
+        logo: image_url,
+        name: businessName,
+        desire_amount: amount,
+        user_id: userId,
+      );
 
       try {
         localStore.setString(getBusinessDetailStoreName, json.encode(resp));
@@ -181,28 +106,24 @@ class BusinessDetailStore extends GetxController {
   /// Returns:
   ///   A map with two keys, name and desire_amount.
 ///////////////////////////////////////////////////////////
-  GetBusinessDetail() async {
+  GetCachedBusinessDetail() async {
     final localStore = await SharedPreferences.getInstance();
+    final tempData = {'name': '', 'desire_amount': ''};
     try {
       bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
-        return {
+        var sortData = {
           'name': json_obj["name"],
           'desire_amount': json_obj["desire_amount"],
         };
+        return ResponseBack(response_type: true, data: sortData);
       } else {
-        return {
-          'name': business_name ?? '',
-          'desire_amount': amount ?? '',
-        };
+        return ResponseBack(response_type: false, data: tempData);
       }
     } catch (e) {
-      return {
-        'name': '',
-        'desire_amount': '',
-      };
+      return ResponseBack(response_type: false, data: tempData);
     }
   }
 
@@ -227,8 +148,8 @@ class BusinessDetailStore extends GetxController {
   }
 
 ////////////////////////////////////////////////
-  /// Update Perticular Business Detail field
-  ///  required param val and update field name :
+/// Update Perticular Business Detail field
+///  required param val and update field name :
 ////////////////////////////////////////////////
 
   UpdateBusinessDetailCacheField({required field, required val}) async {

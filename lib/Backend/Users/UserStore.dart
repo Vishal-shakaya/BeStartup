@@ -30,8 +30,8 @@ class UserStore extends GetxController {
     final temp_user = await UserModel(
         email:email, 
         id: id, 
-        is_founder: false, 
-        is_investor: false);
+        user_type: usertype,
+        is_profile_complete: true);
 
     
     try {
@@ -110,9 +110,9 @@ class UserStore extends GetxController {
   }
 
 ////////////////////////////////////
-  /// Check if user Already buy plan :
-  /// I want to check if the user has a plan without a startup,
-  /// if so, return true response, if not, return
+/// Check if user Already buy plan :
+/// I want to check if the user has a plan without a startup,
+/// if so, return true response, if not, return
 ////////////////////////////////////
   IsAlreadyPlanBuyed() async {
     // Get User from firebase update ints field :

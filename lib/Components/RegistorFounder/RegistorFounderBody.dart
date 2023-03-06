@@ -12,6 +12,8 @@ import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -55,34 +57,33 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     MyCustPageLoadingSpinner();
 
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    var authUser = FirebaseAuth.instance.currentUser; 
     
     formKey.currentState!.save();
 
     if (formKey.currentState!.validate()) {
-      final String founder_name = formKey.currentState!.value['founder_name'];
-      // final String founder_position =
-      //     formKey.currentState!.value['founder_position'];
+      final String name = formKey.currentState!.value['founder_name'];
       final String phone_no = formKey.currentState!.value['phone_no'];
       final String email = formKey.currentState!.value['email'];
       final String other_contact = formKey.currentState!.value['other_info'];
+      
+      final res = await founderStore.CachedCreateFounder(
+        user_id: authUser?.uid, 
+        name:name , 
+        email: authUser?.email, 
+        phone_no: phone_no, 
+        primary_mail: email, 
+        other_contact: other_contact);
 
-      Map<String, dynamic> founder = {
-        'name': founder_name,
-        // 'position': founder_position,
-        'phone_no': phone_no,
-        'email': email,
-        'other_contact': other_contact
-      };
+      // Success Handler : 
+      if(res['response']){
+        CloseCustomPageLoadingSpinner();
+        SmartDialog.dismiss();
+        formKey.currentState!.reset();
+        Get.toNamed(create_business_detail_url);
+      }
 
-      final res = await founderStore.CreateFounder(founder);
-
-      var createFounderResp = await founderConnector.CreateFounderContact();
-      print(createFounderResp);
-
-      var createFounderDetialResp =
-          await founderConnector.CreateFounderDetail();
-      print(createFounderDetialResp);
-
+      // Error Handler : 
       if (!res['response']) {
         CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
@@ -93,12 +94,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
             type: MySnackbarType.error,
             title: res['message'],
             message: create_error_msg));
-      } else {
-        CloseCustomPageLoadingSpinner();
-        SmartDialog.dismiss();
-        formKey.currentState!.reset();
-        Get.toNamed(home_page_url);
-      }
+      } 
     }
 
     // Form Error :
@@ -242,8 +238,8 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     // DEFAULT :
     if (context.width > 1500) {
       fontSize = 40;
-      page_height = 0.65;
-      heading_height = 0.15;
+      page_height = 0.7;
+      heading_height = 0.12;
       print('greator then 1500');
     }
 
@@ -312,7 +308,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
           height: context.height * heading_height,
           margin: EdgeInsets.only(top: context.height * 0.02),
           child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline1, children: [
+            TextSpan(style: Get.textTheme.headline2, children: [
               TextSpan(
                   text: 'Founder',
                   style: TextStyle(fontSize: fontSize, color: slide_header_color

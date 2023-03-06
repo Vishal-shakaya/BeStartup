@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Components/SelectPlan/SelectPlanUtils.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
@@ -45,15 +46,14 @@ class _SelectPlanState extends State<SelectPlan> {
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
 
-  var userStore = Get.put(UserStore(), tag: 'user_store');
-  var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
+  var userStore = Get.put(UserStore());
+  var memeberStore = Get.put(BusinessTeamMemberStore());
   var businessStore = Get.put(BusinessDetailStore());
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var updateStore = Get.put(StartupUpdater());
 
-  var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
-  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var investorConnector =
-      Get.put(InvestorConnector(), tag: 'investor_connector');
+  var startupConnector = Get.put(StartupConnector());
+  var founderConnector = Get.put(FounderConnector());
+  var investorConnector = Get.put(InvestorConnector());
 
   var my_context = Get.context;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -159,23 +159,60 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 17 DISPOSE   FUN:
 //////////////////////////////////////////////
 
-  // Helpong function for gettin expiration date :
-  GetExpiredDate(plan_type) async {
-    var expired;
+/////////////////////////////////////////////
+// Alert for Success Payment :
+/////////////////////////////////////////////
+  SuccessMailSendAlert() async {
+    CoolAlert.show(
+        onConfirmBtnTap: () {
+          Get.toNamed(startup_view_url);
+        },
+        context: context,
+        width: 200,
+        title: 'Successful',
+        type: CoolAlertType.success,
+        widget: Text(
+          'Billing Detail send to mail address',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+          ),
+        ));
+  }
 
-    if (plan_type == 'basic') {
-      expired = DateTime.now().add(const Duration(days: 60)).toString();
-      print('Basic plan Selected');
-    }
-    if (plan_type == 'best') {
-      expired = DateTime.now().add(const Duration(days: 180)).toString();
-      print('Best plan Selected');
-    }
-    if (plan_type == 'business') {
-      print('Business plan Selected');
-      expired = DateTime.now().add(const Duration(days: 360)).toString();
-    }
-    return expired;
+///////////////////////////////////////////////////////
+  /// It's a function that shows a dialog box with a
+  ///  title, a message, and two buttons
+  ///
+  /// Args:
+  ///   context: The context of the page you want to
+  /// show the alert on.
+///////////////////////////////////////////////////////
+  CreateNewBusinessAlert(context) async {
+    CoolAlert.show(
+        onCancelBtnTap: () {
+          Get.toNamed(home_page_url);
+        },
+        context: context,
+        width: 200,
+        title: 'Create New Startup',
+        type: CoolAlertType.info,
+        widget: Text(
+          'Create another startup as you created before',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+          ),
+        ));
+  }
+
+  //////////////////////////////////////
+  // SHOW  BIG LOADING SPINNER :
+  //////////////////////////////////////
+  StartBigLoading() {
+    var dialog = SmartDialog.show(builder: (context) {
+      return BigLoadingSpinner();
+    });
   }
 
   ///////////////////////////////////////////////////////////
@@ -203,225 +240,97 @@ class _SelectPlanState extends State<SelectPlan> {
         });
   }
 
-  ///////////////////////////////////////////
+///////////////////////////////////////////
   /// CHECKOUT  HANDLER :
   /// 1. Create Payment obj :
   /// 2 Requirements :
   /// 2.1 openCheckout
 ///////////////////////////////////////////
   OnpressContinue(context) async {
-    var exact_amount = planAmount! / 100;
+    // 1. Verify Data :
+    // 2. Configure Startup Model [search index] :
+    // 3. Create Plan
+    // 4. Create Startup:
+    // 5. Success : Send Mail then redirect to homeview :
+    // 6. Fail :
+    //  .  if payed then use transaction id and manual startup form :
+    //  .  else try again later :
 
-    var tax_amount = ((exact_amount * tax) / 100);
-    total_amount = tax_amount + exact_amount;
-    final paid_amount = total_amount * 100;
-
-    selectedPlan = {
-      'plan': select_plan_type?.toUpperCase(),
-      'phone_no': auth.currentUser?.phoneNumber,
-      'mail': auth.currentUser?.email,
-      'amount': paid_amount,
-      'tax': '${tax}%',
-      'total_amount': total_amount,
-      'tax_amount': tax_amount,
-    };
-    final temp_val = selectedPlan;
-
-    // REQUIRED TO SELECT USER TYPE:
-    if (select_plan_type == null) {
-      CoolAlert.show(
-          context: context,
-          width: 200,
-          title: 'Select option!',
-          type: CoolAlertType.info,
-          widget: Text(
-            'You have to select a Plan to continue',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
-            ),
-          ));
-    } else {
-      await CheckoutAlertDialog(planVal: temp_val, checkoutVal: openCheckout);
-    }
-  }
-
-// Alert for Success Payment :
-  SuccessMailSendAlert() async {
-    CoolAlert.show(
-        onConfirmBtnTap: () {
-          Get.toNamed(startup_view_url);
-        },
-        context: context,
-        width: 200,
-        title: 'Successful',
-        type: CoolAlertType.success,
-        widget: Text(
-          'Billing Detail send to mail address',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
-          ),
-        ));
-  }
-
-  CreateNewBusinessAlert(context) async {
-    CoolAlert.show(
-        onCancelBtnTap: () {
-          Get.toNamed(home_page_url);
-        },
-        context: context,
-        width: 200,
-        title: 'Create New Startup',
-        type: CoolAlertType.info,
-        widget: Text(
-          'Create another startup as you created before',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
-          ),
-        ));
-  }
-
-  ///////////////////////////////////////////////////
-  /// 1. Send Bill To Buyer [ Founder ]:
-  /// 2. Bill has expiration date  Important:
-  /// 3. Payment Id for handle issue :
-  /// 4. Use email js library to send mail :
-  ////////////////////////////////////////////////
-  SendInvoiceMail(
-      {required paymentId,
-      required exact_amount,
-      required orderd,
-      required expired,
-      required payer_name,
-      phone_no}) async {
-    var resp;
     try {
-      resp = await SendMailToUser(
-        transaction_id: paymentId,
-        plan_type: selectedPlan['plan'],
-        phone_no: phone_no == null ? '' : phone_no,
-        amount: exact_amount.toString(),
-        receiver_mail_address: selectedPlan['mail'],
-        subject: ' Bestartup Payment Statement ',
-        order_date: orderd,
-        expire_date: expired,
-        payer_name: payer_name == null ? selectedPlan['mail'] : payer_name,
-      );
-      return resp;
-    } catch (e) {
-      return resp;
-    }
-  }
+      StartBigLoading();
+      if (select_plan_type != null) {
+        final verifyResp = await VerifyStartupDetial();
+        print('Verfy Resp $verifyResp');
 
-  ///////////////////////////////////////////
-  /// 1. Update user Profile with plan :
-  /// 2. if user plan activate thne show Alert :
-  /// for plan is already activated :
-  /// 3. else activate plan :
-  ///////////////////////////////////////////
-  SetUserPlan({
-    required exact_amount,
-    required orderd,
-    required expired,
-    required buyer_name,
-    required phone_no,
-    required plan_type,
-  }) async {
-    final localStore = await SharedPreferences.getInstance();
-    // Activate User Plan :
-    try {
-      final plan = await PlanModel(
-          plan_name: plan_type,
-          phone_no: phone_no,
-          amount: exact_amount,
-          order_date: orderd,
-          expire_date: expired,
-          buyer_mail: auth.currentUser?.email,
-          buyer_name: buyer_name,
-          startup_id: await startupState.GetStartupId(),
-          user_id: await userState.GetUserId());
+        final configureDetailResp = await ConfigureBusinessDetailModel();
+        print('Configure Resp $configureDetailResp');
 
-      final is_planCreate = await localStore.setString(
-          getStartupPlansStoreName, json.encode(plan));
+        final createPlan = await CreateBusinessPlan(
+            plan_price: '200',
+            orderd: DateTime.now().toString(),
+            buyer_name: 'vishal',
+            phone_no: '7065121120',
+            plan_type: select_plan_type);
 
-      if (is_planCreate) {
-        var resp = await startupConnector.CreateBusinessPlans();
-        print('Business Plan Created ${resp}');
+        print('Create Plan Resp $createPlan');
 
-        // Success Handler Creating plan :
-        if (resp['response']) {
-          return ResponseBack(
-              response_type: true, message: "plan Created ${resp['message']}");
+        final startupCreateResp = await UploadStartupData();
+        print('startupCreateResp Resp $startupCreateResp');
+
+        if (startupCreateResp['response']) {
+          print('Sending Mail');
+          final mailResp = await SendInvoiceMail(
+              paymentId: 'fdf',
+              exact_amount: 100,
+              orderd: DateTime.now().toString(),
+              expired: DateTime.now().toString(),
+              mail: 'shakayavishal007@gmail.com',
+              phone_no: '7065121120',
+              payer_name: 'vishal');
+
+          if (mailResp['response']) {
+            SmartDialog.dismiss();
+            print('Mail Sended');
+            Get.toNamed(home_page_url);
+          }
+          if (!mailResp['response']) {
+            SmartDialog.dismiss();
+            Get.toNamed(home_page_url);
+          }
         }
 
-        // Error Handler Createing plan :
-        if (!resp['response']) {
-          return ResponseBack(
-              response_type: false,
-              message: "plan not created ${resp['message']}");
+        if (!startupCreateResp['response']) {
+            SmartDialog.dismiss();
+            print('Error whitlw Creating Startup');
         }
       }
+
+      if (select_plan_type == null) {
+        CoolAlert.show(
+            context: context,
+            width: 200,
+            title: 'Select option!',
+            type: CoolAlertType.info,
+            widget: Text(
+              'You have to select a Plan to continue',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+              ),
+            ));
+      }
+
+      
     } catch (e) {
-      return ResponseBack(response_type: false, message: e);
+      SmartDialog.dismiss();
+      print('Error While Creating Startup $e');
     }
-  }
 
-  // SHOW  BIG LOADING SPINNER :
-  StartBigLoading() {
-    // var dialog = SmartDialog.showLoading(
-    //     background: Colors.white,
-    //     maskColorTemp: const Color.fromARGB(146, 252, 250, 250),
-    //     widget: BigLoadingSpinner());
-    // return dialog;
-  }
-
-///////////////////////////////////////////////////////////////
-  /// CREATE STARTUP :
-  /// It creates a startup model and .
-  /// pdates the user's plan and startup field in the database
-///////////////////////////////////////////////////////////////
-  CreateStartup() async {
-    var resp = await startupConnector.CreateStartup();
-    return resp;
-  }
-
-  /////////////////////////////////////////////////////
-  // START STORING ALL FOUNDER DETIAL TO FIREBASE :
-  /////////////////////////////////////////////////////
-  SendDataToFireStore() async {
-    var resp = await startupConnector.CreateBusinessCatigory();
-    print(resp);
-
-    var resp2 = await startupConnector.CreateBusinessDetail();
-    print(resp2);
-
-    var resp4 = await startupConnector.CreateBusinessProduct();
-    print(resp4);
-
-    var resp5 = await startupConnector.CreateBusinessThumbnail();
-    print(resp5);
-
-    var resp6 = await startupConnector.CreateBusinessVision();
-    print(resp6);
-
-    var resp9 = await startupConnector.CreateBusinessTeamMember();
-    print(resp9);
-
-    var resp10 = await startupConnector.CreateBusinessWhyInvest();
-    print(resp10);
-
-    var resp11 = await startupConnector.CreateBusinessMileStone();
-    print(resp11);
-
-    var resp12 = await startupConnector.CreateBusinessPitch();
-    print(resp12);
-
-    // var resp11 = await startupConnector.CreateBusinessMileStone();
-    // print(resp11);
-
-    return ResponseBack(response_type: true);
+    // var exact_amount = planAmount! / 100;
+    // var tax_amount = ((exact_amount * tax) / 100);
+    // total_amount = tax_amount + exact_amount;
+    // final paid_amount = total_amount * 100;
+    //   await CheckoutAlertDialog(planVal: temp_val, checkoutVal: openCheckout);
   }
 
   ///////////////////////////////////
@@ -441,60 +350,9 @@ class _SelectPlanState extends State<SelectPlan> {
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
-    try {
-      final is_data_send = await SendDataToFireStore();
-
-      ////////////////////////////////////////////////////////
-      /// The above code is doing the following things:
-      /// 1. It is sending the payment data to the server.
-      /// 2. It is sending the payment data to the firebase.
-      /// 3. It is sending the payment data to the mail.
-      ////////////////////////////////////////////////////////
-      if (is_data_send['response']) {
-        print('Data store in firebase  Resp $is_data_send');
-        var resp = await SetUserPlan(
-            exact_amount: exact_amount,
-            orderd: orderd,
-            expired: expired,
-            buyer_name: userName,
-            phone_no: phoneNo,
-            plan_type: plan_type);
-
-        print('Create User Response $resp');
-
-
-        if (resp['response']) {
-          final is_mail_send = await SendInvoiceMail(
-              paymentId: response.paymentId,
-              exact_amount: exact_amount,
-              orderd: orderd,
-              expired: expired,
-              payer_name: userName,
-              phone_no: phoneNo);
-
-          print('Mail Send Response $is_mail_send');
-        }
-
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(home_page_url);
-      }
-
-      // If data not uploaded completely then
-      // redirect user to home view :
-      if (!is_data_send['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.toNamed(home_page_url);
-      }
-      
-    }
-    
-    // If Error accure then Reset all action of creating 
-    // startup and Payment Return Operation Start : 
-     catch (e) {
+    try {} catch (e) {
       print('Error accure while Creating Startup $e');
     }
-
-
   }
 
 ////////////////////////////////////////
@@ -509,46 +367,6 @@ class _SelectPlanState extends State<SelectPlan> {
 
     var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
-    final is_data_send = await SendDataToFireStore();
-
-    ////////////////////////////////////////////////////////
-    /// The above code is doing the following things:
-    /// 1. It is sending the payment data to the server.
-    /// 2. It is sending the payment data to the firebase.
-    /// 3. It is sending the payment data to the mail.
-    ////////////////////////////////////////////////////////
-    if (is_data_send['response']) {
-      var resp = await SetUserPlan(
-          exact_amount: exact_amount,
-          orderd: orderd,
-          expired: expired,
-          buyer_name: userName,
-          phone_no: phoneNo,
-          plan_type: plan_type);
-      print('Data store in firebase  Resp $is_data_send');
-
-      if (resp) {
-        final is_mail_send = await SendInvoiceMail(
-            paymentId: uuid.v4().toString(),
-            exact_amount: exact_amount,
-            orderd: orderd,
-            expired: expired,
-            payer_name: userName,
-            phone_no: phoneNo);
-        print('Mail Send resp $is_mail_send');
-      }
-
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
-    }
-
-    // If data not uploaded completely then
-    // redirect user to home view :
-    if (!is_data_send['response']) {
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(home_page_url);
-    }
   }
 
   /////////////////////////////////////////
