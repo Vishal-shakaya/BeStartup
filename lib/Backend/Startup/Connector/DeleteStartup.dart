@@ -37,66 +37,57 @@ class RemoveStartup extends GetxController {
   }
 
   DeleteFounderWithStartups({required user_id}) async {
-    var final_startup_id;
     var data;
-    var doc_id;
+
     // FETCHING DATA FROM FIREBASE
     var store =
         FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-    var query = store.where('founder_id', isEqualTo: user_id).get();
+    var query = store.where('user_id', isEqualTo: user_id).get();
 
     await query.then((value) {
       data = value.docs.first.data() as Map<String, dynamic>;
     });
 
-    final_startup_id = data['startup_id'];
-
     try {
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessDetailStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessCatigoryStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessThumbnailStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessMilestoneStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessTeamMemberStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessProductStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessVisiontStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getBusinessWhyInvesttStoreName);
-
-      // Delete User Data :
       await DeleteDocument(
           field_name: 'user_id',
           id: user_id,
-          model: getBusinessFounderContactStoreName);
+          model: getBusinessDetailStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessCatigoryStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessThumbnailStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessMilestoneStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessTeamMemberStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessProductStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessVisiontStoreName);
+
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: getBusinessWhyInvesttStoreName);
 
       await DeleteDocument(
           field_name: 'user_id',
@@ -105,12 +96,8 @@ class RemoveStartup extends GetxController {
 
       await DeleteDocument(
           field_name: 'user_id', id: user_id, model: getLikeStartupStoreName);
-
       await DeleteDocument(
           field_name: 'user_id', id: user_id, model: getSaveStartupStoreName);
-      await DeleteDocument(
-          field_name: 'user_id', id: user_id, model: getStartupStoreName);
-
       await DeleteDocument(
           field_name: 'user_id', id: user_id, model: getStartupPlansStoreName);
 
@@ -120,6 +107,7 @@ class RemoveStartup extends GetxController {
         response_type: true,
       );
     } catch (e) {
+      print('Error While Delete User with Startup $e');
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
@@ -133,59 +121,52 @@ class RemoveStartup extends GetxController {
   /// Args:
   ///   final_startup_id: The id of the startup to be deleted
 ////////////////////////////////////////////////////////////////////////
-  DeleteStartups({required final_startup_id}) async {
+  DeleteStartup({required user_id}) async {
     try {
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessDetailStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessCatigoryStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessThumbnailStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessMilestoneStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessTeamMemberStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessProductStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessVisiontStoreName);
 
       await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
+          field_name: 'user_id',
+          id: user_id,
           model: getBusinessWhyInvesttStoreName);
       await DeleteDocument(
-          field_name: 'id', id: final_startup_id, model: getStartupStoreName);
-
-      await DeleteDocument(
-          field_name: 'startup_id',
-          id: final_startup_id,
-          model: getStartupPlansStoreName);
+          field_name: 'user_id', id: user_id, model: getStartupPlansStoreName);
 
       return ResponseBack(response_type: true);
-
     } catch (e) {
-      
       print('Error while deleteing startup $e');
       return ResponseBack(response_type: false, message: e);
     }

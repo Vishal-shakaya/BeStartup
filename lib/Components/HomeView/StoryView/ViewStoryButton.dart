@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,10 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ViewStoryButton extends StatelessWidget {
-  var startup_id;
-  var founder_id;
+  var user_id;
+
   ViewStoryButton({
-    required this.founder_id,
-    required this.startup_id,
+    required this.user_id,
     Key? key,
   }) : super(key: key);
 
@@ -22,33 +22,35 @@ class ViewStoryButton extends StatelessWidget {
   double view_btn_height = 30;
   double view_btn_icon_size = 15;
 
-  double rounded_btn_width = 25; 
-  double rounded_btn_height = 25; 
+  double rounded_btn_width = 25;
+  double rounded_btn_height = 25;
 
-  // Startup Detail Link :
+
+/////////////////////////////////////////////////////////////
+// Startup Detail Link :
+/// It takes the user_id and is_admin from the userState 
+/// and passes it to the startup_view_url
+/////////////////////////////////////////////////////////////
   StartupDetailView() async {
-    var user = FirebaseAuth.instance.currentUser;
-    var is_admin = false;
-    var user_id = user?.uid;
+    var userState = Get.put(UserState());
+    var is_admin = await userState.GetIsUserAdmin();
 
-    if (user_id == founder_id) {
-      is_admin = true;
-    }
     var param = {
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'founder_id': user_id,
       'is_admin': is_admin,
     };
     Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(param)});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     Widget viewButton = ViewButtonWithText();
     Widget roundedViewButton = RoundedViewButton();
 
-    rounded_btn_width = 25; 
-    rounded_btn_height = 25; 
+    rounded_btn_width = 25;
+    rounded_btn_height = 25;
 
     veiw_btn_top_pos = 0.23;
     view_btn_left_pos = 0.38;
@@ -125,8 +127,8 @@ class ViewStoryButton extends StatelessWidget {
 
     // SMALL TABLET:
     if (context.width < 640) {
-      rounded_btn_width = 30; 
-      rounded_btn_height = 30; 
+      rounded_btn_width = 30;
+      rounded_btn_height = 30;
 
       view_btn_left_pos = 0.83;
       veiw_btn_top_pos = 0.23;
@@ -140,8 +142,8 @@ class ViewStoryButton extends StatelessWidget {
 
     // PHONE:
     if (context.width < 480) {
-      rounded_btn_width = 25; 
-      rounded_btn_height = 25; 
+      rounded_btn_width = 25;
+      rounded_btn_height = 25;
 
       view_btn_left_pos = 0.80;
       veiw_btn_top_pos = 0.23;

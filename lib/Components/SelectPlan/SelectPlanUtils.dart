@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Helper/MailServer.dart';
@@ -122,9 +121,9 @@ VerifyStartupDetial() async {
 ConfigureBusinessDetailModel() async {
   try {
     final businessDetailStore = BusinessDetailStore();
-    final founderStore = BusinessFounderStore();
+    final founderStore = FounderStore();
     final response = await businessDetailStore.GetCachedBusinessDetail();
-    final founderResp = await founderStore.GetFounderDetail();
+    final founderResp = await founderStore.GetCachedFounderDetail();
 
     var businessName = '';
     var founderName = '';
@@ -145,7 +144,7 @@ ConfigureBusinessDetailModel() async {
     await businessDetailStore.UpdateBusinessDetailCacheField(
         field: 'startup_searching_index', val: startup_searching_index);
     await businessDetailStore.UpdateBusinessDetailCacheField(
-        field: 'founder_searching_index', val: startup_searching_index);
+        field: 'founder_searching_index', val: founder_searching_index);
 
     return ResponseBack(response_type: true);
   } catch (e) {
@@ -216,10 +215,10 @@ CreateBusinessPlan({
 ///////////////////////////////////////////////////////////////
 UploadStartupData() async {
   final startupConnector = Get.put(StartupConnector());
-  final founderConnector = Get.put(FounderConnector());
+  final founderStore = Get.put(FounderStore());
   final userStore = Get.put(UserStore());
 
-  var foundResp = founderConnector.CreateFounderDetail();
+  var foundResp = founderStore.CreateFounderDetail();
   print(foundResp);
 
   var resp = await startupConnector.CreateBusinessCatigory();

@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileStoryThumbnail extends StatelessWidget {
-  var startup_id;
+  var user_id;
   ProfileStoryThumbnail({
-    required this.startup_id,
+    required this.user_id,
     Key? key,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class ProfileStoryThumbnail extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    final resp = await startupConnector.FetchThumbnail(startup_id: startup_id);
+    final resp = await startupConnector.FetchThumbnail(user_id: user_id);
     if (resp['response']) {
       thumbnail = resp['data']['thumbnail'];
     }

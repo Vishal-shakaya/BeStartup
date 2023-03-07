@@ -26,7 +26,7 @@ class _VisionPageState extends State<VisionPage> {
 
   var final_data;
   var startup_id;
-  var founder_id;
+  var user_id;
   var is_admin;
 
   double page_width = 0.80;
@@ -80,8 +80,7 @@ class _VisionPageState extends State<VisionPage> {
   EditVision() {
     final param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     });
 
@@ -91,8 +90,7 @@ class _VisionPageState extends State<VisionPage> {
   EditMilestone() {
     final param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     });
     Get.toNamed(create_business_milestone_url, parameters: {'data': param});
@@ -103,12 +101,12 @@ class _VisionPageState extends State<VisionPage> {
   //////////////////////////////////
   GetLocalStorageData() async {
     startup_id = await detailViewState.GetStartupId();
-    founder_id = await detailViewState.GetFounderId();
+    user_id = await detailViewState.GetFounderId();
     is_admin = await detailViewState.GetIsUserAdmin();
 
     try {
       final vision =
-          await startupConnect.FetchBusinessVision(startup_id: startup_id);
+          await startupConnect.FetchBusinessVision(user_id: user_id);
       final_data = vision['data']['vision'];
 
       return final_data;

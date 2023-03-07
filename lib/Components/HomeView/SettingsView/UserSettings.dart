@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
 
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Startup/Connector/DeleteStartup.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/DeleteStartupsDialogCont.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
@@ -30,17 +31,16 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
-  var auth = Get.put(MyAuthentication(), tag: 'my_auth');
-  var userState = Get.put(UserState());
   FirebaseAuth fireInstance = FirebaseAuth.instance;
-
+  final auth = Get.put(MyAuthentication());
+  final userState = Get.put(UserState());
   final updateEmailFeild = TextEditingController();
   final updateAchiveAmount = TextEditingController();
-  final founderConnector = Get.put(FounderConnector());
   final userStore = Get.put(UserStore());
   final homeViewState = Get.put(UserState());
-  final socialAuth = Get.put(MySocialAuth(), tag: 'social_auth');
+  final socialAuth = Get.put(MySocialAuth());
   final my_context = Get.context;
+  final removeStartup = Get.put(RemoveStartup());
 
   double mem_dialog_width = 900;
   var is_update_mail = false;
@@ -68,7 +68,7 @@ class _UserSettingsState extends State<UserSettings> {
   double dialog_heading_fonSize = 14;
 
   double auth_dialog_width = 0.20;
-  double auth_dialog_height = 0.30;
+  double auth_dialog_height = 0.40;
 
   double item_iconSize = 20;
   double item_fontSize = 15;
@@ -94,7 +94,7 @@ class _UserSettingsState extends State<UserSettings> {
 
   double rounded_btn_fontSize = 15;
   double rounded_btn_width = 28;
-  double rounded_btn_height = 28; 
+  double rounded_btn_height = 28;
 
   //////////////////////////////////////////////////////
   // Password Reset Links Send Succfull Dialog :
@@ -157,13 +157,13 @@ class _UserSettingsState extends State<UserSettings> {
           Navigator.of(context).pop();
         },
         onConfirmBtnTap: () async {
-          final resp = await auth.ResetPasswordWithEmail();
-          if (resp['response']) {
+          // final resp = await auth.ResetPasswordWithEmail();
             Navigator.of(context).pop();
             await ReauthenticateDialog(
               task: ReautheticateTask.deleteProfile,
             );
-          }
+          // if (resp['response']) {
+          // }
         },
         widget: Text(
           'After confirm your Profile and Statups will remove completely',
@@ -218,27 +218,27 @@ class _UserSettingsState extends State<UserSettings> {
   /// DeleteStartups Dialog
   ///////////////////////////////////////////////
   DeleteStartupDialog(context) async {
-    showDialog(
-        barrierDismissible: false,
+    CoolAlert.show(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Container(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.cancel_outlined,
-                          color: Colors.blueGrey.shade300, size: 20))),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              content: SizedBox(
-                width: context.width * auth_dialog_width,
-                height: context.height * auth_dialog_height,
-                child: DeleteStartupDialogCont(),
-              ));
-        });
+        width: 200,
+        title: 'Confirm',
+        type: CoolAlertType.confirm,
+        onCancelBtnTap: () {
+          Navigator.of(context).pop();
+        },
+        onConfirmBtnTap: () async {
+          // Delete Startup:
+          final resp = await removeStartup.DeleteStartup(user_id: fireInstance.currentUser?.uid);
+          
+          Navigator.of(context).pop();
+        },
+        widget: Text(
+          'After confirm Statups will remove completely',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 14,
+              color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade500),
+        ));
   }
 
 //////////////////////////////////
@@ -274,11 +274,11 @@ class _UserSettingsState extends State<UserSettings> {
       'user_id': user_id,
     });
 
-    if (usertype == UserType.investor) {
+    if (usertype == UserStoreName.investor) {
       Get.toNamed(investor_registration_form, parameters: {'data': param});
     }
 
-    if (usertype == UserType.founder) {
+    if (usertype == UserStoreName.founder) {
       Get.toNamed(create_founder, parameters: {'data': param});
     }
   }
@@ -287,9 +287,6 @@ class _UserSettingsState extends State<UserSettings> {
   DeleteUser() async {
     await AskBeforeRemoveUserProfile(my_context);
   }
-
-  // Delete Startups :
-  DeleteStartup() async {}
 
   // Verify Phone no :
   VerifyPhoneno() async {
@@ -336,7 +333,7 @@ class _UserSettingsState extends State<UserSettings> {
     dialog_heading_fonSize = 14;
 
     auth_dialog_width = 0.20;
-    auth_dialog_height = 0.30;
+    auth_dialog_height = 0.40;
 
     item_iconSize = 20;
     item_fontSize = 15;
@@ -381,7 +378,7 @@ class _UserSettingsState extends State<UserSettings> {
       dialog_heading_fonSize = 14;
 
       auth_dialog_width = 0.20;
-      auth_dialog_height = 0.30;
+      auth_dialog_height = 0.40;
 
       item_iconSize = 20;
       item_fontSize = 15;
@@ -407,7 +404,7 @@ class _UserSettingsState extends State<UserSettings> {
 
       rounded_btn_fontSize = 15;
       rounded_btn_width = 28;
-      rounded_btn_height = 28; 
+      rounded_btn_height = 28;
       print('Greator then 1500');
     }
 
@@ -629,7 +626,7 @@ class _UserSettingsState extends State<UserSettings> {
 
       rounded_btn_fontSize = 15;
       rounded_btn_width = 28;
-      rounded_btn_height = 28; 
+      rounded_btn_height = 28;
       print('640');
     }
 
@@ -658,7 +655,7 @@ class _UserSettingsState extends State<UserSettings> {
 
       title_cont_width = 0.06;
       title_font_size = 12;
-      
+
       info_iconSize = 14;
 
       trail_width = 110;
@@ -678,7 +675,7 @@ class _UserSettingsState extends State<UserSettings> {
 
       rounded_btn_fontSize = 12;
       rounded_btn_width = 22;
-      rounded_btn_height = 22; 
+      rounded_btn_height = 22;
       print('480');
     }
 
@@ -686,7 +683,7 @@ class _UserSettingsState extends State<UserSettings> {
     /// GET REQUIREMENTS :
     ////////////////////////////////////////////
     GetLocalStorageData() async {
-      user_id = await homeViewState.GetUserId();
+      user_id = fireInstance.currentUser?.uid;
       usertype = await homeViewState.GetUserType();
 
       if (fireInstance.currentUser?.phoneNumber != null) {
@@ -735,7 +732,6 @@ class _UserSettingsState extends State<UserSettings> {
             elevation: page_elevation,
             shadowColor: Colors.blueGrey,
             color: home_profile_cont_color,
-
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -793,27 +789,27 @@ class _UserSettingsState extends State<UserSettings> {
                     //       ),
 
                     // Switch user type;
-                    widget.usertype == UserType.investor
-                        ? SettingItem(
-                            title: 'Switch to founder',
-                            icon: Icons.refresh_rounded,
-                            fun: SwitchInvestorToFounder,
-                          )
-                        : Container(),
+                    // widget.usertype == UserType.investor
+                    //     ? SettingItem(
+                    //         title: 'Switch to founder',
+                    //         icon: Icons.refresh_rounded,
+                    //         fun: SwitchInvestorToFounder,
+                    //       )
+                    //     : Container(),
+
+                    // Delete or Remove user field :
+                    // WarningItem(
+                    //     context: context,
+                    //     title: 'Remove Startup',
+                    //     icon: Icons.home_max_outlined,
+                    //     fun: DeleteStartupDialog),
 
                     // Delete or Remove user field :
                     WarningItem(
                         context: context,
-                        title: 'Delete Startup',
-                        icon: Icons.home_max_outlined,
-                        fun: DeleteStartupDialog),
-
-                    // Delete or Remove user field :
-                    WarningItem(
-                        context: context,
-                        title: 'Delete Account',
+                        title: 'Remove Profile',
                         icon: Icons.delete_rounded,
-                        fun: DeleteUser),
+                        fun: AskBeforeRemoveUserProfile),
                   ],
                 ))));
   }
@@ -844,105 +840,98 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-
-
-
   Container EditEmailItem({title, icon, fun, simpleEditButton}) {
     return Container(
       padding: EdgeInsets.all(4),
       child: ListTile(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          style: ListTileStyle.drawer,
-          hoverColor: home_setting_tile_hover_color,
-          selected: true,
-          mouseCursor: MouseCursor.defer,
-          onTap: () {},
-          autofocus: true,
-          leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
-          title: Container(
-            width: context.width * title_cont_width,
-            child: Row(
-              children: [
-                AutoSizeText.rich(
-                  TextSpan(text: title),
-                  style: TextStyle(
-                      fontSize: title_font_size, color: input_text_color),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        style: ListTileStyle.drawer,
+        hoverColor: home_setting_tile_hover_color,
+        selected: true,
+        mouseCursor: MouseCursor.defer,
+        onTap: () {},
+        autofocus: true,
+        leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
+        title: Container(
+          width: context.width * title_cont_width,
+          child: Row(
+            children: [
+              AutoSizeText.rich(
+                TextSpan(text: title),
+                style: TextStyle(
+                    fontSize: title_font_size, color: input_text_color),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Icon(
+                  Icons.verified_outlined,
+                  size: info_iconSize,
+                  color: primary_light,
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Icon(
-                    Icons.verified_outlined,
-                    size: info_iconSize,
-                    color: primary_light,
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
-          trailing: context.width < 640
-              ?
+        ),
+        // trailing: context.width < 640
+        //     ?
 
-              // Rounded Edit Button :
-              Tooltip(
-                  message: 'edit',
-                  
-                  child: Container(
-                    width: rounded_btn_width,
-                    height: rounded_btn_height,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueGrey.shade300),
-                        borderRadius: BorderRadius.circular(50)),
-                  
-                    child: IconButton(
-                        padding: EdgeInsets.all(4),
-                        onPressed: () {},
+        //     // Rounded Edit Button :
+        //     Tooltip(
+        //         message: 'edit',
+        //         child: Container(
+        //           width: rounded_btn_width,
+        //           height: rounded_btn_height,
+        //           decoration: BoxDecoration(
+        //               border: Border.all(color: Colors.blueGrey.shade300),
+        //               borderRadius: BorderRadius.circular(50)),
+        //           child: IconButton(
+        //               padding: EdgeInsets.all(4),
+        //               onPressed: () {},
+        //               icon: Icon(
+        //                 Icons.edit,
+        //                 size: rounded_btn_fontSize,
+        //                 color: edit_btn_color,
+        //               )),
+        //         ),
+        //       )
+        //     :
 
-                        icon: Icon(
-                          Icons.edit,
-                          size: rounded_btn_fontSize,
-                          color: edit_btn_color,
-                        )),
-                  ),
-                )
-              :
-
-
-              // Simple Edit Button :
-              Container(
-                  width: trail_width,
-                  height: trail_height,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: trail_row_width,
-                        height: trail_row_height,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border:
-                                Border.all(color: Colors.blueGrey.shade300)),
-                        child: TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                is_update_mail
-                                    ? is_update_mail = false
-                                    : is_update_mail = true;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.edit,
-                              size: trail_icon_fontSize,
-                              color: edit_btn_color,
-                            ),
-
-                            label: Text('update',
-                            style: TextStyle(
-                              color: edit_btn_color
-                            ),)),
-                      ),
-                    ],
-                  ),
-                )),
+        // Simple Edit Button :
+        // Container(
+        //     width: trail_width,
+        //     height: trail_height,
+        //     child: Row(
+        //       children: [
+        //         Container(
+        //           width: trail_row_width,
+        //           height: trail_row_height,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(15),
+        //               border:
+        //                   Border.all(color: Colors.blueGrey.shade300)),
+        //           child: TextButton.icon(
+        //               onPressed: () {
+        //                 setState(() {
+        //                   is_update_mail
+        //                       ? is_update_mail = false
+        //                       : is_update_mail = true;
+        //                 });
+        //               },
+        //               icon: Icon(
+        //                 Icons.edit,
+        //                 size: trail_icon_fontSize,
+        //                 color: edit_btn_color,
+        //               ),
+        //               label: Text(
+        //                 'update',
+        //                 style: TextStyle(color: edit_btn_color),
+        //               )),
+        //         ),
+        //       ],
+        //     ),
+        //   )
+      ),
     );
   }
 
@@ -977,35 +966,38 @@ class _UserSettingsState extends State<UserSettings> {
             ],
           ),
         ),
-        trailing: Container(
-          width: trail_width,
-          height: trail_height,
-          child: Row(
-            children: [
-              Container(
-                width: trail_row_width,
-                height: trail_row_height,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.blueGrey.shade300)),
-                child: TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        is_update_achive_amount
-                            ? is_update_achive_amount = false
-                            : is_update_achive_amount = true;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      size: trail_icon_fontSize,
-                      color: edit_btn_color,
-                    ),
-                    label: Text('update',style: TextStyle(color: edit_btn_color),)),
-              ),
-            ],
-          ),
-        ),
+        // trailing: Container(
+        //   width: trail_width,
+        //   height: trail_height,
+        //   child: Row(
+        //     children: [
+        //       Container(
+        //         width: trail_row_width,
+        //         height: trail_row_height,
+        //         decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(15),
+        //             border: Border.all(color: Colors.blueGrey.shade300)),
+        //         child: TextButton.icon(
+        //             onPressed: () {
+        //               setState(() {
+        //                 is_update_achive_amount
+        //                     ? is_update_achive_amount = false
+        //                     : is_update_achive_amount = true;
+        //               });
+        //             },
+        //             icon: Icon(
+        //               Icons.edit,
+        //               size: trail_icon_fontSize,
+        //               color: edit_btn_color,
+        //             ),
+        //             label: Text(
+        //               'update',
+        //               style: TextStyle(color: edit_btn_color),
+        //             )),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
@@ -1045,122 +1037,121 @@ class _UserSettingsState extends State<UserSettings> {
             ],
           ),
         ),
-        trailing: Container(
-          width: trail_width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              fireInstance.currentUser?.phoneNumber != null
-                  ? context.width < 640
-                      ?
+        // trailing: Container(
+        //   width: trail_width,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       fireInstance.currentUser?.phoneNumber != null
+        //           ? context.width < 640
+        //               ?
 
-                      // Rounded Button :
-                      Tooltip(
-                          message: 'edit',
-                          child: Container(
-                            width: rounded_btn_width,
-                            height: rounded_btn_height,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.blueGrey.shade300),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: IconButton(
-                                padding: EdgeInsets.all(4),
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: rounded_btn_fontSize,
-                                  color: edit_btn_color,
-                                )),
-                          ),
-                        )
-                      :
-                      // Simple Phone no Update Button  :
-                      Container(
-                          width: trail_row_width,
-                          height: trail_row_height,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border:
-                                  Border.all(color: Colors.blueGrey.shade300)),
-                          child: TextButton.icon(
-                              icon: Icon(
-                                Icons.edit,
-                                size: trail_icon_fontSize,
-                                color: edit_btn_color,
-                              ),
-                              onPressed: () async {
-                                await fun();
-                              },
-                              label:  Text(
-                                'update',
-                                style: TextStyle(color: edit_btn_color),
-                              )),
-                        )
-                  : fireInstance.currentUser?.phoneNumber == null
-                      ? context.width < 640
-                          ?
-                          // Rounded Button :
-                          Container(
-                              margin:
-                                  EdgeInsets.only(left: context.width * 0.14),
-                              child: Tooltip(
-                                message: 'verify',
-                                child: Container(
-                                  width: rounded_btn_width,
-                                  height: rounded_btn_height,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.blueGrey.shade300),
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: IconButton(
-                                      padding: EdgeInsets.all(4),
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.check,
-                                        size: rounded_btn_fontSize,
-                                        color: edit_btn_color,
-                                      )),
-                                ),
-                              ),
-                            )
-                          :
+        //               // Rounded Button :
+        //               Tooltip(
+        //                   message: 'edit',
+        //                   child: Container(
+        //                     width: rounded_btn_width,
+        //                     height: rounded_btn_height,
+        //                     decoration: BoxDecoration(
+        //                         border:
+        //                             Border.all(color: Colors.blueGrey.shade300),
+        //                         borderRadius: BorderRadius.circular(50)),
+        //                     child: IconButton(
+        //                         padding: EdgeInsets.all(4),
+        //                         onPressed: () {},
+        //                         icon: Icon(
+        //                           Icons.edit,
+        //                           size: rounded_btn_fontSize,
+        //                           color: edit_btn_color,
+        //                         )),
+        //                   ),
+        //                 )
+        //               :
+        //               // Simple Phone no Update Button  :
+        //               Container(
+        //                   width: trail_row_width,
+        //                   height: trail_row_height,
+        //                   decoration: BoxDecoration(
+        //                       borderRadius: BorderRadius.circular(15),
+        //                       border:
+        //                           Border.all(color: Colors.blueGrey.shade300)),
+        //                   child: TextButton.icon(
+        //                       icon: Icon(
+        //                         Icons.edit,
+        //                         size: trail_icon_fontSize,
+        //                         color: edit_btn_color,
+        //                       ),
+        //                       onPressed: () async {
+        //                         await fun();
+        //                       },
+        //                       label: Text(
+        //                         'update',
+        //                         style: TextStyle(color: edit_btn_color),
+        //                       )),
+        //                 )
+        //           : fireInstance.currentUser?.phoneNumber == null
+        //               ? context.width < 640
+        //                   ?
+        //                   // Rounded Button :
+        //                   Container(
+        //                       margin:
+        //                           EdgeInsets.only(left: context.width * 0.14),
+        //                       child: Tooltip(
+        //                         message: 'verify',
+        //                         child: Container(
+        //                           width: rounded_btn_width,
+        //                           height: rounded_btn_height,
+        //                           decoration: BoxDecoration(
+        //                               border: Border.all(
+        //                                   color: Colors.blueGrey.shade300),
+        //                               borderRadius: BorderRadius.circular(50)),
+        //                           child: IconButton(
+        //                               padding: EdgeInsets.all(4),
+        //                               onPressed: () {},
+        //                               icon: Icon(
+        //                                 Icons.check,
+        //                                 size: rounded_btn_fontSize,
+        //                                 color: edit_btn_color,
+        //                               )),
+        //                         ),
+        //                       ),
+        //                     )
+        //                   :
 
-                          // Simple Phone no Verify Button :
-                          Container(
-                              width: phone_no_cont_width,
-                              height: phone_no_height,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                      color: Colors.blueGrey.shade300)),
-                              child: TextButton.icon(
-                                  icon: Icon(
-                                    Icons.check,
-                                    size: trail_icon_fontSize,
-                                    color: edit_btn_color,
-                                  ),
-                                  onPressed: () async {
-                                    await fun();
-                                  },
-                                  label: Text('verify now',
-                                  style: TextStyle(color:edit_btn_color ),)),
-                            )
-                      : Container()
-            ],
-          ),
-        ),
+        //                   // Simple Phone no Verify Button :
+        //                   Container(
+        //                       width: phone_no_cont_width,
+        //                       height: phone_no_height,
+        //                       decoration: BoxDecoration(
+        //                           borderRadius: BorderRadius.circular(15),
+        //                           border: Border.all(
+        //                               color: Colors.blueGrey.shade300)),
+        //                       child: TextButton.icon(
+        //                           icon: Icon(
+        //                             Icons.check,
+        //                             size: trail_icon_fontSize,
+        //                             color: edit_btn_color,
+        //                           ),
+        //                           onPressed: () async {
+        //                             await fun();
+        //                           },
+        //                           label: Text(
+        //                             'verify now',
+        //                             style: TextStyle(color: edit_btn_color),
+        //                           )),
+        //                     )
+        //               : Container()
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
-
-
 
   Container TakeEmailAddress({title, icon, fun}) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(4),
-      
       child: ListTile(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -1173,29 +1164,25 @@ class _UserSettingsState extends State<UserSettings> {
         },
         autofocus: true,
 
-        // Icon : 
+        // Icon :
         leading: Icon(icon, size: item_iconSize, color: edit_btn_color),
-       
-      // Input Mail Section : 
+
+        // Input Mail Section :
         title: Container(
           child: TextField(
               controller: updateEmailFeild,
-              decoration:  InputDecoration(
+              decoration: InputDecoration(
                   hintText: 'Enter mail',
-                
                   hintStyle: TextStyle(color: Colors.blueGrey.shade300),
-                
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blueGrey.shade800),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ))),
         ),
 
-
-        // Done Button : 
+        // Done Button :
         trailing: Container(
           width: trail_width,
           height: trail_height,
@@ -1216,7 +1203,10 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_mail = false;
                       });
                     },
-                    child: Text('Done',style: TextStyle(color: edit_btn_color),)),
+                    child: Text(
+                      'Done',
+                      style: TextStyle(color: edit_btn_color),
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -1238,10 +1228,6 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
-
-
-
-
 
   Container TakeAchiveAmount({title, icon, fun}) {
     return Container(
@@ -1290,7 +1276,10 @@ class _UserSettingsState extends State<UserSettings> {
                         is_update_achive_amount = false;
                       });
                     },
-                    child: Text('Done',style: TextStyle(color: edit_btn_color),)),
+                    child: Text(
+                      'Done',
+                      style: TextStyle(color: edit_btn_color),
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -1312,10 +1301,6 @@ class _UserSettingsState extends State<UserSettings> {
       ),
     );
   }
-
-
-
-
 
   Container WarningItem({context, title, icon, fun}) {
     return Container(

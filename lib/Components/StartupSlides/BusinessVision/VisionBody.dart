@@ -8,6 +8,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -24,12 +25,17 @@ class VisionBody extends StatefulWidget {
 }
 
 class _VisionBodyState extends State<VisionBody> {
-  var startupUpdater = Get.put(StartupUpdater(),);
-  var visionStore = Get.put(BusinessVisionStore(),);
-  var startupConnector =
-      Get.put(StartupViewConnector(),);
-      
+  final startupUpdater = Get.put(
+    StartupUpdater(),
+  );
+  final visionStore = Get.put(
+    BusinessVisionStore(),
+  );
+  final startupConnector = Get.put(
+    StartupViewConnector(),
+  );
   var my_context = Get.context;
+  final authUser = FirebaseAuth.instance.currentUser;
 
   final formKey = GlobalKey<FormBuilderState>();
 
@@ -114,7 +120,7 @@ class _VisionBodyState extends State<VisionBody> {
       await visionStore.SetVisionParam(data: vision);
 
       var resp =
-          await startupUpdater.UpdatehBusinessVision(startup_id: startup_id);
+          await startupUpdater.UpdatehBusinessVision(user_id: authUser?.uid);
 
       // Success Handler Cached Data:
       // Update Success Handler :
@@ -154,7 +160,7 @@ class _VisionBodyState extends State<VisionBody> {
       // Update :
       if (updateMode == true) {
         final resp =
-            await startupConnector.FetchBusinessVision(startup_id: startup_id);
+            await startupConnector.FetchBusinessVision(user_id: authUser?.uid);
         await visionStore.SetVisionParam(data: resp['data']['vision']);
       }
 
@@ -228,7 +234,6 @@ class _VisionBodyState extends State<VisionBody> {
       input_field_height = 20.0;
     }
 
-    
     // SMALL TABLET:
     if (context.width < 640) {
       maxlines = 11;
@@ -261,7 +266,8 @@ class _VisionBodyState extends State<VisionBody> {
           }
 
           if (snapshot.hasData) {
-            return MainMethod(context); // snapshot.data  :- get your object which is pass from your downloadData() function
+            return MainMethod(
+                context); // snapshot.data  :- get your object which is pass from your downloadData() function
           }
 
           inital_val = snapshot.data.toString();
@@ -273,8 +279,7 @@ class _VisionBodyState extends State<VisionBody> {
   // MAIN METHOD SECTION :
   //////////////////////////////////////////
   Column MainMethod(
-    BuildContext  
-    data,
+    BuildContext data,
   ) {
     return Column(
       children: [
@@ -323,45 +328,36 @@ class _VisionBodyState extends State<VisionBody> {
               fontSize: 15, wordSpacing: 1.5, height: 1.5),
           validator: FormBuilderValidators.compose([
             // Remove Comment in  Production mode:
-            FormBuilderValidators.minLength(  500,
+            FormBuilderValidators.minLength(500,
                 errorText: 'At least 500 required'),
 
-            FormBuilderValidators.maxLength(  2000,
+            FormBuilderValidators.maxLength(2000,
                 errorText: 'Maximum 2000 char allow ')
           ]),
-         
           scrollPadding: EdgeInsets.all(10),
           maxLines: maxlines,
-         
           decoration: InputDecoration(
               helperText: 'min allow 200 ',
               hintText: "your vision",
               hintStyle: TextStyle(
                 color: Colors.blueGrey.shade200,
               ),
-              
               fillColor: Colors.grey[100],
               filled: true,
-              
               contentPadding: EdgeInsets.all(20),
-              
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide:
                       BorderSide(width: 1.5, color: Colors.blueGrey.shade200)),
-              
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide(width: 2, color: primary_light)),
-              
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
         ),
       ),
     );
   }
-
-
 
   Container SubHeadingSection(BuildContext context) {
     return Container(
@@ -376,9 +372,6 @@ class _VisionBodyState extends State<VisionBody> {
           textAlign: TextAlign.center),
     );
   }
-
-
-
 
   Container UpdateButton(BuildContext context) {
     return Container(

@@ -2,16 +2,14 @@ import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SaveStoryButton extends StatefulWidget {
-  var founder_id;
-  var startup_id;
-  SaveStoryButton(
-      {required this.founder_id, required this.startup_id, Key? key})
-      : super(key: key);
+  var user_id;
+  SaveStoryButton({required this.user_id, Key? key}) : super(key: key);
 
   @override
   State<SaveStoryButton> createState() => _SaveStoryButtonState();
@@ -20,11 +18,11 @@ class SaveStoryButton extends StatefulWidget {
 class _SaveStoryButtonState extends State<SaveStoryButton> {
   var userState = Get.put(UserState());
   var homeviewConnector = Get.put(HomeViewConnector());
+
   bool is_saved = false;
   var user_id;
 
-
-  double save_iconSize = 26; 
+  double save_iconSize = 26;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +30,8 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
     /// GET REQUIRED PARAM :
     /////////////////////////////////////////
     IsPostSaved() async {
-      user_id = await userState.GetUserId();
+      user_id = user_id;
       final resp = await homeviewConnector.IsStartupSaved(
-        startup_id: widget.startup_id,
         user_id: user_id,
       );
 
@@ -74,18 +71,13 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
         });
   }
 
-
-
   //////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////
   MainMethod(BuildContext context) {
-    return SaveUnsaveIcon(
-        is_saved: is_saved, user_id: user_id, startup_id: widget.startup_id);
+    return SaveUnsaveIcon(is_saved: is_saved, user_id: user_id);
   }
 }
-
-
 
 ////////////////////////////
 /// EXTERNAL WIDGET:
@@ -94,11 +86,7 @@ class SaveUnsaveIcon extends StatefulWidget {
   var user_id;
   var startup_id;
   var is_saved;
-  SaveUnsaveIcon(
-      {this.is_saved,
-      required this.user_id,
-      required this.startup_id,
-      Key? key})
+  SaveUnsaveIcon({this.is_saved, required this.user_id, Key? key})
       : super(key: key);
 
   @override
@@ -108,8 +96,7 @@ class SaveUnsaveIcon extends StatefulWidget {
 class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   var homeviewConnector = Get.put(HomeViewConnector());
   bool is_saved = false;
-  double save_iconSize = 26; 
-
+  double save_iconSize = 26;
 
   ///////////////////////////////////////////////////////////
   /// It checks if the startup is already saved, if it is,
@@ -117,7 +104,6 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   ///////////////////////////////////////////////////////
   SavingPostProcess() async {
     final resp = await homeviewConnector.SaveStartup(
-      startup_id: widget.startup_id,
       user_id: widget.user_id,
     );
 
@@ -131,10 +117,8 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     // If startup already save then Unsave :
     if (resp['code'] == 101) {
       final unsave_resp = await homeviewConnector.UnsaveStartup(
-        startup_id: widget.startup_id,
         user_id: widget.user_id,
       );
-
       // Update UI :
       if (unsave_resp['response']) {
         setState(() {
@@ -144,10 +128,6 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     }
   }
 
-
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -155,24 +135,22 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    save_iconSize = 26;
 
-    save_iconSize = 26; 
-    
     ////////////////////////////////////
     /// RESPONSIVENESS :
     ////////////////////////////////////
     // DEFAULT :
     if (context.width > 1500) {
-      save_iconSize = 26; 
+      save_iconSize = 26;
       print('Greator then 1500');
     }
 
     // PC:
     if (context.width < 1500) {
-      save_iconSize = 23; 
+      save_iconSize = 23;
       print('1500');
     }
 
@@ -191,7 +169,7 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-      save_iconSize = 23; 
+      save_iconSize = 23;
       print('640');
     }
 
@@ -199,7 +177,6 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     if (context.width < 480) {
       print('480');
     }
-
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

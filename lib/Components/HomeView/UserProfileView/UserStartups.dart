@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileInfoChart.dart';
 import 'package:be_startup/Components/HomeView/UserProfileView/ProfileStoryHeading.dart';
@@ -34,7 +35,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
 
   var startup_name = [];
 
-  var startup_ids = [];
+  var user_ids = [];
 
   var usertype;
   var user_id;
@@ -91,7 +92,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       ///////////////////////////////////////////
       /// If user is Investor :
       ///////////////////////////////////////////
-      if (usertype == UserType.investor) {
+      if (usertype == UserStoreName.investor) {
         resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
       }
 
@@ -100,9 +101,8 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       // 1. if menu === intrested then show intrested startups :
       // 2. menu == my_startup show his startups: [ Default ] :
       /////////////////////////////////////////////////////////////
-      if (usertype == UserType.founder) {
+      if (usertype == UserStoreName.founder) {
         if (menuType == FounderStartupMenu.my_startup) {
-          print('Menu Type $menuType');
           resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
           print('Menu Type $resp');
         } else {
@@ -114,7 +114,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     // Response Handler :
     if (resp['response']) {
       startups_length = resp['data']['startup_len'];
-      startup_ids = resp['data']['startup_ids'];
+      user_id = resp['data']['user_id'];
       startup_name = resp['data']['startup_name'];
     }
   }
@@ -405,13 +405,13 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
                             child: Column(
                               children: [
                                 ProfileStoryThumbnail(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_id[itemIndex],
                                 ),
                                 ProfileStoryHeading(
                                   startup_name: startup_name[itemIndex],
                                 ),
                                 ProfileInfoChart(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_id[itemIndex],
                                 ),
                               ],
                             ),

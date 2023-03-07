@@ -9,13 +9,13 @@ import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class BusinessWhyInvestBody extends StatefulWidget {
   BusinessWhyInvestBody({Key? key}) : super(key: key);
@@ -25,11 +25,11 @@ class BusinessWhyInvestBody extends StatefulWidget {
 }
 
 class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
-  var whyInvestStore =
-      Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
-  var startupConnector =
-      Get.put(StartupViewConnector(), tag: "startup_connector");
-  var startupUpdater = Get.put(StartupUpdater(), tag: 'update_startup');
+  var whyInvestStore = Get.put(BusinessWhyInvestStore());
+  var startupConnector = Get.put(StartupViewConnector());
+  var startupUpdater = Get.put(StartupUpdater());
+
+  final authUser = FirebaseAuth.instance.currentUser;
 
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
@@ -111,8 +111,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       var whyInvest = formKey.currentState!.value['whyinvest'];
       await whyInvestStore.SetWhytextParam(data: whyInvest);
 
-      var resp =
-          await startupUpdater.UpdatehBusinessWhy(startup_id: startup_id);
+      var resp = await startupUpdater.UpdatehBusinessWhy(user_id: authUser?.uid);
 
       if (resp['response']) {
         CloseCustomPageLoadingSpinner();
@@ -150,8 +149,7 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     try {
       // Update :
       if (updateMode == true) {
-        final resp =
-            await startupConnector.FetchBusinessWhy(startup_id: startup_id);
+        final resp =  await startupConnector.FetchBusinessWhy(user_id: authUser?.uid);
         final temp_why = resp['data']['why_text'];
         await whyInvestStore.SetWhytextParam(data: temp_why);
       }
@@ -178,11 +176,9 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   //////////////////////////////////
   @override
   void initState() {
-    
-    if(Get.parameters.isNotEmpty){
-
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
-      
+
       startup_id = pageParam['startup_id'];
       founder_id = pageParam['founder_id'];
       is_admin = pageParam['is_admin'];
@@ -190,7 +186,6 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
-
     }
 
     super.initState();
@@ -353,13 +348,14 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
     return Container(
       margin: EdgeInsets.only(top: context.height * 0.05),
       child: AutoSizeText.rich(
-          TextSpan(style: context.textTheme.headline2, children: [
-        TextSpan(
-            text: business_why_sub_text,
-            style: TextStyle(
-                color: light_color_type3, fontSize: vision_subheading_text))
-      ]),
-      textAlign: TextAlign.center, ),
+        TextSpan(style: context.textTheme.headline2, children: [
+          TextSpan(
+              text: business_why_sub_text,
+              style: TextStyle(
+                  color: light_color_type3, fontSize: vision_subheading_text))
+        ]),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 

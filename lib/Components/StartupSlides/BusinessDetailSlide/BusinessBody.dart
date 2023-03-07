@@ -27,6 +27,7 @@ class _BusinessBodyState extends State<BusinessBody> {
   final detailStore = Get.put(BusinessDetailStore());
   final updateStore = Get.put(StartupUpdater());
   final startupConnector = Get.put(StartupViewConnector());
+  final authUser = FirebaseAuth.instance.currentUser;
 
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
@@ -49,7 +50,7 @@ class _BusinessBodyState extends State<BusinessBody> {
 ///////////////////////////////////////////////////
   SubmitBusinessDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final authUser = FirebaseAuth.instance.currentUser;
+    
     MyCustPageLoadingSpinner();
 
     formKey.currentState!.save();
@@ -111,7 +112,7 @@ class _BusinessBodyState extends State<BusinessBody> {
 
 
       var update_resp =
-          await updateStore.UpdateBusinessDetail(startup_id: startup_id);
+          await updateStore.UpdateBusinessDetail(user_id: startup_id);
 
       // Update Success Handler :
       if (update_resp['response']) {
@@ -178,7 +179,7 @@ class _BusinessBodyState extends State<BusinessBody> {
     try {
       if (updateMode == true) {
         final resp =
-            await startupConnector.FetchBusinessDetail(startup_id: startup_id);
+            await startupConnector.FetchBusinessDetail(user_id: authUser?.uid);
         final amount = resp['data']['desire_amount'];
         final logo = resp['data']['logo'];
         final name = resp['data']['name'];

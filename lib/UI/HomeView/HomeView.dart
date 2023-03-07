@@ -1,6 +1,6 @@
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserStoreName.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
@@ -14,6 +14,7 @@ import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +26,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   dynamic mainViewWidget = StoryListView();
-  var founderConnector = Get.put(FounderConnector());
+  var founderStore = Get.put(FounderStore());
   var investorConnector = Get.put(InvestorConnector());
 
   final userState = Get.put(UserState());
@@ -234,8 +235,10 @@ class _HomeViewState extends State<HomeView> {
       var profile_image;
       var username;
       var position;
-      final userType = userState.GetUserType();
-      print(userType);
+      final authUser = FirebaseAuth.instance.currentUser;
+      final userType = await userState.GetUserType();
+      user_id = authUser?.uid;
+
       // Investor Handler :
       if (userType == UserStoreName.investor) {
         final invest_resp =
@@ -275,17 +278,20 @@ class _HomeViewState extends State<HomeView> {
 
       // Founder Handler :
       if (userType == UserStoreName.founder) {
-        final found_resp = await founderConnector.FetchFounderDetailandContact(
+        print(user_id);
+        final found_resp = await founderStore.FetchFounderDetailandContact(
             user_id: user_id);
 
         if (found_resp['response']) {
-          user_profile = found_resp['data']['userDetail']['picture'];
-          user_name = found_resp['data']['userDetail']['name'];
-          registor_mail = found_resp['data']['userDetail']['email'];
+          final pure_data = found_resp['data'];
 
-          primary_mail = found_resp['data']['userContect']['primary_mail'];
-          phoneNo = found_resp['data']['userContect']['phone_no'];
-          otherContact = found_resp['data']['userContect']['other_contact'];
+          user_profile = pure_data['picture']?? temp_avtar_image;
+          user_name = pure_data['name'];
+          registor_mail = pure_data['email'];
+
+          primary_mail = pure_data['primary_mail'];
+          phoneNo = pure_data['phone_no'];
+          otherContact = pure_data['other_contact'];
 
           primary_mail = await CheckAndGetPrimaryMail(
               primary_mail: primary_mail, default_mail: registor_mail);
@@ -308,8 +314,10 @@ class _HomeViewState extends State<HomeView> {
       }
     }
 
+
+
 ///////////////////////////////////////////
-    /// SET REQUIRED PARAM :
+/// SET REQUIRED PARAM :
 ///////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
@@ -332,6 +340,7 @@ class _HomeViewState extends State<HomeView> {
   /// MAIN METHOD :
   ///////////////////////////////////////////
   Container MainMethod(BuildContext context) {
+
     // Show Floating Explore Button :
     Widget exploreButton = Container();
     if (context.width < 640) {
@@ -350,7 +359,7 @@ class _HomeViewState extends State<HomeView> {
 
             // Header Section:
             HomeHeaderSection(
-              profile_image: user_profile ?? temp_avtar_image,
+              profile_image: user_profile , 
               changeView: SetHomeView,
               usertype: usertype,
               home_icon: home_icon,

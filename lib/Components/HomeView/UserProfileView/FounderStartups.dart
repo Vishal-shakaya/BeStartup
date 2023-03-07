@@ -31,7 +31,7 @@ class _FounderStartupsState extends State<FounderStartups> {
 
   var startup_name = [];
 
-  var startup_ids = [];
+  var user_ids = [];
 
   var usertype;
   var user_id;
@@ -104,7 +104,7 @@ class _FounderStartupsState extends State<FounderStartups> {
     // Response Handler :
     if (resp['response']) {
       startups_length = resp['data']['startup_len'];
-      startup_ids = resp['data']['startup_ids'];
+      user_ids = resp['data']['user_ids'];
       startup_name = resp['data']['startup_name'];
     }
 
@@ -157,13 +157,13 @@ class _FounderStartupsState extends State<FounderStartups> {
                             child: Column(
                               children: [
                                 ProfileStoryThumbnail(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_ids[itemIndex],
                                 ),
                                 ProfileStoryHeading(
                                   startup_name: startup_name[itemIndex],
                                 ),
                                 ProfileInfoChart(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_ids[itemIndex],
                                 ),
                               ],
                             ),

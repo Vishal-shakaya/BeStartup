@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/InvestmentChart.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/Picture.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
@@ -26,14 +26,14 @@ class StartupInfoSection extends StatelessWidget {
   StartupInfoSection({Key? key}) : super(key: key);
 
   var startupConnect = Get.put(StartupViewConnector());
-  var founderConnector = Get.put(FounderConnector());
+  var founderStore = Get.put(FounderStore());
 
   var startup_logo;
 
   bool? is_admin;
   bool? is_liked = false;
   var startup_id;
-  var founder_id;
+  var user_id;
 
   String? founder_name;
   var founder_profile;
@@ -75,8 +75,7 @@ class StartupInfoSection extends StatelessWidget {
 /////////////////////////////////////////
   IsStartupLiked() async {
     final resp = await startupConnect.IsStartupLiked(
-      startup_id: startup_id,
-      user_id: founder_id,
+      user_id: user_id,
     );
 
     if (resp['code'] == 101) {
@@ -91,14 +90,12 @@ class StartupInfoSection extends StatelessWidget {
   EditThumbnail() {
     var param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     });
 
     Get.toNamed(create_business_thumbnail_url, parameters: {'data': param});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -115,19 +112,19 @@ class StartupInfoSection extends StatelessWidget {
 
       is_admin = await startupDetialView.GetIsUserAdmin();
       startup_id = await startupDetialView.GetStartupId();
-      founder_id = await startupDetialView.GetFounderId();
+      user_id = await startupDetialView.GetFounderId();
 
       // Set Liked Default State :
       await IsStartupLiked();
 
       try {
         final business_name_resp =
-            await startupConnect.FetchBusinessDetail(startup_id: startup_id);
+            await startupConnect.FetchBusinessDetail(user_id: user_id);
         final business_thum_resp =
-            await startupConnect.FetchThumbnail(startup_id: startup_id);
+            await startupConnect.FetchThumbnail(user_id: user_id);
 
-        final found_resp = await founderConnector.FetchFounderDetailandContact(
-            user_id: founder_id);
+        final found_resp = await founderStore.FetchFounderDetailandContact(
+            user_id: user_id);
 
         ////////////////////////////////////////
         // Founder Success Handler :
@@ -194,8 +191,6 @@ class StartupInfoSection extends StatelessWidget {
   }
 
   Container MainMethod(BuildContext context, data) {
-    
-
     image_cont_width = 0.6;
     image_cont_height = 0.20;
 
@@ -658,7 +653,7 @@ class StartupInfoSection extends StatelessWidget {
                         left: context.width * detail_btn_left_margin,
                         child: StartupDetailButtons(
                           startup_id: startup_id,
-                          user_id: founder_id,
+                          user_id: user_id,
                           is_saved: is_liked,
                         ))
                     : Positioned(

@@ -8,6 +8,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -22,9 +23,10 @@ class ThumbnailSection extends StatefulWidget {
 }
 
 class _ThumbnailSectionState extends State<ThumbnailSection> {
-  var thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
-  var startupConnector =
+  final thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
+  final startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
+  final authUser = FirebaseAuth.instance.currentUser;
 
   Uint8List? image;
   String filename = '';
@@ -102,7 +104,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     try {
       if (updateMode == true) {
         final resp =
-            await startupConnector.FetchThumbnail(startup_id: startup_id);
+            await startupConnector.FetchThumbnail(user_id: authUser?.uid);
         final temp_thumb = resp['data']['thumbnail'];
 
         if (upload_image_url == '') {
@@ -165,9 +167,9 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     // SMALL PC 1000
     if (context.width < 1200) {
       image_cont_width = 0.8;
-      
+
       upload_btn_left = 0.6;
-      
+
       upload_icon_size = 35;
       upload_btn_width = 45;
       upload_btn_height = 45;
@@ -177,7 +179,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     if (context.width < 800) {
       hint_text_font_size = 18;
       image_cont_width = 0.9;
-     
+
       upload_icon_size = 30;
       upload_btn_width = 40;
       upload_btn_height = 40;
@@ -311,20 +313,17 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
           borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(20), right: Radius.circular(20)),
           border: Border.all(width: 2, color: Colors.black54)),
-      child:
-          AutoSizeText.rich(
-            TextSpan(
-            style: Get.textTheme.headline3, children: [
-        TextSpan(
-            text: thumbnail_slide_subheading,
-            style: TextStyle(
-                color: Colors.blueGrey.shade200,
-                fontWeight: FontWeight.bold,
-                fontSize: hint_text_font_size))
-          ]),
-
-          textAlign: TextAlign.center,
-       ),
+      child: AutoSizeText.rich(
+        TextSpan(style: Get.textTheme.headline3, children: [
+          TextSpan(
+              text: thumbnail_slide_subheading,
+              style: TextStyle(
+                  color: Colors.blueGrey.shade200,
+                  fontWeight: FontWeight.bold,
+                  fontSize: hint_text_font_size))
+        ]),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

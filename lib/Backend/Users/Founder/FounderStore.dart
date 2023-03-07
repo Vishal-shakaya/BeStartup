@@ -7,15 +7,14 @@ import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-class BusinessFounderStore extends GetxController {
-  var userState = Get.put(UserState());
-  var startupState = Get.put(StartupDetailViewState());
-  var businessDetailStore = Get.put(BusinessDetailStore());
+class FounderStore extends GetxController {
+  FirebaseFirestore store = FirebaseFirestore.instance;
 
   static Map<String, dynamic>? founder;
 
@@ -35,49 +34,8 @@ class BusinessFounderStore extends GetxController {
     'other_contact': other_contact,
   };
 
-  SetFounderParam({data}) async {
-    founder_obj.clear();
-    await RemoveCachedData(key: getBusinessFounderDetailStoreName);
-
-    // picture = data['picture'];
-    name = data['name'];
-    // position = data['position'];
-    phone_no = data['phone_no'];
-    primary_mail = data['primary_mail'];
-    other_contact = data['other_contact'];
-
-    founder_obj['name'] = name;
-    // founder_obj['position'] = position;
-    founder_obj['phone_no'] = phone_no;
-    founder_obj['primary_mail'] = primary_mail;
-    founder_obj['other_contact'] = other_contact;
-  }
-
-//////////////////////////////////////////////////
-  /// It takes a picture from the camera, and then
-  /// sets the picture to the founder_obj['picture'] variable
-  ///
-  /// Args:
-  ///   data: The image data
-//////////////////////////////////////////////////
-  SetFounderPicture({data}) async {
-    founder_obj['picture'] = data;
-    picture = data;
-  }
-
-//////////////////////////////////////////////
-  /// It returns a Future object that
-  /// contains a Founder object
-  ///
-  /// Returns:
-  ///   The return value is a Future&lt;Founder&gt;.
-//////////////////////////////////////////////
-  GetFounderParam() async {
-    return founder_obj;
-  }
-
-  GetFounderPicture() async {
-    return picture;
+  SetImageUrl({required url}) async {
+    image_url = url;
   }
 
   /////////////////////////////////////
@@ -100,31 +58,29 @@ class BusinessFounderStore extends GetxController {
 
   // CRATE FOUNDER :
   CachedCreateFounder({
-    required user_id, 
-    required name, 
+    required user_id,
+    required name,
     required email,
-    required phone_no , 
-    required primary_mail, 
-    required other_contact, 
-
+    required phone_no,
+    required primary_mail,
+    required other_contact,
   }) async {
     var localStore = await SharedPreferences.getInstance();
-    
 
     try {
       try {
         var resp = await FounderModel(
-            user_id: user_id, 
-            name: name, 
-            email: email, 
-            primary_mail: primary_mail, 
-            phone_no: phone_no, 
-            other_contact: other_contact, 
+            user_id: user_id,
+            name: name,
+            email: email,
+            primary_mail: primary_mail,
+            phone_no: phone_no,
+            other_contact: other_contact,
             picture: image_url);
 
         localStore.setString(
-            getBusinessFounderDetailStoreName, json.encode(resp));;
-
+            getBusinessFounderDetailStoreName, json.encode(resp));
+        ;
 
         return ResponseBack(response_type: true, message: create_error_title);
       } catch (e) {
@@ -135,19 +91,17 @@ class BusinessFounderStore extends GetxController {
     }
   }
 
-
-
-/// It checks if the key exists in the shared preferences, if it does, it returns the value of the key,
-/// if it doesn't, it returns the default value
-/// 
-/// Returns:
-///   A Future<ResponseBack>
-  GetFounderDetail() async {
+  /// It checks if the key exists in the shared preferences, if it does, it returns the value of the key,
+  /// if it doesn't, it returns the default value
+  ///
+  /// Returns:
+  ///   A Future<ResponseBack>
+  GetCachedFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
       bool is_detail =
           localStore.containsKey(getBusinessFounderDetailStoreName);
-      if (is_detail ) {
+      if (is_detail) {
         var detail = localStore.getString(getBusinessFounderDetailStoreName);
 
         var detail_obj = jsonDecode(detail!);
@@ -160,30 +114,132 @@ class BusinessFounderStore extends GetxController {
           'primary_mail': detail_obj['primary_mail'],
           'other_contact': detail_obj['other_contact'],
         };
-        return ResponseBack(response_type: true,data: temp_founder);
+        return ResponseBack(response_type: true, data: temp_founder);
       } else {
-        return  ResponseBack(response_type: true,data: founder_obj);
+        return ResponseBack(response_type: true, data: founder_obj);
       }
     } catch (e) {
       return founder_obj;
     }
   }
 
-  SetFounderDetail({detail, contact}) async {
+//////////////////////////////////////////////////////////
+  ///  Database Handler
+//////////////////////////////////////////////////////////
+
+// Create Founder Detail :
+  CreateFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      var detail_obj = jsonDecode(detail!);
-      var contact_obj = jsonDecode(contact!);
-      founder_obj = {
-        'picture': detail_obj['picture'],
-        'name': detail_obj['name'],
-        // 'position': detail_obj['position'],
-        'phone_no': contact_obj['phone_no'],
-        'primary_mail': contact_obj['primary_mail'],
-        'other_contact': contact_obj['other_contact'],
-      };
+      final myStore = store.collection(getBusinessFounderDetailStoreName);
+
+      // fetch catigories for local storage :
+      // kye : FounderUserDetail
+      bool is_data = localStore.containsKey(getBusinessFounderDetailStoreName);
+
+      // Validate key :
+      if (is_data) {
+        String? temp_data =
+            localStore.getString(getBusinessFounderDetailStoreName);
+        var data = json.decode(temp_data!);
+
+        // Store Data in Firebase :
+        await myStore.add(data);
+        return ResponseBack(response_type: true);
+      } else {
+        return ResponseBack(response_type: false);
+      }
     } catch (e) {
-      return founder_obj;
+      return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+/////////////////////////////////////////////
+  /// GET FOUNDER DETAIL :
+/////////////////////////////////////////////
+  FetchFounderDetailandContact({required user_id}) async {
+    var data_userDetail;
+    var doc_id_userDetail;
+
+    try {
+      // FETCHING DATA FROM FIREBASE
+      var store = FirebaseFirestore.instance
+          .collection(getBusinessFounderDetailStoreName);
+
+      // Get User Detial Document :
+      var query = store.where('user_id', isEqualTo: user_id).get();
+      await query.then((value) {
+        data_userDetail = value.docs.first.data();
+        doc_id_userDetail = value.docs.first.id;
+      });
+
+      return ResponseBack(
+          response_type: true,
+          message: 'Fetch Founder Detail from Firebase storage',
+          data: data_userDetail);
+    } catch (e) {
+      return ResponseBack(
+          response_type: false,
+          message: fetch_data_error_title,
+          data: shimmer_image);
+    }
+  }
+
+////////////////////////////////////////////////////
+  /// UPDATIN USER DETAIL AND CONTACT BOTH:
+  /// I'm fetching data from firebase and storing it in a
+  /// variable, then I'm fetching data from cache
+  /// storage and storing it in a variable, then
+  /// I'm updating the data in firebase with the data from
+  /// cache storage
+////////////////////////////////////////////////////
+  UpdateFounderDetail({required user_id, required data}) async {
+    var data_userDetail;
+    var doc_id_userDetail;
+    var final_user_id;
+    var picture = '';
+    var name = '';
+    var position = '';
+    var phone_no = '';
+    var primary_mail = '';
+    var other_contact = '';
+
+    try {
+      picture = image_url;
+      name = data['name'];
+      // position = data['position'];
+      phone_no = data['phone_no'];
+      primary_mail = data['primary_mail'];
+      other_contact = data['other_contact'];
+
+      // FETCHING DATA FROM FIREBASE
+      var detailStore = FirebaseFirestore.instance
+          .collection(getBusinessFounderDetailStoreName);
+
+      // Get User Detial Document :
+      var query = detailStore.where('user_id', isEqualTo: user_id).get();
+      await query.then((value) {
+        data_userDetail = value.docs.first.data();
+        doc_id_userDetail = value.docs.first.id;
+      });
+
+      print('User Detail $data_userDetail');
+
+      data_userDetail['name'] = name;
+      data_userDetail['picture'] = picture;
+      data_userDetail['primary_mail'] = primary_mail;
+      data_userDetail['phone_no'] = phone_no;
+      data_userDetail['other_contact'] = other_contact;
+
+      detailStore.doc(doc_id_userDetail).update(data_userDetail);
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      print('Error While Updating Founder Detail $e');
+      return ResponseBack(
+          response_type: false,
+          message: update_error_title,
+          data: shimmer_image);
     }
   }
 }

@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
+import 'package:be_startup/Components/HomeView/UserProfileView/FounderStartups.dart';
 import 'package:be_startup/Components/StartupView/IntroPitch/IntroPitch.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ProductSection.dart';
@@ -29,7 +30,7 @@ class StartupView extends StatefulWidget {
 class _StartupViewState extends State<StartupView> {
   String? pageParam = Get.parameters['data'];
 
-  var founderConnector = Get.put(FounderConnector());
+  var founderStore = Get.put(FounderStore());
 
   var detailViewState = Get.put(StartupDetailViewState());
 
@@ -125,10 +126,10 @@ class _StartupViewState extends State<StartupView> {
 
     GetLocalStorageData() async {
       await detailViewState.SetStartupId(id: decode_data['startup_id']);
-      await detailViewState.SetFounderId(id: decode_data['founder_id']);
+      await detailViewState.SetFounderId(id: decode_data['user_id']);
       await detailViewState.SetIsUserAdmin(admin: decode_data['is_admin']);
 
-      final found_resp = await founderConnector.FetchFounderDetailandContact(
+      final found_resp = await founderStore.FetchFounderDetailandContact(
           user_id: decode_data['founder_id']);
 
       if (found_resp['response']) {
@@ -143,7 +144,7 @@ class _StartupViewState extends State<StartupView> {
 
         // GET STARTUP PICH VIDEO : 
         var resp = await startupConnector.FetchBusinessPitch(
-            startup_id: decode_data['startup_id']);
+            user_id: decode_data['user_id']);
 
         if (resp['response']) {
           if (resp['data']['pitch'] == null || resp['data']['pitch'] == '') {

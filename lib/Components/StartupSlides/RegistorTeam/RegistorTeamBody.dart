@@ -5,7 +5,7 @@ import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+
 import 'package:be_startup/Backend/Users/UserStore.dart';
 
 import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
@@ -28,13 +28,10 @@ class RegistorTeamBody extends StatefulWidget {
 }
 
 class _RegistorTeamBodyState extends State<RegistorTeamBody> {
-  var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
-  var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
-  var founderConnector = Get.put(FounderConnector(), tag: 'founder_connector');
-  var startupviewConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_view_connector');
-  var investorConnector =
-      Get.put(InvestorConnector(), tag: 'investor_connector');
+  var memeberStore = Get.put(BusinessTeamMemberStore());
+  var startupConnector = Get.put(StartupConnector());
+  var startupviewConnector = Get.put(StartupViewConnector());
+  var investorConnector =  Get.put(InvestorConnector());
 
   var userStore = Get.put(UserStore(), tag: 'user_store');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');

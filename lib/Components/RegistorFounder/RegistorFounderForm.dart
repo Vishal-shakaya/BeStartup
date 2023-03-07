@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -16,15 +15,18 @@ import 'package:shimmer/shimmer.dart';
 
 class RegistorFounderForm extends StatefulWidget {
   var formKey;
-  RegistorFounderForm({this.formKey, Key? key}) : super(key: key);
+  var data;
+  RegistorFounderForm({
+    this.data, 
+    this.formKey, 
+    Key? key}) : super(key: key);
 
   @override
   State<RegistorFounderForm> createState() => _RegistorFounderFormState();
 }
 
 class _RegistorFounderFormState extends State<RegistorFounderForm> {
-  var founderStore = Get.put(BusinessFounderStore());
-  var founde_connector = Get.put(FounderConnector(), tag: 'user_onnector');
+  var founderStore = Get.put(FounderStore());
 
   bool is_password_visible = true;
 
@@ -59,7 +61,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      final data = await founderStore.GetFounderDetail();
+      final data = widget.data;
       error_resp = data;
       return data;
     } catch (e) {
@@ -67,31 +69,13 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
     }
   }
 
-/////////////////////////////////////
-  /// SET PAGE DEFAULT STATE :
-/////////////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      user_id = pageParam['user_id'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-      
-      formfield_width = 500;
-      form_fontSize = 15;
-      form_hint_fontSize = 14;
-    
+    formfield_width = 500;
+    form_fontSize = 15;
+    form_hint_fontSize = 14;
+
     // DEFAULT :
     if (context.width > 1500) {
       formfield_width = 500;
@@ -188,15 +172,6 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
                           initial_val: data['name'],
                         ),
 
-                        // POSITION:
-                        // InputField(
-                        //   context: context,
-                        //   name: 'founder_position',
-                        //   lable_text: 'Position',
-                        //   hind_text: 'position in company',
-                        //   error_text: 'position in company required',
-                        //   initial_val: data['position'],
-                        // ),
                       ],
                     ),
                   ),
@@ -357,7 +332,7 @@ class _RegistorFounderFormState extends State<RegistorFounderForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength( 1,
+        FormBuilderValidators.minLength(1,
             allowEmpty: name == 'other_info' ? true : false,
             errorText: error_text)
       ]),

@@ -75,7 +75,6 @@ class _InvestmentChartState extends State<InvestmentChart> {
 /////////////////////////////////////////
   IsStartupLiked() async {
     final resp = await startupConnector.IsStartupLiked(
-      startup_id: startup_id,
       user_id: user_id,
     );
 
@@ -121,12 +120,11 @@ class _InvestmentChartState extends State<InvestmentChart> {
     var startupDetialView = Get.put(StartupDetailViewState());
     var userStateView = Get.put(UserState());
 
-    startup_id = await startupDetialView.GetStartupId();
     user_id = await startupDetialView.GetFounderId();
     is_admin = await startupDetialView.GetIsUserAdmin();
 
     final resp =
-        await startupConnector.FetchBusinessDetail(startup_id: startup_id);
+        await startupConnector.FetchBusinessDetail(user_id: user_id);
     // Success Handler:
     if (resp['response']) {
       invested_amount = resp['data']['achived_amount'] ?? '';

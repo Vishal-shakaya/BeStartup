@@ -9,6 +9,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -35,6 +36,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   var startupUpdater = Get.put(StartupUpdater());
 
   var pitchStore = Get.put(BusinessPitchStore());
+
+  final authUser = FirebaseAuth.instance.currentUser; 
 
   double mile_cont_width = 0.70;
 
@@ -94,7 +97,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
     if (formKey.currentState!.validate()) {
       var pitch = formKey.currentState!.value['pitch'];
       
-      var res = await pitchStore.SetPitch(pitchText: pitch);
+      var res = await pitchStore.SetPitch(pitchText: pitch , user_id: authUser?.uid);
 
       // Success Handler :
       if (res['response']) {
@@ -135,7 +138,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       await pitchStore.SetPitchParam(data: pitch);
 
       var resp =
-          await startupUpdater.UpdatehBusinessPitch(startup_id: startup_id);
+          await startupUpdater.UpdatehBusinessPitch(user_id: authUser?.uid);
 
       // Success Handler Cached Data:
       // Update Success Handler :
@@ -175,7 +178,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       // Update :
       if (updateMode == true) {
         final resp =
-            await startupConnector.FetchBusinessPitch(startup_id: startup_id);
+            await startupConnector.FetchBusinessPitch(user_id: authUser?.uid);
         await pitchStore.SetPitchParam(data: resp['data']['vision']);
       }
 

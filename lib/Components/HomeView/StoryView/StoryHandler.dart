@@ -272,8 +272,7 @@ class StoryListView extends StatelessWidget {
                     return Container(
                       child: StoryView(
                         key: UniqueKey(),
-                        startup_id: startup_ids[itemIndex],
-                        founder_id: founder_ids[itemIndex],
+                        user_id: founder_ids[itemIndex],
                         startup_name: startup_names[itemIndex],
                       ),
                     );

@@ -56,10 +56,11 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     GetLocalStorageData() async {
       var detailViewState = Get.put(StartupDetailViewState());
       final startup_id = await detailViewState.GetStartupId();
+      final user_id = await detailViewState.GetFounderId();
 
       try {
         final resp =
-            await startupConnect.FetchBusinessVision(startup_id: startup_id);
+            await startupConnect.FetchBusinessVision(user_id: user_id);
         vision_text = resp['data']['vision'];
 
         return vision_text;

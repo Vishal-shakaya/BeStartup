@@ -79,7 +79,7 @@ class StartupUpdater extends GetxController {
   /// Returns:
   ///   A Future object.
 /////////////////////////////////////////////////////////////
-  UpdateBusinessDetail({startup_id = false}) async {
+  UpdateBusinessDetail({required user_id}) async {
     final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
     var data;
     var name;
@@ -88,24 +88,15 @@ class StartupUpdater extends GetxController {
     var doc_id;
     var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
-
-
       // print('update startup name $name');
       // print('update startup logo $logo');
       // print('update startup desire_amount $desire_amount');
-      
+
       // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -133,7 +124,7 @@ class StartupUpdater extends GetxController {
   /// Returns:
   ///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
-  UpdatehBusinessVision({startup_id = false}) async {
+  UpdatehBusinessVision({required user_id}) async {
     var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
     var data;
     var vision;
@@ -141,19 +132,14 @@ class StartupUpdater extends GetxController {
 
     var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
+
 
     try {
       vision = await visionStore.GetVisionParam();
 
       var store =
           FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -171,36 +157,31 @@ class StartupUpdater extends GetxController {
     }
   }
 
-
-/// It takes a startup_id as a parameter, and if it's not empty, it will use that startup_id to query
-/// the database. If it is empty, it will use an empty string
-/// 
-/// Args:
-///   startup_id: The id of the startup. Defaults to false
-/// 
-/// Returns:
-///   A Future<ResponseBack>
-  UpdatehBusinessPitch({startup_id = false}) async {
-    var pitchStore = Get.put(BusinessPitchStore(),);
+  /// It takes a startup_id as a parameter, and if it's not empty, it will use that startup_id to query
+  /// the database. If it is empty, it will use an empty string
+  ///
+  /// Args:
+  ///   startup_id: The id of the startup. Defaults to false
+  ///
+  /// Returns:
+  ///   A Future<ResponseBack>
+  UpdatehBusinessPitch({required user_id}) async {
+    var pitchStore = Get.put(
+      BusinessPitchStore(),
+    );
     var data;
     var pitch;
     var doc_id;
 
     var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
 
     try {
       pitch = await pitchStore.GetPitchParam();
 
       var store =
           FirebaseFirestore.instance.collection(getBusinessPitchtStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -213,9 +194,7 @@ class StartupUpdater extends GetxController {
       // CACHE BUSINESS DETAIL :
       await StoreCacheData(fromModel: getBusinessPitchtStoreName, data: data);
       return ResponseBack(response_type: true);
-   
-    }
-     catch (e) {
+    } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
@@ -223,7 +202,7 @@ class StartupUpdater extends GetxController {
 /////////////////////////////////////////
   /// Update Why :
 /////////////////////////////////////////
-  UpdatehBusinessWhy({startup_id = false}) async {
+  UpdatehBusinessWhy({required user_id}) async {
     var whyInvestStore =
         Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
 
@@ -232,20 +211,13 @@ class StartupUpdater extends GetxController {
     var doc_id;
     var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       why_text = await whyInvestStore.GetWhytextParam();
 
       // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;

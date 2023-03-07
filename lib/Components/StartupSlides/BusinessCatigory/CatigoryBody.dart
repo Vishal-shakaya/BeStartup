@@ -10,6 +10,7 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -188,10 +189,11 @@ class _CatigoryBodyState extends State<CatigoryBody> {
     /////////////////////////////////////
     GetLocalStorageData() async {
       var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      final authUser = FirebaseAuth.instance.currentUser;
       var erro_resp;
       try {
         if (updateMode == true) {
-          final resp = await startupConnector.FetchBusinessCatigory();
+          final resp = await startupConnector.FetchBusinessCatigory(user_id: authUser?.uid);
           print(resp['message']);
         }
 

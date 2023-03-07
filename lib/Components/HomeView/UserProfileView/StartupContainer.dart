@@ -6,6 +6,7 @@ import 'package:be_startup/Components/HomeView/UserProfileView/Thumbnail.dart';
 import 'package:be_startup/Loader/Shimmer/HomeView/MainUserStartupsShimmer.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -27,7 +28,7 @@ class StartupContainer extends StatelessWidget {
 
   var startup_name = [];
 
-  var startup_ids = [];
+  var user_ids = [];
 
   var mainWidget;
 
@@ -37,26 +38,26 @@ class StartupContainer extends StatelessWidget {
     /// GET REQUIREMENTS :
     ///////////////////////////
     GetLocalStorageData() async {
-      final user_id = await userState.GetUserId();
+      final authUser = FirebaseAuth.instance.currentUser;
       final usertype = await userState.GetUserType();
       var resp;
 
       if (usertype != null) {
         if (usertype == UserType.investor) {
-          resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
+          resp = await homeviewConnector.FetchLikeStartups(user_id: authUser?.uid);
         }
 
         // If user type founder then check selected menu type:
         // 1. if menu === intrested then show intrested startups :
         // 2. menu == my_startup show his startups: [ Default ] :
         if (usertype == UserType.founder) {
-          resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
+          resp = await homeviewConnector.FetchUserStartups(user_id: authUser?.uid);
         }
       }
 
       if (resp['response']) {
         startups_length = resp['data']['startup_len'];
-        startup_ids = resp['data']['startup_ids'];
+        user_ids = resp['data']['user_ids'];
         startup_name = resp['data']['startup_name'];
       }
     }
@@ -116,13 +117,13 @@ class StartupContainer extends StatelessWidget {
                             child: Column(
                               children: [
                                 ProfileStoryThumbnail(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_ids[itemIndex],
                                 ),
                                 ProfileStoryHeading(
                                   startup_name: startup_name[itemIndex],
                                 ),
                                 ProfileInfoChart(
-                                  startup_id: startup_ids[itemIndex],
+                                  user_id: user_ids[itemIndex],
                                 ),
                               ],
                             ),

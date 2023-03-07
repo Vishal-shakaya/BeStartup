@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+// import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
@@ -22,14 +22,9 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
-  var startupConnect =
-      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  var startupConnect = Get.put(StartupViewConnector());
 
-  var startupviewConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_view_connector');
-
-  var founderConnector =
-      Get.put(FounderConnector(), tag: 'startup_view_first_connector');
+  var startupviewConnector = Get.put(StartupViewConnector());
 
   var detailViewState = Get.put(StartupDetailViewState());
 

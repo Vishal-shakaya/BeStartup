@@ -97,14 +97,13 @@ class _InvestPageState extends State<InvestPage> {
   double notice_fontSize = 14; 
 
   var startup_id;
-  var founder_id;
+  var user_id;
   var is_admin;
 
   EditInvestment() {
     var param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     });
 
@@ -115,13 +114,12 @@ class _InvestPageState extends State<InvestPage> {
   /// GET REQUIREMENTS :
   ////////////////////////////////
   GetLocalStorageData() async {
-    startup_id = await detailViewState.GetStartupId();
     is_admin = await detailViewState.GetIsUserAdmin();
-    founder_id = await detailViewState.GetFounderId();
+    user_id = await detailViewState.GetFounderId();
 
     try {
       final resp =
-          await startupConnector.FetchBusinessWhy(startup_id: startup_id);
+          await startupConnector.FetchBusinessWhy(user_id: user_id);
       why_text = resp['data']['why_text'];
       return why_text;
     } catch (e) {

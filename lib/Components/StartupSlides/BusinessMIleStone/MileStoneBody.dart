@@ -14,6 +14,7 @@ import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -33,6 +34,8 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   var mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
   var startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
+
+  final authUser = FirebaseAuth.instance.currentUser; 
 
   late ConfettiController _controllerCenter;
   var my_context = Get.context;
@@ -95,7 +98,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
         return CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
-        ); 
+        );
       },
     );
     return dialog;
@@ -189,7 +192,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
     try {
       if (updateMode == true) {
         final resp = await startupConnector.FetchBusinessMilestone(
-            startup_id: startup_id);
+            user_id: authUser?.uid);
 
         final miles = resp['data']['milestone'];
         await mileStore.SetMilestoneParam(list: miles);

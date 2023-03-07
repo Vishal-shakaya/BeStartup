@@ -17,8 +17,6 @@ class MyAuthentication extends GetxController {
 
   var manage_user = AuthUserManager();
   var userStore = UserStore();
-  var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
-
   ////////////////////////////////////////
   /// Verify Phone No :
   ////////////////////////////////////////
@@ -152,6 +150,7 @@ class MyAuthentication extends GetxController {
       // Verify if eamil is verified or not :
       final user = auth.currentUser;
       final verify_email = user?.emailVerified;
+      
 
       if (verify_email == false) {
         return ResponseBack(response_type: false, data: 'email_not_verify');

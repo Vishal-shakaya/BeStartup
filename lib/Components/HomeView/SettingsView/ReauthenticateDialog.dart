@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
+import 'package:be_startup/Backend/Startup/Connector/DeleteStartup.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -27,9 +29,10 @@ class ReauthenticateWidget extends StatefulWidget {
 
 class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
-
-  var reAuth = Get.put(ReAuthentication(), tag: 're_auth');
-  var auth = Get.put(MyAuthentication(), tag: 'my_auth');
+  final reAuth = Get.put(ReAuthentication());
+  final auth = Get.put(MyAuthentication());
+  final removeStartup = Get.put(RemoveStartup());
+  final authUser = FirebaseAuth.instance.currentUser;
 
   ErrorSnakbar() {
     Get.closeAllSnackbars();
@@ -120,23 +123,45 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
       StartLoading();
 
       if (_formKey.currentState!.validate()) {
-        String email = _formKey.currentState!.value['email'];
-        String password = _formKey.currentState!.value['password'];
-        // _formKey.currentState!.reset();
-        // LOGIN USER :
-        var resp;
+        String email = _formKey.currentState!.value['email'].toString().trim();
+        String password =
+            _formKey.currentState!.value['password'].toString().trim();
+        print('email $email');
+        print('pass $password');
+        var resp = await auth.LoginUser(email: email, password: password);
+        print('resp $resp');
         // SUCCESS RESPONSE :
         if (resp['response']) {
-          EndLoading();
-          // Rediret to User Type Page :
-          // Get.toNamed(user_registration_url);
-        }
+          final del_resp = await removeStartup.DeleteFounderWithStartups(
+              user_id: authUser?.uid);
 
-        // EMAIL NOT VERIFY THEN FIRT ASK FOR VERIFY EMAIL :
-        if (resp['data'] == 'email_not_verify') {
+          if (del_resp['response']) {
+            EndLoading();
+            // Delete Success:
+            print('delete complete');
+          }
+
+          if (!del_resp['']) {
+            // unable delete user :
+            print('unable delete');
+            EndLoading();
+            // CLOSE SNAKBAR :
+            Get.closeAllSnackbars();
+            // Error Alert :
+            Get.snackbar(
+              '',
+              '',
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.all(10),
+              duration: Duration(seconds: 8),
+              backgroundColor: Colors.red.shade50,
+              titleText: MySnackbarTitle(title: 'Error accure'),
+              messageText: MySnackbarContent(message: "${resp['data']}"),
+              maxWidth: context.width * 0.50,
+            );
+          }
+
           EndLoading();
-          InfoDialog(context);
-          return;
         }
 
         // ERROR RESPONSE :
@@ -173,6 +198,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
 
     return Container(
       child: FormBuilder(
+        key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -182,10 +208,6 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
                 TextSpan(text: 'Confirmation', style: TextStyle(fontSize: 22)),
                 style: Get.textTheme.headline3,
               ),
-
-              ///////////////////////////
-              // FORM INPUT FIELDS :
-              ///////////////////////////
 
               // 1. EMAIL FIELD
               Container(
@@ -273,7 +295,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
             ]));
   }
 
-  Container SubmitFormButton(Future<Null> SubmitLofinForm()) {
+  Container SubmitFormButton(SubmitLofinForm) {
     return Container(
       width: 220,
       height: 42,
@@ -307,10 +329,8 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
       name: 'password',
       obscureText: true,
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength(8,
-            errorText: 'invalid password')
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.minLength(8, errorText: 'invalid password')]),
       style: TextStyle(
         fontSize: 14,
         fontWeight: Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
@@ -348,9 +368,8 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
           fontWeight: Get.isDarkMode ? FontWeight.w400 : FontWeight.w600,
           color: input_text_color),
       keyboardType: TextInputType.emailAddress,
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.email(errorText: 'enter valid email')
-      ]),
+      validator: FormBuilderValidators.compose(
+          [FormBuilderValidators.email(errorText: 'enter valid email')]),
       decoration: InputDecoration(
           hintText: 'enter mail ',
           hintStyle: TextStyle(

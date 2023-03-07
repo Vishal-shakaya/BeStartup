@@ -44,10 +44,10 @@ class HomeViewConnector extends GetxController {
     }
   }
 
-  FetchUserStartups({user_id}) async {
+  FetchUserStartups({required user_id}) async {
     var startup_data;
     var startup_ids = [];
-    var founder_ids = [];
+    var user_ids = [];
     var startup_len;
     var startup_names = [];
 
@@ -55,19 +55,17 @@ class HomeViewConnector extends GetxController {
     try {
       var startup = await FirebaseFirestore.instance
           .collection(getBusinessDetailStoreName)
-          .where('founder_id', isEqualTo: user_id)
+          .where('user_id', isEqualTo: user_id)
           .get()
           .then((value) {
         startup_len = value.size;
         for (var doc in value.docs) {
-          startup_ids.add(doc.data()['startup_id']);
-          founder_ids.add(doc.data()['founder_id']);
+          user_ids.add(doc.data()['user_id']);
           startup_names.add(doc.data()['name']);
         }
       });
       startup_data = {
-        'startup_ids': startup_ids,
-        'founder_id': founder_ids,
+        'user_id': user_ids,
         'startup_len': startup_len,
         'startup_name': startup_names
       };
@@ -225,7 +223,7 @@ class HomeViewConnector extends GetxController {
 
   FetchLikeStartups({user_id}) async {
     var startup_data;
-    var startup_ids = [];
+    var user_ids = [];
     var founder_ids = [];
     var startup_len;
     var startup_names = [];
@@ -239,7 +237,7 @@ class HomeViewConnector extends GetxController {
 
       await query.then((value) {
         for (var data in value.docs) {
-          startup_ids = data.data()['startup_ids'];
+          user_ids = data.data()['user_ids'];
         }
       });
 
@@ -247,7 +245,7 @@ class HomeViewConnector extends GetxController {
       /// Fetch Startups Data :
       /// /////////////////////////////////
       var startup_store = await store.collection(getBusinessDetailStoreName);
-      var query2 = startup_store.where('id', whereIn: startup_ids).get();
+      var query2 = startup_store.where('id', whereIn: user_ids).get();
 
       await query2.then((value) {
         for (var doc in value.docs) {
@@ -257,9 +255,9 @@ class HomeViewConnector extends GetxController {
       });
 
       startup_data = {
-        'startup_ids': startup_ids,
+        'user_ids': user_ids,
         'founder_id': founder_ids,
-        'startup_len': startup_ids.length,
+        'user_ids': user_ids.length,
         'startup_name': startup_names
       };
 
@@ -284,7 +282,7 @@ class HomeViewConnector extends GetxController {
   /// Returns:
   ///   A Future<ResponseBack>
   /////////////////////////////////////////////////////
-  SaveStartup({startup_id, user_id}) async {
+  SaveStartup({ required user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -300,7 +298,7 @@ class HomeViewConnector extends GetxController {
         // print('size $save_post_len');
         if (save_post_len > 0) {
           // print(' 1. Save Post Process Start');
-          startup_list = value.docs.first.data()['startup_ids'];
+          startup_list = value.docs.first.data()['user_ids'];
           // print(' 2. Get startup list $startup_list');
           data = value.docs.first.data();
           // print(' 3. Data $data');
@@ -310,17 +308,17 @@ class HomeViewConnector extends GetxController {
       });
 
       // Check if post already Saved :
-      if (startup_list.contains(startup_id)) {
+      if (startup_list.contains(user_id)) {
         return ResponseBack(
             response_type: false, message: 'Startup Already Saved', code: 101);
       }
 
       // Add new Save Story Doc :
       if (save_post_len <= 0) {
-        startup_list.add(startup_id);
+        startup_list.add(user_id);
         var save_startup = await SaveStartupsModel(
           user_id: user_id,
-          startup_ids: startup_list,
+          user_ids: startup_list,
         );
         await myStore.add(save_startup);
         // print('5. Add First Startup $startup_list ');
@@ -330,7 +328,7 @@ class HomeViewConnector extends GetxController {
 
       if (save_post_len > 0) {
         // print("5. Update Startup List with new list ");
-        startup_list.add(startup_id);
+        startup_list.add(user_id);
         data['startup_ids'] = startup_list;
         await myStore.doc(doc_id).update(data);
         // print('6. Update Startup List');
@@ -349,7 +347,7 @@ class HomeViewConnector extends GetxController {
   ///   startup_id: The id of the startup to be unsaved
   ///   user_id: The user's ID
   ///////////////////////////////////////////////////////////
-  UnsaveStartup({startup_id, user_id}) async {
+  UnsaveStartup({required user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -363,7 +361,7 @@ class HomeViewConnector extends GetxController {
         // print('size $save_post_len');
         if (save_post_len > 0) {
           // print(' 1. UnSave Post Process Start');
-          startup_list = value.docs.first.data()['startup_ids'];
+          startup_list = value.docs.first.data()['user_ids'];
           // print(' 2. Get startup list $startup_list');
           data = value.docs.first.data();
           // print(' 3. Data $data');
@@ -379,8 +377,8 @@ class HomeViewConnector extends GetxController {
 
       if (save_post_len > 0) {
         // print("5. Update Startup List with new list ");
-        startup_list.remove(startup_id);
-        data['startup_ids'] = startup_list;
+        startup_list.remove(user_id);
+        data['user_ids'] = startup_list;
         await myStore.doc(doc_id).update(data);
         // print('6. Unsave Update Startup List');
         return ResponseBack(response_type: true, message: 'Startup UnSaved');

@@ -29,9 +29,9 @@ class BusinessPitchStore extends GetxController {
 ///   ResponseBack is a class that has a
 ///   response_type and message.
 ///////////////////////////////////////////////////////
-  SetPitch({pitchText}) async {
+  SetPitch({ required pitchText , required user_id}) async {
     final localStore = await SharedPreferences.getInstance();
-
+    
     try {
       // NULL CHECK :
       if (pitchText == null) {
@@ -40,13 +40,10 @@ class BusinessPitchStore extends GetxController {
       }
 
       pitch = pitchText;
-      final startup_id = await startupState.GetStartupId();
-      
-      print('pitch url Startup id $startup_id');
       
       try {
         var resp = await PitchModel(
-          startup_id: startup_id,
+          user_id: user_id,
           pitch: pitch,
         );
 

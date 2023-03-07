@@ -20,21 +20,12 @@ class StartupViewConnector extends GetxController {
 // 2. Send it to ui
 // 3. Store data in local storage:
 //////////////////////////////////////
-  FetchBusinessDetail({startup_id = false}) async {
+  FetchBusinessDetail({required user_id}) async {
     var data;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -57,16 +48,7 @@ class StartupViewConnector extends GetxController {
 /////////////////////////////////////////
 /// FETCH THUMBNAIL :
 /////////////////////////////////////////
-  FetchThumbnail({startup_id = false}) async {
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
+  FetchThumbnail({required user_id}) async {
     try {
       // FETCHING DATA FROM FIREBASE:
       var data;
@@ -74,7 +56,7 @@ class StartupViewConnector extends GetxController {
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
 
       var query =
-          thumbnail.where('startup_id', isEqualTo: final_startup_id).get();
+          thumbnail.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -96,23 +78,14 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
-  FetchBusinessVision({startup_id = false}) async {
+  FetchBusinessVision({required user_id}) async {
     var data;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
 
       final name = await startupState.GetStartupName();
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -131,22 +104,13 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP Pitch :
   ///////////////////////////////////
-  FetchBusinessPitch({startup_id = false}) async {
+  FetchBusinessPitch({required user_id}) async {
     var data;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessPitchtStoreName);
 
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -164,21 +128,14 @@ class StartupViewConnector extends GetxController {
 ///////////////////////////////////////////
   /// FETCH STARTUP VISION :
 ////////////////////////////////////////////
-  FetchBusinessWhy({startup_id = false}) async {
+  FetchBusinessWhy({required user_id}) async {
     var data;
     var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
 
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -196,21 +153,14 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
-  FetchBusinessCatigory({startup_id = false}) async {
+  FetchBusinessCatigory({ required user_id }) async {
     var data;
-    var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
 
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessCatigoryStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -228,21 +178,12 @@ class StartupViewConnector extends GetxController {
   ////////////////////////////////////
   /// FETCH MILESTONE :
   ////////////////////////////////////
-  FetchBusinessMilestone({startup_id = false}) async {
+  FetchBusinessMilestone({required user_id }) async {
     var data;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -473,7 +414,7 @@ class StartupViewConnector extends GetxController {
 
         var save_startup = await LikeStartupsModel(
           user_id: user_id,
-          startup_ids: startup_list,
+          user_ids: startup_list,
         );
 
         await myStore.add(save_startup);
@@ -555,7 +496,7 @@ class StartupViewConnector extends GetxController {
   ///   startup_id: The id of the startup that the user wants to like.
   ///   user_id: The user id of the user who liked the post
 ////////////////////////////////////////////////////////
-  IsStartupLiked({startup_id, user_id}) async {
+  IsStartupLiked({user_id}) async {
     var save_post_len;
     var startup_list = [];
 
@@ -569,12 +510,12 @@ class StartupViewConnector extends GetxController {
         save_post_len = value.size;
 
         if (save_post_len > 0) {
-          startup_list = value.docs.first.data()['startup_ids'];
+          startup_list = value.docs.first.data()['user_ids'];
         }
       });
 
       // Check if post already Saved :
-      if (startup_list.contains(startup_id)) {
+      if (startup_list.contains(user_id)) {
         return ResponseBack(
             response_type: true, message: 'Startup Already Liked', code: 101);
       } else {

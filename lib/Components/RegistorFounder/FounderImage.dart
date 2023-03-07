@@ -12,14 +12,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FounderImage extends StatefulWidget {
-  FounderImage({Key? key}) : super(key: key);
+  String picture;
+
+  FounderImage({this.picture = '', Key? key}) : super(key: key);
 
   @override
   State<FounderImage> createState() => _FounderImageState();
 }
 
 class _FounderImageState extends State<FounderImage> {
-  var founderStore = Get.put(BusinessFounderStore());
+  var founderStore = Get.put(FounderStore());
   var my_context = Get.context;
 
   Uint8List? image;
@@ -72,11 +74,9 @@ class _FounderImageState extends State<FounderImage> {
   //////////////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      final data = await founderStore.GetFounderDetail();
-      if (data['picture'] != '') {
-        upload_image_url = data['picture'];
-      }
-      return data;
+      upload_image_url = widget.picture;
+      await founderStore.SetImageUrl(url: upload_image_url);
+      return '';
     } catch (e) {
       return '';
     }
@@ -168,53 +168,53 @@ class _FounderImageState extends State<FounderImage> {
   Container MainMethod(Container spinner, Future<void> PickImage()) {
     return Container(
         child: Stack(
-          children: [
-            Card(
-                shadowColor: light_color_type3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(85.0),
-                ),
-                child: upload_image_url != ''
-                    ? CircleAvatar(
-                        radius: image_radius,
-                        backgroundColor: Colors.blueGrey[100],
-                        foregroundImage: NetworkImage(upload_image_url),
-                      )
-                    : CircleAvatar(
-                        radius: image_radius,
-                        backgroundColor: Colors.blueGrey[100],
-                        child: AutoSizeText(
-                          'upload picture',
-                          style: TextStyle(
-                              color: light_color_type3,
-                              fontWeight: FontWeight.bold),
-                        ))),
+      children: [
+        Card(
+            shadowColor: light_color_type3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(85.0),
+            ),
+            child: upload_image_url != ''
+                ? CircleAvatar(
+                    radius: image_radius,
+                    backgroundColor: Colors.blueGrey[100],
+                    foregroundImage: NetworkImage(upload_image_url),
+                  )
+                : CircleAvatar(
+                    radius: image_radius,
+                    backgroundColor: Colors.blueGrey[100],
+                    child: AutoSizeText(
+                      'upload picture',
+                      style: TextStyle(
+                          color: light_color_type3,
+                          fontWeight: FontWeight.bold),
+                    ))),
 
-            //////////////////////////////
-            // UPLOAD CAMERA ICON:
-            ////////////////////////////////
-            Positioned(
-                top: upload_icon_position_top,
-                left: upload_icon_position_left,
-                child: Card(
-                  shadowColor: primary_light,
-                  // elevation: 1,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey.shade200,
-                    radius: 18,
-                    child: is_uploading
-                        ? spinner
-                        : IconButton(
-                            onPressed: () {
-                              PickImage();
-                            },
-                            icon: Icon(Icons.camera_alt_rounded,
-                                size: 19, color: primary_light)),
-                  ),
-                )),
-          ],
-        ));
+        //////////////////////////////
+        // UPLOAD CAMERA ICON:
+        ////////////////////////////////
+        Positioned(
+            top: upload_icon_position_top,
+            left: upload_icon_position_left,
+            child: Card(
+              shadowColor: primary_light,
+              // elevation: 1,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey.shade200,
+                radius: 18,
+                child: is_uploading
+                    ? spinner
+                    : IconButton(
+                        onPressed: () {
+                          PickImage();
+                        },
+                        icon: Icon(Icons.camera_alt_rounded,
+                            size: 19, color: primary_light)),
+              ),
+            )),
+      ],
+    ));
   }
 }

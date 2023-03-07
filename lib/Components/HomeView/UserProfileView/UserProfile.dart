@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
@@ -26,9 +27,10 @@ class HomeViewUserProfile extends StatelessWidget {
   var usertype;
   var user_id;
 
+  final founderStore = Get.put(FounderStore());
   double member_Section_fonsize = 200;
   double profile_image_radius = 55;
-  double spacer = 5; 
+  double spacer = 5;
 
   double name_fonSize = 16;
   double position_fontSize = 11;
@@ -81,7 +83,7 @@ class HomeViewUserProfile extends StatelessWidget {
     //////////////////////////////////////////
     // If User Type Investor :
     //////////////////////////////////////////
-    if (usertype == UserType.investor) {
+    if (usertype == UserStoreName.investor) {
       final investorConnector = Get.put(InvestorConnector());
       final investor_resp =
           await investorConnector.FetchInvestorDetailandContact(
@@ -98,47 +100,45 @@ class HomeViewUserProfile extends StatelessWidget {
     //////////////////////////////////////////
     /// If User Type Founder then :
     //////////////////////////////////////////
-    if (usertype == UserType.founder) {
-      final founderConnector = Get.put(FounderConnector());
+    if (usertype == UserStoreName.founder) {
+      
       final founder_resp =
-          await founderConnector.FetchFounderDetailandContact(user_id: user_id);
-
+          await founderStore.FetchFounderDetailandContact(user_id: user_id);
       if (founder_resp['response']) {
-        user_phoneno = founder_resp['data']['userContect']['phone_no'];
-        username = founder_resp['data']['userDetail']['name'];
-        user_image = founder_resp['data']['userDetail']['picture'];
+        user_phoneno = founder_resp['data']['phone_no'];
+        username = founder_resp['data']['name'];
+        user_image = founder_resp['data']['picture'];
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    member_Section_fonsize = 200;
+    profile_image_radius = 55;
+    spacer = 5;
 
-     member_Section_fonsize = 200;
-     profile_image_radius = 55;
-     spacer = 5; 
+    name_fonSize = 16;
+    position_fontSize = 11;
+    contact_icon_fonSize = 16;
 
-     name_fonSize = 16;
-     position_fontSize = 11;
-     contact_icon_fonSize = 16;
+    contact_fontSiz = 11;
 
-     contact_fontSiz = 11;
-   
     ////////////////////////////////////
     /// RESPONSIVENESS :
     ////////////////////////////////////
 
     // DEFAULT :
     if (context.width > 1500) {
-        member_Section_fonsize = 200;
-        profile_image_radius = 55;
-        spacer = 5; 
+      member_Section_fonsize = 200;
+      profile_image_radius = 55;
+      spacer = 5;
 
-        name_fonSize = 16;
-        position_fontSize = 11;
-        contact_icon_fonSize = 16;
+      name_fonSize = 16;
+      position_fontSize = 11;
+      contact_icon_fonSize = 16;
 
-        contact_fontSiz = 11;
+      contact_fontSiz = 11;
       print('Greator then 1500');
     }
 
@@ -167,15 +167,15 @@ class HomeViewUserProfile extends StatelessWidget {
 
     // PHONE:
     if (context.width < 480) {
-        member_Section_fonsize = 200;
-        profile_image_radius = 40;
-        spacer = 5; 
+      member_Section_fonsize = 200;
+      profile_image_radius = 40;
+      spacer = 5;
 
-        name_fonSize = 14;
-        position_fontSize = 11;
-        contact_icon_fonSize = 14;
+      name_fonSize = 14;
+      position_fontSize = 11;
+      contact_icon_fonSize = 14;
 
-        contact_fontSiz = 11;
+      contact_fontSiz = 11;
       print('480');
     }
 
@@ -250,11 +250,9 @@ class HomeViewUserProfile extends StatelessWidget {
           right: Radius.circular(80),
         ),
       ),
-      
       child: Container(
           child: CircleAvatar(
         radius: profile_image_radius,
-
         backgroundColor: Colors.blueGrey[100],
         foregroundImage: NetworkImage(user_image),
       )),
@@ -271,7 +269,7 @@ class HomeViewUserProfile extends StatelessWidget {
             text: username,
             style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color:home_profile_text_color,
+                color: home_profile_text_color,
                 fontSize: name_fonSize))
       ]))),
     );

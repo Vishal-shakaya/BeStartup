@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
@@ -10,12 +11,9 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StoryCeoProfile extends StatefulWidget {
-  var startup_id;
-  var founder_id;
-
+  var user_id; 
   StoryCeoProfile({
-    required this.founder_id,
-    required this.startup_id,
+    required this.user_id, 
     Key? key,
   }) : super(key: key);
 
@@ -24,8 +22,9 @@ class StoryCeoProfile extends StatefulWidget {
 }
 
 class _StoryCeoProfileState extends State<StoryCeoProfile> {
-  var startupConnector = Get.put(StartupViewConnector());
-  var founderConnector = Get.put(FounderConnector());
+  final startupConnector = Get.put(StartupViewConnector());
+  final founderStore = Get.put(FounderStore());
+
   var startup_logo;
   var founder_profile;
   String? founder_name;
@@ -36,7 +35,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
   double profile_left_pos = 0.01;
   double profile_logo_radius = 45;
 
-  double founder_fontSize = 13; 
+  double founder_fontSize = 13;
 
   ////////////////////////////////////
   /// GET REQUIRED PARAMATERS :
@@ -45,15 +44,11 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
     var bus_resp;
     var found_resp;
     try {
-      bus_resp = await startupConnector.FetchBusinessDetail(
-          startup_id: widget.startup_id);
+      bus_resp =
+          await startupConnector.FetchBusinessDetail(user_id: widget.user_id);
 
-      found_resp = await founderConnector.FetchFounderDetailandContact(
-          user_id: widget.founder_id);
-
-      /////////////////////////////////
-      /// Business Detial Handler :
-      /////////////////////////////////
+      found_resp = await founderStore.FetchFounderDetailandContact(
+          user_id: widget.user_id);
 
       // Business Success Handler :
       if (bus_resp['response']) {
@@ -71,8 +66,8 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
 
       // Founder Success Handler :
       if (found_resp['response']) {
-        founder_profile = found_resp['data']['userDetail']['picture'];
-        founder_name = found_resp['data']['userDetail']['name'];
+        founder_profile = found_resp['data']['picture'];
+        founder_name = found_resp['data']['name'];
       }
 
       // Founder Error Handler :
@@ -97,7 +92,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
     profile_top_pos = 0.14;
     profile_left_pos = 0.01;
     profile_logo_radius = 45;
-    founder_fontSize = 13; 
+    founder_fontSize = 13;
 
     ////////////////////////////////////
     /// RESPONSIVENESS :
@@ -112,7 +107,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       profile_top_pos = 0.14;
       profile_left_pos = 0.01;
       profile_logo_radius = 45;
-      founder_fontSize = 13; 
+      founder_fontSize = 13;
       print('1500');
     }
 
@@ -120,7 +115,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       profile_top_pos = 0.14;
       profile_left_pos = 0.01;
       profile_logo_radius = 42;
-      founder_fontSize = 13; 
+      founder_fontSize = 13;
 
       print('1400');
     }
@@ -129,7 +124,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       profile_top_pos = 0.14;
       profile_left_pos = 0.01;
       profile_logo_radius = 40;
-      founder_fontSize = 13; 
+      founder_fontSize = 13;
       print('1200');
     }
 
@@ -147,7 +142,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       profile_top_pos = 0.14;
       profile_left_pos = 0.01;
       profile_logo_radius = 38;
-      founder_fontSize = 12; 
+      founder_fontSize = 12;
       print('640');
     }
 
@@ -156,7 +151,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       profile_top_pos = 0.14;
       profile_left_pos = 0.01;
       profile_logo_radius = 35;
-      founder_fontSize = 12; 
+      founder_fontSize = 12;
       print('480');
     }
 
@@ -272,8 +267,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
               TextSpan(
                   text: ''.capitalizeFirst,
                   style: TextStyle(
-                    color: Colors.black, 
-                    fontSize: founder_fontSize))
+                      color: Colors.black, fontSize: founder_fontSize))
             ])))
       ],
     );

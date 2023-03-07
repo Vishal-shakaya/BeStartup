@@ -8,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileInfoChart extends StatelessWidget {
-  var startup_id;
-  ProfileInfoChart({required this.startup_id, Key? key}) : super(key: key);
+  var user_id;
+  ProfileInfoChart({required this.user_id, Key? key}) : super(key: key);
 
   var startupConnector = Get.put(StartupViewConnector());
   var my_context = Get.context;
@@ -31,8 +31,8 @@ class ProfileInfoChart extends StatelessWidget {
   /// GET REQUIREMENTS :
   ///////////////////////////
   GetLocalStorageData() async {
-    final resp =
-        await startupConnector.FetchBusinessDetail(startup_id: startup_id);
+    final resp = await startupConnector.FetchBusinessDetail(user_id: user_id);
+    print('resp $resp');
     // Success Handler:
     if (resp['response']) {
       invested_amount = resp['data']['achived_amount'] ?? '';

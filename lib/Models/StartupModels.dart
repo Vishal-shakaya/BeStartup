@@ -19,7 +19,7 @@ BusinessDetailMode({
     try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'uiser_id': user_id,
+      'user_id': user_id,
       'logo':logo, 
       'name': name,
       'desire_amount': desire_amount,
@@ -74,11 +74,11 @@ required user_id,
 
 PitchModel({
 pitch, 
-required startup_id}) async {
+required user_id}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id': startup_id, 
+      'startup_id': user_id, 
       'pitch': pitch,
     };
     return temp_obj;

@@ -24,6 +24,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
   var miles_data = [];
   var startup_id;
+  var user_id; 
 
   double mile_desc_fontSize = 15;
   double mile_desc_height = 1.5;
@@ -42,16 +43,16 @@ class _StartupMileStoneState extends State<StartupMileStone> {
   double mile_cont_padding = 50;
   double tab_extend_width = 0.15;
 
-  double mile_tab_fontSize = 16; 
+  double mile_tab_fontSize = 16;
 /////////////////////////////////////
   /// GET REQUIREMENTS ;
 /////////////////////////////////////
   GetLocalStorageData() async {
-    startup_id = await detailViewState.GetStartupId();
+    user_id = await detailViewState.GetFounderId();
 
     try {
       final miles =
-          await startupConnect.FetchBusinessMilestone(startup_id: startup_id);
+          await startupConnect.FetchBusinessMilestone(user_id: startup_id);
       miles_data = miles['data']['milestone'];
 
       return miles_data;
@@ -62,159 +63,158 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
   @override
   Widget build(BuildContext context) {
-     mile_desc_fontSize = 15;
-     mile_desc_height = 1.5;
+    mile_desc_fontSize = 15;
+    mile_desc_height = 1.5;
 
-     mile_desc_detail_fontSize = 13;
-     mile_desc_detail_height = 1.8;
-     mile_desc_detail_wordspacing = 2;
-     mile_desc_top_margin = 0.02;
+    mile_desc_detail_fontSize = 13;
+    mile_desc_detail_height = 1.8;
+    mile_desc_detail_wordspacing = 2;
+    mile_desc_top_margin = 0.02;
 
-     mile_sec_width = 0.55;
-     mile_sec_height = 0.45;
+    mile_sec_width = 0.55;
+    mile_sec_height = 0.45;
 
-     mile_sec_top_margin = 10;
-     mile_sec_bottom_margin = 50;
+    mile_sec_top_margin = 10;
+    mile_sec_bottom_margin = 50;
 
-     mile_cont_padding = 50;
-     tab_extend_width = 0.15;
+    mile_cont_padding = 50;
+    tab_extend_width = 0.15;
 
-     mile_tab_fontSize = 16; 
+    mile_tab_fontSize = 16;
     ////////////////////////////////////
-    /// RESPONSIVENESS : 
+    /// RESPONSIVENESS :
     ////////////////////////////////////
     // DEFAULT :
     if (context.width > 1700) {
       print('Greator then 1700');
-      }
+    }
 
     if (context.width < 1700) {
       print('1700');
-      }
+    }
 
-  		// DEFAULT :
+    // DEFAULT :
     if (context.width < 1600) {
-        mile_desc_fontSize = 15;
-        mile_desc_height = 1.5;
+      mile_desc_fontSize = 15;
+      mile_desc_height = 1.5;
 
-        mile_desc_detail_fontSize = 13;
-        mile_desc_detail_height = 1.8;
-        mile_desc_detail_wordspacing = 2;
-        mile_desc_top_margin = 0.02;
+      mile_desc_detail_fontSize = 13;
+      mile_desc_detail_height = 1.8;
+      mile_desc_detail_wordspacing = 2;
+      mile_desc_top_margin = 0.02;
 
-        mile_sec_width = 0.60;
-        mile_sec_height = 0.45;
+      mile_sec_width = 0.60;
+      mile_sec_height = 0.45;
 
-        mile_sec_top_margin = 10;
-        mile_sec_bottom_margin = 50;
+      mile_sec_top_margin = 10;
+      mile_sec_bottom_margin = 50;
 
-        mile_cont_padding = 30;
-        tab_extend_width = 0.15;
+      mile_cont_padding = 30;
+      tab_extend_width = 0.15;
 
-        mile_tab_fontSize = 15; 
-        print('1600');
-      }
+      mile_tab_fontSize = 15;
+      print('1600');
+    }
 
     // PC:
     if (context.width < 1500) {
-        mile_desc_fontSize = 14;
-        mile_desc_height = 1.8;
+      mile_desc_fontSize = 14;
+      mile_desc_height = 1.8;
 
-        mile_desc_detail_fontSize = 13;
-        mile_desc_detail_height = 1.8;
-        mile_desc_detail_wordspacing = 2;
-        mile_desc_top_margin = 0.02;
+      mile_desc_detail_fontSize = 13;
+      mile_desc_detail_height = 1.8;
+      mile_desc_detail_wordspacing = 2;
+      mile_desc_top_margin = 0.02;
 
-        mile_sec_width = 0.68;
-        mile_sec_height = 0.45;
+      mile_sec_width = 0.68;
+      mile_sec_height = 0.45;
 
-        mile_sec_top_margin = 10;
-        mile_sec_bottom_margin = 50;
+      mile_sec_top_margin = 10;
+      mile_sec_bottom_margin = 50;
 
-        mile_cont_padding = 30;
-        tab_extend_width = 0.16;
+      mile_cont_padding = 30;
+      tab_extend_width = 0.16;
 
-        mile_tab_fontSize = 14; 
+      mile_tab_fontSize = 14;
       print('1500');
-      }
+    }
 
     if (context.width < 1200) {
-        mile_desc_fontSize = 14;
-        mile_desc_height = 1.8;
+      mile_desc_fontSize = 14;
+      mile_desc_height = 1.8;
 
-        mile_desc_detail_fontSize = 13;
-        mile_desc_detail_height = 1.8;
-        mile_desc_detail_wordspacing = 2;
-        mile_desc_top_margin = 0.02;
+      mile_desc_detail_fontSize = 13;
+      mile_desc_detail_height = 1.8;
+      mile_desc_detail_wordspacing = 2;
+      mile_desc_top_margin = 0.02;
 
-        mile_sec_width = 0.90;
-        mile_sec_height = 0.45;
+      mile_sec_width = 0.90;
+      mile_sec_height = 0.45;
 
-        mile_sec_top_margin = 10;
-        mile_sec_bottom_margin = 50;
+      mile_sec_top_margin = 10;
+      mile_sec_bottom_margin = 50;
 
-        mile_cont_padding = 30;
-        tab_extend_width = 0.20;
+      mile_cont_padding = 30;
+      tab_extend_width = 0.20;
 
-        mile_tab_fontSize = 14; 
+      mile_tab_fontSize = 14;
       print('1200');
-      }
-    
+    }
+
     if (context.width < 1000) {
       print('1000');
-      }
+    }
 
     // TABLET :
     if (context.width < 800) {
-        mile_desc_fontSize = 13;
-        mile_desc_height = 1.8;
+      mile_desc_fontSize = 13;
+      mile_desc_height = 1.8;
 
-        mile_desc_detail_fontSize = 12;
-        mile_desc_detail_height = 1.8;
-        mile_desc_detail_wordspacing = 2;
-        mile_desc_top_margin = 0.02;
+      mile_desc_detail_fontSize = 12;
+      mile_desc_detail_height = 1.8;
+      mile_desc_detail_wordspacing = 2;
+      mile_desc_top_margin = 0.02;
 
-        mile_sec_width = 0.90;
-        mile_sec_height = 0.45;
+      mile_sec_width = 0.90;
+      mile_sec_height = 0.45;
 
-        mile_sec_top_margin = 10;
-        mile_sec_bottom_margin = 50;
+      mile_sec_top_margin = 10;
+      mile_sec_bottom_margin = 50;
 
-        mile_cont_padding = 28;
-        tab_extend_width = 0.25;
+      mile_cont_padding = 28;
+      tab_extend_width = 0.25;
 
-        mile_tab_fontSize = 13; 
+      mile_tab_fontSize = 13;
       print('800');
-      }
+    }
 
     // SMALL TABLET:
     if (context.width < 640) {
       print('640');
-      }
+    }
 
     // PHONE:
     if (context.width < 480) {
-        mile_desc_fontSize = 13;
-        mile_desc_height = 1.8;
+      mile_desc_fontSize = 13;
+      mile_desc_height = 1.8;
 
-        mile_desc_detail_fontSize = 12;
-        mile_desc_detail_height = 1.8;
-        mile_desc_detail_wordspacing = 2;
-        mile_desc_top_margin = 0.02;
+      mile_desc_detail_fontSize = 12;
+      mile_desc_detail_height = 1.8;
+      mile_desc_detail_wordspacing = 2;
+      mile_desc_top_margin = 0.02;
 
-        mile_sec_width = 0.98;
-        mile_sec_height = 0.45;
+      mile_sec_width = 0.98;
+      mile_sec_height = 0.45;
 
-        mile_sec_top_margin = 10;
-        mile_sec_bottom_margin = 50;
+      mile_sec_top_margin = 10;
+      mile_sec_bottom_margin = 50;
 
-        mile_cont_padding = 28;
-        tab_extend_width = 0.25;
+      mile_cont_padding = 28;
+      tab_extend_width = 0.25;
 
-        mile_tab_fontSize = 13; 
+      mile_tab_fontSize = 13;
       print('480');
-      }
-
+    }
 
     /////////////////////////////////////
     /// SET  REQUIREMENTS ;
@@ -315,7 +315,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
                         color: light_color_type1,
                         fontSize: mile_desc_fontSize,
                         height: mile_desc_height)),
-               
+
                 style: Get.textTheme.headline2,
                 textAlign: TextAlign.left,
                 // overflow: TextOverflow.ellipsis,

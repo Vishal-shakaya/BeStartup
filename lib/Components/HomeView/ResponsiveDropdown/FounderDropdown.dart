@@ -207,9 +207,9 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            case FounderMenuItems.startup:
-              widget.CreateStatup();
-              break;
+            // case FounderMenuItems.startup:
+            //   widget.CreateStatup();
+            //   break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView()();
@@ -224,8 +224,6 @@ class _FounderCustomFullScreenDropDownState
               break;
           }
         },
-        openWithLongPress: true,
-        customItemsHeights: [8],
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
           child: CircleAvatar(
@@ -283,9 +281,9 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            case FounderMenuItems.startup:
-              widget.CreateStatup();
-              break;
+            // case FounderMenuItems.startup:
+            //   widget.CreateStatup();
+            //   break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView()();
@@ -300,8 +298,6 @@ class _FounderCustomFullScreenDropDownState
               break;
           }
         },
-        openWithLongPress: true,
-        customItemsHeights: [8],
         dropdownMaxHeight: context.height * dropdonw_heightpx800,
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
@@ -359,9 +355,9 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            case FounderMenuItems.startup:
-              widget.CreateStatup();
-              break;
+            // case FounderMenuItems.startup:
+            //   widget.CreateStatup();
+            //   break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView();
@@ -376,8 +372,6 @@ class _FounderCustomFullScreenDropDownState
               break;
           }
         },
-        openWithLongPress: true,
-        customItemsHeights: [8],
         customButton: Container(
           margin: const EdgeInsets.only(top: 0),
           child: CircleAvatar(
@@ -422,7 +416,7 @@ class FounderMenuItems {
   static const List<MenuItem> firstItems = [
     profile,
     // investor,
-    startup,
+    // startup,
     settings,
   ];
 
@@ -431,8 +425,8 @@ class FounderMenuItems {
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
-  static const startup =
-      MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+  // static const startup =
+  //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 
@@ -469,7 +463,7 @@ class FounderMenuItemsPixel800 {
   static const List<MenuItem> firstItems = [
     profile,
     // investor,
-    startup,
+    // startup,
     settings,
   ];
 
@@ -478,8 +472,8 @@ class FounderMenuItemsPixel800 {
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
-  static const startup =
-      MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+  // static const startup =
+  //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 
@@ -516,7 +510,7 @@ class FounderMenuItemsPixel480 {
   static const List<MenuItem> firstItems = [
     profile,
     // investor,
-    startup,
+    // startup,
     settings,
   ];
 
@@ -525,8 +519,8 @@ class FounderMenuItemsPixel480 {
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
 
-  static const startup =
-      MenuItem(text: 'startup', icon: Icons.add_box_outlined);
+  // static const startup =
+  //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 
   static const settings = MenuItem(text: 'settings', icon: Icons.settings);
 

@@ -4,6 +4,7 @@ import 'package:be_startup/Components/HomeView/StoryView/MileTitleList.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,18 +12,17 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tab_container/tab_container.dart';
 
 class StoryMileStone extends StatelessWidget {
-  var founder_id;
-  var startup_id;
-  StoryMileStone({required this.founder_id, required this.startup_id});
+  var user_id;
+  StoryMileStone({
+    required this.user_id,
+  });
 
   late final TabContainerController _controller;
   List<Widget> mile_title = [];
   List<Widget> mile_desc = [];
   var mile_title_text = [];
-  var miles_data = [];
-
-  var startupConnect =
-      Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
+  var miles_data;
+  var startupConnect = Get.put(StartupViewConnector());
 
   double mile_width = 0.40;
   double mile_height = 0.24;
@@ -209,23 +209,22 @@ class StoryMileStone extends StatelessWidget {
 
     // PHONE:
     if (context.width < 480) {
-        mile_top_margin = 8;
-        mile_width = 0.85;
-        mile_height = 0.24;
+      mile_top_margin = 8;
+      mile_width = 0.85;
+      mile_height = 0.24;
 
-        desc_sec_height = 0.02;
+      desc_sec_height = 0.02;
 
-        tab_extend = 0.17;
-        tab_cont_child_padding = 25;
+      tab_extend = 0.17;
+      tab_cont_child_padding = 25;
 
-        mile_tab_fontSize = 12;
+      mile_tab_fontSize = 12;
 
-        mile_desc_title_fontSize = 13;
-        mile_desc_title_ext_height = 1.6;
+      mile_desc_title_fontSize = 13;
+      mile_desc_title_ext_height = 1.6;
 
-        mile_desc_fontSize = 12;
-        mile_desc_text_height = 1.6;
-
+      mile_desc_fontSize = 12;
+      mile_desc_text_height = 1.6;
 
       print('480');
     }
@@ -236,11 +235,12 @@ class StoryMileStone extends StatelessWidget {
     GetLocalStorageData() async {
       try {
         final miles =
-            await startupConnect.FetchBusinessMilestone(startup_id: startup_id);
+            await startupConnect.FetchBusinessMilestone(user_id: user_id);
         miles_data = miles['data']['milestone'];
         return miles_data;
       } catch (e) {
-        return miles_data;
+        print('Error While Fetching Mile View $e');
+        return [];
       }
     }
 
@@ -264,26 +264,32 @@ class StoryMileStone extends StatelessWidget {
           if (snapshot.hasError) return ErrorPage();
 
           if (snapshot.hasData) {
-            return MainMethod(
-              context,
-            );
+            return MainMethod(context);
           }
-          return MainMethod(
-            context,
-          );
+          return MainMethod(context);
         });
   }
 
   Container MainMethod(BuildContext context) {
     // NULL CHECK :
-    if (miles_data == [] || miles_data.isEmpty) {
+    print('miles data $miles_data');
+    if (miles_data == [] || miles_data ==null) {
       return Container(
         width: context.width * mile_width,
         height: context.height * mile_height,
+        child: Center(
+                child: Shimmer.fromColors(
+              baseColor: shimmer_base_color,
+              highlightColor: shimmer_highlight_color,
+              child: Text(
+                'Loading SUP',
+                style: Get.textTheme.headline2,
+              ),
+            ))
       );
+    } else {
+      _controller = TabContainerController(length: miles_data.length);
     }
-
-    _controller = TabContainerController(length: miles_data.length);
 
     miles_data.forEach((el) {
       final desc = MileDescriptionSection(
@@ -323,12 +329,10 @@ class StoryMileStone extends StatelessWidget {
         color: Colors.orange.shade200,
         tabEdge: TabEdge.left,
         tabExtent: context.width * tab_extend,
+        tabs: mile_title_text,
         children: mile_desc,
-        tabs: mile_title,
       ),
     );
-
-
 
     if (context.width < 640) {
       return smallMilestone;
@@ -336,8 +340,6 @@ class StoryMileStone extends StatelessWidget {
       return bigMilestone;
     }
   }
-
-
 
 // MILESTONE SIDE BAR TITLE TAB  :
 // REQUIRED PARAM : Title

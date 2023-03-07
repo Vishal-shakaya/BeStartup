@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/RegistorFounder/FounderImage.dart';
 import 'package:be_startup/Components/RegistorFounder/RegistorFounderForm.dart';
@@ -29,11 +28,12 @@ class RegistorFounderBody extends StatefulWidget {
 }
 
 class _RegistorFounderBodyState extends State<RegistorFounderBody> {
-  var founderStore = Get.put(BusinessFounderStore());
-  var founderConnector = Get.put(FounderConnector());
+  var founderStore = Get.put(FounderStore());
   var updateStore = Get.put(StartupUpdater());
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
+  var updatePicture ='';
+  var updateData ; 
 
   double con_button_width = 150;
   double con_button_height = 40;
@@ -48,8 +48,6 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var user_id;
   bool? updateMode = false;
 
-
-
   /////////////////////////////////////////
   // CREATE FOUNDER  FORM :
   /////////////////////////////////////////
@@ -57,8 +55,8 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     MyCustPageLoadingSpinner();
 
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    var authUser = FirebaseAuth.instance.currentUser; 
-    
+    var authUser = FirebaseAuth.instance.currentUser;
+
     formKey.currentState!.save();
 
     if (formKey.currentState!.validate()) {
@@ -66,24 +64,24 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       final String phone_no = formKey.currentState!.value['phone_no'];
       final String email = formKey.currentState!.value['email'];
       final String other_contact = formKey.currentState!.value['other_info'];
-      
-      final res = await founderStore.CachedCreateFounder(
-        user_id: authUser?.uid, 
-        name:name , 
-        email: authUser?.email, 
-        phone_no: phone_no, 
-        primary_mail: email, 
-        other_contact: other_contact);
 
-      // Success Handler : 
-      if(res['response']){
+      final res = await founderStore.CachedCreateFounder(
+          user_id: authUser?.uid,
+          name: name,
+          email: authUser?.email,
+          phone_no: phone_no,
+          primary_mail: email,
+          other_contact: other_contact);
+
+      // Success Handler :
+      if (res['response']) {
         CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
         formKey.currentState!.reset();
         Get.toNamed(create_business_detail_url);
       }
 
-      // Error Handler : 
+      // Error Handler :
       if (!res['response']) {
         CloseCustomPageLoadingSpinner();
         SmartDialog.dismiss();
@@ -94,7 +92,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
             type: MySnackbarType.error,
             title: res['message'],
             message: create_error_msg));
-      } 
+      }
     }
 
     // Form Error :
@@ -107,9 +105,6 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       ));
     }
   }
-
-
-
 
 ///////////////////////////////////////////
 // UPDATE FOUNDER FORM  :
@@ -136,10 +131,9 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         'other_contact': other_contact
       };
 
-      final res = await founderStore.SetFounderParam(data: founder);
+    
 
-      final update_resp =
-          await founderConnector.UpdateFounderDetail(user_id: user_id);
+      final update_resp = await founderStore.UpdateFounderDetail(user_id: user_id , data: founder);
 
       // Update Success Handler :
       if (update_resp['response']) {
@@ -174,29 +168,19 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
+
   GetLocalStorageData() async {
     if (updateMode == true) {
       try {
-        print('Founder id $user_id');
-        final resp = await founderConnector.FetchFounderDetailandContact(
-            user_id: user_id);
+        final resp = await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
-        final picture =
-            resp['data']['userDetail']['picture'] ?? temp_avtar_image;
-        // print('picture ${picture}');
-
-        final name = resp['data']['userDetail']['name'] ?? '';
-        // print('name ${name}');
-        // final position = resp['data']['userDetail']['position'];
-        final phone_no = resp['data']['userContect']['phone_no'] ?? '';
-        // print('phone no ${phone_no}');
-
-        final primary_mail = resp['data']['userContect']['primary_mail'] ?? '';
-        // print('primary mail ${primary_mail}');
-
-        final other_contact =
-            resp['data']['userContect']['other_contact'] ?? '';
-        // print('other contact${other_contact}');
+        final picture = resp['data']['picture'] ?? temp_avtar_image;
+        final name = resp['data']['name'] ?? '';
+        final phone_no = resp['data']['phone_no'] ?? '';
+        final primary_mail = resp['data']['primary_mail'] ?? '';
+        final other_contact = resp['data']['other_contact'] ?? '';
+       
+        updatePicture=picture;
 
         final data = {
           'picture': picture,
@@ -206,8 +190,8 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
           'primary_mail': primary_mail,
           'other_contact': other_contact,
         };
-        await founderStore.SetFounderParam(data: data);
-        await founderStore.SetFounderPicture(data: picture);
+        updateData = data; 
+
       } catch (e) {
         print('Fetching erro Founder detail $e');
       }
@@ -231,10 +215,10 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
   @override
   Widget build(BuildContext context) {
-      fontSize = 40;
-      page_height = 0.65;
-      heading_height = 0.15;
-      
+    fontSize = 40;
+    page_height = 0.65;
+    heading_height = 0.15;
+
     // DEFAULT :
     if (context.width > 1500) {
       fontSize = 40;
@@ -325,11 +309,12 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
               child: Column(
                 children: [
                   // UPLOAD FOUNDER IMAGE :
-                  FounderImage(),
+                  FounderImage(picture: updatePicture,),
 
                   // REGISTRATION FORM :
                   RegistorFounderForm(
                     formKey: formKey,
+                    data: updateData,
                   )
                 ],
 
@@ -355,8 +340,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
       child: InkWell(
         highlightColor: primary_light_hover,
         borderRadius: const BorderRadius.horizontal(
-            left: Radius.circular(20), 
-            right: Radius.circular(20)),
+            left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           await fun();
         },

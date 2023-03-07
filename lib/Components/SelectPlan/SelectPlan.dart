@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlanUtils.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
@@ -9,7 +10,6 @@ import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
-import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -52,7 +52,7 @@ class _SelectPlanState extends State<SelectPlan> {
   var updateStore = Get.put(StartupUpdater());
 
   var startupConnector = Get.put(StartupConnector());
-  var founderConnector = Get.put(FounderConnector());
+  var founderStore = Get.put(FounderStore());
   var investorConnector = Get.put(InvestorConnector());
 
   var my_context = Get.context;

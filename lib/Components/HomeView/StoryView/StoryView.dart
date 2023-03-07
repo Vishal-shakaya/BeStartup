@@ -4,20 +4,18 @@ import 'package:be_startup/Components/HomeView/StoryView/StoryHeading.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryMileStone.dart';
 import 'package:be_startup/Components/HomeView/StoryView/StoryThumbnail.dart';
 import 'package:be_startup/Components/HomeView/StoryView/ViewStoryButton.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StoryView extends StatefulWidget {
-  var startup_id;
-  var founder_id;
-  var startup_name; 
+  var startup_name;
+  var user_id; 
   StoryView({
-    Key? key,
-    required this.startup_id,
-    required this.founder_id,
     required this.startup_name, 
+    required this.user_id, 
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -26,6 +24,7 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   double header_section_height = 0.35;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -42,7 +41,6 @@ class _StoryViewState extends State<StoryView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              
               // HEADER SECTION :
               // 1 Thumbnail
               // 2 Ceo Profile :
@@ -51,54 +49,38 @@ class _StoryViewState extends State<StoryView> {
                 height: context.height * header_section_height,
                 child: Stack(
                   children: [
-
-
                     // THUMBNAIL SECTION :
                     StoryThumbnail(
-                      startup_id: widget.startup_id,
+                      user_id: widget.user_id,
                     ),
-
-
 
                     // STARTUP CEO  PROFILE WITH NAME :
                     StoryCeoProfile(
-                      founder_id: widget.founder_id,
-                      startup_id: widget.startup_id,
+                      user_id: widget.user_id,
                     ),
 
-                   
-                   
                     // STARTUP NAME OR HEADING :
                     StoryHeading(
                       startup_name: widget.startup_name,
                     ),
 
-                  
-                  
                     // INFO MINI CHART :
                     // StoryInfoChart(),
                     ViewStoryButton(
-                      founder_id: widget.founder_id,
-                      startup_id: widget.startup_id,
+                      user_id: widget.user_id,
                     )
                   ],
                 ),
               ),
 
-             
-             
               // MILESTONES:
               StoryMileStone(
-                founder_id: widget.founder_id,
-                startup_id: widget.startup_id,
+                user_id: widget.user_id,
               ),
-
-
 
               // SAVE BUTTON :
               SaveStoryButton(
-                founder_id: widget.founder_id,
-                startup_id: widget.startup_id,
+                user_id: widget.user_id,
               )
             ],
           ),
@@ -106,6 +88,4 @@ class _StoryViewState extends State<StoryView> {
       ),
     );
   }
-
 }
-

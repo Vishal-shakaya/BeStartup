@@ -115,14 +115,12 @@ class _LoginFormState extends State<LoginForm> {
 
               // Complete Profile hander :
               else {
-                if (resp_data['is_founder'] == false &&
-                    resp_data['is_investor'] == true) {
+                if (resp_data['user_type'] == 'investor') {
                   EndLoading();
                   await userState.SetUserType(type: UserStoreName.investor);
                   Get.toNamed(home_page_url);
                 }
-                if (resp_data['is_founder'] == true &&
-                    resp_data['is_investor'] == false) {
+                if (resp_data['user_type'] == 'founder') {
                   EndLoading();
                   await userState.SetUserType(type: UserStoreName.founder);
                   Get.toNamed(home_page_url);
