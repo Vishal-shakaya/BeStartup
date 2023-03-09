@@ -21,8 +21,8 @@ class HomeHeaderSection extends StatefulWidget {
   var profile_image;
   var home_icon;
   var save_icon; 
-  HomeHeaderSection(
-      {required this.profile_image,
+  HomeHeaderSection({
+      required this.profile_image,
       required this.changeView,
       required this.usertype,
       required this.home_icon, 

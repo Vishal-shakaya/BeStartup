@@ -78,7 +78,7 @@ required user_id}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
-      'startup_id': user_id, 
+      'user_id': user_id, 
       'pitch': pitch,
     };
     return temp_obj;

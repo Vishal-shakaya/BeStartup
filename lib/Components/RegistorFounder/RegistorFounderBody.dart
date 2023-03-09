@@ -33,7 +33,12 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
   var updatePicture ='';
-  var updateData ; 
+  var updateData ={
+    'name': '',
+    'phone_no': '',
+    'primary_mail': '',
+    'other_contact': ''
+  }; 
 
   double con_button_width = 150;
   double con_button_height = 40;
@@ -182,7 +187,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
        
         updatePicture=picture;
 
-        final data = {
+        Map<String, String> data = {
           'picture': picture,
           'name': name,
           // 'position': position,

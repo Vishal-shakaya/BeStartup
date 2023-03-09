@@ -34,7 +34,7 @@ class StoryMileStone extends StatelessWidget {
 
   double mile_tab_fontSize = 13;
 
-  double mile_desc_title_fontSize = 14;
+  double mile_desc_title_fontSize = 13;
   double mile_desc_title_ext_height = 1.6;
 
   double mile_desc_fontSize = 13;
@@ -57,7 +57,7 @@ class StoryMileStone extends StatelessWidget {
 
     mile_tab_fontSize = 13;
 
-    mile_desc_title_fontSize = 14;
+    mile_desc_title_fontSize = 13;
     mile_desc_title_ext_height = 1.6;
 
     mile_desc_fontSize = 13;
@@ -80,7 +80,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 13;
 
-      mile_desc_title_fontSize = 14;
+      mile_desc_title_fontSize = 13;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 13;
@@ -100,7 +100,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 13;
 
-      mile_desc_title_fontSize = 14;
+      mile_desc_title_fontSize = 13;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 13;
@@ -119,7 +119,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 13;
 
-      mile_desc_title_fontSize = 14;
+      mile_desc_title_fontSize = 13;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 13;
@@ -138,7 +138,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 13;
 
-      mile_desc_title_fontSize = 14;
+      mile_desc_title_fontSize = 13;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 13;
@@ -157,7 +157,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 13;
 
-      mile_desc_title_fontSize = 13;
+      mile_desc_title_fontSize = 12;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 12;
@@ -178,7 +178,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 12;
 
-      mile_desc_title_fontSize = 13;
+      mile_desc_title_fontSize = 12;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 12;
@@ -199,7 +199,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 12;
 
-      mile_desc_title_fontSize = 13;
+      mile_desc_title_fontSize = 12;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 12;
@@ -220,7 +220,7 @@ class StoryMileStone extends StatelessWidget {
 
       mile_tab_fontSize = 12;
 
-      mile_desc_title_fontSize = 13;
+      mile_desc_title_fontSize = 12;
       mile_desc_title_ext_height = 1.6;
 
       mile_desc_fontSize = 12;
@@ -375,7 +375,7 @@ class StoryMileStone extends StatelessWidget {
               margin: EdgeInsets.only(bottom: dy_height),
               child: AutoSizeText.rich(
                 TextSpan(
-                    text: title.toString().capitalizeFirst,
+                    text: description.toString().capitalizeFirst,
                     style: GoogleFonts.openSans(
                         textStyle: TextStyle(),
                         color: mile_text_color,
@@ -385,21 +385,21 @@ class StoryMileStone extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
             ),
-            AutoSizeText.rich(
-              TextSpan(
-                  text: description,
-                  style: GoogleFonts.openSans(
-                      textStyle: TextStyle(),
-                      color: mile_text_color,
-                      fontSize: mile_desc_fontSize,
-                      height: mile_desc_text_height,
-                      wordSpacing: 2)),
-              style: Get.textTheme.headline2,
+            // AutoSizeText.rich(
+            //   TextSpan(
+            //       text: description,
+            //       style: GoogleFonts.openSans(
+            //           textStyle: TextStyle(),
+            //           color: mile_text_color,
+            //           fontSize: 20,
+            //           height: mile_desc_text_height,
+            //           wordSpacing: 2)),
+            //   style: Get.textTheme.headline2,
 
-              // textAlign: TextAlign.center,
-              maxLines: maxlines,
-              overflow: TextOverflow.ellipsis,
-            ),
+            //   // textAlign: TextAlign.center,
+            //   maxLines: maxlines,
+            //   overflow: TextOverflow.ellipsis,
+            // ),
           ],
         ),
       ),

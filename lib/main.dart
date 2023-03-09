@@ -169,7 +169,7 @@ class _MyAppState extends State<MyApp> {
                     }
     
                     if (snapshot.hasData) {
-                      return LoginHandler();
+                      return HomeView();
                     }
                     return LoginHandler();
                   });

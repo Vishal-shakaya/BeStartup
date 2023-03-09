@@ -69,17 +69,25 @@ class _FounderImageState extends State<FounderImage> {
     }
   }
 
+
   //////////////////////////////////////////////////
   /// GET REQUIREMNTS :
   //////////////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      upload_image_url = widget.picture;
       await founderStore.SetImageUrl(url: upload_image_url);
       return '';
     } catch (e) {
       return '';
     }
+  }
+
+
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    upload_image_url = widget.picture;
+    super.setState(fn);
   }
 
   @override

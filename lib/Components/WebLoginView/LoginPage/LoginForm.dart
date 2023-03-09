@@ -93,7 +93,6 @@ class _LoginFormState extends State<LoginForm> {
           String password = _formKey.currentState!.value['password'];
 
           var resp = await myAuth.LoginUser(email: email, password: password);
-          print(resp);
 
           // SUCCESS RESPONSE :
           if (resp['response']) {
@@ -108,7 +107,6 @@ class _LoginFormState extends State<LoginForm> {
               if (resp_data['is_profile_complete'] == null ||
                   resp_data['is_profile_complete'] == false) {
                 // print('Profile not Complete ');
-
                 EndLoading();
                 Get.toNamed(user_type_slide_url);
               }
@@ -116,13 +114,13 @@ class _LoginFormState extends State<LoginForm> {
               // Complete Profile hander :
               else {
                 if (resp_data['user_type'] == 'investor') {
-                  EndLoading();
                   await userState.SetUserType(type: UserStoreName.investor);
+                  EndLoading();
                   Get.toNamed(home_page_url);
                 }
                 if (resp_data['user_type'] == 'founder') {
-                  EndLoading();
                   await userState.SetUserType(type: UserStoreName.founder);
+                  EndLoading();
                   Get.toNamed(home_page_url);
                 }
               }

@@ -236,9 +236,40 @@ class _HomeViewState extends State<HomeView> {
       var username;
       var position;
       final authUser = FirebaseAuth.instance.currentUser;
-      final userType = await userState.GetUserType();
       user_id = authUser?.uid;
 
+      // Validate User Detial before login : 
+      final resp = await userStore.FetchUserDetail();
+      if (resp['response'] == true) {
+        final resp_data = resp['data'];
+        // Incomplete Profile handler :
+        // redirect user to select user type page :
+        if (resp_data['is_profile_complete'] == null ||
+            resp_data['is_profile_complete'] == false) {
+          // print('Profile not Complete ');
+          Get.toNamed(login_handler_url);
+        }
+
+        // Complete Profile hander :
+        else {
+          if (resp_data['user_type'] == 'investor') {
+            await userState.SetUserType(type: UserStoreName.investor);
+            Get.toNamed(home_page_url);
+          }
+          if (resp_data['user_type'] == 'founder') {
+            await userState.SetUserType(type: UserStoreName.founder);
+            Get.toNamed(home_page_url);
+          }
+        }
+      }
+      
+      if(!resp['response']){
+          Get.toNamed(login_handler_url);
+      }
+
+
+
+      final userType = await userState.GetUserType();
       // Investor Handler :
       if (userType == UserStoreName.investor) {
         final invest_resp =
@@ -246,9 +277,6 @@ class _HomeViewState extends State<HomeView> {
                 user_id: user_id);
         // Investor Success Handler :
         if (invest_resp['response']) {
-          print(invest_resp['data']);
-          print(' [ SETUP INVESTOR DETAIL ] ');
-
           user_profile = invest_resp['data']['userDetail']['picture'];
           user_name = invest_resp['data']['userDetail']['name'];
           registor_mail = invest_resp['data']['userDetail']['email'];
@@ -278,14 +306,14 @@ class _HomeViewState extends State<HomeView> {
 
       // Founder Handler :
       if (userType == UserStoreName.founder) {
-        print(user_id);
-        final found_resp = await founderStore.FetchFounderDetailandContact(
-            user_id: user_id);
+        final found_resp =
+            await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
         if (found_resp['response']) {
           final pure_data = found_resp['data'];
 
-          user_profile = pure_data['picture']?? temp_avtar_image;
+          user_profile = pure_data['picture'] ?? temp_avtar_image;
+          print('profile picture $user_profile');
           user_name = pure_data['name'];
           registor_mail = pure_data['email'];
 
@@ -314,10 +342,8 @@ class _HomeViewState extends State<HomeView> {
       }
     }
 
-
-
 ///////////////////////////////////////////
-/// SET REQUIRED PARAM :
+    /// SET REQUIRED PARAM :
 ///////////////////////////////////////////
     return FutureBuilder(
         future: GetLocalStorageData(),
@@ -340,7 +366,6 @@ class _HomeViewState extends State<HomeView> {
   /// MAIN METHOD :
   ///////////////////////////////////////////
   Container MainMethod(BuildContext context) {
-
     // Show Floating Explore Button :
     Widget exploreButton = Container();
     if (context.width < 640) {
@@ -359,7 +384,7 @@ class _HomeViewState extends State<HomeView> {
 
             // Header Section:
             HomeHeaderSection(
-              profile_image: user_profile , 
+              profile_image: user_profile,
               changeView: SetHomeView,
               usertype: usertype,
               home_icon: home_icon,

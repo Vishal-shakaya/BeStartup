@@ -33,9 +33,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
 
   var startups_length = 0;
 
-  var startup_name = [];
+  var startup_name;
 
-  var user_ids = [];
+  var user_ids;
 
   var usertype;
   var user_id;
@@ -74,8 +74,8 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
   double ind_size_height = 22;
   double ind_size_width = 22;
 
-  double indicator_height = 22; 
-  double indi_icon_size = 20; 
+  double indicator_height = 22;
+  double indi_icon_size = 20;
 
   ///////////////////////////
   /// GET REQUIREMENTS :
@@ -88,26 +88,17 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     var resp;
 
     if (usertype != null) {
-      print('user Type $usertype');
-      ///////////////////////////////////////////
-      /// If user is Investor :
-      ///////////////////////////////////////////
-      if (usertype == UserStoreName.investor) {
-        resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
-      }
-
       /////////////////////////////////////////////////////////////
       // If user type founder then check selected menu type:
       // 1. if menu === intrested then show intrested startups :
       // 2. menu == my_startup show his startups: [ Default ] :
       /////////////////////////////////////////////////////////////
+      if (usertype == UserStoreName.investor) {
+        resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
+      }
+
       if (usertype == UserStoreName.founder) {
-        if (menuType == FounderStartupMenu.my_startup) {
-          resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
-          print('Menu Type $resp');
-        } else {
-          resp = await homeviewConnector.FetchLikeStartups(user_id: user_id);
-        }
+        resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
       }
     }
 
@@ -143,9 +134,9 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
     ind_size_height = 22;
     ind_size_width = 22;
 
-    indicator_height = 22; 
+    indicator_height = 22;
 
-    indi_icon_size = 20; 
+    indi_icon_size = 20;
     ////////////////////////////////////
     /// RESPONSIVENESS :
     ////////////////////////////////////
@@ -174,7 +165,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       indicator_height = 22;
 
       spacer = 0.04;
-      indi_icon_size = 20; 
+      indi_icon_size = 20;
 
       print('Greator then 1500');
     }
@@ -281,13 +272,11 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       ind_size_width = 18;
 
       indicator_height = 18;
-      indi_icon_size = 17; 
+      indi_icon_size = 17;
 
       spacer = 0.02;
       print('640');
     }
-
-
 
     // PHONE:
     if (context.width < 480) {
@@ -312,7 +301,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       ind_size_width = 15;
 
       indicator_height = 16;
-      indi_icon_size = 16; 
+      indi_icon_size = 16;
 
       spacer = 0.02;
       print('480');
@@ -348,14 +337,14 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       mainWidget = SingleChildScrollView(
         child: Column(
           children: [
-            // Swith Menu button only show if user is founder :
-            usertype == UserType.founder
-                ?
-                // Swith Menu Switcher :
-                StartupSwitcherButton(context)
+            // // Swith Menu button only show if user is founder :
+            // usertype == UserType.founder
+            //     ?
+            //     // Swith Menu Switcher :
+            //     StartupSwitcherButton(context)
 
-                // Spacer :
-                : Spacer(context),
+            //     // Spacer :
+            //     : Spacer(context),
 
             // Main Startup Container :
             StartupMethod(context),
@@ -384,46 +373,48 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         child: Row(
           children: [
             // Bakcword Button :
-            Expanded(
-              child: BackButton(context),
-              flex: back_button_flex,
-            ),
+            // Expanded(
+            //   child: BackButton(context),
+            //   flex: back_button_flex,
+            // ),
 
             Expanded(
                 flex: startup_flex,
-                child: CarouselSlider.builder(
-                    carouselController: buttonCarouselController,
-                    itemCount: startups_length,
-                    itemBuilder: (BuildContext context, int itemIndex,
-                        int pageViewIndex) {
-                      return Container(
-                        alignment: Alignment.topCenter,
-                        margin: EdgeInsets.only(top: context.height * 0.03),
-                        child: SizedBox(
-                          height: context.height * startup_cont_height,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                ProfileStoryThumbnail(
-                                  user_id: user_id[itemIndex],
-                                ),
-                                ProfileStoryHeading(
-                                  startup_name: startup_name[itemIndex],
-                                ),
-                                ProfileInfoChart(
-                                  user_id: user_id[itemIndex],
-                                ),
-                              ],
-                            ),
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  margin: EdgeInsets.only(top: context.height * 0.03),
+                  child: SizedBox(
+                    height: context.height * startup_cont_height,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ProfileStoryThumbnail(
+                            user_id: user_id,
                           ),
-                        ),
-                      );
-                    },
-                    options: CarouselOptions(
-                        height: context.height * 0.67, viewportFraction: 1))),
+                          ProfileStoryHeading(
+                            startup_name: startup_name,
+                          ),
+                          ProfileInfoChart(
+                            user_id: user_id,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
-            // Forword Button :
-            Expanded(flex: forword_button_flex, child: ForwordButton(context))
+                  // CarouselSlider.builder(
+                  //     carouselController: buttonCarouselController,
+                  //     itemCount: startups_length,
+                  //     itemBuilder: (BuildContext context, int itemIndex,
+                  //         int pageViewIndex) {
+                  //       return
+                  //     },
+                  //     options: CarouselOptions(
+                  //         height: context.height * 0.67, viewportFraction: 1))),
+
+                  // Forword Button :
+                  // Expanded(flex: forword_button_flex, child: ForwordButton(context))
+                ))
           ],
         ));
   }
@@ -448,9 +439,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
         borderWidth: 5.0,
         height: indicator_height,
         indicatorSize: Size(ind_size_width, ind_size_height),
-       
         boxShadow: [
-       
           BoxShadow(
             color: shadow_color1,
             spreadRadius: 1,
@@ -458,20 +447,17 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
             offset: Offset(0, 0.1),
           ),
         ],
-    
         onChanged: (b) async {
           setState(() => positive = b);
         },
-    
         colorBuilder: (b) => b ? Colors.transparent : Colors.transparent,
-       
         iconBuilder: (value) => value
-            ?  Icon(
+            ? Icon(
                 Icons.home,
                 size: indi_icon_size,
                 color: Colors.blueAccent,
               )
-            :  Icon(
+            : Icon(
                 CupertinoIcons.heart_fill,
                 size: indi_icon_size,
                 color: Colors.redAccent,

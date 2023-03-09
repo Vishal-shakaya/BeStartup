@@ -158,18 +158,17 @@ class _FounderCustomFullScreenDropDownState
 
     if (context.width < 800) {
       return DropdownPixel800(context);
-    } 
+    }
 
     if (context.width < 480) {
       return DropdownPixel480(context);
-    } 
-    
-    else {
+    } else {
       return FulscreenDropdown(context);
     }
   }
 
   Container FulscreenDropdown(BuildContext context) {
+
     return Container(
       width: context.width * dropdown_width,
       child: DropdownButtonHideUnderline(
@@ -317,6 +316,7 @@ class _FounderCustomFullScreenDropDownState
       )),
     );
   }
+
   Container DropdownPixel480(BuildContext context) {
     return Container(
       width: context.width * dropdown_width,
@@ -499,8 +499,6 @@ class FounderMenuItemsPixel800 {
     );
   }
 }
-
-
 
 class FounderMenuItemsPixel480 {
   // First Item List :

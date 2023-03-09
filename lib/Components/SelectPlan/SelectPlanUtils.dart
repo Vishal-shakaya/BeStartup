@@ -122,6 +122,7 @@ ConfigureBusinessDetailModel() async {
   try {
     final businessDetailStore = BusinessDetailStore();
     final founderStore = FounderStore();
+
     final response = await businessDetailStore.GetCachedBusinessDetail();
     final founderResp = await founderStore.GetCachedFounderDetail();
 
@@ -133,7 +134,7 @@ ConfigureBusinessDetailModel() async {
       businessName = data['name'];
     }
     if (founderResp['response']) {
-      final data = response['data'];
+      final data = founderResp['data'];
       founderName = data['name'];
     }
 

@@ -8,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StoryThumbnail extends StatefulWidget {
-  var user_id; 
+  var user_id;
   StoryThumbnail({
-    required this.user_id, 
+    required this.user_id,
     Key? key,
   }) : super(key: key);
 
@@ -118,11 +118,13 @@ class _StoryThumbnailState extends State<StoryThumbnail> {
     GetLocalStorageData() async {
       try {
         final resp =
-            await startupView_connector.FetchThumbnail(user_id:widget.user_id);
+            await startupView_connector.FetchThumbnail(user_id: widget.user_id);
+
         if (resp['response']) {
           final_data = resp['data']['thumbnail'];
         }
 
+        print('Final data $final_data');
         // Error Handler :
         if (!resp['response']) {
           final_data = resp['data'];

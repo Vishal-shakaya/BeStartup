@@ -113,6 +113,7 @@ PlanModel({
   }) async {
   try {
     Map<String, dynamic> plan = {
+      'user_id':user_id, 
       'id': uuid.v4(),
       'name': plan_name,
       'buyer_mail': buyer_mail,
@@ -130,7 +131,7 @@ PlanModel({
 }
 
 
-SaveStartupsModel({user_id, timestamp,user_ids}) async {
+SaveStartupsModel({required user_id, required user_ids}) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),

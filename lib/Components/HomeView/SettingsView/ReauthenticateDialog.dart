@@ -129,11 +129,10 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
         print('email $email');
         print('pass $password');
         var resp = await auth.LoginUser(email: email, password: password);
-        print('resp $resp');
+
         // SUCCESS RESPONSE :
         if (resp['response']) {
-          final del_resp = await removeStartup.DeleteFounderWithStartups(
-              user_id: authUser?.uid);
+         var del_resp = await auth.Deleteuser();
 
           if (del_resp['response']) {
             EndLoading();

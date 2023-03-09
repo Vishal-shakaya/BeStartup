@@ -231,11 +231,12 @@ class MySocialAuth extends GetxController {
       final mail = await FirebaseAuth.instance.currentUser?.uid;
       print('Logout user mail $mail');
       await FirebaseAuth.instance.signOut();
-      try {
-        await FacebookAuth.instance.logOut();
-      } catch (e) {
-        print('Facebook logout error $e');
-      }
+      Get.toNamed(login_handler_url);
+      // try {
+      //   await FacebookAuth.instance.logOut();
+      // } catch (e) {
+      //   print('Facebook logout error $e');
+      // }
 
       // Google Error :
       try {

@@ -47,9 +47,9 @@ class HomeViewConnector extends GetxController {
   FetchUserStartups({required user_id}) async {
     var startup_data;
     var startup_ids = [];
-    var user_ids = [];
+    var user_ids ;
     var startup_len;
-    var startup_names = [];
+    var startup_names ;
 
     // FETCHING DATA FROM FIREBASE
     try {
@@ -60,8 +60,8 @@ class HomeViewConnector extends GetxController {
           .then((value) {
         startup_len = value.size;
         for (var doc in value.docs) {
-          user_ids.add(doc.data()['user_id']);
-          startup_names.add(doc.data()['name']);
+          user_ids = doc.data()['user_id'];
+          startup_names=doc.data()['name'];
         }
       });
       startup_data = {

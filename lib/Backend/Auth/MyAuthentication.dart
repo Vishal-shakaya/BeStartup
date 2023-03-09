@@ -214,7 +214,6 @@ class MyAuthentication extends GetxController {
   Deleteuser() async {
     var removeStore = Get.put(RemoveStartup());
     final user = auth.currentUser;
-
     final resp =
         await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
     if (resp['response']) {
