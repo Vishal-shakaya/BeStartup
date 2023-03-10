@@ -313,7 +313,6 @@ class _HomeViewState extends State<HomeView> {
           final pure_data = found_resp['data'];
 
           user_profile = pure_data['picture'] ?? temp_avtar_image;
-          print('profile picture $user_profile');
           user_name = pure_data['name'];
           registor_mail = pure_data['email'];
 

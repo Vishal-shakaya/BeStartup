@@ -57,9 +57,6 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
 
   SearchingAlgo() {
     Stream<QuerySnapshot<Map<String, dynamic>>>? mainStream;
-    // Stream<QuerySnapshot<Map<String, dynamic>>> startupStream;
-    // Stream<QuerySnapshot<Map<String, dynamic>>> founderStream;
-    // List<QueryDocumentSnapshot<Map<String, dynamic>>> dataList = [];
 
     if (queryKeywords.contains('@')) {
       var new_key = queryKeywords.replaceAll('@', '');
@@ -74,16 +71,6 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
           .where('startup_searching_index', arrayContains: queryKeywords)
           .snapshots();
     }
-
-    // Trying to merge two string results : Not wroking:
-    // var merge = MergeStream([startupStream, founderStream]);
-    // merge.forEach((element) {
-    //   dataList.addAll(element.docs);
-    // });
-
-    // dataList.forEach((element) {
-    //   print(element);
-    // });
 
     return mainStream;
   }
@@ -340,7 +327,7 @@ class _BusinessSearchBarState extends State<BusinessSearchBar> {
               size: search_iconSize,
             ),
           ),
-          hintText: 'Search',
+          hintText: '@username or startup name',
           hintStyle: GoogleFonts.openSans(
             textStyle: TextStyle(),
             color: input_hind_color,

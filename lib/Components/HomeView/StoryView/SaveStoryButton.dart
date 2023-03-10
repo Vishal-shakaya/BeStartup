@@ -18,10 +18,9 @@ class SaveStoryButton extends StatefulWidget {
 class _SaveStoryButtonState extends State<SaveStoryButton> {
   var userState = Get.put(UserState());
   var homeviewConnector = Get.put(HomeViewConnector());
-
-  bool is_saved = false;
+  var authUser = FirebaseAuth.instance.currentUser;
   var user_id;
-
+  bool is_saved = false;
   double save_iconSize = 26;
 
   @override
@@ -30,7 +29,7 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
     /// GET REQUIRED PARAM :
     /////////////////////////////////////////
     IsPostSaved() async {
-      user_id = user_id;
+      user_id = authUser?.uid;
       final resp = await homeviewConnector.IsStartupSaved(
         user_id: user_id,
       );
@@ -106,6 +105,7 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
     final resp = await homeviewConnector.SaveStartup(
       user_id: widget.user_id,
     );
+    print('Resp $resp');
 
     /// Updaet UI to Saved
     if (resp['response']) {

@@ -6,11 +6,10 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flip_card/flip_card_controller.dart';
+import 'package:flutter_flip_card/flutter_flip_card.dart';
 
 class Picture extends StatelessWidget {
   String? logo = temp_logo;
@@ -21,10 +20,10 @@ class Picture extends StatelessWidget {
       : super(key: key);
 
   var detailViewState = Get.put(StartupDetailViewState());
-  FlipCardController? _controller;
+   final con = FlipCardController();
 
   var is_admin;
-  var founder_id;
+  var user_id;
   var startup_id;
 
   double profile_top_pos = 0.19;
@@ -46,7 +45,7 @@ class Picture extends StatelessWidget {
   EditBusinessLogo() {
     var param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
+      'user_id': user_id,
       'startup_id': startup_id,
       'is_admin': is_admin
     });
@@ -59,7 +58,7 @@ class Picture extends StatelessWidget {
   ///////////////////////////
   GetLocalStorageData() async {
     is_admin = await detailViewState.GetIsUserAdmin();
-    founder_id = await detailViewState.GetFounderId();
+    user_id = await detailViewState.GetFounderId();
     startup_id = await detailViewState.GetStartupId();
     return '';
   }
@@ -268,8 +267,12 @@ class Picture extends StatelessWidget {
         child: Stack(
           children: [
             FlipCard(
-              front: StartupLogo(),
-              back: CeoDetail(),
+              axis: FlipAxis.horizontal,
+              controller: con,
+              onTapFlipping: true,
+              rotateSide: RotateSide.right,
+              frontWidget: StartupLogo(),
+              backWidget: CeoDetail(),
             ),
             ////////////////////////////////////////////
             /// If user is admin then show edit button :

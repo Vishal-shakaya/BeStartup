@@ -4,16 +4,15 @@ import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_flip_card/flutter_flip_card.dart';
 
 class StoryCeoProfile extends StatefulWidget {
-  var user_id; 
+  var user_id;
   StoryCeoProfile({
-    required this.user_id, 
+    required this.user_id,
     Key? key,
   }) : super(key: key);
 
@@ -29,7 +28,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
   var founder_profile;
   String? founder_name;
 
-  FlipCardController? _controller;
+  FlipCardController con = FlipCardController();
 
   double profile_top_pos = 0.14;
   double profile_left_pos = 0.01;
@@ -84,7 +83,6 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
   @override
   void initState() {
     super.initState();
-    _controller = FlipCardController();
   }
 
   @override
@@ -190,9 +188,11 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       top: context.height * profile_top_pos,
       left: context.width * profile_left_pos,
       child: FlipCard(
-        controller: _controller,
-        front: StartupLogo(),
-        back: CeoDetail(),
+        onTapFlipping: true,
+        controller: con,
+        rotateSide: RotateSide.left,
+        frontWidget: StartupLogo(),
+        backWidget: CeoDetail(),
       ),
     );
   }
@@ -206,7 +206,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
         InkWell(
           radius: 100,
           onTap: () {
-            _controller?.toggleCard();
+            con.flipcard();
           },
           child: Card(
             elevation: 4,
@@ -243,7 +243,7 @@ class _StoryCeoProfileState extends State<StoryCeoProfile> {
       children: [
         InkWell(
           onTap: () {
-            _controller?.toggleCard();
+            con.flipcard();
           },
           child: Card(
             elevation: 4,

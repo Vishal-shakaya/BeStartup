@@ -9,7 +9,6 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

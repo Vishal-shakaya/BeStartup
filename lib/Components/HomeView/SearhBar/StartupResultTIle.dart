@@ -19,17 +19,17 @@ class StartupReslutTile extends StatelessWidget {
     /// Detail view url :
     //////////////////////////////////
     StartupDetailView({
-      required founder_id,
+      required user_id,
       required startup_id,
     }) async {
       var is_admin = false;
       var user_id = await userState.GetUserId();
 
-      if (user_id == founder_id) {
+      if (user_id == user_id) {
         is_admin = true;
       }
       var param = {
-        'founder_id': founder_id,
+        'user_id': user_id,
         'startup_id': startup_id,
         'is_admin': is_admin,
       };
@@ -46,15 +46,14 @@ class StartupReslutTile extends StatelessWidget {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             // Data Conversion :
-            
+
             var result_data =
                 snapshot.data!.docs[index].data() as Map<String, dynamic>;
 
             print('Result Data ${result_data}');
-
             // print(result_data);
             final startup_name = result_data['name'];
-            final founder_name = result_data['founder_name'];
+            final founder_name = result_data['founder_searching_index'].last;
             final startup_id = result_data['startup_id'];
             final startup_logo = result_data['logo'];
             final founder_id = result_data['founder_id'];
@@ -64,7 +63,7 @@ class StartupReslutTile extends StatelessWidget {
               child: ListTile(
                 onTap: () async {
                   await StartupDetailView(
-                      startup_id: startup_id, founder_id: founder_id);
+                      startup_id: startup_id, user_id: founder_id);
                 },
 
                 shape: const RoundedRectangleBorder(
