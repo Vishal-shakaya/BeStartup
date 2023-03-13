@@ -1,3 +1,5 @@
+import 'package:get_storage/get_storage.dart';
+
 class StartupDetailViewState {
   static var startup_id;
   static var is_admin;
@@ -5,54 +7,43 @@ class StartupDetailViewState {
   static var desire_amount;
   static var startup_name;
   static var founder_mail;
-
-
-
-///////////////////////////////
-/// Setter :
-///////////////////////////////
-  SetStartupId({id}) async {
-    startup_id = id;
-    print('Startup Set $startup_id');
-  }
+  final box = GetStorage();
 
   SetFounderId({id}) async {
-    founder_id = id;
-    print('Startup Set $founder_id');
+    await box.write('founder_id', id);
+    print('fouuder Set $id');
   }
 
   SetIsUserAdmin({admin}) async {
     is_admin = admin;
-    print('Startup Set $is_admin');
+    print('admin Set $is_admin');
   }
 
-
   SetDesireAmount({amount}) async {
-    desire_amount = amount;
-    print('Startup Set $amount');
+    await box.write('founder_amount', amount);
+    print('amount  $amount');
   }
 
   SetStartupName({name}) async {
-    startup_name = name;
-    print('Startup Set $startup_name');
+    await box.write('founder_startup_name', name);
+    print('startup_name  $name');
   }
 
   SetFounderMail({mail}) async {
-    founder_mail = mail;
-    print('Startup Set $mail');
+    await box.write('founder_primary_mail', mail);
+    print('startup_name  $mail');
   }
 
-
-
   /////////////////////////////
-    /// Getter :
+  /// Getter :
   /////////////////////////////
   GetStartupId() async {
     return startup_id;
   }
 
   GetFounderId() async {
-    return founder_id;
+    final user = box.read('founder_id');
+    return user;
   }
 
   GetIsUserAdmin() async {
@@ -60,17 +51,17 @@ class StartupDetailViewState {
   }
 
   GetDesireAmount() async {
-    return desire_amount;
+    final amount = box.read('founder_amount');
+    return amount;
   }
 
   GetStartupName() async {
-    return startup_name;
+    final name = box.read('founder_startup_name');
+    return name; 
   }
-
 
   GetFounderMail() async {
+    final mail = box.read('founder_primary_mail');
     return founder_mail;
   }
-
-  
 }

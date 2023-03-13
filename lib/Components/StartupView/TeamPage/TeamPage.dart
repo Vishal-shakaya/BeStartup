@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/StartupState.dart';
 // import 'package:be_startup/Backend/Users/Founder/FounderConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
+import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/MemberBlock.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -23,10 +24,9 @@ class TeamPage extends StatefulWidget {
 
 class _TeamPageState extends State<TeamPage> {
   var startupConnect = Get.put(StartupViewConnector());
-
   var startupviewConnector = Get.put(StartupViewConnector());
-
   var detailViewState = Get.put(StartupDetailViewState());
+  var founderStore = Get.put(FounderStore());
 
   double page_width = 0.80;
 
@@ -60,9 +60,9 @@ class _TeamPageState extends State<TeamPage> {
 
   double profile_radius = 70;
 
-  double member_header_top_height = 0.10; 
+  double member_header_top_height = 0.10;
 
-  double member_header_bottom_height = 0.05; 
+  double member_header_bottom_height = 0.05;
 
   double member_cont_width = 0.50;
 
@@ -94,21 +94,18 @@ class _TeamPageState extends State<TeamPage> {
 
   double edit_btn_fontSize = 15;
 
-
-
-
-
   var team_member = [];
-  var startup_id;
-  var founder_id;
+  var user_id;
   var is_admin;
+  var founder_profile;
+  var primary_mail;
+  var founder_name;
 
   // REDIRECT TO CREATE MEMEBER PAGE :
   EditMember() {
     var param = jsonEncode({
       'type': 'update',
-      'founder_id': founder_id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     });
 
@@ -120,13 +117,29 @@ class _TeamPageState extends State<TeamPage> {
   //////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      startup_id = await detailViewState.GetStartupId();
-      is_admin = await detailViewState.GetIsUserAdmin();
-      founder_id = await detailViewState.GetFounderId();
+      final param = Get.parameters;
+      user_id = param['user_id'];
+      is_admin = param['is_admin'];
 
-      final data = await startupviewConnector.FetchBusinessTeamMember(
-          startup_id: startup_id);
+      final data =
+          await startupviewConnector.FetchBusinessTeamMember(user_id: user_id);
       team_member = data['data']['members'];
+
+      final founder_resp =
+          await founderStore.FetchFounderDetailandContact(user_id: user_id);
+
+      if (founder_resp['response']) {
+        founder_profile = founder_resp['data']['picture'] ?? shimmer_image;
+        founder_name = founder_resp['data']['name'] ?? '';
+        primary_mail = founder_resp['data']['primary_mail'] ??
+            founder_resp['data']['email'];
+      }
+      if (!founder_resp['response']) {
+        founder_profile = temp_image;
+        founder_name = '';
+        primary_mail = '';
+      }
+
       return team_member;
     } catch (e) {
       return team_member;
@@ -135,89 +148,87 @@ class _TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
-     page_width = 0.80;
+    page_width = 0.80;
 
-     spacer = 0.02;
+    spacer = 0.02;
 
-     heading_fontSize = 32;
+    heading_fontSize = 32;
 
-     founder_sec_elevation = 1;
+    founder_sec_elevation = 1;
 
-     founder_border_radius = 10;
+    founder_border_radius = 10;
 
-     founder_cont_width = 0.20;
+    founder_cont_width = 0.20;
 
-     founder_cont_height = 0.34;
+    founder_cont_height = 0.34;
 
-     founder_cont_hori_padd = 10;
+    founder_cont_hori_padd = 10;
 
-     founder_cont_ver_padd = 20;
+    founder_cont_ver_padd = 20;
 
-     founder_cont_top_margin = 10;
+    founder_cont_top_margin = 10;
 
-     founder_sec_padding = 12;
+    founder_sec_padding = 12;
 
-     founder_spacing = 15;
+    founder_spacing = 15;
 
-     founder_box_width = 200;
+    founder_box_width = 200;
 
-     founder_pod_bottom_margin = 10;
+    founder_pod_bottom_margin = 10;
 
-     founder_pod_fontSize = 15;
+    founder_pod_fontSize = 15;
 
-     profile_radius = 70;
+    profile_radius = 70;
 
-     member_header_top_height = 0.10; 
+    member_header_top_height = 0.10;
 
-     member_header_bottom_height = 0.05; 
+    member_header_bottom_height = 0.05;
 
-     member_cont_width = 0.55;
+    member_cont_width = 0.55;
 
-     member_cont_height = 0.70;
+    member_cont_height = 0.70;
 
-     member__cont_hor_padd = 10;
+    member__cont_hor_padd = 10;
 
-     member_cont_ver_padd = 20;
+    member_cont_ver_padd = 20;
 
-     memnber_cont_top_margin = 10;
+    memnber_cont_top_margin = 10;
 
-     member_fonSize = 13;
+    member_fonSize = 13;
 
-     member_contact_iconSize = 16;
+    member_contact_iconSize = 16;
 
-     member_email_fontSize = 11;
+    member_email_fontSize = 11;
 
-     member_contact_padd = 5.0;
+    member_contact_padd = 5.0;
 
-     edit_btn_width = 0.48;
+    edit_btn_width = 0.48;
 
-     edit_btn_top_margin = 0.04;
+    edit_btn_top_margin = 0.04;
 
-     edit_btn_cont_width = 80;
+    edit_btn_cont_width = 80;
 
-     edit_btn_height = 30;
+    edit_btn_height = 30;
 
-     edit_btn_IconSize = 15;
+    edit_btn_IconSize = 15;
 
-     edit_btn_fontSize = 15;
+    edit_btn_fontSize = 15;
 
-     
-
-	////////////////////////////////////
-  /// RESPONSIVENESS : 
-  ////////////////////////////////////
-		// DEFAULT :
+    ////////////////////////////////////
+    /// RESPONSIVENESS :
+    ////////////////////////////////////
+    // DEFAULT :
     if (context.width > 1700) {
       print('Greator then 1700');
-      }
-   
+    }
+
     if (context.width < 1700) {
       print(' 1700');
-      }
+    }
 
     if (context.width < 1600) {
       print('1600');
-      }
+    }
 
     // PC:
     if (context.width < 1500) {
@@ -253,9 +264,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 70;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 0.60;
 
@@ -288,7 +299,7 @@ class _TeamPageState extends State<TeamPage> {
       edit_btn_fontSize = 15;
 
       print('1500');
-      }
+    }
 
     if (context.width < 1200) {
       page_width = 0.80;
@@ -323,9 +334,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 70;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 0.68;
 
@@ -357,8 +368,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 15;
       print('1200');
-      }
-
+    }
 
     if (context.width < 1100) {
       page_width = 0.80;
@@ -393,9 +403,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 70;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 0.80;
 
@@ -427,7 +437,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 15;
       print('1100');
-      }
+    }
 
     if (context.width < 900) {
       page_width = 0.80;
@@ -462,9 +472,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 70;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 0.90;
 
@@ -496,11 +506,11 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 14;
       print('900');
-      }
-    
+    }
+
     if (context.width < 1000) {
       print('1000');
-      }
+    }
 
     // TABLET :
     if (context.width < 800) {
@@ -536,9 +546,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 65;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 0.99;
 
@@ -570,7 +580,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 13;
       print('800');
-      }
+    }
 
     // SMALL TABLET:
     if (context.width < 640) {
@@ -606,9 +616,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 65;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 1;
 
@@ -640,8 +650,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 13;
       print('640');
-      }
-
+    }
 
     if (context.width < 600) {
       page_width = 0.90;
@@ -676,9 +685,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 60;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 1;
 
@@ -710,7 +719,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 13;
       print('600');
-      }
+    }
 
     // PHONE:
     if (context.width < 480) {
@@ -746,9 +755,9 @@ class _TeamPageState extends State<TeamPage> {
 
       profile_radius = 60;
 
-      member_header_top_height = 0.10; 
+      member_header_top_height = 0.10;
 
-      member_header_bottom_height = 0.05; 
+      member_header_bottom_height = 0.05;
 
       member_cont_width = 1;
 
@@ -780,9 +789,7 @@ class _TeamPageState extends State<TeamPage> {
 
       edit_btn_fontSize = 12;
       print('480');
-      }
-
-
+    }
 
     //////////////////////////////////////////
     // SET REQUIREMTNS :
@@ -810,7 +817,6 @@ class _TeamPageState extends State<TeamPage> {
   }
 
   Container MainMethod({context, data}) {
-
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(
@@ -894,14 +900,18 @@ class _TeamPageState extends State<TeamPage> {
                   /// TEAM MEMBER SECTION :
                   /////////////////////////////////////////
                   // SPACING :
-                  SizedBox(height: MediaQuery.of(context).size.height * member_header_top_height),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height *
+                          member_header_top_height),
 
                   StartupHeaderText(
                     title: 'Members',
                     font_size: heading_fontSize,
                   ),
 
-                  SizedBox(height: MediaQuery.of(context).size.height * member_header_bottom_height),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height *
+                          member_header_bottom_height),
 
                   // EDIT TEAM MEMBER :
                   // REDIRECT TO CREATE TEAME PAGE :
@@ -916,11 +926,8 @@ class _TeamPageState extends State<TeamPage> {
                     child: Container(
                       width:
                           MediaQuery.of(context).size.width * member_cont_width,
-                    
                       height: MediaQuery.of(context).size.height *
                           member_cont_height,
-                    
-                    
                       padding: EdgeInsets.symmetric(
                           horizontal: member__cont_hor_padd,
                           vertical: member_cont_ver_padd),
@@ -991,7 +998,7 @@ class _TeamPageState extends State<TeamPage> {
         AutoSizeText.rich(TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
               // text: widget.member!['member_mail'],
-              text: 'vishalsakaya@gmail.com',
+              text: '$primary_mail',
               style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.blue,
@@ -1007,7 +1014,7 @@ class _TeamPageState extends State<TeamPage> {
         child: AutoSizeText.rich(
             TextSpan(style: Get.textTheme.headline5, children: [
           TextSpan(
-              text: 'vishal shakaya',
+              text: '$founder_name',
               style: TextStyle(
                   color: Colors.blueGrey.shade700, fontSize: member_fonSize))
         ])));
@@ -1032,8 +1039,7 @@ class _TeamPageState extends State<TeamPage> {
         child: CircleAvatar(
       radius: profile_radius,
       backgroundColor: Colors.blueGrey[100],
-      // foregroundImage: NetworkImage(widget.member!['image']),
-      foregroundImage: NetworkImage(temp_image),
+      foregroundImage: NetworkImage(founder_profile),
     ));
   }
 }

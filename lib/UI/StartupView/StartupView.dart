@@ -105,7 +105,6 @@ class _StartupViewState extends State<StartupView> {
   Widget build(BuildContext context) {
     var decode_data = jsonDecode(pageParam!);
     GetLocalStorageData() async {
-      // await detailViewState.SetStartupId(id: decode_data['startup_id']);
       await detailViewState.SetFounderId(id: decode_data['user_id']);
       await detailViewState.SetIsUserAdmin(admin: decode_data['is_admin']);
 

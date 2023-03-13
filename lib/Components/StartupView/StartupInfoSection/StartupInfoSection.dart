@@ -110,6 +110,7 @@ class StartupInfoSection extends StatelessWidget {
       var startupDetialView = Get.put(StartupDetailViewState());
       var userStateView = Get.put(UserState());
       var founderStore = Get.put(FounderStore());
+
       is_admin = await startupDetialView.GetIsUserAdmin();
       user_id = await startupDetialView.GetFounderId();
 
@@ -120,14 +121,13 @@ class StartupInfoSection extends StatelessWidget {
             await startupConnect.FetchThumbnail(user_id: user_id);
 
         final founder_resp =
-           await  founderStore.FetchFounderDetailandContact(user_id: user_id);
-
+            await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
         ////////////////////////////////////////
         // Founder Success Handler :
         ////////////////////////////////////////
         if (business_name_resp['response']) {
-          founder_profile = founder_resp['data']['picture']?? shimmer_image;
+          founder_profile = founder_resp['data']['picture'] ?? shimmer_image;
           founder_name = business_name_resp['data']['name'];
 
           registor_mail = business_name_resp['data']['email'];
@@ -631,11 +631,20 @@ class StartupInfoSection extends StatelessWidget {
                     alignment: WrapAlignment.spaceAround,
                     children: [
                       StartupNavigation(
-                          title: 'Team', route: StartupPageRoute.team),
+                          is_admin: is_admin,
+                          user_id: user_id,
+                          title: 'Team',
+                          route: StartupPageRoute.team),
                       StartupNavigation(
-                          title: 'Vision', route: StartupPageRoute.vision),
+                          is_admin: is_admin,
+                          user_id: user_id,
+                          title: 'Vision',
+                          route: StartupPageRoute.vision),
                       StartupNavigation(
-                          title: 'Invest', route: StartupPageRoute.invest),
+                          is_admin: is_admin,
+                          user_id: user_id,
+                          title: 'Invest',
+                          route: StartupPageRoute.invest),
                     ],
                   )),
             ),

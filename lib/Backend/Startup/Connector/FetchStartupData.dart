@@ -326,16 +326,10 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   // Fetch Team Member :
   ///////////////////////////////////
-  FetchBusinessTeamMember({startup_id = false}) async {
+  FetchBusinessTeamMember({ required  user_id }) async {
     var final_startup_id;
     var data;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :

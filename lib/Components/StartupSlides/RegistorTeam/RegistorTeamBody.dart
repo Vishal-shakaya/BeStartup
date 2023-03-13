@@ -48,7 +48,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   var pageParam;
   var startup_id;
-  var founder_id;
+  var user_id;
   var is_admin;
 
   bool? updateMode = false;
@@ -128,7 +128,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     // Upload Succes response :
     if (upload_resp['response']) {
       var param = jsonEncode({
-        'founder_id': founder_id,
+        'user_id': user_id,
         'startup_id': startup_id,
         'is_admin': is_admin,
       });
@@ -157,7 +157,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
       pageParam = jsonDecode(Get.parameters['data']!);
 
       startup_id = pageParam['startup_id'];
-      founder_id = pageParam['founder_id'];
+      user_id = pageParam['user_id'];
       is_admin = pageParam['is_admin'];
 
       if (pageParam['type'] == 'update') {
@@ -175,7 +175,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     try {
       if (updateMode == true) {
         final fetch_resp = await startupviewConnector.FetchBusinessTeamMember(
-            startup_id: startup_id);
+            user_id: user_id);
 
         if (fetch_resp['response']) {
           await memeberStore.SetTeamMembers(
