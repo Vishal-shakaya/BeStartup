@@ -11,10 +11,10 @@ import 'package:get/get.dart';
 
 class StoryView extends StatefulWidget {
   var startup_name;
-  var user_id; 
+  var user_id;
   StoryView({
-    required this.startup_name, 
-    required this.user_id, 
+    required this.startup_name,
+    required this.user_id,
     Key? key,
   }) : super(key: key);
 
@@ -27,6 +27,8 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   Widget build(BuildContext context) {
+    print('Main Id ${widget.user_id}');
+
     return Card(
       elevation: 10,
       shadowColor: Colors.blueGrey,

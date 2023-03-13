@@ -26,14 +26,12 @@ class HomeViewConnector extends GetxController {
           .then((value) {
         startup_len = value.size;
         for (var doc in value.docs) {
-          startup_ids.add(doc.data()['startup_id']);
-          founder_ids.add(doc.data()['founder_id']);
+          founder_ids.add(doc.data()['user_id']);
           startup_names.add(doc.data()['name']);
         }
       });
       startup_data = {
-        'startup_ids': startup_ids,
-        'founder_id': founder_ids,
+        'user_id': founder_ids,
         'startup_len': startup_len,
         'startup_name': startup_names
       };
@@ -122,8 +120,8 @@ class HomeViewConnector extends GetxController {
       });
 
       startup_data = {
-        'user_ids': user_ids,
-        'founder_id': founder_ids,
+        'user_idss': user_ids,
+        'user_id': founder_ids,
         'startup_len': user_ids.length,
         'startup_name': startup_names
       };

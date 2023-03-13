@@ -36,23 +36,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   @override
   void initState() {
-    super.initState();
-    _controller = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-          showControls: true,
-          mute: false,
-          showFullscreenButton: true,
-          loop: false,
-          strictRelatedVideos: true,
-          enableJavaScript: true,
-          color: 'red'),
-    );
-    _controller.loadVideo(widget.pitch);
 
-    _controller.stopVideo();
-
-    _controller.setSize(context.width * video_player_width,
-        context.height * video_player_height);
   }
 
   @override
@@ -64,10 +48,25 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   @override
   Widget build(BuildContext context) {
+      _controller = YoutubePlayerController(
+      params: const YoutubePlayerParams(
+          showControls: true,
+          mute: false,
+          showFullscreenButton: true,
+          loop: false,
+          strictRelatedVideos: true,
+          enableJavaScript: true,
+          color: 'red'),
+    );
+    _controller.loadVideo(widget.pitch);
+    _controller.stopVideo();
+    _controller.setSize(context.width * video_player_width,
+        context.height * video_player_height);
+
+
     video_model_player_width = 0.70;
     video_model_player_height = 0.70;
     service_top_height = 0.10;
-
     // DEFAULT :
     if (context.width > 1700) {
       video_model_player_width = 0.70;

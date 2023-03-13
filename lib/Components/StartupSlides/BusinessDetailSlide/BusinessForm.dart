@@ -1,7 +1,4 @@
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
-import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
-import 'package:be_startup/Components/Widgets/CustomInputField.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +46,18 @@ class _BusinessFormState extends State<BusinessForm> {
 /////////////////////////////////
   GetRequiredData() async {
     try {
-      var data = await detailStore.GetCachedBusinessDetail();
-      initial_val = data['data'];
+      final is_update = await detailStore.IsUpdate();
+      
+      if (is_update) {
+        final data = await detailStore.GetUpdateDetail();
+        initial_val = data; 
+      }
+
+      else {
+        var data = await detailStore.GetCachedBusinessDetail();
+        initial_val = data['data'];
+      }
+
       return initial_val;
     } catch (e) {
       return initial_val;

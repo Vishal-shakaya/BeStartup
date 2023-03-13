@@ -92,73 +92,63 @@ class _StartupViewState extends State<StartupView> {
   @override
   void initState() {
     super.initState();
-    _controller = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-          showControls: true,
-          mute: false,
-          showFullscreenButton: true,
-          loop: false,
-          strictRelatedVideos: true,
-          enableJavaScript: true,
-          color: 'red'),
-    );
-        _controller.loadVideo(pitch);
-
-        _controller.setSize(
-          context.width * video_player_width,
-            context.height * video_player_height);
-      
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.close();
+    // _controller.close();
     super.dispose();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     var decode_data = jsonDecode(pageParam!);
-
     GetLocalStorageData() async {
-      await detailViewState.SetStartupId(id: decode_data['startup_id']);
+      // await detailViewState.SetStartupId(id: decode_data['startup_id']);
       await detailViewState.SetFounderId(id: decode_data['user_id']);
       await detailViewState.SetIsUserAdmin(admin: decode_data['is_admin']);
 
       final found_resp = await founderStore.FetchFounderDetailandContact(
-          user_id: decode_data['founder_id']);
+          user_id: decode_data['user_id']);
 
       if (found_resp['response']) {
-        final registor_mail = found_resp['data']['userDetail']['email'];
-        final primary_mail = found_resp['data']['userContect']['primary_mail'];
+        final registor_mail = found_resp['data']['email'];
+        final primary_mail = found_resp['data']['primary_mail'];
 
         var mail = await CheckAndGetPrimaryMail(
             primary_mail: primary_mail, default_mail: registor_mail);
 
         await detailViewState.SetFounderMail(mail: mail);
 
-
-        // GET STARTUP PICH VIDEO : 
+        // GET STARTUP PICH VIDEO :
         var resp = await startupConnector.FetchBusinessPitch(
             user_id: decode_data['user_id']);
-
         if (resp['response']) {
           if (resp['data']['pitch'] == null || resp['data']['pitch'] == '') {
             pitch = default_pitch;
-          }
-          else{
+          } else {
             pitch = resp['data']['pitch'];
+            _controller = YoutubePlayerController(
+              params: const YoutubePlayerParams(
+                  showControls: true,
+                  mute: false,
+                  showFullscreenButton: true,
+                  loop: false,
+                  strictRelatedVideos: true,
+                  enableJavaScript: true,
+                  color: 'red'),
+            );
+
+            _controller.loadVideo(pitch);
+            _controller.setSize(context.width * video_player_width,
+                context.height * video_player_height);
           }
         }
+
         if (!resp['response']) {
           pitch = default_pitch;
         }
-
-        print('Pitch Response ${resp}');
       }
     }
 
@@ -226,14 +216,11 @@ class _StartupViewState extends State<StartupView> {
 
     // PC:
     if (context.width < 1500) {
-
-
       video_player_width = 0.65;
 
       video_player_height = 0.65;
 
       video_model_player_width = 0.65;
-
 
       video_model_player_height = 0.65;
       print('1500');
@@ -241,7 +228,7 @@ class _StartupViewState extends State<StartupView> {
 
     if (context.width < 1200) {
       page_width = 0.90;
-      
+
       video_player_width = 0.70;
 
       video_player_height = 0.70;
@@ -275,7 +262,6 @@ class _StartupViewState extends State<StartupView> {
 
     // TABLET :
     if (context.width < 800) {
-
       video_player_width = 0.90;
 
       video_player_height = 0.90;
@@ -313,7 +299,6 @@ class _StartupViewState extends State<StartupView> {
       print('480');
     }
 
-
     return Container(
       padding: const EdgeInsets.all(5),
       color: my_theme_background_color,
@@ -321,7 +306,6 @@ class _StartupViewState extends State<StartupView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-
             // CONTAIN :
             // 1 THUMBNAIL :
             // 2 PROFILE PICTURE :
@@ -329,26 +313,22 @@ class _StartupViewState extends State<StartupView> {
             // 4 INVESTMENT CHART :
             StartupInfoSection(),
 
-
             // VISION SECTION :
             // 1 HEADING :
             // 2 STARTUP VISION DESCRIPTION:
-             StartupVisionSection(),
-
+            StartupVisionSection(),
 
             // PRODUCT AND SERVIVES :
-             ProductSection(),
-
+            ProductSection(),
 
             // SERVICE SECTION :
             ServiceSection(),
 
-
-            IntroPitchSection(pitch: pitch,), 
-
+            IntroPitchSection(
+              pitch: pitch,
+            ),
 
             InvestorSection(),
-   
           ],
         ),
       ),

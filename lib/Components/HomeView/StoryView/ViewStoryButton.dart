@@ -25,27 +25,25 @@ class ViewStoryButton extends StatelessWidget {
   double rounded_btn_width = 25;
   double rounded_btn_height = 25;
 
-
 /////////////////////////////////////////////////////////////
 // Startup Detail Link :
-/// It takes the user_id and is_admin from the userState 
-/// and passes it to the startup_view_url
+  /// It takes the user_id and is_admin from the userState
+  /// and passes it to the startup_view_url
 /////////////////////////////////////////////////////////////
   StartupDetailView() async {
     var userState = Get.put(UserState());
     var is_admin = await userState.GetIsUserAdmin();
 
     var param = {
-      'founder_id': user_id,
+      'user_id': user_id,
       'is_admin': is_admin,
     };
     Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(param)});
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    print('detail view user id $user_id');
     Widget viewButton = ViewButtonWithText();
     Widget roundedViewButton = RoundedViewButton();
 

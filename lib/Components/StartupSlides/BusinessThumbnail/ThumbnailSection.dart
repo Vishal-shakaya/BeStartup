@@ -54,14 +54,14 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 
   var pageParam;
   var is_admin;
-  var founder_id;
+  var user_id;
   var startup_id;
 
   bool? updateMode = false;
 
 ///////////////////////////////////////////////////////
-  // CALL FUNCTION TO UPLOAD IMAGE :
-  // THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
+// CALL FUNCTION TO UPLOAD IMAGE :
+// THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
 ///////////////////////////////////////////////////////
   Future<void> PickImage() async {
     // Pick only one file :
@@ -102,16 +102,21 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   GetLocalStorageData() async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
     try {
-      if (updateMode == true) {
-        final resp =
-            await startupConnector.FetchThumbnail(user_id: authUser?.uid);
-        final temp_thumb = resp['data']['thumbnail'];
 
-        if (upload_image_url == '') {
-          // await thumbStore.SetThumbnailParam(data: temp_thumb);
+      // Handle Update View : 
+      if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
+        is_admin = pageParam['is_admin'];
+        user_id = pageParam['user_id'];
+
+        if (pageParam['type'] == 'update') {
+          final resp = await startupConnector.FetchThumbnail(user_id: user_id);
+          final temp_thumb = resp['data']['thumbnail'];
+         upload_image_url = temp_thumb;
         }
       }
 
+      // Fetch Thumbnail and update : 
       final data = await thumbStore.GetThumbnail();
       upload_image_url = data;
       return upload_image_url;
@@ -125,18 +130,6 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   ////////////////////////////////////////////
   @override
   void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      is_admin = pageParam['is_admin'];
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-
     super.initState();
   }
 

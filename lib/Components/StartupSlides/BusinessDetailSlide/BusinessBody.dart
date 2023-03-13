@@ -25,7 +25,6 @@ class BusinessBody extends StatefulWidget {
 
 class _BusinessBodyState extends State<BusinessBody> {
   final detailStore = Get.put(BusinessDetailStore());
-  final updateStore = Get.put(StartupUpdater());
   final startupConnector = Get.put(StartupViewConnector());
   final authUser = FirebaseAuth.instance.currentUser;
 
@@ -39,7 +38,7 @@ class _BusinessBodyState extends State<BusinessBody> {
   // update params :
   var pageParam;
   bool? updateMode;
-  var founder_id;
+  var user_id;
   var startup_id;
   var is_admin;
 
@@ -50,7 +49,7 @@ class _BusinessBodyState extends State<BusinessBody> {
 ///////////////////////////////////////////////////
   SubmitBusinessDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    
+
     MyCustPageLoadingSpinner();
 
     formKey.currentState!.save();
@@ -63,7 +62,7 @@ class _BusinessBodyState extends State<BusinessBody> {
       // HANDLING RESPONSE :
       var res = await detailStore.CachedBusinessDetail(
           userId: authUser?.uid,
-          businessName: business_name, 
+          businessName: business_name,
           amount: desire_amount);
 
       // RESPONSE HANDLING :
@@ -106,18 +105,18 @@ class _BusinessBodyState extends State<BusinessBody> {
     if (formKey.currentState!.validate()) {
       var business_name = formKey.currentState!.value['startup_name'];
       var desire_amount = formKey.currentState!.value['desire_amount'];
+      var logo = await detailStore.GetBusinessLogo();
 
       business_name = business_name.trim();
       desire_amount = desire_amount.trim();
 
-
-      var update_resp =
-          await updateStore.UpdateBusinessDetail(user_id: startup_id);
+      var update_resp = await detailStore.UpdateBusinessDetail(
+          user_id: user_id, name: business_name, amount: desire_amount);
 
       // Update Success Handler :
       if (update_resp['response']) {
         var param = jsonEncode({
-          'founder_id': founder_id,
+          'user_id': user_id,
           'startup_id': startup_id,
           'is_admin': is_admin,
         });
@@ -152,39 +151,29 @@ class _BusinessBodyState extends State<BusinessBody> {
   }
 
 /////////////////////////////////
-  /// SET PAGE DEFAULT STATE :
-/////////////////////////////////
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-
-    super.initState();
-  }
-
-/////////////////////////////////
   /// GET REQUIREMENTS :
 /////////////////////////////////
   GetRequirements() async {
     try {
-      if (updateMode == true) {
-        final resp =
-            await startupConnector.FetchBusinessDetail(user_id: authUser?.uid);
-        final amount = resp['data']['desire_amount'];
-        final logo = resp['data']['logo'];
-        final name = resp['data']['name'];
+      if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
+        user_id = pageParam['user_id'];
+        is_admin = pageParam['is_admin'];
+
+        if (pageParam['type'] == 'update') {
+          updateMode = true; 
+          final resp =  await startupConnector.FetchBusinessDetail(user_id: user_id);
+          final amount = resp['data']['desire_amount'];
+          final logo = resp['data']['logo'];
+          final name = resp['data']['name'];
+
+          await detailStore.SetUpdateMode(mode: true);
+          await detailStore.SetUpdateDetial(
+              updateImage: logo, updateName: name, updateAmount: amount);
+        }
       }
     } catch (e) {
+      print('Error While Fetching Business Detail');
       return '';
     }
   }

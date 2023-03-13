@@ -109,13 +109,9 @@ class StartupInfoSection extends StatelessWidget {
 
       var startupDetialView = Get.put(StartupDetailViewState());
       var userStateView = Get.put(UserState());
-
+      var founderStore = Get.put(FounderStore());
       is_admin = await startupDetialView.GetIsUserAdmin();
-      startup_id = await startupDetialView.GetStartupId();
       user_id = await startupDetialView.GetFounderId();
-
-      // Set Liked Default State :
-      await IsStartupLiked();
 
       try {
         final business_name_resp =
@@ -123,26 +119,27 @@ class StartupInfoSection extends StatelessWidget {
         final business_thum_resp =
             await startupConnect.FetchThumbnail(user_id: user_id);
 
-        final found_resp = await founderStore.FetchFounderDetailandContact(
-            user_id: user_id);
+        final founder_resp =
+           await  founderStore.FetchFounderDetailandContact(user_id: user_id);
+
 
         ////////////////////////////////////////
         // Founder Success Handler :
         ////////////////////////////////////////
-        if (found_resp['response']) {
-          founder_profile = found_resp['data']['userDetail']['picture'];
-          founder_name = found_resp['data']['userDetail']['name'];
+        if (business_name_resp['response']) {
+          founder_profile = founder_resp['data']['picture']?? shimmer_image;
+          founder_name = business_name_resp['data']['name'];
 
-          registor_mail = found_resp['data']['userDetail']['email'];
-          primary_mail = found_resp['data']['userContect']['primary_mail'];
+          registor_mail = business_name_resp['data']['email'];
+          primary_mail = business_name_resp['data']['primary_mail'];
 
           primary_mail = await CheckAndGetPrimaryMail(
               primary_mail: primary_mail, default_mail: registor_mail);
         }
 
         // Founder Error Handler :
-        if (!found_resp['response']) {
-          founder_profile = found_resp['data'];
+        if (!business_name_resp['response']) {
+          founder_profile = business_name_resp['data'];
         }
 
         /////////////////////////////////////
@@ -153,6 +150,9 @@ class StartupInfoSection extends StatelessWidget {
         }
         if (!business_thum_resp['response']) {
           thumbnail = business_thum_resp['data'];
+        }
+        if (business_thum_resp['data']['thumbnail'] == null) {
+          thumbnail = shimmer_image;
         }
 
         ////////////////////////////////////
@@ -695,11 +695,12 @@ class StartupInfoSection extends StatelessWidget {
                     left: Radius.circular(19),
                     right: Radius.circular(19),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: thumbnail_image,
+                  child: Image.network(
+                    thumbnail_image,
                     width: context.width * image_cont_width,
                     height: context.height * image_cont_height,
                     fit: BoxFit.cover,
+                    scale: 1,
                   ),
                 )),
           ),

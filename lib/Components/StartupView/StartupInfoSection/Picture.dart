@@ -16,7 +16,11 @@ class Picture extends StatelessWidget {
   var founder_profile;
   var founder_name;
 
-  Picture({this.founder_name, this.founder_profile, this.logo, Key? key})
+  Picture({
+    
+    required this.founder_name, 
+    required this.founder_profile, 
+    required this.logo, Key? key})
       : super(key: key);
 
   var detailViewState = Get.put(StartupDetailViewState());
@@ -46,7 +50,6 @@ class Picture extends StatelessWidget {
     var param = jsonEncode({
       'type': 'update',
       'user_id': user_id,
-      'startup_id': startup_id,
       'is_admin': is_admin
     });
 
@@ -59,7 +62,6 @@ class Picture extends StatelessWidget {
   GetLocalStorageData() async {
     is_admin = await detailViewState.GetIsUserAdmin();
     user_id = await detailViewState.GetFounderId();
-    startup_id = await detailViewState.GetStartupId();
     return '';
   }
 
@@ -267,7 +269,7 @@ class Picture extends StatelessWidget {
         child: Stack(
           children: [
             FlipCard(
-              axis: FlipAxis.horizontal,
+              axis: FlipAxis.vertical,
               controller: con,
               onTapFlipping: true,
               rotateSide: RotateSide.right,

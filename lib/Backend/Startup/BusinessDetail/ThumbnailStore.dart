@@ -44,6 +44,42 @@ class ThumbnailStore extends GetxController {
   }
 
 
+  ////////////////////////////////////////////////
+// UPDATE THUMBNAIL :
+// 1. Get Thum from local storage:
+// 2. Get startup instance to update :
+// 3. Create new instance  with updated thnbnail :
+// 4. Update Firestore and localStorage :
+////////////////////////////////////////////////
+  UpdateThumbnail({required user_id}) async {
+    var doc_id;
+    try {
+      // FETCHING DOCUMENT FROM FIREBASE:
+      // temp_data = await thumbStore.GetThumbnailParam();
+
+      var data;
+      var thumbnail =FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
+      var query =
+          thumbnail.where('user_id', isEqualTo: user_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Thumbnail :
+      data['thumbnail'] = image_url;
+
+      //  Update Database :
+      thumbnail.doc(doc_id).update(data);
+
+      return ResponseBack(
+        response_type: true,
+      );
+    } catch (e) {
+      return ResponseBack(response_type: false, message: update_error_title);
+    }
+  }
 
   //////////////////////////////////////////////////////////
   /// It checks if the key exists in the shared preferences,

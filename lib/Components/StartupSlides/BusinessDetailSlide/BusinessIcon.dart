@@ -87,6 +87,10 @@ class _BusinessIconState extends State<BusinessIcon> {
   ///////////////////////////////////////////////////////
   FetchData(context) async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
+
+    // var pageParam = Get.parameters.values;
+    // print('')
+
     var mySnack = MyCustSnackbar(
         type: MySnackbarType.error,
         title: fetch_data_error_title,
@@ -94,8 +98,16 @@ class _BusinessIconState extends State<BusinessIcon> {
         width: snack_width);
 
     try {
-      final logo = await detailStore.GetBusinessLogo();
-      upload_image_url = logo;
+
+      final is_update = await detailStore.IsUpdate();
+      if (is_update) {
+        final data = await detailStore.GetUpdateDetail();
+        upload_image_url = data['logo'];
+      }
+      else{
+        final logo = await detailStore.GetBusinessLogo();
+        upload_image_url = logo;
+      }
       return upload_image_url;
     } catch (e) {
       return upload_image_url;

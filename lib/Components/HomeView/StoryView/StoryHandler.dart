@@ -90,8 +90,7 @@ class StoryListView extends StatelessWidget {
         // General Response Hnadler :
         if (resp['response']) {
           startups_length = resp['data']['startup_len'];
-          startup_ids = resp['data']['startup_ids'];
-          founder_ids = resp['data']['founder_id'];
+          founder_ids = resp['data']['user_id'];
           startup_names = resp['data']['startup_name'];
         }
 

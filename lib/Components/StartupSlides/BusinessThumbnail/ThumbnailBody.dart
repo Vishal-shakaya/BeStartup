@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessThumbnail/NoticeSection.dart';
@@ -21,7 +22,7 @@ class ThumbnailBody extends StatefulWidget {
 }
 
 class _ThumbnailBodyState extends State<ThumbnailBody> {
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
+  var thumbnailStore = Get.put(ThumbnailStore(),);
 
   Uint8List? image;
   String filename = '';
@@ -37,7 +38,7 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
   var pageParam;
   var is_admin;
-  var founder_id;
+  var user_id;
   var startup_id;
 
   bool? updateMode = false;
@@ -50,51 +51,44 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double image_hint_text_size = 22;
 
 /////////////////////////////////////////////
-/// UPDATE THUMBNAIL :
-/// The function is called when the user clicks on the "Update" button. The function then calls the
-/// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
-/// response object. The response object is then used to determine whether the update was successful or
-/// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
-/// update was not successful, a snackbar is displayed to the user
+  /// UPDATE THUMBNAIL :
+  /// The function is called when the user clicks on the "Update" button. The function then calls the
+  /// "UpdateThumbnail" function in the "updateStore" class. The "UpdateThumbnail" function then returns a
+  /// response object. The response object is then used to determine whether the update was successful or
+  /// not. If the update was successful, the user is redirected to the "startup_view_url" page. If the
+  /// update was not successful, a snackbar is displayed to the user
 /////////////////////////////////////////////
   UpdateThumbnail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final resp = await updateStore.UpdateThumbnail(startup_id: startup_id);
+    final resp = await thumbnailStore.UpdateThumbnail(user_id: user_id);
+  
     // Update Success Handler :
     if (resp['response']) {
       var param = jsonEncode({
-        'founder_id': founder_id,
-        'startup_id': startup_id,
+        'user_id': user_id,
         'is_admin': is_admin,
       });
-      Get.toNamed(startup_view_url,parameters: {'data':param});
+      Get.toNamed(startup_view_url, parameters: {'data': param});
     }
 
     // Update Error Handler :
     if (!resp['response']) {
-      Get.showSnackbar(
-          MyCustSnackbar(
-            type: MySnackbarType.error,
-            width: snack_width, 
-            message: resp['message']));
+      Get.showSnackbar(MyCustSnackbar(
+          type: MySnackbarType.error,
+          width: snack_width,
+          message: resp['message']));
     }
   }
-
-
 
   ////////////////////////////////////////////
   /// SET PAGE DEFAULT STATE
   ////////////////////////////////////////////
   @override
   void initState() {
-    
-    if(Get.parameters.isNotEmpty){
-      
+    if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
-
       is_admin = pageParam['is_admin'];
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
+      user_id = pageParam['user_id'];
 
       if (pageParam['type'] == 'update') {
         updateMode = true;
@@ -103,9 +97,6 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
 
     super.initState();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {

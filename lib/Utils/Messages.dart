@@ -7,7 +7,7 @@ String profile_image =
     'https://p.kindpng.com/picc/s/32-324477_hair-face-hairstyle-long-hair-beauty-skin-hair.png';
 
 String shimmer_image =
-    'https://www.pngmagic.com/product_images/white-and-grey-gradient-background.jpg';
+    'https://wallpaperaccess.com/full/5637211.jpg';
 
 String temp_logo =
     'https://i.pinimg.com/originals/1e/c3/17/1ec317142711af99cce906ef35a2f44f.jpg';

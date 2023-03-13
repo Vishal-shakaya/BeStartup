@@ -19,6 +19,33 @@ class BusinessDetailStore extends GetxController {
   static String? image_url;
   static String? business_name;
   static String? amount;
+  static bool is_update = false;
+  // Set Update Page Detail :
+  SetUpdateDetial({
+    required updateImage,
+    required updateName,
+    required updateAmount}) async {
+    image_url = updateImage;
+    business_name = updateName;
+    amount = updateAmount;
+  }
+
+  GetUpdateDetail() async {
+    final data = {
+      'logo': image_url,
+      'name': business_name,
+      'desire_amount': amount
+    };
+    return data; 
+  }
+
+  SetUpdateMode({required mode}) async {
+    is_update = mode;
+  }
+
+  IsUpdate() async {
+    return is_update;
+  }
 
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
@@ -117,6 +144,7 @@ class BusinessDetailStore extends GetxController {
         var sortData = {
           'name': json_obj["name"],
           'desire_amount': json_obj["desire_amount"],
+          'logo': image_url
         };
         return ResponseBack(response_type: true, data: sortData);
       } else {
@@ -148,8 +176,8 @@ class BusinessDetailStore extends GetxController {
   }
 
 ////////////////////////////////////////////////
-/// Update Perticular Business Detail field
-///  required param val and update field name :
+  /// Update Perticular Business Detail field
+  ///  required param val and update field name :
 ////////////////////////////////////////////////
 
   UpdateBusinessDetailCacheField({required field, required val}) async {
@@ -160,12 +188,11 @@ class BusinessDetailStore extends GetxController {
       if (is_detail) {
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
-        json_obj[field] = val;
-
         localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
         return ResponseBack(response_type: true);
       }
     } catch (e) {
+      print('Error While update Business Datail Field $e');
       return ResponseBack(response_type: false);
     }
   }
@@ -200,6 +227,48 @@ class BusinessDetailStore extends GetxController {
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
+    }
+  }
+
+  /////////////////////////////////////////////////////////////
+  /// Update Business  :
+  /// It fetches data from firebase, updates it and
+  ///  then updates the firebase document
+  ///
+  /// Args:
+  ///   startup_id: This is the id of the business. Defaults to false
+  ///
+  /// Returns:
+  ///   A Future object.
+/////////////////////////////////////////////////////////////
+  UpdateBusinessDetail(
+      {required user_id, required name, required amount}) async {
+    final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
+    var data;
+    var doc_id;
+    var final_startup_id;
+
+    try {
+      // FETCHING DATA FROM FIREBASE
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
+      var query = store.where('user_id', isEqualTo: user_id).get();
+
+      await query.then((value) {
+        data = value.docs.first.data() as Map<String, dynamic>;
+        doc_id = value.docs.first.id;
+      });
+
+      // Update Detials:
+      data['logo'] = image_url;
+      data['name'] = name;
+      data['desire_amount'] = amount;
+
+      store.doc(doc_id).update(data);
+
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false, message: update_error_title);
     }
   }
 }
