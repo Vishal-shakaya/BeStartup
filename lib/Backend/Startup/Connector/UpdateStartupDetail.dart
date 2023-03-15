@@ -99,18 +99,15 @@ class StartupUpdater extends GetxController {
 /////////////////////////////////////////
   /// Update Why :
 /////////////////////////////////////////
-  UpdatehBusinessWhy({required user_id}) async {
+  UpdatehBusinessWhy({required user_id , required why_text }) async {
     var whyInvestStore =
         Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
 
     var data;
-    var why_text;
     var doc_id;
     var final_startup_id;
 
     try {
-      why_text = await whyInvestStore.GetWhytextParam();
-
       // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessWhyInvesttStoreName);

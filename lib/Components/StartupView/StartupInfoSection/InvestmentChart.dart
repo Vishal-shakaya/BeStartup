@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/StartupState.dart';
 
 import 'package:be_startup/AppState/User.dart';
@@ -60,7 +62,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
 
   var desire_amount;
 
-  var invested_amount;
+  var achived_amount;
 
   var team_members;
 
@@ -71,7 +73,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   bool? is_liked = false;
 
 /////////////////////////////////////////
-/// GET REQUIRED PARAM :
+  /// GET REQUIRED PARAM :
 /////////////////////////////////////////
   // IsStartupLiked() async {
   //   final resp = await startupConnector.IsStartupLiked(
@@ -89,7 +91,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   // Update Investment amount UI :
   UpdateInvestmentAmount({required data}) async {
     setState(() {
-      invested_amount = data;
+      achived_amount = data;
     });
   }
 
@@ -109,6 +111,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   height: context.height * dialog_height,
                   child: UpdateInvestmentDialog(
                     updateInvestmentFun: UpdateInvestmentAmount,
+                    user_id : user_id, 
                   )));
         });
   }
@@ -119,23 +122,36 @@ class _InvestmentChartState extends State<InvestmentChart> {
   GetLocalStorageData() async {
     var startupDetialView = Get.put(StartupDetailViewState());
     var userStateView = Get.put(UserState());
+    var pageParam = Get.parameters;
+    var paramData = jsonDecode(pageParam['data']!);
+    user_id = paramData['user_id'];
+    is_admin = paramData['is_admin'];
 
-    user_id = await startupDetialView.GetFounderId();
-    is_admin = await startupDetialView.GetIsUserAdmin();
+    final resp = await startupConnector.FetchBusinessDetail(user_id: user_id);
+    final teamResp =
+        await startupConnector.FetchBusinessTeamMember(user_id: user_id);
 
-    final resp =
-        await startupConnector.FetchBusinessDetail(user_id: user_id);
+
+
+    if (teamResp['response']) {
+      team_members = teamResp['data']['members'].length;
+    }
+
+    if (!teamResp['response']) {
+      team_members = 0;
+    }
+
+
+    // Business Detail  
     // Success Handler:
     if (resp['response']) {
-      invested_amount = resp['data']['achived_amount'] ?? '';
-      team_members = resp['data']['team_members'] ?? '';
+      achived_amount = resp['data']['achived_amount'] ?? '';
       desire_amount = resp['data']['desire_amount'] ?? '';
     }
 
     // Error Handler :
     if (!resp['response']) {
-      invested_amount = '';
-      team_members = '';
+      achived_amount = '';
       desire_amount = '';
     }
 
@@ -490,9 +506,8 @@ class _InvestmentChartState extends State<InvestmentChart> {
   /// MAIN METHOD :
   //////////////////////////////////////////
   Container MainMethod(context) {
-
     //////////////////////////////////////
-    /// Main Chart : 
+    /// Main Chart :
     //////////////////////////////////////
     Container mainChart = Container(
       width: static_sec_width,
@@ -511,7 +526,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
             bottom: card_bottom_padding,
           ),
           decoration: BoxDecoration(
-            color: mini_map_background_color,
+              color: mini_map_background_color,
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               border: Border.all(
                 color: minimap_border_color,
@@ -523,10 +538,10 @@ class _InvestmentChartState extends State<InvestmentChart> {
             children: [
               // StaticRow(title: 'Team', value: "$team_members"),
               // StaticRow(title: 'Desire', value: "₹ $desire_amount"),
-              // StaticRow(title: 'Invest', value: "₹ $invested_amount"),
-              StaticRow(title: 'Team', value: "10"),
-              StaticRow(title: 'Desire', value: "₹ 50L"),
-              StaticRow(title: 'Invest', value: "₹ 80K"),
+              // StaticRow(title: 'Invest', value: "₹ $achived_amount"),
+              StaticRow(title: 'Team', value: "$team_members"),
+              StaticRow(title: 'Desire', value: "₹ $desire_amount"),
+              StaticRow(title: 'Invest', value: "₹ $achived_amount"),
 
               // Submit Button :
               is_admin == true
@@ -545,43 +560,37 @@ class _InvestmentChartState extends State<InvestmentChart> {
     //////////////////////////////
     /// Phone Static Chart :
     //////////////////////////////
-     Container phoneChart = Container(
+    Container phoneChart = Container(
         width: MediaQuery.of(context).size.width * 0.70,
         height: MediaQuery.of(context).size.height * 0.10,
         padding: EdgeInsets.all(2),
-        
-        
         child: Card(
           elevation: 2,
           shadowColor: my_theme_shadow_color,
           surfaceTintColor: my_theme_shadow_color,
           shape: const RoundedRectangleBorder(
-              
               borderRadius: BorderRadius.all(Radius.circular(10))),
-         
-         
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              
-              PhoneStaticRow(title: 'Team', value: "10"),
-              PhoneStaticRow(title: 'Desire', value: "₹ 50L"),
-              
-              // if User is admin then show update dialog else pass Null Function : 
-              PhoneStaticRow(title: 'Invest', value: "₹ 80K",
-              fun: is_admin==true? UpdateInvetAlert :(){}),
+              PhoneStaticRow(title: 'Team', value: "$team_members"),
+              PhoneStaticRow(title: 'Desire', value: "₹$desire_amount"),
+
+              // if User is admin then show update dialog else pass Null Function :
+              PhoneStaticRow(
+                  title: 'Invest',
+                  value: "₹ $achived_amount",
+                  fun: is_admin == true ? UpdateInvetAlert : () {}),
             ],
           ),
         ));
 
-
-
-    // Return Chart base on screen size : 
-    Container chart ;    
-    MediaQuery.of(context).size.width<550
-    ? chart= phoneChart
-    : chart= mainChart ;
-    return chart; 
+    // Return Chart base on screen size :
+    Container chart;
+    MediaQuery.of(context).size.width < 550
+        ? chart = phoneChart
+        : chart = mainChart;
+    return chart;
   }
 
 /////////////////////////////////////////////
@@ -632,7 +641,6 @@ class _InvestmentChartState extends State<InvestmentChart> {
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
-      
           AutoSizeText.rich(
               TextSpan(
                   text: title,
@@ -644,10 +652,8 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   )),
               style: Get.textTheme.headline5,
               overflow: TextOverflow.ellipsis),
-        
           Tooltip(
             message: value,
-          
             child: Container(
               width: static_row_desc_cont_width,
               child: AutoSizeText.rich(
@@ -668,14 +674,13 @@ class _InvestmentChartState extends State<InvestmentChart> {
     );
   }
 
-  Container PhoneStaticRow({title, value,fun}) {
+  Container PhoneStaticRow({title, value, fun}) {
     return Container(
       padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-       
           AutoSizeText.rich(
               TextSpan(
                   text: title,
@@ -687,18 +692,14 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   )),
               style: Get.textTheme.headline5,
               overflow: TextOverflow.ellipsis),
-       
-       
           Tooltip(
             message: value,
             child: InkWell(
               onTap: () {
                 fun();
               },
-
               child: Container(
                 width: static_row_desc_cont_width,
-               
                 child: AutoSizeText.rich(
                     TextSpan(
                         text: value,

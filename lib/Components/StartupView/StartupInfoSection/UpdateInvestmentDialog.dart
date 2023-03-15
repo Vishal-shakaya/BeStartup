@@ -11,7 +11,10 @@ import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart' as a;
 
 class UpdateInvestmentDialog extends StatelessWidget {
   Function updateInvestmentFun;
-  UpdateInvestmentDialog({required this.updateInvestmentFun, Key? key})
+  var user_id; 
+  UpdateInvestmentDialog({
+    required this.user_id, 
+    required this.updateInvestmentFun, Key? key})
       : super(key: key);
 
   var investAmountController = TextEditingController();
@@ -19,12 +22,17 @@ class UpdateInvestmentDialog extends StatelessWidget {
   var startupState = Get.put(StartupDetailViewState());
   var my_context = Get.context;
 
+//////////////////////////////////////////////////////////////
+  /// The function is called when a user clicks on a button.
+  /// The function then calls another function
+  /// which updates the database
+//////////////////////////////////////////////////////////////
   SubmitAmount() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final amount = investAmountController.text;
-    final startup_id = await startupState.GetStartupId();
+
     final resp = await detailController.UpdateBusinessDetailDatabaseField(
-        field: 'achived_amount', val: amount, startup_id: startup_id);
+        field: 'achived_amount', val: amount, user_id: user_id);
 
     if (resp['response']) {
       await updateInvestmentFun(data: amount);

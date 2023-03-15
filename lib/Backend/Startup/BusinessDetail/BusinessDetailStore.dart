@@ -203,7 +203,7 @@ class BusinessDetailStore extends GetxController {
 // update localy for mantain local app state :
 ////////////////////////////////////////////////////////
   UpdateBusinessDetailDatabaseField(
-      {required field, required val, required startup_id}) async {
+      {required field, required val, required user_id}) async {
     // FETCHING DATA FROM FIREBASE
     var data;
     var doc_id;
@@ -211,7 +211,7 @@ class BusinessDetailStore extends GetxController {
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessDetailStoreName);
-      var query = store.where('startup_id', isEqualTo: startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -222,8 +222,6 @@ class BusinessDetailStore extends GetxController {
       data[field] = val;
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessDetailStoreName, data: data);
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: e);
