@@ -24,7 +24,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
   var miles_data = [];
   var startup_id;
-  var user_id; 
+  var user_id;
 
   double mile_desc_fontSize = 15;
   double mile_desc_height = 1.5;
@@ -241,6 +241,7 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 ////////////////////////////////////////
   Container MainMethod(BuildContext context) {
     List<Widget> mile_title = [];
+    var mile_title_text = [];
     List<Widget> mile_desc = [];
 
     // NULL CHECK :
@@ -259,7 +260,8 @@ class _StartupMileStoneState extends State<StartupMileStone> {
 
       final title = MiltTitleTab(title: el['title']);
 
-      mile_title.add(title);
+      mile_title_text.add(el['title']);
+      // mile_title.add(title);
       mile_desc.add(desc);
     });
 
@@ -275,7 +277,8 @@ class _StartupMileStoneState extends State<StartupMileStone> {
           tabEdge: TabEdge.left,
           tabExtent: MediaQuery.of(context).size.width * tab_extend_width,
           children: mile_desc,
-          tabs: mile_title),
+          tabs: mile_title_text
+          ),
     );
   }
 

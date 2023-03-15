@@ -28,19 +28,12 @@ class StartupUpdater extends GetxController {
   /// Returns:
   ///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
-  UpdatehBusinessVision({required user_id}) async {
+  UpdatehBusinessVision({required user_id , required vision}) async {
     var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
     var data;
-    var vision;
     var doc_id;
-
     var final_startup_id;
-
-
-
     try {
-      vision = await visionStore.GetVisionParam();
-
       var store =
           FirebaseFirestore.instance.collection(getBusinessVisiontStoreName);
       var query = store.where('user_id', isEqualTo: user_id).get();

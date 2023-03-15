@@ -25,19 +25,13 @@ class VisionBody extends StatefulWidget {
 }
 
 class _VisionBodyState extends State<VisionBody> {
-  final startupUpdater = Get.put(
-    StartupUpdater(),
-  );
-  final visionStore = Get.put(
-    BusinessVisionStore(),
-  );
-  final startupConnector = Get.put(
-    StartupViewConnector(),
-  );
-  var my_context = Get.context;
+  final startupUpdater = Get.put(StartupUpdater());
+  final visionStore = Get.put(BusinessVisionStore());
+  final startupConnector = Get.put(StartupViewConnector());
   final authUser = FirebaseAuth.instance.currentUser;
-
   final formKey = GlobalKey<FormBuilderState>();
+  var my_context = Get.context;
+
 
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
@@ -63,8 +57,7 @@ class _VisionBodyState extends State<VisionBody> {
 
   var pageParam;
   bool? updateMode = false;
-  var founder_id;
-  var startup_id;
+  var user_id;
   var is_admin;
 
   String? inital_val = '';
@@ -117,17 +110,20 @@ class _VisionBodyState extends State<VisionBody> {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       var vision = formKey.currentState!.value['vision'];
-      await visionStore.SetVisionParam(data: vision);
 
-      var resp =
-          await startupUpdater.UpdatehBusinessVision(user_id: authUser?.uid);
+      await visionStore.SetVisionParam(data: vision);
+      var resp = await startupUpdater.UpdatehBusinessVision(user_id: user_id ,vision: vision.toString().trim());
+      var urlParam = {
+        'user_id':user_id,
+        'is_admin':is_admin,  
+      };
 
       // Success Handler Cached Data:
       // Update Success Handler :
       if (resp['response']) {
         CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
-        Get.toNamed(vision_page_url);
+        Get.toNamed(vision_page_url , parameters: {'data':jsonEncode(urlParam)});
       }
 
       //  Update Error Handler :
@@ -157,12 +153,18 @@ class _VisionBodyState extends State<VisionBody> {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     try {
-      // Update :
-      if (updateMode == true) {
-        final resp =
-            await startupConnector.FetchBusinessVision(user_id: authUser?.uid);
-        await visionStore.SetVisionParam(data: resp['data']['vision']);
-      }
+        if (Get.parameters.isNotEmpty) {
+          pageParam = jsonDecode(Get.parameters['data']!);
+          user_id = pageParam['user_id'];
+          is_admin = pageParam['is_admin'];
+
+          if (pageParam['type'] == 'update') {
+            updateMode = true;
+            final resp =  await startupConnector.FetchBusinessVision(user_id: user_id);
+            await visionStore.SetVisionParam(data: resp['data']['vision']);
+          }
+        }
+
 
       // Get :
       final data = await visionStore.GetVision();
@@ -170,6 +172,7 @@ class _VisionBodyState extends State<VisionBody> {
 
       CloseCustomPageLoadingSpinner();
       return data;
+
     } catch (e) {
       print('Vision Fetchng error $e');
 
@@ -181,24 +184,6 @@ class _VisionBodyState extends State<VisionBody> {
     }
   }
 
-  /////////////////////////////////////
-  // SET PAGE DEFAULT STATE :
-  /////////////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

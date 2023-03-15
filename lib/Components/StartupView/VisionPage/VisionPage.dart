@@ -51,7 +51,7 @@ class _VisionPageState extends State<VisionPage> {
 
   double vision_cont_width = 0.45;
 
-  double vision_cont_height = 0.40; 
+  double vision_cont_height = 0.40;
 
   double vision_cont_padding = 20;
 
@@ -100,13 +100,14 @@ class _VisionPageState extends State<VisionPage> {
   // GET REQUIREMENTS :
   //////////////////////////////////
   GetLocalStorageData() async {
-    startup_id = await detailViewState.GetStartupId();
-    user_id = await detailViewState.GetFounderId();
-    is_admin = await detailViewState.GetIsUserAdmin();
-
     try {
-      final vision =
-          await startupConnect.FetchBusinessVision(user_id: user_id);
+      final param = Get.parameters;
+      final paramData = jsonDecode(param['data']!);
+      user_id = paramData['user_id'];
+      is_admin = paramData['is_admin'];
+      // print('vision page param $paramData');
+
+      final vision = await startupConnect.FetchBusinessVision(user_id: user_id);
       final_data = vision['data']['vision'];
 
       return final_data;
@@ -125,8 +126,6 @@ class _VisionPageState extends State<VisionPage> {
 
     heading_top_spacer = 0.01;
 
-  
-
     headingfonSize = 30;
 
     edit_btn_top_spacer = 0.01;
@@ -140,8 +139,8 @@ class _VisionPageState extends State<VisionPage> {
     vision_card_right_radius = 15;
 
     vision_cont_width = 0.45;
-    
-    vision_cont_height = 0.40; 
+
+    vision_cont_height = 0.40;
 
     vision_cont_padding = 20;
 
@@ -195,7 +194,7 @@ class _VisionPageState extends State<VisionPage> {
 
       vision_cont_width = 0.50;
 
-      vision_cont_height = 0.40; 
+      vision_cont_height = 0.40;
 
       vision_cont_padding = 20;
 
@@ -259,7 +258,6 @@ class _VisionPageState extends State<VisionPage> {
 
       milestone_fontSize = 30;
 
-
       edit_btn_cont_width = 0.55;
 
       edit_btn_top_margin = 0.02;
@@ -297,8 +295,8 @@ class _VisionPageState extends State<VisionPage> {
       vision_card_right_radius = 15;
 
       vision_cont_width = 0.60;
-      
-      vision_cont_height = 0.40; 
+
+      vision_cont_height = 0.40;
 
       vision_cont_padding = 20;
 
@@ -311,7 +309,6 @@ class _VisionPageState extends State<VisionPage> {
       milestone_spacer = 0.02;
 
       milestone_fontSize = 30;
-
 
       edit_btn_cont_width = 0.60;
 
@@ -349,8 +346,8 @@ class _VisionPageState extends State<VisionPage> {
       vision_card_right_radius = 15;
 
       vision_cont_width = 0.65;
-      
-      vision_cont_height = 0.40; 
+
+      vision_cont_height = 0.40;
 
       vision_cont_padding = 20;
 
@@ -363,7 +360,6 @@ class _VisionPageState extends State<VisionPage> {
       milestone_spacer = 0.02;
 
       milestone_fontSize = 30;
-
 
       edit_btn_cont_width = 0.70;
 
@@ -401,8 +397,8 @@ class _VisionPageState extends State<VisionPage> {
       vision_card_right_radius = 15;
 
       vision_cont_width = 0.85;
-      
-      vision_cont_height = 0.38; 
+
+      vision_cont_height = 0.38;
 
       vision_cont_padding = 20;
 
@@ -415,7 +411,6 @@ class _VisionPageState extends State<VisionPage> {
       milestone_spacer = 0.02;
 
       milestone_fontSize = 30;
-
 
       edit_btn_cont_width = 0.85;
 
@@ -433,7 +428,7 @@ class _VisionPageState extends State<VisionPage> {
 
     // TABLET :
     if (context.width < 800) {
-            page_width = 0.80;
+      page_width = 0.80;
 
       vision_page_width = 0.50;
 
@@ -454,8 +449,8 @@ class _VisionPageState extends State<VisionPage> {
       vision_card_right_radius = 15;
 
       vision_cont_width = 0.85;
-      
-      vision_cont_height = 0.38; 
+
+      vision_cont_height = 0.38;
 
       vision_cont_padding = 20;
 
@@ -468,7 +463,6 @@ class _VisionPageState extends State<VisionPage> {
       milestone_spacer = 0.02;
 
       milestone_fontSize = 30;
-
 
       edit_btn_cont_width = 0.85;
 
@@ -507,8 +501,8 @@ class _VisionPageState extends State<VisionPage> {
       vision_card_right_radius = 15;
 
       vision_cont_width = 0.85;
-      
-      vision_cont_height = 0.38; 
+
+      vision_cont_height = 0.38;
 
       vision_cont_padding = 20;
 
@@ -522,7 +516,6 @@ class _VisionPageState extends State<VisionPage> {
 
       milestone_fontSize = 25;
 
-
       edit_btn_cont_width = 0.85;
 
       edit_btn_top_margin = 0.02;
@@ -534,7 +527,7 @@ class _VisionPageState extends State<VisionPage> {
       edit_btn_iconSize = 12;
 
       edit_btn_fontSize = 12;
-      
+
       print('640');
     }
 
@@ -601,35 +594,30 @@ class _VisionPageState extends State<VisionPage> {
                 child: Card(
                   elevation: 1,
                   shadowColor: shadow_color1,
-                 
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(vision_card_left_radius),
                     right: Radius.circular(vision_card_right_radius),
                   )),
-                 
                   child: Container(
                       width: context.width * vision_cont_width,
                       height: context.height * vision_cont_height,
-                  
                       padding: EdgeInsets.all(vision_cont_padding),
                       decoration: BoxDecoration(
                           border: Border.all(color: border_color),
                           borderRadius: BorderRadius.horizontal(
                               left: Radius.circular(vision_card_left_radius),
                               right: Radius.circular(vision_card_left_radius))),
-                      
                       child: SingleChildScrollView(
                         child: RichText(
-                         text: TextSpan(
+                          text: TextSpan(
                               text: final_data,
                               style: GoogleFonts.openSans(
                                   color: light_color_type3,
                                   fontSize: vison_text_fontSize,
                                   height: vision_text_lineHeight,
                                   fontWeight: FontWeight.w600)),
-                          
-                                
+
                           // maxLines: vision_maxlines,
                         ),
                       )),
