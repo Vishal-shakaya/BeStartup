@@ -81,7 +81,7 @@ class MileStoneStore extends GetxController {
   /// Returns:
   ///   the value of the variable milestones.
 ///////////////////////////////////////////////////////
-  GetMilestoneParam() {
+  GetMilestoneParam()  async {
     return milestones;
   }
 
@@ -160,6 +160,25 @@ class MileStoneStore extends GetxController {
         return milestones;
       }
     } catch (e) {
+      return milestones;
+    }
+  }
+
+
+////////////////////////////////////////
+// Update Mile
+////////////////////////////////////////
+  UpdateMilestoneList({required mile}) async {
+    final localStore = await SharedPreferences.getInstance();
+    try {
+        var temp_list = mile.toList();
+        for (int i = 0; i < temp_list.length; i++) {
+          milestones.add(temp_list[i]);
+        }
+        return milestones;
+      }
+    
+     catch (e) {
       return milestones;
     }
   }

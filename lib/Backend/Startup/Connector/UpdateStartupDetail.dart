@@ -133,27 +133,14 @@ class StartupUpdater extends GetxController {
   ///////////////////////////////////////
   /// Milestone Update :
   ///////////////////////////////////////
-  UpdateBusinessMilestone({startup_id = false}) async {
-    var mileStore = Get.put(MileStoneStore(), tag: 'first_mile');
+  UpdateBusinessMilestone({required user_id ,required mile}) async {
     var data;
-    var temp_miles;
     var doc_id;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
-      temp_miles = await mileStore.GetMilestoneParam();
-
       // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessMilestoneStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -161,7 +148,7 @@ class StartupUpdater extends GetxController {
       });
 
       // Update Data in FireStore :
-      data['milestone'] = temp_miles;
+      data['milestone'] = mile;
       store.doc(doc_id).update(data);
 
       return ResponseBack(response_type: true);

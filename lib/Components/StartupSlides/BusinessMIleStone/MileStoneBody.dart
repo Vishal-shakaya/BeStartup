@@ -35,7 +35,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   var startupConnector =
       Get.put(StartupViewConnector(), tag: 'startup_connector');
 
-  final authUser = FirebaseAuth.instance.currentUser; 
+  final authUser = FirebaseAuth.instance.currentUser;
 
   late ConfettiController _controllerCenter;
   var my_context = Get.context;
@@ -60,7 +60,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   var pageParam;
   var startup_id;
-  var founder_id;
+  var user_id;
   var is_admin;
 
   bool? updateMode = false;
@@ -95,7 +95,7 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   StartLoading() {
     var dialog = SmartDialog.showLoading(
       builder: (context) {
-        return CircularProgressIndicator(
+        return const CircularProgressIndicator(
           backgroundColor: Colors.white,
           color: Colors.orangeAccent,
         );
@@ -112,16 +112,22 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   /// Update Milestone :
   ///////////////////////////////
   UpdateMileStone() async {
+    var mileStore = Get.put(MileStoneStore());
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var resp;
     StartLoading();
+    final miles = await mileStore.GetMilestoneParam();
+    resp = await updateStore.UpdateBusinessMilestone(
+        user_id: user_id, mile: miles);
 
-    resp = await updateStore.UpdateBusinessMilestone(startup_id: startup_id);
-
+    final urlParam = {
+      'user_id': user_id,
+      'is_admin': is_admin,
+    };
     // Update Success Handler :
     if (resp['response']) {
       EndLoading();
-      Get.toNamed(vision_page_url);
+      Get.toNamed(vision_page_url,parameters: {'data':jsonEncode(urlParam)});
     }
 
     // Update Error Handler :
@@ -189,16 +195,26 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   //  GET REQUIREMENTS :
   //////////////////////////////////////
   GetLocalStorageData() async {
+    var data;
     try {
-      if (updateMode == true) {
-        final resp = await startupConnector.FetchBusinessMilestone(
-            user_id: authUser?.uid);
+      if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
 
-        final miles = resp['data']['milestone'];
-        await mileStore.SetMilestoneParam(list: miles);
+        user_id = pageParam['user_id'];
+        is_admin = pageParam['is_admin'];
+
+        if (pageParam['type'] == 'update') {
+          updateMode = true;
+          final resp =
+              await startupConnector.FetchBusinessMilestone(user_id: user_id);
+          print('update');
+          final miles = resp['data']['milestone'];
+          data = await mileStore.UpdateMilestoneList(mile: miles);
+        }
+      } else {
+        data = await mileStore.GetMileStonesList();
       }
 
-      final data = await mileStore.GetMileStonesList();
       milestones = data;
       return milestones;
     } catch (e) {
@@ -211,17 +227,6 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 ///////////////////////////////////////////
   @override
   void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
     super.initState();
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
