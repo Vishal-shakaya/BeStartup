@@ -270,25 +270,19 @@ class StartupUpdater extends GetxController {
   //////////////////////////////////
   /// UPDATE TEAM MEMEBER :
   //////////////////////////////////
-  UpdateBusinessTeamMember({startup_id = false}) async {
+  UpdateBusinessTeamMember({required user_id}) async {
     var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
     var data;
     var doc_id;
     var temp_mem;
-    var final_startup_id;
 
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
 
     try {
       temp_mem = await memeberStore.GetTeamMembers();
       print(temp_mem);
       var store =
           FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data();

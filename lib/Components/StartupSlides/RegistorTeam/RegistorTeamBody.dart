@@ -31,7 +31,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   var memeberStore = Get.put(BusinessTeamMemberStore());
   var startupConnector = Get.put(StartupConnector());
   var startupviewConnector = Get.put(StartupViewConnector());
-  var investorConnector =  Get.put(InvestorConnector());
+  var investorConnector = Get.put(InvestorConnector());
 
   var userStore = Get.put(UserStore(), tag: 'user_store');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
@@ -43,8 +43,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   double con_btn_top_margin = 30;
   double mem_dialog_width = 900;
 
-  double member_section_height=0.60; 
-  double member_section_width=0.50; 
+  double member_section_height = 0.60;
+  double member_section_width = 0.50;
 
   var pageParam;
   var startup_id;
@@ -122,19 +122,17 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     var upload_resp;
 
     MyCustPageLoadingSpinner();
-    upload_resp =
-        await updateStore.UpdateBusinessTeamMember(startup_id: startup_id);
+    upload_resp = await updateStore.UpdateBusinessTeamMember(user_id: user_id);
 
     // Upload Succes response :
     if (upload_resp['response']) {
       var param = jsonEncode({
         'user_id': user_id,
-        'startup_id': startup_id,
         'is_admin': is_admin,
       });
 
       CloseCustomPageLoadingSpinner();
-      Get.toNamed(team_page_url);
+      Get.toNamed(team_page_url ,parameters: {'data':param});
     }
 
     // Upload Error Response
@@ -148,45 +146,39 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
     }
   }
 
-//////////////////////////////////////
-// SET PAGE DEFAULT STATE :
-//////////////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      startup_id = pageParam['startup_id'];
-      user_id = pageParam['user_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-    super.initState();
-  }
-
 //////////////////////////////////////////
   /// GET REQUIREMENTS DATA :
 //////////////////////////////////////////
   GetLocalStorageData() async {
     var error_resp;
+    var data = [];
     try {
-      if (updateMode == true) {
-        final fetch_resp = await startupviewConnector.FetchBusinessTeamMember(
-            user_id: user_id);
+      if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
+        user_id = pageParam['user_id'];
+        is_admin = pageParam['is_admin'];
 
-        if (fetch_resp['response']) {
-          await memeberStore.SetTeamMembers(
-              list: fetch_resp['data']['members']);
-        }
+        // Update Members :
+        if (pageParam['type'] == 'update') {
+          updateMode = true;
+          final fetch_resp = await startupviewConnector.FetchBusinessTeamMember(
+              user_id: user_id);
 
-        if (!fetch_resp['response']) {
-          print('Fetch Team Member Error $fetch_resp');
+          if (fetch_resp['response']) {
+            data = await memeberStore.UpdateMemberList(
+                update_memebers: fetch_resp['data']['members']);
+          }
+
+          if (!fetch_resp['response']) {
+            print('Fetch Team Member Error $fetch_resp');
+          }
         }
       }
-      final data = await memeberStore.GetMembers();
+
+      // Set Default member List :
+      else {
+        data = await memeberStore.GetMembers();
+      }
       error_resp = data;
       return data;
     } catch (e) {
@@ -196,61 +188,60 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   @override
   Widget build(BuildContext context) {
-
-     member_section_height=0.60; 
-     member_section_width=0.50; 
+    member_section_height = 0.60;
+    member_section_width = 0.50;
 
     ////////////////////////////////////
     /// RESPONSIVENESS :
     ////////////////////////////////////
     // DEFAULT :
     if (context.width > 1500) {
-      member_section_height=0.60; 
-      member_section_width=0.55; 
+      member_section_height = 0.60;
+      member_section_width = 0.55;
       print('Greator then 1500');
     }
 
     // PC:
     if (context.width < 1500) {
-      member_section_height=0.60; 
-      member_section_width=0.60; 
+      member_section_height = 0.60;
+      member_section_width = 0.60;
       print('1500');
     }
 
     if (context.width < 1200) {
-      member_section_height=0.60; 
-      member_section_width=0.60; 
+      member_section_height = 0.60;
+      member_section_width = 0.60;
       print('1200');
     }
 
     if (context.width < 1300) {
-      member_section_width=0.65; 
-      member_section_height=0.60; 
+      member_section_width = 0.65;
+      member_section_height = 0.60;
       print('1200');
     }
 
     if (context.width < 1000) {
-      member_section_width=0.90; 
-      member_section_height=0.60; 
+      member_section_width = 0.90;
+      member_section_height = 0.60;
       print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
-      member_section_width=0.90; 
-      member_section_height=0.60; 
+      member_section_width = 0.90;
+      member_section_height = 0.60;
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
-      member_section_width=0.90; 
+      member_section_width = 0.90;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-      member_section_width=0.90; 
+      member_section_width = 0.90;
       print('480');
     }
 
@@ -308,8 +299,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 // MEMBER PROFILE LIST VIEW :
                 // Image , name , position , email , then desc :
                 Container(
-                    height: context.height * member_section_height ,
-                    width: context.width *member_section_width ,
+                    height: context.height * member_section_height,
+                    width: context.width * member_section_width,
                     child: Obx(() {
                       return ListView.builder(
                           itemCount: member_list.length,

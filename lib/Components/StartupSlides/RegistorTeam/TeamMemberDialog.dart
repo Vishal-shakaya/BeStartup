@@ -89,7 +89,6 @@ class _TeamMemberDialogState extends State<TeamMemberDialog> {
 
       var res;
       if (widget.form_type == MemberFormType.edit) {
-        print('update member profile index ${widget.index}');
         res = await memeberStore.UpdateTeamMember(member, widget.index);
       } else {
         res = await memeberStore.CreateTeamMember(member);

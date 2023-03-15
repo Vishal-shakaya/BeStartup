@@ -59,11 +59,16 @@ class BusinessTeamMemberStore extends GetxController {
 
   // SetTeam Membesr
   SetTeamMembers({list}) async {
-    member_list.clear();
-    await RemoveCachedData(key: getBusinessTeamMemberStoreName);
-    list.forEach((el) {
-      member_list.add(el);
-    });
+    try {
+      member_list.clear();
+      await RemoveCachedData(key: getBusinessTeamMemberStoreName);
+      list.forEach((el) {
+        member_list.add(el);
+      });
+
+    } catch (e) {
+      print('Error while setting team memebnr $e');
+    }
   }
 
   // Get Team Members :
@@ -152,6 +157,22 @@ class BusinessTeamMemberStore extends GetxController {
     }
   }
 
+  UpdateMemberList({required update_memebers}) async {
+    final localStore = await SharedPreferences.getInstance();
+    member_list.clear();
+    try {
+      final temp_list = update_memebers.toList();
+      for (int i = 0; i < temp_list.length; i++) {
+        member_list.add(temp_list[i]);
+      }
+      return member_list;
+
+    } catch (e) {
+      print('Error While Get Milestones ${e}');
+      return member_list;
+    }
+  }
+
   /////////////////////////////////////////
   /// STORE MEMBER TO LOCAL STORAGE :
   /// The function is used to save the data to
@@ -159,10 +180,10 @@ class BusinessTeamMemberStore extends GetxController {
   /////////////////////////////////////////
   PersistMembers() async {
     final localStore = await SharedPreferences.getInstance();
-    final authUser = FirebaseAuth.instance.currentUser; 
+    final authUser = FirebaseAuth.instance.currentUser;
     try {
       var resp = await BusinessTeamMembersModel(
-        user_id: authUser?.uid, 
+        user_id: authUser?.uid,
         members: member_list,
       );
 

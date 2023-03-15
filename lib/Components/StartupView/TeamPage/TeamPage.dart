@@ -118,8 +118,10 @@ class _TeamPageState extends State<TeamPage> {
   GetLocalStorageData() async {
     try {
       final param = Get.parameters;
-      user_id = param['user_id'];
-      is_admin = param['is_admin'];
+      final paramData = jsonDecode(param['data']!);
+      print('team page param $paramData');
+      user_id = paramData['user_id'];
+      is_admin = paramData['is_admin'];
 
       final data =
           await startupviewConnector.FetchBusinessTeamMember(user_id: user_id);
