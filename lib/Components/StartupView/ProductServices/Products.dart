@@ -871,6 +871,13 @@ class _ProductsState extends State<Products> {
         ),
       ),
       child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(image_radius),
+              right: Radius.circular(image_radius),
+            ),
+            border: Border.all(
+                width: image_radius_width, color: Colors.grey.shade200)),
         child: ClipRRect(
           borderRadius: BorderRadius.horizontal(
             left: Radius.circular(image_radius),
@@ -879,15 +886,8 @@ class _ProductsState extends State<Products> {
           child: Image.network(widget.product['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
-              fit: BoxFit.fill),
+              fit: BoxFit.cover),
         ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(image_radius),
-              right: Radius.circular(image_radius),
-            ),
-            border: Border.all(
-                width: image_radius_width, color: Colors.grey.shade200)),
       ),
     );
   }

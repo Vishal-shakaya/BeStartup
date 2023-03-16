@@ -9,7 +9,6 @@ import 'package:uuid/uuid.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 var uuid = Uuid();
 
 class StartupViewConnector extends GetxController {
@@ -43,10 +42,8 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
-
 /////////////////////////////////////////
-/// FETCH THUMBNAIL :
+  /// FETCH THUMBNAIL :
 /////////////////////////////////////////
   FetchThumbnail({required user_id}) async {
     try {
@@ -55,8 +52,7 @@ class StartupViewConnector extends GetxController {
       var thumbnail =
           FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
 
-      var query =
-          thumbnail.where('user_id', isEqualTo: user_id).get();
+      var query = thumbnail.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -71,9 +67,6 @@ class StartupViewConnector extends GetxController {
           response_type: false, data: shimmer_image, message: e);
     }
   }
-
-
-
 
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
@@ -99,7 +92,6 @@ class StartupViewConnector extends GetxController {
       return ResponseBack(response_type: false, message: e);
     }
   }
-
 
   ///////////////////////////////////
   /// FETCH STARTUP Pitch :
@@ -153,9 +145,8 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   /// FETCH STARTUP VISION :
   ///////////////////////////////////
-  FetchBusinessCatigory({ required user_id }) async {
+  FetchBusinessCatigory({required user_id}) async {
     var data;
-
 
     try {
       var store =
@@ -178,7 +169,7 @@ class StartupViewConnector extends GetxController {
   ////////////////////////////////////
   /// FETCH MILESTONE :
   ////////////////////////////////////
-  FetchBusinessMilestone({required user_id }) async {
+  FetchBusinessMilestone({required user_id}) async {
     var data;
     try {
       var store =
@@ -201,23 +192,14 @@ class StartupViewConnector extends GetxController {
   //////////////////////////////////
   /// Fetch Product :
   //////////////////////////////////
-  FetchProducts({startup_id = false}) async {
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
+  FetchProducts({required user_id}) async {
     var data;
     var product_list = [];
     var only_product = [];
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -240,67 +222,44 @@ class StartupViewConnector extends GetxController {
     }
   }
 
-
 ////////////////////////////////////////////
-/// Fetch All Product and services for
-///  Update View : 
+  /// Fetch All Product and services for
+  ///  Update View :
 ////////////////////////////////////////////
-  FetchProductsAndServices({startup_id = false}) async {
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
+  FetchProductsAndServices({required user_id}) async {
     var data;
-    var product_list = [];
-    var only_product = [];
     try {
-      var store =
+      final store =
           FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
-
+      final query = store.where('user_id', isEqualTo: user_id).get();
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
       });
-
 
       return ResponseBack(
           response_type: true,
           data: data['products'],
           message: 'BusinessProducts Fetch from Firebase  DB');
     } catch (e) {
+      print('Error While Fetching Product $e');
       return ResponseBack(response_type: false, data: [], message: e);
     }
   }
 
-
-
-
 ///////////////////////////////////////////////////
-/// It fetches data from firestore
-/// and stores it in cache storage
+  /// It fetches data from firestore
+  /// and stores it in cache storage
 /////////////////////////////////////////////////////
-  FetchServices({startup_id = false}) async {
+  FetchServices({required user_id}) async {
     var final_startup_id;
     var data;
     var service_list = [];
     var only_services = [];
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
       var store =
           FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -319,6 +278,7 @@ class StartupViewConnector extends GetxController {
           data: only_services,
           message: 'BusinessProducts Fetch Services from Firstore  DB');
     } catch (e) {
+      print('Error While Fetching Services');
       return ResponseBack(response_type: false, data: [], message: e);
     }
   }
@@ -326,10 +286,9 @@ class StartupViewConnector extends GetxController {
   ///////////////////////////////////
   // Fetch Team Member :
   ///////////////////////////////////
-  FetchBusinessTeamMember({ required  user_id }) async {
+  FetchBusinessTeamMember({required user_id}) async {
     var final_startup_id;
     var data;
-
 
     try {
       // FETCHING DATA FROM CACHE STORAGE :

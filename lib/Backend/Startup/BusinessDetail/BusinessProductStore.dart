@@ -91,10 +91,10 @@ class BusinessProductStore extends GetxController {
   SetProductList({list}) async {
     product_list.clear();
     RemoveCachedData(key: getBusinessProductStoreName);
-
     list.forEach((el) {
       product_list.add(el);
     });
+    return product_list;
   }
 
   GetProducts() async {
@@ -231,7 +231,7 @@ class BusinessProductStore extends GetxController {
     final localStore = await SharedPreferences.getInstance();
     try {
       var resp = await BusinessProductsList(
-        user_id :user_id, 
+        user_id: user_id,
         products: product_list,
       );
 

@@ -20,7 +20,7 @@ class ServiceSection extends StatelessWidget {
   var services = [];
   var is_admin;
   var startup_id;
-  var founder_id;
+  var user_id;
 
   double service_cont_width = 0.75;
 
@@ -38,7 +38,6 @@ class ServiceSection extends StatelessWidget {
 
   double service_bottom_height = 0.04;
 
-
   Map<String, dynamic?> temp_product = {
     'id': 'some_randodnjflks',
     'title': 'word famous watter battle  cleane',
@@ -52,35 +51,25 @@ class ServiceSection extends StatelessWidget {
     'catigory': '',
   };
 
-
-
-
   EditProductAndService() {
-    var pageParam = jsonEncode({
-      'type': 'update',
-      'startup_id': startup_id,
-      'is_admin': is_admin,
-      'founder_id': founder_id
-    });
+    var pageParam = jsonEncode(
+        {'type': 'update', 'is_admin': is_admin, 'user_id': user_id});
 
     Get.toNamed(create_business_product_url, parameters: {'data': pageParam});
   }
-
-
 
   ///////////////////////////////////////////
   /// Get Required param :
   ///////////////////////////////////////////
   GetLocalStorageData() async {
     try {
-      startup_id = await detailViewState.GetStartupId();
-      is_admin = await detailViewState.GetIsUserAdmin();
-      founder_id = await detailViewState.GetFounderId();
-      
-      final data = await startupConnect.FetchServices(startup_id: startup_id);
-      
-      service_len = data['data'].length;
+      final pageParam = jsonDecode(Get.parameters['data']!);
+      user_id = pageParam['user_id'];
+      is_admin = pageParam['is_admin'];
 
+      final data = await startupConnect.FetchServices(user_id: user_id);
+      print('services ${data['data'].length}');
+      service_len = data['data'].length;
       services = data['data'];
       return data;
     } catch (e) {
@@ -102,7 +91,6 @@ class ServiceSection extends StatelessWidget {
 
     service_bottom_height = 0.04;
 
-
     // DEFAULT :
     if (context.width > 1700) {
       prouduct_bottom_space = 0.03;
@@ -116,7 +104,7 @@ class ServiceSection extends StatelessWidget {
       service_top_margin = 0.02;
 
       service_bottom_margin = 0.06;
-      
+
       print('Greator then 1700');
     }
 
@@ -165,7 +153,6 @@ class ServiceSection extends StatelessWidget {
 
       service_bottom_margin = 0.06;
 
-    
       print('1300');
     }
 
@@ -189,7 +176,6 @@ class ServiceSection extends StatelessWidget {
       service_top_margin = 0.02;
 
       service_bottom_margin = 0.06;
-
 
       print('1000');
     }
@@ -281,8 +267,6 @@ class ServiceSection extends StatelessWidget {
       print('480');
     }
 
-
-
     //////////////////////////////////////
     /// Set Required param :
     //////////////////////////////////////
@@ -304,7 +288,7 @@ class ServiceSection extends StatelessWidget {
 ///////////////////////////////////////
   /// Main Method :
 ///////////////////////////////////////
-   MainMethod(BuildContext context) {
+  MainMethod(BuildContext context) {
     var no_services = Container();
 
     var services_section = Column(
@@ -317,9 +301,9 @@ class ServiceSection extends StatelessWidget {
           font_size: heading_fontSize,
         ),
 
-      is_admin == true
-        ? MyEditButton(func: EditProductAndService, text: 'Edit')
-        : Container(),
+        is_admin == true
+            ? MyEditButton(func: EditProductAndService, text: 'Edit')
+            : Container(),
 
         SizedBox(height: context.height * service_bottom_height),
 
@@ -345,7 +329,6 @@ class ServiceSection extends StatelessWidget {
       return services_section;
     }
   }
-
 
   Center ServiceShimmer() {
     return Center(

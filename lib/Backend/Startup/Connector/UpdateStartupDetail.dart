@@ -157,37 +157,20 @@ class StartupUpdater extends GetxController {
   ///////////////////////////////////////////
   /// UPDATE PRODUCTS :
   ///////////////////////////////////////////
-  UpdateProducts({startup_id = false}) async {
-    var productStore = Get.put(BusinessProductStore(), tag: 'productList');
+  UpdateProducts({required user_id , required products}) async {
     var data;
-    var product_list = [];
-    var only_product = [];
-    var temp_products = [];
     var doc_id;
-    var final_startup_id;
-
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
-
     try {
-      temp_products = await productStore.GetProducts();
-
-      // FETCHING DATA FROM FIREBASE
-      var store =
-          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
         doc_id = value.docs.first.id;
       });
 
-      // Update Product :
-      data['products'] = temp_products;
+
+      data['products'] = products;
       store.doc(doc_id).update(data);
 
       return ResponseBack(response_type: true);
@@ -196,53 +179,53 @@ class StartupUpdater extends GetxController {
     }
   }
 
-  FetchServices({startup_id = false}) async {
-    var data;
-    var product_list = [];
-    var only_product = [];
-    var temp_service = [];
-    var doc_id;
-    var final_startup_id;
+  // FetchServices({startup_id = false}) async {
+  //   var data;
+  //   var product_list = [];
+  //   var only_product = [];
+  //   var temp_service = [];
+  //   var doc_id;
+  //   var final_startup_id;
 
-    // Filter Startup Id :
-    if (startup_id != '' || startup_id != false) {
-      final_startup_id = startup_id;
-    } else {
-      final_startup_id = '';
-    }
+  //   // Filter Startup Id :
+  //   if (startup_id != '' || startup_id != false) {
+  //     final_startup_id = startup_id;
+  //   } else {
+  //     final_startup_id = '';
+  //   }
 
-    try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      final cacheData = await GetCachedData(
-          fromModel: getBusinessProductStoreName, startup_id: final_startup_id);
-      if (cacheData != false && cacheData != null) {
-        temp_service = cacheData['service'];
-      }
+  //   try {
+  //     // FETCHING DATA FROM CACHE STORAGE :
+  //     final cacheData = await GetCachedData(
+  //         fromModel: getBusinessProductStoreName, startup_id: final_startup_id);
+  //     if (cacheData != false && cacheData != null) {
+  //       temp_service = cacheData['service'];
+  //     }
 
-      // FETCHING DATA FROM FIREBASE
-      var store =
-          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+  //     // FETCHING DATA FROM FIREBASE
+  //     var store =
+  //         FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+  //     var query = store.where('startup_id', isEqualTo: final_startup_id).get();
 
-      await query.then((value) {
-        data = value.docs.first.data() as Map<String, dynamic>;
-        doc_id = value.docs.first.id;
-      });
+  //     await query.then((value) {
+  //       data = value.docs.first.data() as Map<String, dynamic>;
+  //       doc_id = value.docs.first.id;
+  //     });
 
-      // Update Product :
-      data['products'] = temp_service;
+  //     // Update Product :
+  //     data['products'] = temp_service;
 
-      // Uppdate product in firestore :
-      store.doc(doc_id).update(data);
+  //     // Uppdate product in firestore :
+  //     store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessProductStoreName, data: data);
+  //     // CACHE BUSINESS DETAIL :
+  //     await StoreCacheData(fromModel: getBusinessProductStoreName, data: data);
 
-      return ResponseBack(response_type: true);
-    } catch (e) {
-      return ResponseBack(response_type: false, message: update_error_title);
-    }
-  }
+  //     return ResponseBack(response_type: true);
+  //   } catch (e) {
+  //     return ResponseBack(response_type: false, message: update_error_title);
+  //   }
+  // }
 
   //////////////////////////////////
   /// UPDATE TEAM MEMEBER :

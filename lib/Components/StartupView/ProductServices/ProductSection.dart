@@ -21,20 +21,19 @@ class ProductSection extends StatefulWidget {
 }
 
 class _ProductSectionState extends State<ProductSection> {
-  
   var detailViewState = Get.put(StartupDetailViewState());
-  
+
   var startupConnect =
       Get.put(StartupViewConnector(), tag: 'startup_view_first_connector');
-  
+
   var products = [];
   var is_admin;
   var startup_id;
-  var founder_id;
+  var user_id;
 
   double product_cont_width = 0.75;
 
-  double product_cont_height = 0.60;
+  double product_cont_height = 0.50;
 
   double product_top_margin = 0.02;
 
@@ -66,7 +65,7 @@ class _ProductSectionState extends State<ProductSection> {
       'type': 'update',
       'startup_id': startup_id,
       'is_admin': is_admin,
-      'founder_id': founder_id
+      'user_id': user_id
     });
 
     Get.toNamed(create_business_product_url, parameters: {'data': pageParam});
@@ -76,7 +75,7 @@ class _ProductSectionState extends State<ProductSection> {
   Widget build(BuildContext context) {
     product_cont_width = 0.75;
 
-    product_cont_height = 0.60;
+    product_cont_height = 0.50;
 
     product_top_margin = 0.02;
 
@@ -92,12 +91,11 @@ class _ProductSectionState extends State<ProductSection> {
     if (context.width > 1700) {
       product_cont_width = 0.75;
 
-      product_cont_height = 0.60;
+      product_cont_height = 0.50;
 
       product_top_margin = 0.02;
 
       product_bottom_margin = 0.06;
-
 
       heading_fontSize = 32;
 
@@ -110,7 +108,7 @@ class _ProductSectionState extends State<ProductSection> {
     if (context.width < 1700) {
       product_cont_width = 0.75;
 
-      product_cont_height = 0.60;
+      product_cont_height = 0.50;
 
       product_top_margin = 0.02;
 
@@ -127,7 +125,7 @@ class _ProductSectionState extends State<ProductSection> {
     if (context.width < 1500) {
       product_cont_width = 0.80;
 
-      product_cont_height = 0.60;
+      product_cont_height = 0.50;
 
       product_top_margin = 0.02;
 
@@ -199,10 +197,10 @@ class _ProductSectionState extends State<ProductSection> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-        product_top_space = 0.03;
+      product_top_space = 0.03;
 
-        product_bottom_space = 0.03;
-        heading_fontSize = 28;
+      product_bottom_space = 0.03;
+      heading_fontSize = 28;
       print('640');
     }
 
@@ -220,12 +218,12 @@ class _ProductSectionState extends State<ProductSection> {
     ///  GET REQUIREMENTS :
     ////////////////////////////////////////////
     GetLocalStorageData() async {
-      startup_id = await detailViewState.GetStartupId();
-      is_admin = await detailViewState.GetIsUserAdmin();
-      founder_id = await detailViewState.GetFounderId();
+      final pageParam = jsonDecode(Get.parameters['data']!);
+      user_id = pageParam['user_id'];
+      is_admin = pageParam['is_admin'];
 
       try {
-        final data = await startupConnect.FetchProducts(startup_id: startup_id);
+        final data = await startupConnect.FetchProducts(user_id: user_id);
         // print('Detail View Fetch Product $data');
         product_len = data['data'].length;
         products = data['data'];
@@ -256,8 +254,7 @@ class _ProductSectionState extends State<ProductSection> {
 ////////////////////////////////////////
   /// Main Method :
 ////////////////////////////////////////
-   MainMethodSection(BuildContext contex) {
-    
+  MainMethodSection(BuildContext contex) {
     var no_product = Container();
 
     var product_list = Column(
@@ -299,7 +296,6 @@ class _ProductSectionState extends State<ProductSection> {
       return product_list;
     }
   }
-
 
   Center ProductShimmer() {
     return Center(

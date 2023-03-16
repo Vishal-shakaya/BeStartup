@@ -44,26 +44,27 @@ class _ProductBodyState extends State<ProductBody> {
   var pageArguments;
 
   String? startup_id;
-  String? founder_id;
+  String? user_id;
   bool? is_admin;
   bool? updateMode = false;
 
-  /////////////////////////////////////////
+////////////////////////////////////////////////////////////
   /// SUBMIT PRODUCT :
-  /////////////////////////////////////////
+  /// The function is called when the user clicks on a button.
+  /// The function calls a method in a store that
+  /// persists the data to firestore. The function then navigates
+  /// the user to the next page
+////////////////////////////////////////////////////////////
   SubmitProduct() async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final authUser = FirebaseAuth.instance.currentUser; 
     MyCustPageLoadingSpinner();
-    var resp = await productStore.PersistProduct(user_id: authUser?.uid);
-
-    // print('Submit Products $resp');
+    final snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final authUser = FirebaseAuth.instance.currentUser;
+    final resp = await productStore.PersistProduct(user_id: authUser?.uid);
 
     if (resp['response']) {
       Get.toNamed(create_business_whyInvest_url);
     }
 
-    // Error Handerl :
     if (!resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
@@ -77,26 +78,32 @@ class _ProductBodyState extends State<ProductBody> {
     CloseCustomPageLoadingSpinner();
   }
 
-  /////////////////////////////////////////
+//////////////////////////////////////////////////////////
   /// UPDATE PRODUCT :
-  /////////////////////////////////////////
+  /// It's a function that updates a product in a store
+//////////////////////////////////////////////////////////
   UpdateProduct() async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     MyCustPageLoadingSpinner();
+    final productStore = Get.put(BusinessProductStore());
+    final snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final updateProducts = await productStore.GetProducts();
+    
+    final update_resp = await updateStore.UpdateProducts(
+      user_id: user_id, 
+      products: updateProducts);
 
-    var update_resp = await updateStore.UpdateProducts(startup_id: startup_id);
-
-    // Update Success Handler    :
+    // Success Handler  :
     if (update_resp['response']) {
-      var param = jsonEncode({
-        'founder_id': founder_id,
-        'startup_id': startup_id,
+      final param = jsonEncode({
+        'user_id': user_id,
         'is_admin': is_admin,
       });
+
       MyCustPageLoadingSpinner();
       Get.toNamed(startup_view_url, parameters: {'data': param});
     }
 
+    // Error handler :
     if (!update_resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
@@ -110,64 +117,54 @@ class _ProductBodyState extends State<ProductBody> {
     CloseCustomPageLoadingSpinner();
   }
 
-  ///////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
   /// GET REQUIREMENTS DATA :
   /// It fetches data from the server and stores. it in the local storage.
   ///  If the server is down, it
   /// returns the data from the local storage
   /// Returns:
   ///   The return value is a Future&lt;dynamic&gt;.
-  ///////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
   GetLocalStorageData() async {
+    final snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     var error_resp;
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
+    var data;
     try {
-      if (updateMode == true) {
-        final resp = await startupConnector.FetchProductsAndServices(
-            startup_id: startup_id);
+      // Check if update Mode :
+      if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
+        user_id = pageParam['user_id'];
+        is_admin = pageParam['is_admin'];
 
-        // Fetch product Success Handler :
-        if (resp['response']) {
-          await productStore.SetProductList(list: resp['data']);
-        }
+        if (pageParam['type'] == 'update') {
+          updateMode = true;
+          final resp =
+              await startupConnector.FetchProductsAndServices(user_id: user_id);
 
-        // Fetch Product Error Handler :
-        if (!resp['response']) {
-          // CloseCustomPageLoadingSpinner();
-          // Get.closeAllSnackbars();
-          // Get.showSnackbar(MyCustSnackbar(
-          //   width: snack_width,
-          //   message: fetch_data_error_msg,
-          //   title: fetch_data_error_title));
+          // Success Handler :
+          if (resp['response']) {
+            data = await productStore.SetProductList(list: resp['data']);
+          }
+
+          // Error Handler :
+          if (!resp['response']) {
+            CloseCustomPageLoadingSpinner();
+            Get.closeAllSnackbars();
+            Get.showSnackbar(MyCustSnackbar(
+                width: snack_width,
+                message: fetch_data_error_msg,
+                title: fetch_data_error_title));
+          }
         }
+      } else {
+        data = await productStore.GetProductList();
       }
 
-      final data = await productStore.GetProductList();
       error_resp = data;
       return data;
     } catch (e) {
       return error_resp;
     }
-  }
-
-///////////////////////////////
-// Set page Default State :
-///////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      startup_id = pageParam['startup_id'];
-      founder_id = pageParam['founder_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-    super.initState();
   }
 
   @override
