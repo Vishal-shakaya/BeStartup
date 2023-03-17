@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/InvestorFormDetail.dart';
@@ -51,8 +53,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   double con_btn_btttom_margin = 10;
   double cont_btn_radius = 20;
   double cont_btn_elevation = 10;
-  double cont_btn_fontSize = 16; 
-  double cont_btn_letterSpace= 2.5; 
+  double cont_btn_fontSize = 16;
+  double cont_btn_letterSpace = 2.5;
 
   double width_factor = 0.9;
   double height_factor = 0.65;
@@ -64,6 +66,9 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   int image_flex = 5;
   int desc_flex = 5;
 
+  var user_id; 
+  var is_admin ; 
+
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
 
@@ -74,35 +79,29 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   // 2. MEMEBER DETAIL :
 /////////////////////////////////////////////////////
   SubmitMemberDetail() async {
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    final startup_id = await startupState.GetStartupId();
-    print('Startrup id $startup_id');
+    final pageParam = jsonDecode(Get.parameters['data']!);
+    user_id = pageParam['user_id'];
+    is_admin = pageParam['is_admin'];
 
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     // STARTING LOADING :
     formKey.currentState!.save();
     formKey2.currentState!.save();
 
     if (formKey.currentState!.validate() && formKey2.currentState!.validate()) {
-   SmartDialog.showLoading(
-      builder: (context) {
-        return CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ); 
-      },
-    );
+      SmartDialog.showLoading(
+        builder: (context) {
+          return const CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            color: Colors.orangeAccent,
+          );
+        },
+      );
 
       final name = formKey.currentState!.value['name'];
       final position = formKey.currentState!.value['position'];
       final email = formKey.currentState!.value['email'];
-      // Info form values;
       final info = formKey2.currentState!.value['info'];
-
-      // Testing
-      print(name);
-      print(position);
-      print(email);
-      print('second form : ${info}');
 
       Map<String, dynamic> temp_investor = {
         'name': name,
@@ -121,30 +120,28 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       }
 
       if (widget.form_type == InvestorFormType.create) {
-        print('Create Investor');
-
         res = await startupInvestorStore.CreateInvestor(
-            inv_obj: temp_investor, startup_id: startup_id);
+            inv_obj: temp_investor, user_id: user_id);
       }
 
-      print(res);
+
       if (res['response']) {
         formKey.currentState!.reset();
         formKey2.currentState!.reset();
-
         SmartDialog.dismiss();
         Navigator.of(context).pop();
       }
 
+
       if (!res['response']) {
-        // CLOSE SNAKBAR :
         Get.closeAllSnackbars();
         Get.showSnackbar(
             MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
       }
-    } else {
-      print('Invalid form');
-
+    }
+    
+    
+     else {
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
           type: MySnackbarType.error,
@@ -152,6 +149,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
           width: snack_width));
     }
   }
+
+
 
   // RESET FORM :
   ResetForm(field) {
@@ -166,7 +165,29 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
   @override
   Widget build(BuildContext context) {
+    maxlines = 7;
+    con_button_width = 100;
+    con_button_height = 33;
 
+    con_btn_top_margin = 5;
+    con_btn_btttom_margin = 10;
+    cont_btn_radius = 20;
+    cont_btn_elevation = 10;
+    cont_btn_fontSize = 16;
+    cont_btn_letterSpace = 2.5;
+
+    width_factor = 0.9;
+    height_factor = 0.65;
+
+    dialog_padd = 15;
+
+    top_spacer = 10;
+
+    image_flex = 5;
+    desc_flex = 5;
+
+    // DEFAULT :
+    if (context.width > 1700) {
       maxlines = 7;
       con_button_width = 100;
       con_button_height = 33;
@@ -175,8 +196,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       con_btn_btttom_margin = 10;
       cont_btn_radius = 20;
       cont_btn_elevation = 10;
-      cont_btn_fontSize = 16; 
-      cont_btn_letterSpace= 2.5; 
+      cont_btn_fontSize = 16;
+      cont_btn_letterSpace = 2.5;
 
       width_factor = 0.9;
       height_factor = 0.65;
@@ -187,230 +208,204 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
       image_flex = 5;
       desc_flex = 5;
+      print('Greator then 1700');
+    }
 
-
-		// DEFAULT :
-    if (context.width > 1700) {
-        maxlines = 7;
-        con_button_width = 100;
-        con_button_height = 33;
-
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 16; 
-        cont_btn_letterSpace= 2.5; 
-
-        width_factor = 0.9;
-        height_factor = 0.65;
-
-        dialog_padd = 15;
-
-        top_spacer = 10;
-
-        image_flex = 5;
-        desc_flex = 5;
-        print('Greator then 1700');
-      }
-  
     if (context.width < 1700) {
-        maxlines = 7;
-        con_button_width = 100;
-        con_button_height = 33;
+      maxlines = 7;
+      con_button_width = 100;
+      con_button_height = 33;
 
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 16; 
-        cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 16;
+      cont_btn_letterSpace = 2.5;
 
-        width_factor = 0.9;
-        height_factor = 0.65;
+      width_factor = 0.9;
+      height_factor = 0.65;
 
-        dialog_padd = 15;
+      dialog_padd = 15;
 
-        top_spacer = 10;
+      top_spacer = 10;
 
-        image_flex = 5;
-        desc_flex = 5;
+      image_flex = 5;
+      desc_flex = 5;
       print('1700');
-      }
-  
+    }
+
     if (context.width < 1600) {
       print('1600');
-      }
+    }
 
     // PC:
     if (context.width < 1500) {
-        maxlines = 7;
-        con_button_width = 100;
-        con_button_height = 33;
+      maxlines = 7;
+      con_button_width = 100;
+      con_button_height = 33;
 
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 16; 
-        cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 16;
+      cont_btn_letterSpace = 2.5;
 
-        width_factor = 0.9;
-        height_factor = 0.65;
+      width_factor = 0.9;
+      height_factor = 0.65;
 
-        dialog_padd = 15;
+      dialog_padd = 15;
 
-        top_spacer = 10;
+      top_spacer = 10;
 
-        image_flex = 5;
-        desc_flex = 5;
+      image_flex = 5;
+      desc_flex = 5;
       print('1500');
-      }
+    }
 
     if (context.width < 1200) {
       print('1200');
-      }
-    
+    }
+
     if (context.width < 1000) {
-        maxlines = 7;
-        con_button_width = 100;
-        con_button_height = 33;
+      maxlines = 7;
+      con_button_width = 100;
+      con_button_height = 33;
 
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 16; 
-        cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 16;
+      cont_btn_letterSpace = 2.5;
 
-        width_factor = 0.9;
-        height_factor = 0.65;
+      width_factor = 0.9;
+      height_factor = 0.65;
 
-        dialog_padd = 15;
+      dialog_padd = 15;
 
-        top_spacer = 10;
+      top_spacer = 10;
 
-        image_flex = 4;
-        desc_flex = 5;
+      image_flex = 4;
+      desc_flex = 5;
       print('1000');
-      }
+    }
 
     // TABLET :
     if (context.width < 800) {
       print('800');
-      }
+    }
 
     // SMALL TABLET:
     if (context.width < 640) {
-        maxlines = 7;
-        con_button_width = 90;
-        con_button_height = 30;
+      maxlines = 7;
+      con_button_width = 90;
+      con_button_height = 30;
 
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 14; 
-        cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 14;
+      cont_btn_letterSpace = 2.5;
 
-        width_factor = 0.9;
-        height_factor = 0.57;
+      width_factor = 0.9;
+      height_factor = 0.57;
 
-        dialog_padd = 15;
+      dialog_padd = 15;
 
-        top_spacer = 10;
+      top_spacer = 10;
 
-        image_flex = 4;
-        desc_flex = 5;
+      image_flex = 4;
+      desc_flex = 5;
       print('640');
-      }
+    }
 
     // PHONE:
     if (context.width < 480) {
-        maxlines = 7;
-        con_button_width = 90;
-        con_button_height = 30;
+      maxlines = 7;
+      con_button_width = 90;
+      con_button_height = 30;
 
-        con_btn_top_margin = 5;
-        con_btn_btttom_margin = 10;
-        cont_btn_radius = 20;
-        cont_btn_elevation = 10;
-        cont_btn_fontSize = 14; 
-        cont_btn_letterSpace= 2.5; 
+      con_btn_top_margin = 5;
+      con_btn_btttom_margin = 10;
+      cont_btn_radius = 20;
+      cont_btn_elevation = 10;
+      cont_btn_fontSize = 14;
+      cont_btn_letterSpace = 2.5;
 
-        width_factor = 1;
-        height_factor = 0.80;
+      width_factor = 1;
+      height_factor = 0.80;
 
-        dialog_padd = 15;
+      dialog_padd = 15;
 
-        top_spacer = 10;
+      top_spacer = 10;
 
-        image_flex = 4;
-        desc_flex = 5;
+      image_flex = 4;
+      desc_flex = 5;
       print('480');
-      }
+    }
 
-  Widget mainHeaderForm =  Row(
-                children: [
-                  // IMAGE SECTION :
-                  Expanded(
-                      flex: image_flex,
-                      child: widget.form_type == InvestorFormType.create
-                          ? InvestorProfileImage()
-                          : InvestorProfileImage(
-                              member_image: widget.member['image'],
-                              form_type: InvestorFormType.edit,
-                            )),
+    Widget mainHeaderForm = Row(
+      children: [
+        // IMAGE SECTION :
+        Expanded(
+            flex: image_flex,
+            child: widget.form_type == InvestorFormType.create
+                ? InvestorProfileImage()
+                : InvestorProfileImage(
+                    member_image: widget.member['image'],
+                    form_type: InvestorFormType.edit,
+                  )),
 
-                  // DETAIL SECTION :
-                  Expanded(
-                      flex: desc_flex,
-                      child: widget.form_type == InvestorFormType.create
-                          ? InvestorDetialForm(
-                              formkey: formKey,
-                              ResetForm: ResetForm,
-                            )
-                          : InvestorDetialForm(
-                              formkey: formKey,
-                              ResetForm: ResetForm,
-                              form_type: InvestorFormType.edit,
-                              member: widget.member,
-                            ))
-                ],
-              ); 
-  Widget phoneHeaderForm =  Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // IMAGE SECTION :
-                  widget.form_type == InvestorFormType.create
-                      ? InvestorProfileImage()
-                      : InvestorProfileImage(
-                          member_image: widget.member['image'],
-                          form_type: InvestorFormType.edit,
-                        ),
+        // DETAIL SECTION :
+        Expanded(
+            flex: desc_flex,
+            child: widget.form_type == InvestorFormType.create
+                ? InvestorDetialForm(
+                    formkey: formKey,
+                    ResetForm: ResetForm,
+                  )
+                : InvestorDetialForm(
+                    formkey: formKey,
+                    ResetForm: ResetForm,
+                    form_type: InvestorFormType.edit,
+                    member: widget.member,
+                  ))
+      ],
+    );
+    Widget phoneHeaderForm = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // IMAGE SECTION :
+        widget.form_type == InvestorFormType.create
+            ? InvestorProfileImage()
+            : InvestorProfileImage(
+                member_image: widget.member['image'],
+                form_type: InvestorFormType.edit,
+              ),
 
-                  // DETAIL SECTION :
-                  widget.form_type == InvestorFormType.create
-                      ? InvestorDetialForm(
-                          formkey: formKey,
-                          ResetForm: ResetForm,
-                        )
-                      : InvestorDetialForm(
-                          formkey: formKey,
-                          ResetForm: ResetForm,
-                          form_type: InvestorFormType.edit,
-                          member: widget.member,
-                        )
-                ],
-              ); 
+        // DETAIL SECTION :
+        widget.form_type == InvestorFormType.create
+            ? InvestorDetialForm(
+                formkey: formKey,
+                ResetForm: ResetForm,
+              )
+            : InvestorDetialForm(
+                formkey: formKey,
+                ResetForm: ResetForm,
+                form_type: InvestorFormType.edit,
+                member: widget.member,
+              )
+      ],
+    );
 
-
-
-  if (context.width < 480) {
-      mainHeaderForm = phoneHeaderForm; 
+    if (context.width < 480) {
+      mainHeaderForm = phoneHeaderForm;
       print('480');
-      }
+    }
     ///////////////////////////////////////////////////////
     /// 1. MILESTONE DIALOG :
     /// 2. MILESTONE FORM : Take Title and Description:
@@ -418,30 +413,22 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
     return FractionallySizedBox(
       widthFactor: width_factor,
       heightFactor: height_factor,
-      
       child: Container(
         padding: EdgeInsets.all(dialog_padd),
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           color: my_theme_container_color,
         ),
-      
         child: Scaffold(
           backgroundColor: my_theme_container_color,
           body: SingleChildScrollView(
-            
             child: Column(children: [
-           
               SizedBox(
                 height: top_spacer,
               ),
 
-           
               // TEAM MEMEBER PROFILE IAMGE SECTION
-              Container(
-                  child:mainHeaderForm
-              ),
+              Container(child: mainHeaderForm),
 
-           
               // MEMBER DETAIL SECTION :
               Container(
                   child: Column(
@@ -492,8 +479,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
                             widget.form_type == InvestorFormType.create
                                 ? 'Done'
                                 : 'Update',
-                          
-                            style:  TextStyle(
+                            style: TextStyle(
                                 letterSpacing: cont_btn_letterSpace,
                                 color: Colors.white,
                                 fontSize: cont_btn_fontSize,

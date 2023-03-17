@@ -1,4 +1,7 @@
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
+import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/CreateInvestorDialog.dart';
+import 'package:be_startup/Components/StartupView/MemberDetailDialog.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -38,6 +41,33 @@ class _FounderCustomFullScreenDropDownState
   double profile_menu_radiud = 30;
 
   double dropdonw_heightpx800 = 0.22;
+
+
+  // Investor dialog Width :
+  MemberDetailDialogView({form_type, context}) async {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => AlertDialog(
+              title: Container(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.cancel,
+                      color: Colors.grey,
+                    )),
+              ),
+              content: SizedBox(
+                width: 600,
+                child: InvestorDialog(
+                  form_type: form_type,
+                ),
+              )));
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -206,9 +236,10 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            // case FounderMenuItems.startup:
-            //   widget.CreateStatup();
-            //   break;
+            case FounderMenuItems.add_investor:
+              MemberDetailDialogView(
+                  context: context, form_type: InvestorFormType.create);
+              break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView()();
@@ -242,7 +273,7 @@ class _FounderCustomFullScreenDropDownState
     );
   }
 
-  Container DropdownPixel800(BuildContext context) {
+  Container DropdownPixel800(BuildContext context ) {
     return Container(
       width: context.width * dropdown_width,
       child: DropdownButtonHideUnderline(
@@ -280,9 +311,10 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            // case FounderMenuItems.startup:
-            //   widget.CreateStatup();
-            //   break;
+            case FounderMenuItems.add_investor:
+                MemberDetailDialogView(
+                context: context, form_type: InvestorFormType.create);
+              break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView()();
@@ -355,9 +387,10 @@ class _FounderCustomFullScreenDropDownState
               widget.SwitchToFounder();
               break;
 
-            // case FounderMenuItems.startup:
-            //   widget.CreateStatup();
-            //   break;
+            case FounderMenuItems.add_investor:
+                 MemberDetailDialogView(
+                  context: context, form_type: InvestorFormType.create);
+              break;
 
             case FounderMenuItems.settings:
               widget.SwitchSettingView();
@@ -415,6 +448,7 @@ class FounderMenuItems {
   // Second Item List :
   static const List<MenuItem> firstItems = [
     profile,
+    add_investor,
     // investor,
     // startup,
     settings,
@@ -422,8 +456,9 @@ class FounderMenuItems {
 
   // THIRD ITEM LIST :
   static const List<MenuItem> thirdItems = [feedback];
-
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
+  static const add_investor =
+      MenuItem(text: 'Investor', icon: Icons.add_box_outlined);
 
   // static const startup =
   //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
@@ -462,6 +497,7 @@ class FounderMenuItemsPixel800 {
   // Second Item List :
   static const List<MenuItem> firstItems = [
     profile,
+    add_investor,
     // investor,
     // startup,
     settings,
@@ -471,7 +507,8 @@ class FounderMenuItemsPixel800 {
   static const List<MenuItem> thirdItems = [feedback];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-
+  static const add_investor =
+      MenuItem(text: 'Investor', icon: Icons.add_box_outlined);
   // static const startup =
   //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 
@@ -507,6 +544,7 @@ class FounderMenuItemsPixel480 {
   // Second Item List :
   static const List<MenuItem> firstItems = [
     profile,
+    add_investor,
     // investor,
     // startup,
     settings,
@@ -516,7 +554,8 @@ class FounderMenuItemsPixel480 {
   static const List<MenuItem> thirdItems = [feedback];
 
   static const profile = MenuItem(text: 'profile', icon: Icons.person);
-
+  static const add_investor =
+      MenuItem(text: 'Investor', icon: Icons.add_box_outlined);
   // static const startup =
   //     MenuItem(text: 'startup', icon: Icons.add_box_outlined);
 

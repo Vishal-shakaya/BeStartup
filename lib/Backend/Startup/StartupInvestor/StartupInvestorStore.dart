@@ -70,7 +70,7 @@ class StartupInvestorStore extends GetxController {
   /// Returns:
   ///   A ResponseBack object.
 ////////////////////////////////////////////////////////
-  CreateInvestor({required inv_obj, required startup_id}) async {
+  CreateInvestor({required inv_obj, required user_id}) async {
     final id = uuid.v4();
     try {
       final myStore = store.collection(getStartupInvestorStoreName);
@@ -84,7 +84,9 @@ class StartupInvestorStore extends GetxController {
       };
 
       final investor_model = await StartupInvestorModel(
-          startup_id: startup_id, investor: investor, id: id);
+          user_id: user_id, 
+          investor: investor, id: id);
+
       await myStore.add(investor_model);
 
       investor_list.add(investor);
@@ -106,12 +108,12 @@ class StartupInvestorStore extends GetxController {
   /// Returns:
   ///   A list of investors.
 /////////////////////////////////////////////////////
-  FetchStartupInvestor({required startup_id}) async {
+  FetchStartupInvestor({required user_id}) async {
     var data;
     var investors = [];
     try {
       final my_store = store.collection(getStartupInvestorStoreName);
-      var query = my_store.where('startup_id', isEqualTo: startup_id).get();
+      var query = my_store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         value.docs.forEach((el) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/StartupInvestor/StartupInvestorStore.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/CreateInvestorDialog.dart';
@@ -18,6 +20,7 @@ class InvestorSection extends StatelessWidget {
 
   var investors = [];
   var is_admin;
+  var user_id;
 
   double mem_desc_block_width = 0.15;
   double mem_desc_block_height = 0.10;
@@ -41,8 +44,7 @@ class InvestorSection extends StatelessWidget {
 
   double invest_cont_height = 0.30;
 
-  double invest_cont_width = 0.60; 
-
+  double invest_cont_width = 0.60;
 
   // MEMBER DETAIL DIALOG BLOK :
   MemberDetailDialogView({form_type, context}) async {
@@ -73,13 +75,13 @@ class InvestorSection extends StatelessWidget {
   /// Get Requirements :
   ////////////////////////////////////////
   GetLocalStorageData() async {
-    final startup_id = await startupState.GetStartupId();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final pageParam = jsonDecode(Get.parameters['data']!);
 
-    is_admin = await startupState.GetIsUserAdmin();
+    user_id = pageParam['user_id'];
+    is_admin = pageParam['is_admin'];
 
-    final resp =
-        await startupInvestorStore.FetchStartupInvestor(startup_id: startup_id);
+    final resp =await startupInvestorStore.FetchStartupInvestor(user_id: user_id);
 
     if (resp['response']) {
       investors = resp['data'];
@@ -95,62 +97,61 @@ class InvestorSection extends StatelessWidget {
   Widget build(BuildContext context) {
     // DEFAULT :
     if (context.width > 1700) {
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 32;
+      heading_fonSize = 32;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.02;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.02;
 
-        add_btn_cont_width = 90;
-        add_btn_cont_height = 30;
+      add_btn_cont_width = 90;
+      add_btn_cont_height = 30;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 16;
+      add_iconSize = 16;
 
-        add_iconfonSize = 14;
+      add_iconfonSize = 14;
 
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_height = 0.30;
+      invest_cont_height = 0.30;
 
-        invest_cont_width = 0.60; 
-        print('Greator then 1700');
+      invest_cont_width = 0.60;
+      print('Greator then 1700');
     }
 
     if (context.width < 1700) {
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.60; 
+      invest_cont_width = 0.60;
 
-        invest_cont_height = 0.30;
+      invest_cont_height = 0.30;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 32;
+      heading_fonSize = 32;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.02;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.02;
 
-        add_btn_cont_width = 90;
-        add_btn_cont_height = 30;
+      add_btn_cont_width = 90;
+      add_btn_cont_height = 30;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 16;
+      add_iconSize = 16;
 
-        add_iconfonSize = 14;
+      add_iconfonSize = 14;
 
       print('1700');
     }
 
     if (context.width < 1600) {
-      
       print('1500');
     }
 
@@ -160,56 +161,56 @@ class InvestorSection extends StatelessWidget {
     }
 
     if (context.width < 1200) {
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.60; 
+      invest_cont_width = 0.60;
 
-        invest_cont_height = 0.30;
+      invest_cont_height = 0.30;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 30;
+      heading_fonSize = 30;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.02;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.02;
 
-        add_btn_cont_width = 80;
-        add_btn_cont_height = 25;
+      add_btn_cont_width = 80;
+      add_btn_cont_height = 25;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 15;
+      add_iconSize = 15;
 
-        add_iconfonSize = 13;
+      add_iconfonSize = 13;
       print('1200');
     }
 
     if (context.width < 1000) {
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.60; 
+      invest_cont_width = 0.60;
 
-        invest_cont_height = 0.25;
+      invest_cont_height = 0.25;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 30;
+      heading_fonSize = 30;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.02;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.02;
 
-        add_btn_cont_width = 80;
-        add_btn_cont_height = 25;
+      add_btn_cont_width = 80;
+      add_btn_cont_height = 25;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 14;
+      add_iconSize = 14;
 
-        add_iconfonSize = 13;
+      add_iconfonSize = 13;
       print('1000');
     }
 
@@ -217,84 +218,84 @@ class InvestorSection extends StatelessWidget {
     if (context.width < 800) {
       invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.80; 
+      invest_cont_width = 0.80;
 
-        invest_cont_height = 0.28;
+      invest_cont_height = 0.28;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 28;
+      heading_fonSize = 28;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.05;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.05;
 
-        add_btn_cont_width = 70;
-        add_btn_cont_height = 25;
+      add_btn_cont_width = 70;
+      add_btn_cont_height = 25;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 14;
+      add_iconSize = 14;
 
-        add_iconfonSize = 13;
+      add_iconfonSize = 13;
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.80; 
+      invest_cont_width = 0.80;
 
-        invest_cont_height = 0.28;
+      invest_cont_height = 0.28;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 25;
+      heading_fonSize = 25;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.05;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.05;
 
-        add_btn_cont_width = 65;
-        add_btn_cont_height = 25;
+      add_btn_cont_width = 65;
+      add_btn_cont_height = 25;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 14;
+      add_iconSize = 14;
 
-        add_iconfonSize = 13;
+      add_iconfonSize = 13;
 
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-        invest_cont_top_marg = 0.06;
+      invest_cont_top_marg = 0.06;
 
-        invest_cont_width = 0.80; 
+      invest_cont_width = 0.80;
 
-        invest_cont_height = 0.22;
+      invest_cont_height = 0.22;
 
-        mem_desc_block_width = 0.15;
-        mem_desc_block_height = 0.10;
-        mem_dialog_width = 600;
+      mem_desc_block_width = 0.15;
+      mem_desc_block_height = 0.10;
+      mem_dialog_width = 600;
 
-        heading_fonSize = 25;
+      heading_fonSize = 25;
 
-        add_btn_top_margin = 0.06;
-        add_btn_left_margin = 0.05;
+      add_btn_top_margin = 0.06;
+      add_btn_left_margin = 0.05;
 
-        add_btn_cont_width = 63;
-        add_btn_cont_height = 25;
+      add_btn_cont_width = 63;
+      add_btn_cont_height = 25;
 
-        add_btn_radius = 15;
+      add_btn_radius = 15;
 
-        add_iconSize = 14;
+      add_iconSize = 14;
 
-        add_iconfonSize = 12;
+      add_iconfonSize = 12;
       print('480');
     }
 
@@ -384,7 +385,6 @@ class InvestorSection extends StatelessWidget {
                 height: context.height * invest_cont_height,
                 width: context.width * invest_cont_width,
                 color: Colors.orange.shade300,
-               
                 child: Obx(
                   () {
                     return ListView.builder(

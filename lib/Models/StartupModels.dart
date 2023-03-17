@@ -208,11 +208,11 @@ BusinessTeamMembersModel({
 
 
 // id is required field :
-StartupInvestorModel({required startup_id, required investor,required id})async{
+StartupInvestorModel({required user_id, required investor,required id})async{
  try {
     Map<String, dynamic> temp_obj = {
       'id': id,
-      'startup_id': startup_id,
+      'user_id': user_id,
       'investor':investor, 
       'timestamp':await GetFormatedDate() , 
 

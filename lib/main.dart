@@ -16,7 +16,7 @@ import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
 import 'package:be_startup/Components/StartupView/VisionPage/VisionPage.dart';
-import 'package:be_startup/Helper/HorizontalScroll.dart';
+import 'package:be_startup/Helper/HorizontalScroll.dart'; 
 import 'package:be_startup/UI/HomeView/HomeView.dart';
 import 'package:be_startup/UI/RegistorInvestor/ChooseCatigoryView.dart';
 import 'package:be_startup/UI/RegistorInvestor/InvestorRegistorFormView.dart';
