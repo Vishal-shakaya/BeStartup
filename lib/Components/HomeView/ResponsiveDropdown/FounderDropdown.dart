@@ -42,32 +42,32 @@ class _FounderCustomFullScreenDropDownState
 
   double dropdonw_heightpx800 = 0.22;
 
+  double investor_dialog_width = 0.40;
 
   // Investor dialog Width :
   MemberDetailDialogView({form_type, context}) async {
-      showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => AlertDialog(
-              title: Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.grey,
-                    )),
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Container(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.cancel,
+                    color: Colors.grey,
+                  )),
+            ),
+            content: SizedBox(
+              width: context.width * investor_dialog_width,
+              child: InvestorDialog(
+                form_type: form_type,
               ),
-              content: SizedBox(
-                width: 600,
-                child: InvestorDialog(
-                  form_type: form_type,
-                ),
-              )));
-    }
-
+            )));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +76,8 @@ class _FounderCustomFullScreenDropDownState
     profile_menu_height = 51;
 
     profile_menu_radiud = 30;
+
+    investor_dialog_width = 0.40; 
 
     // DEFAULT :
     if (context.width > 1600) {
@@ -101,6 +103,12 @@ class _FounderCustomFullScreenDropDownState
     // PC:
     if (context.width < 1500) {
       dropdown_width = 0.11;
+      investor_dialog_width = 0.45; 
+      print('1500');
+    }
+    if (context.width < 1400) {
+      dropdown_width = 0.11;
+      investor_dialog_width = 0.50; 
       print('1500');
     }
 
@@ -112,6 +120,8 @@ class _FounderCustomFullScreenDropDownState
       profile_menu_height = 48;
 
       dropdown_width = 0.13;
+      
+      investor_dialog_width = 0.60; 
       print('1200');
     }
 
@@ -134,6 +144,8 @@ class _FounderCustomFullScreenDropDownState
       profile_menu_height = 45;
 
       dropdown_width = 0.15;
+
+      investor_dialog_width = 0.65; 
       print('1000');
     }
 
@@ -198,7 +210,6 @@ class _FounderCustomFullScreenDropDownState
   }
 
   Container FulscreenDropdown(BuildContext context) {
-
     return Container(
       width: context.width * dropdown_width,
       child: DropdownButtonHideUnderline(
@@ -273,7 +284,7 @@ class _FounderCustomFullScreenDropDownState
     );
   }
 
-  Container DropdownPixel800(BuildContext context ) {
+  Container DropdownPixel800(BuildContext context) {
     return Container(
       width: context.width * dropdown_width,
       child: DropdownButtonHideUnderline(
@@ -312,8 +323,8 @@ class _FounderCustomFullScreenDropDownState
               break;
 
             case FounderMenuItems.add_investor:
-                MemberDetailDialogView(
-                context: context, form_type: InvestorFormType.create);
+              MemberDetailDialogView(
+                  context: context, form_type: InvestorFormType.create);
               break;
 
             case FounderMenuItems.settings:
@@ -388,7 +399,7 @@ class _FounderCustomFullScreenDropDownState
               break;
 
             case FounderMenuItems.add_investor:
-                 MemberDetailDialogView(
+              MemberDetailDialogView(
                   context: context, form_type: InvestorFormType.create);
               break;
 

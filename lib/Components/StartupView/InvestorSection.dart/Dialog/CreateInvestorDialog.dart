@@ -79,15 +79,16 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   // 2. MEMEBER DETAIL :
 /////////////////////////////////////////////////////
   SubmitMemberDetail() async {
+    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+
     final pageParam = jsonDecode(Get.parameters['data']!);
     user_id = pageParam['user_id'];
     is_admin = pageParam['is_admin'];
 
-    var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    // STARTING LOADING :
+
+
     formKey.currentState!.save();
     formKey2.currentState!.save();
-
     if (formKey.currentState!.validate() && formKey2.currentState!.validate()) {
       SmartDialog.showLoading(
         builder: (context) {
@@ -261,10 +262,21 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
       image_flex = 5;
       desc_flex = 5;
+      height_factor = 0.75;
       print('1500');
     }
 
+    if (context.width < 1300) {
+      image_flex = 4;
+      desc_flex = 6;
+      print('1200');
+    }
     if (context.width < 1200) {
+      image_flex = 3;
+      desc_flex = 7;
+      
+      width_factor = 0.9;
+      height_factor = 0.75;
       print('1200');
     }
 
@@ -287,8 +299,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
       top_spacer = 10;
 
-      image_flex = 4;
-      desc_flex = 5;
+      image_flex = 3;
+      desc_flex = 7;
       print('1000');
     }
 
@@ -311,7 +323,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       cont_btn_letterSpace = 2.5;
 
       width_factor = 0.9;
-      height_factor = 0.57;
+      height_factor = 0.70;
 
       dialog_padd = 15;
 
@@ -375,6 +387,9 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
                   ))
       ],
     );
+
+
+
     Widget phoneHeaderForm = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -403,6 +418,10 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
     );
 
     if (context.width < 480) {
+      mainHeaderForm = phoneHeaderForm;
+      print('480');
+    }
+    if (context.width < 800) {
       mainHeaderForm = phoneHeaderForm;
       print('480');
     }

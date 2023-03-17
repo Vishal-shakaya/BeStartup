@@ -38,6 +38,8 @@ class _StartupViewState extends State<StartupView> {
 
   var pitch;
 
+  var is_admin;
+
   late YoutubePlayerController _controller;
 
   var autoPlay = true;
@@ -105,6 +107,7 @@ class _StartupViewState extends State<StartupView> {
   Widget build(BuildContext context) {
     var decode_data = jsonDecode(pageParam!);
     GetLocalStorageData() async {
+      is_admin = decode_data['is_admin'];
       await detailViewState.SetFounderId(id: decode_data['user_id']);
       await detailViewState.SetIsUserAdmin(admin: decode_data['is_admin']);
 
@@ -327,7 +330,9 @@ class _StartupViewState extends State<StartupView> {
               pitch: pitch,
             ),
 
-            InvestorSection(),
+            is_admin ==true
+            ? InvestorSection()
+            : Container()
           ],
         ),
       ),

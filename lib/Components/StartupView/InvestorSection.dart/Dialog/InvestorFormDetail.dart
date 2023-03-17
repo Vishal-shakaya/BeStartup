@@ -167,8 +167,8 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
 
     // TABLET :
     if (context.width < 800) {
-        formfield_width = 0.24;
-        contact_formfield_width = 0.24;
+        formfield_width = 0.40;
+        contact_formfield_width = 0.40;
         contact_text_margin_top = 0.05;
 
         top_spacer = 20;
@@ -183,8 +183,8 @@ class _TeamMemberDetailFormState extends State<InvestorDetialForm> {
 
     // SMALL TABLET:
     if (context.width < 640) {
-        formfield_width = 0.35;
-        contact_formfield_width = 0.35;
+        formfield_width = 0.50;
+        contact_formfield_width = 0.50;
         contact_text_margin_top = 0.05;
 
         top_spacer = 20;

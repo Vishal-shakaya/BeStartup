@@ -30,8 +30,8 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
   Color suffix_icon_color = Colors.blueGrey.shade300;
 
   double maxlines = 5;
-  double formfield_width =0.30;
-  double contact_formfield_width =0.30;
+  double formfield_width =0.32;
+  double contact_formfield_width =0.32;
   double contact_text_margin_top = 0.05;
 
   double info_cont_top_margin = 0.01;
@@ -45,8 +45,8 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
   @override
   Widget build(BuildContext context) {
      maxlines = 5;
-     formfield_width =0.30;
-     contact_formfield_width =0.30;
+     formfield_width =0.32;
+     contact_formfield_width =0.32;
      contact_text_margin_top = 0.05;
 
      info_cont_top_margin = 0.01;
@@ -60,8 +60,8 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
     // DEFAULT :
     if (context.width > 1700) {
         maxlines = 5;
-        formfield_width =0.30;
-        contact_formfield_width =0.30;
+        formfield_width =0.32;
+        contact_formfield_width =0.32;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -77,8 +77,8 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
 
     if (context.width < 1700) {
         maxlines = 5;
-        formfield_width =0.30;
-        contact_formfield_width =0.30;
+        formfield_width =0.32;
+        contact_formfield_width =0.32;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -92,14 +92,14 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
     }
 
     if (context.width < 1600) {
-      print('1600');
+        print('1600');
     }
 
     // PC:
     if (context.width < 1500) {
         maxlines = 5;
-        formfield_width =0.32;
-        contact_formfield_width =0.32;
+        formfield_width =0.34;
+        contact_formfield_width =0.34;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -109,12 +109,12 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 20;
         input_radius = 15; 
-      print('1500');
+        print('1500');
     }
     if (context.width < 1400) {
         maxlines = 5;
-        formfield_width =0.33;
-        contact_formfield_width =0.33;
+        formfield_width =0.36;
+        contact_formfield_width =0.36;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -124,13 +124,13 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 20;
         input_radius = 15; 
-      print('1400');
+        print('1400');
     }
 
     if (context.width < 1300) {
         maxlines = 5;
-        formfield_width =0.39;
-        contact_formfield_width =0.39;
+        formfield_width =0.37;
+        contact_formfield_width =0.37;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -145,8 +145,8 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
 
     if (context.width < 1200) {
         maxlines = 5;
-        formfield_width =0.42;
-        contact_formfield_width =0.42;
+        formfield_width =0.45;
+        contact_formfield_width =0.45;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -156,13 +156,13 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 20;
         input_radius = 15; 
-      print('1200');
+        print('1200');
     }
 
     if (context.width < 1000) {
         maxlines = 5;
-        formfield_width =0.48;
-        contact_formfield_width =0.48;
+        formfield_width =0.45;
+        contact_formfield_width =0.45;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -172,14 +172,14 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 18;
         input_radius = 15; 
-      print('1000');
+        print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
         maxlines = 5;
-        formfield_width =0.54;
-        contact_formfield_width =0.54;
+        formfield_width =0.50;
+        contact_formfield_width =0.50;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.01;
@@ -189,14 +189,14 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 18;
         input_radius = 15; 
-      print('800');
-    }
+        print('800');
+    } 
 
     // SMALL TABLET:
     if (context.width < 640) {
         maxlines = 5;
-        formfield_width =0.66;
-        contact_formfield_width =0.66;
+        formfield_width =0.50;
+        contact_formfield_width =0.50;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.03;
@@ -206,14 +206,14 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 18;
         input_radius = 15; 
-      print('640');
+        print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-        maxlines = 7;
-        formfield_width =0.80;
-        contact_formfield_width =0.80;
+        maxlines = 6;
+        formfield_width =0.55;
+        contact_formfield_width =0.55;
         contact_text_margin_top = 0.05;
 
         info_cont_top_margin = 0.03;
@@ -223,7 +223,7 @@ class _MemberInfoFormState extends State<InvestorInfoForm> {
         scroll_padd = 10;
         content_padding = 5;
         input_radius = 10; 
-      print('480');
+        print('480');
     }
 
     return Container(

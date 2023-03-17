@@ -208,7 +208,7 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
       image_cont_width = 150;
       image_cont_height = 150;
 
-      card_radius = 85.0;
+      card_radius = 90.0;
       profile_radius = 55;
 
       pod_btn_top_space = 75;
@@ -226,11 +226,11 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
       image_cont_width = 150;
       image_cont_height = 150;
 
-      card_radius = 85.0;
-      profile_radius = 48;
+      card_radius = 90.0;
+      profile_radius = 55;
 
-      pod_btn_top_space = 70;
-      pod_btn_left_space = 70;
+      pod_btn_top_space = 78;
+      pod_btn_left_space = 78;
 
       pos_btn_radius = 16;
       btn_radius = 14;
@@ -242,13 +242,13 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
     // PHONE:
     if (context.width < 480) {
       image_cont_width = 150;
-      image_cont_height = 100;
+      image_cont_height = 120;
 
       card_radius = 500.0;
-      profile_radius = 60;
+      profile_radius = 65;
 
-      pod_btn_top_space = 65;
-      pod_btn_left_space = 90;
+      pod_btn_top_space = 75;
+      pod_btn_left_space = 100;
 
       pos_btn_radius = 16;
       btn_radius = 14;
@@ -285,6 +285,7 @@ class _InvestorProfileImage extends State<InvestorProfileImage> {
                         child: AutoSizeText(
                           'profile picture',
                           style: TextStyle(
+                              fontSize: 14,
                               color: light_color_type3,
                               fontWeight: FontWeight.bold),
                         ))),
