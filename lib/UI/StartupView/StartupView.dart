@@ -3,15 +3,14 @@ import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
-import 'package:be_startup/Components/HomeView/UserProfileView/FounderStartups.dart';
 import 'package:be_startup/Components/StartupView/IntroPitch/IntroPitch.dart';
 import 'package:be_startup/Components/StartupView/InvestorSection.dart/InvestorSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ProductSection.dart';
 import 'package:be_startup/Components/StartupView/ProductServices/ServiceSection.dart';
-import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupInfoSection.dart';
 import 'package:be_startup/Components/StartupView/StartupVisionSection/StartupVisionSection.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -91,9 +90,12 @@ class _StartupViewState extends State<StartupView> {
         });
   }
 
-  @override
-  void initState() {
-    super.initState();
+  HomeNavButton() {
+    Get.toNamed(home_page_url);
+  }
+
+  BackNavButton() {
+    Get.toNamed(home_page_url);
   }
 
   @override
@@ -305,36 +307,86 @@ class _StartupViewState extends State<StartupView> {
       padding: const EdgeInsets.all(5),
       color: my_theme_background_color,
       width: context.width * page_width,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // CONTAIN :
-            // 1 THUMBNAIL :
-            // 2 PROFILE PICTURE :
-            // 3 TABS :
-            // 4 INVESTMENT CHART :
-            StartupInfoSection(),
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // CONTAIN :
+                // 1 THUMBNAIL :
+                // 2 PROFILE PICTURE :
+                // 3 TABS :
+                // 4 INVESTMENT CHART :
+                StartupInfoSection(),
 
-            // VISION SECTION :
-            // 1 HEADING :
-            // 2 STARTUP VISION DESCRIPTION:
-            StartupVisionSection(),
+                // VISION SECTION :
+                // 1 HEADING :
+                // 2 STARTUP VISION DESCRIPTION:
+                StartupVisionSection(),
 
-            // PRODUCT AND SERVIVES :
-            ProductSection(),
+                // PRODUCT AND SERVIVES :
+                ProductSection(),
 
-            // SERVICE SECTION :
-            ServiceSection(),
+                // SERVICE SECTION :
+                ServiceSection(),
 
-            IntroPitchSection(
-              pitch: pitch,
+                IntroPitchSection(
+                  pitch: pitch,
+                ),
+
+                is_admin == true ? InvestorSection() : Container()
+              ],
             ),
-
-            is_admin ==true
-            ? InvestorSection()
-            : Container()
-          ],
-        ),
+          ),
+          
+          Positioned(
+              bottom: 0,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  HomeNavButton();
+                },
+                child: Card(
+                  color: primary_light,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Icon(
+                      Icons.home,
+                      size: 25,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )),
+     /// A back button that is placed on the screen.
+          // Positioned(
+          //     bottom: 70,
+          //     right: 10,
+          //     child: InkWell(
+          //       onTap: () {
+          //         BackNavButton();
+          //       },
+          //       child: Card(
+          //         color: Colors.blueGrey.shade500,
+          //         elevation: 5,
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(50)),
+          //         child: Container(
+          //           width: 40,
+          //           height: 40,
+          //           child: Icon(
+          //             Icons.arrow_back_rounded,
+          //             size: 25,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //     ))
+        ],
       ),
     );
   }

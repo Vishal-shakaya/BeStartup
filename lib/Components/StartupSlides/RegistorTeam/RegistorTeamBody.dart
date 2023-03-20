@@ -53,6 +53,16 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
   bool? updateMode = false;
 
+  BackButtonRoute() {
+      var param = jsonEncode({
+        'user_id': user_id,
+        'is_admin': is_admin,
+      });
+
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(team_page_url ,parameters: {'data':param});
+  }
+
 /////////////////////////////////////////////
   /// ADD TEAM MEMBER DIALOG WIDGET :
 /////////////////////////////////////////////
@@ -266,58 +276,92 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   /////////////////////////////////////////
   /// MAIN METHOD :
   /////////////////////////////////////////
-  Column MainMethod(BuildContext context, member_list) {
-    return Column(
-      children: [
-        Container(
-            height: context.height * 0.7,
-            width: context.width * 0.7,
-            /////////////////////////////////////////
-            ///  BUSINESS SLIDE :
-            ///  1. BUSINESS ICON :
-            ///  2. INPUT FIELD TAKE BUSINESS NAME :
-            /////////////////////////////////////////
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(flex: 1, child: Container()),
-                    Container(
-                        child: ElevatedButton.icon(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(primary_light)),
-                            onPressed: () {
-                              AddMember(context);
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text('Add'))),
-                  ],
-                ),
+  Container MainMethod(BuildContext context, member_list) {
+    return Container(
+      width: context.width*1,
+      alignment: Alignment.topCenter,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Container(
+                  height: context.height * 0.7,
+                  width: context.width * 0.7,
+                  /////////////////////////////////////////
+                  ///  BUSINESS SLIDE :
+                  ///  1. BUSINESS ICON :
+                  ///  2. INPUT FIELD TAKE BUSINESS NAME :
+                  /////////////////////////////////////////
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(flex: 1, child: Container()),
+                          Container(
+                              child: ElevatedButton.icon(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(primary_light)),
+                                  onPressed: () {
+                                    AddMember(context);
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Add'))),
+                        ],
+                      ),
+    
+                      // MEMBER PROFILE LIST VIEW :
+                      // Image , name , position , email , then desc :
+                      Container(
+                          height: context.height * member_section_height,
+                          width: context.width * member_section_width,
+                          child: Obx(() {
+                            return ListView.builder(
+                                itemCount: member_list.length,
+                                itemBuilder: (context, index) {
+                                  return MemberListView(
+                                    key: UniqueKey(),
+                                    member: member_list[index],
+                                    index: index,
+                                  );
+                                });
+                          }))
+                    ],
+                  )),
+              updateMode == true
+                  ? SubmitAndUpdateButton(context, UpdateTeamMemberDetails)
+                  : SubmitAndUpdateButton(context, SubmitTeamMemberDetails)
+            ],
+          ),
 
-                // MEMBER PROFILE LIST VIEW :
-                // Image , name , position , email , then desc :
-                Container(
-                    height: context.height * member_section_height,
-                    width: context.width * member_section_width,
-                    child: Obx(() {
-                      return ListView.builder(
-                          itemCount: member_list.length,
-                          itemBuilder: (context, index) {
-                            return MemberListView(
-                              key: UniqueKey(),
-                              member: member_list[index],
-                              index: index,
-                            );
-                          });
-                    }))
-              ],
-            )),
-        updateMode == true
-            ? SubmitAndUpdateButton(context, UpdateTeamMemberDetails)
-            : SubmitAndUpdateButton(context, SubmitTeamMemberDetails)
-      ],
+          updateMode==true?
+            Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+             : Container()   
+        ],
+      ),
     );
   }
 

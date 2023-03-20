@@ -112,6 +112,16 @@ class _TeamPageState extends State<TeamPage> {
     Get.toNamed(create_business_team, parameters: {'data': param});
   }
 
+  BackButtonRoute() {
+    var param = jsonEncode({
+      'user_id': user_id,
+      'is_admin': is_admin,
+    });
+
+    print('startup view');
+    Get.toNamed(startup_view_url, parameters: {'data': param});
+  }
+
   //////////////////////////////////////////
   // GET REQUIREMTNS :
   //////////////////////////////////////////
@@ -822,138 +832,168 @@ class _TeamPageState extends State<TeamPage> {
     return Container(
         width: MediaQuery.of(context).size.width * page_width,
         child: Container(
-            child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Spacer :
-              SizedBox(height: MediaQuery.of(context).size.height * spacer),
+            child: Stack(
+          children: [
 
-              // Heading :
-              StartupHeaderText(
-                title: 'Founder',
-                font_size: heading_fontSize,
-              ),
-
-              // Spacer :
-              SizedBox(height: MediaQuery.of(context).size.height * spacer),
-
-              Column(
+            SingleChildScrollView(
+              child: Column(
                 children: [
-                  ////////////////////////////////////////////
-                  /// FOUNDER AND TEAM DTEAIL SECTION :
-                  ////////////////////////////////////////////
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  // Spacer :
+                  SizedBox(height: MediaQuery.of(context).size.height * spacer),
+
+                  // Heading :
+                  StartupHeaderText(
+                    title: 'Founder',
+                    font_size: heading_fontSize,
+                  ),
+
+                  // Spacer :
+                  SizedBox(height: MediaQuery.of(context).size.height * spacer),
+
+                  Column(
                     children: [
+                      ////////////////////////////////////////////
+                      /// FOUNDER AND TEAM DTEAIL SECTION :
+                      ////////////////////////////////////////////
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Card(
+                            elevation: founder_sec_elevation,
+                            shadowColor: Colors.blueGrey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(founder_border_radius),
+                            ),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width *
+                                  founder_cont_width,
+                              height: MediaQuery.of(context).size.height *
+                                  founder_cont_height,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: founder_cont_hori_padd,
+                                  vertical: founder_cont_ver_padd),
+                              decoration: BoxDecoration(
+                                // border: Border.all(color: border_color),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              alignment: Alignment.topCenter,
+                              margin:
+                                  EdgeInsets.only(top: founder_cont_top_margin),
+                              child: Container(
+                                padding: EdgeInsets.all(founder_sec_padding),
+
+                                //////////////////////////////////
+                                /// FOUNDER SECTION:
+                                //////////////////////////////////
+                                child: Column(
+                                  children: [
+                                    ProfileImage(),
+
+                                    // SPACING:
+                                    SizedBox(height: founder_spacing),
+
+                                    // POSITION:
+                                    SizedBox(
+                                      width: founder_box_width,
+                                      child: Column(
+                                        children: [
+                                          MemPosition(),
+                                          MemName(),
+                                          MemContact(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      /////////////////////////////////////////
+                      /// TEAM MEMBER SECTION :
+                      /////////////////////////////////////////
+                      // SPACING :
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              member_header_top_height),
+
+                      StartupHeaderText(
+                        title: 'Members',
+                        font_size: heading_fontSize,
+                      ),
+
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              member_header_bottom_height),
+
+                      // EDIT TEAM MEMBER :
+                      // REDIRECT TO CREATE TEAME PAGE :
+                      EditButton(context, EditMember),
+
                       Card(
-                        elevation: founder_sec_elevation,
+                        elevation: 1,
                         shadowColor: Colors.blueGrey,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(founder_border_radius),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Container(
                           width: MediaQuery.of(context).size.width *
-                              founder_cont_width,
+                              member_cont_width,
                           height: MediaQuery.of(context).size.height *
-                              founder_cont_height,
+                              member_cont_height,
                           padding: EdgeInsets.symmetric(
-                              horizontal: founder_cont_hori_padd,
-                              vertical: founder_cont_ver_padd),
+                              horizontal: member__cont_hor_padd,
+                              vertical: member_cont_ver_padd),
                           decoration: BoxDecoration(
                             // border: Border.all(color: border_color),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.topCenter,
-                          margin: EdgeInsets.only(top: founder_cont_top_margin),
-                          child: Container(
-                            padding: EdgeInsets.all(founder_sec_padding),
-
-                            //////////////////////////////////
-                            /// FOUNDER SECTION:
-                            //////////////////////////////////
-                            child: Column(
-                              children: [
-                                ProfileImage(),
-
-                                // SPACING:
-                                SizedBox(height: founder_spacing),
-
-                                // POSITION:
-                                SizedBox(
-                                  width: founder_box_width,
-                                  child: Column(
-                                    children: [
-                                      MemPosition(),
-                                      MemName(),
-                                      MemContact(),
-                                    ],
-                                  ),
+                          margin: EdgeInsets.only(top: memnber_cont_top_margin),
+                          child: team_member.length <= 0
+                              ? Container()
+                              : ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return MemberBlock(member: data[index]);
+                                  },
                                 ),
-                              ],
-                            ),
-                          ),
                         ),
-                      )
-                    ],
-                  ),
-
-                  /////////////////////////////////////////
-                  /// TEAM MEMBER SECTION :
-                  /////////////////////////////////////////
-                  // SPACING :
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          member_header_top_height),
-
-                  StartupHeaderText(
-                    title: 'Members',
-                    font_size: heading_fontSize,
-                  ),
-
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          member_header_bottom_height),
-
-                  // EDIT TEAM MEMBER :
-                  // REDIRECT TO CREATE TEAME PAGE :
-                  EditButton(context, EditMember),
-
-                  Card(
-                    elevation: 1,
-                    shadowColor: Colors.blueGrey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Container(
-                      width:
-                          MediaQuery.of(context).size.width * member_cont_width,
-                      height: MediaQuery.of(context).size.height *
-                          member_cont_height,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: member__cont_hor_padd,
-                          vertical: member_cont_ver_padd),
-                      decoration: BoxDecoration(
-                        // border: Border.all(color: border_color),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      alignment: Alignment.topCenter,
-                      margin: EdgeInsets.only(top: memnber_cont_top_margin),
-                      child: team_member.length <= 0
-                          ? Container()
-                          : ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return MemberBlock(member: data[index]);
-                              },
-                            ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+
+              Positioned(
+                bottom: 10,
+                right: 20,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ],
-              )
-            ],
-          ),
+                )),
+          ],
         )));
   }
 

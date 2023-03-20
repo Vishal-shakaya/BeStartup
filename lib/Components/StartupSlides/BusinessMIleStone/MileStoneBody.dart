@@ -65,6 +65,19 @@ class _MileStoneBodyState extends State<MileStoneBody> {
 
   bool? updateMode = false;
 
+
+
+  BackButtonRoute() {
+      var param = jsonEncode({
+        'user_id': user_id,
+        'is_admin': is_admin,
+      });
+
+      CloseCustomPageLoadingSpinner();
+      Get.toNamed(vision_page_url ,parameters: {'data':param});
+  }
+
+
   //////////////////////////////////////////
   /// Congress message animation :
   //////////////////////////////////////////
@@ -323,57 +336,85 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   /////////////////////////////////////
   /// MAIN METHOD :
   /////////////////////////////////////
-  Column MainMethod(
-    BuildContext context,
-    milestones,
-  ) {
-    return Column(
+  Stack MainMethod(BuildContext context,milestones) {
+    return Stack(
       children: [
-        Container(
-            width: context.width * mile_cont_width,
-            height: context.height * mile_cont_height,
-            child: Column(children: [
-              // SUBHEADING SECTION :
-              SubHeadingSection(context),
+        Column(
+          children: [
+            Container(
+                width: context.width * mile_cont_width,
+                height: context.height * mile_cont_height,
+                child: Column(children: [
+                  // SUBHEADING SECTION :
+                  SubHeadingSection(context),
 
-              // ADD TAG BUTTON :
-              AddMileButton(),
+                  // ADD TAG BUTTON :
+                  AddMileButton(),
 
-              // CONGRESS MESSAGE WITH SPARKEL:
-              CongressMessage(),
+                  // CONGRESS MESSAGE WITH SPARKEL:
+                  CongressMessage(),
 
-              //////////////////////////////
-              // LIST OF TAGS :
-              // 1.Show milestone Info:
-              // 2.Delete milestone :
-              // 3.Edit MileStone :
-              //////////////////////////////
-              Container(
-                  width: context.width * list_tile_width,
-                  height: context.height * list_tile_height,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Obx(
-                    () {
-                      return milestones == false
-                          ? Container()
-                          : ListView.builder(
-                              itemCount: milestones.length,
-                              itemBuilder: (context, intex) {
-                                return MileStoneTag(
-                                  milestone: milestones[intex],
-                                  index: intex,
-                                  key: UniqueKey(),
-                                );
-                              });
-                    },
-                  ))
-            ])),
-        updateMode == true
-            ? UpdateButton(context)
-            : BusinessSlideNav(
-                slide: SlideType.milestone,
-                submitform: SubmitMileStone,
-              )
+                  //////////////////////////////
+                  // LIST OF TAGS :
+                  // 1.Show milestone Info:
+                  // 2.Delete milestone :
+                  // 3.Edit MileStone :
+                  //////////////////////////////
+                  Container(
+                      width: context.width * list_tile_width,
+                      height: context.height * list_tile_height,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Obx(
+                        () {
+                          return milestones == false
+                              ? Container()
+                              : ListView.builder(
+                                  itemCount: milestones.length,
+                                  itemBuilder: (context, intex) {
+                                    return MileStoneTag(
+                                      milestone: milestones[intex],
+                                      index: intex,
+                                      key: UniqueKey(),
+                                    );
+                                  });
+                        },
+                      ))
+                ])),
+            updateMode == true
+                ? UpdateButton(context)
+                : BusinessSlideNav(
+                    slide: SlideType.milestone,
+                    submitform: SubmitMileStone,
+                  )
+          ],
+        ),
+
+
+          updateMode==true?
+            Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+             : Container() 
       ],
     );
   }

@@ -62,6 +62,15 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   var is_admin;
   bool? updateMode = false;
 
+
+
+  BackButtonRoute(){
+       var urlParam = {
+        'user_id':user_id,
+        'is_admin':is_admin,  
+      };
+      Get.toNamed(invest_page_url , parameters: {'data':jsonEncode(urlParam)});
+  }
   /////////////////////////////////
   // SUBMIT FORM :
   /////////////////////////////////
@@ -252,33 +261,60 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
 ///////////////////////////////
   // MAIN METHOD SECTION :
 ///////////////////////////////
-  Column MainMethod(
-    BuildContext context,
-    data,
-  ) {
-    return Column(
+  Stack MainMethod(BuildContext context,data,) {
+    return Stack(
       children: [
-        Container(
-          width: context.width * vision_cont_width,
-          height: context.height * vision_cont_height,
-          child: Column(
-            children: [
-              // SUB HEADING :
-              SubHeadingSection(context),
+        Column(
+          children: [
+            Container(
+              width: context.width * vision_cont_width,
+              height: context.height * vision_cont_height,
+              child: Column(
+                children: [
+                  // SUB HEADING :
+                  SubHeadingSection(context),
 
-              // Vision input field
-              VisionInputField(context)
-            ],
-          ),
+                  // Vision input field
+                  VisionInputField(context)
+                ],
+              ),
+            ),
+
+            // BOTTOM NAVIGATION:
+            updateMode == true
+                ? UpdateButton(context)
+                : BusinessSlideNav(
+                    slide: SlideType.whyInvest,
+                    submitform: SubmitWhyInvestForm,
+                  )
+          ],
         ),
 
-        // BOTTOM NAVIGATION:
-        updateMode == true
-            ? UpdateButton(context)
-            : BusinessSlideNav(
-                slide: SlideType.whyInvest,
-                submitform: SubmitWhyInvestForm,
-              )
+            updateMode==true?
+            Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+             : Container() 
       ],
     );
   }

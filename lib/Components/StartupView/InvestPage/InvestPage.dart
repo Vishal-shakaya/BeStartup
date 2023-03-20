@@ -109,7 +109,15 @@ class _InvestPageState extends State<InvestPage> {
 
     Get.toNamed(create_business_whyInvest_url, parameters: {'data': param});
   }
+  BackButtonRoute() {
+    var param = jsonEncode({
+      'user_id': user_id,
+      'is_admin': is_admin,
+    });
 
+    print('startup view');
+    Get.toNamed(startup_view_url, parameters: {'data': param});
+  }
   ////////////////////////////////
   /// GET REQUIREMENTS :
   ////////////////////////////////
@@ -732,64 +740,93 @@ class _InvestPageState extends State<InvestPage> {
         });
   }
 
-  Container MainMethod(BuildContext context) {
-    return Container(
-      child: Container(
-        width: context.width * invest_page_width,
-        height: context.height * invest_page_height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // HEADING :
-              SizedBox(
-                height: context.height * heading_space,
-              ),
+  Stack MainMethod(BuildContext context) {
+    return Stack(
+      children: [
 
-              StartupHeaderText(
-                title: 'Investment',
-                font_size: header_text_fontSize,
-              ),
+        Container(
+          alignment: Alignment.topCenter,
+          // width: context.width * invest_page_width,
+          // height: context.height * invest_page_height,
 
-              // Edit BUtton
-              EditButton(context),
-
-              // SubHeading :
-              Container(
-                child: StartupHeaderText(
-                  title: 'Why you invest in us !',
-                  font_size: subheading_text,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // HEADING :
+                SizedBox(
+                  height: context.height * heading_space,
                 ),
-              ),
 
-              SizedBox(
-                height: context.height * inves_text_top_space,
-              ),
+                StartupHeaderText(
+                  title: 'Investment',
+                  font_size: header_text_fontSize,
+                ),
 
-              // VISION TEXT:
-              Description(context),
+                // Edit BUtton
+                EditButton(context),
 
-              SizedBox(
-                height: context.height * desc_bottom_sapce,
-              ),
+                // SubHeading :
+                Container(
+                  child: StartupHeaderText(
+                    title: 'Why you invest in us !',
+                    font_size: subheading_text,
+                  ),
+                ),
 
-              StartupHeaderText(
-                title: 'Terms & Conditions',
-                font_size: terms_text_fontSize,
-              ),
+                SizedBox(
+                  height: context.height * inves_text_top_space,
+                ),
 
-              // Notice Section :
-              NoticeContainer(context, notice_block_padding, notice_cont_width),
+                // VISION TEXT:
+                Description(context),
 
-              // Invet Button :
-              SizedBox(
-                height: context.height * desc_bottom_sapce,
-              ),
+                SizedBox(
+                  height: context.height * desc_bottom_sapce,
+                ),
 
-              InvestButton(invest_btn_width, invest_btn_height)
-            ],
+                StartupHeaderText(
+                  title: 'Terms & Conditions',
+                  font_size: terms_text_fontSize,
+                ),
+
+                // Notice Section :
+                NoticeContainer(context, notice_block_padding, notice_cont_width),
+
+                // Invet Button :
+                SizedBox(
+                  height: context.height * desc_bottom_sapce,
+                ),
+
+                InvestButton(invest_btn_width, invest_btn_height)
+              ],
+            ),
           ),
         ),
-      ),
+
+              Positioned(
+                bottom: 10,
+                right: 20,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )),
+      ],
     );
   }
 

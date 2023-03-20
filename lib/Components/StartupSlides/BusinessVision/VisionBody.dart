@@ -62,6 +62,14 @@ class _VisionBodyState extends State<VisionBody> {
 
   String? inital_val = '';
 
+
+  BackButtonRoute(){
+       var urlParam = {
+        'user_id':user_id,
+        'is_admin':is_admin,  
+      };
+      Get.toNamed(vision_page_url , parameters: {'data':jsonEncode(urlParam)});
+  }
   /////////////////////////////
   /// SUBMIT FORM :
   /////////////////////////////
@@ -263,32 +271,60 @@ class _VisionBodyState extends State<VisionBody> {
   //////////////////////////////////////////
   // MAIN METHOD SECTION :
   //////////////////////////////////////////
-  Column MainMethod(
-    BuildContext data,
-  ) {
-    return Column(
+  Stack MainMethod(BuildContext data) {
+    return Stack(
       children: [
-        Container(
-          width: context.width * vision_cont_width,
-          height: context.height * vision_cont_height,
-          child: Column(
-            children: [
-              // SUB HEADING :
-              SubHeadingSection(context),
+        Column(
+          children: [
+            Container(
+              width: context.width * vision_cont_width,
+              height: context.height * vision_cont_height,
+              child: Column(
+                children: [
+                  // SUB HEADING :
+                  SubHeadingSection(context),
 
-              // Vision input field
-              WhyInputField(context)
-            ],
-          ),
+                  // Vision input field
+                  WhyInputField(context)
+                ],
+              ),
+            ),
+
+            // BOTTOM NAVIGATION:
+            updateMode == true
+                ? UpdateButton(context)
+                : BusinessSlideNav(
+                    slide: SlideType.vision,
+                    submitform: SubmitVisionForm,
+                  )
+          ],
         ),
 
-        // BOTTOM NAVIGATION:
-        updateMode == true
-            ? UpdateButton(context)
-            : BusinessSlideNav(
-                slide: SlideType.vision,
-                submitform: SubmitVisionForm,
-              )
+          updateMode==true?
+            Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+             : Container()  
       ],
     );
   }

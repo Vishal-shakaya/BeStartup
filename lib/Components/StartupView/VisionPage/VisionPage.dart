@@ -96,6 +96,14 @@ class _VisionPageState extends State<VisionPage> {
     Get.toNamed(create_business_milestone_url, parameters: {'data': param});
   }
 
+  BackButtonRoute() {
+    final param = jsonEncode({
+      'user_id': user_id,
+      'is_admin': is_admin,
+    });
+    Get.toNamed(startup_view_url, parameters: {'data': param});
+  }
+
   //////////////////////////////////
   // GET REQUIREMENTS :
   //////////////////////////////////
@@ -559,98 +567,128 @@ class _VisionPageState extends State<VisionPage> {
 //////////////////////////////////////////
   /// Main Method :
 //////////////////////////////////////////
-  Container MainMethod(BuildContext context) {
-    return Container(
-      width: context.width * page_width,
-      child: Container(
-        width: context.width * vision_page_width,
-        height: context.height * vision_page_height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // HEADING :
-              SizedBox(
-                height: context.height * heading_top_spacer,
-              ),
+  Stack MainMethod(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          // width: context.width * page_width,
+          alignment: Alignment.center,
+          child: Container(
+          alignment: Alignment.center,
+            // width: context.width * vision_page_width,
+            // height: context.height * vision_page_height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // HEADING :
+                  SizedBox(
+                    height: context.height * heading_top_spacer,
+                  ),
 
-              StartupHeaderText(
-                title: 'Vision',
-                font_size: headingfonSize,
-              ),
+                  StartupHeaderText(
+                    title: 'Vision',
+                    font_size: headingfonSize,
+                  ),
 
-              SizedBox(
-                height: context.height * edit_btn_top_spacer,
-              ),
+                  SizedBox(
+                    height: context.height * edit_btn_top_spacer,
+                  ),
 
-              // EDIT BUTTON :
-              EditButton(context, EditVision),
+                  // EDIT BUTTON :
+                  EditButton(context, EditVision),
 
-              SizedBox(
-                height: context.height * edit_btn_bottom_spacer,
-              ),
+                  SizedBox(
+                    height: context.height * edit_btn_bottom_spacer,
+                  ),
 
-              // VISION TEXT:
-              ClipPath(
-                child: Card(
-                  elevation: 1,
-                  shadowColor: shadow_color1,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(vision_card_left_radius),
-                    right: Radius.circular(vision_card_right_radius),
-                  )),
-                  child: Container(
-                      width: context.width * vision_cont_width,
-                      height: context.height * vision_cont_height,
-                      padding: EdgeInsets.all(vision_cont_padding),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: border_color),
+                  // VISION TEXT:
+                  ClipPath(
+                    child: Card(
+                      elevation: 1,
+                      shadowColor: shadow_color1,
+                      shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(vision_card_left_radius),
-                              right: Radius.circular(vision_card_left_radius))),
-                      child: SingleChildScrollView(
-                        child: RichText(
-                          text: TextSpan(
-                              text: final_data,
-                              style: GoogleFonts.openSans(
-                                  color: light_color_type3,
-                                  fontSize: vison_text_fontSize,
-                                  height: vision_text_lineHeight,
-                                  fontWeight: FontWeight.w600)),
-
-                          // maxLines: vision_maxlines,
-                        ),
+                        left: Radius.circular(vision_card_left_radius),
+                        right: Radius.circular(vision_card_right_radius),
                       )),
-                ),
+                      child: Container(
+                          width: context.width * vision_cont_width,
+                          height: context.height * vision_cont_height,
+                          padding: EdgeInsets.all(vision_cont_padding),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: border_color),
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(vision_card_left_radius),
+                                  right: Radius.circular(vision_card_left_radius))),
+                          child: SingleChildScrollView(
+                            child: RichText(
+                              text: TextSpan(
+                                  text: final_data,
+                                  style: GoogleFonts.openSans(
+                                      color: light_color_type3,
+                                      fontSize: vison_text_fontSize,
+                                      height: vision_text_lineHeight,
+                                      fontWeight: FontWeight.w600)),
+
+                              // maxLines: vision_maxlines,
+                            ),
+                          )),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: context.height * milestone_spacer,
+                  ),
+
+                  // MILESTONES WIDGET:
+                  StartupHeaderText(
+                    title: 'Milestone',
+                    font_size: milestone_fontSize,
+                  ),
+
+                  SizedBox(
+                    height: context.height * milestone_spacer,
+                  ),
+
+                  // EDIT MILESTONE BUTTON:
+                  EditButton(context, EditMilestone),
+
+                  SizedBox(
+                    height: context.height * milestone_spacer,
+                  ),
+
+                  // MILESTONES :
+                  StartupMileStone()
+                ],
               ),
-
-              SizedBox(
-                height: context.height * milestone_spacer,
-              ),
-
-              // MILESTONES WIDGET:
-              StartupHeaderText(
-                title: 'Milestone',
-                font_size: milestone_fontSize,
-              ),
-
-              SizedBox(
-                height: context.height * milestone_spacer,
-              ),
-
-              // EDIT MILESTONE BUTTON:
-              EditButton(context, EditMilestone),
-
-              SizedBox(
-                height: context.height * milestone_spacer,
-              ),
-
-              // MILESTONES :
-              StartupMileStone()
-            ],
+            ),
           ),
         ),
-      ),
+
+        Positioned(
+          bottom: 10,
+          right: 20,
+          child: InkWell(
+            onTap: () {
+              BackButtonRoute();
+            },
+            child: Card(
+              color: Colors.blueGrey.shade500,
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              child: Container(
+                width: 40,
+                height: 40,
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 25,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )),
+      ],
     );
   }
 
