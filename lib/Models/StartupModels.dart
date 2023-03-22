@@ -1,4 +1,5 @@
 
+import 'package:be_startup/Components/StartupSlides/RegistorTeam/TeamMemberDialog.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
@@ -74,12 +75,18 @@ required user_id,
 
 PitchModel({
 pitch, 
-required user_id}) async {
+filename, 
+required user_id,
+path , 
+ 
+  }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'user_id': user_id, 
       'pitch': pitch,
+      'file_name':filename, 
+      'path':path, 
     };
     return temp_obj;
   } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessMileStoneStore.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
@@ -19,7 +20,6 @@ var uuid = Uuid();
 class StartupUpdater extends GetxController {
   var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
 
-
 /////////////////////////////////////////
   /// Update Vision :
   /// It fetches data from cache storage, fetches data
@@ -28,7 +28,7 @@ class StartupUpdater extends GetxController {
   /// Returns:
   ///   ResponseBack(response_type: false, message: e);
 /////////////////////////////////////////
-  UpdatehBusinessVision({required user_id , required vision}) async {
+  UpdatehBusinessVision({required user_id, required vision}) async {
     var visionStore = Get.put(BusinessVisionStore(), tag: 'vision_store');
     var data;
     var doc_id;
@@ -62,20 +62,20 @@ class StartupUpdater extends GetxController {
   ///
   /// Returns:
   ///   A Future<ResponseBack>
-  UpdatehBusinessPitch({required user_id}) async {
-    var pitchStore = Get.put(
-      BusinessPitchStore(),
-    );
+  UpdatehBusinessPitch(
+      {required user_id,
+      required pitch,
+      required path,
+      required previousPath}) async {
     var data;
     var pitch;
     var doc_id;
 
-    var final_startup_id;
-
+    if (path == '' || path == null) {
+      path = previousPath;
+    }
 
     try {
-      pitch = await pitchStore.GetPitchParam();
-
       var store =
           FirebaseFirestore.instance.collection(getBusinessPitchtStoreName);
       var query = store.where('user_id', isEqualTo: user_id).get();
@@ -86,10 +86,12 @@ class StartupUpdater extends GetxController {
       });
 
       data['pitch'] = pitch;
+      data['path'] = path;
       store.doc(doc_id).update(data);
 
-      // CACHE BUSINESS DETAIL :
-      await StoreCacheData(fromModel: getBusinessPitchtStoreName, data: data);
+      final deleteResp = await DeleteFileFromStorage(previousPath);
+      print(deleteResp);
+      
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);
@@ -99,7 +101,7 @@ class StartupUpdater extends GetxController {
 /////////////////////////////////////////
   /// Update Why :
 /////////////////////////////////////////
-  UpdatehBusinessWhy({required user_id , required why_text }) async {
+  UpdatehBusinessWhy({required user_id, required why_text}) async {
     var whyInvestStore =
         Get.put(BusinessWhyInvestStore(), tag: 'whyinvest_store');
 
@@ -130,7 +132,7 @@ class StartupUpdater extends GetxController {
   ///////////////////////////////////////
   /// Milestone Update :
   ///////////////////////////////////////
-  UpdateBusinessMilestone({required user_id ,required mile}) async {
+  UpdateBusinessMilestone({required user_id, required mile}) async {
     var data;
     var doc_id;
     try {
@@ -157,18 +159,18 @@ class StartupUpdater extends GetxController {
   ///////////////////////////////////////////
   /// UPDATE PRODUCTS :
   ///////////////////////////////////////////
-  UpdateProducts({required user_id , required products}) async {
+  UpdateProducts({required user_id, required products}) async {
     var data;
     var doc_id;
     try {
-      var store = FirebaseFirestore.instance.collection(getBusinessProductStoreName);
+      var store =
+          FirebaseFirestore.instance.collection(getBusinessProductStoreName);
       var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
         doc_id = value.docs.first.id;
       });
-
 
       data['products'] = products;
       store.doc(doc_id).update(data);
@@ -235,7 +237,6 @@ class StartupUpdater extends GetxController {
     var data;
     var doc_id;
     var temp_mem;
-
 
     try {
       temp_mem = await memeberStore.GetTeamMembers();

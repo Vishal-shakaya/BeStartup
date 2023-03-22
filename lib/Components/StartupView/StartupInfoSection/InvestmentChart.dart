@@ -502,13 +502,12 @@ class _InvestmentChartState extends State<InvestmentChart> {
         });
   }
 
+
+
   //////////////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////////////
   Container MainMethod(context) {
-    //////////////////////////////////////
-    /// Main Chart :
-    //////////////////////////////////////
     Container mainChart = Container(
       width: static_sec_width,
       height: static_sec_height,
@@ -594,7 +593,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   }
 
 /////////////////////////////////////////////
-  /// External Methods :
+/// External Methods :
 /////////////////////////////////////////////
   Container SubmitButton() {
     return Container(

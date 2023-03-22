@@ -62,7 +62,7 @@ class _StartupViewState extends State<StartupView> {
           return AlertDialog(
               elevation: 0,
               backgroundColor: Colors.transparent,
-              titlePadding: EdgeInsets.all(0),
+              titlePadding: const EdgeInsets.all(0),
               // title: Container(
               //     decoration: const BoxDecoration(color: Colors.transparent),
               //     alignment: Alignment.topRight,
@@ -75,8 +75,8 @@ class _StartupViewState extends State<StartupView> {
               //           color: cancel_btn_color,
               //           size: 18,
               //         ))),
-              contentPadding: EdgeInsets.all(0.0),
-              insetPadding: EdgeInsets.all(0.0),
+              contentPadding: const EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               content: Container(
                   alignment: Alignment.center,
                   width: context.width * video_model_player_width,
@@ -322,10 +322,10 @@ class _StartupViewState extends State<StartupView> {
                 // VISION SECTION :
                 // 1 HEADING :
                 // 2 STARTUP VISION DESCRIPTION:
-                StartupVisionSection(),
+                const StartupVisionSection(),
 
                 // PRODUCT AND SERVIVES :
-                ProductSection(),
+                const ProductSection(),
 
                 // SERVICE SECTION :
                 ServiceSection(),
@@ -354,7 +354,7 @@ class _StartupViewState extends State<StartupView> {
                   child: Container(
                     width: 40,
                     height: 40,
-                    child: Icon(
+                    child: const Icon(
                       Icons.home,
                       size: 25,
                       color: Colors.white,

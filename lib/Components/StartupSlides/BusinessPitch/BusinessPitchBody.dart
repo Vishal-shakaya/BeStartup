@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinesssPitchStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -8,14 +9,18 @@ import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:typed_data';
 
 class BusinessPitchBody extends StatefulWidget {
   BusinessPitchBody({Key? key}) : super(key: key);
@@ -37,7 +42,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
   var pitchStore = Get.put(BusinessPitchStore());
 
-  final authUser = FirebaseAuth.instance.currentUser; 
+  final authUser = FirebaseAuth.instance.currentUser;
 
   double mile_cont_width = 0.70;
 
@@ -69,22 +74,74 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
   double subhead_fontSize = 14;
 
+  double invest_btn_width = 150;
+
+  double invest_btn_height = 37;
+
+  double invest_btn_fontSize = 16;
+
+  double invest_btn_letter_spacing = 2.5;
+
+  Uint8List? pitchVideo;
+  String filename = '';
+  String upload_image_url = '';
+  late UploadTask? upload_process;
+  bool is_uploading = false;
+
   String? inital_val = '';
-
-  var pageParam;
-
-  var startup_id;
-
-  var founder_id;
-
-  var is_admin;
-
   bool? updateMode = false;
+  var congressMsg = false;
+  var pitchPath;
+  var pageParam;
+  var startup_id;
+  var user_id;
+  var is_admin;
+  var pitchUrl;
 
-  //////////////////////////////////////////////////
-  /// Important Function Section :
-  /// Here Create and Update pitch to backend :
-  ///////////////////////////////////////////////////
+  var spinner = MyCustomButtonSpinner();
+
+  Future<void> UploadPitchVideo() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
+
+    if (result != null && result.files.isNotEmpty) {
+      pitchVideo = result.files.first.bytes;
+      filename = result.files.first.name;
+
+      setState(() {
+        is_uploading = true;
+      });
+
+      var resp = await UploadPitch(video: pitchVideo, filename: filename);
+      final data = resp['data'];
+      pitchPath = data['path'];
+      pitchUrl = data['url'];
+
+      if (resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        String logo_url = resp['data'];
+        congressMsg = true;
+
+        // Upldate UI :
+        setState(() {
+          is_uploading = false;
+        });
+      }
+
+      if (!resp['response']) {
+        CloseCustomPageLoadingSpinner();
+        // show error snakbar :
+        // ignore: use_build_context_synchronously
+        MyCustSnackbar(
+            type: MySnackbarType.error,
+            context: context,
+            title: fetch_data_error_title,
+            message: fetch_data_error_msg,
+            width: context.width * 0.50);
+      }
+    }
+    CloseCustomPageLoadingSpinner();
+  }
 
   /////////////////////////////
   /// SUBMIT FORM :
@@ -92,37 +149,38 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   SubmitPitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    formKey.currentState!.save();
+    // formKey.currentState!.save();
+    // var pitch = formKey.currentState!.value['pitch'];
 
-    if (formKey.currentState!.validate()) {
-      var pitch = formKey.currentState!.value['pitch'];
-      
-      var res = await pitchStore.SetPitch(pitchText: pitch , user_id: authUser?.uid);
+    var res = await pitchStore.SetPitch(
+        pitchPath: pitchPath, pitchText: pitchUrl, user_id: authUser?.uid);
 
-      // Success Handler :
-      if (res['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.toNamed(create_business_milestone_url);
-      }
-
-      // Error Handler
-      if (!res['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, message: res['message']));
-      }
-    }
-
-    // Invalid Form :
-    else {
+    // Success Handler :
+    if (res['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
-      Get.showSnackbar(MyCustSnackbar(
-        width: snack_width,
-      ));
+      Get.toNamed(create_business_milestone_url);
     }
+
+    // Error Handler
+    if (!res['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, message: res['message']));
+    }
+
+    // if (formKey.currentState!.validate()) {
+    // }
+
+    // Invalid Form :
+    // else {
+    //   CloseCustomPageLoadingSpinner();
+    //   Get.closeAllSnackbars();
+    //   Get.showSnackbar(MyCustSnackbar(
+    //     width: snack_width,
+    //   ));
+    // }
   }
 
   /////////////////////////////
@@ -131,40 +189,47 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   UpdatePitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    var path;
+    var pitch;
+    var previousPath; 
+    // formKey.currentState!.save();
+    // var pitch = formKey.currentState!.value['[pitch]'];
+    // await pitchStore.SetPitchParam(data: pitch);
 
-    formKey.currentState!.save();
-    if (formKey.currentState!.validate()) {
-      var pitch = formKey.currentState!.value['[pitch]'];
-      await pitchStore.SetPitchParam(data: pitch);
+    // fetch pitch url :
+    var resp = await startupUpdater.UpdatehBusinessPitch(
+      user_id: authUser?.uid,
+      path: path,
+      pitch: pitch,
+      previousPath:previousPath, 
+    );
 
-      var resp =
-          await startupUpdater.UpdatehBusinessPitch(user_id: authUser?.uid);
-
-      // Success Handler Cached Data:
-      // Update Success Handler :
-      if (resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.toNamed(vision_page_url);
-      }
-
-      //  Update Error Handler :
-      if (!resp['response']) {
-        CloseCustomPageLoadingSpinner();
-        Get.closeAllSnackbars();
-        Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, message: resp['message']));
-      }
-    }
-
-    // Invalid Form :
-    else {
+    // Success Handler Cached Data:
+    // Update Success Handler :
+    if (resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
-      Get.showSnackbar(MyCustSnackbar(
-        width: snack_width,
-      ));
+      Get.toNamed(vision_page_url);
     }
+
+    //  Update Error Handler :
+    if (!resp['response']) {
+      CloseCustomPageLoadingSpinner();
+      Get.closeAllSnackbars();
+      Get.showSnackbar(
+          MyCustSnackbar(width: snack_width, message: resp['message']));
+    }
+    // if (formKey.currentState!.validate()) {
+    // }
+
+    // // Invalid Form :
+    // else {
+    //   CloseCustomPageLoadingSpinner();
+    //   Get.closeAllSnackbars();
+    //   Get.showSnackbar(MyCustSnackbar(
+    //     width: snack_width,
+    //   ));
+    // }
   }
 
   ////////////////////////////
@@ -208,8 +273,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
     if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
 
-      founder_id = pageParam['founder_id'];
-      startup_id = pageParam['startup_id'];
+      user_id = pageParam['user_id'];
       is_admin = pageParam['is_admin'];
 
       if (pageParam['type'] == 'update') {
@@ -295,203 +359,203 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
     // PC:
     if (context.width < 1500) {
-        mile_cont_width = 0.70;
+      mile_cont_width = 0.70;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 20;
+      mile_subhead_fontSize = 20;
 
-        input_field_width = 0.30;
+      input_field_width = 0.30;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.50;
+      subhead_con_width = 0.50;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.03;
+      subhead_con_top_margin = 0.03;
 
-        subhead_fontSize = 14;
+      subhead_fontSize = 14;
       print('1500');
     }
 
     if (context.width < 1200) {
-        mile_cont_width = 0.70;
+      mile_cont_width = 0.70;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 18;
+      mile_subhead_fontSize = 18;
 
-        input_field_width = 0.45;
+      input_field_width = 0.45;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.50;
+      subhead_con_width = 0.50;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.03;
+      subhead_con_top_margin = 0.03;
 
-        subhead_fontSize = 14;
+      subhead_fontSize = 14;
       print('1200');
     }
 
     if (context.width < 1000) {
-        mile_cont_width = 0.80;
+      mile_cont_width = 0.80;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 18;
+      mile_subhead_fontSize = 18;
 
-        input_field_width = 0.50;
+      input_field_width = 0.50;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.55;
+      subhead_con_width = 0.55;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.03;
+      subhead_con_top_margin = 0.03;
 
-        subhead_fontSize = 14;
+      subhead_fontSize = 14;
       print('1000');
     }
 
     // TABLET :
     if (context.width < 800) {
-        mile_cont_width = 0.80;
+      mile_cont_width = 0.80;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 17;
+      mile_subhead_fontSize = 17;
 
-        input_field_width = 0.65;
+      input_field_width = 0.65;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.65;
+      subhead_con_width = 0.65;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.03;
+      subhead_con_top_margin = 0.03;
 
-        subhead_fontSize = 14;
+      subhead_fontSize = 14;
       print('800');
     }
 
     // SMALL TABLET:
     if (context.width < 640) {
-        mile_cont_width = 0.90;
+      mile_cont_width = 0.90;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 16;
+      mile_subhead_fontSize = 16;
 
-        input_field_width = 0.70;
+      input_field_width = 0.70;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.70;
+      subhead_con_width = 0.70;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.03;
+      subhead_con_top_margin = 0.03;
 
-        subhead_fontSize = 13;
+      subhead_fontSize = 13;
       print('640');
     }
 
     // PHONE:
     if (context.width < 480) {
-        mile_cont_width = 0.80;
+      mile_cont_width = 0.80;
 
-        mile_cont_height = 0.70;
+      mile_cont_height = 0.70;
 
-        subhead_sec_width = 400;
+      subhead_sec_width = 400;
 
-        subhead_sec_height = 85;
+      subhead_sec_height = 85;
 
-        con_button_width = 150;
+      con_button_width = 150;
 
-        con_button_height = 40;
+      con_button_height = 40;
 
-        con_btn_top_margin = 30;
+      con_btn_top_margin = 30;
 
-        mile_subhead_fontSize = 14;
+      mile_subhead_fontSize = 14;
 
-        input_field_width = 0.90;
+      input_field_width = 0.90;
 
-        input_field_fontSize = 13;
+      input_field_fontSize = 13;
 
-        input_field_top_margin = 0.08;
+      input_field_top_margin = 0.08;
 
-        subhead_con_width = 0.80;
+      subhead_con_width = 0.80;
 
-        subhead_con_height = 0.20;
+      subhead_con_height = 0.20;
 
-        subhead_con_top_margin = 0.04;
+      subhead_con_top_margin = 0.04;
 
-        subhead_fontSize = 13;
+      subhead_fontSize = 13;
       print('480');
     }
 
@@ -530,8 +594,32 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
               children: [
                 // SUBHEADING SECTION :
                 SubHeadingSection(context),
+
+                is_uploading == true
+                    ? spinner
+                    : congressMsg == true
+                        ? Shimmer(
+                            gradient: g1,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                'Video Uploaded Sucessful',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: primary_light),
+                              ),
+                            ),
+                          )
+                        : Container(),
+
+                SizedBox(
+                  height: context.height * 0.20,
+                ),
+
+                SubmitButton(),
                 // INPUT FIELD :
-                PitchInputField(context),
+                // PitchInputField(context),
               ],
             ),
           ),
@@ -542,6 +630,44 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                   submitform: SubmitPitch,
                 )
         ],
+      ),
+    );
+  }
+
+  Container SubmitButton() {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: InkWell(
+        highlightColor: primary_light_hover,
+        borderRadius: const BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
+        onTap: () {
+          UploadPitchVideo();
+        },
+        child: Card(
+          elevation: 10,
+          shadowColor: light_color_type3,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            width: invest_btn_width,
+            height: invest_btn_height,
+            decoration: BoxDecoration(
+                color: primary_light,
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(20), right: Radius.circular(20))),
+            child: Text(
+              'Upload',
+              style: TextStyle(
+                  letterSpacing: invest_btn_letter_spacing,
+                  color: Colors.white,
+                  fontSize: invest_btn_fontSize,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -562,8 +688,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
               fontSize: input_field_fontSize, wordSpacing: 1.5, height: 1.5),
           validator: FormBuilderValidators.compose([
             // Remove Comment in  Production mode:
-            FormBuilderValidators.minLength( 10,
-                errorText: 'Enter valid url '),
+            FormBuilderValidators.minLength(10, errorText: 'Enter valid url '),
           ]),
           scrollPadding: EdgeInsets.all(10),
           decoration: InputDecoration(
@@ -593,11 +718,11 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       margin: EdgeInsets.only(top: con_btn_top_margin, bottom: 20),
       child: InkWell(
         highlightColor: primary_light_hover,
-        borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(20), right: Radius.circular(20)),
         onTap: () async {
           await UpdatePitch();
         },
+        borderRadius: const BorderRadius.horizontal(
+            left: Radius.circular(20), right: Radius.circular(20)),
         child: Card(
           elevation: 10,
           shadowColor: light_color_type3,
@@ -612,7 +737,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                 color: primary_light,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
-            child: const Text(
+            child: Text(
               'Update',
               style: TextStyle(
                   letterSpacing: 2.5,
@@ -648,8 +773,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
               alignment: Alignment.topCenter,
               width: context.width * subhead_con_width,
               height: context.height * subhead_con_height,
-              margin: EdgeInsets.only(
-                  top: context.height * subhead_con_top_margin),
+              margin:
+                  EdgeInsets.only(top: context.height * subhead_con_top_margin),
               padding: EdgeInsets.all(20),
 
               // Decoration:
@@ -658,7 +783,6 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(10), right: Radius.circular(10))),
-              
               child: SingleChildScrollView(
                 child: AutoSizeText.rich(
                   TextSpan(children: [
