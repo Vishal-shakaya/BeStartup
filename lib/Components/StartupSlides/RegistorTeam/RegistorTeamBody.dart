@@ -282,57 +282,60 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
-          Column(
-            children: [
-              Container(
-                  height: context.height * 0.7,
-                  width: context.width * 0.7,
-                  /////////////////////////////////////////
-                  ///  BUSINESS SLIDE :
-                  ///  1. BUSINESS ICON :
-                  ///  2. INPUT FIELD TAKE BUSINESS NAME :
-                  /////////////////////////////////////////
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(flex: 1, child: Container()),
-                          Container(
-                              child: ElevatedButton.icon(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(primary_light)),
-                                  onPressed: () {
-                                    AddMember(context);
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  label: const Text('Add'))),
-                        ],
-                      ),
-    
-                      // MEMBER PROFILE LIST VIEW :
-                      // Image , name , position , email , then desc :
-                      Container(
-                          height: context.height * member_section_height,
-                          width: context.width * member_section_width,
-                          child: Obx(() {
-                            return ListView.builder(
-                                itemCount: member_list.length,
-                                itemBuilder: (context, index) {
-                                  return MemberListView(
-                                    key: UniqueKey(),
-                                    member: member_list[index],
-                                    index: index,
-                                  );
-                                });
-                          }))
-                    ],
-                  )),
-              updateMode == true
-                  ? SubmitAndUpdateButton(context, UpdateTeamMemberDetails)
-                  : SubmitAndUpdateButton(context, SubmitTeamMemberDetails)
-            ],
+          Container(
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: [
+                Container(
+                    height: context.height * 0.7,
+                    width: context.width * 0.7,
+                    /////////////////////////////////////////
+                    ///  BUSINESS SLIDE :
+                    ///  1. BUSINESS ICON :
+                    ///  2. INPUT FIELD TAKE BUSINESS NAME :
+                    /////////////////////////////////////////
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 1, child: Container()),
+                            Container(
+                                child: ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(primary_light)),
+                                    onPressed: () {
+                                      AddMember(context);
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: const Text('Add'))),
+                          ],
+                        ),
+              
+                        // MEMBER PROFILE LIST VIEW :
+                        // Image , name , position , email , then desc :
+                        Container(
+                            height: context.height * member_section_height,
+                            width: context.width * member_section_width,
+                            child: Obx(() {
+                              return ListView.builder(
+                                  itemCount: member_list.length,
+                                  itemBuilder: (context, index) {
+                                    return MemberListView(
+                                      key: UniqueKey(),
+                                      member: member_list[index],
+                                      index: index,
+                                    );
+                                  });
+                            }))
+                      ],
+                    )),
+                updateMode == true
+                    ? SubmitAndUpdateButton(context, UpdateTeamMemberDetails)
+                    : SubmitAndUpdateButton(context, SubmitTeamMemberDetails)
+              ],
+            ),
           ),
 
           updateMode==true?

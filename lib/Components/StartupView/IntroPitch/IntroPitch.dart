@@ -1,4 +1,8 @@
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'dart:convert';
+
+import 'package:be_startup/Utils/Routes.dart';
+import 'package:be_startup/Utils/utils.dart';
+import 'package:video_player/video_player.dart';
 
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +10,9 @@ import 'package:get/get.dart';
 
 class IntroPitchSection extends StatefulWidget {
   var pitch;
-
-  IntroPitchSection({required this.pitch, Key? key}) : super(key: key);
+  var path;
+  IntroPitchSection({required this.path, required this.pitch, Key? key})
+      : super(key: key);
 
   @override
   State<IntroPitchSection> createState() => _IntroPitchSectionState();
@@ -30,130 +35,65 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   double pitch_cont_bottom_margin = 0.10;
 
-  late YoutubePlayerController _controller;
+  var is_admin;
+  var user_id;
 
   var autoPlay = true;
+  var playIcon = Icon(
+    Icons.pause,
+    size: 28,
+    color: Colors.blueGrey.shade400,
+  );
+  var defaultPlayPauseIcon = Icon(
+    Icons.pause,
+    size: 28,
+    color: Colors.blueGrey.shade400,
+  );
+
+  var pauseIcon = Icon(
+    Icons.play_arrow_sharp,
+    size: 28,
+    color: Colors.blueGrey.shade400,
+  );
+
+  var volumneMuteIcon = Icon(Icons.volume_mute_rounded);
+  var volumeUpIcon = Icon(Icons.volume_up_outlined);
+  var defaultvolumneMuteIcon = Icon(Icons.volume_mute_rounded);
+  late VideoPlayerController _controller;
+  var playserVolume = true;
+
+  EditPitchUrl() {
+    var pageParam = jsonEncode({
+      'type': 'update',
+      'is_admin': is_admin,
+      'pitch': widget.pitch,
+      'user_id': user_id,
+      'path': widget.path ?? '',
+    });
+    Get.toNamed(create_business_pitcht_url, parameters: {'data': pageParam});
+  }
 
   @override
   void initState() {
-
+    super.initState();
+    _controller = VideoPlayerController.network(widget.pitch,
+        videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true))
+      ..initialize().then((_) {
+        setState(() {});
+      });
+    _controller.play();
+    // _controller.setVolume(0.0);
+    _controller.setLooping(true);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _controller.close();
     super.dispose();
+    // _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-      _controller = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-          showControls: true,
-          mute: false,
-          showFullscreenButton: true,
-          loop: false,
-          strictRelatedVideos: true,
-          enableJavaScript: true,
-          color: 'red'),
-    );
-    _controller.loadVideo(widget.pitch);
-    _controller.stopVideo();
-    _controller.setSize(context.width * video_player_width,
-        context.height * video_player_height);
-
-
-    video_model_player_width = 0.70;
-    video_model_player_height = 0.70;
-    service_top_height = 0.10;
-    // DEFAULT :
-    if (context.width > 1700) {
-      video_model_player_width = 0.70;
-      video_model_player_height = 0.70;
-
-      service_top_height = 0.10;
-      print('1700');
-    }
-    // DEFAULT :
-    if (context.width < 1700) {
-      print('1700');
-    }
-
-    // DEFAULT :
-    if (context.width < 1600) {
-      video_model_player_width = 0.70;
-      video_model_player_height = 0.70;
-      print('1600');
-    }
-
-    // PC:
-    if (context.width < 1500) {
-      video_model_player_width = 0.75;
-      video_model_player_height = 0.60;
-      print('1500');
-    }
-
-    if (context.width < 1200) {
-      service_top_height = 0.06;
-      video_model_player_width = 0.90;
-      video_model_player_height = 0.50;
-      print('1200');
-    }
-
-    if (context.width < 1300) {
-      // video_player_width = 0.90;
-      // video_player_height = 0.40;
-      print('1300');
-    }
-
-    if (context.width < 1000) {
-      service_top_height = 0.05;
-      video_model_player_width = 0.90;
-      video_model_player_height = 0.40;
-      print('1000');
-    }
-
-    if (context.width < 950) {
-      // video_player_width = 0.85;
-
-      // video_player_height = 0.85;
-      // video_model_player_width = 0.85;
-
-      // video_model_player_height = 0.85;
-      print('950');
-    }
-
-    // TABLET :
-    if (context.width < 800) {
-      service_top_height = 0.05;
-
-      video_model_player_width = 0.90;
-
-      video_model_player_height = 0.35;
-      print('800');
-    }
-
-    // SMALL TABLET:
-    if (context.width < 640) {
-      service_top_height = 0.02;
-      video_model_player_width = 0.90;
-
-      video_model_player_height = 0.35;
-      print('640');
-    }
-
-    // PHONE:
-    if (context.width < 480) {
-      video_model_player_width = 0.97;
-      video_model_player_height = 0.99;
-      print('480');
-    }
-
-////////////////////////////////////////////
-    /// HEADING FONTSIZE :
-////////////////////////////////////////////
-
     heading_fontSize = 32;
     if (context.width > 1700) {
       heading_fontSize = 32;
@@ -205,6 +145,34 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
       print('480');
     }
 
+    ////////////////////////////////////////////
+    ///  GET REQUIREMENTS :
+    ////////////////////////////////////////////
+    GetLocalStorageData() async {
+      final pageParam = jsonDecode(Get.parameters['data']!);
+      user_id = pageParam['user_id'];
+      is_admin = pageParam['is_admin'];
+    }
+
+    ////////////////////////////////////////
+    ///  SET REQUIREMENTS :
+    ////////////////////////////////////////
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+  SingleChildScrollView MainMethod(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -215,19 +183,81 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           ),
           SizedBox(height: context.height * service_bottom_height),
           Container(
-            margin: EdgeInsets.only(
-                bottom: context.height * pitch_cont_bottom_margin),
-            width: context.width * video_model_player_width,
-            height: context.height * video_model_player_height,
-            child: YoutubePlayerControllerProvider(
-              controller: _controller,
-              child: YoutubePlayer(
-                controller: _controller,
-              ),
-            ),
+            child: _controller.value.isInitialized
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: context.width * 0.75,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_controller.value.isPlaying) {
+                                          _controller.pause();
+                                          defaultPlayPauseIcon = pauseIcon;
+                                        } else {
+                                          _controller.play();
+                                          defaultPlayPauseIcon = playIcon;
+                                        }
+                                      });
+                                    },
+                                    icon: defaultPlayPauseIcon),
+                              ),
+
+                              IconButton(
+                                  onPressed: () {
+                                    EditPitchUrl();
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 25,
+                                    color: Colors.blueGrey.shade400,
+                                  ))
+                              // Container(
+                              //   child: IconButton(
+                              //       onPressed: () {
+                              //         print(
+                              //             'volument ${_controller.value.volume}');
+                              //         setState(() {
+                              //           if (_controller.value.volume == 1) {
+                              //             playserVolume = false;
+                              //             _controller.setVolume(0.0);
+                              //             defaultvolumneMuteIcon =
+                              //                 volumneMuteIcon;
+                              //           }
+                              //           if (_controller.value.volume == 0) {
+                              //             playserVolume = true;
+                              //             _controller.setVolume(1.0);
+                              //             defaultvolumneMuteIcon = volumeUpIcon;
+                              //           }
+                              //         });
+                              //       },
+                              //       icon: defaultvolumneMuteIcon),
+                              // ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                            width: context.width * 0.80,
+                            height: context.height * 0.75,
+                            child: VideoPlayer(_controller)),
+                      ],
+                    ),
+                  )
+                : Container(),
           ),
         ],
       ),
     );
   }
 }
+// YoutubePlayerControllerProvider(
+//               controller: _controller,
+//               child: YoutubePlayer(
+//                 controller: _controller,
+//               ),
+//             ),

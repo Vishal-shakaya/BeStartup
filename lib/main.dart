@@ -52,13 +52,11 @@ import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FIREBASE INITILZATION :
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // FACEBOOK SDK INITILIZE :
   if (GetPlatform.isWeb) {
 
     // initialiaze the facebook javascript SDK

@@ -91,12 +91,15 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   String? inital_val = '';
   bool? updateMode = false;
   var congressMsg = false;
-  var pitchPath;
   var pageParam;
   var startup_id;
   var user_id;
   var is_admin;
+
+  var pitchPath;
   var pitchUrl;
+  var previousPitchUrl;
+  var previousPath;
 
   var spinner = MyCustomButtonSpinner();
 
@@ -113,13 +116,13 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       });
 
       var resp = await UploadPitch(video: pitchVideo, filename: filename);
+
       final data = resp['data'];
       pitchPath = data['path'];
       pitchUrl = data['url'];
 
       if (resp['response']) {
         CloseCustomPageLoadingSpinner();
-        String logo_url = resp['data'];
         congressMsg = true;
 
         // Upldate UI :
@@ -149,8 +152,6 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   SubmitPitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    // formKey.currentState!.save();
-    // var pitch = formKey.currentState!.value['pitch'];
 
     var res = await pitchStore.SetPitch(
         pitchPath: pitchPath, pitchText: pitchUrl, user_id: authUser?.uid);
@@ -169,18 +170,6 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, message: res['message']));
     }
-
-    // if (formKey.currentState!.validate()) {
-    // }
-
-    // Invalid Form :
-    // else {
-    //   CloseCustomPageLoadingSpinner();
-    //   Get.closeAllSnackbars();
-    //   Get.showSnackbar(MyCustSnackbar(
-    //     width: snack_width,
-    //   ));
-    // }
   }
 
   /////////////////////////////
@@ -189,46 +178,39 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   UpdatePitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    var path;
-    var pitch;
-    var previousPath; 
-    // formKey.currentState!.save();
-    // var pitch = formKey.currentState!.value['[pitch]'];
-    // await pitchStore.SetPitchParam(data: pitch);
+    print('pitch ${pitchUrl}');
+    print('previousPitch ${previousPitchUrl}');
 
-    // fetch pitch url :
     var resp = await startupUpdater.UpdatehBusinessPitch(
-      user_id: authUser?.uid,
-      path: path,
-      pitch: pitch,
-      previousPath:previousPath, 
+      user_id: user_id,
+      path: pitchPath,
+      pitch: pitchUrl,
     );
 
-    // Success Handler Cached Data:
-    // Update Success Handler :
+    print('update resp $resp');
+
     if (resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
-      Get.toNamed(vision_page_url);
+      print('update pitch');
+
+      final deleteResp = await DeleteFileFromStorage(previousPath);
+      print('delete Resp $deleteResp');
+
+      var pageParam = jsonEncode({
+        'is_admin': is_admin,
+        'user_id': user_id,
+      });
+      Get.toNamed(startup_view_url, parameters: {'data': pageParam});
     }
 
-    //  Update Error Handler :
     if (!resp['response']) {
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, message: resp['message']));
     }
-    // if (formKey.currentState!.validate()) {
-    // }
-
-    // // Invalid Form :
-    // else {
-    //   CloseCustomPageLoadingSpinner();
-    //   Get.closeAllSnackbars();
-    //   Get.showSnackbar(MyCustSnackbar(
-    //     width: snack_width,
-    //   ));
+    // if (pitchUrl != previousPitchUrl) {
     // }
   }
 
@@ -236,51 +218,33 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   // GET REQUIREMENTS :
   ////////////////////////////
   GetLocalStorageData() async {
-    MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     try {
-      // Update :
-      if (updateMode == true) {
-        final resp =
-            await startupConnector.FetchBusinessPitch(user_id: authUser?.uid);
-        await pitchStore.SetPitchParam(data: resp['data']['vision']);
+      if (Get.parameters.isNotEmpty) {
+        MyCustPageLoadingSpinner();
+
+        pageParam = jsonDecode(Get.parameters['data']!);
+        user_id = pageParam['user_id'];
+        is_admin = pageParam['is_admin'];
+
+        previousPath = pageParam['pitch'];
+        pitchUrl = pageParam['pitch'];
+        // previousPath =
+
+        if (pageParam['type'] == 'update') {
+          updateMode = true;
+        }
       }
 
-      // Get :
-      final data = await pitchStore.GetPitch();
-      inital_val = data;
-
       CloseCustomPageLoadingSpinner();
-      return data;
     } catch (e) {
-      print('Vision Fetchng error $e');
-
+      print('Pitch Fetchng error $e');
       CloseCustomPageLoadingSpinner();
       Get.closeAllSnackbars();
-
       Get.showSnackbar(MyCustSnackbar(
           width: snack_width, message: e, title: fetch_data_error_title));
-      return '';
     }
-  }
-
-  /////////////////////////////////////
-  // SET PAGE DEFAULT STATE :
-  /////////////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-
-      user_id = pageParam['user_id'];
-      is_admin = pageParam['is_admin'];
-
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-    super.initState();
   }
 
   @override
@@ -655,7 +619,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
             width: invest_btn_width,
             height: invest_btn_height,
             decoration: BoxDecoration(
-                color: primary_light,
+                color: Colors.orange,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: Text(

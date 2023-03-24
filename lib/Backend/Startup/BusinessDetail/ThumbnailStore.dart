@@ -19,21 +19,30 @@ class ThumbnailStore extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
   final authUser = FirebaseAuth.instance.currentUser; 
   static String? image_url;
+  static String? path;
+
 
   SetThumbnail({thumbnail, filename}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      image_url = await UploadImage(image: thumbnail, filename: filename);
 
-      // RETURN SUCCES RESPONSE WITH IMAGE URL :
+      final resp = await UploadImage(image: thumbnail, filename: filename);
+      
+      if (resp['response']) {
+        image_url = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
+
       try {
-        final startup_id = await startupState.GetStartupId();
-        var resp =
-            await ThumbnailModel(thumbnail: image_url,user_id: authUser?.uid);
-
+        var resp = await ThumbnailModel(
+          thumbnail: image_url,
+          path:path, 
+          user_id: authUser?.uid);
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
+
         return ResponseBack(response_type: true, data: image_url);
       } catch (e) {
         return ResponseBack(response_type: false);

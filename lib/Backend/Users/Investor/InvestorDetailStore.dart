@@ -17,6 +17,7 @@ class InvestorDetailStore extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
   FirebaseFirestore store = FirebaseFirestore.instance;
   static Map<String, dynamic>? investor;
+  static var path;
 
   static String? image_url;
   Map<String, dynamic> clean_resp = {
@@ -34,11 +35,16 @@ class InvestorDetailStore extends GetxController {
   ////////////////////////////////////////
   UploadProfileImage({image, filename}) async {
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      image_url = await UploadImage(image: image, filename: filename);
+      final resp = await UploadImage(image: image, filename: filename);
 
-      // RETURN SUCCES RESPONSE WITH IMAGE URL :
+      if (resp['response']) {
+        image_url = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
       return ResponseBack(response_type: true, data: image_url);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -63,8 +69,9 @@ class InvestorDetailStore extends GetxController {
           phone_no: phoneNo,
           primary_mail: primaryMail,
           other_contact: otherContact,
+          path: path,
           picture: image_url);
-      
+
       await myStore.add(investor_detail);
       return ResponseBack(response_type: true);
     } catch (e) {

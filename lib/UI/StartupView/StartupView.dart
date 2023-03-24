@@ -9,7 +9,6 @@ import 'package:be_startup/Components/StartupView/ProductServices/ProductSection
 import 'package:be_startup/Components/StartupView/ProductServices/ServiceSection.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupInfoSection.dart';
 import 'package:be_startup/Components/StartupView/StartupVisionSection/StartupVisionSection.dart';
-import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -36,6 +35,8 @@ class _StartupViewState extends State<StartupView> {
   var startupConnector = Get.put(StartupViewConnector());
 
   var pitch;
+
+  var path; 
 
   var is_admin;
 
@@ -128,31 +129,33 @@ class _StartupViewState extends State<StartupView> {
         // GET STARTUP PICH VIDEO :
         var resp = await startupConnector.FetchBusinessPitch(
             user_id: decode_data['user_id']);
-        if (resp['response']) {
-          if (resp['data']['pitch'] == null || resp['data']['pitch'] == '') {
-            pitch = default_pitch;
-          } else {
-            pitch = resp['data']['pitch'];
-            _controller = YoutubePlayerController(
-              params: const YoutubePlayerParams(
-                  showControls: true,
-                  mute: false,
-                  showFullscreenButton: true,
-                  loop: false,
-                  strictRelatedVideos: true,
-                  enableJavaScript: true,
-                  color: 'red'),
-            );
+        pitch = resp['data']['pitch'];
+        path = resp['data']['path'];
+        // if (resp['response']) {
+        //   if (resp['data']['pitch'] == null || resp['data']['pitch'] == '') {
+        //     pitch = default_pitch;
+        //   } else {
+        //     pitch = resp['data']['pitch'];
+        //     _controller = YoutubePlayerController(
+        //       params: const YoutubePlayerParams(
+        //           showControls: true,
+        //           mute: false,
+        //           showFullscreenButton: true,
+        //           loop: false,
+        //           strictRelatedVideos: true,
+        //           enableJavaScript: true,
+        //           color: 'red'),
+        //     );
 
-            _controller.loadVideo(pitch);
-            _controller.setSize(context.width * video_player_width,
-                context.height * video_player_height);
-          }
-        }
+        //     _controller.loadVideo(pitch);
+        //     _controller.setSize(context.width * video_player_width,
+        //         context.height * video_player_height);
+        //   }
+        // }
 
-        if (!resp['response']) {
-          pitch = default_pitch;
-        }
+        // if (!resp['response']) {
+        //   pitch = default_pitch;
+        // }
       }
     }
 
@@ -332,13 +335,14 @@ class _StartupViewState extends State<StartupView> {
 
                 IntroPitchSection(
                   pitch: pitch,
+                  path: path?? '',
                 ),
 
-                is_admin == true ? InvestorSection() : Container()
+                InvestorSection()
               ],
             ),
           ),
-          
+
           Positioned(
               bottom: 0,
               right: 10,
@@ -362,7 +366,8 @@ class _StartupViewState extends State<StartupView> {
                   ),
                 ),
               )),
-     /// A back button that is placed on the screen.
+
+          /// A back button that is placed on the screen.
           // Positioned(
           //     bottom: 70,
           //     right: 10,

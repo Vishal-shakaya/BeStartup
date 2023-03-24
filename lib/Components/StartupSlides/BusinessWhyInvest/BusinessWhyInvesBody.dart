@@ -264,30 +264,33 @@ class _BusinessWhyInvestBodyState extends State<BusinessWhyInvestBody> {
   Stack MainMethod(BuildContext context,data,) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Container(
-              width: context.width * vision_cont_width,
-              height: context.height * vision_cont_height,
-              child: Column(
-                children: [
-                  // SUB HEADING :
-                  SubHeadingSection(context),
-
-                  // Vision input field
-                  VisionInputField(context)
-                ],
+        Container(
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Container(
+                width: context.width * vision_cont_width,
+                height: context.height * vision_cont_height,
+                child: Column(
+                  children: [
+                    // SUB HEADING :
+                    SubHeadingSection(context),
+        
+                    // Vision input field
+                    VisionInputField(context)
+                  ],
+                ),
               ),
-            ),
-
-            // BOTTOM NAVIGATION:
-            updateMode == true
-                ? UpdateButton(context)
-                : BusinessSlideNav(
-                    slide: SlideType.whyInvest,
-                    submitform: SubmitWhyInvestForm,
-                  )
-          ],
+        
+              // BOTTOM NAVIGATION:
+              updateMode == true
+                  ? UpdateButton(context)
+                  : BusinessSlideNav(
+                      slide: SlideType.whyInvest,
+                      submitform: SubmitWhyInvestForm,
+                    )
+            ],
+          ),
         ),
 
             updateMode==true?

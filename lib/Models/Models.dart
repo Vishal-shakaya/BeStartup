@@ -35,6 +35,7 @@ InvestorModel({
     required phone_no,
     required primary_mail,
     required other_contact,  
+    required path , 
     }) async {
   try {
     Map<String, dynamic> temp_obj = {
@@ -46,6 +47,7 @@ InvestorModel({
       'primary_mail': primary_mail,
       'other_contact': other_contact,
       'phone_no': phone_no, 
+      'path':path, 
     };
     return temp_obj;
   } catch (e) {
@@ -62,6 +64,7 @@ FounderModel({
     required picture,
     required primary_mail , 
     required other_contact,
+    required path, 
     phone_no,
     }) async {
   try {
@@ -73,7 +76,8 @@ FounderModel({
       'picture': picture,
       'primary_mail': primary_mail,
       'other_contact': other_contact,
-      'phone_no': phone_no, 
+      'phone_no': phone_no,
+      'path':path,  
     };
     return temp_obj;
   } catch (e) {

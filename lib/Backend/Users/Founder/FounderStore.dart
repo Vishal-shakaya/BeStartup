@@ -24,6 +24,7 @@ class FounderStore extends GetxController {
   static var phone_no = '';
   static var primary_mail = '';
   static var other_contact = '';
+  static var path = '';
 
   static Map<String, dynamic> founder_obj = {
     'picture': picture,
@@ -45,11 +46,17 @@ class FounderStore extends GetxController {
   ////////////////////////////////////////
   UploadFounderImage({image, filename}) async {
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      image_url = await UploadImage(image: image, filename: filename);
+      final resp = await UploadImage(image: image, filename: filename);
+      if (resp['response']) {
+        image_url = resp['data']['url'];
+        path = resp['data']['path'];
+      }
 
-      // RETURN SUCCES RESPONSE WITH IMAGE URL :
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
+
+      
       return ResponseBack(response_type: true, data: image_url);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -76,6 +83,7 @@ class FounderStore extends GetxController {
             primary_mail: primary_mail,
             phone_no: phone_no,
             other_contact: other_contact,
+            path: path,
             picture: image_url);
 
         localStore.setString(
@@ -91,11 +99,13 @@ class FounderStore extends GetxController {
     }
   }
 
-  /// It checks if the key exists in the shared preferences, if it does, it returns the value of the key,
+  ///////////////////////////////////////////////////////////
+  /// It checks if the key exists in the shared preferences, 
+  /// if it does, it returns the value of the key,
   /// if it doesn't, it returns the default value
-  ///
   /// Returns:
   ///   A Future<ResponseBack>
+  ///////////////////////////////////////////////////////////
   GetCachedFounderDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {

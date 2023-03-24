@@ -11,6 +11,7 @@ BusinessDetailMode({
   required name, 
   required desire_amount, 
   required user_id, 
+  required path, 
   invested,
   activate, 
   startup_search_index, 
@@ -22,6 +23,7 @@ BusinessDetailMode({
       'id': uuid.v4(),
       'user_id': user_id,
       'logo':logo, 
+      'path':path, 
       'name': name,
       'desire_amount': desire_amount,
       'achived_amount':achived_amount, 
@@ -40,13 +42,15 @@ BusinessDetailMode({
 
 ThumbnailModel({
   required thumbnail,
-  required user_id , 
+  required user_id ,
+  required path,    
 }) async {
   try {
     Map<String, dynamic> temp_obj = {
       'id': uuid.v4(),
       'thumbnail': thumbnail,
-      'user_id':user_id
+      'user_id':user_id,
+      'path':path,  
     };
     return temp_obj;
   } catch (e) {

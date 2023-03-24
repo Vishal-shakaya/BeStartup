@@ -63,7 +63,6 @@ class _ProductSectionState extends State<ProductSection> {
   EditProductAndService() {
     var pageParam = jsonEncode({
       'type': 'update',
-      'startup_id': startup_id,
       'is_admin': is_admin,
       'user_id': user_id
     });

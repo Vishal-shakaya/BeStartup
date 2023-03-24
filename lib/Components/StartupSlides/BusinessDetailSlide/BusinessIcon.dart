@@ -70,6 +70,7 @@ class _BusinessIconState extends State<BusinessIcon> {
 
       if (!resp['response']) {
         // show error snakbar :
+        // ignore: use_build_context_synchronously
         MyCustSnackbar(
             type: MySnackbarType.error,
             context: context,

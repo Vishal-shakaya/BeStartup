@@ -19,7 +19,9 @@ class BusinessDetailStore extends GetxController {
   static String? image_url;
   static String? business_name;
   static String? amount;
+  static String? path;
   static bool is_update = false;
+
   // Set Update Page Detail :
   SetUpdateDetial({
     required updateImage,
@@ -55,17 +57,25 @@ class BusinessDetailStore extends GetxController {
   SetBusinessLogo({logo, filename}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      image_url = await UploadImage(image: logo, filename: filename);
+     
+      final resp = await UploadImage(image: logo, filename: filename);
+      
+      if (resp['response']) {
+        image_url = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
 
-      // Update Image in Local Storage :
+
       bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
+
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
-        json_obj["logo"] = image_url;
 
+        json_obj["logo"] = image_url;
         localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
       }
 
@@ -112,6 +122,7 @@ class BusinessDetailStore extends GetxController {
         name: businessName,
         desire_amount: amount,
         user_id: userId,
+        path:path, 
       );
 
       try {

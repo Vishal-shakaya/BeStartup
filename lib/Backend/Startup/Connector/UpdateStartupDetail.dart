@@ -62,18 +62,13 @@ class StartupUpdater extends GetxController {
   ///
   /// Returns:
   ///   A Future<ResponseBack>
-  UpdatehBusinessPitch(
-      {required user_id,
-      required pitch,
-      required path,
-      required previousPath}) async {
+  UpdatehBusinessPitch({
+    required user_id,
+    required pitch,
+    required path,
+  }) async {
     var data;
-    var pitch;
     var doc_id;
-
-    if (path == '' || path == null) {
-      path = previousPath;
-    }
 
     try {
       var store =
@@ -85,13 +80,15 @@ class StartupUpdater extends GetxController {
         doc_id = value.docs.first.id;
       });
 
+      print('path $path');
+      print('pitch $pitch');
       data['pitch'] = pitch;
       data['path'] = path;
       store.doc(doc_id).update(data);
 
-      final deleteResp = await DeleteFileFromStorage(previousPath);
-      print(deleteResp);
-      
+      // final deleteResp = await DeleteFileFromStorage(previousPath);
+      // print(deleteResp);
+
       return ResponseBack(response_type: true);
     } catch (e) {
       return ResponseBack(response_type: false, message: update_error_title);

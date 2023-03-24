@@ -339,54 +339,57 @@ class _MileStoneBodyState extends State<MileStoneBody> {
   Stack MainMethod(BuildContext context,milestones) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Container(
-                width: context.width * mile_cont_width,
-                height: context.height * mile_cont_height,
-                child: Column(children: [
-                  // SUBHEADING SECTION :
-                  SubHeadingSection(context),
-
-                  // ADD TAG BUTTON :
-                  AddMileButton(),
-
-                  // CONGRESS MESSAGE WITH SPARKEL:
-                  CongressMessage(),
-
-                  //////////////////////////////
-                  // LIST OF TAGS :
-                  // 1.Show milestone Info:
-                  // 2.Delete milestone :
-                  // 3.Edit MileStone :
-                  //////////////////////////////
-                  Container(
-                      width: context.width * list_tile_width,
-                      height: context.height * list_tile_height,
-                      margin: EdgeInsets.only(top: 10),
-                      child: Obx(
-                        () {
-                          return milestones == false
-                              ? Container()
-                              : ListView.builder(
-                                  itemCount: milestones.length,
-                                  itemBuilder: (context, intex) {
-                                    return MileStoneTag(
-                                      milestone: milestones[intex],
-                                      index: intex,
-                                      key: UniqueKey(),
-                                    );
-                                  });
-                        },
-                      ))
-                ])),
-            updateMode == true
-                ? UpdateButton(context)
-                : BusinessSlideNav(
-                    slide: SlideType.milestone,
-                    submitform: SubmitMileStone,
-                  )
-          ],
+        Container(
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Container(
+                  width: context.width * mile_cont_width,
+                  height: context.height * mile_cont_height,
+                  child: Column(children: [
+                    // SUBHEADING SECTION :
+                    SubHeadingSection(context),
+        
+                    // ADD TAG BUTTON :
+                    AddMileButton(),
+        
+                    // CONGRESS MESSAGE WITH SPARKEL:
+                    CongressMessage(),
+        
+                    //////////////////////////////
+                    // LIST OF TAGS :
+                    // 1.Show milestone Info:
+                    // 2.Delete milestone :
+                    // 3.Edit MileStone :
+                    //////////////////////////////
+                    Container(
+                        width: context.width * list_tile_width,
+                        height: context.height * list_tile_height,
+                        margin: EdgeInsets.only(top: 10),
+                        child: Obx(
+                          () {
+                            return milestones == false
+                                ? Container()
+                                : ListView.builder(
+                                    itemCount: milestones.length,
+                                    itemBuilder: (context, intex) {
+                                      return MileStoneTag(
+                                        milestone: milestones[intex],
+                                        index: intex,
+                                        key: UniqueKey(),
+                                      );
+                                    });
+                          },
+                        ))
+                  ])),
+              updateMode == true
+                  ? UpdateButton(context)
+                  : BusinessSlideNav(
+                      slide: SlideType.milestone,
+                      submitform: SubmitMileStone,
+                    )
+            ],
+          ),
         ),
 
 

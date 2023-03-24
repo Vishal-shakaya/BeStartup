@@ -7,47 +7,55 @@ import 'package:firebase_storage/firebase_storage.dart';
 // PICKED IMAGE AND STORE IN  FILE :
 /// It takes an image, uploads it to Firebase Storage,
 ///  and returns the download URL
-/// 
+///
 /// Args:
 ///   image (Uint8List): The image to upload.
 ///   filename (String): The name of the file to be uploaded.
-/// 
+///
 /// Returns:
 ///   A Future&lt;String&gt;
 /////////////////////////////////////////////////////////
 Future UploadImage({Uint8List? image, String filename = ''}) async {
   late UploadTask? upload_process;
+  final date = DateTime.now().toString();
+
+  // Validate
   if (filename == '') {
     filename = DateTime.now().toString();
   }
-
-  // Validate
   if (image == null) return;
-  // UPLOAD FILE LOCAION IN FIREBASE :
-  final destination = 'user_profile/profile_image/$filename';
-  upload_process = FileStorage.UploadFileBytes(destination, image);
 
-  // ERROR ACCURE
-  if (upload_process == null) return;
+  try {
+    final destination = 'user_profile/profile_image/$date$filename';
+    upload_process = FileStorage.UploadFileBytes(destination, image);
 
-  final snapshot = await upload_process.whenComplete(() {
-    print('PROFILE UPLOADED');
-  });
+    // ERROR ACCURE
+    if (upload_process == null) return;
 
-  final urlDownload = await snapshot.ref.getDownloadURL();
-  return urlDownload;
+    final snapshot = await upload_process.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    final path = await snapshot.ref.fullPath;
+
+    final data = {
+      'path': path,
+      'url': urlDownload,
+    };
+    return  ResponseBack(response_type: true, data: data);
+
+  } catch (e) {
+    print('Error While Upload Profile $e');
+    return ResponseBack(response_type: false);
+  }
 }
 
-
-
 //////////////////////////////////////////////////////////////
-/// UploadPitch() is a function that takes a video file and 
+/// UploadPitch() is a function that takes a video file and
 /// uploads it to Firebase Storage
-/// 
+///
 /// Args:
 ///   video (Uint8List): The video file to be uploaded.
 ///   filename (String): The name of the file to be uploaded.
-/// 
+///
 /// Returns:
 ///   A Future&lt;ResponseBack&gt;
 //////////////////////////////////////////////////////////////
@@ -78,13 +86,12 @@ Future UploadPitch({Uint8List? video, String filename = ''}) async {
   }
 }
 
-
 /////////////////////////////////////////////////////////////////
 /// It takes a path to a file in Firebase Storage and deletes it
-/// 
+///
 /// Args:
 ///   path: The path to the file in the Firebase Storage.
-/// 
+///
 /// Returns:
 ///   A Future<ResponseBack>
 /////////////////////////////////////////////////////////////////
@@ -93,9 +100,7 @@ DeleteFileFromStorage(path) async {
   try {
     await storageRef.child(path).delete();
     return ResponseBack(response_type: true);
-  }
-  
-   catch (e) {
+  } catch (e) {
     print('Error While Delete File $e');
     return ResponseBack(response_type: false);
   }

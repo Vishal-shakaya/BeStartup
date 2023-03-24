@@ -39,16 +39,13 @@ class _FounderImageState extends State<FounderImage> {
   /////////////////////////////////////////
   Future<void> PickImage() async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
-    // Pick only one file :
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    // if rsult null then return :
     if (result == null) return;
 
     setState(() {
       is_uploading = true;
     });
-    // if file single then gets ist path :
+
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
@@ -59,9 +56,12 @@ class _FounderImageState extends State<FounderImage> {
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
-            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
+        MyCustSnackbar(
+          width: snack_width, 
+          type: MySnackbarType.error));
         return;
       }
+
       setState(() {
         upload_image_url = resp['data'];
         is_uploading = false;

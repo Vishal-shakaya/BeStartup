@@ -336,40 +336,6 @@ class InvestorSection extends StatelessWidget {
                 title: 'Investors',
                 font_size: heading_fonSize,
               ),
-
-              //////////////////////////////////////////////////
-              /// Show Add button only if user is admin :
-              //////////////////////////////////////////////////
-              is_admin != true
-                  ? Container()
-                  : Container(
-                      margin: EdgeInsets.only(
-                        top: context.height * add_btn_top_margin,
-                        left: context.width * add_btn_left_margin,
-                      ),
-                      child: Container(
-                        width: add_btn_cont_width,
-                        height: add_btn_cont_height,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(add_btn_radius),
-                            border: Border.all(color: border_color)),
-                        child: TextButton.icon(
-                            onPressed: () {
-                              MemberDetailDialogView(
-                                  form_type: InvestorFormType.create,
-                                  context: context);
-                            },
-                            icon: Icon(
-                              Icons.add,
-                              size: add_iconSize,
-                            ),
-                            label: Text(
-                              'Add',
-                              style: TextStyle(
-                                  fontSize: add_iconfonSize,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ))
             ],
           ),
         );

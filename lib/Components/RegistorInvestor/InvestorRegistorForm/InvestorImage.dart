@@ -58,18 +58,16 @@ class _InvestorImageState extends State<InvestorImage> {
     }
 
     Future<void> PickImage() async {
-      // Pick only one file :
       final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-     setState(() {
-        is_uploading = true; 
-      });
-      // if rsult null then return :
+      setState(() {
+          is_uploading = true; 
+        });
+      
       if (result == null) return;
-
-      // if file single then gets ist path :
       if (result != null && result.files.isNotEmpty) {
         image = result.files.first.bytes;
         filename = result.files.first.name;
+        
         var resp = await investorStore.UploadProfileImage(
             image: image, filename: filename);
 
