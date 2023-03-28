@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
@@ -22,7 +23,9 @@ class ThumbnailBody extends StatefulWidget {
 }
 
 class _ThumbnailBodyState extends State<ThumbnailBody> {
-  var thumbnailStore = Get.put(ThumbnailStore(),);
+  var thumbnailStore = Get.put(
+    ThumbnailStore(),
+  );
 
   Uint8List? image;
   String filename = '';
@@ -50,6 +53,14 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   double body_height = 0.70;
   double image_hint_text_size = 22;
 
+  BackButtonRoute() {
+    var urlParam = {
+      'user_id': user_id,
+      'is_admin': is_admin,
+    };
+    Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(urlParam)});
+  }
+
 /////////////////////////////////////////////
   /// UPDATE THUMBNAIL :
   /// The function is called when the user clicks on the "Update" button. The function then calls the
@@ -61,9 +72,13 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
   UpdateThumbnail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final resp = await thumbnailStore.UpdateThumbnail(user_id: user_id);
-  
+
     // Update Success Handler :
     if (resp['response']) {
+      final previousPath = await thumbnailStore.GetPreviousPath();
+      final deleteResp = await DeleteFileFromStorage(previousPath);
+      print(resp);
+      
       var param = jsonEncode({
         'user_id': user_id,
         'is_admin': is_admin,
@@ -123,30 +138,60 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     // PHONE:
     if (context.width < 480) {}
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-              width: context.width * body_cont_width,
-              height: context.height * body_height,
-              child: Column(
-                children: [
-                  // THUMBNAIL UPLOAD SECTION:
-                  ThumbnailSection(),
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  width: context.width * body_cont_width,
+                  height: context.height * body_height,
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      // THUMBNAIL UPLOAD SECTION:
+                      ThumbnailSection(),
 
-                  // NOTICE  SECTION:
-                  NoticeSection(),
-                ],
-              )),
+                      // NOTICE  SECTION:
+                      NoticeSection(),
+                    ],
+                  )),
 
-          // NAVIGATION:
-          updateMode == true
-              ? UpdateButton(context)
-              : BusinessSlideNav(
-                  slide: SlideType.thumbnail,
-                )
-        ],
-      ),
+              // NAVIGATION:
+              updateMode == true
+                  ? UpdateButton(context)
+                  : BusinessSlideNav(
+                      slide: SlideType.thumbnail,
+                    )
+            ],
+          ),
+        ),
+        updateMode == true
+            ? Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+            : Container()
+      ],
     );
   }
 

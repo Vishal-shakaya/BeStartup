@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
@@ -54,13 +55,13 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   bool? updateMode = false;
 
   BackButtonRoute() {
-      var param = jsonEncode({
-        'user_id': user_id,
-        'is_admin': is_admin,
-      });
+    var param = jsonEncode({
+      'user_id': user_id,
+      'is_admin': is_admin,
+    });
 
-      CloseCustomPageLoadingSpinner();
-      Get.toNamed(team_page_url ,parameters: {'data':param});
+    CloseCustomPageLoadingSpinner();
+    Get.toNamed(team_page_url, parameters: {'data': param});
   }
 
 /////////////////////////////////////////////
@@ -133,16 +134,21 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
 
     MyCustPageLoadingSpinner();
     upload_resp = await updateStore.UpdateBusinessTeamMember(user_id: user_id);
+    final deleteMemberPath = await memeberStore.GetDeleteMemeberPath();
 
-    // Upload Succes response :
     if (upload_resp['response']) {
+      for (var i = 0; i < deleteMemberPath.length; i++) {
+        print('path ${deleteMemberPath[i]}');
+        await DeleteFileFromStorage(deleteMemberPath[i]);
+      }
+
       var param = jsonEncode({
         'user_id': user_id,
         'is_admin': is_admin,
       });
 
       CloseCustomPageLoadingSpinner();
-      Get.toNamed(team_page_url ,parameters: {'data':param});
+      Get.toNamed(team_page_url, parameters: {'data': param});
     }
 
     // Upload Error Response
@@ -278,7 +284,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   /////////////////////////////////////////
   Container MainMethod(BuildContext context, member_list) {
     return Container(
-      width: context.width*1,
+      width: context.width * 1,
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
@@ -304,7 +310,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                                 child: ElevatedButton.icon(
                                     style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(primary_light)),
+                                            MaterialStateProperty.all(
+                                                primary_light)),
                                     onPressed: () {
                                       AddMember(context);
                                     },
@@ -312,7 +319,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                                     label: const Text('Add'))),
                           ],
                         ),
-              
+
                         // MEMBER PROFILE LIST VIEW :
                         // Image , name , position , email , then desc :
                         Container(
@@ -337,32 +344,31 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
               ],
             ),
           ),
-
-          updateMode==true?
-            Positioned(
-                bottom: 25,
-                right: 0,
-                child: InkWell(
-                  onTap: () {
-                    BackButtonRoute();
-                  },
-                  child: Card(
-                    color: Colors.blueGrey.shade500,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      child: Icon(
-                        Icons.arrow_back_rounded,
-                        size: 25,
-                        color: Colors.white,
+          updateMode == true
+              ? Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      BackButtonRoute();
+                    },
+                    child: Card(
+                      color: Colors.blueGrey.shade500,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 25,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ))
-             : Container()   
+                  ))
+              : Container()
         ],
       ),
     );
@@ -397,7 +403,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: const Text(
-              'Submit',
+              'Update',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,

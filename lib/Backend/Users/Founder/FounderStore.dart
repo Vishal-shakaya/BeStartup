@@ -17,7 +17,6 @@ class FounderStore extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
 
   static Map<String, dynamic>? founder;
-
   static var image_url;
   static var picture = '';
   static var name = '';
@@ -35,8 +34,12 @@ class FounderStore extends GetxController {
     'other_contact': other_contact,
   };
 
-  SetImageUrl({required url}) async {
+  SetImageUrl({required url,}) async {
     image_url = url;
+  }
+  
+  SetImagePath({required image_path }){
+    path = image_path; 
   }
 
   /////////////////////////////////////
@@ -47,6 +50,7 @@ class FounderStore extends GetxController {
   UploadFounderImage({image, filename}) async {
     try {
       final resp = await UploadImage(image: image, filename: filename);
+
       if (resp['response']) {
         image_url = resp['data']['url'];
         path = resp['data']['path'];
@@ -56,12 +60,12 @@ class FounderStore extends GetxController {
         print('Error While Upload Image $resp');
       }
 
-      
       return ResponseBack(response_type: true, data: image_url);
     } catch (e) {
       return ResponseBack(response_type: false);
     }
   }
+
 
   // CRATE FOUNDER :
   CachedCreateFounder({
@@ -100,7 +104,7 @@ class FounderStore extends GetxController {
   }
 
   ///////////////////////////////////////////////////////////
-  /// It checks if the key exists in the shared preferences, 
+  /// It checks if the key exists in the shared preferences,
   /// if it does, it returns the value of the key,
   /// if it doesn't, it returns the default value
   /// Returns:
@@ -217,7 +221,6 @@ class FounderStore extends GetxController {
     try {
       picture = image_url;
       name = data['name'];
-      // position = data['position'];
       phone_no = data['phone_no'];
       primary_mail = data['primary_mail'];
       other_contact = data['other_contact'];
@@ -233,13 +236,12 @@ class FounderStore extends GetxController {
         doc_id_userDetail = value.docs.first.id;
       });
 
-      print('User Detail $data_userDetail');
-
       data_userDetail['name'] = name;
       data_userDetail['picture'] = picture;
       data_userDetail['primary_mail'] = primary_mail;
       data_userDetail['phone_no'] = phone_no;
       data_userDetail['other_contact'] = other_contact;
+      data_userDetail['path'] = path;
 
       detailStore.doc(doc_id_userDetail).update(data_userDetail);
 

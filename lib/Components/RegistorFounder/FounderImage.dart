@@ -12,9 +12,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FounderImage extends StatefulWidget {
-  String picture;
+  String? picture;
 
-  FounderImage({this.picture = '', Key? key}) : super(key: key);
+  FounderImage({this.picture, Key? key}) : super(key: key);
 
   @override
   State<FounderImage> createState() => _FounderImageState();
@@ -52,13 +52,10 @@ class _FounderImageState extends State<FounderImage> {
 
       var resp = await founderStore.UploadFounderImage(
           image: image, filename: filename);
-
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
-        MyCustSnackbar(
-          width: snack_width, 
-          type: MySnackbarType.error));
+            MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
         return;
       }
 
@@ -69,6 +66,12 @@ class _FounderImageState extends State<FounderImage> {
     }
   }
 
+@override
+  void initState() {
+    // TODO: implement initState
+    upload_image_url = widget.picture!;
+    super.initState();
+  }
 
   //////////////////////////////////////////////////
   /// GET REQUIREMNTS :
@@ -83,12 +86,6 @@ class _FounderImageState extends State<FounderImage> {
   }
 
 
-  @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    upload_image_url = widget.picture;
-    super.setState(fn);
-  }
 
   @override
   Widget build(BuildContext context) {

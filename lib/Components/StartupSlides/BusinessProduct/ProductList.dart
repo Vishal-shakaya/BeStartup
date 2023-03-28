@@ -69,6 +69,7 @@ class _ProductListViewState extends State<ProductListView> {
       await productStore.SetProductType(ProductType.service);
     }
 
+    // ignore: use_build_context_synchronously
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -79,7 +80,7 @@ class _ProductListViewState extends State<ProductListView> {
 
               // PRODUCT CONTAINER :
               child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Wrap(
                     children: [
                       /////////////////////////////////
@@ -107,11 +108,16 @@ class _ProductListViewState extends State<ProductListView> {
             )));
   }
 
+
+
   // REMOVE PRODUCT AND UPDATE UI :
   DeleteProduct(id) async {
-    // print('DELETING PRODUCT');
-    var res = await productStore.RemoveProduct(widget.product!['id']);
+    var res = await productStore.RemoveProduct(
+      id: widget.product!['id'], 
+      path: widget.product!['path']);
   }
+
+
 
   CloseDialog() {
     Navigator.of(context).pop();

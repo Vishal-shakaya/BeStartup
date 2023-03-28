@@ -80,8 +80,6 @@ class StartupUpdater extends GetxController {
         doc_id = value.docs.first.id;
       });
 
-      print('path $path');
-      print('pitch $pitch');
       data['pitch'] = pitch;
       data['path'] = path;
       store.doc(doc_id).update(data);

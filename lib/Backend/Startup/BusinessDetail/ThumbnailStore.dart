@@ -15,19 +15,32 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThumbnailStore extends GetxController {
-  var userState = Get.put(UserState());
-  var startupState = Get.put(StartupDetailViewState());
-  final authUser = FirebaseAuth.instance.currentUser; 
+  final authUser = FirebaseAuth.instance.currentUser;
   static String? image_url;
   static String? path;
+  static String? previousPath; 
 
+  SetPath({required defaultpath}) async {
+    path = defaultpath;
+  }
+
+  SetPreviousPath({required defaultpath}) async {
+    previousPath = defaultpath;
+  }
+
+  GetPreviousPath() async {
+    return previousPath ;
+  }
+
+  GetPath() async {
+    return path;
+  }
 
   SetThumbnail({thumbnail, filename}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
-
       final resp = await UploadImage(image: thumbnail, filename: filename);
-      
+
       if (resp['response']) {
         image_url = resp['data']['url'];
         path = resp['data']['path'];
@@ -38,9 +51,7 @@ class ThumbnailStore extends GetxController {
 
       try {
         var resp = await ThumbnailModel(
-          thumbnail: image_url,
-          path:path, 
-          user_id: authUser?.uid);
+            thumbnail: image_url, path: path, user_id: authUser?.uid);
         localStore.setString(getBusinessThumbnailStoreName, json.encode(resp));
 
         return ResponseBack(response_type: true, data: image_url);
@@ -51,7 +62,6 @@ class ThumbnailStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
-
 
   ////////////////////////////////////////////////
 // UPDATE THUMBNAIL :
@@ -67,9 +77,9 @@ class ThumbnailStore extends GetxController {
       // temp_data = await thumbStore.GetThumbnailParam();
 
       var data;
-      var thumbnail =FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
-      var query =
-          thumbnail.where('user_id', isEqualTo: user_id).get();
+      var thumbnail =
+          FirebaseFirestore.instance.collection(getBusinessThumbnailStoreName);
+      var query = thumbnail.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data() as Map<String, dynamic>;
@@ -78,6 +88,7 @@ class ThumbnailStore extends GetxController {
 
       // Update Thumbnail :
       data['thumbnail'] = image_url;
+      data['path'] = path;
 
       //  Update Database :
       thumbnail.doc(doc_id).update(data);

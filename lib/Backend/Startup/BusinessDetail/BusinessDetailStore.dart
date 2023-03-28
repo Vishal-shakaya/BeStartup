@@ -23,13 +23,15 @@ class BusinessDetailStore extends GetxController {
   static bool is_update = false;
 
   // Set Update Page Detail :
-  SetUpdateDetial({
-    required updateImage,
-    required updateName,
-    required updateAmount}) async {
+  SetUpdateDetial(
+      {required updateImage,
+      required updateName,
+      required updateAmount,
+      required previousPath }) async {
     image_url = updateImage;
     business_name = updateName;
     amount = updateAmount;
+    path = previousPath; 
   }
 
   GetUpdateDetail() async {
@@ -38,7 +40,7 @@ class BusinessDetailStore extends GetxController {
       'name': business_name,
       'desire_amount': amount
     };
-    return data; 
+    return data;
   }
 
   SetUpdateMode({required mode}) async {
@@ -57,9 +59,8 @@ class BusinessDetailStore extends GetxController {
   SetBusinessLogo({logo, filename}) async {
     final localStore = await SharedPreferences.getInstance();
     try {
-     
       final resp = await UploadImage(image: logo, filename: filename);
-      
+
       if (resp['response']) {
         image_url = resp['data']['url'];
         path = resp['data']['path'];
@@ -68,10 +69,8 @@ class BusinessDetailStore extends GetxController {
         print('Error While Upload Image $resp');
       }
 
-
       bool is_detail = localStore.containsKey(getBusinessDetailStoreName);
       if (is_detail) {
-
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
 
@@ -122,7 +121,7 @@ class BusinessDetailStore extends GetxController {
         name: businessName,
         desire_amount: amount,
         user_id: userId,
-        path:path, 
+        path: path,
       );
 
       try {
@@ -250,9 +249,11 @@ class BusinessDetailStore extends GetxController {
   /// Returns:
   ///   A Future object.
 /////////////////////////////////////////////////////////////
-  UpdateBusinessDetail(
-      {required user_id, required name, required amount}) async {
-    final detailStore = Get.put(BusinessDetailStore(), tag: 'business_store');
+  UpdateBusinessDetail({
+      required user_id,
+      required name,
+      required amount}) async {
+    final detailStore = Get.put(BusinessDetailStore());
     var data;
     var doc_id;
     var final_startup_id;
@@ -268,11 +269,10 @@ class BusinessDetailStore extends GetxController {
         doc_id = value.docs.first.id;
       });
 
-      // Update Detials:
       data['logo'] = image_url;
       data['name'] = name;
       data['desire_amount'] = amount;
-
+      data['path'] = path;
       store.doc(doc_id).update(data);
 
       return ResponseBack(response_type: true);

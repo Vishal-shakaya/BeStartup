@@ -57,9 +57,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (GetPlatform.isWeb) {
 
-    // initialiaze the facebook javascript SDK
+  if (GetPlatform.isWeb) {
     await FacebookAuth.instance.webAndDesktopInitialize(
       appId: "554392976209038",
       cookie: true,
@@ -80,7 +79,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Razorpay Channel initilize:
   static const platform = MethodChannel("razorpay_flutter");
   FirebaseAuth auth = FirebaseAuth.instance;
 

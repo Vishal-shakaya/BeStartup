@@ -20,6 +20,7 @@ class BusinessTeamMemberStore extends GetxController {
   var userState = Get.put(UserState());
   var startupState = Get.put(StartupDetailViewState());
   var businessDetailStore = Get.put(BusinessDetailStore());
+  static var deleteMemberPath = [];
 
   static Map<String, dynamic> temp_member = {
     'id': uuid.v4(),
@@ -35,6 +36,7 @@ class BusinessTeamMemberStore extends GetxController {
 
   static Map<String, dynamic>? member;
   static String? profile_image;
+  static String? path;
 
   static RxList member_list = [].obs;
 
@@ -46,11 +48,17 @@ class BusinessTeamMemberStore extends GetxController {
   // UPLOADING PROFILE :
   UploadProductImage({image, filename}) async {
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      profile_image = await UploadImage(image: image, filename: filename);
+      final resp = await UploadImage(image: image, filename: filename);
 
-      // RETURN SUCCES RESPONSE WITH IMAGE URL :
+      if (resp['response']) {
+        profile_image = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
+
       return ResponseBack(response_type: true, data: profile_image);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -65,7 +73,6 @@ class BusinessTeamMemberStore extends GetxController {
       list.forEach((el) {
         member_list.add(el);
       });
-
     } catch (e) {
       print('Error while setting team memebnr $e');
     }
@@ -74,6 +81,10 @@ class BusinessTeamMemberStore extends GetxController {
   // Get Team Members :
   GetTeamMembers() async {
     return member_list;
+  }
+
+  GetDeleteMemeberPath() async {
+    return deleteMemberPath;
   }
 
   // CREATE MEMEBER WITH REQUIRED DETAIL :
@@ -88,7 +99,8 @@ class BusinessTeamMemberStore extends GetxController {
         'member_mail': member['email'],
         'meminfo': member['meminfo'],
         'image': profile_image,
-        'timestamp': DateTime.now().toUtc().toString()
+        'timestamp': DateTime.now().toUtc().toString(),
+        'path': path
       };
       member = temp_member;
       member_list.add(member);
@@ -108,6 +120,7 @@ class BusinessTeamMemberStore extends GetxController {
         'meminfo': member['meminfo'],
         'image': profile_image,
         'timestamp': DateTime.now().toUtc().toString(),
+        'path': path
       };
       member_list[index] = temp_member;
       profile_image = null;
@@ -118,8 +131,10 @@ class BusinessTeamMemberStore extends GetxController {
   }
 
   // DELETE MEMBER FORM LIST :
-  RemoveMember(id) async {
+  RemoveMember({id, path}) async {
     member_list.removeWhere((element) => element!['id'] == id);
+    print('delte path $path');
+    deleteMemberPath.add(path);
   }
 
   ////////////////////////////////////////////////////
@@ -166,7 +181,6 @@ class BusinessTeamMemberStore extends GetxController {
         member_list.add(temp_list[i]);
       }
       return member_list;
-
     } catch (e) {
       print('Error While Get Milestones ${e}');
       return member_list;

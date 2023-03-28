@@ -287,34 +287,16 @@ class StartupViewConnector extends GetxController {
   // Fetch Team Member :
   ///////////////////////////////////
   FetchBusinessTeamMember({required user_id}) async {
-    var final_startup_id;
     var data;
 
     try {
-      // FETCHING DATA FROM CACHE STORAGE :
-      // final cacheData = await GetCachedData(
-      //     fromModel: getBusinessTeamMemberStoreName,
-      //     startup_id: final_startup_id);
-      // if (cacheData != false) {
-      //   return ResponseBack(
-      //       response_type: true,
-      //       data: cacheData,
-      //       message: 'BusinessTeamMember  Fetch from Cache DB');
-      // }
-
-      // FETCHING DATA FROM FIREBASE
       var store =
           FirebaseFirestore.instance.collection(getBusinessTeamMemberStoreName);
-      var query = store.where('startup_id', isEqualTo: final_startup_id).get();
+      var query = store.where('user_id', isEqualTo: user_id).get();
 
       await query.then((value) {
         data = value.docs.first.data();
       });
-
-      // CACHE BUSINESS DETAIL :
-      // await StoreCacheData(
-      //     fromModel: getBusinessTeamMemberStoreName, data: data);
-
       return ResponseBack(
           response_type: true,
           data: data,

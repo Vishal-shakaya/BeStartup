@@ -56,6 +56,8 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   var is_admin;
   var user_id;
   var startup_id;
+  var path;
+  var previousPath;
 
   bool? updateMode = false;
 
@@ -102,8 +104,7 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
   GetLocalStorageData() async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
     try {
-
-      // Handle Update View : 
+      // Handle Update View :
       if (Get.parameters.isNotEmpty) {
         pageParam = jsonDecode(Get.parameters['data']!);
         is_admin = pageParam['is_admin'];
@@ -112,11 +113,14 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
         if (pageParam['type'] == 'update') {
           final resp = await startupConnector.FetchThumbnail(user_id: user_id);
           final temp_thumb = resp['data']['thumbnail'];
-         upload_image_url = temp_thumb;
+          path = resp['data']['path'];
+          previousPath = path;
+          upload_image_url = temp_thumb;
+          await thumbStore.SetPreviousPath(defaultpath: previousPath);
         }
       }
 
-      // Fetch Thumbnail and update : 
+      // Fetch Thumbnail and update :
       final data = await thumbStore.GetThumbnail();
       upload_image_url = data;
       return upload_image_url;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Components/RegistorFounder/FounderImage.dart';
@@ -32,13 +33,13 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var updateStore = Get.put(StartupUpdater());
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
-  var updatePicture ='';
-  var updateData ={
+  var updatePicture = '';
+  var updateData = {
     'name': '',
     'phone_no': '',
     'primary_mail': '',
     'other_contact': ''
-  }; 
+  };
 
   double con_button_width = 150;
   double con_button_height = 40;
@@ -52,6 +53,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   var pageParam;
   var user_id;
   bool? updateMode = false;
+  var previousPath = '';
 
   /////////////////////////////////////////
   // CREATE FOUNDER  FORM :
@@ -136,13 +138,14 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         'other_contact': other_contact
       };
 
-    
-
-      final update_resp = await founderStore.UpdateFounderDetail(user_id: user_id , data: founder);
+      final update_resp = await founderStore.UpdateFounderDetail(
+          user_id: user_id, data: founder);
 
       // Update Success Handler :
       if (update_resp['response']) {
         CloseCustomPageLoadingSpinner();
+        await DeleteFileFromStorage(previousPath);
+
         SmartDialog.dismiss();
         formKey.currentState!.reset();
         Get.toNamed(home_page_url);
@@ -173,20 +176,23 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
-
   GetLocalStorageData() async {
     if (updateMode == true) {
       try {
-        final resp = await founderStore.FetchFounderDetailandContact(user_id: user_id);
+        final resp =
+            await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
         final picture = resp['data']['picture'] ?? temp_avtar_image;
         final name = resp['data']['name'] ?? '';
         final phone_no = resp['data']['phone_no'] ?? '';
         final primary_mail = resp['data']['primary_mail'] ?? '';
         final other_contact = resp['data']['other_contact'] ?? '';
-       
-        updatePicture=picture;
+        previousPath = resp['data']['path'] ?? '';
 
+        updatePicture = picture;
+        founderStore.SetImagePath(image_path: previousPath);
+        founderStore.SetImageUrl(url: picture);
+        // print('upload picture $updatePicture');
         Map<String, String> data = {
           'picture': picture,
           'name': name,
@@ -195,8 +201,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
           'primary_mail': primary_mail,
           'other_contact': other_contact,
         };
-        updateData = data; 
-
+        updateData = data;
       } catch (e) {
         print('Fetching erro Founder detail $e');
       }
@@ -208,9 +213,7 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   void initState() {
     if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
-
       user_id = pageParam['user_id'];
-
       if (pageParam['type'] == 'update') {
         updateMode = true;
       }
@@ -290,45 +293,78 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
         });
   }
 
-  Column MainMethod(BuildContext context) {
-    return Column(
+  Stack MainMethod(BuildContext context) {
+    return Stack(
       children: [
-        Container(
-          height: context.height * heading_height,
-          margin: EdgeInsets.only(top: context.height * 0.02),
-          child: AutoSizeText.rich(
-            TextSpan(style: Get.textTheme.headline2, children: [
-              TextSpan(
-                  text: 'Founder',
-                  style: TextStyle(fontSize: fontSize, color: slide_header_color
-                      //  fontSize: 35
-                      ))
-            ]),
-          ),
-        ),
-        Container(
-            alignment: Alignment.topCenter,
-            height: context.height * page_height,
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                children: [
-                  // UPLOAD FOUNDER IMAGE :
-                  FounderImage(picture: updatePicture,),
-
-                  // REGISTRATION FORM :
-                  RegistorFounderForm(
-                    formKey: formKey,
-                    data: updateData,
-                  )
-                ],
-
-                // BOTTOM NAVIGATION:
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.topCenter,
+              height: context.height * heading_height,
+              margin: EdgeInsets.only(top: context.height * 0.02),
+              child: AutoSizeText.rich(
+                TextSpan(style: Get.textTheme.headline2, children: [
+                  TextSpan(
+                      text: 'Founder',
+                      style: TextStyle(
+                          fontSize: fontSize, color: slide_header_color
+                          //  fontSize: 35
+                          ))
+                ]),
               ),
-            )),
+            ),
+            Container(
+                alignment: Alignment.topCenter,
+                height: context.height * page_height,
+                child: SingleChildScrollView(
+                  reverse: true,
+                  child: Column(
+                    children: [
+                      // UPLOAD FOUNDER IMAGE :
+                      FounderImage(
+                        picture: updatePicture,
+                      ),
+
+                      // REGISTRATION FORM :
+                      RegistorFounderForm(
+                        formKey: formKey,
+                        data: updateData,
+                      )
+                    ],
+
+                    // BOTTOM NAVIGATION:
+                  ),
+                )),
+            updateMode == true
+                ? CreateOrUpdateFounderButton(context, UpdateFounderDetail)
+                : CreateOrUpdateFounderButton(context, SubmitFounderDetail)
+          ],
+        ),
         updateMode == true
-            ? CreateOrUpdateFounderButton(context, UpdateFounderDetail)
-            : CreateOrUpdateFounderButton(context, SubmitFounderDetail)
+            ? Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(home_page_url);
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+            : Container()
       ],
     );
   }

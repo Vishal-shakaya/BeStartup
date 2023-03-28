@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
@@ -41,6 +42,16 @@ class _BusinessBodyState extends State<BusinessBody> {
   var user_id;
   var startup_id;
   var is_admin;
+  var path;
+  var previousPath;
+
+  BackButtonRoute() {
+    var urlParam = {
+      'user_id': user_id,
+      'is_admin': is_admin,
+    };
+    Get.toNamed(vision_page_url, parameters: {'data': jsonEncode(urlParam)});
+  }
 
 ///////////////////////////////////////////////////
   /// HANDLE SUBMIT FORM :
@@ -111,15 +122,22 @@ class _BusinessBodyState extends State<BusinessBody> {
       desire_amount = desire_amount.trim();
 
       var update_resp = await detailStore.UpdateBusinessDetail(
-          user_id: user_id, name: business_name, amount: desire_amount);
+          user_id: user_id,
+          name: business_name,
+          amount: desire_amount);
+
+  
 
       // Update Success Handler :
       if (update_resp['response']) {
+        final deleteResp = await DeleteFileFromStorage(previousPath);
+    
         var param = jsonEncode({
           'user_id': user_id,
           'startup_id': startup_id,
           'is_admin': is_admin,
         });
+
         CloseCustomPageLoadingSpinner();
         Get.closeAllSnackbars();
         Get.toNamed(startup_view_url, parameters: {'data': param});
@@ -161,15 +179,21 @@ class _BusinessBodyState extends State<BusinessBody> {
         is_admin = pageParam['is_admin'];
 
         if (pageParam['type'] == 'update') {
-          updateMode = true; 
-          final resp =  await startupConnector.FetchBusinessDetail(user_id: user_id);
+          updateMode = true;
+          final resp =
+              await startupConnector.FetchBusinessDetail(user_id: user_id);
           final amount = resp['data']['desire_amount'];
           final logo = resp['data']['logo'];
           final name = resp['data']['name'];
+          path = resp['data']['path'];
+          previousPath = resp['data']['path'];
 
           await detailStore.SetUpdateMode(mode: true);
           await detailStore.SetUpdateDetial(
-              updateImage: logo, updateName: name, updateAmount: amount);
+              updateImage: logo,
+              previousPath: previousPath,
+              updateName: name,
+              updateAmount: amount);
         }
       }
     } catch (e) {
@@ -240,31 +264,61 @@ class _BusinessBodyState extends State<BusinessBody> {
         });
   }
 
-  Container MainMethod(BuildContext context) {
-    return Container(
-        height: context.height * 0.80,
-        /////////////////////////////////////////
-        ///  BUSINESS SLIDE :
-        ///  1. BUSINESS ICON :
-        ///  2. INPUT FIELD TAKE BUSINESS NAME :
-        /////////////////////////////////////////
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BusinessIcon(),
-              BusinessForm(
-                formKey: formKey,
+  Stack MainMethod(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+            alignment: Alignment.center,
+            height: context.height * 0.80,
+            /////////////////////////////////////////
+            ///  BUSINESS SLIDE :
+            ///  1. BUSINESS ICON :
+            ///  2. INPUT FIELD TAKE BUSINESS NAME :
+            /////////////////////////////////////////
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  BusinessIcon(),
+                  BusinessForm(
+                    formKey: formKey,
+                  ),
+                  updateMode == true
+                      ? UpdateButton(context)
+                      : BusinessSlideNav(
+                          key: UniqueKey(),
+                          submitform: SubmitBusinessDetail,
+                          slide: SlideType.detail,
+                        ),
+                ],
               ),
-              updateMode == true
-                  ? UpdateButton(context)
-                  : BusinessSlideNav(
-                      key: UniqueKey(),
-                      submitform: SubmitBusinessDetail,
-                      slide: SlideType.detail,
-                    )
-            ],
-          ),
-        ));
+            )),
+        updateMode == true
+            ? Positioned(
+                bottom: 25,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+            : Container()
+      ],
+    );
   }
 
 //////////////////////////////////////

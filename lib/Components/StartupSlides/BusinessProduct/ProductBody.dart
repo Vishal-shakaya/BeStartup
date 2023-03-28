@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessProduct/AddSectionButton.dart';
@@ -25,10 +26,10 @@ class ProductBody extends StatefulWidget {
 }
 
 class _ProductBodyState extends State<ProductBody> {
-  var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
-  var productStore = Get.put(BusinessProductStore(), tag: 'productList');
-  var startupConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_connector');
+  var updateStore = Get.put(StartupUpdater());
+  var productStore = Get.put(BusinessProductStore());
+
+  var startupConnector = Get.put(StartupViewConnector());
   var my_context = Get.context;
 
   double prod_cont_width = 0.80;
@@ -87,13 +88,25 @@ class _ProductBodyState extends State<ProductBody> {
     final productStore = Get.put(BusinessProductStore());
     final snack_width = MediaQuery.of(my_context!).size.width * 0.50;
     final updateProducts = await productStore.GetProducts();
-    
+
     final update_resp = await updateStore.UpdateProducts(
-      user_id: user_id, 
-      products: updateProducts);
+        user_id: user_id, products: updateProducts);
+
+    final productDeletePath = productStore.GetDeleteProductPath();
 
     // Success Handler  :
     if (update_resp['response']) {
+      try {
+        for (var i = 0; i < productDeletePath.length; i++) {
+          final deleteResp = await DeleteFileFromStorage(productDeletePath[i]);
+          print('delete Resp $deleteResp');
+        }
+      } catch (e) {
+        print('Error While Delete File from firebase : $e');
+      }
+
+
+
       final param = jsonEncode({
         'user_id': user_id,
         'is_admin': is_admin,

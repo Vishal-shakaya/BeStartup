@@ -37,10 +37,12 @@ class BusinessProductStore extends GetxController {
 
   static RxList product_list = [].obs;
   static String? image_url;
+  static String? path;
   static String? product_type = 'product';
   static String? youtube_link = '';
   static String? content_link = '';
   late ProductType prod_type;
+  static var deleteProductpath = [];
 
   // Setting youtube link :
   SetYoutubeLink(link) async {
@@ -114,6 +116,7 @@ class BusinessProductStore extends GetxController {
       'content_link': content_link,
       'belong_to': '',
       'catigory': '',
+      'path': path,
     };
     try {
       product_list.add(product);
@@ -142,6 +145,7 @@ class BusinessProductStore extends GetxController {
       'content_link': content_link,
       'belong_to': '',
       'catigory': '',
+      'path': path
     };
     try {
       product_list[index] = product;
@@ -163,9 +167,15 @@ class BusinessProductStore extends GetxController {
   ////////////////////////////////////////
   UploadProductImage({logo, filename}) async {
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      image_url = await UploadImage(image: logo, filename: filename);
+      final resp = await UploadImage(image: logo, filename: filename);
+
+      if (resp['response']) {
+        image_url = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
       return ResponseBack(response_type: true, data: image_url);
@@ -174,10 +184,17 @@ class BusinessProductStore extends GetxController {
     }
   }
 
+  GetDeleteProductPath() {
+    return deleteProductpath;
+  }
+
 // REMOVE PRODUCT FROM LIST USING ID param:
-  RemoveProduct(id) async {
+  RemoveProduct({id, path}) async {
+    final localStore = await SharedPreferences.getInstance();
     try {
       product_list.removeWhere((element) => element['id'] == id);
+      deleteProductpath.add(path);
+      print(path);
     } catch (e) {
       return ResponseBack(response_type: false);
     }

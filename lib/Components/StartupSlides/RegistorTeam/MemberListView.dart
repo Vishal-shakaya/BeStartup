@@ -36,7 +36,7 @@ class _MemberListViewState extends State<MemberListView> {
 
   // REMOVE MEMBER FROM LIST :
   RemoveMember(id) async {
-    await memeberStore.RemoveMember(widget.member!['id']);
+    await memeberStore.RemoveMember(id: widget.member!['id'] , path:widget.member!['path']);
   }
 
   //  EDIT MEMBER DETAIL :
