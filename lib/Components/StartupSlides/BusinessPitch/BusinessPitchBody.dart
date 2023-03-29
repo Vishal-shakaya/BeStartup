@@ -44,6 +44,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
   final authUser = FirebaseAuth.instance.currentUser;
 
+  Color uploadIconColor = light_color_type3;
+
   double mile_cont_width = 0.70;
 
   double mile_cont_height = 0.70;
@@ -95,13 +97,13 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   var startup_id;
   var user_id;
   var is_admin;
-
-  var pitchPath;
+  
   var pitchUrl;
+
   var previousPitchUrl;
   var previousPath;
-
   var spinner = MyCustomButtonSpinner();
+  var uploadFileName = '';
 
   Future<void> UploadPitchVideo() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -110,22 +112,21 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
     if (result != null && result.files.isNotEmpty) {
       pitchVideo = result.files.first.bytes;
       filename = result.files.first.name;
+      uploadFileName = filename.toString();
 
       setState(() {
         is_uploading = true;
       });
 
       var resp = await UploadPitch(video: pitchVideo, filename: filename);
-
       final data = resp['data'];
-      pitchPath = data['path'];
-      pitchUrl = data['url'];
+      await pitchStore.SetPitchUrl(tempPitchUrl: data['url']);
+      await pitchStore.SetPitchPath(tempPath: data['path']);
 
       if (resp['response']) {
         CloseCustomPageLoadingSpinner();
         congressMsg = true;
-
-        // Upldate UI :
+        uploadIconColor = primary_light;
         setState(() {
           is_uploading = false;
         });
@@ -133,8 +134,6 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
       if (!resp['response']) {
         CloseCustomPageLoadingSpinner();
-        // show error snakbar :
-        // ignore: use_build_context_synchronously
         MyCustSnackbar(
             type: MySnackbarType.error,
             context: context,
@@ -143,6 +142,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
             width: context.width * 0.50);
       }
     }
+
     CloseCustomPageLoadingSpinner();
   }
 
@@ -152,6 +152,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   SubmitPitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final pitchUrl = await pitchStore.GetPitchUrl();
+    final pitchPath = await pitchStore.GetPitchPath();
 
     var res = await pitchStore.SetPitch(
         pitchPath: pitchPath, pitchText: pitchUrl, user_id: authUser?.uid);
@@ -178,16 +180,14 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   UpdatePitch() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-    print('pitch ${pitchUrl}');
-    print('previousPitch ${previousPitchUrl}');
+    final pitchUrl = await pitchStore.GetPitchUrl();
+    final pitchPath = await pitchStore.GetPitchPath();
 
     var resp = await startupUpdater.UpdatehBusinessPitch(
       user_id: user_id,
       path: pitchPath,
       pitch: pitchUrl,
     );
-
-    print('update resp $resp');
 
     if (resp['response']) {
       CloseCustomPageLoadingSpinner();
@@ -559,29 +559,59 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                 // SUBHEADING SECTION :
                 SubHeadingSection(context),
 
+                SizedBox(height: context.height * 0.02),
+
+                Shimmer(
+                  gradient: g2,
+                  child: Icon(
+                    Icons.ondemand_video_rounded,
+                    size: context.height * 0.12,
+                    color: uploadIconColor,
+                  ),
+                ),
+
                 is_uploading == true
                     ? spinner
                     : congressMsg == true
-                        ? Shimmer(
-                            gradient: g1,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                'Video Uploaded Sucessful',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: primary_light),
-                              ),
+                        // if upload success full then show mesasge :
+                        ? Container(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              '$uploadFileName',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: light_color_type4),
                             ),
                           )
+
+                        // else show empty container :
                         : Container(),
 
                 SizedBox(
-                  height: context.height * 0.20,
+                  height: context.height * 0.05,
                 ),
 
-                SubmitButton(),
+                Container(
+                  width: context.width * 0.10,
+                  height: context.height * 0.05,
+                  decoration: BoxDecoration(
+                      color: Colors.orange.shade500,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextButton(
+                    child: Text(
+                      'Upload',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      UploadPitchVideo();
+                    },
+                  ),
+                )
                 // INPUT FIELD :
                 // PitchInputField(context),
               ],
@@ -618,9 +648,9 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
             padding: EdgeInsets.all(5),
             width: invest_btn_width,
             height: invest_btn_height,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.orange,
-                borderRadius: const BorderRadius.horizontal(
+                borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: Text(
               'Upload',
@@ -701,8 +731,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                 color: primary_light,
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
-            child: Text(
-              'Update',
+            child: const Text(
+              'Done',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,
@@ -724,7 +754,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
           child: AutoSizeText.rich(
               TextSpan(style: context.textTheme.headline2, children: [
                 TextSpan(
-                    text: 'Submit Startup Pitch ( Youtube Video Url )',
+                    text: 'Submit Startup Pitch',
                     style: TextStyle(
                         color: light_color_type3,
                         fontSize: mile_subhead_fontSize))

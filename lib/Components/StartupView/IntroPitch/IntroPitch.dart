@@ -11,7 +11,11 @@ import 'package:get/get.dart';
 class IntroPitchSection extends StatefulWidget {
   var pitch;
   var path;
-  IntroPitchSection({required this.path, required this.pitch, Key? key})
+  var HomeNavButton; 
+  IntroPitchSection({
+    required this.HomeNavButton, 
+    required this.path, 
+    required this.pitch, Key? key})
       : super(key: key);
 
   @override

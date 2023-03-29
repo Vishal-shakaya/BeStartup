@@ -36,11 +36,9 @@ class _StartupViewState extends State<StartupView> {
 
   var pitch;
 
-  var path; 
+  var path;
 
   var is_admin;
-
-  late YoutubePlayerController _controller;
 
   var autoPlay = true;
 
@@ -55,43 +53,44 @@ class _StartupViewState extends State<StartupView> {
   double video_model_player_height = 0.70;
 
   PlayPitchVideo(context) {
-    _controller.close();
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              titlePadding: const EdgeInsets.all(0),
-              // title: Container(
-              //     decoration: const BoxDecoration(color: Colors.transparent),
-              //     alignment: Alignment.topRight,
-              //     child: IconButton(
-              //         onPressed: () {
-              //           Navigator.of(context).pop();
-              //         },
-              //         icon: Icon(
-              //           Icons.cancel_rounded,
-              //           color: cancel_btn_color,
-              //           size: 18,
-              //         ))),
-              contentPadding: const EdgeInsets.all(0.0),
-              insetPadding: const EdgeInsets.all(0.0),
-              content: Container(
-                  alignment: Alignment.center,
-                  width: context.width * video_model_player_width,
-                  height: context.height * video_model_player_height,
-                  child: YoutubePlayerControllerProvider(
-                    controller: _controller,
-                    child: YoutubePlayer(
-                      controller: _controller,
-                    ),
-                  )));
-        });
+    // _controller.close();
+    // showDialog(
+    //     context: context,
+    //     barrierDismissible: true,
+    //     builder: (context) {
+    //       return AlertDialog(
+    //           elevation: 0,
+    //           backgroundColor: Colors.transparent,
+    //           titlePadding: const EdgeInsets.all(0),
+    //           // title: Container(
+    //           //     decoration: const BoxDecoration(color: Colors.transparent),
+    //           //     alignment: Alignment.topRight,
+    //           //     child: IconButton(
+    //           //         onPressed: () {
+    //           //           Navigator.of(context).pop();
+    //           //         },
+    //           //         icon: Icon(
+    //           //           Icons.cancel_rounded,
+    //           //           color: cancel_btn_color,
+    //           //           size: 18,
+    //           //         ))),
+    //           contentPadding: const EdgeInsets.all(0.0),
+    //           insetPadding: const EdgeInsets.all(0.0),
+    //           content: Container(
+    //               alignment: Alignment.center,
+    //               width: context.width * video_model_player_width,
+    //               height: context.height * video_model_player_height,
+    //               child: YoutubePlayerControllerProvider(
+    //                 controller: _controller,
+    //                 child: YoutubePlayer(
+    //                   controller: _controller,
+    //                 ),
+    //               )));
+    //     });
   }
 
-  HomeNavButton() {
+  HomeNavButton({controller}) {
+    Navigator.of(Get.context!).pop();
     Get.toNamed(home_page_url);
   }
 
@@ -334,9 +333,9 @@ class _StartupViewState extends State<StartupView> {
                 ServiceSection(),
 
                 IntroPitchSection(
-                  pitch: pitch,
-                  path: path?? '',
-                ),
+                    pitch: pitch,
+                    path: path ?? '',
+                    HomeNavButton: HomeNavButton),
 
                 InvestorSection()
               ],

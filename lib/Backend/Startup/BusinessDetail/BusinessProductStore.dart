@@ -194,7 +194,6 @@ class BusinessProductStore extends GetxController {
     try {
       product_list.removeWhere((element) => element['id'] == id);
       deleteProductpath.add(path);
-      print(path);
     } catch (e) {
       return ResponseBack(response_type: false);
     }

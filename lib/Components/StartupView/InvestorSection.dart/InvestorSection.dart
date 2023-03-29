@@ -46,6 +46,8 @@ class InvestorSection extends StatelessWidget {
 
   double invest_cont_width = 0.60;
 
+
+
   // MEMBER DETAIL DIALOG BLOK :
   MemberDetailDialogView({form_type, context}) async {
     showDialog(
@@ -319,6 +321,8 @@ class InvestorSection extends StatelessWidget {
         });
   }
 
+
+
   Column MainMethod(BuildContext context) {
     var mainWidget;
     var investorSectionWidget;
@@ -332,10 +336,12 @@ class InvestorSection extends StatelessWidget {
           child: Wrap(
             alignment: WrapAlignment.center,
             children: [
-              StartupHeaderText(
-                title: 'Investors',
-                font_size: heading_fonSize,
-              ),
+              investors.length>1?
+                StartupHeaderText(
+                  title: 'Investors',
+                  font_size: heading_fonSize,
+                ):
+                Container()
             ],
           ),
         );
@@ -372,10 +378,12 @@ class InvestorSection extends StatelessWidget {
         child: Wrap(
           alignment: WrapAlignment.center,
           children: [
+            investors.length>1?
             StartupHeaderText(
               title: 'Investors',
               font_size: heading_fonSize,
-            ),
+            ):
+            Container()
           ],
         ),
       );

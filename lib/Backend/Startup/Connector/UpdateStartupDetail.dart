@@ -18,8 +18,6 @@ import 'package:uuid/uuid.dart';
 var uuid = Uuid();
 
 class StartupUpdater extends GetxController {
-  var startupConnector = Get.put(StartupConnector(), tag: 'startup_connector');
-
 /////////////////////////////////////////
   /// Update Vision :
   /// It fetches data from cache storage, fetches data

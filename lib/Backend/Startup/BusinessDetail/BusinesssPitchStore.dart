@@ -12,29 +12,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class BusinessPitchStore extends GetxController {
-  var userState = Get.put(UserState());
-  var startupState = Get.put(StartupDetailViewState());
   static var pitch;
+  static var pitchUrl;
+  static var pitchPath;
+
+  SetPitchPath({tempPath}) async {
+    pitchPath = tempPath;
+  }
+
+  SetPitchUrl({tempPitchUrl}) async {
+    pitchUrl = tempPitchUrl;
+  }
+
+  GetPitchPath() async {
+    return pitchPath;
+  }
+
+  GetPitchUrl() async {
+    return pitchUrl; 
+  }
+
+
 
 ////////////////////////////////////////////////////////////
-/// It takes a string as an argument, and then it
-/// stores it in a local variable, and then it stores it
-/// in a local storage
-///
-/// Args:
-///   visionText: The text that the user e
-///   nters in the text field.
-///
-/// Returns:
-///   ResponseBack is a class that has a
-///   response_type and message.
+  /// It takes a string as an argument, and then it
+  /// stores it in a local variable, and then it stores it
+  /// in a local storage
+  ///
+  /// Args:
+  ///   visionText: The text that the user e
+  ///   nters in the text field.
+  ///
+  /// Returns:
+  ///   ResponseBack is a class that has a
+  ///   response_type and message.
 ///////////////////////////////////////////////////////
-  SetPitch({ 
-    required pitchText , 
+  SetPitch({
+    required pitchText,
     required user_id,
-    required pitchPath,  }) async {
+    required pitchPath,
+  }) async {
     final localStore = await SharedPreferences.getInstance();
-    
+
     try {
       // NULL CHECK :
       if (pitchText == null) {
@@ -43,19 +62,14 @@ class BusinessPitchStore extends GetxController {
       }
 
       pitch = pitchText;
-      
+
       try {
-        var resp = await PitchModel(
-          user_id: user_id,
-          pitch: pitch,
-          path: pitchPath
-        );
+        var resp =
+            await PitchModel(user_id: user_id, pitch: pitch, path: pitchPath);
 
         localStore.setString(getBusinessPitchtStoreName, json.encode(resp));
         return ResponseBack(response_type: true);
-      }
-      
-       catch (e) {
+      } catch (e) {
         return ResponseBack(response_type: false, message: create_error_title);
       }
 
@@ -100,19 +114,16 @@ class BusinessPitchStore extends GetxController {
 /////////////////////////////////////////////////
   GetPitch() async {
     final localStore = await SharedPreferences.getInstance();
-   
+
     try {
       bool is_detail = localStore.containsKey(getBusinessPitchtStoreName);
-      
+
       if (is_detail) {
         var data = localStore.getString(getBusinessPitchtStoreName);
         var json_obj = jsonDecode(data!);
         pitch = json_obj["pitch"];
         return pitch;
-      
-      }
-      
-       else {
+      } else {
         return pitch;
       }
     } catch (e) {
