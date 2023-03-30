@@ -70,6 +70,7 @@ class _VisionBodyState extends State<VisionBody> {
       };
       Get.toNamed(vision_page_url , parameters: {'data':jsonEncode(urlParam)});
   }
+  
   /////////////////////////////
   /// SUBMIT FORM :
   /////////////////////////////

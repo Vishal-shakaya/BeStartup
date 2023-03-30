@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:be_startup/Components/StartupView/StartupHeaderText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,11 +11,12 @@ import 'package:get/get.dart';
 class IntroPitchSection extends StatefulWidget {
   var pitch;
   var path;
-  var HomeNavButton; 
-  IntroPitchSection({
-    required this.HomeNavButton, 
-    required this.path, 
-    required this.pitch, Key? key})
+  var HomeNavButton;
+  IntroPitchSection(
+      {required this.HomeNavButton,
+      required this.path,
+      required this.pitch,
+      Key? key})
       : super(key: key);
 
   @override
@@ -38,6 +39,10 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   double service_top_height = 0.10;
 
   double pitch_cont_bottom_margin = 0.10;
+
+  double video_pitch_width = 0.80;
+
+  double video_pitch_height = 0.72; 
 
   var is_admin;
   var user_id;
@@ -64,6 +69,10 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   var volumeUpIcon = Icon(Icons.volume_up_outlined);
   var defaultvolumneMuteIcon = Icon(Icons.volume_mute_rounded);
   late VideoPlayerController _controller;
+  
+  late FlickManager flickManager;
+  // late DataManager? dataManager;
+
   var playserVolume = true;
 
   EditPitchUrl() {
@@ -80,20 +89,25 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.pitch,
-        videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true))
-      ..initialize().then((_) {
-        setState(() {});
-      });
-    _controller.play();
-    // _controller.setVolume(0.0);
-    _controller.setLooping(true);
+    // _controller = VideoPlayerController.network(widget.pitch,
+    //     videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true))
+    //   ..initialize().then((_) {
+    //     setState(() {});
+    //   });
+    // _controller.play();
+    // // _controller.setVolume(0.0);
+    // _controller.setLooping(true);
+
+      flickManager = FlickManager(
+      videoPlayerController:
+          VideoPlayerController.network(widget.pitch),
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
-    // _controller.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -187,8 +201,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           ),
           SizedBox(height: context.height * service_bottom_height),
           Container(
-            child: _controller.value.isInitialized
-                ? SingleChildScrollView(
+            child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Container(
@@ -221,38 +234,22 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
                                     size: 25,
                                     color: Colors.blueGrey.shade400,
                                   ))
-                              // Container(
-                              //   child: IconButton(
-                              //       onPressed: () {
-                              //         print(
-                              //             'volument ${_controller.value.volume}');
-                              //         setState(() {
-                              //           if (_controller.value.volume == 1) {
-                              //             playserVolume = false;
-                              //             _controller.setVolume(0.0);
-                              //             defaultvolumneMuteIcon =
-                              //                 volumneMuteIcon;
-                              //           }
-                              //           if (_controller.value.volume == 0) {
-                              //             playserVolume = true;
-                              //             _controller.setVolume(1.0);
-                              //             defaultvolumneMuteIcon = volumeUpIcon;
-                              //           }
-                              //         });
-                              //       },
-                              //       icon: defaultvolumneMuteIcon),
-                              // ),
                             ],
                           ),
                         ),
                         Container(
-                            width: context.width * 0.80,
-                            height: context.height * 0.75,
-                            child: VideoPlayer(_controller)),
+                            width: context.width * video_pitch_width,
+                            height: context.height * video_pitch_height,
+                            child:  FlickVideoPlayer(
+                              flickManager: flickManager,
+                              flickVideoWithControls: const FlickVideoWithControls(
+                                videoFit: BoxFit.contain,
+                                // aspectRatioWhenLoading: 4 / 3,
+                              ),
+                            )),
                       ],
                     ),
                   )
-                : Container(),
           ),
         ],
       ),

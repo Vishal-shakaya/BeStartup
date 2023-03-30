@@ -205,7 +205,7 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
     if (context.width < 1500) {
       vision_section_width = 0.60;
 
-      vision_section_height = 0.43;
+      vision_section_height = 0.44;
 
       header_fontSize = 32;
 

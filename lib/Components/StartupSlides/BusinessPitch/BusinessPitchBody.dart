@@ -105,6 +105,14 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   var spinner = MyCustomButtonSpinner();
   var uploadFileName = '';
 
+    BackButtonRoute(){
+       var urlParam = {
+        'user_id':user_id,
+        'is_admin':is_admin,  
+      };
+      Get.toNamed(startup_view_url , parameters: {'data':jsonEncode(urlParam)});
+  }
+
   Future<void> UploadPitchVideo() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) return;
@@ -547,84 +555,114 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
         });
   }
 
-  Container MainMethod(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            width: context.width * mile_cont_width,
-            height: context.height * mile_cont_height,
-            child: Column(
-              children: [
-                // SUBHEADING SECTION :
-                SubHeadingSection(context),
+  Stack MainMethod(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          child: Column(
+            children: [
+              Container(
+                width: context.width * mile_cont_width,
+                height: context.height * mile_cont_height,
+                child: Column(
+                  children: [
+                    // SUBHEADING SECTION :
+                    SubHeadingSection(context),
 
-                SizedBox(height: context.height * 0.02),
+                    SizedBox(height: context.height * 0.02),
 
-                Shimmer(
-                  gradient: g2,
-                  child: Icon(
-                    Icons.ondemand_video_rounded,
-                    size: context.height * 0.12,
-                    color: uploadIconColor,
-                  ),
-                ),
-
-                is_uploading == true
-                    ? spinner
-                    : congressMsg == true
-                        // if upload success full then show mesasge :
-                        ? Container(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              '$uploadFileName',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  overflow: TextOverflow.ellipsis,
-                                  color: light_color_type4),
-                            ),
-                          )
-
-                        // else show empty container :
-                        : Container(),
-
-                SizedBox(
-                  height: context.height * 0.05,
-                ),
-
-                Container(
-                  width: context.width * 0.10,
-                  height: context.height * 0.05,
-                  decoration: BoxDecoration(
-                      color: Colors.orange.shade500,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: TextButton(
-                    child: Text(
-                      'Upload',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                    Shimmer(
+                      gradient: g2,
+                      child: Icon(
+                        Icons.ondemand_video_rounded,
+                        size: context.height * 0.12,
+                        color: uploadIconColor,
+                      ),
                     ),
-                    onPressed: () {
-                      UploadPitchVideo();
-                    },
-                  ),
-                )
-                // INPUT FIELD :
-                // PitchInputField(context),
-              ],
-            ),
+
+                    is_uploading == true
+                        ? spinner
+                        : congressMsg == true
+                            // if upload success full then show mesasge :
+                            ? Container(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  '$uploadFileName',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: light_color_type4),
+                                ),
+                              )
+
+                            // else show empty container :
+                            : Container(),
+
+                    SizedBox(
+                      height: context.height * 0.05,
+                    ),
+
+                    Container(
+                      width: context.width * 0.10,
+                      height: context.height * 0.05,
+                      decoration: BoxDecoration(
+                          color: Colors.orange.shade500,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextButton(
+                        child: Text(
+                          'Upload',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          UploadPitchVideo();
+                        },
+                      ),
+                    )
+                    // INPUT FIELD :
+                    // PitchInputField(context),
+                  ],
+                ),
+              ),
+              updateMode == true
+                  ? UpdateButton(context)
+                  : BusinessSlideNav(
+                      slide: SlideType.pitch,
+                      submitform: SubmitPitch,
+                    )
+            ],
           ),
-          updateMode == true
-              ? UpdateButton(context)
-              : BusinessSlideNav(
-                  slide: SlideType.pitch,
-                  submitform: SubmitPitch,
-                )
-        ],
-      ),
+        ),
+
+            updateMode==true?
+            Positioned(
+                bottom: 0,
+                right: 0,
+                child: InkWell(
+                  onTap: () {
+                    BackButtonRoute();
+                  },
+                  child: Card(
+                    color: Colors.blueGrey.shade500,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: const Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ))
+             : Container() 
+      ],
     );
   }
 

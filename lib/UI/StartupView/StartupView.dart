@@ -333,7 +333,7 @@ class _StartupViewState extends State<StartupView> {
                 ServiceSection(),
 
                 IntroPitchSection(
-                    pitch: pitch,
+                    pitch: pitch??'',
                     path: path ?? '',
                     HomeNavButton: HomeNavButton),
 
