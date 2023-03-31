@@ -105,8 +105,6 @@ class MyAuthentication extends GetxController {
     );
   }
 
-
-
   //////////////////////////////////
   // SIGNUP USING EMAIL , PASSWOD :
   //////////////////////////////////
@@ -119,7 +117,7 @@ class MyAuthentication extends GetxController {
         email: email,
         password: password,
       );
-      
+
       // Verify user email :
       await auth.currentUser?.sendEmailVerification();
       return ResponseBack(response_type: true);
@@ -136,7 +134,6 @@ class MyAuthentication extends GetxController {
     }
   }
 
-
 ////////////////////////////////////////////
   // LOGIN USER WITH EMAIL AND PASSWORD :
 ////////////////////////////////////////////
@@ -150,21 +147,16 @@ class MyAuthentication extends GetxController {
       // Verify if eamil is verified or not :
       final user = auth.currentUser;
       final verify_email = user?.emailVerified;
-      
 
       if (verify_email == false) {
         return ResponseBack(response_type: false, data: 'email_not_verify');
-      } 
-      
-      else {
+      } else {
         try {
           if (GetPlatform.isWeb) {
             await auth.setPersistence(Persistence.SESSION);
           }
           return ResponseBack(response_type: true);
-        } 
-        
-        catch (e) {
+        } catch (e) {
           return ResponseBack(response_type: false);
         }
       }
@@ -216,6 +208,7 @@ class MyAuthentication extends GetxController {
     final user = auth.currentUser;
     final resp =
         await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
+    print('complete delete Resp $resp');
     if (resp['response']) {
       try {
         await user?.delete();

@@ -201,22 +201,6 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      // Container(
-                      //   child: IconButton(
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           if (_controller.value.isPlaying) {
-                      //             _controller.pause();
-                      //             defaultPlayPauseIcon = pauseIcon;
-                      //           } else {
-                      //             _controller.play();
-                      //             defaultPlayPauseIcon = playIcon;
-                      //           }
-                      //         });
-                      //       },
-                      //       icon: defaultPlayPauseIcon),
-                      // ),
-
                       IconButton(
                           onPressed: () {
                             EditPitchUrl();
