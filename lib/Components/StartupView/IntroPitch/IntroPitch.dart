@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:be_startup/Components/StartupView/IntroPitch/DataManger.dart';
+import 'package:be_startup/Components/StartupView/IntroPitch/PitchVideoController.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:video_player/video_player.dart';
@@ -42,7 +44,7 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
 
   double video_pitch_width = 0.80;
 
-  double video_pitch_height = 0.72; 
+  double video_pitch_height = 0.72;
 
   var is_admin;
   var user_id;
@@ -68,9 +70,9 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   var volumneMuteIcon = Icon(Icons.volume_mute_rounded);
   var volumeUpIcon = Icon(Icons.volume_up_outlined);
   var defaultvolumneMuteIcon = Icon(Icons.volume_mute_rounded);
-  late VideoPlayerController _controller;
-  
+
   late FlickManager flickManager;
+  late DataManager? dataManager;
   // late DataManager? dataManager;
 
   var playserVolume = true;
@@ -89,25 +91,15 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
   @override
   void initState() {
     super.initState();
-    // _controller = VideoPlayerController.network(widget.pitch,
-    //     videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true))
-    //   ..initialize().then((_) {
-    //     setState(() {});
-    //   });
-    // _controller.play();
-    // // _controller.setVolume(0.0);
-    // _controller.setLooping(true);
-
-      flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.network(widget.pitch),
+    flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.network(widget.pitch),
     );
+    dataManager = DataManager(flickManager: flickManager, urls: [widget.pitch]);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
   }
 
   @override
@@ -201,56 +193,58 @@ class _IntroPitchSectionState extends State<IntroPitchSection> {
           ),
           SizedBox(height: context.height * service_bottom_height),
           Container(
-            child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          width: context.width * 0.75,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_controller.value.isPlaying) {
-                                          _controller.pause();
-                                          defaultPlayPauseIcon = pauseIcon;
-                                        } else {
-                                          _controller.play();
-                                          defaultPlayPauseIcon = playIcon;
-                                        }
-                                      });
-                                    },
-                                    icon: defaultPlayPauseIcon),
-                              ),
+              child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  width: context.width * 0.75,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Container(
+                      //   child: IconButton(
+                      //       onPressed: () {
+                      //         setState(() {
+                      //           if (_controller.value.isPlaying) {
+                      //             _controller.pause();
+                      //             defaultPlayPauseIcon = pauseIcon;
+                      //           } else {
+                      //             _controller.play();
+                      //             defaultPlayPauseIcon = playIcon;
+                      //           }
+                      //         });
+                      //       },
+                      //       icon: defaultPlayPauseIcon),
+                      // ),
 
-                              IconButton(
-                                  onPressed: () {
-                                    EditPitchUrl();
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 25,
-                                    color: Colors.blueGrey.shade400,
-                                  ))
-                            ],
-                          ),
+                      IconButton(
+                          onPressed: () {
+                            EditPitchUrl();
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            size: 25,
+                            color: Colors.blueGrey.shade400,
+                          ))
+                    ],
+                  ),
+                ),
+                Container(
+                    width: context.width * video_pitch_width,
+                    height: context.height * video_pitch_height,
+                    child: FlickVideoPlayer(
+                      flickManager: flickManager,
+                      flickVideoWithControls: FlickVideoWithControls(
+                        controls: WebVideoControl(
+                          dataManager: dataManager,
                         ),
-                        Container(
-                            width: context.width * video_pitch_width,
-                            height: context.height * video_pitch_height,
-                            child:  FlickVideoPlayer(
-                              flickManager: flickManager,
-                              flickVideoWithControls: const FlickVideoWithControls(
-                                videoFit: BoxFit.contain,
-                                // aspectRatioWhenLoading: 4 / 3,
-                              ),
-                            )),
-                      ],
-                    ),
-                  )
-          ),
+                        videoFit: BoxFit.contain,
+                        // aspectRatioWhenLoading: 4 / 3,
+                      ),
+                    )),
+              ],
+            ),
+          )),
         ],
       ),
     );
