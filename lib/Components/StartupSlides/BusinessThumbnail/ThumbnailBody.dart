@@ -139,6 +139,7 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
     if (context.width < 480) {}
 
     return Stack(
+      alignment :AlignmentDirectional.topCenter, 
       children: [
         SingleChildScrollView(
           child: Column(
@@ -151,12 +152,12 @@ class _ThumbnailBodyState extends State<ThumbnailBody> {
                     children: [
                       // THUMBNAIL UPLOAD SECTION:
                       ThumbnailSection(),
-
+    
                       // NOTICE  SECTION:
                       NoticeSection(),
                     ],
                   )),
-
+    
               // NAVIGATION:
               updateMode == true
                   ? UpdateButton(context)

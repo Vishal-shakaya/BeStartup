@@ -27,11 +27,11 @@ class BusinessDetailStore extends GetxController {
       {required updateImage,
       required updateName,
       required updateAmount,
-      required previousPath }) async {
+      required previousPath}) async {
     image_url = updateImage;
     business_name = updateName;
     amount = updateAmount;
-    path = previousPath; 
+    path = previousPath;
   }
 
   GetUpdateDetail() async {
@@ -198,6 +198,7 @@ class BusinessDetailStore extends GetxController {
       if (is_detail) {
         var data = localStore.getString(getBusinessDetailStoreName);
         var json_obj = jsonDecode(data!);
+        json_obj[field] = val;
         localStore.setString(getBusinessDetailStoreName, json.encode(json_obj));
         return ResponseBack(response_type: true);
       }
@@ -212,8 +213,10 @@ class BusinessDetailStore extends GetxController {
 // First update database online then :
 // update localy for mantain local app state :
 ////////////////////////////////////////////////////////
-  UpdateBusinessDetailDatabaseField(
-      {required field, required val, required user_id}) async {
+  UpdateBusinessDetailDatabaseField({
+    required field, 
+    required val, 
+    required user_id}) async {
     // FETCHING DATA FROM FIREBASE
     var data;
     var doc_id;
@@ -249,10 +252,8 @@ class BusinessDetailStore extends GetxController {
   /// Returns:
   ///   A Future object.
 /////////////////////////////////////////////////////////////
-  UpdateBusinessDetail({
-      required user_id,
-      required name,
-      required amount}) async {
+  UpdateBusinessDetail(
+      {required user_id, required name, required amount}) async {
     final detailStore = Get.put(BusinessDetailStore());
     var data;
     var doc_id;

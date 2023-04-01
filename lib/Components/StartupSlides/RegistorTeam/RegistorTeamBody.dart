@@ -106,7 +106,6 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   SubmitTeamMemberDetails() async {
     MyCustPageLoadingSpinner();
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
     var resp = await memeberStore.PersistMembers();
 
     // Success Handler :
@@ -375,8 +374,8 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   }
 
 ///////////////////////////////////
-  /// EXTERNAL METHODS :
-  /// 1. Update buttopn :
+/// EXTERNAL METHODS :
+/// 1. Update buttopn :
 ///////////////////////////////////
   Container SubmitAndUpdateButton(BuildContext context, fun) {
     return Container(
@@ -403,7 +402,7 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(20), right: Radius.circular(20))),
             child: const Text(
-              'Update',
+              'Done',
               style: TextStyle(
                   letterSpacing: 2.5,
                   color: Colors.white,

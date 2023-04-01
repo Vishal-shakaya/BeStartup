@@ -139,8 +139,13 @@ ConfigureBusinessDetailModel() async {
     }
 
     final startup_searching_index = await CreateSearchIndexParam(businessName);
-
     final founder_searching_index = await CreateSearchIndexParam(founderName);
+    print('business Name $businessName');
+    print('business index name ${startup_searching_index}');
+
+    print('founder name $founderName');
+    print('founder index $founder_searching_index');
+    
 
     await businessDetailStore.UpdateBusinessDetailCacheField(
         field: 'startup_searching_index', val: startup_searching_index);
@@ -152,6 +157,8 @@ ConfigureBusinessDetailModel() async {
     return ResponseBack(response_type: false);
   }
 }
+
+
 
 // Helping function for getting expiration date :
 GetExpiredDate(plan_type) async {

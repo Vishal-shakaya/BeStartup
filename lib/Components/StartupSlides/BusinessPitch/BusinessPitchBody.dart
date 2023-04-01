@@ -559,6 +559,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
     return Stack(
       children: [
         Container(
+          alignment: Alignment.topCenter,
           child: Column(
             children: [
               Container(

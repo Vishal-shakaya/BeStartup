@@ -3,6 +3,7 @@ import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -142,6 +143,10 @@ class RemoveStartup extends GetxController {
     }
   }
 
+/// I'm trying to delete the image from the firebase storage
+/// 
+/// Args:
+///   id: The user id of the user whose product images are to be deleted.
   DeleteProductImage({required id}) async {
     try {
       var data;
@@ -156,7 +161,7 @@ class RemoveStartup extends GetxController {
 
       await query.then((value) {
           data = value.docs.first.data() as Map<String, dynamic>;
-          products.add(data['products']);
+          products =data['products'] ;
         });
 
       products.forEach((element) {
@@ -187,7 +192,7 @@ class RemoveStartup extends GetxController {
 
       await query.then((value) {
          data = value.docs.first.data() as Map<String, dynamic>;
-         members.add(data['members']);
+         members = data['members'];
 
       });
 
@@ -197,6 +202,38 @@ class RemoveStartup extends GetxController {
 
       for (var i = 0; i < filepath.length; i++) {
         print('team memeber Image $filepath');
+        final deleteResp = await DeleteFileFromStorage(filepath[i]);
+        print('delete resp $deleteResp');
+      }
+    } catch (e) {
+      print('Error While Delete team Image $e');
+    }
+  }
+
+  DeleteInvestors({required id}) async {
+    try {
+      var data;
+      var doc_id;
+      var filepath = [];
+      var investors = [];
+
+      var obj_instance =
+          FirebaseFirestore.instance.collection(startup_investors_store_name);
+
+      var query = obj_instance.where('user_id', isEqualTo: id).get();
+
+      await query.then((value) {
+         data = value.docs.first.data() as Map<String, dynamic>;
+         investors = data['investor'];
+
+      });
+
+      investors.forEach((element) {
+        filepath.add(element['path']);
+      });
+
+      for (var i = 0; i < filepath.length; i++) {
+        print('team memeber investor $filepath');
         final deleteResp = await DeleteFileFromStorage(filepath[i]);
         print('delete resp $deleteResp');
       }
@@ -226,6 +263,19 @@ class RemoveStartup extends GetxController {
     }
   }
 
+
+
+////////////////////////////////////////////////////////////////
+/// DeleteFounderWithStartups() is a function that
+///  deletes a user and all of their associated data
+/// from the database
+/// 
+/// Args:
+///   user_id: The user id of the user you want to delete.
+/// 
+/// Returns:
+///   A ResponseBack object.
+////////////////////////////////////////////////////////////////
   DeleteFounderWithStartups({required user_id}) async {
     await DeleteBusinessLogo(id: user_id);
     await DeleteFounderImage(id: user_id);
@@ -300,63 +350,5 @@ class RemoveStartup extends GetxController {
     }
   }
 
-////////////////////////////////////////////////////////////////////////
-  /// DELETE STARTUP AND ITS PLAN :
-  /// It deletes all the documents in the firestore database that
-  /// have the same startup_id as the
-  /// startup_id of the startup that the user wants to delete
-  ///
-  /// Args:
-  ///   final_startup_id: The id of the startup to be deleted
-////////////////////////////////////////////////////////////////////////
-  DeleteStartup({required user_id}) async {
-    try {
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessDetailStoreName);
 
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessCatigoryStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessThumbnailStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessMilestoneStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessTeamMemberStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessProductStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessVisiontStoreName);
-
-      await DeleteDocument(
-          field_name: 'user_id',
-          id: user_id,
-          model: getBusinessWhyInvesttStoreName);
-      await DeleteDocument(
-          field_name: 'user_id', id: user_id, model: getStartupPlansStoreName);
-
-      return ResponseBack(response_type: true);
-    } catch (e) {
-      print('Error while deleteing startup $e');
-      return ResponseBack(response_type: false, message: e);
-    }
-  }
 }

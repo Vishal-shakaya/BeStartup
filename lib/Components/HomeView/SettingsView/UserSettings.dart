@@ -228,7 +228,7 @@ class _UserSettingsState extends State<UserSettings> {
         },
         onConfirmBtnTap: () async {
           // Delete Startup:
-          final resp = await removeStartup.DeleteStartup(user_id: fireInstance.currentUser?.uid);
+          // final resp = await removeStartup.DeleteStartup(user_id: fireInstance.currentUser?.uid);
           
           Navigator.of(context).pop();
         },
