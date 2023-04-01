@@ -15,14 +15,11 @@ import 'package:uuid/uuid.dart';
 var uuid = Uuid();
 
 class StartupInvestorStore extends GetxController {
-  var userState = Get.put(UserState());
-  var startupState = Get.put(StartupDetailViewState());
-  var businessDetailStore = Get.put(BusinessDetailStore());
   FirebaseFirestore store = FirebaseFirestore.instance;
 
   static var investor_image;
-
   static RxList investor_list = [].obs;
+  static String path = '';
 
   GetProfileImage() async {
     print('Get investor image $investor_image');
@@ -47,10 +44,15 @@ class StartupInvestorStore extends GetxController {
 ///////////////////////////////////////////////////////////
   UploadInvestorProfile({required image, required filename}) async {
     try {
-      // STORE IMAGE IN FIREBASE :
-      // AND GET URL OF IMAGE AFTER UPLOAD IMAGE :
-      investor_image = await UploadImage(image: image, filename: filename);
-      // RETURN SUCCES RESPONSE WITH IMAGE URL :
+      final resp = await UploadImage(image: image, filename: filename);
+
+      if (resp['response']) {
+        investor_image = resp['data']['url'];
+        path = resp['data']['path'];
+      }
+      if (!resp['response']) {
+        print('Error While Upload Image $resp');
+      }
       return ResponseBack(response_type: true, data: investor_image);
     } catch (e) {
       return ResponseBack(response_type: false);
@@ -84,8 +86,7 @@ class StartupInvestorStore extends GetxController {
       };
 
       final investor_model = await StartupInvestorModel(
-          user_id: user_id, 
-          investor: investor, id: id);
+          user_id: user_id, investor: investor, id: id);
 
       await myStore.add(investor_model);
 
@@ -120,7 +121,7 @@ class StartupInvestorStore extends GetxController {
           investors.add(el.data()['investor']);
         });
       });
-
+      print(investors);
       investor_list.clear();
       investor_list.addAll(investors);
 

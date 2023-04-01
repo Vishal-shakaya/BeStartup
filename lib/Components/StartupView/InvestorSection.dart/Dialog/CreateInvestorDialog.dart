@@ -9,6 +9,7 @@ import 'package:be_startup/Components/StartupView/InvestorSection.dart/Dialog/In
 
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -36,10 +37,8 @@ class InvestorDialog extends StatefulWidget {
 
 class _TeamMemberDialogState extends State<InvestorDialog> {
   var startupInvestorStore = Get.put(StartupInvestorStore());
-
-  var startupState = Get.put(
-    StartupDetailViewState(),
-  );
+  var startupState = Get.put(StartupDetailViewState());
+  var authUser = FirebaseAuth.instance.currentUser;
 
   final formKey = GlobalKey<FormBuilderState>();
   final formKey2 = GlobalKey<FormBuilderState>();
@@ -66,8 +65,8 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
   int image_flex = 5;
   int desc_flex = 5;
 
-  var user_id; 
-  var is_admin ; 
+  var user_id;
+  var is_admin;
 
   // double formsection_width = 0.35;
   // double formsection_height = 0.41;
@@ -80,12 +79,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 /////////////////////////////////////////////////////
   SubmitMemberDetail() async {
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-
-    final pageParam = jsonDecode(Get.parameters['data']!);
-    user_id = pageParam['user_id'];
-    is_admin = pageParam['is_admin'];
-
-
+    var user_id = authUser?.uid;
 
     formKey.currentState!.save();
     formKey2.currentState!.save();
@@ -125,7 +119,6 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
             inv_obj: temp_investor, user_id: user_id);
       }
 
-
       if (res['response']) {
         formKey.currentState!.reset();
         formKey2.currentState!.reset();
@@ -133,16 +126,12 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
         Navigator.of(context).pop();
       }
 
-
       if (!res['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
             MyCustSnackbar(type: MySnackbarType.error, width: snack_width));
       }
-    }
-    
-    
-     else {
+    } else {
       Get.closeAllSnackbars();
       Get.showSnackbar(MyCustSnackbar(
           type: MySnackbarType.error,
@@ -150,8 +139,6 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
           width: snack_width));
     }
   }
-
-
 
   // RESET FORM :
   ResetForm(field) {
@@ -274,7 +261,7 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
     if (context.width < 1200) {
       image_flex = 3;
       desc_flex = 7;
-      
+
       width_factor = 0.9;
       height_factor = 0.75;
       print('1200');
@@ -388,8 +375,6 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
       ],
     );
 
-
-
     Widget phoneHeaderForm = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -450,9 +435,9 @@ class _TeamMemberDialogState extends State<InvestorDialog> {
 
               // MEMBER DETAIL SECTION :
               Container(
-                  child: Column(
+               child: Column(
                 children: [
-                  Row(
+                  Wrap(
                     children: [
                       widget.form_type == InvestorFormType.create
                           ? InvestorInfoForm(

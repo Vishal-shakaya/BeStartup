@@ -174,7 +174,6 @@ class BusinessProductStore extends GetxController {
         path = resp['data']['path'];
       }
       if (!resp['response']) {
-        print('Error While Upload Image $resp');
       }
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
