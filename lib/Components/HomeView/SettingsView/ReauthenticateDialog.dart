@@ -57,6 +57,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
     // Delete User Permanently :
     if (widget.task == ReautheticateTask.deleteProfile) {
       var resp = await auth.Deleteuser();
+      print('delete user Resp $resp');
       if (!resp['response']) {
         ErrorSnakbar();
       }
@@ -132,7 +133,7 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
 
         // SUCCESS RESPONSE :
         if (resp['response']) {
-         var del_resp = await auth.Deleteuser();
+          var del_resp = await auth.Deleteuser();
 
           if (del_resp['response']) {
             EndLoading();

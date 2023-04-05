@@ -25,13 +25,14 @@ class InvestorDetailStore extends GetxController {
     'other_contact': '',
   };
 
-
-  SetImageUrl({required url,}) async {
+  SetImageUrl({
+    required url,
+  }) async {
     image_url = url;
   }
-  
-  SetImagePath({required image_path }){
-    path = image_path; 
+
+  SetImagePath({required image_path}) {
+    path = image_path;
   }
 
   /////////////////////////////////////
@@ -117,10 +118,10 @@ class InvestorDetailStore extends GetxController {
 
       return ResponseBack(response_type: true);
     } catch (e) {
+      print('Error While Update Investor $e');
       return ResponseBack(response_type: false, message: update_error_title);
     }
   }
-
 
   FetchInvestorDetailandContact({required user_id}) async {
     var data_userDetail;
@@ -148,8 +149,6 @@ class InvestorDetailStore extends GetxController {
     }
   }
 
-
-
   GetInvestorDetail() async {
     final localStore = await SharedPreferences.getInstance();
     try {
@@ -176,7 +175,6 @@ class InvestorDetailStore extends GetxController {
     }
   }
 
-  
   CreateInvestorCatigory() async {
     final localStore = await SharedPreferences.getInstance();
     try {

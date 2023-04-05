@@ -93,7 +93,7 @@ class _HomeViewUserStartupsState extends State<HomeViewUserStartups> {
       // 2. menu == my_startup show his startups: [ Default ] :
       /////////////////////////////////////////////////////////////
       if (usertype == UserStoreName.investor) {
-        resp = await homeviewConnector.FetchUserStartups(user_id: user_id);
+        resp = await homeviewConnector.FetchSaveStartups(user_id: user_id);
       }
 
       if (usertype == UserStoreName.founder) {

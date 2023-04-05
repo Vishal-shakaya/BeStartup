@@ -277,13 +277,13 @@ class _HomeViewState extends State<HomeView> {
                 user_id: user_id);
         // Investor Success Handler :
         if (invest_resp['response']) {
-          user_profile = invest_resp['data']['userDetail']['picture'];
-          user_name = invest_resp['data']['userDetail']['name'];
-          registor_mail = invest_resp['data']['userDetail']['email'];
+          user_profile = invest_resp['data']['picture'];
+          user_name = invest_resp['data']['name'];
+          registor_mail = invest_resp['data']['email'];
 
-          primary_mail = invest_resp['data']['userContect']['primary_mail'];
-          phoneNo = invest_resp['data']['userContect']['phone_no'];
-          otherContact = invest_resp['data']['userContect']['other_contact'];
+          primary_mail = invest_resp['data']['primary_mail'];
+          phoneNo = invest_resp['data']['phone_no'];
+          otherContact = invest_resp['data']['other_contact'];
 
           primary_mail = await CheckAndGetPrimaryMail(
               primary_mail: primary_mail, default_mail: registor_mail);

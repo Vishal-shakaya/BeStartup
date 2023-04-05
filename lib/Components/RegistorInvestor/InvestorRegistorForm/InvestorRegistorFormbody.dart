@@ -126,11 +126,11 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
       final mail = authUser?.email;
 
       var update_resp = await investorStore.UpdateInvestorDetail(
-          user_id: id,
-          name: name,
-          phone_no: phoneNo,
-          other_contact: other_contact,
-          email: email);
+          user_id: id??'',
+          name: name??'',
+          phone_no: phoneNo??'',
+          other_contact: other_contact??'',
+          email: email??'');
 
       // Success Handler :
       if (update_resp['response']) {
@@ -139,7 +139,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
           formKey.currentState!.reset();
           CloseCustomPageLoadingSpinner();
           print('Update Error');
-          Get.toNamed(startup_view_url);
+          Get.toNamed(homeProfessionalImage);
         }
 
         // Update Error handler :
@@ -247,7 +247,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
           final picture = resp['data']['picture'] ?? temp_avtar_image;
           final name = resp['data']['name'] ?? '';
           final phone_no = resp['data']['phone_no'] ?? '';
-          final primary_mail = resp['data']['primary_mail'] ?? '';
+          final primary_mail = resp['data']['email'] ?? '';
           final other_contact = resp['data']['other_contact'] ?? '';
           previousPath = resp['data']['path'] ?? '';
 

@@ -91,9 +91,9 @@ class HomeViewUserProfile extends StatelessWidget {
 
       print('Founder Response $investor_resp');
       if (investor_resp['response']) {
-        user_phoneno = investor_resp['data']['userContect']['phone_no'];
-        username = investor_resp['data']['userDetail']['name'];
-        user_image = investor_resp['data']['userDetail']['picture'];
+        user_phoneno = investor_resp['data']['phone_no'];
+        username = investor_resp['data']['name'];
+        user_image = investor_resp['data']['picture'];
       }
     }
 
@@ -261,17 +261,19 @@ class HomeViewUserProfile extends StatelessWidget {
 
   Tooltip MemName() {
     return Tooltip(
-      message: user_position,
+      message: username,
       child: Container(
           child: AutoSizeText.rich(
-              TextSpan(style: Get.textTheme.headline5, children: [
-        TextSpan(
-            text: username,
-            style: TextStyle(
-                fontWeight: FontWeight.w900,
-                color: home_profile_text_color,
-                fontSize: name_fonSize))
-      ]))),
+              TextSpan(
+                style: Get.textTheme.headline5, 
+                children: [
+                TextSpan(
+                    text: username,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: home_profile_text_color,
+                        fontSize: name_fonSize))
+      ]),overflow: TextOverflow.ellipsis,)),
     );
   }
 

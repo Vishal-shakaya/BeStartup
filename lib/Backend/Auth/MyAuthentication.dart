@@ -1,10 +1,12 @@
 // Import the firebase_core and cloud_firestore plugin
 
+import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/Reauthenticate.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/Connector/DeleteStartup.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:get/get.dart';
@@ -205,13 +207,22 @@ class MyAuthentication extends GetxController {
   // PERMANENT DELETE USER :
   Deleteuser() async {
     var removeStore = Get.put(RemoveStartup());
+    var userState = Get.put(UserState());
+    var resp;
+    final userType = await userState.GetUserType();
     final user = auth.currentUser;
-    final resp =
-        await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
-    print('complete delete Resp $resp');
+
+    if (userType == 'investor') {
+      resp = await removeStore.DeleteInvestorComplete(user_id: user?.uid);
+    }
+
+    if (userType == 'founder') {
+      resp = await removeStore.DeleteFounderWithStartups(user_id: user?.uid);
+    }
     if (resp['response']) {
       try {
         await user?.delete();
+        Get.toNamed(login_handler_url);
         return ResponseBack(response_type: true);
       } catch (e) {
         return ResponseBack(response_type: false, message: e);

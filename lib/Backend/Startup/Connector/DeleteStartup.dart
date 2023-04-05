@@ -14,13 +14,13 @@ class RemoveStartup extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
 
 /////////////////////////////////////////////////////////////
-/// It takes a id and a model as parameters,
-/// then it queries the database for the document that
-/// matches the startup_id, then it deletes the document
-///
-/// Args:
-///   startup_id: The id of the startup that is being deleted.
-///   model: The name of the collection you want to delete from.
+  /// It takes a id and a model as parameters,
+  /// then it queries the database for the document that
+  /// matches the startup_id, then it deletes the document
+  ///
+  /// Args:
+  ///   startup_id: The id of the startup that is being deleted.
+  ///   model: The name of the collection you want to delete from.
 //////////////////////////////////////////////////////////////////
   DeleteDocument({required id, required field_name, required model}) async {
     var doc_id;
@@ -92,7 +92,6 @@ class RemoveStartup extends GetxController {
     }
   }
 
-
   DeletePitch({required id}) async {
     try {
       var data;
@@ -143,10 +142,10 @@ class RemoveStartup extends GetxController {
     }
   }
 
-/// I'm trying to delete the image from the firebase storage
-/// 
-/// Args:
-///   id: The user id of the user whose product images are to be deleted.
+  /// I'm trying to delete the image from the firebase storage
+  ///
+  /// Args:
+  ///   id: The user id of the user whose product images are to be deleted.
   DeleteProductImage({required id}) async {
     try {
       var data;
@@ -160,9 +159,9 @@ class RemoveStartup extends GetxController {
       var query = obj_instance.where('user_id', isEqualTo: id).get();
 
       await query.then((value) {
-          data = value.docs.first.data() as Map<String, dynamic>;
-          products =data['products'] ;
-        });
+        data = value.docs.first.data() as Map<String, dynamic>;
+        products = data['products'];
+      });
 
       products.forEach((element) {
         filepath.add(element['path']);
@@ -191,9 +190,8 @@ class RemoveStartup extends GetxController {
       var query = obj_instance.where('user_id', isEqualTo: id).get();
 
       await query.then((value) {
-         data = value.docs.first.data() as Map<String, dynamic>;
-         members = data['members'];
-
+        data = value.docs.first.data() as Map<String, dynamic>;
+        members = data['members'];
       });
 
       members.forEach((element) {
@@ -223,9 +221,8 @@ class RemoveStartup extends GetxController {
       var query = obj_instance.where('user_id', isEqualTo: id).get();
 
       await query.then((value) {
-         data = value.docs.first.data() as Map<String, dynamic>;
-         investors = data['investor'];
-
+        data = value.docs.first.data() as Map<String, dynamic>;
+        investors = data['investor'];
       });
 
       investors.forEach((element) {
@@ -263,18 +260,16 @@ class RemoveStartup extends GetxController {
     }
   }
 
-
-
 ////////////////////////////////////////////////////////////////
-/// DeleteFounderWithStartups() is a function that
-///  deletes a user and all of their associated data
-/// from the database
-/// 
-/// Args:
-///   user_id: The user id of the user you want to delete.
-/// 
-/// Returns:
-///   A ResponseBack object.
+  /// DeleteFounderWithStartups() is a function that
+  ///  deletes a user and all of their associated data
+  /// from the database
+  ///
+  /// Args:
+  ///   user_id: The user id of the user you want to delete.
+  ///
+  /// Returns:
+  ///   A ResponseBack object.
 ////////////////////////////////////////////////////////////////
   DeleteFounderWithStartups({required user_id}) async {
     await DeleteBusinessLogo(id: user_id);
@@ -334,7 +329,7 @@ class RemoveStartup extends GetxController {
           field_name: 'user_id',
           id: user_id,
           model: getBusinessPitchtStoreName);
-          
+
       await DeleteDocument(
           field_name: 'user_id',
           id: user_id,
@@ -355,5 +350,30 @@ class RemoveStartup extends GetxController {
     }
   }
 
+//////////////////////////////////////////////////////
+  /// This function deletes an investor user
+  ///  and their associated image and documents.
+  /// Args:
+  ///   user_id: The user ID is a required parameter
+  /// for the DeleteInvestorUser function. It is used to
+  /// identify the user whose data needs to be
+  /// deleted from the system.
+//////////////////////////////////////////////////////
+  DeleteInvestorComplete({required user_id}) async {
+    try {
+      await DeleteInvestorImage(id: user_id);
+      
+      await DeleteDocument(
+          field_name: 'user_id', id: user_id, model: getInvestorUserDetail);
+      
+      await DeleteDocument(
+          field_name: 'user_id', id: user_id, model: getLikeStartupStoreName);
+      
+      await DeleteDocument(field_name: 'id', id: user_id, model: 'users');
 
+      return ResponseBack(response_type: true);
+    } catch (e) {
+      return ResponseBack(response_type: false);
+    }
+  }
 }

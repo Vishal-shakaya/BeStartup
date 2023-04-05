@@ -778,32 +778,6 @@ class _UserSettingsState extends State<UserSettings> {
                         icon: Icons.phone,
                         fun: VerifyPhoneno),
 
-                    // // Update Achived Amount :
-                    // is_update_achive_amount
-                    //     ? TakeAchiveAmount(fun: UpdateAchivedAmount)
-                    //     : EditAchivedAmount(
-                    //         title: 'Achived Amount',
-                    //         icon: Icons.currency_rupee_sharp,
-                    //         amount: '  ${30000}',
-                    //         fun: () {},
-                    //       ),
-
-                    // Switch user type;
-                    // widget.usertype == UserType.investor
-                    //     ? SettingItem(
-                    //         title: 'Switch to founder',
-                    //         icon: Icons.refresh_rounded,
-                    //         fun: SwitchInvestorToFounder,
-                    //       )
-                    //     : Container(),
-
-                    // Delete or Remove user field :
-                    // WarningItem(
-                    //     context: context,
-                    //     title: 'Remove Startup',
-                    //     icon: Icons.home_max_outlined,
-                    //     fun: DeleteStartupDialog),
-
                     // Delete or Remove user field :
                     WarningItem(
                         context: context,
