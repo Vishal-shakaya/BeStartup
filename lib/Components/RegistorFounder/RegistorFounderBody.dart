@@ -177,49 +177,46 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
   }
 
   GetLocalStorageData() async {
-    if (updateMode == true) {
-      try {
-        final resp =
-            await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
-        final picture = resp['data']['picture'] ?? temp_avtar_image;
-        final name = resp['data']['name'] ?? '';
-        final phone_no = resp['data']['phone_no'] ?? '';
-        final primary_mail = resp['data']['primary_mail'] ?? '';
-        final other_contact = resp['data']['other_contact'] ?? '';
-        previousPath = resp['data']['path'] ?? '';
-
-        updatePicture = picture;
-        founderStore.SetImagePath(image_path: previousPath);
-        founderStore.SetImageUrl(url: picture);
-        // print('upload picture $updatePicture');
-        Map<String, String> data = {
-          'picture': picture,
-          'name': name,
-          // 'position': position,
-          'phone_no': phone_no,
-          'primary_mail': primary_mail,
-          'other_contact': other_contact,
-        };
-        updateData = data;
-      } catch (e) {
-        print('Fetching erro Founder detail $e');
-      }
-    }
-  }
-
-  /// SET PAGE DEFAULT STATE :
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
+  if (Get.parameters.isNotEmpty) {
       pageParam = jsonDecode(Get.parameters['data']!);
       user_id = pageParam['user_id'];
       if (pageParam['type'] == 'update') {
         updateMode = true;
+      
+        try {
+          final resp =
+              await founderStore.FetchFounderDetailandContact(user_id: user_id);
+
+          final picture = resp['data']['picture'] ?? temp_avtar_image;
+          final name = resp['data']['name'] ?? '';
+          final phone_no = resp['data']['phone_no'] ?? '';
+          final primary_mail = resp['data']['primary_mail'] ?? '';
+          final other_contact = resp['data']['other_contact'] ?? '';
+          previousPath = resp['data']['path'] ?? '';
+
+          updatePicture = picture;
+          founderStore.SetImagePath(image_path: previousPath);
+          founderStore.SetImageUrl(url: picture);
+          // print('upload picture $updatePicture');
+          Map<String, String> data = {
+            'picture': picture,
+            'name': name,
+            // 'position': position,
+            'phone_no': phone_no,
+            'primary_mail': primary_mail,
+            'other_contact': other_contact,
+          };
+          updateData = data;
+        } catch (e) {
+          print('Fetching erro Founder detail $e');
+        }
       }
     }
-    super.initState();
+
   }
+
+
 
   @override
   Widget build(BuildContext context) {

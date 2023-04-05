@@ -52,6 +52,7 @@ class _FounderImageState extends State<FounderImage> {
 
       var resp = await founderStore.UploadFounderImage(
           image: image, filename: filename);
+          
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(

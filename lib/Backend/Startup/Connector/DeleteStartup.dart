@@ -14,13 +14,13 @@ class RemoveStartup extends GetxController {
   var startupState = Get.put(StartupDetailViewState());
 
 /////////////////////////////////////////////////////////////
-  /// It takes a id and a model as parameters,
-  /// then it queries the database for the document that
-  /// matches the startup_id, then it deletes the document
-  ///
-  /// Args:
-  ///   startup_id: The id of the startup that is being deleted.
-  ///   model: The name of the collection you want to delete from.
+/// It takes a id and a model as parameters,
+/// then it queries the database for the document that
+/// matches the startup_id, then it deletes the document
+///
+/// Args:
+///   startup_id: The id of the startup that is being deleted.
+///   model: The name of the collection you want to delete from.
 //////////////////////////////////////////////////////////////////
   DeleteDocument({required id, required field_name, required model}) async {
     var doc_id;
@@ -169,7 +169,7 @@ class RemoveStartup extends GetxController {
       });
 
       for (var i = 0; i < filepath.length; i++) {
-        print('deletProduct Image $filepath');
+        print('deletProduct Image ${filepath[i]}');
         final deleteResp = await DeleteFileFromStorage(filepath[i]);
         print('delete resp $deleteResp');
       }
@@ -334,6 +334,11 @@ class RemoveStartup extends GetxController {
           field_name: 'user_id',
           id: user_id,
           model: getBusinessPitchtStoreName);
+          
+      await DeleteDocument(
+          field_name: 'user_id',
+          id: user_id,
+          model: startup_investors_store_name);
 
       await DeleteDocument(
           field_name: 'user_id', id: user_id, model: getLikeStartupStoreName);

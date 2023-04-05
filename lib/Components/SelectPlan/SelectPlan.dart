@@ -6,7 +6,6 @@ import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/SelectPlan/SelectPlanUtils.dart';
 import 'package:be_startup/Components/Widgets/CheckoutPaymentDiagWidget.dart';
 import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
@@ -53,7 +52,6 @@ class _SelectPlanState extends State<SelectPlan> {
 
   var startupConnector = Get.put(StartupConnector());
   var founderStore = Get.put(FounderStore());
-  var investorConnector = Get.put(InvestorConnector());
 
   var my_context = Get.context;
   FirebaseAuth auth = FirebaseAuth.instance;

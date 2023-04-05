@@ -165,7 +165,7 @@ class _UserTypeState extends State<UserType> {
     }
 
     SelectUserType(option) {
-      print('selected');
+      // print('selected');
       setState(() {
         // 1. SELECT FOUNDER LOGIC:
         // 2. UNSELECT INVESTOR :

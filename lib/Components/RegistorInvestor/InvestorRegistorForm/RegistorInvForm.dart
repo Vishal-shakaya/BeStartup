@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
@@ -13,16 +13,19 @@ import 'package:google_fonts/google_fonts.dart';
 
 class RegistorInvForm extends StatefulWidget {
   var formKey;
-  RegistorInvForm({this.formKey, Key? key}) : super(key: key);
+  var data; 
+  RegistorInvForm({
+    required this.data, 
+    this.formKey, Key? key}) : super(key: key);
 
   @override
   State<RegistorInvForm> createState() => _RegistorInvFormState();
 }
 
 class _RegistorInvFormState extends State<RegistorInvForm> {
-  var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
-  var investor_connector = Get.put(InvestorConnector(), tag: 'user_onnector');
+  var investorStore = Get.put(InvestorDetailStore());
 
+  final authUser = FirebaseAuth.instance.currentUser;
   // THEME  COLOR :
   Color input_text_color = Get.isDarkMode ? dartk_color_type2 : light_black;
   Color input_foucs_color = Get.isDarkMode ? tealAccent : darkTeal;
@@ -46,8 +49,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
   GetLocalStorageData() async {
     var error_resp;
     try {
-      final resp = await investor_connector.FetchInvestorDetailandContact();
-      final data = await investorStore.GetInvestorDetail();
+      final data = widget.data;
       error_resp = data;
       return data;
     } catch (e) {
@@ -116,7 +118,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
     return Container(
       width: formfield_width,
       alignment: Alignment.center,
-      margin: EdgeInsets.only(top:context.height*0.02),
+      margin: EdgeInsets.only(top: context.height * 0.02),
       child: FormBuilder(
           key: widget.formKey,
           autovalidateMode: AutovalidateMode.disabled,
@@ -128,7 +130,6 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                   shadowColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                
                   child: Container(
                       width: formfield_width,
                       padding: EdgeInsets.all(20),
@@ -143,14 +144,13 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
                             width: contact_formfield_width,
                             child: Column(
                               children: [
-                              InputField(
-                                context: context,
-                                name: 'investor_name',
-                                error_text: 'Founder name required',
-                                lable_text: 'Full name',
-                                hind_text: 'full name',
-                                initial_val: data['name']),
-
+                                InputField(
+                                    context: context,
+                                    name: 'investor_name',
+                                    error_text: 'Founder name required',
+                                    lable_text: 'Full name',
+                                    hind_text: 'full name',
+                                    initial_val: data['name']),
                                 SecondaryInputField(
                                   context: context,
                                   name: 'phone_no',
@@ -208,7 +208,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose(
-          [FormBuilderValidators.minLength( 1, errorText: error_text)]),
+          [FormBuilderValidators.minLength(1, errorText: error_text)]),
       decoration: InputDecoration(
         labelText: lable_text,
 
@@ -263,7 +263,7 @@ class _RegistorInvFormState extends State<RegistorInvForm> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.minLength( 1,
+        FormBuilderValidators.minLength(1,
             allowEmpty: name == 'other_info' ? true : false,
             errorText: error_text)
       ]),

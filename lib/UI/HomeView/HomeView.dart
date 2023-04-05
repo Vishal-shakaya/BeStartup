@@ -1,7 +1,7 @@
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/HomeView/ExploreSection/ExploreAlert.dart';
 import 'package:be_startup/Components/HomeView/HomeHeaderSection.dart';
@@ -27,7 +27,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   dynamic mainViewWidget = StoryListView();
   var founderStore = Get.put(FounderStore());
-  var investorConnector = Get.put(InvestorConnector());
+  var investorStore = Get.put(InvestorDetailStore());
 
   final userState = Get.put(UserState());
   final userStore = Get.put(UserStore());
@@ -273,7 +273,7 @@ class _HomeViewState extends State<HomeView> {
       // Investor Handler :
       if (userType == UserStoreName.investor) {
         final invest_resp =
-            await investorConnector.FetchInvestorDetailandContact(
+            await investorStore.FetchInvestorDetailandContact(
                 user_id: user_id);
         // Investor Success Handler :
         if (invest_resp['response']) {

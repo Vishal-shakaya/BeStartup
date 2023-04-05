@@ -1,4 +1,6 @@
 import 'package:be_startup/UI/StartupSlides/BusinessPitchView.dart';
+
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
@@ -10,8 +12,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Keys/CacheStoreKeys/CacheStoreKeys.dart';
-
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseCatigoryBody.dart';
+
 import 'package:be_startup/Components/SelectPlan/SelectPlan.dart';
 import 'package:be_startup/Components/StartupView/InvestPage/InvestPage.dart';
 import 'package:be_startup/Components/StartupView/TeamPage/TeamPage.dart';
@@ -36,7 +38,6 @@ import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:be_startup/Handlers/UserRegistration/Login.dart';
 import 'package:be_startup/Utils/Fonts.dart';
 import 'package:be_startup/Utils/Routes.dart';

@@ -13,8 +13,8 @@ class InvestorCustomDropdown extends StatefulWidget {
   var profile_image;
   var SwitchSettingView;
 
-  InvestorCustomDropdown(
-      {required this.CreateStatup,
+  InvestorCustomDropdown({
+      required this.CreateStatup,
       required this.SwitchToFounder,
       required this.profile_image,
       required this.SwitchSettingView,
@@ -214,8 +214,8 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
                     break;
                 }
               },
-              openWithLongPress: true,
-              customItemsHeights: [8],
+              // openWithLongPress: true,
+              // customItemsHeights: [8],
               customButton: Container(
                 margin: EdgeInsets.only(top: context.height * 0.01),
                 child: CircleAvatar(
@@ -224,10 +224,12 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
 
                   child: ClipOval(
                     child: CachedNetworkImage(
+                      key: UniqueKey(),
                       imageUrl: widget.profile_image,
                       fit: BoxFit.cover,
                       width: profile_menu_width,
                       height: profile_menu_height,
+                      
                     ),
                   ),
                 ),

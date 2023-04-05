@@ -1,8 +1,10 @@
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
+import 'dart:convert';
+
 import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Components/RegistorInvestor/InvestorRegistorForm/InvestorImage.dart';
 import 'package:be_startup/Components/RegistorInvestor/InvestorRegistorForm/RegistorInvForm.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -21,9 +23,7 @@ class InvestorRegistorFormBody extends StatefulWidget {
 }
 
 class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
-  final investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
-  final investorConnector =
-      Get.put(InvestorConnector(), tag: 'investor_connector');
+  final investorStore = Get.put(InvestorDetailStore());
   final formKey = GlobalKey<FormBuilderState>();
   var my_context = Get.context;
 
@@ -45,11 +45,19 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 
   bool? updateMode = false;
 
+  var user_id;
+
+  var previousPath;
+
+  var updatePicture;
+
+  var updateData; 
+
+
   //////////////////////////////////////////////
   // CREATE INVESTOR FORM :
   //////////////////////////////////////////////
   SubmitInvestorDetail() async {
-    print('Submit Detail');
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
 
     formKey.currentState!.save();
@@ -117,24 +125,21 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
       final id = authUser?.uid;
       final mail = authUser?.email;
 
-      var res = await investorStore.CreateInvestor(
-          id: id,
-          mail: mail,
-          primaryMail: email,
+      var update_resp = await investorStore.UpdateInvestorDetail(
+          user_id: id,
           name: name,
-          phoneNo: phoneNo,
-          otherContact: other_contact);
-      var update_resp = await investorConnector.UpdateInvestorDetail();
+          phone_no: phoneNo,
+          other_contact: other_contact,
+          email: email);
 
       // Success Handler :
-      if (res['response']) {
-        
+      if (update_resp['response']) {
         // Update Success Hndler :
         if (update_resp['response']) {
           formKey.currentState!.reset();
           CloseCustomPageLoadingSpinner();
-          print('Investor Created');
-          // Get.toNamed(startup_view_url);
+          print('Update Error');
+          Get.toNamed(startup_view_url);
         }
 
         // Update Error handler :
@@ -146,20 +151,9 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
               type: MySnackbarType.error,
               title: update_resp['message'],
               message: update_error_msg));
-          
+
           print('Error Investor Created');
         }
-      }
-
-      // Error Handler :
-      if (!res['response']) {
-        Get.closeAllSnackbars();
-        CloseCustomPageLoadingSpinner();
-        Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            type: MySnackbarType.error,
-            title: create_error_title,
-            message: create_error_msg));
       }
     }
 
@@ -170,20 +164,6 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
       Get.showSnackbar(
           MyCustSnackbar(width: snack_width, type: MySnackbarType.error));
     }
-  }
-
-/////////////////////////////////////
-  /// SET PAGE DEFAULT STATE :
-/////////////////////////////////////
-  @override
-  void initState() {
-    if (Get.parameters.isNotEmpty) {
-      pageParam = Get.parameters;
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      }
-    }
-    super.initState();
   }
 
   @override
@@ -233,6 +213,65 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
       print('480');
     }
 
+    return FutureBuilder(
+        future: GetLocalStorageData(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CustomShimmer(
+              text: 'Loading User Detail ',
+            );
+          }
+          if (snapshot.hasError) return ErrorPage();
+
+          if (snapshot.hasData) {
+            return MainMethod(context);
+          }
+          return MainMethod(context);
+        });
+  }
+
+//////////////////////////////////////
+// GET REQUIREMENTS :
+//////////////////////////////////////
+  GetLocalStorageData() async {
+    if (Get.parameters.isNotEmpty) {
+      pageParam = jsonDecode(Get.parameters['data']!);
+      user_id = pageParam['user_id'];
+      if (pageParam['type'] == 'update') {
+        updateMode = true;
+
+        try {
+          final resp = await investorStore.FetchInvestorDetailandContact(
+              user_id: user_id);
+
+          final picture = resp['data']['picture'] ?? temp_avtar_image;
+          final name = resp['data']['name'] ?? '';
+          final phone_no = resp['data']['phone_no'] ?? '';
+          final primary_mail = resp['data']['primary_mail'] ?? '';
+          final other_contact = resp['data']['other_contact'] ?? '';
+          previousPath = resp['data']['path'] ?? '';
+
+          updatePicture = picture;
+          investorStore.SetImagePath(image_path: previousPath);
+          investorStore.SetImageUrl(url: picture);
+          // print('upload picture $updatePicture');
+          Map<String, String> data = {
+            'picture': picture,
+            'name': name,
+            // 'position': position,
+            'phone_no': phone_no,
+            'primary_mail': primary_mail,
+            'other_contact': other_contact,
+          };
+          updateData = data;
+        } catch (e) {
+          print('Fetching erro Founder detail $e');
+        }
+      }
+    }
+  }
+
+  Column MainMethod(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -248,11 +287,12 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // UPLOAD FOUNDER IMAGE :
-                  InvestorImage(),
+                  InvestorImage(picture: updatePicture,),
 
                   // REGISTRATION FORM :
                   RegistorInvForm(
                     formKey: formKey,
+                    data: updateData,
                   )
                 ],
 

@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorCatigoryStorage.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/RegistorInvestor/ChooseCatigory/ChooseChip.dart';
 
@@ -32,10 +31,9 @@ class _ChooseCatigoryBodyState extends State<ChooseCatigoryBody> {
   double continue_btn_width = 150;
   double continue_btn_height = 50;
 
-  var catigoryStore = Get.put(InvestorCatigoryStore(), tag: 'catigories');
-  var investorConct = Get.put(InvestorConnector(), tag: 'investor_connector');
+  var catigoryStore = Get.put(InvestorCatigoryStore());
   var userStore = Get.put(UserStore());
-  var userState = Get.put(UserState());
+
   var authUser = FirebaseAuth.instance.currentUser;
 
   @override

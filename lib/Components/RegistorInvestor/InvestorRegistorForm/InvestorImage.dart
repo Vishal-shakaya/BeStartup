@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -10,7 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 
 class InvestorImage extends StatefulWidget {
-  InvestorImage({Key? key}) : super(key: key);
+  var picture; 
+  InvestorImage({
+    required this.picture, 
+    Key? key}) : super(key: key);
 
   @override
   State<InvestorImage> createState() => _InvestorImageState();
@@ -18,17 +20,25 @@ class InvestorImage extends StatefulWidget {
 
 class _InvestorImageState extends State<InvestorImage> {
   var investorStore = Get.put(InvestorDetailStore(), tag: 'investor');
- 
+
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
-  bool is_uploading = false; 
- 
+  bool is_uploading = false;
+
   late UploadTask? upload_process;
 
   double image_radius = 85;
   double upload_icon_position_top = 129;
   double upload_icon_position_left = 129;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    upload_image_url = widget.picture!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +70,14 @@ class _InvestorImageState extends State<InvestorImage> {
     Future<void> PickImage() async {
       final result = await FilePicker.platform.pickFiles(allowMultiple: false);
       setState(() {
-          is_uploading = true; 
-        });
-      
+        is_uploading = true;
+      });
+
       if (result == null) return;
       if (result != null && result.files.isNotEmpty) {
         image = result.files.first.bytes;
         filename = result.files.first.name;
-        
+
         var resp = await investorStore.UploadProfileImage(
             image: image, filename: filename);
 
@@ -177,11 +187,11 @@ class _InvestorImageState extends State<InvestorImage> {
                     child: is_uploading
                         ? spinner
                         : IconButton(
-                        onPressed: () {
-                          PickImage();
-                        },
-                        icon: Icon(Icons.camera_alt_rounded,
-                            size: 19, color: primary_light)),
+                            onPressed: () {
+                              PickImage();
+                            },
+                            icon: Icon(Icons.camera_alt_rounded,
+                                size: 19, color: primary_light)),
                   ),
                 )),
           ],

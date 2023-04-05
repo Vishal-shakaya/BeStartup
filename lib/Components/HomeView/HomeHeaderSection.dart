@@ -776,13 +776,13 @@ class _HomeHeaderSectionState extends State<HomeHeaderSection> {
                       CreateStatup: CreateStatup,
                       SwitchToFounder: SwitchToProfile,
                       SwitchSettingView: SwitchSettingView,
-                      profile_image: widget.profile_image,
+                      profile_image: widget.profile_image??'',
                     )
                   : FounderCustomFullScreenDropDown(
                       CreateStatup: CreateStatup,
                       SwitchToFounder: SwitchToProfile,
                       SwitchSettingView: SwitchSettingView,
-                      profile_image: widget.profile_image,
+                      profile_image: widget.profile_image??'',
                     ),
             ],
           ),

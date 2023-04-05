@@ -273,7 +273,6 @@ class _StartupViewState extends State<StartupView> {
       video_player_height = 0.90;
 
       video_model_player_width = 0.90;
-      ;
 
       video_model_player_height = 0.90;
       print('800');

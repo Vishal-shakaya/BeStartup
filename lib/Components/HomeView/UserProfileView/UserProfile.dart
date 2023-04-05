@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
+import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -84,9 +84,9 @@ class HomeViewUserProfile extends StatelessWidget {
     // If User Type Investor :
     //////////////////////////////////////////
     if (usertype == UserStoreName.investor) {
-      final investorConnector = Get.put(InvestorConnector());
+      final investorStore = Get.put(InvestorDetailStore());
       final investor_resp =
-          await investorConnector.FetchInvestorDetailandContact(
+          await investorStore.FetchInvestorDetailandContact(
               user_id: user_id);
 
       print('Founder Response $investor_resp');

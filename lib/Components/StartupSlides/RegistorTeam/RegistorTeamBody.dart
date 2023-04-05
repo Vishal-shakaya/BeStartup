@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Backend/Users/Investor/InvestorConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
@@ -32,7 +31,6 @@ class _RegistorTeamBodyState extends State<RegistorTeamBody> {
   var memeberStore = Get.put(BusinessTeamMemberStore());
   var startupConnector = Get.put(StartupConnector());
   var startupviewConnector = Get.put(StartupViewConnector());
-  var investorConnector = Get.put(InvestorConnector());
 
   var userStore = Get.put(UserStore(), tag: 'user_store');
   var updateStore = Get.put(StartupUpdater(), tag: 'update_startup');
