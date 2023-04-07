@@ -31,8 +31,9 @@ class ViewStoryButton extends StatelessWidget {
   /// and passes it to the startup_view_url
 /////////////////////////////////////////////////////////////
   StartupDetailView() async {
+    final loginUserId = FirebaseAuth.instance.currentUser?.uid;
     var userState = Get.put(UserState());
-    var is_admin = await userState.GetIsUserAdmin();
+    var is_admin = await userState.GetIsUserAdmin(story_user_id: user_id, login_user_id: loginUserId);
 
     var param = {
       'user_id': user_id,
@@ -43,7 +44,6 @@ class ViewStoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('detail view user id $user_id');
     Widget viewButton = ViewButtonWithText();
     Widget roundedViewButton = RoundedViewButton();
 

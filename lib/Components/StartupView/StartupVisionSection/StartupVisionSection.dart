@@ -445,19 +445,16 @@ class _StartupVisionSectionState extends State<StartupVisionSection> {
                           left: Radius.circular(vision_cont_radius),
                           right: Radius.circular(vision_cont_radius))),
                   child: SingleChildScrollView(
-                    child: AutoSizeText.rich(
-                      TextSpan(
-                          text: vision_text,
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(),
-                              color: startup_text_color,
-                              fontSize: vision_text_fontSize,
-                              height: vision_text_height,
-                              fontWeight: FontWeight.w600)),
+                    child:Text(
+                      vision_text??'',
+                      style:GoogleFonts.openSans(
+                          textStyle: TextStyle(),
+                          color: startup_text_color,
+                          fontSize: vision_text_fontSize,
+                          height: vision_text_height,
+                          fontWeight: FontWeight.w500),
                       maxLines: vison_text_maxlines,
-                      overflow: TextOverflow.ellipsis,
-                      style: Get.textTheme.headline2,
-                    ),
+                      overflow: TextOverflow.ellipsis )
                   )),
             ),
           )

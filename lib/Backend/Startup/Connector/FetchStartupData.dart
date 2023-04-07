@@ -313,7 +313,7 @@ class StartupViewConnector extends GetxController {
   ///   startup_id: The id of the startup you want to like
   ///   user_id: The user id of the user who liked the startup
 ///////////////////////////////////////////////////////////////
-  LikeStartup({startup_id, user_id}) async {
+  LikeStartup({required user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -329,7 +329,7 @@ class StartupViewConnector extends GetxController {
         save_post_len = value.size;
 
         if (save_post_len > 0) {
-          startup_list = value.docs.first.data()['startup_ids'];
+          startup_list = value.docs.first.data()['user_ids'];
 
           data = value.docs.first.data();
 
@@ -338,14 +338,14 @@ class StartupViewConnector extends GetxController {
       });
 
       // Check if post already Saved :
-      if (startup_list.contains(startup_id)) {
+      if (startup_list.contains(user_id)) {
         return ResponseBack(
             response_type: false, message: 'Startup Already Liked', code: 101);
       }
 
       // Add new Save Story Doc :
       if (save_post_len <= 0) {
-        startup_list.add(startup_id);
+        startup_list.add(user_id);
 
         var save_startup = await LikeStartupsModel(
           user_id: user_id,
@@ -359,9 +359,9 @@ class StartupViewConnector extends GetxController {
       }
 
       if (save_post_len > 0) {
-        startup_list.add(startup_id);
+        startup_list.add(user_id);
 
-        data['startup_ids'] = startup_list;
+        data['user_ids'] = startup_list;
 
         await myStore.doc(doc_id).update(data);
 
@@ -384,7 +384,7 @@ class StartupViewConnector extends GetxController {
   /// Returns:
   ///   A Future<ResponseBack>
 //////////////////////////////////////////////////////////////
-  UnLikeStartup({startup_id, user_id}) async {
+  UnLikeStartup({required user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -398,7 +398,7 @@ class StartupViewConnector extends GetxController {
         save_post_len = value.size;
 
         if (save_post_len > 0) {
-          startup_list = value.docs.first.data()['startup_ids'];
+          startup_list = value.docs.first.data()['user_ids'];
 
           data = value.docs.first.data();
 
@@ -412,9 +412,9 @@ class StartupViewConnector extends GetxController {
       }
 
       if (save_post_len > 0) {
-        startup_list.remove(startup_id);
+        startup_list.remove(user_id);
 
-        data['startup_ids'] = startup_list;
+        data['user_ids'] = startup_list;
 
         await myStore.doc(doc_id).update(data);
 
@@ -443,6 +443,7 @@ class StartupViewConnector extends GetxController {
 
       await query.then((value) {
         save_post_len = value.size;
+        print('like value $value');
 
         if (save_post_len > 0) {
           startup_list = value.docs.first.data()['user_ids'];

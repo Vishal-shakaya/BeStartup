@@ -73,20 +73,20 @@ class _InvestmentChartState extends State<InvestmentChart> {
   bool? is_liked = false;
 
 /////////////////////////////////////////
-  /// GET REQUIRED PARAM :
+/// GET REQUIRED PARAM :
 /////////////////////////////////////////
-  // IsStartupLiked() async {
-  //   final resp = await startupConnector.IsStartupLiked(
-  //     user_id: user_id,
-  //   );
+  IsStartupLiked() async {
+    final resp = await startupConnector.IsStartupLiked(
+      user_id: user_id,
+    );
 
-  //   if (resp['code'] == 101) {
-  //     is_liked = true;
-  //   }
-  //   if (resp['code'] == 111) {
-  //     is_liked = false;
-  //   }
-  // }
+    if (resp['code'] == 101) {
+      is_liked = true;
+    }
+    if (resp['code'] == 111) {
+      is_liked = false;
+    }
+  }
 
   // Update Investment amount UI :
   UpdateInvestmentAmount({required data}) async {
@@ -156,7 +156,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
     }
 
     // Set liked default state :
-    // await IsStartupLiked();
+    await IsStartupLiked();
   }
 
   @override

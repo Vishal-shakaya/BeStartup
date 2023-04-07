@@ -42,7 +42,6 @@ class UserState {
   IsAdmin({required admin}) async {
     is_admin = admin ?? '';
     print('Set  $admin');
-  
   }
 
   SetProfileImage({required image}) async {
@@ -86,8 +85,13 @@ class UserState {
     return user;
   }
 
-  GetIsUserAdmin() async {
-    return true;
+  GetIsUserAdmin({required story_user_id, required login_user_id}) async {
+    // print('login user id $login_user_id');
+    // print('story user Id $story_user_id');
+    if (story_user_id == login_user_id) {
+      return true;
+    }
+    return false;
   }
 
   GetProfileImage() async {

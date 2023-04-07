@@ -42,7 +42,6 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   /// saves it
   LikeUnlikeStartupProcess() async {
     final resp = await startupViewConnector.LikeStartup(
-      startup_id: widget.startup_id,
       user_id: widget.user_id,
     );
 
@@ -56,7 +55,6 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
     // If startup already save then Unsave :
     if (resp['code'] == 101) {
       final unsave_resp = await startupViewConnector.UnLikeStartup(
-        startup_id: widget.startup_id,
         user_id: widget.user_id,
       );
 
