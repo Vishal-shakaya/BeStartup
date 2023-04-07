@@ -8,7 +8,6 @@ import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/DeleteStartup.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
-import 'package:be_startup/Components/HomeView/SettingsView/DeleteStartupsDialogCont.dart';
 import 'package:be_startup/Components/HomeView/SettingsView/ReauthenticateDialog.dart';
 
 import 'package:be_startup/Components/Widgets/PhoneNoVerification.dart';
@@ -210,7 +209,8 @@ class _UserSettingsState extends State<UserSettings> {
                   width: context.width * auth_dialog_width,
                   height: context.height * auth_dialog_height,
                   child: PhoneNoVerifyDialogAlert(
-                      noOperation: NumberOperation.update, key: UniqueKey())));
+                      noOperation: NumberOperation.update, 
+                      key: UniqueKey())));
         });
   }
 
@@ -223,15 +223,15 @@ class _UserSettingsState extends State<UserSettings> {
         width: 200,
         title: 'Confirm',
         type: CoolAlertType.confirm,
+        
         onCancelBtnTap: () {
           Navigator.of(context).pop();
         },
-        onConfirmBtnTap: () async {
-          // Delete Startup:
-          // final resp = await removeStartup.DeleteStartup(user_id: fireInstance.currentUser?.uid);
-          
+        
+        onConfirmBtnTap: () async {          
           Navigator.of(context).pop();
         },
+
         widget: Text(
           'After confirm Statups will remove completely',
           textAlign: TextAlign.center,
@@ -847,64 +847,6 @@ class _UserSettingsState extends State<UserSettings> {
             ],
           ),
         ),
-        // trailing: context.width < 640
-        //     ?
-
-        //     // Rounded Edit Button :
-        //     Tooltip(
-        //         message: 'edit',
-        //         child: Container(
-        //           width: rounded_btn_width,
-        //           height: rounded_btn_height,
-        //           decoration: BoxDecoration(
-        //               border: Border.all(color: Colors.blueGrey.shade300),
-        //               borderRadius: BorderRadius.circular(50)),
-        //           child: IconButton(
-        //               padding: EdgeInsets.all(4),
-        //               onPressed: () {},
-        //               icon: Icon(
-        //                 Icons.edit,
-        //                 size: rounded_btn_fontSize,
-        //                 color: edit_btn_color,
-        //               )),
-        //         ),
-        //       )
-        //     :
-
-        // Simple Edit Button :
-        // Container(
-        //     width: trail_width,
-        //     height: trail_height,
-        //     child: Row(
-        //       children: [
-        //         Container(
-        //           width: trail_row_width,
-        //           height: trail_row_height,
-        //           decoration: BoxDecoration(
-        //               borderRadius: BorderRadius.circular(15),
-        //               border:
-        //                   Border.all(color: Colors.blueGrey.shade300)),
-        //           child: TextButton.icon(
-        //               onPressed: () {
-        //                 setState(() {
-        //                   is_update_mail
-        //                       ? is_update_mail = false
-        //                       : is_update_mail = true;
-        //                 });
-        //               },
-        //               icon: Icon(
-        //                 Icons.edit,
-        //                 size: trail_icon_fontSize,
-        //                 color: edit_btn_color,
-        //               ),
-        //               label: Text(
-        //                 'update',
-        //                 style: TextStyle(color: edit_btn_color),
-        //               )),
-        //         ),
-        //       ],
-        //     ),
-        //   )
       ),
     );
   }
@@ -940,38 +882,6 @@ class _UserSettingsState extends State<UserSettings> {
             ],
           ),
         ),
-        // trailing: Container(
-        //   width: trail_width,
-        //   height: trail_height,
-        //   child: Row(
-        //     children: [
-        //       Container(
-        //         width: trail_row_width,
-        //         height: trail_row_height,
-        //         decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(15),
-        //             border: Border.all(color: Colors.blueGrey.shade300)),
-        //         child: TextButton.icon(
-        //             onPressed: () {
-        //               setState(() {
-        //                 is_update_achive_amount
-        //                     ? is_update_achive_amount = false
-        //                     : is_update_achive_amount = true;
-        //               });
-        //             },
-        //             icon: Icon(
-        //               Icons.edit,
-        //               size: trail_icon_fontSize,
-        //               color: edit_btn_color,
-        //             ),
-        //             label: Text(
-        //               'update',
-        //               style: TextStyle(color: edit_btn_color),
-        //             )),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }
@@ -1011,113 +921,6 @@ class _UserSettingsState extends State<UserSettings> {
             ],
           ),
         ),
-        // trailing: Container(
-        //   width: trail_width,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       fireInstance.currentUser?.phoneNumber != null
-        //           ? context.width < 640
-        //               ?
-
-        //               // Rounded Button :
-        //               Tooltip(
-        //                   message: 'edit',
-        //                   child: Container(
-        //                     width: rounded_btn_width,
-        //                     height: rounded_btn_height,
-        //                     decoration: BoxDecoration(
-        //                         border:
-        //                             Border.all(color: Colors.blueGrey.shade300),
-        //                         borderRadius: BorderRadius.circular(50)),
-        //                     child: IconButton(
-        //                         padding: EdgeInsets.all(4),
-        //                         onPressed: () {},
-        //                         icon: Icon(
-        //                           Icons.edit,
-        //                           size: rounded_btn_fontSize,
-        //                           color: edit_btn_color,
-        //                         )),
-        //                   ),
-        //                 )
-        //               :
-        //               // Simple Phone no Update Button  :
-        //               Container(
-        //                   width: trail_row_width,
-        //                   height: trail_row_height,
-        //                   decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       border:
-        //                           Border.all(color: Colors.blueGrey.shade300)),
-        //                   child: TextButton.icon(
-        //                       icon: Icon(
-        //                         Icons.edit,
-        //                         size: trail_icon_fontSize,
-        //                         color: edit_btn_color,
-        //                       ),
-        //                       onPressed: () async {
-        //                         await fun();
-        //                       },
-        //                       label: Text(
-        //                         'update',
-        //                         style: TextStyle(color: edit_btn_color),
-        //                       )),
-        //                 )
-        //           : fireInstance.currentUser?.phoneNumber == null
-        //               ? context.width < 640
-        //                   ?
-        //                   // Rounded Button :
-        //                   Container(
-        //                       margin:
-        //                           EdgeInsets.only(left: context.width * 0.14),
-        //                       child: Tooltip(
-        //                         message: 'verify',
-        //                         child: Container(
-        //                           width: rounded_btn_width,
-        //                           height: rounded_btn_height,
-        //                           decoration: BoxDecoration(
-        //                               border: Border.all(
-        //                                   color: Colors.blueGrey.shade300),
-        //                               borderRadius: BorderRadius.circular(50)),
-        //                           child: IconButton(
-        //                               padding: EdgeInsets.all(4),
-        //                               onPressed: () {},
-        //                               icon: Icon(
-        //                                 Icons.check,
-        //                                 size: rounded_btn_fontSize,
-        //                                 color: edit_btn_color,
-        //                               )),
-        //                         ),
-        //                       ),
-        //                     )
-        //                   :
-
-        //                   // Simple Phone no Verify Button :
-        //                   Container(
-        //                       width: phone_no_cont_width,
-        //                       height: phone_no_height,
-        //                       decoration: BoxDecoration(
-        //                           borderRadius: BorderRadius.circular(15),
-        //                           border: Border.all(
-        //                               color: Colors.blueGrey.shade300)),
-        //                       child: TextButton.icon(
-        //                           icon: Icon(
-        //                             Icons.check,
-        //                             size: trail_icon_fontSize,
-        //                             color: edit_btn_color,
-        //                           ),
-        //                           onPressed: () async {
-        //                             await fun();
-        //                           },
-        //                           label: Text(
-        //                             'verify now',
-        //                             style: TextStyle(color: edit_btn_color),
-        //                           )),
-        //                     )
-        //               : Container()
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }

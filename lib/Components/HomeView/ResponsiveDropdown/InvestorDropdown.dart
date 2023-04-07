@@ -210,7 +210,7 @@ class _InvestorCustomDropdownState extends State<InvestorCustomDropdown> {
                     break;
 
                   case InvestorMenuItems.feedback:
-                    Wiredash.of(context).show(inheritMaterialTheme: true);
+                    Wiredash.of(context).show(inheritMaterialTheme: false ,feedbackOptions: WiredashFeedbackOptions(), options: WiredashFeedbackOptions());
                     break;
                 }
               },

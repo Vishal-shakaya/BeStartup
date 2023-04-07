@@ -51,7 +51,13 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
 
   var updatePicture;
 
-  var updateData; 
+  var updateData= {
+    'picture': '',
+    'name': '',
+    'phone_no': '',
+    'primary_mail': '',
+    'other_contact': '',
+  }; 
 
 
   //////////////////////////////////////////////
@@ -286,7 +292,7 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // UPLOAD FOUNDER IMAGE :
-                  InvestorImage(picture: updatePicture,),
+                  InvestorImage(picture: updatePicture??'',),
 
                   // REGISTRATION FORM :
                   RegistorInvForm(

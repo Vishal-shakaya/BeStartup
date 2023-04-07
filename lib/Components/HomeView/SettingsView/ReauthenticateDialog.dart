@@ -241,15 +241,16 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
 
   Container SocialReAuthRow(BuildContext context) {
     return Container(
-        width: context.width * 0.15,
-        margin: EdgeInsets.only(top: context.height * 0.07),
+        width: context.width * 0.12,
+        margin: EdgeInsets.only(top: context.height * 0.03),
         child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 flex: 1,
-                child: SignInButton.mini(
+                child: SignInButton(
+                    padding: 5,
                     buttonType: Get.isDarkMode
                         ? ButtonType.googleDark
                         : ButtonType.google,
@@ -262,43 +263,43 @@ class _ReauthenticateWidgetState extends State<ReauthenticateWidget> {
                       await CompleteTask();
                     }),
               ),
-              Expanded(
-                flex: 1,
-                child: SignInButton.mini(
-                    buttonType: ButtonType.twitter,
-                    elevation: 3,
-                    buttonSize: ButtonSize.medium,
-                    onPressed: () {
-                      print('click');
-                    }),
-              ),
-              Expanded(
-                flex: 1,
-                child: SignInButton.mini(
-                    buttonType: ButtonType.linkedin,
-                    elevation: 3,
-                    buttonSize: ButtonSize.medium,
-                    onPressed: () {
-                      print('click');
-                    }),
-              ),
-              Expanded(
-                flex: 1,
-                child: SignInButton.mini(
-                    buttonType: ButtonType.apple,
-                    elevation: 3,
-                    buttonSize: ButtonSize.medium,
-                    onPressed: () {
-                      print('click');
-                    }),
-              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: SignInButton.mini(
+              //       buttonType: ButtonType.twitter,
+              //       elevation: 3,
+              //       buttonSize: ButtonSize.medium,
+              //       onPressed: () {
+              //         print('click');
+              //       }),
+              // ),
+              // Expanded(
+              //   flex: 1,
+              //   child: SignInButton.mini(
+              //       buttonType: ButtonType.linkedin,
+              //       elevation: 3,
+              //       buttonSize: ButtonSize.medium,
+              //       onPressed: () {
+              //         print('click');
+              //       }),
+              // ),
+              // Expanded(
+              //   flex: 1,
+              //   child: SignInButton.mini(
+              //       buttonType: ButtonType.apple,
+              //       elevation: 3,
+              //       buttonSize: ButtonSize.medium,
+              //       onPressed: () {
+              //         print('click');
+              //       }),
+              // ),
             ]));
   }
 
   Container SubmitFormButton(SubmitLofinForm) {
     return Container(
-      width: 220,
-      height: 42,
+      width: context.width*0.12,
+      height: context.height*0.04,
       margin: EdgeInsets.only(top: 20),
       child: a.GradientElevatedButton(
           gradient: g1,

@@ -261,7 +261,7 @@ class _FounderCustomFullScreenDropDownState
               break;
 
             case FounderMenuItems.feedback:
-              Wiredash.of(context).show(inheritMaterialTheme: true);
+              Wiredash.of(context).show(inheritMaterialTheme: false ,feedbackOptions: WiredashFeedbackOptions(), options: WiredashFeedbackOptions());
               break;
           }
         },
