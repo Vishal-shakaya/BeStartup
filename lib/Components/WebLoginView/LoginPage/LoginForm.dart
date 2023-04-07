@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/Users/UserStore.dart';
+import 'package:be_startup/Components/WebLoginView/SocialAuth/SocailAuth.dart';
 import 'package:be_startup/Components/Widgets/ForgotPasswordDialogAlert.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -198,31 +199,39 @@ class _LoginFormState extends State<LoginForm> {
     return Container(
         margin: EdgeInsets.only(top: 10),
         child: SingleChildScrollView(
-          child: Column(children: [
-            FormBuilder(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: Column(children: [
-                  // 1. EMAIL FIELD
-                  Label(input_label_color, 'Email addresss'),
-                  EmailInputField(input_text_color, context, input_foucs_color),
-
-                  SizedBox(
-                    height: 2,
-                  ),
-
-                  // 2. PASSWORD
-                  Label(input_label_color, 'Password'),
-                  PasswodInputField(
-                      context, input_text_color, input_foucs_color),
-
-                  // 3.LOOGIN BUTTON:
-                  LoginButton(SubmitLofinForm),
-
-                  // 5. Forgot password :
-                  ResetPasswordButton(ForgotPasswordMethod)
-                ]))
-          ]),
+          child: Container(
+            child: Column(
+              children: [
+              FormBuilder(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(children: [
+                    // 1. EMAIL FIELD
+                    Label(input_label_color, 'Email addresss'),
+                    EmailInputField(input_text_color, context, input_foucs_color),
+          
+                    SizedBox(
+                      height: 2,
+                    ),
+          
+                    // 2. PASSWORD
+                    Label(input_label_color, 'Password'),
+                    PasswodInputField(
+                        context, input_text_color, input_foucs_color),
+          
+                    // 3.LOOGIN BUTTON:
+                    LoginButton(SubmitLofinForm),
+                    
+                    SizedBox(
+                      height: context.height*0.03,
+                    ),
+          
+                    SocialAuth(), 
+                    // 5. Forgot password :
+                    ResetPasswordButton(ForgotPasswordMethod)
+                  ]))
+            ]),
+          ),
         ));
   }
 
@@ -240,7 +249,7 @@ class _LoginFormState extends State<LoginForm> {
           ForgotPasswordMethod();
         },
         child: AutoSizeText.rich(
-          TextSpan(text: 'click here to forgot password !'),
+          TextSpan(text: 'forgot password !'),
           style: TextStyle(color: light_color_type3, fontSize: 14),
         ),
       ),

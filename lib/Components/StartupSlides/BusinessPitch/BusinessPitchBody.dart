@@ -97,30 +97,51 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
   var startup_id;
   var user_id;
   var is_admin;
-  
+
   var pitchUrl;
 
   var previousPitchUrl;
   var previousPath;
   var spinner = MyCustomButtonSpinner();
   var uploadFileName = '';
+  var size; 
 
-    BackButtonRoute(){
-       var urlParam = {
-        'user_id':user_id,
-        'is_admin':is_admin,  
-      };
-      Get.toNamed(startup_view_url , parameters: {'data':jsonEncode(urlParam)});
+  BackButtonRoute() {
+    var urlParam = {
+      'user_id': user_id,
+      'is_admin': is_admin,
+    };
+    Get.toNamed(startup_view_url, parameters: {'data': jsonEncode(urlParam)});
   }
 
   Future<void> UploadPitchVideo() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        dialogTitle: 'UPLOAD PITCH',
+        type: FileType.video);
+
     if (result == null) return;
 
     if (result != null && result.files.isNotEmpty) {
       pitchVideo = result.files.first.bytes;
       filename = result.files.first.name;
       uploadFileName = filename.toString();
+      size = result.files.first.size / (1024 * 1024);
+      size = size.toString().split('.')[0];
+      size = int.parse(size);
+
+      // if image size greater then 10 mb then show max size message:
+      if (size > 100) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: 'Image size must be less then 100 mb',
+        ));
+
+        return;
+      }
 
       setState(() {
         is_uploading = true;
@@ -128,8 +149,10 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
 
       var resp = await UploadPitch(video: pitchVideo, filename: filename);
       final data = resp['data'];
+      final deleteResp = await DeleteFileFromStorage(previousPath);
       await pitchStore.SetPitchUrl(tempPitchUrl: data['url']);
       await pitchStore.SetPitchPath(tempPath: data['path']);
+      
 
       if (resp['response']) {
         CloseCustomPageLoadingSpinner();
@@ -203,7 +226,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
       print('update pitch');
 
       final deleteResp = await DeleteFileFromStorage(previousPath);
-      print('delete Resp $deleteResp');
+      // print('delete Resp $deleteResp');
 
       var pageParam = jsonEncode({
         'is_admin': is_admin,
@@ -637,9 +660,8 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
             ],
           ),
         ),
-
-            updateMode==true?
-            Positioned(
+        updateMode == true
+            ? Positioned(
                 bottom: 0,
                 right: 0,
                 child: InkWell(
@@ -662,7 +684,7 @@ class _BusinessPitchBodyState extends State<BusinessPitchBody> {
                     ),
                   ),
                 ))
-             : Container() 
+            : Container()
       ],
     );
   }

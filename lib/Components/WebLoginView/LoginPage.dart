@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
               child: Row(
                 children: [
                   // SPACING
-                  Expanded(flex: 1, child: Text('')),
+                  // Expanded(flex: 1, child: Text('')),
 
                   // TABS LOGIN | SIGNUP
                   Expanded(
@@ -36,29 +36,29 @@ class LoginPage extends StatelessWidget {
                   // Divider
                   // Responseive adder 800 width  :
                   // add emptly container and remove divider:
-                  screen_width < 800
-                      ? Container(
-                          width: 20,
-                          margin: EdgeInsets.only(right: 20),
-                          child: Text(''))
-                      : CustomDivider(),
+                  // screen_width < 800
+                  //     ? Container(
+                  //         width: 20,
+                  //         margin: EdgeInsets.only(right: 20),
+                  //         child: Text(''))
+                  //     : CustomDivider(),
 
                   // SOCIAL LOGIN BUTTONS :
                   // Responsive Adder :
                   // 1. Remove Large button :
                   // 2. Add Small button :
-                  screen_width < 800
-                      ? Text('')
-                      : Expanded(
-                          flex: 1,
-                          child: SocailAuth(),
-                        ),
+                  // screen_width < 800
+                  //     ? Text('')
+                  //     : Expanded(
+                  //         flex: 1,
+                  //         child: SocailAuth(),
+                  //       ),
 
                   // SPACING RESPONSIVE
                   // Hide Image
-                  screen_width < 1150
-                      ? Expanded(flex: 1, child: Text(''))
-                      : Text('')
+                  // screen_width < 1150
+                  //     ? Expanded(flex: 1, child: Text(''))
+                  //     : Text('')
                 ],
               )),
         ]),

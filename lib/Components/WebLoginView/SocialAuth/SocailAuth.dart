@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_button/sign_button.dart';
 
-class SocailAuth extends StatefulWidget {
-  const SocailAuth({Key? key}) : super(key: key);
+class SocialAuth extends StatefulWidget {
+  const SocialAuth({Key? key}) : super(key: key);
 
   @override
-  State<SocailAuth> createState() => _SocailAuthState();
+  State<SocialAuth> createState() => _SocialAuthState();
 }
 
-class _SocailAuthState extends State<SocailAuth> {
+class _SocialAuthState extends State<SocialAuth> {
   bool is_theme_light = false;
   var auth = Get.put(MySocialAuth(), tag: 'socail_auth');
   var authManager = Get.put(AuthUserManager(), tag: 'user_manager');
@@ -215,6 +215,8 @@ class _SocailAuthState extends State<SocailAuth> {
       children: [
         // GOOGLE :
         SignInButton(
+          width: 240,
+          // height: 42,
             buttonType:
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,
@@ -224,29 +226,29 @@ class _SocailAuthState extends State<SocailAuth> {
             }),
 
         // TWITTER :
-        SignInButton(
-            buttonType: ButtonType.twitter,
-            elevation: 3,
-            onPressed: () async {
-              await TwitterSingIn();
-            }),
+        // SignInButton(
+        //     buttonType: ButtonType.twitter,
+        //     elevation: 3,
+        //     onPressed: () async {
+        //       await TwitterSingIn();
+        //     }),
 
-        // FACEBOOK :
-        SignInButton(
-            buttonType:
-                Get.isDarkMode ? ButtonType.facebookDark : ButtonType.facebook,
-            elevation: 3,
-            onPressed: () async {
-              await FacebookSingIn();
-            }),
+        // // FACEBOOK :
+        // SignInButton(
+        //     buttonType:
+        //         Get.isDarkMode ? ButtonType.facebookDark : ButtonType.facebook,
+        //     elevation: 3,
+        //     onPressed: () async {
+        //       await FacebookSingIn();
+        //     }),
 
-        // APPLE :
-        SignInButton(
-            buttonType: ButtonType.apple,
-            elevation: 3,
-            onPressed: () async {
-              await AppleSingIn();
-            }),
+        // // APPLE :
+        // SignInButton(
+        //     buttonType: ButtonType.apple,
+        //     elevation: 3,
+        //     onPressed: () async {
+        //       await AppleSingIn();
+        //     }),
       ],
     ));
   }

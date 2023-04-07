@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/Founder/FounderStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/enums.dart';
@@ -29,7 +30,7 @@ class _FounderImageState extends State<FounderImage> {
   String upload_image_url = '';
   late UploadTask? upload_process;
   bool is_uploading = false;
-
+  var size;
   double image_radius = 85;
   double upload_icon_position_top = 129;
   double upload_icon_position_left = 129;
@@ -39,20 +40,43 @@ class _FounderImageState extends State<FounderImage> {
   /////////////////////////////////////////
   Future<void> PickImage() async {
     var snack_width = MediaQuery.of(context).size.width * 0.50;
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    if (result == null) return;
+    final path = await founderStore.GetImagePath();
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        dialogTitle: 'UPLOAD PROFILE',
+        type: FileType.image);
 
-    setState(() {
-      is_uploading = true;
-    });
+    if (result == null) return;
 
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+      size = result.files.first.size / (1024 * 1024);
+      size = size.toString().split('.')[0];
+      size = int.parse(size);
+
+      // if image size greater then 10 mb then show max size message:
+      if (size > 10) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: 'Image size must be less then 10 mb',
+        ));
+
+        return;
+      }
+      setState(() {
+        is_uploading = true;
+      });
 
       var resp = await founderStore.UploadFounderImage(
           image: image, filename: filename);
-          
+
+      if (path != null || path == '') {
+        await DeleteFileFromStorage(path);
+      }
+
       if (!resp['response']) {
         Get.closeAllSnackbars();
         Get.showSnackbar(
@@ -67,7 +91,7 @@ class _FounderImageState extends State<FounderImage> {
     }
   }
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     upload_image_url = widget.picture!;
@@ -85,8 +109,6 @@ class _FounderImageState extends State<FounderImage> {
       return '';
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

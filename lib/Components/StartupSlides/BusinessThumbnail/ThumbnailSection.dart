@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:be_startup/Backend/Firebase/FileStorage.dart';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/ThumbnailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -23,14 +23,15 @@ class ThumbnailSection extends StatefulWidget {
 }
 
 class _ThumbnailSectionState extends State<ThumbnailSection> {
-  final thumbStore = Get.put(ThumbnailStore(), tag: 'thumb_store');
-  final startupConnector =
-      Get.put(StartupViewConnector(), tag: 'startup_connector');
+  final thumbStore = Get.put(ThumbnailStore());
+  final startupConnector =Get.put(StartupViewConnector());
+  
   final authUser = FirebaseAuth.instance.currentUser;
 
   Uint8List? image;
   String filename = '';
   String upload_image_url = '';
+  var size; 
 
   late UploadTask? upload_process;
   double image_hint_text_size = 22;
@@ -66,12 +67,13 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
 // THEN CALL UPLOD IMAGE FOR UPLOAD IMAGE IN BACKGROUND
 ///////////////////////////////////////////////////////
   Future<void> PickImage() async {
-    // Pick only one file :
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     var snack_width = MediaQuery.of(context).size.width * 0.50;
-    setState(() {
-      is_loading = true;
-    });
+
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        dialogTitle: 'UPLOAD THUMBNAIL',
+        type: FileType.image);
+
 
     // if rsult null then return :
     if (result == null) return;
@@ -80,9 +82,29 @@ class _ThumbnailSectionState extends State<ThumbnailSection> {
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+      size = result.files.first.size / (1024 * 1024);
+      size = size.toString().split('.')[0];
+      size = int.parse(size);
 
+      // if image size greater then 10 mb then show max size message:
+      if (size > 15) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: 'Image size must be less then 15 mb',
+        ));
+
+        return;
+      }
+
+        
+      setState(() {
+          is_loading = true;
+      });
       var resp =
           await thumbStore.SetThumbnail(thumbnail: image, filename: filename);
+          await DeleteFileFromStorage(previousPath);
 
       if (!resp['response']) {
         Get.closeAllSnackbars();

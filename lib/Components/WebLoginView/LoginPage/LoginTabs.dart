@@ -1,6 +1,6 @@
 import 'package:be_startup/Components/WebLoginView/LoginPage/LoginForm.dart';
 import 'package:be_startup/Components/WebLoginView/Signup/SignupBox.dart';
-import 'package:be_startup/Components/WebLoginView/SocialAuth/SocialAuthRow.dart';
+import 'package:be_startup/Components/WebLoginView/SocialAuth/SocailAuth.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:container_tab_indicator/container_tab_indicator.dart';
@@ -67,11 +67,12 @@ class LoginTabs extends StatelessWidget {
                       ),
                     ),
 
+                  
                   ],
                   labelColor: Colors.orange[800],
                   indicator: ContainerTabIndicator(
                     color: indicator_color,
-                    widthFraction: 0.45,
+                    widthFraction: 0.50,
                     height: 5,
                     padding: const EdgeInsets.only(top: 30),
                     radius: const BorderRadius.horizontal(
@@ -83,18 +84,21 @@ class LoginTabs extends StatelessWidget {
               ),
               Container(
                 width: 300,
-                height: 300,
+                height: 350,
                 margin: EdgeInsets.only(top: 20),
                 child: TabBarView(
                   children: [
                     LoginForm(), 
-                    SignupForm()
+                    SignupForm(), 
+                    
                     ]),
               ),
-
-              context.width<800
-              ?SocialAuthRow()
-              :Text('')
+              
+              
+              
+              // context.width<800
+              // ?SocialAuthRow()
+              // :Text('')
                
             ],
           ),

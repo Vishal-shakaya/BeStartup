@@ -138,7 +138,6 @@ class _InvestorRegistorFormBodyState extends State<InvestorRegistorFormBody> {
         if (update_resp['response']) {
           formKey.currentState!.reset();
           CloseCustomPageLoadingSpinner();
-          print('Update Error');
           Get.toNamed(homeProfessionalImage);
         }
 

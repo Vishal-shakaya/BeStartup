@@ -34,12 +34,18 @@ class FounderStore extends GetxController {
     'other_contact': other_contact,
   };
 
-  SetImageUrl({required url,}) async {
+  SetImageUrl({
+    required url,
+  }) async {
     image_url = url;
   }
-  
-  SetImagePath({required image_path }){
-    path = image_path; 
+
+  SetImagePath({required image_path}) {
+    path = image_path;
+  }
+
+  GetImagePath() {
+    return path;
   }
 
   /////////////////////////////////////
@@ -65,7 +71,6 @@ class FounderStore extends GetxController {
       return ResponseBack(response_type: false);
     }
   }
-
 
   // CRATE FOUNDER :
   CachedCreateFounder({

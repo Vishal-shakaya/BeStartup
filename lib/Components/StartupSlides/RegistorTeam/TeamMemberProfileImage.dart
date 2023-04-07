@@ -3,6 +3,7 @@ import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Components/StartupSlides/RegistorTeam/MemberListView.dart';
 
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,30 +36,45 @@ class _TeamMemberProfileImageState extends State<TeamMemberProfileImage> {
   double upload_icon_size = 19;
 
   double hint_text_size = 13;
+  var size; 
 
   var memeberStore = Get.put(BusinessTeamMemberStore(), tag: 'team_memeber');
 //////////////////////////////////////////
   // UPLOADING IMAGE :
 //////////////////////////////////////////
   Future<void> PickImage() async {
-    // Pick only one file :
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      dialogTitle: 'PROFILE',
+      type: FileType.image);
 
-    // if rsult null then return :
+
     if (result == null) return;
 
-    // if file single then gets ist path :
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+      size = result.files.first.size / (1024 * 1024);
+      size = size.toString().split('.')[0];
+      size = int.parse(size);
 
-      // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
-      // 1. Start Loading spinner :
-      // 2. If success then stop and show cloud icon :
-      // 3. If error then show cloud icon and alert :
+      // if image size greater then 10 mb then show max size message:
+      if (size > 10) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.info,
+            title: 'Image size must be less then 10 mb',
+            ));
+
+        return;
+      }
+
       setState(() {
         is_uploading = true;
       });
+
       var resp = await memeberStore.UploadProductImage(
           image: image, filename: filename);
 

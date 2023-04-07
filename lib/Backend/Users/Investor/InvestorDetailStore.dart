@@ -35,6 +35,10 @@ class InvestorDetailStore extends GetxController {
     path = image_path;
   }
 
+  GetImagePath() async {
+    return path; 
+  }
+
   /////////////////////////////////////
   /// UPLOAD IMAGE IN FIREBASE :
   /// CHECK ERROR OR SUCCESS RESP :

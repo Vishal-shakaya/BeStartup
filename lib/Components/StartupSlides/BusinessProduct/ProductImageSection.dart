@@ -1,5 +1,7 @@
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessProductStore.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -72,7 +74,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 
   Color active_content_icon_color = Colors.blue.shade400;
   Color content_icon_color = Colors.blue.shade200;
-
+  var size;
   var product_url_controller = TextEditingController();
   late ProductUrlType url_type;
 
@@ -129,16 +131,32 @@ class _ProductImageSectionState extends State<ProductImageSection> {
 // UPLOADING IMAGE :
 //////////////////////////////////////////
   Future<void> PickImage() async {
-    // Pick only one file :
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    var snack_width = MediaQuery.of(context).size.width * 0.50;
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        dialogTitle: 'PRODUCT THUMBNAIL',
+        type: FileType.image);
 
-    // if rsult null then return :
     if (result == null) return;
 
-    // if file single then gets ist path :
     if (result != null && result.files.isNotEmpty) {
       image = result.files.first.bytes;
       filename = result.files.first.name;
+      size = result.files.first.size / (1024 * 1024);
+      size = size.toString().split('.')[0];
+      size = int.parse(size);
+
+      // if image size greater then 10 mb then show max size message:
+      if (size > 10) {
+        Get.closeAllSnackbars();
+        Get.showSnackbar(MyCustSnackbar(
+          width: snack_width,
+          type: MySnackbarType.info,
+          title: 'Image size must be less then 10 mb',
+        ));
+
+        return;
+      }
 
       // IF TRUE THE UPDATE LOGO ELSE SHOW ERROR :
       // 1. Start Loading spinner :
@@ -149,7 +167,8 @@ class _ProductImageSectionState extends State<ProductImageSection> {
       });
       var resp = await productStore.UploadProductImage(
           logo: image, filename: filename);
-
+      
+      // final deleteResp = await DeleteFileFromStorage(previousPath);
       if (resp['response']) {
         String logo_url = resp['data'];
 
@@ -337,7 +356,7 @@ class _ProductImageSectionState extends State<ProductImageSection> {
       upload_btn_height = 40;
 
       take_url_sec_width = 0.45;
-       prod_img_hint_text = 14;
+      prod_img_hint_text = 14;
       print('640');
     }
 

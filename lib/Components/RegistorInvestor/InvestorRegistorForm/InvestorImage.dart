@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Users/Investor/InvestorDetailStore.dart';
 import 'package:be_startup/Utils/Colors.dart';
+import 'package:be_startup/Utils/enums.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,10 +11,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 
 class InvestorImage extends StatefulWidget {
-  var picture; 
-  InvestorImage({
-    required this.picture, 
-    Key? key}) : super(key: key);
+  var picture;
+  InvestorImage({required this.picture, Key? key}) : super(key: key);
 
   @override
   State<InvestorImage> createState() => _InvestorImageState();
@@ -25,13 +25,13 @@ class _InvestorImageState extends State<InvestorImage> {
   String filename = '';
   String upload_image_url = '';
   bool is_uploading = false;
+  var size;
 
   late UploadTask? upload_process;
 
   double image_radius = 85;
   double upload_icon_position_top = 129;
   double upload_icon_position_left = 129;
-
 
   @override
   void initState() {
@@ -68,19 +68,44 @@ class _InvestorImageState extends State<InvestorImage> {
     }
 
     Future<void> PickImage() async {
-      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-      setState(() {
-        is_uploading = true;
-      });
+      var snack_width = MediaQuery.of(context).size.width * 0.50;
+      var path = await investorStore.GetImagePath();
+
+      final result = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          dialogTitle: 'UPLOAD PROFILE',
+          type: FileType.image);
 
       if (result == null) return;
       if (result != null && result.files.isNotEmpty) {
         image = result.files.first.bytes;
         filename = result.files.first.name;
 
+        size = result.files.first.size / (1024 * 1024);
+        size = size.toString().split('.')[0];
+        size = int.parse(size);
+
+        // if image size greater then 10 mb then show max size message:
+        if (size > 10) {
+          Get.closeAllSnackbars();
+          Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.info,
+            title: 'Image size must be less then 10 mb',
+          ));
+
+          return;
+        }
+
+        setState(() {
+          is_uploading = true;
+        });
+
         var resp = await investorStore.UploadProfileImage(
             image: image, filename: filename);
 
+        await DeleteFileFromStorage(path);
+        
         if (!resp['response']) {
           ErrorSnakbar();
           return;
