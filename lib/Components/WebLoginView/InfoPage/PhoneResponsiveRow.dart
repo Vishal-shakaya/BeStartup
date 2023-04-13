@@ -23,7 +23,7 @@ class ResponsiveRow extends StatefulWidget {
 class _ResponsiveRowState extends State<ResponsiveRow> {
   @override
   Widget build(BuildContext context) {
-    double heading_font_size = 27; 
+    double heading_font_size = 20; 
     return Column(
       children: [
         Row(
@@ -56,6 +56,7 @@ class _ResponsiveRowState extends State<ResponsiveRow> {
                         children: [
                           // HEADER TEXT :
                           Container(
+                            width: context.width*0.90,
                             child: RichText(
                               text: TextSpan(
                                 style:Get.theme.textTheme.headline3,
@@ -63,12 +64,12 @@ class _ResponsiveRowState extends State<ResponsiveRow> {
                                   TextSpan(
                                     text:widget.heading_text,
                                     style:TextStyle(
-                                      fontSize:context.width<890 ? 23 :heading_font_size, 
+                                      fontSize:context.width<890 ? 18 :heading_font_size, 
                                     ),
                                   ),
                                 ]
-                              ) 
-                            ),
+                              ) ,
+                            textAlign: TextAlign.center,),
                           ),
                   
                           // GRADIENT HEADER :
@@ -94,6 +95,8 @@ class _ResponsiveRowState extends State<ResponsiveRow> {
                                   TextSpan(
                                     style: TextStyle(
                                         letterSpacing: 1,
+                                          fontSize: 15,
+                                            height: 2, 
                                     ),
                                     text: widget.body_text
                                     )

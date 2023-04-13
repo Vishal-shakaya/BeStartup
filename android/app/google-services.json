@@ -1,130 +1,35 @@
 {
   "project_info": {
-    "project_number": "66114167783",
-    "firebase_url": "https://bestartup-680d0-default-rtdb.firebaseio.com",
-    "project_id": "bestartup-680d0",
-    "storage_bucket": "bestartup-680d0.appspot.com"
+    "project_number": "398783146658",
+    "firebase_url": "https://sharkstartup-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sharkstartup",
+    "storage_bucket": "sharkstartup.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:66114167783:android:125afb4cda789f4fc8d342",
-        "android_client_info": {
-          "package_name": "com.example.test_flutter"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "66114167783-qu0dfoqhsi3ha783ji1g95dmpdfbif6h.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.test_flutter",
-            "certificate_hash": "9585869cce82c64abf6b78cffcbc0254306acbc3"
-          }
-        },
-        {
-          "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBtttUX-COBJxHnE4VzQg8Heo2dzEJFwY0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "66114167783-b2est4ve6hih3f48320vic8khv9glkvd.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.vishalshakayaproject.bestartup"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:66114167783:android:cc08ce23db617b87c8d342",
+        "mobilesdk_app_id": "1:398783146658:android:609a497ce2999419c4c5fb",
         "android_client_info": {
           "package_name": "com.vishalshakayaproject.be_startup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
+          "client_id": "398783146658-8hb3not4u7vl9b5m72gdgvea0fs1n25h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBtttUX-COBJxHnE4VzQg8Heo2dzEJFwY0"
+          "current_key": "AIzaSyD9r_moCdQYlwTS5D_A746yfZYhqwSkWio"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
+              "client_id": "398783146658-8hb3not4u7vl9b5m72gdgvea0fs1n25h.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "66114167783-b2est4ve6hih3f48320vic8khv9glkvd.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.vishalshakayaproject.bestartup"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:66114167783:android:c3bc6cd41f3a2af8c8d342",
-        "android_client_info": {
-          "package_name": "com.vishalshakayaproject.bestartup"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "66114167783-nialhmegnjuj3b4f3kt8urjqfnmrbjo0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vishalshakayaproject.bestartup",
-            "certificate_hash": "9585869cce82c64abf6b78cffcbc0254306acbc3"
-          }
-        },
-        {
-          "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBtttUX-COBJxHnE4VzQg8Heo2dzEJFwY0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "66114167783-moudm7nt9qh2jrpivrirbuon5eeo56ga.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "66114167783-b2est4ve6hih3f48320vic8khv9glkvd.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.vishalshakayaproject.bestartup"
-              }
             }
           ]
         }

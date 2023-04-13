@@ -149,10 +149,10 @@ flutter:
     - assets/images/logo.png
     - assets/images/side_login_image.png
     - assets/images/signup_image.png
-    - assets/images/Info/Feature1.png
-    - assets/images/Info/Feature2.png
-    - assets/images/Info/Feature3.png
-    - assets/images/Info/Feature4.png
+    - assets/images/Info/Feature1.gif
+    - assets/images/Info/Feature2.gif
+    - assets/images/Info/Feature3.gif
+    - assets/images/Info/Feature4.gif
     - assets/images/Info/businessTycoon.mp4
     - assets/images/Info/indian_startup.png
     

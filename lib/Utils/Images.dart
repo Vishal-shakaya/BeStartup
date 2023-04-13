@@ -6,10 +6,10 @@ String dark_social_auth_image = 'assets/images/dark_social_auth.png';
 ////////////////////////////////////////
 /// HOMEVIEW:
 ////////////////////////////////////////
-String homeProfessionalImage = 'assets/images/Info/Feature1.png';
-String homeInvestorImage = 'assets/images/Info/Feature2.png';
-String homePlatformSupportImage= 'assets/images/Info/Feature4.png';
-String homeAttractiveProfileImage = 'assets/images/Info/Feature3.png';
+String homeProfessionalImage = 'assets/images/Info/Feature1.gif';
+String homeInvestorImage = 'assets/images/Info/Feature2.gif';
+String homePlatformSupportImage= 'assets/images/Info/Feature4.gif';
+String homeAttractiveProfileImage = 'assets/images/Info/Feature3.gif';
 String businessTycoonVideo = 'assets/images/Info/businessTycoon.mp4';
 String indian_startup_logo = 'assets/images/Info/indian_startup.png';
 

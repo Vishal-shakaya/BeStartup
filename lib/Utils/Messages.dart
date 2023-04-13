@@ -44,20 +44,18 @@ String snack_info_msg = 'Please Try Again';
 //////////////////
 String login_page_heading_text = 'Lets Make Your Startup Stand Out';
 
-String feature1_header = 'Professionalize your  Startup';
+String feature1_header = 'Elevate your pitch with professional deck creation services';
 String feature1_body =
-    'Get a fully customize  Professional portfolio to represent your idea to the investors. or you can just send the link to desired investors';
+    'Pitch deck creation services: Many entrepreneurs may not have experience creating a compelling pitch deck that effectively communicates their business idea and its potential. Offering pitch deck creation services can help entrepreneurs create a professional-looking pitch that clearly outlines their business concept, value proposition, and financial projections.';
 
-String feature2_header = 'Get Investor all over the world';
-String feature2_body =
-    'Now Just a matter of time until you get desired, Investors';
+String feature2_header = 'Showcase your startup to the world with virtual pitch events and build a community of like-minded entrepreneurs';
+String feature2_body = 'Virtual pitch events and competitions: Hosting virtual pitch events and competitions can provide opportunities for entrepreneurs to showcase their businesses to a wider audience and potentially win funding or other prizes. An online pitching platform can facilitate these events and provide tools for entrepreneurs to create and share their pitches.';
 
-String feature3_header = 'Attractive Profile';
-String feature3_body =
-    'Just Require Basic Information to Create an Attractive Profile and easily understand by Reader';
+String feature3_header = 'Attractive Profile and Stay organized and follow up with investor communication tools';
+String feature3_body ='Investor communication and follow-up tools: After a pitch has been made, its important to follow up with investors to answer any questions and provide additional information. An online pitching platform can provide tools to help entrepreneurs manage their investor communications and track follow-up activities.';
 
-String feature4_header = 'Multi-Platform Support:';
-String feature4_body = 'Android Ios Web';
+String feature4_header = 'Connect, Collaborate, and Succeed - Building a Thriving Startup Community';
+String feature4_body = 'Networking and community building: Building a community of entrepreneurs, investors, and mentors can provide valuable support and resources for startups. An online pitching platform can offer networking opportunities, discussion forums, and other community-building tools to help entrepreneurs connect and collaborate with others in their industry.';
 
 String login_page_info_heading = 'Future is Here';
 
@@ -101,7 +99,7 @@ String milestone_subHeading_text =
 
 String pitch_heading_test = 'Startup Pitch';
 String pitch_subHeading_text =
-    'Create Youtube video and paste pitch video url here , the pitch vidoe play as intro of your startup when investor see you startup . Must create quality and detailed video  ';
+    'Make your startup stand out with a high-quality pitch video that captures investors attention.';
 
 // CREATE TEAM SLIDES :
 //1. REGISTORFOUNDER SLIDE :

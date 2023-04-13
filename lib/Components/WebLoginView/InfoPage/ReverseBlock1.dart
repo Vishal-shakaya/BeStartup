@@ -27,7 +27,7 @@ class ReverseBlock1 extends StatefulWidget {
 class _ReverseBlock1State extends State<ReverseBlock1> {
   @override
   Widget build(BuildContext context) {
-    double heading_font_size = 27;
+    double heading_font_size = 23;
 
     return Container(
         margin: EdgeInsets.only(
@@ -82,6 +82,7 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
+                                         width: context.width*0.30,
                                         child: RichText(
                                             text: TextSpan(
                                                 style:
@@ -93,11 +94,11 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                                                   color:
                                                       login_page_detail_sec_title_color,
                                                   fontSize: context.width < 890
-                                                      ? 23
+                                                      ? 20
                                                       : heading_font_size,
                                                 ),
                                               ),
-                                            ])),
+                                            ]),textAlign: TextAlign.center,),
                                       ),
                                               
                                       // GRADIENT HEADER :
@@ -111,22 +112,22 @@ class _ReverseBlock1State extends State<ReverseBlock1> {
                                               
                                       // BODY TEXT BLOCK :
                                       Container(
-                                        width: 400,
+                                        width: context.width*0.35,
                                         margin: EdgeInsets.only(top: 15),
                                         alignment: Alignment.center,
                                         child: RichText(
                                             text: TextSpan(
-                                                style:
-                                                    Get.theme.textTheme.headline5,
+                                                style:Get.theme.textTheme.headline5,
                                                 children: [
-                                              TextSpan(
+                                               TextSpan(
                                                   style: TextStyle(
-                                                    color:
-                                                        login_page_detail_sec_desc_color,
+                                                    color:login_page_detail_sec_desc_color,
                                                     letterSpacing: 1,
-                                                  ),
+                                                    fontSize: 16,
+                                                    height: 2, 
+                                                   ),
                                                   text: widget.body_text)
-                                            ])),
+                                            ]),textAlign: TextAlign.center,),
                                       )
                                     ]),
                               )),

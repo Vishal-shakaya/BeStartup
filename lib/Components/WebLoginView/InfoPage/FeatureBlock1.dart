@@ -26,7 +26,7 @@ class FeatureBlock1 extends StatefulWidget {
 class _FeatureBlock1State extends State<FeatureBlock1> {
   @override
   Widget build(BuildContext context) {
-    double heading_font_size = 27;
+    double heading_font_size = 23;
 
     return Container(
         margin: EdgeInsets.only(top: context.height * 0.05),
@@ -103,6 +103,7 @@ class _FeatureBlock1State extends State<FeatureBlock1> {
                                     children: [
                                       // HEADER TEXT :
                                       Container(
+                                        width: context.width*0.30,
                                         child: RichText(
                                             text: TextSpan(
                                                 style: Get.theme.textTheme.headline3,
@@ -113,11 +114,11 @@ class _FeatureBlock1State extends State<FeatureBlock1> {
                                                   color:
                                                       login_page_detail_sec_title_color,
                                                   fontSize: context.width < 890
-                                                      ? 23
+                                                      ? 20
                                                       : heading_font_size,
                                                 ),
                                               ),
-                                            ])),
+                                            ]), textAlign: TextAlign.center,),
                                       ),
                                             
                                       // GRADIENT HEADER :
@@ -133,7 +134,7 @@ class _FeatureBlock1State extends State<FeatureBlock1> {
                                             
                                       // BODY TEXT BLOCK :
                                       Container(
-                                        width: 400,
+                                       width: context.width*0.35,
                                         margin: EdgeInsets.only(top: 15),
                                         child: RichText(
                                             text: TextSpan(
@@ -142,12 +143,13 @@ class _FeatureBlock1State extends State<FeatureBlock1> {
                                               TextSpan(
                                                 text: widget.body_text,
                                                 style: TextStyle(
-                                                  color:
-                                                      login_page_detail_sec_desc_color,
+                                                  color:login_page_detail_sec_desc_color,
                                                   letterSpacing: 1,
+                                                  height: 2,
+                                                   fontSize: 16,
                                                 ),
                                               )
-                                            ])),
+                                            ]),textAlign: TextAlign.center,),
                                       )
                                     ]),
                               )),

@@ -31,7 +31,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
   @override
   Widget build(BuildContext context) {
 
-    double heading_font_size = 27;
+    double heading_font_size = 23;
 
     return Container(
         margin: EdgeInsets.only(
@@ -105,6 +105,8 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                     children: [
                                       // HEADER TEXT :
                                       Container(
+                                        width: context.width*0.30,
+                                        alignment: Alignment.center,
                                         child: RichText(
                                             text: TextSpan(
                                                 style:
@@ -113,20 +115,23 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                               TextSpan(
                                                 text: widget.heading_text,
                                                 style: TextStyle(
-                                                  color:
-                                                      login_page_detail_sec_title_color,
+                                                  color:login_page_detail_sec_title_color,
+                                            
                                                   fontSize: context.width < 890
-                                                      ? 23
+                                                      ? 20
                                                       : heading_font_size,
                                                 ),
+                                                
                                               ),
-                                            ])),
+                                            
+                                            ]), textAlign: TextAlign.center,),
+                                          
                                       ),
                                               
                                       // GRADIENT HEADER :
                                       Container(
                                         // padding:EdgeInsets.all(50),
-                                        margin: EdgeInsets.only(right: 20, top: 2),
+                                        margin: EdgeInsets.only(right: 20, top: 10),
                                         width: context.width * 0.05,
                                         height: 12,
                                               
@@ -136,15 +141,18 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                               
                                       // BODY TEXT BLOCK :
                                       Container(
-                                        width: 400,
+                                        width: context.width*0.35,
                                         margin: EdgeInsets.only(top: 15),
                                         child: RichText(
                                             text: TextSpan(
                                                 style: GoogleFonts.openSans(
+                                                  
                                                   textStyle: TextStyle(),
+                                                
                                                   color:
                                                       login_page_detail_sec_desc_color,
-                                                  fontSize: 18,
+                                                  fontSize: 16,
+                                                  height: 2, 
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1,
                                                 ),
@@ -152,7 +160,7 @@ class _FeatureBlockState extends State<FeatureBlock> {
                                               TextSpan(
                                                 text: widget.body_text,
                                               )
-                                            ])),
+                                            ]),textAlign: TextAlign.center,),
                                       )
                                     ]),
                               )),

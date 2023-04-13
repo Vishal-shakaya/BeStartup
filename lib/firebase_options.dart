@@ -47,34 +47,33 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCPiBFBS7UDk38-12wfp7R2Ead2rYceeGA',
-    appId: '1:66114167783:web:079f69adaf5bc792c8d342',
-    messagingSenderId: '66114167783',
-    projectId: 'bestartup-680d0',
-    authDomain: 'bestartup-680d0.firebaseapp.com',
-    databaseURL: 'https://bestartup-680d0-default-rtdb.firebaseio.com',
-    storageBucket: 'bestartup-680d0.appspot.com',
-    measurementId: 'G-BK08G8BZ0L',
+    apiKey: 'AIzaSyCQk5FEXKcdxpA-W5_hjZJR1sR1c7WQS4w',
+    appId: '1:398783146658:web:79f97a77fc799753c4c5fb',
+    messagingSenderId: '398783146658',
+    projectId: 'sharkstartup',
+    authDomain: 'sharkstartup.firebaseapp.com',
+    databaseURL: 'https://sharkstartup-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'sharkstartup.appspot.com',
+    measurementId: 'G-TYKMNVW3ZR',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBtttUX-COBJxHnE4VzQg8Heo2dzEJFwY0',
-    appId: '1:66114167783:android:cc08ce23db617b87c8d342',
-    messagingSenderId: '66114167783',
-    projectId: 'bestartup-680d0',
-    databaseURL: 'https://bestartup-680d0-default-rtdb.firebaseio.com',
-    storageBucket: 'bestartup-680d0.appspot.com',
+    apiKey: 'AIzaSyD9r_moCdQYlwTS5D_A746yfZYhqwSkWio',
+    appId: '1:398783146658:android:609a497ce2999419c4c5fb',
+    messagingSenderId: '398783146658',
+    projectId: 'sharkstartup',
+    databaseURL: 'https://sharkstartup-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'sharkstartup.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDudoF2LUYljnwjrGg0yquOxmb7bVXU3e8',
-    appId: '1:66114167783:ios:85fafd8d9dd170b3c8d342',
-    messagingSenderId: '66114167783',
-    projectId: 'bestartup-680d0',
-    databaseURL: 'https://bestartup-680d0-default-rtdb.firebaseio.com',
-    storageBucket: 'bestartup-680d0.appspot.com',
-    androidClientId: '66114167783-nialhmegnjuj3b4f3kt8urjqfnmrbjo0.apps.googleusercontent.com',
-    iosClientId: '66114167783-b2est4ve6hih3f48320vic8khv9glkvd.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCLEpDfPcOTk0uQFDaA_64ELxqgQEdL-5I',
+    appId: '1:398783146658:ios:7005add74f117d04c4c5fb',
+    messagingSenderId: '398783146658',
+    projectId: 'sharkstartup',
+    databaseURL: 'https://sharkstartup-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'sharkstartup.appspot.com',
+    iosClientId: '398783146658-upeiha7m928vnbq4pev1lff674d9ut07.apps.googleusercontent.com',
     iosBundleId: 'com.vishalshakayaproject.bestartup',
   );
 }

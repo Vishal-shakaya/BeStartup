@@ -51,14 +51,15 @@ import 'package:sizer/sizer.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:get_storage/get_storage.dart';
 
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-
   if (GetPlatform.isWeb) {
     await FacebookAuth.instance.webAndDesktopInitialize(
       appId: "554392976209038",
@@ -111,8 +112,8 @@ class _MyAppState extends State<MyApp> {
   /////////////////////////////////
   return Sizer(builder: (context, orientation, deviceType) {
     return Wiredash(
-      projectId:'be-startup-vk323v6', 
-      secret:'OG9_Vc15GmDaTKskckJ_vnPK6hD4icDt', 
+      projectId:'sharkstartup-w0a9qtz', 
+      secret:'DBUleuvUjEhkmo4QNvs7_0DHIPFNJwnc', 
       
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

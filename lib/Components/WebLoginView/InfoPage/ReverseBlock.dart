@@ -28,7 +28,7 @@ class ReverseBlock extends StatefulWidget {
 class _ReverseBlockState extends State<ReverseBlock> {
   @override
   Widget build(BuildContext context) {
-    double heading_font_size = 27;
+    double heading_font_size = 23;
 
     return Container(
         margin: EdgeInsets.only(
@@ -88,6 +88,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
+                                        width: context.width*0.30,
                                         child: RichText(
                                             text: TextSpan(
                                                 style: Get.theme.textTheme.headline3,
@@ -98,11 +99,11 @@ class _ReverseBlockState extends State<ReverseBlock> {
                                                   color:
                                                       login_page_detail_sec_title_color,
                                                   fontSize: context.width < 890
-                                                      ? 23
+                                                      ? 20
                                                       : heading_font_size,
                                                 ),
                                               ),
-                                            ])),
+                                            ]), textAlign: TextAlign.center,),
                                       ),
                                             
                                       // GRADIENT HEADER :
@@ -116,7 +117,7 @@ class _ReverseBlockState extends State<ReverseBlock> {
                                             
                                       // BODY TEXT BLOCK :
                                       Container(
-                                        width: 400,
+                                         width: context.width*0.35,
                                         margin: EdgeInsets.only(top: 15),
                                         alignment: Alignment.center,
                                         child: RichText(
@@ -128,9 +129,11 @@ class _ReverseBlockState extends State<ReverseBlock> {
                                                     color:
                                                         login_page_detail_sec_desc_color,
                                                     letterSpacing: 1,
+                                                     height: 2,
+                                                     fontSize: 16
                                                   ),
                                                   text: widget.body_text)
-                                            ])),
+                                            ]),textAlign: TextAlign.center),
                                       )
                                     ]),
                               )),

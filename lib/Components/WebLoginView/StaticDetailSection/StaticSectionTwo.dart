@@ -398,26 +398,28 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
                   itemCount: 5,
                   itemBuilder: ((context, index, realIndex) {
                     return Container(
-                        child: Column(
-                      children: [
-                        
-                        ProfileImage(),
-                        
-                        SizedBox(
-                          height: context.height * profile_bottom_margin,
-                        ),
-                        
-                        MemName(
-                            user_position: 'Founder', username: 'Vishal shakaya'),
-                        
-                        SizedBox(
-                          height: context.height * member_name_bottom_margin,
-                        ),
-      
-                        MemContact(text: 'Founder', icon: Icons.person)
-                      ],
-                      
-                    ));
+                        child: SingleChildScrollView(
+                          child: Column(
+                                              children: [
+                          
+                          ProfileImage(),
+                          
+                          SizedBox(
+                            height: context.height * profile_bottom_margin,
+                          ),
+                          
+                          MemName(
+                              user_position: 'Founder', username: 'Vishal shakaya'),
+                          
+                          SizedBox(
+                            height: context.height * member_name_bottom_margin,
+                          ),
+                              
+                          MemContact(text: 'Founder', icon: Icons.person)
+                                              ],
+                                              
+                                            ),
+                        ));
                   }),
       
                   options: CarouselOptions(
