@@ -271,23 +271,25 @@ UploadStartupData() async {
 /// 3. Payment Id for handle issue :
 /// 4. Use email js library to send mail :
 ////////////////////////////////////////////////
-SendInvoiceMail(
-    {required paymentId,
+SendInvoiceMail({
+    required paymentId,
     required exact_amount,
     required orderd,
     required expired,
     required payer_name,
     required mail,
+    required planType,
     required phone_no}) async {
   var resp;
   try {
     resp = await SendMailToUser(
-        transaction_id: '12',
+        transaction_id: paymentId,
         phone_no: phone_no == null ? '' : phone_no,
         amount: exact_amount.toString(),
         receiver_mail_address: mail,
-        subject: ' Bestartup Payment Statement ',
+        subject: ' Shark Startup Payment Statement ',
         order_date: orderd,
+        plan_type: planType,
         expire_date: expired,
         payer_name: payer_name);
 

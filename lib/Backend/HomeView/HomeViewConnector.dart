@@ -306,7 +306,7 @@ class HomeViewConnector extends GetxController {
       });
 
       // Check if post already Saved :
-      if (user_ids.contains(user_id)) {
+      if (user_ids.contains(startup_user_id)) {
         return ResponseBack(
             response_type: false, message: 'Startup Already Saved', code: 101);
       }
@@ -345,7 +345,7 @@ class HomeViewConnector extends GetxController {
   ///   startup_id: The id of the startup to be unsaved
   ///   user_id: The user's ID
   ///////////////////////////////////////////////////////////
-  UnsaveStartup({required user_id}) async {
+  UnsaveStartup({required user_id , required startup_user_id}) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -375,7 +375,7 @@ class HomeViewConnector extends GetxController {
 
       if (save_post_len > 0) {
         // print("5. Update Startup List with new list ");
-        startup_list.remove(user_id);
+        startup_list.remove(startup_user_id);
         data['user_ids'] = startup_list;
         await myStore.doc(doc_id).update(data);
         // print('6. Unsave Update Startup List');
@@ -395,7 +395,7 @@ class HomeViewConnector extends GetxController {
   /// Returns:
   ///   ResponseBack is a class that returns a response.
 ///////////////////////////////////////////////////////////////
-  IsStartupSaved({user_id , required startup_user_id}) async {
+  IsStartupSaved({required user_id , required startup_user_id}) async {
     var save_post_len;
     var startup_list = [];
 
@@ -412,7 +412,7 @@ class HomeViewConnector extends GetxController {
 
 
       // Check if post already Saved :
-      if (startup_list.contains(user_id)) {
+      if (startup_list.contains(startup_user_id)) {
         return ResponseBack(
             response_type: true, message: 'Startup Already Saved', code: 101);
       } else {

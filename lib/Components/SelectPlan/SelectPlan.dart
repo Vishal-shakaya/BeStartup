@@ -252,12 +252,12 @@ class _SelectPlanState extends State<SelectPlan> {
   /// 2 Requirements :
   /// 2.1 openCheckout
 ///////////////////////////////////////////
-  CreateStartup(
-      {required phone,
-      required name,
-      required email,
-      required ammount,
-      required payemntId}) async {
+  CreateStartup({
+    required phone,
+    required name,
+    required email,
+    required ammount,
+    required payemntId}) async {
     //  1. Verify Data :
     // 2. Configure Startup Model [search index] :
     // 3. Create Plan
@@ -301,7 +301,9 @@ class _SelectPlanState extends State<SelectPlan> {
               orderd: orderDate,
               expired: expireDate,
               mail: email,
+              planType: select_plan_type,
               phone_no: phone,
+              
               payer_name: name);
 
           if (mailResp['response']) {
