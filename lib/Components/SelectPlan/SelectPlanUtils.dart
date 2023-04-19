@@ -108,7 +108,7 @@ VerifyStartupDetial() async {
         is_catigory == true) {
       return ResponseBack(response_type: true);
     } else {
-     return ResponseBack(response_type: false);
+      return ResponseBack(response_type: false);
     }
   } catch (e) {
     return ResponseBack(response_type: false);
@@ -145,7 +145,6 @@ ConfigureBusinessDetailModel() async {
 
     print('founder name $founderName');
     print('founder index $founder_searching_index');
-    
 
     await businessDetailStore.UpdateBusinessDetailCacheField(
         field: 'startup_searching_index', val: startup_searching_index);
@@ -158,23 +157,24 @@ ConfigureBusinessDetailModel() async {
   }
 }
 
-
-
 // Helping function for getting expiration date :
 GetExpiredDate(plan_type) async {
   var expired;
 
-  if (plan_type == 'basic') {
-    expired = DateTime.now().add(const Duration(days: 60)).toString();
+  if (plan_type == 'Basic') {
+    expired =
+        EmailFormatedDate(date: DateTime.now().add(const Duration(days: 60)));
     print('Basic plan Selected');
   }
-  if (plan_type == 'best') {
-    expired = DateTime.now().add(const Duration(days: 180)).toString();
+  if (plan_type == 'Best') {
+    expired =
+        EmailFormatedDate(date: DateTime.now().add(const Duration(days: 180)));
     print('Best plan Selected');
   }
-  if (plan_type == 'business') {
+  if (plan_type == 'Business') {
     print('Business plan Selected');
-    expired = DateTime.now().add(const Duration(days: 360)).toString();
+    expired =
+        EmailFormatedDate(date: DateTime.now().add(const Duration(days: 360)));
   }
 
   return expired;

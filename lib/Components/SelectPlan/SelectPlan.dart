@@ -10,7 +10,6 @@ import 'package:be_startup/Backend/Startup/Connector/CreateStartupData.dart';
 import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Backend/Startup/Team/CreateTeamStore.dart';
 import 'package:be_startup/Components/Widgets/BigLoadingSpinner.dart';
-import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Utils/Colors.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
@@ -19,8 +18,6 @@ import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:be_startup/Helper/MailServer.dart';
-import 'package:be_startup/Models/Models.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/services.dart';
 import 'package:razorpay_web/razorpay_web.dart';
@@ -270,6 +267,14 @@ class _SelectPlanState extends State<SelectPlan> {
     //  .  if payed then use transaction id and manual startup form :
     //  .  else try again later :
 
+    var expireDate = await GetExpiredDate(select_plan_type);
+    var planAmount = ammount / 100;
+    var orderDate =  await EmailFormatedDate(date: DateTime.now());
+    // print('select plan type $select_plan_type');
+    // print('expire date $expireDate');
+    // print('order amount $planAmount');
+    // print('orderDate $orderDate');
+
     try {
       StartBigLoading();
       if (select_plan_type != null) {
@@ -277,8 +282,8 @@ class _SelectPlanState extends State<SelectPlan> {
         print('Configure Resp $configureDetailResp');
 
         final createPlan = await CreateBusinessPlan(
-            plan_price: ammount.toString(),
-            orderd: DateTime.now().toString(),
+            plan_price: planAmount,
+            orderd: orderDate,
             buyer_name: name,
             phone_no: phone,
             plan_type: select_plan_type);
@@ -291,10 +296,10 @@ class _SelectPlanState extends State<SelectPlan> {
         if (startupCreateResp['response']) {
           print('Sending Mail');
           final mailResp = await SendInvoiceMail(
-              paymentId: payemntId,
-              exact_amount: 100,
-              orderd: DateTime.now().toString(),
-              expired: await GetExpiredDate(select_plan_type),
+              paymentId: planAmount,
+              exact_amount: planAmount,
+              orderd: orderDate,
+              expired: expireDate,
               mail: email,
               phone_no: phone,
               payer_name: name);
@@ -336,51 +341,49 @@ class _SelectPlanState extends State<SelectPlan> {
     }
   }
 
-
 //////////////////////////////////////////////////////////////////
-/// The function performs a verification check and calculates the
-///  total amount for a selected plan
-/// before opening a checkout alert dialog.
+  /// The function performs a verification check and calculates the
+  ///  total amount for a selected plan
+  /// before opening a checkout alert dialog.
 
-/// Args:
-///   context: The context parameter is a reference to the current 
-/// build context of the widget tree. It
-/// is typically used to access theme data, media queries, and
-///  other information related to the current
-/// state of the app.
+  /// Args:
+  ///   context: The context parameter is a reference to the current
+  /// build context of the widget tree. It
+  /// is typically used to access theme data, media queries, and
+  ///  other information related to the current
+  /// state of the app.
 //////////////////////////////////////////////////////////////////
   OnpressContinue(context) async {
     try {
       final verifyResp = await VerifyStartupDetial();
       print('Verfy Resp $verifyResp');
 
-      if(verifyResp['response']==true){
+      if (verifyResp['response'] == true) {
         var exact_amount = planAmount! / 100;
         var tax_amount = ((exact_amount * tax) / 100);
         total_amount = tax_amount + exact_amount;
-        
+
         final paid_amount = total_amount * 100;
-        
+
         final plan = {
           'plan': select_plan_type,
           'amount': paid_amount,
           'tax_amount': tax_amount,
           'total_amount': total_amount
         };
-        
+
         await CheckoutAlertDialog(planVal: plan, checkoutVal: openCheckout);
-        
       }
 
-      if(verifyResp['response']==false){
+      if (verifyResp['response'] == false) {
         var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
         Get.showSnackbar(MyCustSnackbar(
             width: snack_width,
             type: MySnackbarType.info,
             title: snack_info_msg,
-            message: 'Some details Not configured correctly! Re-try or contact us '));
+            message:
+                'Some details Not configured correctly! Re-try or contact us '));
       }
-
     } catch (e) {
       print('Something Went Wrong $e');
       throw 'error $e';

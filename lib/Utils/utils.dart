@@ -73,12 +73,12 @@ final startupSlideStorageKeys = [
   getBusinessFounderContactStoreName,
   getBusinessFounderDetailStoreName,
   getStartupPlansStoreName,
-  getStartupStoreName, 
-  getInvestorUserDetail, 
-  getInvestorUserContacts, 
-  getInvestorUserChooseCatigory , 
+  getStartupStoreName,
+  getInvestorUserDetail,
+  getInvestorUserContacts,
+  getInvestorUserChooseCatigory,
   getBusinessFounderDetailStoreName,
-  getBusinessFounderContactStoreName,  
+  getBusinessFounderContactStoreName,
 ];
 
 ////////////////////////////////////////////
@@ -152,7 +152,8 @@ Row MySnackbarContent({message = 'processing... '}) {
 /// 2. Custom message and title :
 /// //////////////////////////////////////////
 
-MyCustSnackbar({context, title, message, type=MySnackbarType.error, required width}) {
+MyCustSnackbar(
+    {context, title, message, type = MySnackbarType.error, required width}) {
   var snack;
   // var snack_width = MediaQuery.of(context).size.width * 0.50;
   try {
@@ -221,14 +222,14 @@ MyCustomButtonSpinner({color, width}) {
 }
 
 MyCustPageLoadingSpinner() {
-    SmartDialog.showLoading(
-      builder: (context) {
-        return CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          color: Colors.orangeAccent,
-        ); 
-      },
-    );
+  SmartDialog.showLoading(
+    builder: (context) {
+      return CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.orangeAccent,
+      );
+    },
+  );
 }
 
 CloseCustomPageLoadingSpinner() {
@@ -295,18 +296,17 @@ class _CustomShimmerState extends State<CustomShimmer> {
   }
 }
 
-
 ///////////////////////////////////////
 // Search Index Creator :
 ///////////////////////////////////////
-CreateSearchIndexParam(String val)  {
+CreateSearchIndexParam(String val) {
   String pureString = val.toLowerCase().trim();
   var searchIndexArray = [];
-  var temp =''; 
-  
+  var temp = '';
+
   for (var i = 0; i < pureString.length; i++) {
     if (pureString[i] != ' ') {
-       temp = temp + pureString[i];
+      temp = temp + pureString[i];
       searchIndexArray.add(temp);
     }
   }
@@ -314,56 +314,50 @@ CreateSearchIndexParam(String val)  {
 }
 
 /////////////////////////////////////////////////////////
-/// If the primary_mail is not empty, then set 
+/// If the primary_mail is not empty, then set
 /// the primary_mail to the mail variable and return the mail
-/// variable. 
+/// variable.
 /// If the primary_mail is empty, then set the
 ///  default_mail to the mail variable and return the mail
 /// variable.
-/// 
+///
 /// Args:
 ///   primary_mail: String
 ///   default_mail: the default mail of the user
-/// 
+///
 /// Returns:
 ///   The return value is a Future&lt;String&gt;.
 /////////////////////////////////////////////////////////
-CheckAndGetPrimaryMail({required primary_mail , required default_mail})async {
-var userState = Get.put(UserState());
-var mail = default_mail; 
-if (primary_mail != ''){
-  mail = primary_mail;
-  await userState.SetPrimaryMail(mail: mail);
-  return mail; 
+CheckAndGetPrimaryMail({required primary_mail, required default_mail}) async {
+  var userState = Get.put(UserState());
+  var mail = default_mail;
+  if (primary_mail != '') {
+    mail = primary_mail;
+    await userState.SetPrimaryMail(mail: mail);
+    return mail;
   }
 }
 
-
-
-
 /////////////////////////////////////
-/// Get Formated Date : 
+/// Get Formated Date :
 /////////////////////////////////////
-  GetFormatedDate() async {
-    try {
-      var today  = DateTime.now().toString();
-      // final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      // final String formatted = formatter.format(today);
-    
-      return today;
-    } catch (err) {
-      return '';
-    }
+GetFormatedDate() async {
+  try {
+    var today = DateTime.now().toString();
+    // final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    // final String formatted = formatter.format(today);
+
+    return today;
+  } catch (err) {
+    return '';
   }
+}
 
-
-
-
-
-
-
-
-
+EmailFormatedDate({required date})  async {
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final String formatted = formatter.format(date);
+  return formatted;
+}
 
 ////////////////////////////////////////
 // CUSTOM CACHING  SYSTEM :
