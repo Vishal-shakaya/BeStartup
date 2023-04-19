@@ -1,10 +1,14 @@
+import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/AppState/UserStoreName.dart';
 import 'package:be_startup/Backend/Auth/LinkUser.dart';
 import 'package:be_startup/Backend/Auth/MyAuthentication.dart';
 import 'package:be_startup/Backend/Auth/SocialAuthStore.dart';
+import 'package:be_startup/Backend/Users/UserStore.dart';
 import 'package:be_startup/Components/Widgets/GetPasswordDialog.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:sign_button/sign_button.dart';
 
@@ -21,6 +25,8 @@ class _SocialAuthState extends State<SocialAuth> {
   var authManager = Get.put(AuthUserManager(), tag: 'user_manager');
   var registor_mail;
   var pendingCred;
+  final userState = Get.put(UserState());
+  final userStore = Get.put(UserStore());
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +92,6 @@ class _SocialAuthState extends State<SocialAuth> {
 
       if (message == "password_method") {
         print('Linking Start to password');
-        // Getting password here:
         await GetPasswordDialog();
       }
 
@@ -131,6 +136,10 @@ class _SocialAuthState extends State<SocialAuth> {
       // }
     }
 
+    EndLoading() async {
+      SmartDialog.dismiss();
+    }
+
     // Google SignIn :
     GoogleSingIn() async {
       var resp;
@@ -143,10 +152,49 @@ class _SocialAuthState extends State<SocialAuth> {
           var message = resp['message'];
           await LinkAccountWithWeb(message, data);
         }
-      } else {
+
+        if(resp['response']){
+          final userResp = await userStore.FetchUserDetail();
+          print('user Resp $userResp');
+          if (userResp['response'] == true) {
+            final resp_data = userResp['data'];
+
+            // Incomplete Profile handler :
+            // redirect user to select user type page :
+            if (resp_data['is_profile_complete'] == null ||
+                resp_data['is_profile_complete'] == false) {
+              // print('Profile not Complete ');
+              EndLoading();
+              Get.toNamed(user_type_slide_url);
+            }
+
+            // Complete Profile hander :
+            else {
+              if (resp_data['user_type'] == 'investor') {
+                await userState.SetUserType(type: UserStoreName.investor);
+                EndLoading();
+                Get.toNamed(home_page_url);
+              }
+              if (resp_data['user_type'] == 'founder') {
+                await userState.SetUserType(type: UserStoreName.founder);
+                EndLoading();
+                Get.toNamed(home_page_url);
+              }
+            }
+          }
+
+         else {
+            Get.toNamed(user_type_slide_url);
+            }
+        }
+
+
+      } 
+      
+      
+      else {
         resp = await auth.SigninWithGoogleInAndroid();
 
-        print('Sing in response $resp');
         if (!resp['response']) {
           var data = resp['data'];
           var message = resp['message'];
@@ -215,8 +263,8 @@ class _SocialAuthState extends State<SocialAuth> {
       children: [
         // GOOGLE :
         SignInButton(
-          width: 240,
-          // height: 42,
+            width: 240,
+            // height: 42,
             buttonType:
                 Get.isDarkMode ? ButtonType.googleDark : ButtonType.google,
             elevation: 3,

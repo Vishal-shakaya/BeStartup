@@ -106,9 +106,10 @@ class MySocialAuth extends GetxController {
         // Once signed in, return the UserCredential
         await FirebaseAuth.instance.signInWithPopup(googleProvider);
         await auth.setPersistence(Persistence.SESSION);
-
         return ResponseBack(response_type: true);
-      } on FirebaseAuthException catch (e) {
+      } 
+      
+      on FirebaseAuthException catch (e) {
         final error = await AuthErrorHandling(e);
         return error;
       }
