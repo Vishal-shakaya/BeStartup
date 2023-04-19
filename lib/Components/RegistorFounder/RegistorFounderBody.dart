@@ -12,7 +12,6 @@ import 'package:be_startup/Utils/Images.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/Routes.dart';
 import 'package:be_startup/Utils/enums.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:be_startup/Utils/utils.dart';
@@ -124,8 +123,6 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
 
     if (formKey.currentState!.validate()) {
       final String founder_name = formKey.currentState!.value['founder_name'];
-      // final String founder_position =
-      //     formKey.currentState!.value['founder_position'];
       final String phone_no = formKey.currentState!.value['phone_no'];
       final String email = formKey.currentState!.value['email'];
       final String other_contact = formKey.currentState!.value['other_info'];
@@ -176,44 +173,58 @@ class _RegistorFounderBodyState extends State<RegistorFounderBody> {
     }
   }
 
+
+//////////////////////////////////////////////////////////////
+/// This function retrieves data from local 
+/// storage and sets variables based on the retrieved data.
+//////////////////////////////////////////////////////////////
   GetLocalStorageData() async {
 
-  if (Get.parameters.isNotEmpty) {
-      pageParam = jsonDecode(Get.parameters['data']!);
-      user_id = pageParam['user_id'];
-      if (pageParam['type'] == 'update') {
-        updateMode = true;
-      
-        try {
-          final resp =
-              await founderStore.FetchFounderDetailandContact(user_id: user_id);
+    if (Get.parameters.isNotEmpty) {
+        pageParam = jsonDecode(Get.parameters['data']!);
+        user_id = pageParam['user_id'];
 
-          final picture = resp['data']['picture'] ?? temp_avtar_image;
-          final name = resp['data']['name'] ?? '';
-          final phone_no = resp['data']['phone_no'] ?? '';
-          final primary_mail = resp['data']['primary_mail'] ?? '';
-          final other_contact = resp['data']['other_contact'] ?? '';
-          previousPath = resp['data']['path'] ?? '';
+        if (pageParam['type'] == 'update') {
+          updateMode = true;
+  
+          try {
+            final resp = await founderStore.FetchFounderDetailandContact(user_id: user_id);
 
-          updatePicture = picture;
-          founderStore.SetImagePath(image_path: previousPath);
-          founderStore.SetImageUrl(url: picture);
-          // print('upload picture $updatePicture');
-          Map<String, String> data = {
-            'picture': picture,
-            'name': name,
-            // 'position': position,
-            'phone_no': phone_no,
-            'primary_mail': primary_mail,
-            'other_contact': other_contact,
-          };
-          updateData = data;
-        } catch (e) {
-          print('Fetching erro Founder detail $e');
+            final picture = resp['data']['picture'] ?? temp_avtar_image;
+            
+            final name = resp['data']['name'] ?? '';
+            
+            final phone_no = resp['data']['phone_no'] ?? '';
+            
+            final primary_mail = resp['data']['primary_mail'] ?? '';
+            
+            final other_contact = resp['data']['other_contact'] ?? '';
+            
+            previousPath = resp['data']['path'] ?? '';
+
+            founderStore.SetImagePath(image_path: previousPath);
+           
+            founderStore.SetImageUrl(url: picture);
+
+            updatePicture = picture;
+
+
+            Map<String, String> data = {
+              'picture': picture,
+              'name': name,
+              'phone_no': phone_no,
+              'primary_mail': primary_mail,
+              'other_contact': other_contact,
+            };
+
+
+            updateData = data;
+
+          } catch (e) {
+            print('Fetching erro Founder detail $e');
+          }
         }
       }
-    }
-
   }
 
 

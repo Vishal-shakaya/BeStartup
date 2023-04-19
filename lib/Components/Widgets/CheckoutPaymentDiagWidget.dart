@@ -81,7 +81,6 @@ class _CheckoutPaymentDialogWidgetState
       Navigator.of(context).pop();
 
       await widget.checkout(
-          plan_type: widget.plan['plan'],
           phone: phone_no,
           amount: widget.plan['amount'],
           email: email,

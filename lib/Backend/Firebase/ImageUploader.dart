@@ -1,8 +1,10 @@
 import 'package:be_startup/Backend/Firebase/FileStorage.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 
+final loginUserId = FirebaseAuth.instance.currentUser!.uid;
 /////////////////////////////////////////////////////////
 // PICKED IMAGE AND STORE IN  FILE :
 /// It takes an image, uploads it to Firebase Storage,
@@ -26,7 +28,7 @@ Future UploadImage({Uint8List? image, String filename = ''}) async {
   if (image == null) return;
 
   try {
-    final destination = 'user_profile/profile_image/$date$filename';
+    final destination = 'user_profile/profile_image/$loginUserId/$date$filename';
     upload_process = FileStorage.UploadFileBytes(destination, image);
 
     // ERROR ACCURE
@@ -40,8 +42,7 @@ Future UploadImage({Uint8List? image, String filename = ''}) async {
       'path': path,
       'url': urlDownload,
     };
-    return  ResponseBack(response_type: true, data: data);
-
+    return ResponseBack(response_type: true, data: data);
   } catch (e) {
     print('Error While Upload Profile $e');
     return ResponseBack(response_type: false);
@@ -69,7 +70,7 @@ Future UploadPitch({Uint8List? video, String filename = ''}) async {
   // Validate
   if (video == null) return;
   // UPLOAD FILE LOCAION IN FIREBASE :
-  final destination = 'pitch/$date$filename';
+  final destination = 'pitch/$loginUserId/$date$filename';
   try {
     upload_process = FileStorage.UploadFileBytes(destination, video);
     // ERROR ACCURE

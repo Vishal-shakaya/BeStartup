@@ -91,12 +91,14 @@ class _FounderImageState extends State<FounderImage> {
     }
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
     upload_image_url = widget.picture!;
     super.initState();
   }
+
 
   //////////////////////////////////////////////////
   /// GET REQUIREMNTS :
@@ -206,7 +208,7 @@ class _FounderImageState extends State<FounderImage> {
                 ? CircleAvatar(
                     radius: image_radius,
                     backgroundColor: Colors.blueGrey[100],
-                    foregroundImage: NetworkImage(upload_image_url),
+                    foregroundImage: NetworkImage(upload_image_url,scale: 1),
                   )
                 : CircleAvatar(
                     radius: image_radius,

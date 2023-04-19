@@ -136,8 +136,7 @@ class HomeViewConnector extends GetxController {
 
 
 
-  FetchExploreStartups(
-      {DateTime? start_date, DateTime? end_date, catigories}) async {
+  FetchExploreStartups({DateTime? start_date, DateTime? end_date, catigories}) async {
     // print('start at $start_date');
     // print('end at $end_date');
     // print('catigory $catigories');
@@ -284,7 +283,7 @@ class HomeViewConnector extends GetxController {
   /// Returns:
   ///   A Future<ResponseBack>
   /////////////////////////////////////////////////////
-  SaveStartup({required user_id}) async {
+  SaveStartup({required user_id , required startup_user_id }) async {
     final localStore = await SharedPreferences.getInstance();
     var doc_id;
     var data;
@@ -297,12 +296,12 @@ class HomeViewConnector extends GetxController {
 
       await query.then((value) {
         save_post_len = value.size;
-        print('Save post len $save_post_len');
+        // print('Save post len $save_post_len');
         if (save_post_len > 0) {
           user_ids = value.docs.first.data()['user_ids'];
           data = value.docs.first.data();
           doc_id = value.docs.first.id;
-          print('Save post len ${value.docs.first.data()}');
+          // print('Save post len ${value.docs.first.data()}');
         }
       });
 
@@ -314,7 +313,7 @@ class HomeViewConnector extends GetxController {
 
       // Add new Save Story Doc :
       if (save_post_len <= 0) {
-        user_ids.add(user_id);
+        user_ids.add(startup_user_id);
         var save_startup = await SaveStartupsModel(
           user_id: user_id,
           user_ids: user_ids,
@@ -327,7 +326,7 @@ class HomeViewConnector extends GetxController {
       }
 
       if (save_post_len > 0) {
-        user_ids.add(user_id);
+        user_ids.add(startup_user_id);
         data['user_ids'] = user_ids;
         await myStore.doc(doc_id).update(data);
         return ResponseBack(response_type: true, message: 'Startup Saved');
@@ -396,7 +395,7 @@ class HomeViewConnector extends GetxController {
   /// Returns:
   ///   ResponseBack is a class that returns a response.
 ///////////////////////////////////////////////////////////////
-  IsStartupSaved({user_id}) async {
+  IsStartupSaved({user_id , required startup_user_id}) async {
     var save_post_len;
     var startup_list = [];
 

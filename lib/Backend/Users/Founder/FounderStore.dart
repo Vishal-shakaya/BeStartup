@@ -1,21 +1,18 @@
-import 'package:be_startup/AppState/StartupState.dart';
-import 'package:be_startup/AppState/User.dart';
-import 'package:be_startup/Backend/CacheStore/CacheStore.dart';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
-import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Helper/StartupSlideStoreName.dart';
 import 'package:be_startup/Models/Models.dart';
 import 'package:be_startup/Utils/Messages.dart';
 import 'package:be_startup/Utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 
 class FounderStore extends GetxController {
   FirebaseFirestore store = FirebaseFirestore.instance;
-
+  final loginUserId = FirebaseAuth.instance.currentUser!.uid;
+  
   static Map<String, dynamic>? founder;
   static var image_url;
   static var picture = '';
@@ -34,9 +31,7 @@ class FounderStore extends GetxController {
     'other_contact': other_contact,
   };
 
-  SetImageUrl({
-    required url,
-  }) async {
+  SetImageUrl({required url}) async {
     image_url = url;
   }
 
@@ -97,7 +92,6 @@ class FounderStore extends GetxController {
 
         localStore.setString(
             getBusinessFounderDetailStoreName, json.encode(resp));
-        ;
 
         return ResponseBack(response_type: true, message: create_error_title);
       } catch (e) {

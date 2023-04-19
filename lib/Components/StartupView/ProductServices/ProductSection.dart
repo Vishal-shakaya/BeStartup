@@ -61,11 +61,8 @@ class _ProductSectionState extends State<ProductSection> {
   };
 
   EditProductAndService() {
-    var pageParam = jsonEncode({
-      'type': 'update',
-      'is_admin': is_admin,
-      'user_id': user_id
-    });
+    var pageParam = jsonEncode(
+        {'type': 'update', 'is_admin': is_admin, 'user_id': user_id});
 
     Get.toNamed(create_business_product_url, parameters: {'data': pageParam});
   }
@@ -226,6 +223,7 @@ class _ProductSectionState extends State<ProductSection> {
         // print('Detail View Fetch Product $data');
         product_len = data['data'].length;
         products = data['data'];
+        print('product len $product_len');
         return products;
       } catch (e) {
         return products;

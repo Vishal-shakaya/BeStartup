@@ -873,7 +873,7 @@ class _ServicesState extends State<Services> {
           child: Image.network(widget.service['image_url'],
               width: context.width * image_cont_width,
               height: context.height * image_cont_height,
-              fit: BoxFit.fill),
+              fit: BoxFit.cover),
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(

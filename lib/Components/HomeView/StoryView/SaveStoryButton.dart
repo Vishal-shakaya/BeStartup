@@ -32,6 +32,7 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
       user_id = authUser?.uid;
       final resp = await homeviewConnector.IsStartupSaved(
         user_id: user_id,
+        startup_user_id: widget.user_id, 
       );
 
       if (resp['code'] == 101) {
@@ -74,9 +75,12 @@ class _SaveStoryButtonState extends State<SaveStoryButton> {
   /// MAIN METHOD :
   //////////////////////////////////
   MainMethod(BuildContext context) {
-    return SaveUnsaveIcon(is_saved: is_saved, user_id: user_id);
+    return SaveUnsaveIcon(is_saved: is_saved, user_id: widget.user_id);
   }
 }
+
+
+
 
 ////////////////////////////
 /// EXTERNAL WIDGET:
@@ -102,11 +106,12 @@ class _SaveUnsaveIconState extends State<SaveUnsaveIcon> {
   /// it unsaves it. If it isn't, it saves it
   ///////////////////////////////////////////////////////
   SavingPostProcess() async {
+   var authUser = FirebaseAuth.instance.currentUser;
     final resp = await homeviewConnector.SaveStartup(
-      user_id: widget.user_id,
+      user_id: authUser!.uid,
+      startup_user_id: widget.user_id
     );
-    print('Resp $resp');
-
+    
     /// Updaet UI to Saved
     if (resp['response']) {
       setState(() {

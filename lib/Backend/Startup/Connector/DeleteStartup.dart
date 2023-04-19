@@ -369,6 +369,9 @@ class RemoveStartup extends GetxController {
       await DeleteDocument(
           field_name: 'user_id', id: user_id, model: getLikeStartupStoreName);
       
+      await DeleteDocument(
+          field_name: 'user_id', id: user_id, model: getSaveStartupStoreName);
+      
       await DeleteDocument(field_name: 'id', id: user_id, model: 'users');
 
       return ResponseBack(response_type: true);

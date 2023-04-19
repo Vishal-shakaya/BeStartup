@@ -108,7 +108,7 @@ VerifyStartupDetial() async {
         is_catigory == true) {
       return ResponseBack(response_type: true);
     } else {
-      ResponseBack(response_type: false);
+     return ResponseBack(response_type: false);
     }
   } catch (e) {
     return ResponseBack(response_type: false);

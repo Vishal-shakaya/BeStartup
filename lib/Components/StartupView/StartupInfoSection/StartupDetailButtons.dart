@@ -1,8 +1,10 @@
+import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 
 import 'package:be_startup/AppState/StartupState.dart';
 import 'package:be_startup/AppState/User.dart';
 import 'package:be_startup/Utils/Messages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,11 +31,10 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   var startupViewConnector = Get.put(StartupViewConnector());
   var startupState = Get.put(StartupDetailViewState());
   var userState = Get.put(UserState());
-
+  var homeviewConnector = Get.put(HomeViewConnector());
+var authUser = FirebaseAuth.instance.currentUser;
   double elevation = 4;
-
   double icon_fontSize = 23; 
-
   double btn_width = 45; 
   double btn_height = 45 ; 
 
@@ -41,8 +42,10 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
   /// if yes then it unsaves it, if no then it
   /// saves it
   LikeUnlikeStartupProcess() async {
-    final resp = await startupViewConnector.LikeStartup(
-      user_id: widget.user_id,
+    
+    final resp = await homeviewConnector.SaveStartup(
+      startup_user_id: widget.user_id,
+      user_id: authUser!.uid,
     );
 
     /// Updaet UI to Saved
@@ -54,7 +57,7 @@ class _StartupDetailButtonsState extends State<StartupDetailButtons> {
 
     // If startup already save then Unsave :
     if (resp['code'] == 101) {
-      final unsave_resp = await startupViewConnector.UnLikeStartup(
+      final unsave_resp = await homeviewConnector.UnsaveStartup(
         user_id: widget.user_id,
       );
 

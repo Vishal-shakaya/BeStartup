@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:be_startup/AppState/StartupState.dart';
 
 import 'package:be_startup/AppState/User.dart';
+import 'package:be_startup/Backend/HomeView/HomeViewConnector.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/StartupDetailButtons.dart';
 import 'package:be_startup/Components/StartupView/StartupInfoSection/UpdateInvestmentDialog.dart';
 import 'package:be_startup/Utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -23,6 +25,8 @@ class InvestmentChart extends StatefulWidget {
 
 class _InvestmentChartState extends State<InvestmentChart> {
   var startupConnector = Get.put(StartupViewConnector());
+  var homeviewConnector = Get.put(HomeViewConnector());
+  var authUser = FirebaseAuth.instance.currentUser;
 
   double invest_btn_width = 150;
 
@@ -69,16 +73,23 @@ class _InvestmentChartState extends State<InvestmentChart> {
   var is_admin;
 
   var startup_id;
+  
   var user_id;
+
   bool? is_liked = false;
 
 /////////////////////////////////////////
-/// GET REQUIRED PARAM :
+  /// GET REQUIRED PARAM :
 /////////////////////////////////////////
   IsStartupLiked() async {
-    final resp = await startupConnector.IsStartupLiked(
-      user_id: user_id,
+    final loginUserId= authUser?.uid;
+    final resp = await homeviewConnector.IsStartupSaved(
+      user_id: loginUserId,
+      startup_user_id: user_id, 
     );
+
+    print('saved user id $user_id');
+    print(resp);
 
     if (resp['code'] == 101) {
       is_liked = true;
@@ -111,7 +122,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
                   height: context.height * dialog_height,
                   child: UpdateInvestmentDialog(
                     updateInvestmentFun: UpdateInvestmentAmount,
-                    user_id : user_id, 
+                    user_id: user_id,
                   )));
         });
   }
@@ -131,8 +142,6 @@ class _InvestmentChartState extends State<InvestmentChart> {
     final teamResp =
         await startupConnector.FetchBusinessTeamMember(user_id: user_id);
 
-
-
     if (teamResp['response']) {
       team_members = teamResp['data']['members'].length;
     }
@@ -141,8 +150,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
       team_members = 0;
     }
 
-
-    // Business Detail  
+    // Business Detail
     // Success Handler:
     if (resp['response']) {
       achived_amount = resp['data']['achived_amount'] ?? '';
@@ -502,8 +510,6 @@ class _InvestmentChartState extends State<InvestmentChart> {
         });
   }
 
-
-
   //////////////////////////////////////////
   /// MAIN METHOD :
   //////////////////////////////////////////
@@ -593,7 +599,7 @@ class _InvestmentChartState extends State<InvestmentChart> {
   }
 
 /////////////////////////////////////////////
-/// External Methods :
+  /// External Methods :
 /////////////////////////////////////////////
   Container SubmitButton() {
     return Container(

@@ -127,6 +127,11 @@ class _SelectPlanState extends State<SelectPlan> {
   bool? is_new_startup;
   var planType;
 
+  var finalPhone;
+  var finalName;
+  var finalEmail;
+  var finalAmount;
+
 //////////////////////////////////////////////
   /// REQUIREMNTS AND HANDERL : [INDEX]
   /// 1. Getexpiredate:
@@ -233,19 +238,30 @@ class _SelectPlanState extends State<SelectPlan> {
                 width: context.width * payment_dialog_width,
                 height: context.height * payment_dialog_height,
                 child: CheckoutPaymentDialogWidget(
-                    plan: planVal, checkout: checkoutVal, key: UniqueKey()),
+                    plan: planVal, checkout: openCheckout, key: UniqueKey()),
               ));
         });
   }
 
 ///////////////////////////////////////////
   /// CHECKOUT  HANDLER :
+  /// Required :
+  /// 1 Phone:
+  /// 2 Mail :
+  /// 3 Name :
+  /// 4 price :
+
   /// 1. Create Payment obj :
   /// 2 Requirements :
   /// 2.1 openCheckout
 ///////////////////////////////////////////
-  OnpressContinue(context) async {
-    // 1. Verify Data :
+  CreateStartup(
+      {required phone,
+      required name,
+      required email,
+      required ammount,
+      required payemntId}) async {
+    //  1. Verify Data :
     // 2. Configure Startup Model [search index] :
     // 3. Create Plan
     // 4. Create Startup:
@@ -257,17 +273,14 @@ class _SelectPlanState extends State<SelectPlan> {
     try {
       StartBigLoading();
       if (select_plan_type != null) {
-        final verifyResp = await VerifyStartupDetial();
-        print('Verfy Resp $verifyResp');
-
         final configureDetailResp = await ConfigureBusinessDetailModel();
         print('Configure Resp $configureDetailResp');
 
         final createPlan = await CreateBusinessPlan(
-            plan_price: '200',
+            plan_price: ammount.toString(),
             orderd: DateTime.now().toString(),
-            buyer_name: 'vishal',
-            phone_no: '7065121120',
+            buyer_name: name,
+            phone_no: phone,
             plan_type: select_plan_type);
 
         print('Create Plan Resp $createPlan');
@@ -278,13 +291,13 @@ class _SelectPlanState extends State<SelectPlan> {
         if (startupCreateResp['response']) {
           print('Sending Mail');
           final mailResp = await SendInvoiceMail(
-              paymentId: 'fdf',
+              paymentId: payemntId,
               exact_amount: 100,
               orderd: DateTime.now().toString(),
-              expired: DateTime.now().toString(),
-              mail: 'shakayavishal007@gmail.com',
-              phone_no: '7065121120',
-              payer_name: 'vishal');
+              expired: await GetExpiredDate(select_plan_type),
+              mail: email,
+              phone_no: phone,
+              payer_name: name);
 
           if (mailResp['response']) {
             SmartDialog.dismiss();
@@ -298,8 +311,8 @@ class _SelectPlanState extends State<SelectPlan> {
         }
 
         if (!startupCreateResp['response']) {
-            SmartDialog.dismiss();
-            print('Error whitlw Creating Startup');
+          SmartDialog.dismiss();
+          print('Error whitlw Creating Startup');
         }
       }
 
@@ -317,18 +330,61 @@ class _SelectPlanState extends State<SelectPlan> {
               ),
             ));
       }
-
-      
     } catch (e) {
       SmartDialog.dismiss();
       print('Error While Creating Startup $e');
     }
+  }
 
-    // var exact_amount = planAmount! / 100;
-    // var tax_amount = ((exact_amount * tax) / 100);
-    // total_amount = tax_amount + exact_amount;
-    // final paid_amount = total_amount * 100;
-    //   await CheckoutAlertDialog(planVal: temp_val, checkoutVal: openCheckout);
+
+//////////////////////////////////////////////////////////////////
+/// The function performs a verification check and calculates the
+///  total amount for a selected plan
+/// before opening a checkout alert dialog.
+
+/// Args:
+///   context: The context parameter is a reference to the current 
+/// build context of the widget tree. It
+/// is typically used to access theme data, media queries, and
+///  other information related to the current
+/// state of the app.
+//////////////////////////////////////////////////////////////////
+  OnpressContinue(context) async {
+    try {
+      final verifyResp = await VerifyStartupDetial();
+      print('Verfy Resp $verifyResp');
+
+      if(verifyResp['response']==true){
+        var exact_amount = planAmount! / 100;
+        var tax_amount = ((exact_amount * tax) / 100);
+        total_amount = tax_amount + exact_amount;
+        
+        final paid_amount = total_amount * 100;
+        
+        final plan = {
+          'plan': select_plan_type,
+          'amount': paid_amount,
+          'tax_amount': tax_amount,
+          'total_amount': total_amount
+        };
+        
+        await CheckoutAlertDialog(planVal: plan, checkoutVal: openCheckout);
+        
+      }
+
+      if(verifyResp['response']==false){
+        var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+        Get.showSnackbar(MyCustSnackbar(
+            width: snack_width,
+            type: MySnackbarType.info,
+            title: snack_info_msg,
+            message: 'Some details Not configured correctly! Re-try or contact us '));
+      }
+
+    } catch (e) {
+      print('Something Went Wrong $e');
+      throw 'error $e';
+    }
   }
 
   ///////////////////////////////////
@@ -340,15 +396,17 @@ class _SelectPlanState extends State<SelectPlan> {
   ///////////////////////////////////
   PaymentSuccess(PaymentSuccessResponse response) async {
     StartBigLoading();
-
-    final orderd = DateTime.now().toString();
-    final plan_type = selectedPlan['plan'].toString().toLowerCase();
-    final expired = await GetExpiredDate(plan_type);
-
-    var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    try {
+      final resp = await CreateStartup(
+          phone: finalPhone,
+          name: finalName,
+          email: finalEmail,
+          payemntId: response.paymentId,
+          ammount: finalAmount);
 
-    try {} catch (e) {
+      print('payment Success');
+    } catch (e) {
       print('Error accure while Creating Startup $e');
     }
   }
@@ -358,13 +416,13 @@ class _SelectPlanState extends State<SelectPlan> {
 ////////////////////////////////////////
   PayemtnFromExternalWallet(ExternalWalletResponse response) async {
     StartBigLoading();
-
-    final orderd = DateTime.now().toString();
-    final plan_type = selectedPlan['plan'].toString().toLowerCase();
-    final expired = await GetExpiredDate(plan_type);
-
-    var exact_amount = selectedPlan['amount'] / 100;
     var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+    final resp = await CreateStartup(
+        phone: finalPhone,
+        name: finalName,
+        email: finalEmail,
+        payemntId: response.walletName,
+        ammount: finalAmount);
   }
 
   /////////////////////////////////////////
@@ -386,14 +444,23 @@ class _SelectPlanState extends State<SelectPlan> {
   /// razorpay :
   /// 2. Required: amount , plan , phone , email ,
   //////////////////////////////////////////////////////
-  void openCheckout({amount, phone, email, plan_type, user_name}) async {
-    userName = user_name;
+  void openCheckout({amount, phone, email, user_name}) async {
+    // print('amount $amount');
+    // print('phone $phone');
+    // print('email $email');
+    // print('name $user_name');
+
+    finalAmount = amount;
+    finalEmail = email;
+    finalPhone = phone;
+    finalName = user_name;
+
     phoneNo = phone;
     options = {
-      'key': 'rzp_test_XBqgVUXDkrs93M',
+      'key': 'rzp_test_ygK0zSF2wWLC5z',
       'amount': amount,
-      'name': 'BeStartup',
-      'description': plan_type,
+      'name': 'Shark Startup',
+      'description': select_plan_type,
       'retry': {'enabled': false, 'max_count': 1},
       'send_sms_hash': true,
       'prefill': {'contact': phone, 'email': email},
@@ -422,7 +489,7 @@ class _SelectPlanState extends State<SelectPlan> {
         basicPlan = select_color;
         bestPlan = unselect_color;
         businessPlan = unselect_color;
-        select_plan_type = 'basic';
+        select_plan_type = 'Basic';
         planAmount = basic_plan_amount * 100;
         // 1. SELECT INVESTOR LOGIC:
         // 2. UNSELECT FOUNDER
@@ -430,7 +497,7 @@ class _SelectPlanState extends State<SelectPlan> {
         bestPlan = select_color;
         basicPlan = unselect_color;
         businessPlan = unselect_color;
-        select_plan_type = 'best';
+        select_plan_type = 'Best';
         planAmount = best_plan_amount * 100;
       }
 
@@ -440,7 +507,7 @@ class _SelectPlanState extends State<SelectPlan> {
         businessPlan = select_color;
         bestPlan = unselect_color;
         basicPlan = unselect_color;
-        select_plan_type = 'business';
+        select_plan_type = 'Business';
         planAmount = business_plan_amount * 100;
       }
     });
