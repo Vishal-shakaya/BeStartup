@@ -886,25 +886,27 @@ class _TeamPageState extends State<TeamPage> {
                                 //////////////////////////////////
                                 /// FOUNDER SECTION:
                                 //////////////////////////////////
-                                child: Column(
-                                  children: [
-                                    ProfileImage(),
-
-                                    // SPACING:
-                                    SizedBox(height: founder_spacing),
-
-                                    // POSITION:
-                                    SizedBox(
-                                      width: founder_box_width,
-                                      child: Column(
-                                        children: [
-                                          MemPosition(),
-                                          MemName(),
-                                          MemContact(),
-                                        ],
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      ProfileImage(),
+                                
+                                      // SPACING:
+                                      SizedBox(height: founder_spacing),
+                                
+                                      // POSITION:
+                                      SizedBox(
+                                        width: founder_box_width,
+                                        child: Column(
+                                          children: [
+                                            MemPosition(),
+                                            MemName(),
+                                            MemContact(),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

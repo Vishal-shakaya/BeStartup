@@ -66,6 +66,7 @@ class BusinessProductStore extends GetxController {
 
   // Set Product Type :
   SetProductType(type) async {
+   
     try {
       if (ProductType.product == type) {
         product_type = 'product';
@@ -105,6 +106,7 @@ class BusinessProductStore extends GetxController {
 
   // ADD PRODUCT :
   CreateProduct({title, description}) {
+     print('p $product_type');
     Map<String, dynamic?> product = {
       'id': uuid.v4(),
       'title': title,
@@ -173,8 +175,7 @@ class BusinessProductStore extends GetxController {
         image_url = resp['data']['url'];
         path = resp['data']['path'];
       }
-      if (!resp['response']) {
-      }
+      if (!resp['response']) {}
 
       // RETURN SUCCES RESPONSE WITH IMAGE URL :
       return ResponseBack(response_type: true, data: image_url);

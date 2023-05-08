@@ -242,8 +242,8 @@ class _ProductFormState extends State<ProductForm> {
         highlightColor: primary_light_hover,
         borderRadius: const BorderRadius.horizontal(
             left: Radius.circular(20), right: Radius.circular(20)),
-        onTap: () {
-          SubmitProductForm();
+        onTap: () async  {
+         await  SubmitProductForm();
         },
         child: Card(
           elevation: 10,

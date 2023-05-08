@@ -903,95 +903,97 @@ class _ServicesState extends State<Services> {
               right: Radius.circular(phone_product_right_radius),
             ),
             border: Border.all(width: 1, color:startup_container_border_color)),
-        child: Column(
-          children: [
-            Container(
-              padding:
-                  EdgeInsets.only(bottom: phone_product_title_bottom_padding),
-              child: RichText(
-                text: TextSpan(children: [
-                  // Heading Texct :
-                  TextSpan(
-                    text: widget.service['title'],
-                    style: GoogleFonts.robotoSlab(
-                      color: startup_title_text_color,
-                      fontSize: phone_product_title_fontSize,
-                      fontWeight: FontWeight.w600,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding:
+                    EdgeInsets.only(bottom: phone_product_title_bottom_padding),
+                child: RichText(
+                  text: TextSpan(children: [
+                    // Heading Texct :
+                    TextSpan(
+                      text: widget.service['title'],
+                      style: GoogleFonts.robotoSlab(
+                        color: startup_title_text_color,
+                        fontSize: phone_product_title_fontSize,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ]),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-
-            // Description:
-            Container(
-              child: AutoSizeText.rich(
-                TextSpan(
-                  text: widget.service['description'],
-                  style: GoogleFonts.openSans(
-                      textStyle: TextStyle(),
-                      color: startup_text_color,
-                      fontSize: phone_product_desc_fontSize,
-                      fontWeight: FontWeight.w600,
-                      wordSpacing: phone_product_desc_word_spacing,
-                      height: phone_product_desc_text_height),
+                  ]),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                textAlign: TextAlign.left,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                maxLines: phone_product_desc_maxlines,
               ),
-            ),
-
-            // Important Links :
-            Container(
-                width: context.width * phone_imp_links_width,
-                height: phone_img_link_height,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ////////////////////////////////
-                    // Video Play Button :
-                    ////////////////////////////////
-                    Padding(
-                      padding: EdgeInsets.all(play_icon_padd),
-                      child: Tooltip(
-                        message: 'play video',
-                        child: IconButton(
-                            onPressed: () async {
-                              await YoutubeLink();
-                            },
-                            icon: GlowIcon(Icons.play_circle_fill,
-                                blurRadius: phone_play_icon_radius,
-                                color: Colors.red.shade300,
-                                size: phone_play_icon_fontSize)),
+        
+              // Description:
+              Container(
+                child: AutoSizeText.rich(
+                  TextSpan(
+                    text: widget.service['description'],
+                    style: GoogleFonts.openSans(
+                        textStyle: TextStyle(),
+                        color: startup_text_color,
+                        fontSize: phone_product_desc_fontSize,
+                        fontWeight: FontWeight.w600,
+                        wordSpacing: phone_product_desc_word_spacing,
+                        height: phone_product_desc_text_height),
+                  ),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: phone_product_desc_maxlines,
+                ),
+              ),
+        
+              // Important Links :
+              Container(
+                  width: context.width * phone_imp_links_width,
+                  height: phone_img_link_height,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ////////////////////////////////
+                      // Video Play Button :
+                      ////////////////////////////////
+                      Padding(
+                        padding: EdgeInsets.all(play_icon_padd),
+                        child: Tooltip(
+                          message: 'play video',
+                          child: IconButton(
+                              onPressed: () async {
+                                await YoutubeLink();
+                              },
+                              icon: GlowIcon(Icons.play_circle_fill,
+                                  blurRadius: phone_play_icon_radius,
+                                  color: Colors.red.shade300,
+                                  size: phone_play_icon_fontSize)),
+                        ),
                       ),
-                    ),
-
-                    /////////////////////////
-                    // Content Link:
-                    /////////////////////////
-                    Padding(
-                      padding: EdgeInsets.all(play_icon_padd),
-                      child: Tooltip(
-                        message: 'content detail',
-                        child: IconButton(
-                            onPressed: () async {
-                              await DocumentLink();
-                            },
-                            icon: GlowIcon(
-                              Icons.link_rounded,
-                              blurRadius: phone_link_icon_radius,
-                              color: Colors.blue.shade300,
-                              size: phone_play_icon_fontSize,
-                            )),
-                      ),
-                    )
-                  ],
-                ))
-          ],
+        
+                      /////////////////////////
+                      // Content Link:
+                      /////////////////////////
+                      Padding(
+                        padding: EdgeInsets.all(play_icon_padd),
+                        child: Tooltip(
+                          message: 'content detail',
+                          child: IconButton(
+                              onPressed: () async {
+                                await DocumentLink();
+                              },
+                              icon: GlowIcon(
+                                Icons.link_rounded,
+                                blurRadius: phone_link_icon_radius,
+                                color: Colors.blue.shade300,
+                                size: phone_play_icon_fontSize,
+                              )),
+                        ),
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ));
   }
 

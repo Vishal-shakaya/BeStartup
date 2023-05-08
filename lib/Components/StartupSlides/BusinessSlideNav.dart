@@ -11,7 +11,7 @@ enum SlideType {
   catigory,
   product,
   whyInvest,
-  pitch 
+  pitch
 }
 
 class BusinessSlideNav extends StatefulWidget {
@@ -63,8 +63,6 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     }
   }
 
-
-
   ForwordButton(slide) {
     // 1. Detail view -> Thumbnail  view : :
     if (slide == SlideType.detail) {
@@ -115,18 +113,16 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
         child: Text(
           'BACK',
           style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: next_back_btn_color),
+              fontWeight: FontWeight.bold, color: next_back_btn_color),
         ));
 
     Widget nextButton = TextButton(
         onPressed: () {
           ForwordButton(widget.slide);
         },
-        child: Text('NEXT', 
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: next_back_btn_color)));
+        child: Text('NEXT',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: next_back_btn_color)));
 
     // DEFAULT :
     if (context.width > 1500) {
@@ -137,7 +133,6 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
     if (context.width < 1500) {
       print('1500');
     }
-
 
     if (context.width < 1200) {
       print('1200');
@@ -152,19 +147,25 @@ class _BusinessSlideNavState extends State<BusinessSlideNav> {
       );
     }
 
-
     if (context.width < 1000) {
       print('1000');
 
-      nextButton = Icon(
-        Icons.arrow_forward,
-        color: next_back_btn_color,
-      );
+      nextButton = IconButton(
+          onPressed: () {
+            ForwordButton(widget.slide);},
+          icon: Icon(
+            Icons.arrow_forward,
+            color: next_back_btn_color,
+          ));
 
-      backButton = Icon(
-        Icons.arrow_back,
-        color: next_back_btn_color,
-      );
+
+      backButton = IconButton(
+          onPressed: () {
+            BackWordButton(widget.slide);},
+          icon: Icon(
+            Icons.arrow_forward,
+            color: next_back_btn_color,
+          ));
 
       slide_width = 0.65;
     }

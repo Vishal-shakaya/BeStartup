@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:be_startup/Backend/Firebase/ImageUploader.dart';
 import 'package:be_startup/Backend/Startup/BusinessDetail/BusinessDetailStore.dart';
 import 'package:be_startup/Backend/Startup/Connector/FetchStartupData.dart';
-import 'package:be_startup/Backend/Startup/Connector/UpdateStartupDetail.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessDetailSlide/BusinessForm.dart';
 import 'package:be_startup/Components/StartupSlides/BusinessSlideNav.dart';
 import 'package:be_startup/Utils/Colors.dart';
@@ -292,6 +291,9 @@ class _BusinessBodyState extends State<BusinessBody> {
                 ],
               ),
             )),
+
+
+            
         updateMode == true
             ? Positioned(
                 bottom: 25,
@@ -308,7 +310,7 @@ class _BusinessBodyState extends State<BusinessBody> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back_rounded,
                         size: 25,
                         color: Colors.white,

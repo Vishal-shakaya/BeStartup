@@ -188,7 +188,7 @@ class ProfileInfoChart extends StatelessWidget {
                         StaticRow(title: 'Team'),
                         // StaticRow(title: '$team_members')
                         // Test Amount Unit
-                        StaticRow(title: '10')
+                        StaticRow(title: team_members.toString())
                       ],
                     ),
                   ),
@@ -198,7 +198,7 @@ class ProfileInfoChart extends StatelessWidget {
                       children: [
                         StaticRow(title: 'Desire'),
                         // StaticRow(title: '₹ $desire_amount')
-                        StaticRow(title: '₹ 1.5CR')
+                        StaticRow(title: '₹ ${desire_amount}')
                       ],
                     ),
                   ),
@@ -208,7 +208,7 @@ class ProfileInfoChart extends StatelessWidget {
                       children: [
                         StaticRow(title: 'Invest'),
                         // StaticRow(title: '₹ $invested_amount')
-                        StaticRow(title: '₹ 1.5L')
+                        StaticRow(title: '₹ ${invested_amount}')
                       ],
                     ),
                   ),
