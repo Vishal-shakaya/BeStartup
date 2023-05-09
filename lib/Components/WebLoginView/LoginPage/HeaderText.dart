@@ -77,6 +77,13 @@ class HeaderText extends StatelessWidget {
                   style: TextStyle(
                     fontSize:font_size, 
                     color:login_page_heading_color)
+                  ), 
+          
+              TextSpan(
+                  text:  '\n Testing Desktop (Web) Version Please Send Us Feedback',
+                  style: TextStyle(
+                    fontSize:16, 
+                    color:login_page_heading_color)
                   )
             ]),
         ),

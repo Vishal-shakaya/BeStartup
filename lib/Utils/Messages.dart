@@ -42,7 +42,7 @@ String snack_info_msg = 'Please Try Again';
 /////////////////
 // LOGIN PAGE :
 //////////////////
-String login_page_heading_text = 'Lets Make Your Startup Stand Out';
+String login_page_heading_text = 'We Are in Beta';
 
 String feature1_header = 'Elevate your pitch with professional deck creation services';
 String feature1_body =

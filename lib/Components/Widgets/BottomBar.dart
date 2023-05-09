@@ -69,12 +69,12 @@ class _BottomBarState extends State<BottomBar> {
   //////////////////////////////////////////////
   /// SOCIAL URLS :
   //////////////////////////////////////////////
-  var youtube_url = 'https://www.youtube.com/channel/UCrBv8I0p1uAg-mVvHqn9K4A';
+  var youtube_url = '';
   var linkdiln_url =
-      'https://www.linkedin.com/showcase/bestartup007/?viewAsMember=true';
-  var instagram_url = 'https://www.instagram.com/besupofficial/';
-  var facebook_url = 'https://www.facebook.com/profile.php?id=10008751034330';
-  var twitter_url = 'https://twitter.com/BeSupOfficial';
+      '';
+  var instagram_url = '';
+  var facebook_url = '';
+  var twitter_url = '';
 
   /////////////////////////////////////////////
   /// COMPANY SECTION :
@@ -462,22 +462,7 @@ class _BottomBarState extends State<BottomBar> {
                             HeaderText(context, 'Company'),
                       
                             // Feedback Text Link :
-                            MouseRegion(
-                                onHover: (_) {
-                                  setState(() {
-                                    feedbackColor = defaultColor;
-                                  });
-                                },
-                                onExit: (_) {
-                                  setState(() {
-                                    feedbackColor = linkDefaultColor;
-                                  });
-                                },
-                                child: InfoText(
-                                    height: context.height * comp_text_height,
-                                    text: 'feedback',
-                                    size: comp_text_fontSize,
-                                    color: feedbackColor)),
+         
                       
                             // About Text Link :
                             MouseRegion(
@@ -520,6 +505,22 @@ class _BottomBarState extends State<BottomBar> {
                                   size: comp_text_fontSize,
                                   color: featureColor),
                             ),
+                                MouseRegion(
+                                onHover: (_) {
+                                  setState(() {
+                                    feedbackColor = defaultColor;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    feedbackColor = linkDefaultColor;
+                                  });
+                                },
+                                child: InfoText(
+                                    height: context.height * comp_text_height,
+                                    text: 'feedback@sharkstartup.in',
+                                    size: comp_text_fontSize,
+                                    color: feedbackColor)),
                           ],
                         ),
                       )),
@@ -567,7 +568,7 @@ class _BottomBarState extends State<BottomBar> {
                                 },
                                 child: InfoText(
                                     height: context.height * comp_text_height,
-                                    text: 'official@bestartup.site',
+                                    text: 'contact@sharkstartup.in',
                                     size: address_fontSize,
                                     color: officialMailColor)),
                       

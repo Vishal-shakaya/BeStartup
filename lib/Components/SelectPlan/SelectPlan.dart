@@ -357,37 +357,76 @@ class _SelectPlanState extends State<SelectPlan> {
 //////////////////////////////////////////////////////////////////
   OnpressContinue(context) async {
     try {
+      StartBigLoading();
+      final configureDetailResp = await ConfigureBusinessDetailModel();
+      print('Configure Resp $configureDetailResp');
+      
       final verifyResp = await VerifyStartupDetial();
       print('Verfy Resp $verifyResp');
 
-      if (verifyResp['response'] == true) {
-        var exact_amount = planAmount! / 100;
-        var tax_amount = ((exact_amount * tax) / 100);
-        total_amount = tax_amount + exact_amount;
+      final startupCreateResp = await UploadStartupData();
+      print('startupCreateResp Resp $startupCreateResp');
 
-        final paid_amount = total_amount * 100;
-
-        final plan = {
-          'plan': select_plan_type,
-          'amount': paid_amount,
-          'tax_amount': tax_amount,
-          'total_amount': total_amount
-        };
-
-        await CheckoutAlertDialog(planVal: plan, checkoutVal: openCheckout);
+      if (!startupCreateResp['response']) {
+        SmartDialog.dismiss();
+        CoolAlert.show(
+            context: context,
+            width: 200,
+            title: 'Error While Creating Startup',
+            type: CoolAlertType.info,
+            widget: Text(
+              'Something Went Wrong',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+              ),
+            ));
+      }
+      if (startupCreateResp['response']) {
+        SmartDialog.dismiss();
+        Get.toNamed(home_page_url);
       }
 
-      if (verifyResp['response'] == false) {
-        var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
-        Get.showSnackbar(MyCustSnackbar(
-            width: snack_width,
-            type: MySnackbarType.info,
-            title: snack_info_msg,
-            message:
-                'Some details Not configured correctly! Re-try or contact us '));
-      }
+      // if (verifyResp['response'] == true) {
+      //   var exact_amount = planAmount! / 100;
+      //   var tax_amount = ((exact_amount * tax) / 100);
+      //   total_amount = tax_amount + exact_amount;
+
+      //   final paid_amount = total_amount * 100;
+
+      //   final plan = {
+      //     'plan': select_plan_type,
+      //     'amount': paid_amount,
+      //     'tax_amount': tax_amount,
+      //     'total_amount': total_amount
+      //   };
+
+      //   await CheckoutAlertDialog(planVal: plan, checkoutVal: openCheckout);
+      // }
+
+      // if (verifyResp['response'] == false) {
+      //   var snack_width = MediaQuery.of(my_context!).size.width * 0.50;
+      //   Get.showSnackbar(MyCustSnackbar(
+      //       width: snack_width,
+      //       type: MySnackbarType.info,
+      //       title: snack_info_msg,
+      //       message:
+      //           'Some details Not configured correctly! Re-try or contact us '));
+      // }
     } catch (e) {
-      print('Something Went Wrong $e');
+        SmartDialog.dismiss();
+        CoolAlert.show(
+            context: context,
+            width: 200,
+            title: 'Error While Creating Startup',
+            type: CoolAlertType.info,
+            widget: Text(
+              'Something Went Wrong',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Get.isDarkMode ? Colors.white : Colors.blueGrey.shade900,
+              ),
+            ));
       throw 'error $e';
     }
   }
@@ -595,26 +634,26 @@ class _SelectPlanState extends State<SelectPlan> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         PlanType(
-            amount: '₹ 1000/-',
+            amount: '₹ 0/-',
             period: '3 Month',
-            type: 'Basic Plan',
+            type: 'Free Plan',
             selected_plan: PlanOption.basicPlan,
             active_color: basicPlan,
             color_pallet: Colors.blue),
-        PlanType(
-            amount: '₹ 1950/-',
-            period: '1 Year',
-            type: 'Best Plan',
-            selected_plan: PlanOption.bestPlan,
-            active_color: bestPlan,
-            color_pallet: Colors.orange),
-        PlanType(
-            amount: '₹ 6000/-',
-            period: 'Lifetime',
-            type: 'Business Plan',
-            selected_plan: PlanOption.businessPlan,
-            active_color: businessPlan,
-            color_pallet: primary_light2),
+        // PlanType(
+        //     amount: '₹ 1950/-',
+        //     period: '1 Year',
+        //     type: 'Best Plan',
+        //     selected_plan: PlanOption.bestPlan,
+        //     active_color: bestPlan,
+        //     color_pallet: Colors.orange),
+        // PlanType(
+        //     amount: '₹ 6000/-',
+        //     period: 'Lifetime',
+        //     type: 'Business Plan',
+        //     selected_plan: PlanOption.businessPlan,
+        //     active_color: businessPlan,
+        //     color_pallet: primary_light2),
       ],
     );
 
@@ -965,7 +1004,7 @@ class _SelectPlanState extends State<SelectPlan> {
                                     DetailLabel(title: '. Admin Pannel'),
                                     DetailLabel(
                                         title:
-                                            '. Available Android / Ios / Web'),
+                                            '.  Web'),
                                   ],
                                 )),
 
