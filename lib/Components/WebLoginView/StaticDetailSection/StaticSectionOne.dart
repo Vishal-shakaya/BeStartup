@@ -215,7 +215,7 @@ class StaticSectionOne extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             letterSpacing: 1,
                           ),
-                          text: '75')),
+                          text: '')),
                 ],
               ),
             ),
@@ -247,7 +247,7 @@ class StaticSectionOne extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             letterSpacing: 1,
                           ),
-                          text: '20K+'))
+                          text: '    '))
                 ],
               ),
             )

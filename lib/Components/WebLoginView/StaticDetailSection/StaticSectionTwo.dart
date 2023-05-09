@@ -409,7 +409,7 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
                           ),
                           
                           MemName(
-                              user_position: 'Founder', username: 'Vishal shakaya'),
+                              user_position: 'Founder', username: 'Vishal shakya'),
                           
                           SizedBox(
                             height: context.height * member_name_bottom_margin,
@@ -448,7 +448,7 @@ class _StatiSectionTwoState extends State<StatiSectionTwo> {
           child: CircleAvatar(
         radius: profile_image_radius,
         backgroundColor: Colors.blueGrey[100],
-        foregroundImage: NetworkImage(temp_avtar_image),
+        foregroundImage: NetworkImage(''),
       )),
     );
   }
